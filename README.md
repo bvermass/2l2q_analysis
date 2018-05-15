@@ -1,2 +1,2 @@
 # 2l2q_analysis
-Analysis code for 2l2q HNL search
+Repository for analysis code for 2l2q HNL search
