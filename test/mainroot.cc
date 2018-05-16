@@ -6,7 +6,7 @@ using namespace std;
 void mainroot(TString samples)
 {
     cout << samples << endl;
-//    full_analyzer b;
-//    b.testrun();
+    full_analyzer b;
+    b.testrun();
 
 }
