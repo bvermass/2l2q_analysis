@@ -140,7 +140,6 @@ public :
    Bool_t          _Flag_HBHENoiseIsoFilter;
    Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
    Bool_t          _Flag_goodVertices;
-   Bool_t          _Flag_eeBadScFilter;
    Bool_t          _Flag_globalTightHalo2016Filter;
    Bool_t          _flag_badPFMuonFilter;
    Bool_t          _flag_badChCandFilter;
@@ -417,7 +416,6 @@ public :
    TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
    TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
    TBranch        *b__Flag_goodVertices;   //!
-   TBranch        *b__Flag_eeBadScFilter;   //!
    TBranch        *b__Flag_globalTightHalo2016Filter;   //!
    TBranch        *b__flag_badPFMuonFilter;   //!
    TBranch        *b__flag_badChCandFilter;   //!
@@ -784,7 +782,6 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &_Flag_HBHENoiseIsoFilter, &b__Flag_HBHENoiseIsoFilter);
    fChain->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &_Flag_EcalDeadCellTriggerPrimitiveFilter, &b__Flag_EcalDeadCellTriggerPrimitiveFilter);
    fChain->SetBranchAddress("_Flag_goodVertices", &_Flag_goodVertices, &b__Flag_goodVertices);
-   fChain->SetBranchAddress("_Flag_eeBadScFilter", &_Flag_eeBadScFilter, &b__Flag_eeBadScFilter);
    fChain->SetBranchAddress("_Flag_globalTightHalo2016Filter", &_Flag_globalTightHalo2016Filter, &b__Flag_globalTightHalo2016Filter);
    fChain->SetBranchAddress("_flag_badPFMuonFilter", &_flag_badPFMuonFilter, &b__flag_badPFMuonFilter);
    fChain->SetBranchAddress("_flag_badChCandFilter", &_flag_badChCandFilter, &b__flag_badChCandFilter);

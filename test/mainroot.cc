@@ -5,8 +5,14 @@ using namespace std;
 
 void mainroot(TString samples)
 {
-    cout << samples << endl;
+    cout << endl << samples << endl << endl;
+    
     full_analyzer b;
-    b.testrun();
+
+    TString flavor;
+    if(samples.Index("_e_") != -1)          flavor = "e";
+    else if(samples.Index("_mu_") != -1)    flavor = "mu";
+    
+    b.run_over_file(samples, flavor);
 
 }

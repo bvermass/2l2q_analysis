@@ -22,9 +22,14 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 //     Make it very structured and clear!
+
+    LeptonID b;
+    b.test_function();
+
     if(flavor != "e" && flavor != "mu"){ cout << "Wrong flavor" << endl; return;}
 
-    TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
+    //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
+    TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init(tree);
 
