@@ -1,5 +1,8 @@
-#define full_analyzer_cxx
+#define full_analyzer_start_cxx
+#include <iostream>
 #include "full_analyzer.h"
+#define full_analyzer_done_cxx // otherwise the functions in full_analyzer.h can be loaded multiple times
+//#include "/user/bvermass/heavyNeutrino/DileptonPrompt/CMSSW_9_4_0/src/2l2q_analysis/tools/LeptonID.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -23,8 +26,8 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 //     - functions for every signal region event selection
 //     Make it very structured and clear!
 
-    LeptonID b;
-    b.test_function();
+    //LeptonID b;
+    //b.test_function();
 
     if(flavor != "e" && flavor != "mu"){ cout << "Wrong flavor" << endl; return;}
 
@@ -77,7 +80,7 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 
 
     Long64_t nentries = tree->GetEntries();
-    cout << "file: " << filename << endl;
+    cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
     for(unsigned jentry = 0; jentry < nentries; ++jentry){
 	LoadTree(jentry);
@@ -111,7 +114,7 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 	bool fullMuonID[10];
 	bool nonisoMuonID[10];
 	bool displMuonID[10];
-        bool fullJetID[20];
+    bool fullJetID[20];
 	get_electronID(&fullElectronID[0]);
 	get_noniso_electronID(&nonisoElectronID[0]);
 	get_displ_electronID(&displElectronID[0]);
@@ -292,6 +295,21 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
         cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
         cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
     }
+        cout << "it should be:" << endl;
+        cout << "2iso e, 0jet:            0.136727     " << endl; 
+        cout << "2iso e, 1jet:            0.0321711    " << endl; 
+        cout << "2iso e, 2jet:            0.00402139   " << endl; 
+        cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
+        cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
+        cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
+        cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
+        cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
+        cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
+    
+        cout << "1iso e, 0jet:            17.7906      " << endl; 
+        cout << "1iso e, 1jet:            47.8707      " << endl; 
+        cout << "1iso e, 2jet:            11.7143      " << endl; 
+
 
 
     TString outputfilename = "";
@@ -583,7 +601,7 @@ int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int inde
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nL; ++i){
+    for(int i = 0; i < _nL; ++i){
 	if(i == index_good_leading) continue;
 	if(_lFlavor[i] != 0)   	    continue;
 	//if(_lCharge[i] != _lCharge[index_good_leading]) continue;
@@ -600,7 +618,7 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nL; ++i){
+    for(int i = 0; i < _nL; ++i){
 	if(i == index_good_leading) continue;
 	if(_lFlavor[i] != 1)   	    continue;
 	//if(_lCharge[i] != _lCharge[index_good_leading]) continue;
@@ -616,7 +634,7 @@ int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_g
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nJets; ++i){
+    for(int i = 0; i < _nJets; ++i){
 	if(i == index_good_leading) continue;
 	if(!*(jetID + i))           continue;
 	if(!*(jet_clean + i))       continue;

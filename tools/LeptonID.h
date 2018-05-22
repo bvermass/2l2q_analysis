@@ -15,6 +15,7 @@ class LeptonID {
         LeptonID();
         ~LeptonID();
         virtual void test_function();
+        //virtual void get_electronID(bool*);
 };
 
 #endif

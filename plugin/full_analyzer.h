@@ -605,7 +605,8 @@ public :
 
 #endif
 
-#ifdef full_analyzer_cxx
+#ifdef full_analyzer_start_cxx
+#ifndef full_analyzer_done_cxx
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
@@ -967,4 +968,5 @@ Int_t full_analyzer::Cut(Long64_t entry)
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef full_analyzer_cxx
+#endif // #ifdef full_analyzer_done_cxx
+#endif // #ifdef full_analyzer_start_cxx
