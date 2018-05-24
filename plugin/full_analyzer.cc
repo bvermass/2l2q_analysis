@@ -56,8 +56,6 @@ void full_analyzer::run_over_file(TString filename)
     hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
     hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
-    //hists[
-    //hists["HLT_Ele27_WPTight_Gsf_pt"]      = new TH1F("HLT
     // signal regions that are included:
     // 0 = 2iso l, 0jet
     // 1 = 2iso l, 1jet
@@ -72,7 +70,24 @@ void full_analyzer::run_over_file(TString filename)
     // 10= 1iso l, 1jet
     // 11= 1iso l, 2jet
     // 12= other
-    
+    hists["1_iso_ele_pt"]               = new TH1F("1_iso_ele_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+    hists["1_iso_ele_barrel_pt"]               = new TH1F("1_iso_ele_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+    hists["1_iso_ele_endcap_pt"]               = new TH1F("1_iso_ele_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+    hists["1_iso_mu_pt"]               = new TH1F("1_iso_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+    hists["1_iso_mu_barrel_pt"]               = new TH1F("1_iso_mu_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+    hists["1_iso_mu_endcap_pt"]               = new TH1F("1_iso_mu_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     
     for(auto&& sh : hists){
 	auto&& h = sh.second;
@@ -99,6 +114,8 @@ void full_analyzer::run_over_file(TString filename)
     Long64_t nentries = tree->GetEntries();
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
+    int maxentries = 300000;
+    if(nentries > maxentries) nentries = maxentries;//CHANGE THIS, quick fix to not run too long
     for(unsigned jentry = 0; jentry < nentries; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
@@ -249,7 +266,41 @@ void full_analyzer::run_over_file(TString filename)
 	        else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11);
 	        else hists["mumu_sigreg_fraction"]->Fill(12);
 	    }
+
+        //HLT efficiency stuff, put this in a separate function later
+        if(_1e){
+            hists["1_iso_ele_pt"]->Fill(_lPt[i_leading_e], _weight);
+            if(fabs(_lEta[i_leading_e]) < 1.2) hists["1_iso_ele_barrel_pt"]->Fill(_lPt[i_leading_e], _weight);
+            else hists["1_iso_ele_endcap_pt"]->Fill(_lPt[i_leading_e], _weight);
+            
+            if(_HLT_Ele27_WPTight_Gsf){ 
+                hists["HLT_Ele27_WPTight_Gsf_pt"]->Fill(_lPt[i_leading_e], _weight);
+                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]->Fill(_lPt[i_leading_e], _weight);
+                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]->Fill(_lPt[i_leading_e], _weight);
+                
+                hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
+                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
+                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
+            }
+
+        }
+        if(_1mu){
+            hists["1_iso_mu_pt"]->Fill(_lPt[i_leading_mu], _weight);
+            if(fabs(_lEta[i_leading_mu]) < 1.2) hists["1_iso_mu_barrel_pt"]->Fill(_lPt[i_leading_mu], _weight);
+            else hists["1_iso_mu_endcap_pt"]->Fill(_lPt[i_leading_mu], _weight);
+            
+            if(_HLT_IsoMu24 or _HLT_IsoTkMu24){ 
+                hists["HLT_IsoMu24_IsoTkMu24_pt"]->Fill(_lPt[i_leading_mu], _weight);
+                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]->Fill(_lPt[i_leading_mu], _weight);
+                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]->Fill(_lPt[i_leading_mu], _weight);
+                
+                hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
+                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
+                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
+            }
+        }
     }
+
     //cout << "ee else: " << ee_else << endl;
     /*cout << "n total " << n_ele << endl;
     cout << "after eta " << n_after_eta << endl;
@@ -266,10 +317,10 @@ void full_analyzer::run_over_file(TString filename)
     cout << "after invreliso and convveto " << n_after_invreliso_convveto << endl;
     cout << "after invreliso and missinghits " << n_after_invreliso_missinghits << endl;*/
 
-    for(auto&& sh : hists){
-	    auto&& h  = sh.second;
-	    h->Scale(100/h->GetEntries());
-    }
+    //for(auto&& sh : hists){
+	//    auto&& h  = sh.second;
+	//    h->Scale(100/h->GetEntries());
+    //}
 
     if(flavor == "e"){
         cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
@@ -316,8 +367,10 @@ void full_analyzer::run_over_file(TString filename)
     cout << "1iso e, 1jet:            47.8707      " << endl; 
     cout << "1iso e, 2jet:            11.7143      " << endl; 
 
+
     TString outputfilename = "";
     if(filename.Index("HeavyNeutrino") != -1) outputfilename = "output/histograms/hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
+    else outputfilename = "output/histograms/hists_full_analyzer_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + ".root";
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
     for(auto&& sh : hists){
@@ -340,6 +393,24 @@ void full_analyzer::run_over_file(TString filename)
         h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
         h->SetBinContent(nb+1, 0.);
         h->SetBinError  (nb+1, 0.);
+        
+        //if bin content is below zero, set it to 0
+        for(int i = 0; i < nb+1; i++){
+            if(h->GetBinContent(i) < 0.2) h->SetBinContent(i, 0.);
+        }
+
+    }
+
+    //Determine efficiencies for HLT
+    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide(hists["1_iso_ele_pt"]);
+    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Divide(hists["1_iso_ele_barrel_pt"]);
+    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Divide(hists["1_iso_ele_endcap_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide(hists["1_iso_mu_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["1_iso_mu_barrel_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["1_iso_mu_endcap_pt"]);
+
+    for(auto&& sh : hists){
+        auto&& h = sh.second;
 	    h->Write();
     }
     output->Close();
@@ -399,7 +470,8 @@ void full_analyzer::testrun()
 void full_analyzer::get_electronID(bool* ID)
 {
     for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 0 &&
+	bool fullID = 	
+            _lFlavor[i] == 0 &&
 			fabs(_lEta[i]) < 2.5 &&
 			_lPt[i] > 7 &&
 			fabs(_dxy[i]) < 0.05 &&
@@ -569,7 +641,7 @@ int full_analyzer::find_leading_e(bool* electronID, bool* ele_clean)
 	if(_lFlavor[i] != 0)   continue;
 	if(!*(electronID + i)) continue;
 	if(!*(ele_clean + i))  continue;
-	if(_lPt[i] < 30)       continue;
+	//if(_lPt[i] < 30)       continue;
 	if(index_good_leading == -1) index_good_leading = i;
 	if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
     }
