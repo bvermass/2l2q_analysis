@@ -1,8 +1,15 @@
 #define full_analyzer_start_cxx
+
+//Include C++ libraries
 #include <iostream>
+
+//Include header for this class
 #include "full_analyzer.h"
+
 #define full_analyzer_done_cxx // otherwise the functions in full_analyzer.h can be loaded multiple times
 //#include "/user/bvermass/heavyNeutrino/DileptonPrompt/CMSSW_9_4_0/src/2l2q_analysis/tools/LeptonID.h"
+
+//Include ROOT header files
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -16,7 +23,7 @@ using namespace std;
 //  find_2_highest_pt_particles : finds 2 highest pt particles, if there is only one or zero, then i_jet1 or i_jet2 are put to -1
 //  loop 			: currently not used
 
-void full_analyzer::run_over_file(TString filename, TString flavor)
+void full_analyzer::run_over_file(TString filename)
 {
 // Short description of program flow:
 //     - initialize file
@@ -24,12 +31,18 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 //     - start loop over events
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
-//     Make it very structured and clear!
 
     //LeptonID b;
     //b.test_function();
 
-    if(flavor != "e" && flavor != "mu"){ cout << "Wrong flavor" << endl; return;}
+    TString flavor;
+    if(filename.Index("_e_") != -1) flavor = "e";
+    else if(filename.Index("_mu_") != -1) flavor = "mu";
+    else flavor = "bkg";
+    TString promptordisplaced;
+    if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
+    else if(filename.Index("displaced") != -1) promptordisplaced = "displaced";
+    else promptordisplaced = "";
 
     //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
@@ -41,8 +54,10 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
     std::map<TString, TH1*> hists;
     hists["ee_sigreg_fraction"]			= new TH1F("ee_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
-    hists["1eovertotal"]			= new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
-    hists["1muovertotal"]			= new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
+    hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
+    hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
+    //hists[
+    //hists["HLT_Ele27_WPTight_Gsf_pt"]      = new TH1F("HLT
     // signal regions that are included:
     // 0 = 2iso l, 0jet
     // 1 = 2iso l, 1jet
@@ -57,6 +72,8 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
     // 10= 1iso l, 1jet
     // 11= 1iso l, 2jet
     // 12= other
+    
+    
     for(auto&& sh : hists){
 	auto&& h = sh.second;
 	h->Sumw2();
@@ -83,166 +100,155 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
     for(unsigned jentry = 0; jentry < nentries; ++jentry){
-	LoadTree(jentry);
-	tree->GetEntry(jentry);
-	bool printevent = (jentry%5000 == 0);
-	if(printevent){
-	    cout << jentry << " of " << nentries << endl;
-	}
+	    LoadTree(jentry);
+	    tree->GetEntry(jentry);
+	    bool printevent = (jentry%5000 == 0);
+	    if(printevent){
+	        cout << jentry << " of " << nentries << endl;
+	    }
 
-	for(unsigned i = 0; i < _nL; ++i){
-    	    if(_lFlavor[i] != 0) continue;
-	    ++n_ele;
-	    if(fabs(_lEta[i]) < 2.5) ++n_after_eta;
-    	    if(_lPt[i] > 30) ++n_after_pt;
-    	    if(fabs(_dxy[i]) < 0.05) ++n_after_dxy;
-    	    if(fabs(_dz[i])  < 0.1) ++n_after_dz;
-    	    if(_3dIPSig[i]   < 4) ++n_after_sip3d;
-    	    if(_relIso[i]    < 0.2) ++n_after_reliso;
-	    if(_relIso[i]    > 0.2) ++n_after_invreliso;
-    	    if(_lPOGMedium[i]) ++n_after_pogmedium;
-    	    if(_lElectronPassConvVeto[i]) ++n_after_convveto;
-    	    if(_lElectronMissingHits[i] < 1) ++n_after_missinghits;
-	    if(_relIso[i] > 0.03 && _lPOGMedium[i]) ++n_after_invreliso_pogmedium;
-	    if(_relIso[i] > 0.2 && _lElectronPassConvVeto[i]) ++n_after_invreliso_convveto;
-	    if(_relIso[i] > 0.2 && _lElectronMissingHits[i]) ++n_after_invreliso_missinghits;
-	}
-	
-	bool fullElectronID[10];
-	bool nonisoElectronID[10];
-	bool displElectronID[10];
-	bool fullMuonID[10];
-	bool nonisoMuonID[10];
-	bool displMuonID[10];
-    bool fullJetID[20];
-	get_electronID(&fullElectronID[0]);
-	get_noniso_electronID(&nonisoElectronID[0]);
-	get_displ_electronID(&displElectronID[0]);
-	get_muonID(&fullMuonID[0]);
-	get_noniso_muonID(&nonisoMuonID[0]);
-	get_displ_muonID(&displMuonID[0]);
-	get_jetID(&fullJetID[0]);
+	    for(unsigned i = 0; i < _nL; ++i){
+        	if(_lFlavor[i] != 0) continue;
+	        ++n_ele;
+	        if(fabs(_lEta[i]) < 2.5)    ++n_after_eta;
+        	if(_lPt[i] > 30)            ++n_after_pt;
+        	if(fabs(_dxy[i]) < 0.05)    ++n_after_dxy;
+        	if(fabs(_dz[i])  < 0.1)     ++n_after_dz;
+        	if(_3dIPSig[i]   < 4)       ++n_after_sip3d;
+        	if(_relIso[i]    < 0.2)     ++n_after_reliso;
+	        if(_relIso[i]    > 0.2)     ++n_after_invreliso;
+        	if(_lPOGMedium[i])          ++n_after_pogmedium;
+        	if(_lElectronPassConvVeto[i])       ++n_after_convveto;
+        	if(_lElectronMissingHits[i] < 1)    ++n_after_missinghits;
+	        if(_relIso[i] > 0.03 && _lPOGMedium[i])             ++n_after_invreliso_pogmedium;
+	        if(_relIso[i] > 0.2 && _lElectronPassConvVeto[i])   ++n_after_invreliso_convveto;
+	        if(_relIso[i] > 0.2 && _lElectronMissingHits[i])    ++n_after_invreliso_missinghits;
+	    }
+	    
+        //Get ID
+	    bool fullElectronID[10];
+	    bool nonisoElectronID[10];
+	    bool displElectronID[10];
+	    bool fullMuonID[10];
+	    bool nonisoMuonID[10];
+	    bool displMuonID[10];
+        bool fullJetID[20];
+	    get_electronID(&fullElectronID[0]);
+	    get_noniso_electronID(&nonisoElectronID[0]);
+	    get_displ_electronID(&displElectronID[0]);
+	    get_muonID(&fullMuonID[0]);
+	    get_noniso_muonID(&nonisoMuonID[0]);
+	    get_displ_muonID(&displMuonID[0]);
+	    get_jetID(&fullJetID[0]);
 
-	bool jet_clean_full[20];
-	bool jet_clean_noniso[20];
-	bool jet_clean_displ[20];
-	get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
-	get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
-	get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
-	bool ele_clean_full[10];
-	bool ele_clean_noniso[10];
-	bool ele_clean_displ[10];
-	get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
-	get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
-	get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
-	bool jet_clean_full_noniso[20];
-	bool jet_clean_full_displ[20];
-	for(unsigned i = 0; i < 20; ++i){
-	    jet_clean_full_noniso[i] = jet_clean_full[i] && jet_clean_noniso[i];
-	    jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
-	}
-	bool ele_clean_full_noniso_displ[10];
-	for(unsigned i = 0; i < 10; ++i){
-	    ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && ele_clean_displ[i];
-	}
+        //Get Cleaning for jets
+	    bool jet_clean_full[20];
+	    bool jet_clean_noniso[20];
+	    bool jet_clean_displ[20];
+	    bool jet_clean_full_noniso[20];
+	    bool jet_clean_full_displ[20];
+	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
+	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
+	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
+	    for(unsigned i = 0; i < 20; ++i){
+	        jet_clean_full_noniso[i] = jet_clean_full[i] && jet_clean_noniso[i];
+	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
+	    }
+	    
+        //Get cleaning for electrons
+        bool ele_clean_full[10];
+	    bool ele_clean_noniso[10];
+	    bool ele_clean_displ[10];
+	    bool ele_clean_full_noniso_displ[10];
+	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
+	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
+	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
+	    for(unsigned i = 0; i < 10; ++i){
+	        ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && ele_clean_displ[i];
+	    }
 
-
-
-	int i_leading_e     		= find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
-	int i_subleading_e  		= find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	int i_leading_mu    		= find_leading_mu(&fullMuonID[0]);
-	int i_subleading_mu 		= find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	int i_subleading_noniso_e  	= find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	int i_subleading_noniso_mu 	= find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
-	int i_subleading_displ_e  	= find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	int i_subleading_displ_mu 	= find_subleading_mu(&displMuonID[0], i_leading_mu);
-	
-	int i_leading_jet_for_full	= find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
-	int i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
-	int i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
-	int i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
-	int i_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
-	int i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
-
-	/*for(unsigned i = 0; i < _nL; ++i){
-	    if(nonisoElectronID[i]) cout << "noniso electron passed: " << nonisoElectronID[i] << endl;
-	    if(nonisoMuonID[i]) cout << "noniso muon passed: " << nonisoMuonID[i] << endl;
-	}*/
-	if(printevent && flavor == "mu" && false){
-	    cout << "i_subleading_displ_mu: " << i_subleading_displ_mu << endl;
-	    /*cout << "good_leading_e: " << index_good_leading_e << endl;
-	    cout << "good_subleading_e: " << index_good_subleading_e << endl;
-	    cout << "good_leading_mu: " << index_good_leading_mu << endl;
-	    cout << "good_subleading_mu: " << index_good_subleading_mu << endl;
-	    cout << "good_leading_jet: " << index_good_leading_jet << endl;
-	    cout << "good_subleading_jet: " << index_good_subleading_jet << endl;
-	    if(flavor == "e") cout << "good_subleading_noniso_e: " << index_good_subleading_noniso_e << endl;
-	    else if(flavor == "mu") cout << "good_subleading_noniso_mu: " << index_good_subleading_noniso_mu << endl;*/
-	}		
-
-        bool _1e			= i_leading_e != -1;
-	bool _2e0jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	bool _2e1jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	bool _2e2jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	bool _1e1nonisoe0jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	bool _1e1nonisoe1jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	bool _1e1nonisoe2jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	bool _1e1disple0jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	bool _1e1disple1jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	bool _1e1disple2jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	bool _1e0jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	bool _1e1jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	bool _1e2jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-
-	bool _1mu			= i_leading_mu != -1;
-	bool _2mu0jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	bool _2mu1jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	bool _2mu2jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	bool _1mu1nonisomu0jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	bool _1mu1nonisomu1jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	bool _1mu1nonisomu2jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	bool _1mu1displmu0jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	bool _1mu1displmu1jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	bool _1mu1displmu2jet		= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	bool _1mu0jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	bool _1mu1jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	bool _1mu2jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+        //Find leptons and jets with leading pt
+	    int i_leading_e     		= find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
+	    int i_subleading_e  		= find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_leading_mu    		= find_leading_mu(&fullMuonID[0]);
+	    int i_subleading_mu 		= find_subleading_mu(&fullMuonID[0], i_leading_mu);
+	    int i_subleading_noniso_e  	= find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_subleading_noniso_mu 	= find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
+	    int i_subleading_displ_e  	= find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_subleading_displ_mu 	= find_subleading_mu(&displMuonID[0], i_leading_mu);
+	    
+	    int i_leading_jet_for_full	= find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
+	    int i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
+	    int i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
+	    int i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
+	    int i_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
+	    int i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
 
 
-	hists["1eovertotal"]->Fill(0);
-	if(_1e){
-	    hists["1eovertotal"]->Fill(1);
-	    if(_2e0jet) hists["ee_sigreg_fraction"]->Fill(0);
-	    else if(_2e1jet) hists["ee_sigreg_fraction"]->Fill(1);
-	    else if(_2e2jet) hists["ee_sigreg_fraction"]->Fill(2);
-	    else if(_1e1nonisoe0jet) hists["ee_sigreg_fraction"]->Fill(3);
-	    else if(_1e1nonisoe1jet) hists["ee_sigreg_fraction"]->Fill(4);
-	    else if(_1e1nonisoe2jet) hists["ee_sigreg_fraction"]->Fill(5);
-	    else if(_1e1disple0jet)  hists["ee_sigreg_fraction"]->Fill(6);
-	    else if(_1e1disple1jet)  hists["ee_sigreg_fraction"]->Fill(7);
-	    else if(_1e1disple2jet)  hists["ee_sigreg_fraction"]->Fill(8);
-	    else if(_1e0jet) hists["ee_sigreg_fraction"]->Fill(9);
-	    else if(_1e1jet) hists["ee_sigreg_fraction"]->Fill(10);
-	    else if(_1e2jet) hists["ee_sigreg_fraction"]->Fill(11);
-	    else hists["ee_sigreg_fraction"]->Fill(12);
-	}
-	hists["1muovertotal"]->Fill(0);
-	if(_1mu){
-	    hists["1muovertotal"]->Fill(1);
-	    if(_2mu0jet) hists["mumu_sigreg_fraction"]->Fill(0);
-	    else if(_2mu1jet) hists["mumu_sigreg_fraction"]->Fill(1);
-	    else if(_2mu2jet) hists["mumu_sigreg_fraction"]->Fill(2);
-	    else if(_1mu1nonisomu0jet) hists["mumu_sigreg_fraction"]->Fill(3);
-	    else if(_1mu1nonisomu1jet) hists["mumu_sigreg_fraction"]->Fill(4);
-	    else if(_1mu1nonisomu2jet) hists["mumu_sigreg_fraction"]->Fill(5);
-	    else if(_1mu1displmu0jet)  hists["mumu_sigreg_fraction"]->Fill(6);
-	    else if(_1mu1displmu1jet)  hists["mumu_sigreg_fraction"]->Fill(7);
-	    else if(_1mu1displmu2jet)  hists["mumu_sigreg_fraction"]->Fill(8);
-	    else if(_1mu0jet) hists["mumu_sigreg_fraction"]->Fill(9);
-	    else if(_1mu1jet) hists["mumu_sigreg_fraction"]->Fill(10);
-	    else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11);
-	    else hists["mumu_sigreg_fraction"]->Fill(12);
-	}
+        //Get signal region -> put this into a function maybe
+        bool _1e			    = i_leading_e != -1;
+	    bool _2e0jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _2e1jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _2e2jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	    bool _1e1nonisoe0jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1e1nonisoe1jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1e1nonisoe2jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+	    bool _1e1disple0jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
+	    bool _1e1disple1jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	    bool _1e1disple2jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	    bool _1e0jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _1e1jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _1e2jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+
+	    bool _1mu			    = i_leading_mu != -1;
+	    bool _2mu0jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _2mu1jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _2mu2jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	    bool _1mu1nonisomu0jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1mu1nonisomu1jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1mu1nonisomu2jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+	    bool _1mu1displmu0jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
+	    bool _1mu1displmu1jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	    bool _1mu1displmu2jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	    bool _1mu0jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _1mu1jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _1mu2jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+
+
+	    hists["1eovertotal"]->Fill(0);
+	    if(_1e){
+	        hists["1eovertotal"]->Fill(1);
+	        if(_2e0jet) hists["ee_sigreg_fraction"]->Fill(0);
+	        else if(_2e1jet) hists["ee_sigreg_fraction"]->Fill(1);
+	        else if(_2e2jet) hists["ee_sigreg_fraction"]->Fill(2);
+	        else if(_1e1nonisoe0jet) hists["ee_sigreg_fraction"]->Fill(3);
+	        else if(_1e1nonisoe1jet) hists["ee_sigreg_fraction"]->Fill(4);
+	        else if(_1e1nonisoe2jet) hists["ee_sigreg_fraction"]->Fill(5);
+	        else if(_1e1disple0jet)  hists["ee_sigreg_fraction"]->Fill(6);
+	        else if(_1e1disple1jet)  hists["ee_sigreg_fraction"]->Fill(7);
+	        else if(_1e1disple2jet)  hists["ee_sigreg_fraction"]->Fill(8);
+	        else if(_1e0jet) hists["ee_sigreg_fraction"]->Fill(9);
+	        else if(_1e1jet) hists["ee_sigreg_fraction"]->Fill(10);
+	        else if(_1e2jet) hists["ee_sigreg_fraction"]->Fill(11);
+	        else hists["ee_sigreg_fraction"]->Fill(12);
+	    }
+	    hists["1muovertotal"]->Fill(0);
+	    if(_1mu){
+	        hists["1muovertotal"]->Fill(1);
+	        if(_2mu0jet) hists["mumu_sigreg_fraction"]->Fill(0);
+	        else if(_2mu1jet) hists["mumu_sigreg_fraction"]->Fill(1);
+	        else if(_2mu2jet) hists["mumu_sigreg_fraction"]->Fill(2);
+	        else if(_1mu1nonisomu0jet) hists["mumu_sigreg_fraction"]->Fill(3);
+	        else if(_1mu1nonisomu1jet) hists["mumu_sigreg_fraction"]->Fill(4);
+	        else if(_1mu1nonisomu2jet) hists["mumu_sigreg_fraction"]->Fill(5);
+	        else if(_1mu1displmu0jet)  hists["mumu_sigreg_fraction"]->Fill(6);
+	        else if(_1mu1displmu1jet)  hists["mumu_sigreg_fraction"]->Fill(7);
+	        else if(_1mu1displmu2jet)  hists["mumu_sigreg_fraction"]->Fill(8);
+	        else if(_1mu0jet) hists["mumu_sigreg_fraction"]->Fill(9);
+	        else if(_1mu1jet) hists["mumu_sigreg_fraction"]->Fill(10);
+	        else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11);
+	        else hists["mumu_sigreg_fraction"]->Fill(12);
+	    }
     }
     //cout << "ee else: " << ee_else << endl;
     /*cout << "n total " << n_ele << endl;
@@ -261,8 +267,8 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
     cout << "after invreliso and missinghits " << n_after_invreliso_missinghits << endl;*/
 
     for(auto&& sh : hists){
-	auto&& h  = sh.second;
-	h->Scale(100/h->GetEntries());
+	    auto&& h  = sh.second;
+	    h->Scale(100/h->GetEntries());
     }
 
     if(flavor == "e"){
@@ -295,29 +301,27 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
         cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
         cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
     }
-        cout << "it should be:" << endl;
-        cout << "2iso e, 0jet:            0.136727     " << endl; 
-        cout << "2iso e, 1jet:            0.0321711    " << endl; 
-        cout << "2iso e, 2jet:            0.00402139   " << endl; 
-        cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
-        cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
-        cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
-        cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
-        cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
-        cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
+    cout << endl << "it should be:" << endl;
+    cout << "2iso e, 0jet:            0.136727     " << endl; 
+    cout << "2iso e, 1jet:            0.0321711    " << endl; 
+    cout << "2iso e, 2jet:            0.00402139   " << endl; 
+    cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
+    cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
+    cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
+    cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
+    cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
+    cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
     
-        cout << "1iso e, 0jet:            17.7906      " << endl; 
-        cout << "1iso e, 1jet:            47.8707      " << endl; 
-        cout << "1iso e, 2jet:            11.7143      " << endl; 
-
-
+    cout << "1iso e, 0jet:            17.7906      " << endl; 
+    cout << "1iso e, 1jet:            47.8707      " << endl; 
+    cout << "1iso e, 2jet:            11.7143      " << endl; 
 
     TString outputfilename = "";
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename = "histograms/hists_full_analyzer_" + filename(filename.Index("/") + 1, filename.Length() - filename.Index("/") - 1) + "_" + filename(0, filename.Index("/"))  + ".root";
+    if(filename.Index("HeavyNeutrino") != -1) outputfilename = "output/histograms/hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
     for(auto&& sh : hists){
-	auto&& h  = sh.second;
+	    auto&& h  = sh.second;
         int nb = h->GetNbinsX();
         double b0  = h->GetBinContent( 0  );
         double e0  = h->GetBinError  ( 0  );
@@ -336,7 +340,7 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
         h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
         h->SetBinContent(nb+1, 0.);
         h->SetBinError  (nb+1, 0.);
-	h->Write();
+	    h->Write();
     }
     output->Close();
 }
@@ -346,45 +350,45 @@ void full_analyzer::run_over_file(TString filename, TString flavor)
 
 void full_analyzer::testrun()
 {
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-200_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-800_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1000_V-0.01_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_e_onshell_pre2017_NLO", "e");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO", "e");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO", "e");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO", "mu");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO", "e");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO", "mu");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-200_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-800_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("prompt/HeavyNeutrino_lljj_M-1000_V-0.01_mu_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_e_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_mu_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
+    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
 
     print_table();
 }

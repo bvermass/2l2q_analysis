@@ -10,11 +10,7 @@ void mainroot(TString samples)
     
     full_analyzer b;
 
-    TString flavor;
-    if(samples.Index("_e_") != -1)          flavor = "e"; //change the full_analyzer function to do this validation itself
-    else if(samples.Index("_mu_") != -1)    flavor = "mu";
-    else return;
-    b.run_over_file(samples, flavor);
+    b.run_over_file(samples);
 
 }
 
