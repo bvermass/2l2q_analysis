@@ -35,14 +35,13 @@ void full_analyzer::run_over_file(TString filename)
     //LeptonID b;
     //b.test_function();
 
-    TString flavor;
+    TString flavor = "bkg";
     if(filename.Index("_e_") != -1) flavor = "e";
     else if(filename.Index("_mu_") != -1) flavor = "mu";
-    else flavor = "bkg";
-    TString promptordisplaced;
+
+    TString promptordisplaced = "";
     if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
     else if(filename.Index("displaced") != -1) promptordisplaced = "displaced";
-    else promptordisplaced = "";
 
     //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
@@ -638,12 +637,12 @@ int full_analyzer::find_leading_e(bool* electronID, bool* ele_clean)
 {
     int index_good_leading = -1;
     for(unsigned i = 0; i < _nL; ++i){
-	if(_lFlavor[i] != 0)   continue;
-	if(!*(electronID + i)) continue;
-	if(!*(ele_clean + i))  continue;
-	//if(_lPt[i] < 30)       continue;
-	if(index_good_leading == -1) index_good_leading = i;
-	if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
+	    if(_lFlavor[i] != 0)   continue;
+	    if(!*(electronID + i)) continue;
+	    if(!*(ele_clean + i))  continue;
+	    //if(_lPt[i] < 30)       continue;
+	    if(index_good_leading == -1) index_good_leading = i;
+	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
     }
     return index_good_leading;
 }
@@ -652,11 +651,11 @@ int full_analyzer::find_leading_mu(bool* muonID)
 {
     int index_good_leading = -1;
     for(unsigned i = 0; i < _nL; ++i){
-	if(_lFlavor[i] != 1) continue;
-	if(!*(muonID + i))   continue;
-	if(_lPt[i] < 25)     continue;
-	if(index_good_leading == -1) index_good_leading = i;
-	if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
+	    if(_lFlavor[i] != 1) continue;
+	    if(!*(muonID + i))   continue;
+	    if(_lPt[i] < 25)     continue;
+	    if(index_good_leading == -1) index_good_leading = i;
+	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
     }
     return index_good_leading;
 }
@@ -665,10 +664,10 @@ int full_analyzer::find_leading_jet(bool* jetID, bool* jet_clean)
 {
     int index_good_leading = -1;
     for(unsigned i = 0; i < _nJets; ++i){
-	if(!*(jetID + i))      continue;
-	if(!*(jet_clean + i))  continue;
-	if(index_good_leading == -1) index_good_leading = i;
-	if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
+	    if(!*(jetID + i))      continue;
+	    if(!*(jet_clean + i))  continue;
+	    if(index_good_leading == -1) index_good_leading = i;
+	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
     }
     return index_good_leading;
 }
@@ -678,14 +677,14 @@ int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int inde
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	if(i == index_good_leading) continue;
-	if(_lFlavor[i] != 0)   	    continue;
-	//if(_lCharge[i] != _lCharge[index_good_leading]) continue;
-	if(!*(electronID + i))      continue;
-	if(!*(ele_clean + i))       continue;
-	if(_lPt[i] < 7)             continue;
-	if(index_good_subleading == -1) index_good_subleading = i;
-	if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
+	    if(i == index_good_leading) continue;
+	    if(_lFlavor[i] != 0)   	    continue;
+	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
+	    if(!*(electronID + i))      continue;
+	    if(!*(ele_clean + i))       continue;
+	    if(_lPt[i] < 7)             continue;
+	    if(index_good_subleading == -1) index_good_subleading = i;
+	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
     return index_good_subleading;
 }
@@ -695,13 +694,13 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	if(i == index_good_leading) continue;
-	if(_lFlavor[i] != 1)   	    continue;
-	//if(_lCharge[i] != _lCharge[index_good_leading]) continue;
-	if(!*(muonID + i))          continue;
-	if(_lPt[i] < 5)             continue;
-	if(index_good_subleading == -1) index_good_subleading = i;
-	if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
+	    if(i == index_good_leading) continue;
+	    if(_lFlavor[i] != 1)   	    continue;
+	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
+	    if(!*(muonID + i))          continue;
+	    if(_lPt[i] < 5)             continue;
+	    if(index_good_subleading == -1) index_good_subleading = i;
+	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
     return index_good_subleading;
 }
@@ -711,11 +710,11 @@ int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_g
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nJets; ++i){
-	if(i == index_good_leading) continue;
-	if(!*(jetID + i))           continue;
-	if(!*(jet_clean + i))       continue;
-	if(index_good_subleading == -1) index_good_subleading = i;
-	if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
+	    if(i == index_good_leading) continue;
+	    if(!*(jetID + i))           continue;
+	    if(!*(jet_clean + i))       continue;
+	    if(index_good_subleading == -1) index_good_subleading = i;
+	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
     return index_good_subleading;
 }
@@ -935,16 +934,16 @@ void full_analyzer::Loop()
 // METHOD2: replace line
 //    fChain->GetEntry(jentry);       //read all branches
 //by  b_branchname->GetEntry(ientry); //read only this branch
-   if (fChain == 0) return;
+    if (fChain == 0) return;
 
-   Long64_t nentries = fChain->GetEntriesFast();
+    Long64_t nentries = fChain->GetEntriesFast();
 
-   Long64_t nbytes = 0, nb = 0;
-   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-      if(jentry%1000 == 0) cout << "yeey " << jentry << endl;
-      Long64_t ientry = LoadTree(jentry);
-      if (ientry < 0) break;
-      nb = fChain->GetEntry(jentry);   nbytes += nb;
-      // if (Cut(ientry) < 0) continue;
-   }
+    Long64_t nbytes = 0, nb = 0;
+    for (Long64_t jentry=0; jentry<nentries;jentry++) {
+        if(jentry%1000 == 0) cout << "yeey " << jentry << endl;
+        Long64_t ientry = LoadTree(jentry);
+        if (ientry < 0) break;
+        nb = fChain->GetEntry(jentry);   nbytes += nb;
+        // if (Cut(ientry) < 0) continue;
+    }
 }
