@@ -4,13 +4,13 @@
 
 using namespace std;
 
-void mainroot(TString samples)
+void mainroot(TString sample)
 {
-    cout << "mainroot.cc file: " << samples << endl;
+    cout << "mainroot.cc file: " << sample << endl;
     
     full_analyzer b;
 
-    b.run_over_file(samples);
+    b.run_over_file(sample);
 
 }
 

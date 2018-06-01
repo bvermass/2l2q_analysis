@@ -368,9 +368,9 @@ void full_analyzer::run_over_file(TString filename)
     cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
-    TString outputfilename = "";
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename = "output/histograms/hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
-    else outputfilename = "output/histograms/hists_full_analyzer_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + ".root";
+    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/";
+    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
+    else outputfilename += "hists_full_analyzer_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + ".root";
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
     for(auto&& sh : hists){
