@@ -47,6 +47,18 @@ void markerstyle(TH1F *hist, TString color)
     }
 }
 
+void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], double normalization_const[])
+{
+    unsigned count = 0; //to count along with histograms in the map
+    for(auto&& sh : hists){
+        auto&& h = sh.second;
+        markerstyle((TH1F*)h, colors[count]);
+        if(normalization_const[count] == -1) h->Scale(1, "width");
+        else h->Scale(normalization_const[count]/h->GetEntries(), "width");
+        count++;
+    }
+}
+
 void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& legend, TString legend_entries[], TString colors[], double normalization_const[])
 {
     unsigned count = 0; //to count along with histograms in the map
@@ -59,6 +71,54 @@ void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& leg
         else h->Scale(normalization_const[count]/h->GetEntries(), "width");
         count++;
     }
+}
+
+void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
+{
+    //std::cout << "draw_n_hists" << std::endl;
+    // set x range lin or log
+    c->SetLogx(lin0log1);
+ 
+    // find the y range needed for the plot
+    double ymax = 1.1*h->GetMaximum();
+  
+    // design and draw the histograms
+    if(xmax != xmin) h->GetXaxis()->SetRangeUser(xmin, xmax);
+    if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
+    h->GetXaxis()->SetTitleOffset(1.2);
+    h->GetYaxis()->SetRangeUser(0, ymax);
+    if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
+    h->GetYaxis()->SetTitleOffset(1.5);
+    if(historE1 == "hist") h->Draw("hist");
+    else if(historE1 == "E1") h->Draw("E1");
+  
+    lgend->DrawClone("same");
+
+    // "CMS simulation" in top left
+    TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
+    cms_title->SetTextAlign(11);
+    cms_title->SetTextFont(43);
+    cms_title->SetTextSize(25);
+    cms_title->SetTextColor(kBlack);
+    cms_title->Draw("same");
+
+    // "mass, coupling and flavor info if relevant in top right
+    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
+    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
+    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling;
+    if(flavor != "" and coupling != "") couplinglatex += ", ";
+    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
+    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
+    double xmax_for_title = (xmax == xmin)? h->GetXaxis()->GetXmax() : xmax;
+    TLatex *massflavor_title    = new TLatex(xmax_for_title,1.012*ymax, masslatex + couplinglatex + flavorlatex);
+    massflavor_title->SetTextFont(43);
+    massflavor_title->SetTextSize(25);
+    massflavor_title->SetTextAlign(31);
+    massflavor_title->SetTextColor(kBlack);
+    massflavor_title->Draw("same");
+    
+    //Add option to make several formats, like .root, .png,...
+    c->Print(name);
 }
 
 void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
