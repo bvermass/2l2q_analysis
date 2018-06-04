@@ -14,6 +14,7 @@
 #include <TStyle.h>
 #include <TCanvas.h>
 #include <TLorentzVector.h>
+#include <TSystem.h>
 
 using namespace std;
 //Contents:
@@ -46,6 +47,7 @@ void full_analyzer::run_over_file(TString filename)
     //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
+    Double_t total_weight = ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
     Init(tree);
 
 
@@ -55,6 +57,12 @@ void full_analyzer::run_over_file(TString filename)
     hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
     hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
+    hists["2isol_0jet_pt"]              = new TH1F("2isol_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    hists["2isol_1jet_pt"]              = new TH1F("2isol_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    hists["2isol_2jet_pt"]              = new TH1F("2isol_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    hists["1iso1displ_0jet_pt"]              = new TH1F("1iso1displ_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    hists["1iso1displ_1jet_pt"]              = new TH1F("1iso1displ_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    hists["1iso1displ_2jet_pt"]              = new TH1F("1iso1displ_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     // signal regions that are included:
     // 0 = 2iso l, 0jet
     // 1 = 2iso l, 1jet
@@ -122,6 +130,11 @@ void full_analyzer::run_over_file(TString filename)
 	    if(printevent){
 	        cout << jentry << " of " << nentries << endl;
 	    }
+
+        //Calculate Event weight
+        Double_t event_weight;
+        if(filename.Index("HeavyNeutrino") != -1) event_weight = 1; //WHEN WEIGHTS ARE CORRECT CHANGE THIS
+        else event_weight = _weight;
 
 	    for(unsigned i = 0; i < _nL; ++i){
         	if(_lFlavor[i] != 0) continue;
@@ -231,73 +244,95 @@ void full_analyzer::run_over_file(TString filename)
 	    bool _1mu2jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
 
 
-	    hists["1eovertotal"]->Fill(0);
+	    hists["1eovertotal"]->Fill(0., event_weight);
 	    if(_1e){
-	        hists["1eovertotal"]->Fill(1);
-	        if(_2e0jet) hists["ee_sigreg_fraction"]->Fill(0);
-	        else if(_2e1jet) hists["ee_sigreg_fraction"]->Fill(1);
-	        else if(_2e2jet) hists["ee_sigreg_fraction"]->Fill(2);
-	        else if(_1e1nonisoe0jet) hists["ee_sigreg_fraction"]->Fill(3);
-	        else if(_1e1nonisoe1jet) hists["ee_sigreg_fraction"]->Fill(4);
-	        else if(_1e1nonisoe2jet) hists["ee_sigreg_fraction"]->Fill(5);
-	        else if(_1e1disple0jet)  hists["ee_sigreg_fraction"]->Fill(6);
-	        else if(_1e1disple1jet)  hists["ee_sigreg_fraction"]->Fill(7);
-	        else if(_1e1disple2jet)  hists["ee_sigreg_fraction"]->Fill(8);
-	        else if(_1e0jet) hists["ee_sigreg_fraction"]->Fill(9);
-	        else if(_1e1jet) hists["ee_sigreg_fraction"]->Fill(10);
-	        else if(_1e2jet) hists["ee_sigreg_fraction"]->Fill(11);
-	        else hists["ee_sigreg_fraction"]->Fill(12);
+	        hists["1eovertotal"]->Fill(1., event_weight);
+	        if(_2e0jet) hists["ee_sigreg_fraction"]->Fill(0., event_weight);
+	        else if(_2e1jet) hists["ee_sigreg_fraction"]->Fill(1., event_weight);
+	        else if(_2e2jet) hists["ee_sigreg_fraction"]->Fill(2., event_weight);
+	        else if(_1e1nonisoe0jet) hists["ee_sigreg_fraction"]->Fill(3., event_weight);
+	        else if(_1e1nonisoe1jet) hists["ee_sigreg_fraction"]->Fill(4., event_weight);
+	        else if(_1e1nonisoe2jet) hists["ee_sigreg_fraction"]->Fill(5., event_weight);
+	        else if(_1e1disple0jet)  hists["ee_sigreg_fraction"]->Fill(6., event_weight);
+	        else if(_1e1disple1jet)  hists["ee_sigreg_fraction"]->Fill(7., event_weight);
+	        else if(_1e1disple2jet)  hists["ee_sigreg_fraction"]->Fill(8., event_weight);
+	        else if(_1e0jet) hists["ee_sigreg_fraction"]->Fill(9., event_weight);
+	        else if(_1e1jet) hists["ee_sigreg_fraction"]->Fill(10., event_weight);
+	        else if(_1e2jet) hists["ee_sigreg_fraction"]->Fill(11., event_weight);
+	        else hists["ee_sigreg_fraction"]->Fill(12., event_weight);
 	    }
-	    hists["1muovertotal"]->Fill(0);
+	    hists["1muovertotal"]->Fill(0., event_weight);
 	    if(_1mu){
-	        hists["1muovertotal"]->Fill(1);
-	        if(_2mu0jet) hists["mumu_sigreg_fraction"]->Fill(0);
-	        else if(_2mu1jet) hists["mumu_sigreg_fraction"]->Fill(1);
-	        else if(_2mu2jet) hists["mumu_sigreg_fraction"]->Fill(2);
-	        else if(_1mu1nonisomu0jet) hists["mumu_sigreg_fraction"]->Fill(3);
-	        else if(_1mu1nonisomu1jet) hists["mumu_sigreg_fraction"]->Fill(4);
-	        else if(_1mu1nonisomu2jet) hists["mumu_sigreg_fraction"]->Fill(5);
-	        else if(_1mu1displmu0jet)  hists["mumu_sigreg_fraction"]->Fill(6);
-	        else if(_1mu1displmu1jet)  hists["mumu_sigreg_fraction"]->Fill(7);
-	        else if(_1mu1displmu2jet)  hists["mumu_sigreg_fraction"]->Fill(8);
-	        else if(_1mu0jet) hists["mumu_sigreg_fraction"]->Fill(9);
-	        else if(_1mu1jet) hists["mumu_sigreg_fraction"]->Fill(10);
-	        else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11);
-	        else hists["mumu_sigreg_fraction"]->Fill(12);
+	        hists["1muovertotal"]->Fill(1., event_weight);
+	        if(_2mu0jet) hists["mumu_sigreg_fraction"]->Fill(0., event_weight);
+	        else if(_2mu1jet) hists["mumu_sigreg_fraction"]->Fill(1., event_weight);
+	        else if(_2mu2jet) hists["mumu_sigreg_fraction"]->Fill(2., event_weight);
+	        else if(_1mu1nonisomu0jet) hists["mumu_sigreg_fraction"]->Fill(3., event_weight);
+	        else if(_1mu1nonisomu1jet) hists["mumu_sigreg_fraction"]->Fill(4., event_weight);
+	        else if(_1mu1nonisomu2jet) hists["mumu_sigreg_fraction"]->Fill(5., event_weight);
+	        else if(_1mu1displmu0jet)  hists["mumu_sigreg_fraction"]->Fill(6., event_weight);
+	        else if(_1mu1displmu1jet)  hists["mumu_sigreg_fraction"]->Fill(7., event_weight);
+	        else if(_1mu1displmu2jet)  hists["mumu_sigreg_fraction"]->Fill(8., event_weight);
+	        else if(_1mu0jet) hists["mumu_sigreg_fraction"]->Fill(9., event_weight);
+	        else if(_1mu1jet) hists["mumu_sigreg_fraction"]->Fill(10., event_weight);
+	        else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11., event_weight);
+	        else hists["mumu_sigreg_fraction"]->Fill(12., event_weight);
 	    }
 
         //HLT efficiency stuff, put this in a separate function later
         if(_1e){
-            hists["1_iso_ele_pt"]->Fill(_lPt[i_leading_e], _weight);
-            if(fabs(_lEta[i_leading_e]) < 1.2) hists["1_iso_ele_barrel_pt"]->Fill(_lPt[i_leading_e], _weight);
-            else hists["1_iso_ele_endcap_pt"]->Fill(_lPt[i_leading_e], _weight);
+            hists["1_iso_ele_pt"]->Fill(_lPt[i_leading_e], event_weight);
+            if(fabs(_lEta[i_leading_e]) < 1.2) hists["1_iso_ele_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);
+            else hists["1_iso_ele_endcap_pt"]->Fill(_lPt[i_leading_e], event_weight);
             
             if(_HLT_Ele27_WPTight_Gsf){ 
-                hists["HLT_Ele27_WPTight_Gsf_pt"]->Fill(_lPt[i_leading_e], _weight);
-                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]->Fill(_lPt[i_leading_e], _weight);
-                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]->Fill(_lPt[i_leading_e], _weight);
+                hists["HLT_Ele27_WPTight_Gsf_pt"]->Fill(_lPt[i_leading_e], event_weight);
+                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);
+                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]->Fill(_lPt[i_leading_e], event_weight);
                 
-                hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
-                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
-                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Fill(_lPt[i_leading_e], _weight);
+                hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
+                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
+                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
             }
 
         }
         if(_1mu){
-            hists["1_iso_mu_pt"]->Fill(_lPt[i_leading_mu], _weight);
-            if(fabs(_lEta[i_leading_mu]) < 1.2) hists["1_iso_mu_barrel_pt"]->Fill(_lPt[i_leading_mu], _weight);
-            else hists["1_iso_mu_endcap_pt"]->Fill(_lPt[i_leading_mu], _weight);
+            hists["1_iso_mu_pt"]->Fill(_lPt[i_leading_mu], event_weight);
+            if(fabs(_lEta[i_leading_mu]) < 1.2) hists["1_iso_mu_barrel_pt"]->Fill(_lPt[i_leading_mu], event_weight);
+            else hists["1_iso_mu_endcap_pt"]->Fill(_lPt[i_leading_mu], event_weight);
             
             if(_HLT_IsoMu24 or _HLT_IsoTkMu24){ 
-                hists["HLT_IsoMu24_IsoTkMu24_pt"]->Fill(_lPt[i_leading_mu], _weight);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]->Fill(_lPt[i_leading_mu], _weight);
-                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]->Fill(_lPt[i_leading_mu], _weight);
+                hists["HLT_IsoMu24_IsoTkMu24_pt"]->Fill(_lPt[i_leading_mu], event_weight);
+                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]->Fill(_lPt[i_leading_mu], event_weight);
+                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]->Fill(_lPt[i_leading_mu], event_weight);
                 
-                hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
-                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu], _weight);
+                hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
+                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
+                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
             }
         }
+
+        /*if(filename.Index("_e_") != -1){
+            hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+            hists["2isol_1jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+            hists["2isol_2jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+            hists["1iso1displ_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+            hists["1iso1displ_1jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+            hists["1iso1displ_2jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
+        }
+        else if(filename.Index("_mu_") != -1){
+            hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+            hists["2isol_1jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+            hists["2isol_2jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+            hists["1iso1displ_0jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+            hists["1iso1displ_1jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+            hists["1iso1displ_2jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
+        }
+        else{
+
+
+        }*/
+
     }
 
     //cout << "ee else: " << ee_else << endl;
@@ -367,7 +402,8 @@ void full_analyzer::run_over_file(TString filename)
     cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
-    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/";
+    TString outputfilename = "~/public/2l2q_analysis/histograms/full_analyzer/";
+    gSystem->Exec("mkdir -p " + outputfilename);
     if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
     else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + ".root";
     cout << "output to: " << outputfilename << endl;

@@ -25,8 +25,8 @@ using namespace std;
 void testplotterfunctions()
 {
     //test_plot();
-    plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.004472135955_e_pre2017_leptonFirst_NLO_displaced.root");
-    plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root");
+    plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.004472135955_e_pre2017_leptonFirst_NLO_displaced.root");
+    plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root");
 }
  
 void test_plot()
