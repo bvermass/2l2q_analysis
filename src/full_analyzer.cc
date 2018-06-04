@@ -4,7 +4,7 @@
 #include <iostream>
 
 //Include header for this class
-#include "full_analyzer.h"
+#include "../interface/full_analyzer.h"
 
 #define full_analyzer_done_cxx // otherwise the functions in full_analyzer.h can be loaded multiple times
 //#include "/user/bvermass/heavyNeutrino/DileptonPrompt/CMSSW_9_4_0/src/2l2q_analysis/tools/LeptonID.h"

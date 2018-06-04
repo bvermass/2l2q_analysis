@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../plugin/full_analyzer.h"
+#include "../interface/full_analyzer.h"
 
 using namespace std;
 
