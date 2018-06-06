@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "../interface/full_analyzer.h"
+#include "../interface/full_analyzer_ee.h"
 
 using namespace std;
 
@@ -24,6 +25,8 @@ void mainroot(TString sample)
     //    b_mumu.run_over_file(sample);
     //}
     //
+    //full_analyzer_ee* a = new full_analyzer_ee(5);
+    //a->test();
     full_analyzer b;
 
     b.run_over_file(sample);
