@@ -47,7 +47,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    Double_t total_weight = ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
+    double total_weight = cross_section / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
+    cout << "total weight: " << total_weight << endl;
     Init(tree);
 
 
@@ -121,7 +122,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     Long64_t nentries = tree->GetEntries();
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
-    int maxentries = 300000;
+    int maxentries = 10000;
     if(nentries > maxentries) nentries = maxentries;//CHANGE THIS, quick fix to not run too long
     for(unsigned jentry = 0; jentry < nentries; ++jentry){
 	    LoadTree(jentry);
@@ -433,7 +434,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
         for(int i = 0; i < nb+1; i++){
             if(h->GetBinContent(i) < 0.2) h->SetBinContent(i, 0.);
         }
-
+        h->Scale(total_weight);
     }
 
     //Determine efficiencies for HLT
