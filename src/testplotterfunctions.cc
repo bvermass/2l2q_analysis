@@ -57,7 +57,7 @@ void test_plot()
     TString colors[]  = {"green", "blue"};
     double norms[]   = {1,1};
     style_legend_and_normalization(hists, lgendrup, legends, colors, norms);
-    draw_n_hists("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis/makeplots/testplot.pdf", c, hists, "hist", &lgendrup, "pt", "events", -1.5, 1.5, 0, "e", "2", "0.22");
+    draw_n_hists("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis/misc/testplot.pdf", c, hists, "hist", &lgendrup, "pt", "events", -1.5, 1.5, 0, "e", "2", "0.22");
 }
 
 void plot_every_variable_in_root_file(TString filename)
