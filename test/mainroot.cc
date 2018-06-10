@@ -5,9 +5,9 @@
 
 using namespace std;
 
-void mainroot(TString sample)
+void mainroot(TString sample, double cross_section)
 {
-    cout << "mainroot.cc file: " << sample << endl;
+    cout << "mainroot.cc file: " << sample << " " << cross_section << endl;
     
     //how it should be: 
     //if(sample.Index("_e_") != -1){
@@ -29,7 +29,7 @@ void mainroot(TString sample)
     //a->test();
     full_analyzer b;
 
-    b.run_over_file(sample);
+    b.run_over_file(sample, cross_section);
 
 }
 
@@ -37,7 +37,8 @@ void mainroot(TString sample)
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    mainroot(argv[1]);
+    double cross_section = atof(argv[2]);
+    mainroot(argv[1], cross_section);
     return 0;
 }
 # endif

@@ -24,7 +24,7 @@ using namespace std;
 //  find_2_highest_pt_particles : finds 2 highest pt particles, if there is only one or zero, then i_jet1 or i_jet2 are put to -1
 //  loop 			: currently not used
 
-void full_analyzer::run_over_file(TString filename)
+void full_analyzer::run_over_file(TString filename, double cross_section)
 {
 // Short description of program flow:
 //     - initialize file
@@ -456,45 +456,45 @@ void full_analyzer::run_over_file(TString filename)
 
 void full_analyzer::testrun()
 {
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-200_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-800_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("prompt/HeavyNeutrino_lljj_M-1000_V-0.01_mu_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_e_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_mu_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
-    run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-200_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-800_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("prompt/HeavyNeutrino_lljj_M-1000_V-0.01_mu_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_e_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_mu_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
+    //run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
 
     print_table();
 }
