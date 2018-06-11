@@ -47,7 +47,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    double total_weight = cross_section / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
+    double total_weight = cross_section * 35900 / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
     cout << "total weight: " << total_weight << endl;
     Init(tree);
 
@@ -96,6 +96,32 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     hists["1_iso_mu_endcap_pt"]               = new TH1F("1_iso_mu_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+
+    hists["displ_SS_e_pt"]          = new TH1F("displ_SS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_e_dxy"]         = new TH1F("displ_SS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_SS_e_mll"]         = new TH1F("displ_SS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_e_vtxfitgen"]   = new TH1F("displ_SS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_SS_e_chi2"]        = new TH1F("displ_SS_e_chi2", ";#Chi^{2};Events", 80, 0, 50);
+    hists["displ_SS_e_vtxfitPV"]    = new TH1F("displ_SS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_pt"]         = new TH1F("displ_SS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_mu_dxy"]        = new TH1F("displ_SS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_mll"]        = new TH1F("displ_SS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_mu_vtxfitgen"]  = new TH1F("displ_SS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_chi2"]       = new TH1F("displ_SS_mu_chi2", ";#Chi^{2};Events", 80, 0, 50);
+    hists["displ_SS_mu_vtxfitPV"]   = new TH1F("displ_SS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_pt"]          = new TH1F("displ_OS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_e_dxy"]         = new TH1F("displ_OS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_mll"]         = new TH1F("displ_OS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_e_vtxfitgen"]   = new TH1F("displ_OS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_chi2"]        = new TH1F("displ_OS_e_chi2", ";#Chi^{2};Events", 80, 0, 50);
+    hists["displ_OS_e_vtxfitPV"]    = new TH1F("displ_OS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_pt"]         = new TH1F("displ_OS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_mu_dxy"]        = new TH1F("displ_OS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_mll"]        = new TH1F("displ_OS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_mu_vtxfitgen"]  = new TH1F("displ_OS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_chi2"]       = new TH1F("displ_OS_mu_chi2", ";#Chi^{2};Events", 80, 0, 50);
+    hists["displ_OS_mu_vtxfitPV"]   = new TH1F("displ_OS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+
     
     for(auto&& sh : hists){
 	auto&& h = sh.second;
@@ -122,7 +148,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     Long64_t nentries = tree->GetEntries();
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
-    int maxentries = 10000;
+    int maxentries = nentries;
     if(nentries > maxentries) nentries = maxentries;//CHANGE THIS, quick fix to not run too long
     for(unsigned jentry = 0; jentry < nentries; ++jentry){
 	    LoadTree(jentry);
@@ -313,6 +339,50 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
             }
         }
 
+        TLorentzVector lepton1;
+        TLorentzVector lepton2;
+        if(_1e1disple0jet){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                hists["displ_SS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
+                hists["displ_SS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
+                lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
+                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_e], _lEta[i_subleading_displ_e], _lPhi[i_subleading_displ_e], _lE[i_subleading_displ_e]);
+                hists["displ_SS_e_mll"]->Fill((lepton1 + lepton2).M());
+                hists["displ_SS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])));
+                hists["displ_SS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e]);
+                hists["displ_SS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e]);
+            }else{
+                hists["displ_OS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
+                hists["displ_OS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
+                lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
+                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_e], _lEta[i_subleading_displ_e], _lPhi[i_subleading_displ_e], _lE[i_subleading_displ_e]);
+                hists["displ_OS_e_mll"]->Fill((lepton1 + lepton2).M());
+                hists["displ_OS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])));
+                hists["displ_OS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e]);
+                hists["displ_OS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e]);
+            }
+        }
+        if(_1mu1displmu0jet){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                hists["displ_SS_mu_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
+                hists["displ_SS_mu_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
+                lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
+                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
+                hists["displ_SS_mu_mll"]->Fill((lepton1 + lepton2).M());
+                hists["displ_SS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])));
+                hists["displ_SS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu]);
+                hists["displ_SS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu]);
+            }else{
+                hists["displ_OS_mu_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
+                hists["displ_OS_mu_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
+                lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
+                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
+                hists["displ_OS_mu_mll"]->Fill((lepton1 + lepton2).M());
+                hists["displ_OS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])));
+                hists["displ_OS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu]);
+                hists["displ_OS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu]);
+            }
+        }
         /*if(filename.Index("_e_") != -1){
             hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
             hists["2isol_1jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);

@@ -64,6 +64,9 @@ public :
    UInt_t          _gen_lFlavor[20];   //[_gen_nL]
    Int_t           _gen_lCharge[20];   //[_gen_nL]
    Int_t           _gen_lMomPdg[20];   //[_gen_nL]
+   Double_t        _gen_vertex_x[20];
+   Double_t        _gen_vertex_y[20];
+   Double_t        _gen_vertex_z[20];
    Bool_t          _gen_lIsPrompt[20];   //[_gen_nL]
    Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
    Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
@@ -72,6 +75,13 @@ public :
    UInt_t          _gen_WMomPdg[1];   //[_gen_nW]
    UChar_t         _gen_nWfromN;
    UChar_t         _gen_nN;
+   Double_t        _gen_NPt;
+   Double_t        _gen_NEta;
+   Double_t        _gen_NPhi;
+   Double_t        _gen_NE;
+   Double_t        _gen_Nvertex_x;
+   Double_t        _gen_Nvertex_y;
+   Double_t        _gen_Nvertex_z;
    UChar_t         _gen_nNdaughters;
    UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
    UChar_t         _gen_nstatus23;
@@ -242,7 +252,10 @@ public :
    Double_t	   _lVtxpos_czx[10];
    Double_t	   _lVtxpos_df[10];
    Double_t	   _lVtxpos_chi2[10];
-   //Double_t	   _lVtxpos_PVdxy[10];
+   Double_t	   _lVtxpos_PVdxy[10];
+   Double_t	   _lVtxpos_BSdxy[10];
+   Double_t	   _lVtxpos_PVdz[10];
+   Double_t	   _lVtxpos_BSdz[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
@@ -340,6 +353,9 @@ public :
    TBranch        *b__gen_lFlavor;   //!
    TBranch        *b__gen_lCharge;   //!
    TBranch        *b__gen_lMomPdg;   //!
+   TBranch        *b__gen_vertex_x;  //!
+   TBranch        *b__gen_vertex_y;  //!
+   TBranch        *b__gen_vertex_z;  //!
    TBranch        *b__gen_lIsPrompt;   //!
    TBranch        *b__gen_lMinDeltaR;   //!
    TBranch        *b__gen_lPassParentage;   //!
@@ -348,6 +364,13 @@ public :
    TBranch        *b__gen_WMomPdg;   //!
    TBranch        *b__gen_nWfromN;   //!
    TBranch        *b__gen_nN;   //!
+   TBranch        *b__gen_NPt;
+   TBranch        *b__gen_NEta;
+   TBranch        *b__gen_NPhi;
+   TBranch        *b__gen_NE;
+   TBranch        *b__gen_Nvertex_x;
+   TBranch        *b__gen_Nvertex_y;
+   TBranch        *b__gen_Nvertex_z;
    TBranch        *b__gen_nNdaughters;   //!
    TBranch        *b__gen_Ndaughters_pdg;   //!
    TBranch        *b__gen_nstatus23;   //!
@@ -518,7 +541,10 @@ public :
    TBranch	  *b__lVtxpos_czx;
    TBranch	  *b__lVtxpos_df;
    TBranch	  *b__lVtxpos_chi2;
-   //TBranch	  *b__lVtxpos_PVdxy;
+   TBranch	  *b__lVtxpos_PVdxy;
+   TBranch	  *b__lVtxpos_BSdxy;
+   TBranch	  *b__lVtxpos_PVdz;
+   TBranch	  *b__lVtxpos_BSdz;
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
@@ -707,6 +733,9 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_gen_lFlavor", _gen_lFlavor, &b__gen_lFlavor);
    fChain->SetBranchAddress("_gen_lCharge", _gen_lCharge, &b__gen_lCharge);
    fChain->SetBranchAddress("_gen_lMomPdg", _gen_lMomPdg, &b__gen_lMomPdg);
+   fChain->SetBranchAddress("_gen_vertex_x", _gen_vertex_x, &b__gen_vertex_x);
+   fChain->SetBranchAddress("_gen_vertex_y", _gen_vertex_y, &b__gen_vertex_y);
+   fChain->SetBranchAddress("_gen_vertex_z", _gen_vertex_z, &b__gen_vertex_z);
    fChain->SetBranchAddress("_gen_lIsPrompt", _gen_lIsPrompt, &b__gen_lIsPrompt);
    fChain->SetBranchAddress("_gen_lMinDeltaR", _gen_lMinDeltaR, &b__gen_lMinDeltaR);
    fChain->SetBranchAddress("_gen_lPassParentage", _gen_lPassParentage, &b__gen_lPassParentage);
@@ -715,6 +744,13 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_gen_WMomPdg", _gen_WMomPdg, &b__gen_WMomPdg);
    fChain->SetBranchAddress("_gen_nWfromN", &_gen_nWfromN, &b__gen_nWfromN);
    fChain->SetBranchAddress("_gen_nN", &_gen_nN, &b__gen_nN);
+   fChain->SetBranchAddress("_gen_NPt", &_gen_NPt, &b__gen_NPt);
+   fChain->SetBranchAddress("_gen_NEta", &_gen_NEta, &b__gen_NEta);
+   fChain->SetBranchAddress("_gen_NPhi", &_gen_NPhi, &b__gen_NPhi);
+   fChain->SetBranchAddress("_gen_NE", &_gen_NE, &b__gen_NE);
+   fChain->SetBranchAddress("_gen_Nvertex_x", &_gen_Nvertex_x, &b__gen_Nvertex_x);
+   fChain->SetBranchAddress("_gen_Nvertex_y", &_gen_Nvertex_y, &b__gen_Nvertex_y);
+   fChain->SetBranchAddress("_gen_Nvertex_z", &_gen_Nvertex_z, &b__gen_Nvertex_z);
    fChain->SetBranchAddress("_gen_nNdaughters", &_gen_nNdaughters, &b__gen_nNdaughters);
    fChain->SetBranchAddress("_gen_Ndaughters_pdg", _gen_Ndaughters_pdg, &b__gen_Ndaughters_pdg);
    fChain->SetBranchAddress("_gen_nstatus23", &_gen_nstatus23, &b__gen_nstatus23);
@@ -885,7 +921,10 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lVtxpos_czx", _lVtxpos_czx, &b__lVtxpos_czx);
    fChain->SetBranchAddress("_lVtxpos_df", _lVtxpos_df, &b__lVtxpos_df);
    fChain->SetBranchAddress("_lVtxpos_chi2", _lVtxpos_chi2, &b__lVtxpos_chi2);
-   //fChain->SetBranchAddress("_lVtxpos_PVdxy", _lVtxpos_PVdxy, &b__lVtxpos_PVdxy);
+   fChain->SetBranchAddress("_lVtxpos_PVdxy", _lVtxpos_PVdxy, &b__lVtxpos_PVdxy);
+   fChain->SetBranchAddress("_lVtxpos_BSdxy", _lVtxpos_BSdxy, &b__lVtxpos_BSdxy);
+   fChain->SetBranchAddress("_lVtxpos_PVdz", _lVtxpos_PVdz, &b__lVtxpos_PVdz);
+   fChain->SetBranchAddress("_lVtxpos_BSdz", _lVtxpos_BSdz, &b__lVtxpos_BSdz);
    fChain->SetBranchAddress("_lMuonSegComp", _lMuonSegComp, &b__lMuonSegComp);
    fChain->SetBranchAddress("_lMuonTrackPt", _lMuonTrackPt, &b__lMuonTrackPt);
    fChain->SetBranchAddress("_lMuonTrackPtErr", _lMuonTrackPtErr, &b__lMuonTrackPtErr);

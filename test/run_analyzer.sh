@@ -11,22 +11,26 @@ if g++ ${headdir}"/src/full_analyzer_ee.cc" ${headdir}"/src/full_analyzer.cc" ${
     #execute code for every file necessary
     while IFS='' read -r line || [[ -n "$line" ]]; do
         
-        #split sample name and cross section that are currenlty on single line
-        counter=0
-        for val in $line; do
-            if [ $counter -eq 0 ]; then
-                inputfile=$val
-                counter=1
-            else
-                cross_section=$val
-                counter=0
-            fi
-        done
+        if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then
+            echo "white line or comment found!"
+        else
+            #split sample name and cross section that are currenlty on single line
+            counter=0
+            for val in $line; do
+                if [ $counter -eq 0 ]; then
+                    inputfile=$val
+                    counter=1
+                else
+                    cross_section=$val
+                    counter=0
+                fi
+            done
 
-        #root -l -b -q ${headdir}"src/full_analyzer.cc+" ${headdir}"test/mainroot.cc(\"$line\")" #maybe add an option to compile using this line, meaning Aclic
-        echo "run_analyzer.sh file: "$inputfile
-        ./a.out $inputfile $cross_section
-        echo 
+            #root -l -b -q ${headdir}"src/full_analyzer.cc+" ${headdir}"test/mainroot.cc(\"$line\")" #maybe add an option to compile using this line, meaning Aclic
+            echo "run_analyzer.sh file: "$inputfile
+            ./a.out $inputfile $cross_section
+            echo 
+        fi
     done < "$1"
 else
     echo -e "COMPILATION FAILED\n"
