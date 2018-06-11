@@ -5,8 +5,9 @@
 
 using namespace std;
 
-void mainroot(TString sample, double cross_section)
+void mainroot(TString sample, double cross_section, int max_entries)
 {
+    if (sample.Index(".root") == -1) sample+= "/dilep.root";//in case only the directory is given and not the actual root file. This should fix in almost all cases
     cout << "mainroot.cc file: " << sample << " " << cross_section << endl;
     
     //how it should be: 
@@ -29,7 +30,7 @@ void mainroot(TString sample, double cross_section)
     //a->test();
     full_analyzer b;
 
-    b.run_over_file(sample, cross_section);
+    b.run_over_file(sample, cross_section, max_entries);
 
 }
 
@@ -38,7 +39,8 @@ void mainroot(TString sample, double cross_section)
 int main(int argc, char * argv[])
 {
     double cross_section = atof(argv[2]);
-    mainroot(argv[1], cross_section);
+    int max_entries = atof(argv[3]);
+    mainroot(argv[1], cross_section, max_entries);
     return 0;
 }
 # endif

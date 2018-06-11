@@ -24,7 +24,7 @@ using namespace std;
 //  find_2_highest_pt_particles : finds 2 highest pt particles, if there is only one or zero, then i_jet1 or i_jet2 are put to -1
 //  loop 			: currently not used
 
-void full_analyzer::run_over_file(TString filename, double cross_section)
+void full_analyzer::run_over_file(TString filename, double cross_section, int max_entries)
 {
 // Short description of program flow:
 //     - initialize file
@@ -148,14 +148,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section)
     Long64_t nentries = tree->GetEntries();
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
-    int maxentries = nentries;
-    if(nentries > maxentries) nentries = maxentries;//CHANGE THIS, quick fix to not run too long
-    for(unsigned jentry = 0; jentry < nentries; ++jentry){
+    if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
+    total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
+    
+    for(unsigned jentry = 0; jentry < max_entries; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
 	    bool printevent = (jentry%5000 == 0);
 	    if(printevent){
-	        cout << jentry << " of " << nentries << endl;
+	        cout << jentry << " of " << max_entries << endl;
 	    }
 
         //Calculate Event weight
