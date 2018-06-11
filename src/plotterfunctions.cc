@@ -1,6 +1,7 @@
 #include <TF1.h>
 #include <TH2.h>
 #include <TH1.h>
+#include <THStack.h>
 #include <THistPainter.h>
 #include <TGraphAsymmErrors.h>
 #include <TLatex.h>
@@ -15,6 +16,16 @@
 #include "../interface/plotterfunctions.h"
 
 using namespace std;
+
+void mapmarkerstyle(std::map<TString, TH1*> hists)
+{
+    for(auto&& sh : hists){
+        auto&& h = sh.second;
+        //h->SetMarkerStyle(20);
+        h->SetMarkerSize(0);
+        h->SetLineWidth(1);
+    }
+}
 
 void markerstyle(TH1F *hist, TString color)
 {
@@ -178,5 +189,35 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     massflavor_title->Draw("same");
     
     //Add option to make several formats, like .root, .png,...
+    c->Print(name);
+}
+
+void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax)
+{
+    c->SetLogy(ylin0log1);
+    
+    stack->Draw("PFC hist");
+
+    stack->GetXaxis()->SetTitle(Xaxis);
+    stack->GetYaxis()->SetTitle(Yaxis);
+    stack->GetXaxis()->SetTitleOffset(1.2);
+    stack->GetYaxis()->SetTitleOffset(1.5);
+
+    if(xmin != -1) stack->GetXaxis()->SetRangeUser(xmin,xmax);
+    if(ymin != -1) stack->SetMinimum(ymin);
+    if(ymax != -1) stack->SetMaximum(ymax);
+
+    lgend->DrawClone("same");
+
+    // "CMS simulation" in top left
+   // TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
+   // cms_title->SetTextAlign(11);
+   // cms_title->SetTextFont(43);
+   // cms_title->SetTextSize(25);
+   // cms_title->SetTextColor(kBlack);
+   // cms_title->Draw("same");
+
+   // TLatex luminosity   = new TLatex(
+    c->Modified();
     c->Print(name);
 }
