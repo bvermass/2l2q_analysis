@@ -14,9 +14,13 @@ case $choice in
         echo -e "//////////////////////////\n"
         
         while IFS='' read -r line || [[ -n "$line" ]]; do
-            echo "run_test.sh file: "$line
-            ./a.out $line
-            echo
+            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+                echo "white line or comment found!"
+            else
+                echo "run_test.sh file: "$line
+                ./a.out $line
+                echo
+            fi
         done < "$1"
     
     else
@@ -33,16 +37,20 @@ case $choice in
         echo -e "//////////////////////////\n"
     
         while IFS='' read -r line || [[ -n "$line" ]]; do
-            counter=0
-            for val in $line; do
-                if [ $counter -eq 0 ]; then
-                    samples+=($val)
-                    counter=1
-                else 
-                    legend+=($val)
-                    counter=0
-                fi
-            done
+            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+                echo "white line or comment found!"
+            else
+                counter=0
+                for val in $line; do
+                    if [ $counter -eq 0 ]; then
+                        samples+=($val)
+                        counter=1
+                    else 
+                        legend+=($val)
+                        counter=0
+                    fi
+                done
+            fi
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $2

@@ -55,6 +55,9 @@ void markerstyle(TH1F *hist, TString color)
     }else if(color == "teal"){
         hist->SetMarkerColor(kTeal-6);
         hist->SetLineColor(kTeal-6);
+    }else if(color == "pink"){
+        hist->SetMarkerColor(kPink);
+        hist->SetLineColor(kPink);
     }
 }
 
@@ -196,7 +199,7 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
 {
     c->SetLogy(ylin0log1);
     
-    stack->Draw("PFC hist");
+    stack->Draw("PFC PLC hist");
 
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);
@@ -210,14 +213,69 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-   // TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
-   // cms_title->SetTextAlign(11);
-   // cms_title->SetTextFont(43);
-   // cms_title->SetTextSize(25);
-   // cms_title->SetTextColor(kBlack);
-   // cms_title->Draw("same");
+    //TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
+    //cms_title->SetTextAlign(11);
+    //cms_title->SetTextFont(43);
+    //cms_title->SetTextSize(25);
+    //cms_title->SetTextColor(kBlack);
+    //cms_title->Draw("same");
 
-   // TLatex luminosity   = new TLatex(
+    //TLatex luminosity   = new TLatex(
+    c->Modified();
+    c->Print(name);
+}
+
+void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax)
+{
+    c->SetLogy(ylin0log1);
+    
+    stack->Draw("PFC PLC hist");
+
+    stack->GetXaxis()->SetTitle(Xaxis);
+    stack->GetYaxis()->SetTitle(Yaxis);
+    stack->GetXaxis()->SetTitleOffset(1.2);
+    stack->GetYaxis()->SetTitleOffset(1.5);
+
+    if(xmin != -1) stack->GetXaxis()->SetRangeUser(xmin,xmax);
+    if(ymin != -1) stack->SetMinimum(ymin);
+    if(ymax != -1) stack->SetMaximum(ymax);
+
+    // draw signal on top
+    // find the y range needed for the plot
+    double max_for_scale = 0;
+    for(auto&& sh : signals){
+        auto&& h = sh.second;
+        if(h->GetMaximum() > max_for_scale) max_for_scale = h->GetMaximum();
+    }
+    //double scale_factor = 0.01 * stack->GetMaximum() / max_for_scale;
+    
+    for(auto&& sh : signals){
+        auto&& h = sh.second;
+        double scale_factor = 0.01 * stack->GetMaximum() / h->GetMaximum();
+        h->Scale(scale_factor);
+        if(historE1 == "hist") h->Draw("hist same");
+        else if(historE1 == "E1") h->Draw("E1 same");
+    }
+
+    lgend->DrawClone("same");
+
+    // "CMS simulation" in top left
+    TLatex *cms_title    = new TLatex(0.1,0.905,"#bf{CMS} #it{simulation}"); 
+    cms_title->SetNDC();
+    cms_title->SetTextAlign(11);
+    cms_title->SetTextFont(43);
+    cms_title->SetTextSize(25);
+    cms_title->SetTextColor(kBlack);
+    cms_title->Draw("same");
+
+    TLatex *lumi    = new TLatex(0.9,0.905,"35.9 fb^{-1} (13 TeV)"); 
+    lumi->SetNDC();
+    lumi->SetTextAlign(31);
+    lumi->SetTextFont(43);
+    lumi->SetTextSize(22);
+    lumi->SetTextColor(kBlack);
+    lumi->Draw("same");
+    
     c->Modified();
     c->Print(name);
 }
