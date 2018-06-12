@@ -58,12 +58,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
     hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
-    hists["2isol_0jet_pt"]              = new TH1F("2isol_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+    /*hists["2isol_0jet_pt"]              = new TH1F("2isol_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     hists["2isol_1jet_pt"]              = new TH1F("2isol_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     hists["2isol_2jet_pt"]              = new TH1F("2isol_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     hists["1iso1displ_0jet_pt"]              = new TH1F("1iso1displ_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     hists["1iso1displ_1jet_pt"]              = new TH1F("1iso1displ_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
     hists["1iso1displ_2jet_pt"]              = new TH1F("1iso1displ_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
+*/
     // signal regions that are included:
     // 0 = 2iso l, 0jet
     // 1 = 2iso l, 1jet
@@ -154,7 +155,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for(unsigned jentry = 0; jentry < max_entries; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
-	    bool printevent = (jentry%5000 == 0);
+        double notice = round(0.001 * max_entries / 20) * 1000;
+	    bool printevent = (jentry%notice == 0);
 	    if(printevent){
 	        cout << jentry << " of " << max_entries << endl;
 	    }
