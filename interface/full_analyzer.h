@@ -239,23 +239,24 @@ public :
    UInt_t          _TrackMult_noIP_pt3[6];   //[_nLight]
    UInt_t          _TrackMult_noIP_pt4[6];   //[_nLight]
    UInt_t          _TrackMult_noIP_pt5[6];   //[_nLight]
-   UInt_t	   _Nutau_TrackMult_pt1[10];
-   UInt_t	   _Nutau_TrackMult_pt5[10];
-   Double_t	   _lVtxpos_x[10];
-   Double_t	   _lVtxpos_y[10];
-   Double_t	   _lVtxpos_z[10];
-   Double_t	   _lVtxpos_cxx[10];
-   Double_t	   _lVtxpos_cyy[10];
-   Double_t	   _lVtxpos_czz[10];
-   Double_t	   _lVtxpos_cyx[10];
-   Double_t	   _lVtxpos_czy[10];
-   Double_t	   _lVtxpos_czx[10];
-   Double_t	   _lVtxpos_df[10];
-   Double_t	   _lVtxpos_chi2[10];
-   Double_t	   _lVtxpos_PVdxy[10];
-   Double_t	   _lVtxpos_BSdxy[10];
-   Double_t	   _lVtxpos_PVdz[10];
-   Double_t	   _lVtxpos_BSdz[10];
+   UInt_t	       _Nutau_TrackMult_pt1[10];
+   UInt_t	       _Nutau_TrackMult_pt5[10];
+   Double_t	       _lVtxpos_x[10];
+   Double_t	       _lVtxpos_y[10];
+   Double_t	       _lVtxpos_z[10];
+   Double_t	       _lVtxpos_cxx[10];
+   Double_t	       _lVtxpos_cyy[10];
+   Double_t	       _lVtxpos_czz[10];
+   Double_t	       _lVtxpos_cyx[10];
+   Double_t	       _lVtxpos_czy[10];
+   Double_t	       _lVtxpos_czx[10];
+   Double_t	       _lVtxpos_df[10];
+   Double_t	       _lVtxpos_chi2[10];
+   UInt_t	       _lVtxpos_ntracks[10];
+   Double_t	       _lVtxpos_PVdxy[10];
+   Double_t	       _lVtxpos_BSdxy[10];
+   Double_t	       _lVtxpos_PVdz[10];
+   Double_t	       _lVtxpos_BSdz[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
@@ -638,11 +639,11 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/user/bvermass/public/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-11_V-0.01_e_onshell_pre2017_NLO/dilep.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-11_V-0.01_e_onshell_pre2017_NLO/dilep.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/user/bvermass/public/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO/dilep.root");
+         f = new TFile("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO/dilep.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("/user/bvermass/public/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO/dilep.root:/blackJackAndHookers");
+      TDirectory * dir = (TDirectory*)f->Get("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO/dilep.root:/blackJackAndHookers");
       dir->GetObject("blackJackAndHookersTree",tree);
 
    }

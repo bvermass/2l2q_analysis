@@ -29,6 +29,7 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
 
 void markerstyle(TH1F *hist, TString color)
 {
+    hist->SetLineWidth(2);
     hist->SetMarkerStyle(20);
     hist->SetMarkerSize(0.7);
     if(color == "blue"){

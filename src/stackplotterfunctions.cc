@@ -94,7 +94,7 @@ int main(int argc, char * argv[])
         // style of signal
         markerstyle((TH1F*)signals["1_3GeV"], "red");
         markerstyle((TH1F*)signals["2_7GeV"], "magenta");
-        //mapmarkerstyle(hists);
+        mapmarkerstyle(hists);
 
         THStack *stack = new THStack("stack", h_ref->GetName());
         int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME

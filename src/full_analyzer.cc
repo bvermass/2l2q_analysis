@@ -98,34 +98,39 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
 
-    hists["displ_SS_e_leadpt"]      = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_pt"]          = new TH1F("displ_SS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_dxy"]         = new TH1F("displ_SS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_SS_e_mll"]         = new TH1F("displ_SS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_vtxfitgen"]   = new TH1F("displ_SS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_SS_e_chi2"]        = new TH1F("displ_SS_e_chi2", ";#Chi^{2};Events", 80, 0, 50);
-    hists["displ_SS_e_vtxfitPV"]    = new TH1F("displ_SS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_leadpt"]     = new TH1F("displ_SS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_pt"]         = new TH1F("displ_SS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_dxy"]        = new TH1F("displ_SS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_mll"]        = new TH1F("displ_SS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_vtxfitgen"]  = new TH1F("displ_SS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_chi2"]       = new TH1F("displ_SS_mu_chi2", ";#Chi^{2};Events", 80, 0, 50);
-    hists["displ_SS_mu_vtxfitPV"]   = new TH1F("displ_SS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_leadpt"]      = new TH1F("displ_OS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_e_pt"]          = new TH1F("displ_OS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_e_dxy"]         = new TH1F("displ_OS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_mll"]         = new TH1F("displ_OS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_e_vtxfitgen"]   = new TH1F("displ_OS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_chi2"]        = new TH1F("displ_OS_e_chi2", ";#Chi^{2};Events", 80, 0, 50);
-    hists["displ_OS_e_vtxfitPV"]    = new TH1F("displ_OS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_leadpt"]     = new TH1F("displ_OS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_pt"]         = new TH1F("displ_OS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_dxy"]        = new TH1F("displ_OS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_mll"]        = new TH1F("displ_OS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_vtxfitgen"]  = new TH1F("displ_OS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_chi2"]       = new TH1F("displ_OS_mu_chi2", ";#Chi^{2};Events", 80, 0, 50);
-    hists["displ_OS_mu_vtxfitPV"]   = new TH1F("displ_OS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    // CHANGE METHOD OF MAKING HISTOGRAMS, NOW HAVE TO COPY EVERYTHING 4 TIMES, SHOULD BE POSSIBLE IN ONE GO WITH A FUNCTION
+    hists["displ_SS_e_leadpt"]              = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_e_pt"]                  = new TH1F("displ_SS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_e_dxy"]                 = new TH1F("displ_SS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_SS_e_mll"]                 = new TH1F("displ_SS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_e_vtxfitgen"]           = new TH1F("displ_SS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_SS_e_chi2"]                = new TH1F("displ_SS_e_chi2", ";#Chi^{2};Events", 80, 0, 2);
+    hists["displ_SS_e_vtxfitPV"]            = new TH1F("displ_SS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_SS_e_vtxfit_ntracks"]      = new TH1F("displ_SS_e_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
+    hists["displ_SS_mu_leadpt"]             = new TH1F("displ_SS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_mu_pt"]                 = new TH1F("displ_SS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_mu_dxy"]                = new TH1F("displ_SS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_mll"]                = new TH1F("displ_SS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_SS_mu_vtxfitgen"]          = new TH1F("displ_SS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_chi2"]               = new TH1F("displ_SS_mu_chi2", ";#Chi^{2};Events", 80, 0, 2);
+    hists["displ_SS_mu_vtxfitPV"]           = new TH1F("displ_SS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_SS_mu_vtxfit_ntracks"]      = new TH1F("displ_SS_mu_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
+    hists["displ_OS_e_leadpt"]              = new TH1F("displ_OS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_e_pt"]                  = new TH1F("displ_OS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_e_dxy"]                 = new TH1F("displ_OS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_mll"]                 = new TH1F("displ_OS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_e_vtxfitgen"]           = new TH1F("displ_OS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_chi2"]                = new TH1F("displ_OS_e_chi2", ";#Chi^{2};Events", 80, 0, 2);
+    hists["displ_OS_e_vtxfitPV"]            = new TH1F("displ_OS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_OS_e_vtxfit_ntracks"]      = new TH1F("displ_OS_e_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
+    hists["displ_OS_mu_leadpt"]             = new TH1F("displ_OS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_mu_pt"]                 = new TH1F("displ_OS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_mu_dxy"]                = new TH1F("displ_OS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_mll"]                = new TH1F("displ_OS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    hists["displ_OS_mu_vtxfitgen"]          = new TH1F("displ_OS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_chi2"]               = new TH1F("displ_OS_mu_chi2", ";#Chi^{2};Events", 80, 0, 2);
+    hists["displ_OS_mu_vtxfitPV"]           = new TH1F("displ_OS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
+    hists["displ_OS_mu_vtxfit_ntracks"]      = new TH1F("displ_OS_mu_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
 
     
     for(auto&& sh : hists){
@@ -250,33 +255,40 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //Get signal region -> put this into a function maybe
         bool _1e			    = i_leading_e != -1;
-	    bool _2e0jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	    bool _2e1jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	    bool _2e2jet 			= i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	    bool _1e1nonisoe0jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	    bool _1e1nonisoe1jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	    bool _1e1nonisoe2jet	= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	    bool _1e1disple0jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	    bool _1e1disple1jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	    bool _1e1disple2jet		= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	    bool _1e0jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	    bool _1e1jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	    bool _1e2jet			= i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+        bool leadptveto_e = false;
+        //if(i_leading_e != -1 && jentry%100 == 0) cout << "leading pt: " << _lPt[i_leading_e] << endl;
+        if(i_leading_e != -1 and _lPt[i_leading_e] > 30) leadptveto_e = true;
+        //if(i_leading_e != -1 && jentry%100 == 0) cout << "leadptveto_e: " << leadptveto_e << endl;
+	    bool _2e0jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	    bool _1e1nonisoe0jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1e1nonisoe1jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1e1nonisoe2jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+	    bool _1e1disple0jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
+	    bool _1e1disple1jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	    bool _1e1disple2jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	    bool _1e0jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _1e1jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _1e2jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+        
 
 	    bool _1mu			    = i_leading_mu != -1;
-	    bool _2mu0jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	    bool _2mu1jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	    bool _2mu2jet 			= i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	    bool _1mu1nonisomu0jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	    bool _1mu1nonisomu1jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	    bool _1mu1nonisomu2jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	    bool _1mu1displmu0jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	    bool _1mu1displmu1jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	    bool _1mu1displmu2jet	= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	    bool _1mu0jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	    bool _1mu1jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	    bool _1mu2jet			= i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-
+        bool leadptveto_mu = false;
+	    if(i_leading_mu != -1 and _lPt[i_leading_mu] > 25) leadptveto_mu = true;
+        bool _2mu0jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _2mu1jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _2mu2jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	    bool _1mu1nonisomu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1mu1nonisomu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
+	    bool _1mu1nonisomu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+	    bool _1mu1displmu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
+	    bool _1mu1displmu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	    bool _1mu1displmu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	    bool _1mu0jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
+	    bool _1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
+	    bool _1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+        
 
 	    hists["1eovertotal"]->Fill(0., event_weight);
 	    if(_1e){
@@ -359,6 +371,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 hists["displ_SS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
                 hists["displ_SS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e], event_weight);
                 hists["displ_SS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
+                hists["displ_SS_e_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
             }else{
                 hists["displ_OS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
                 hists["displ_OS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
@@ -369,6 +382,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 hists["displ_OS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
                 hists["displ_OS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e], event_weight);
                 hists["displ_OS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
+                hists["displ_OS_e_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
             }
         }
         if(_1mu1displmu0jet){
@@ -382,6 +396,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 hists["displ_SS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
                 hists["displ_SS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu], event_weight);
                 hists["displ_SS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
+                hists["displ_SS_mu_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
             }else{
                 hists["displ_OS_mu_leadpt"]->Fill(_lPt[i_leading_mu], event_weight);
                 hists["displ_OS_mu_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
@@ -391,6 +406,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 hists["displ_OS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
                 hists["displ_OS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu], event_weight);
                 hists["displ_OS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
+                hists["displ_OS_mu_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
             }
         }
         /*if(filename.Index("_e_") != -1){
@@ -437,7 +453,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	//    h->Scale(100/h->GetEntries());
     //}
 
-    if(flavor == "e"){
+    if(flavor == "e" or flavor == "bkg"){
         cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
         cout << "2iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(2) << endl;
         cout << "2iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(3) << endl;
@@ -452,7 +468,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         cout << "1iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(12) << endl;
         cout << "other:                   " << hists["ee_sigreg_fraction"]->GetBinContent(13) << endl;
     }
-    if(flavor == "mu"){
+    if(flavor == "mu" or flavor == "bkg"){
         cout << "2iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(1) << endl;
         cout << "2iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(2) << endl;
         cout << "2iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(3) << endl;
@@ -461,26 +477,26 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         cout << "1iso mu, 1noniso mu, 2jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(6) << endl;
         cout << "1iso mu, 1displ mu, 0jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(7) << endl;
         cout << "1iso mu, 1displ mu, 1jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(8) << endl;
-        cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl << endl;
+        cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl;
         cout << "1iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(10) << endl;
         cout << "1iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(11) << endl;
         cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
         cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
     }
-    cout << endl << "it should be:" << endl;
-    cout << "2iso e, 0jet:            0.136727     " << endl; 
-    cout << "2iso e, 1jet:            0.0321711    " << endl; 
-    cout << "2iso e, 2jet:            0.00402139   " << endl; 
-    cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
-    cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
-    cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
-    cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
-    cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
-    cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
-    
-    cout << "1iso e, 0jet:            17.7906      " << endl; 
-    cout << "1iso e, 1jet:            47.8707      " << endl; 
-    cout << "1iso e, 2jet:            11.7143      " << endl; 
+    //cout << endl << "it should be:" << endl;
+    //cout << "2iso e, 0jet:            0.136727     " << endl; 
+    //cout << "2iso e, 1jet:            0.0321711    " << endl; 
+    //cout << "2iso e, 2jet:            0.00402139   " << endl; 
+    //cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
+    //cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
+    //cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
+    //cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
+    //cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
+    //cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
+    //
+    //cout << "1iso e, 0jet:            17.7906      " << endl; 
+    //cout << "1iso e, 1jet:            47.8707      " << endl; 
+    //cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
     TString outputfilename = "~/public/2l2q_analysis/histograms/full_analyzer/";
@@ -734,16 +750,16 @@ void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
     TLorentzVector electron;
 
     for(unsigned i_el = 0; i_el < _nL; ++i_el){
-	*(cleaned + i_el) = true;
-	if(_lFlavor[i_el] != 0) continue;
-	electron.SetPtEtaPhiE(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
+	    *(cleaned + i_el) = true;
+	    if(_lFlavor[i_el] != 0) continue;
+	    electron.SetPtEtaPhiE(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
 
-	for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
-	    if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
-		muon.SetPtEtaPhiE(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
-		if(muon.DeltaR(electron) < 0.4) *(cleaned + i_el) = false;
+	    for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
+	        if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
+	    	muon.SetPtEtaPhiE(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
+	    	if(muon.DeltaR(electron) < 0.4) *(cleaned + i_el) = false;
+	        }
 	    }
-	}
     }
 }
 
@@ -770,7 +786,7 @@ int full_analyzer::find_leading_mu(bool* muonID)
     for(unsigned i = 0; i < _nL; ++i){
 	    if(_lFlavor[i] != 1) continue;
 	    if(!*(muonID + i))   continue;
-	    if(_lPt[i] < 25)     continue;
+	    //if(_lPt[i] < 25)     continue;
 	    if(index_good_leading == -1) index_good_leading = i;
 	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
     }

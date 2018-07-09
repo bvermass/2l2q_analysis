@@ -22,7 +22,7 @@ case $choice in
                 echo
             fi
         done < "$1"
-    
+    rm a.out
     else
         echo -e "\n//////////////////////"
         echo -e "//COMPILATION FAILED//"
@@ -56,7 +56,7 @@ case $choice in
         #IFS=$'\n' read -d '' -r -a legend < $2
         ./a.out ${samples[@]} ${legend[@]}
         echo
-    
+    rm a.out    
     else
         echo -e "\n//////////////////////"
         echo -e "//COMPILATION FAILED//"
