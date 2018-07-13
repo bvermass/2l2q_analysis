@@ -18,4 +18,4 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     echo $joboutname":"$filename >> $errors
 
 done < "$errorstmp"
-
+rm $errorstmp

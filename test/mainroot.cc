@@ -8,7 +8,7 @@ using namespace std;
 void mainroot(TString sample, double cross_section, int max_entries)
 {
     if (sample.Index(".root") == -1) sample+= "/dilep.root";//in case only the directory is given and not the actual root file. This should fix in almost all cases
-    cout << "mainroot.cc file - cross section - maxentry: " << sample << " - " << cross_section << "-" << max_entries << endl;
+    cout << "mainroot.cc file - cross section - maxentry: " << sample << " - " << cross_section << " - " << max_entries << endl;
     
     //how it should be: 
     //if(sample.Index("_e_") != -1){
@@ -28,8 +28,15 @@ void mainroot(TString sample, double cross_section, int max_entries)
     //
     //full_analyzer_ee* a = new full_analyzer_ee(5);
     //a->test();
-    full_analyzer b;
+    
+    TFile *input = new TFile(sample, "open");
+    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
+    
+    cout << "mainroot 1" << endl;
+    
+    full_analyzer b(tree);
 
+    cout << "mainroot 2" << endl;
     b.run_over_file(sample, cross_section, max_entries);
 
 }

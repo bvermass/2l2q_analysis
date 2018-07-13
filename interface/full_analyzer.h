@@ -12,6 +12,12 @@
 #include <TChain.h>
 #include <TFile.h>
 
+#include <TH2.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLorentzVector.h>
+#include <TSystem.h>
+
 // Header file for the classes stored in the TTree if any.
 
 class full_analyzer {
@@ -241,6 +247,7 @@ public :
    UInt_t          _TrackMult_noIP_pt5[6];   //[_nLight]
    UInt_t	       _Nutau_TrackMult_pt1[10];
    UInt_t	       _Nutau_TrackMult_pt5[10];
+   Bool_t          _lVtx_valid[10];
    Double_t	       _lVtxpos_x[10];
    Double_t	       _lVtxpos_y[10];
    Double_t	       _lVtxpos_z[10];
@@ -257,6 +264,10 @@ public :
    Double_t	       _lVtxpos_BSdxy[10];
    Double_t	       _lVtxpos_PVdz[10];
    Double_t	       _lVtxpos_BSdz[10];
+   Double_t        _lVtxpos_maxdxy_valid[10];
+   Double_t        _lVtxpos_maxdz_valid[10];
+   Double_t        _lVtxpos_maxdxy_Notvalid[10];
+   Double_t        _lVtxpos_maxdz_Notvalid[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
@@ -529,23 +540,28 @@ public :
    TBranch        *b__TrackMult_noIP_pt3;   //!
    TBranch        *b__TrackMult_noIP_pt4;   //!
    TBranch        *b__TrackMult_noIP_pt5;   //!
-   TBranch	  *b__Nutau_TrackMult_pt1;
-   TBranch	  *b__Nutau_TrackMult_pt5;
-   TBranch	  *b__lVtxpos_x;
-   TBranch	  *b__lVtxpos_y;
-   TBranch	  *b__lVtxpos_z;
-   TBranch	  *b__lVtxpos_cxx;
-   TBranch	  *b__lVtxpos_cyy;
-   TBranch	  *b__lVtxpos_czz;
-   TBranch	  *b__lVtxpos_cyx;
-   TBranch	  *b__lVtxpos_czy;
-   TBranch	  *b__lVtxpos_czx;
-   TBranch	  *b__lVtxpos_df;
-   TBranch	  *b__lVtxpos_chi2;
-   TBranch	  *b__lVtxpos_PVdxy;
-   TBranch	  *b__lVtxpos_BSdxy;
-   TBranch	  *b__lVtxpos_PVdz;
-   TBranch	  *b__lVtxpos_BSdz;
+   TBranch	      *b__Nutau_TrackMult_pt1;
+   TBranch	      *b__Nutau_TrackMult_pt5;
+   TBranch        *b__lVtx_valid;
+   TBranch	      *b__lVtxpos_x;
+   TBranch	      *b__lVtxpos_y;
+   TBranch	      *b__lVtxpos_z;
+   TBranch	      *b__lVtxpos_cxx;
+   TBranch	      *b__lVtxpos_cyy;
+   TBranch	      *b__lVtxpos_czz;
+   TBranch	      *b__lVtxpos_cyx;
+   TBranch	      *b__lVtxpos_czy;
+   TBranch	      *b__lVtxpos_czx;
+   TBranch	      *b__lVtxpos_df;
+   TBranch	      *b__lVtxpos_chi2;
+   TBranch	      *b__lVtxpos_PVdxy;
+   TBranch	      *b__lVtxpos_BSdxy;
+   TBranch	      *b__lVtxpos_PVdz;
+   TBranch	      *b__lVtxpos_BSdz;
+   TBranch        *b__lVtxpos_maxdxy_valid;
+   TBranch        *b__lVtxpos_maxdz_valid;
+   TBranch        *b__lVtxpos_maxdxy_Notvalid;
+   TBranch        *b__lVtxpos_maxdz_Notvalid;
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
@@ -627,13 +643,16 @@ public :
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual void     print_table();
+   virtual void     add_histogram(std::map<TString, TH1*>*, TString);
    
 };
 
 #endif
 
-#ifdef full_analyzer_start_cxx
-#ifndef full_analyzer_done_cxx
+//#ifdef full_analyzer_start_cxx
+//#ifndef full_analyzer_done_cxx
+/*#ifndef full_analyzer_h_functions
+#define full_analyzer_h_functions
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
@@ -911,6 +930,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_TrackMult_noIP_pt5", _TrackMult_noIP_pt5, &b__TrackMult_noIP_pt5);
    fChain->SetBranchAddress("_Nutau_TrackMult_pt1", _Nutau_TrackMult_pt1, &b__Nutau_TrackMult_pt1);
    fChain->SetBranchAddress("_Nutau_TrackMult_pt5", _Nutau_TrackMult_pt5, &b__Nutau_TrackMult_pt5);
+   fChain->SetBranchAddress("_lVtx_valid", _lVtx_valid, &b__lVtx_valid);
    fChain->SetBranchAddress("_lVtxpos_x", _lVtxpos_x, &b__lVtxpos_x);
    fChain->SetBranchAddress("_lVtxpos_y", _lVtxpos_y, &b__lVtxpos_y);
    fChain->SetBranchAddress("_lVtxpos_z", _lVtxpos_z, &b__lVtxpos_z);
@@ -926,6 +946,10 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lVtxpos_BSdxy", _lVtxpos_BSdxy, &b__lVtxpos_BSdxy);
    fChain->SetBranchAddress("_lVtxpos_PVdz", _lVtxpos_PVdz, &b__lVtxpos_PVdz);
    fChain->SetBranchAddress("_lVtxpos_BSdz", _lVtxpos_BSdz, &b__lVtxpos_BSdz);
+   fChain->SetBranchAddress("_lVtxpos_maxdxy_valid", _lVtxpos_maxdxy_valid, &b__lVtxpos_maxdxy_valid);
+   fChain->SetBranchAddress("_lVtxpos_maxdz_valid", _lVtxpos_maxdz_valid, &b__lVtxpos_maxdz_valid);
+   fChain->SetBranchAddress("_lVtxpos_maxdxy_Notvalid", _lVtxpos_maxdxy_Notvalid, &b__lVtxpos_maxdxy_Notvalid);
+   fChain->SetBranchAddress("_lVtxpos_maxdz_Notvalid", _lVtxpos_maxdz_Notvalid, &b__lVtxpos_maxdz_Notvalid);
    fChain->SetBranchAddress("_lMuonSegComp", _lMuonSegComp, &b__lMuonSegComp);
    fChain->SetBranchAddress("_lMuonTrackPt", _lMuonTrackPt, &b__lMuonTrackPt);
    fChain->SetBranchAddress("_lMuonTrackPtErr", _lMuonTrackPtErr, &b__lMuonTrackPtErr);
@@ -971,7 +995,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_jetHadronFlavor", _jetHadronFlavor, &b__jetHadronFlavor);
    fChain->SetBranchAddress("_jetIsLoose", _jetIsLoose, &b__jetIsLoose);
    fChain->SetBranchAddress("_jetIsTight", _jetIsTight, &b__jetIsTight);
-   fChain->SetBranchAddress("_jetIsTightLepVeto", _jetIsTightLepVeto, &b__jetIsTightLepVeto);
+   fChain->SetBranchAddress("_jetIsTightLepVeto", _jetIsTightLepVeto, &b__jetIsTightLepVeto);*/
 /*   fChain->SetBranchAddress("_nDaughters", &_nDaughters, &b__nDaughters);
    fChain->SetBranchAddress("_jet_tag_for_daughters", _jet_tag_for_daughters, &b__jet_tag_for_daughters);
    fChain->SetBranchAddress("_jet_daughter_pdgid", _jet_daughter_pdgid, &b__jet_daughter_pdgid);
@@ -980,7 +1004,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_jet_daughter_phi", _jet_daughter_phi, &b__jet_daughter_phi);
    fChain->SetBranchAddress("_jet_daughter_energy", _jet_daughter_energy, &b__jet_daughter_energy);
 */
-   Notify();
+/*   Notify();
 }
 
 Bool_t full_analyzer::Notify()
@@ -1008,5 +1032,5 @@ Int_t full_analyzer::Cut(Long64_t entry)
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef full_analyzer_done_cxx
-#endif // #ifdef full_analyzer_start_cxx
+//#endif // #ifdef full_analyzer_done_cxx
+#endif // #ifdef full_analyzer_start_cxx*/

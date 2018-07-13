@@ -20,7 +20,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         #root -l -b -q ${headdir}"src/full_analyzer.cc+" ${headdir}"test/mainroot.cc(\"$line\")" #maybe add an option to compile using this line, meaning Aclic(but why?)
     
         echo "inputfile:"$inputfile
-        ./a.out $inputfile $cross_section $max_entries
+        ./$2 $inputfile $cross_section $max_entries
         echo 
     
     fi
