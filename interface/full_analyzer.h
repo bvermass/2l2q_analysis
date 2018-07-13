@@ -643,7 +643,7 @@ public :
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual void     print_table();
-   virtual void     add_histogram(std::map<TString, TH1*>*, TString);
+   virtual void     add_histograms(std::map<TString, TH1*>*, TString);
    
 };
 

@@ -99,8 +99,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
 
-    // CHANGE METHOD OF MAKING HISTOGRAMS, NOW HAVE TO COPY EVERYTHING 4 TIMES, SHOULD BE POSSIBLE IN ONE GO WITH A FUNCTION
-    hists["displ_SS_e_leadpt"]              = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+    // DELETE THIS AFTER NEXT ITERATION 
+    /*hists["displ_SS_e_leadpt"]              = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["displ_SS_e_pt"]                  = new TH1F("displ_SS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["displ_SS_e_dxy"]                 = new TH1F("displ_SS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
     hists["displ_SS_e_mll"]                 = new TH1F("displ_SS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
@@ -140,8 +140,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["displ_OS_mu_vtxfit_ntracks"]      = new TH1F("displ_OS_mu_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
     hists["displ_OS_mu_vtxfit_valid"]        = new TH1F("displ_OS_mu_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
     hists["displ_OS_mu_vtxfit_maxdxy_valid"] = new TH1F("displ_OS_mu_vtxfit_maxdxy_valid", ";dxy_{max} (Valid Vtx);Events", 40, 0, 1.1);
-
-    add_histogram(&hists, "displ_OS_e");
+*/
+    add_histograms(&hists, "displ_OS_e");
+    add_histograms(&hists, "displ_SS_e");
+    add_histograms(&hists, "displ_OS_mu");
+    add_histograms(&hists, "displ_SS_mu");
     cout << hists["displ_OS_e_pt"]->GetName() << endl;
 
     for(auto&& sh : hists){
