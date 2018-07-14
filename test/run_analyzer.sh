@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #First argument must be the txt file containing: SAMPLENAME CROSS-SECTION MaxEntry(to avoid crashes)
-headdir="/home/basile/Documents/PhD/code/2l2q_analysis"
-#headdir="/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis"
+headdir="/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis"
 cd $headdir
 
 #compile code
