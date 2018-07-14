@@ -1,4 +1,3 @@
-//#define full_analyzer_start_cxx
 
 //Include C++ libraries
 #include <iostream>
@@ -6,8 +5,6 @@
 //Include header for this class
 #include "../interface/full_analyzer.h"
 
-//#define full_analyzer_done_cxx // otherwise the functions in full_analyzer.h can be loaded multiple times
-//#include "/user/bvermass/heavyNeutrino/DileptonPrompt/CMSSW_9_4_0/src/2l2q_analysis/tools/LeptonID.h"
 
 //Include ROOT header files
 #include <TH2.h>
@@ -17,13 +14,8 @@
 #include <TSystem.h>
 
 using namespace std;
-//Contents:
-//  run_over_file		: This is the main function to loop over events of a certain file, give the exact filename of the signal/background/data to the function
-//  clean_jets			: cleans collection of jets by vetoing jets with dR < 0.4 with electrons or muons
-//  clean_ele			: cleans collection of electrons by vetoing electrons with dR < 0.4 with muons
-//  find_2_highest_pt_particles : finds 2 highest pt particles, if there is only one or zero, then i_jet1 or i_jet2 are put to -1
-//  loop 			: currently not used
 
+//  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 void full_analyzer::run_over_file(TString filename, double cross_section, int max_entries)
 {
 // Short description of program flow:
@@ -33,8 +25,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 
-    //LeptonID b;
-    //b.test_function();
 
     TString flavor = "bkg";
     if(filename.Index("_e_") != -1) flavor = "e";
@@ -44,7 +34,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
     else if(filename.Index("displaced") != -1) promptordisplaced = "displaced";
 
-    //TFile *input = new TFile("/user/bvermass/public/heavyNeutrino/" + filename + "/dilep.root", "open");
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     double total_weight = cross_section * 35900 / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
@@ -58,13 +47,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
     hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
-    /*hists["2isol_0jet_pt"]              = new TH1F("2isol_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-    hists["2isol_1jet_pt"]              = new TH1F("2isol_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-    hists["2isol_2jet_pt"]              = new TH1F("2isol_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-    hists["1iso1displ_0jet_pt"]              = new TH1F("1iso1displ_0jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-    hists["1iso1displ_1jet_pt"]              = new TH1F("1iso1displ_1jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-    hists["1iso1displ_2jet_pt"]              = new TH1F("1iso1displ_2jet_pt", ";#it{p}_{T} [GeV]; Events", 40, 0, 100);
-*/
     // signal regions that are included:
     // 0 = 2iso l, 0jet
     // 1 = 2iso l, 1jet
@@ -80,82 +62,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // 11= 1iso l, 2jet
     // 12= other
 
+    HLT_efficiency_init(&hists);//found in src/HLT_eff.cc, does everything HLT efficiency related
 
-    // DELETE THIS AFTER NEXT ITERATION
-    /*hists["1_iso_ele_pt"]               = new TH1F("1_iso_ele_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-    hists["1_iso_ele_barrel_pt"]               = new TH1F("1_iso_ele_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-    hists["1_iso_ele_endcap_pt"]               = new TH1F("1_iso_ele_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-    hists["1_iso_mu_pt"]               = new TH1F("1_iso_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-    hists["1_iso_mu_barrel_pt"]               = new TH1F("1_iso_mu_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-    hists["1_iso_mu_endcap_pt"]               = new TH1F("1_iso_mu_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
-*/
-    HLT_efficiency_init(&hists);
-
-    // DELETE THIS AFTER NEXT ITERATION 
-    /*hists["displ_SS_e_leadpt"]              = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_pt"]                  = new TH1F("displ_SS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_dxy"]                 = new TH1F("displ_SS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_SS_e_mll"]                 = new TH1F("displ_SS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_e_vtxfitgen"]           = new TH1F("displ_SS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_SS_e_chi2"]                = new TH1F("displ_SS_e_chi2", ";#Chi^{2};Events", 80, 0, 2);
-    hists["displ_SS_e_vtxfitPV"]            = new TH1F("displ_SS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_SS_e_vtxfit_ntracks"]      = new TH1F("displ_SS_e_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
-    hists["displ_SS_e_vtxfit_valid"]        = new TH1F("displ_SS_e_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    hists["displ_SS_e_vtxfit_maxdxy_valid"] = new TH1F("displ_SS_e_vtxfit_maxdxy_valid", ";dxy_{max} (Valid Vtx);Events", 40, 0, 1.1);
-    hists["displ_SS_mu_leadpt"]             = new TH1F("displ_SS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_pt"]                 = new TH1F("displ_SS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_dxy"]                = new TH1F("displ_SS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_mll"]                = new TH1F("displ_SS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_SS_mu_vtxfitgen"]          = new TH1F("displ_SS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_chi2"]               = new TH1F("displ_SS_mu_chi2", ";#Chi^{2};Events", 80, 0, 2);
-    hists["displ_SS_mu_vtxfitPV"]           = new TH1F("displ_SS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_SS_mu_vtxfit_ntracks"]      = new TH1F("displ_SS_mu_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
-    hists["displ_SS_mu_vtxfit_valid"]        = new TH1F("displ_SS_mu_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    hists["displ_SS_mu_vtxfit_maxdxy_valid"] = new TH1F("displ_SS_mu_vtxfit_maxdxy_valid", ";dxy_{max} (Valid Vtx);Events", 40, 0, 1.1);
-    hists["displ_OS_e_leadpt"]              = new TH1F("displ_OS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    //hists["displ_OS_e_pt"]                  = new TH1F("displ_OS_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_e_dxy"]                 = new TH1F("displ_OS_e_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_mll"]                 = new TH1F("displ_OS_e_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_e_vtxfitgen"]           = new TH1F("displ_OS_e_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_chi2"]                = new TH1F("displ_OS_e_chi2", ";#Chi^{2};Events", 80, 0, 2);
-    hists["displ_OS_e_vtxfitPV"]            = new TH1F("displ_OS_e_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_OS_e_vtxfit_ntracks"]      = new TH1F("displ_OS_e_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
-    hists["displ_OS_e_vtxfit_valid"]        = new TH1F("displ_OS_e_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    hists["displ_OS_e_vtxfit_maxdxy_valid"] = new TH1F("displ_OS_e_vtxfit_maxdxy_valid", ";dxy_{max} (Valid Vtx);Events", 40, 0, 1.1);
-    hists["displ_OS_mu_leadpt"]             = new TH1F("displ_OS_mu_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_pt"]                 = new TH1F("displ_OS_mu_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_dxy"]                = new TH1F("displ_OS_mu_dxy", ";#Delta_{xy} [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_mll"]                = new TH1F("displ_OS_mu_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    hists["displ_OS_mu_vtxfitgen"]          = new TH1F("displ_OS_mu_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_chi2"]               = new TH1F("displ_OS_mu_chi2", ";#Chi^{2};Events", 80, 0, 2);
-    hists["displ_OS_mu_vtxfitPV"]           = new TH1F("displ_OS_mu_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 80, 0, 10);
-    hists["displ_OS_mu_vtxfit_ntracks"]      = new TH1F("displ_OS_mu_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
-    hists["displ_OS_mu_vtxfit_valid"]        = new TH1F("displ_OS_mu_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    hists["displ_OS_mu_vtxfit_maxdxy_valid"] = new TH1F("displ_OS_mu_vtxfit_maxdxy_valid", ";dxy_{max} (Valid Vtx);Events", 40, 0, 1.1);
-*/
-    add_histograms(&hists, "displ_OS_e");
+    add_histograms(&hists, "displ_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
     add_histograms(&hists, "displ_SS_e");
     add_histograms(&hists, "displ_OS_mu");
     add_histograms(&hists, "displ_SS_mu");
-    cout << hists["displ_OS_e_pt"]->GetName() << endl;
 
+    //assures statistical errors are dealt with correctly
     for(auto&& sh : hists){
 	auto&& h = sh.second;
 	h->Sumw2();
     }
    
+    //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int ee_else = 0; 
     int n_ele = 0;
     int n_after_eta = 0;
@@ -178,8 +98,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
-    cout << "full_analyzer 2" << endl;
     
+    //main loop begins here
     for(unsigned jentry = 0; jentry < max_entries; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
@@ -331,108 +251,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //HLT efficiency stuff, put this in a separate function later
         HLT_efficiency_fill(&hists, _1e, _1mu);
-        /*if(_1e){
-            hists["1_iso_ele_pt"]->Fill(_lPt[i_leading_e], event_weight);
-            if(fabs(_lEta[i_leading_e]) < 1.2) hists["1_iso_ele_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);
-            else hists["1_iso_ele_endcap_pt"]->Fill(_lPt[i_leading_e], event_weight);
-            
-            if(_HLT_Ele27_WPTight_Gsf){ 
-                hists["HLT_Ele27_WPTight_Gsf_pt"]->Fill(_lPt[i_leading_e], event_weight);
-                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);
-                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt"]->Fill(_lPt[i_leading_e], event_weight);
-                
-                hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
-                if(fabs(_lEta[i_leading_e]) < 1.2) hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
-                else hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Fill(_lPt[i_leading_e], event_weight);
-            }
 
-        }
-        if(_1mu){
-            hists["1_iso_mu_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-            if(fabs(_lEta[i_leading_mu]) < 1.2) hists["1_iso_mu_barrel_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-            else hists["1_iso_mu_endcap_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-            
-            if(_HLT_IsoMu24 or _HLT_IsoTkMu24){ 
-                hists["HLT_IsoMu24_IsoTkMu24_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]->Fill(_lPt[i_leading_mu], event_weight);
-                
-                hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
-                else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
-            }
-        }*/
-
-        //TLorentzVector lepton1;
-        //TLorentzVector lepton2;
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 fill_histograms(&hists, "displ_SS_e");
-/*                hists["displ_SS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
-                hists["displ_SS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
-                hists["displ_SS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
-                lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
-                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_e], _lEta[i_subleading_displ_e], _lPhi[i_subleading_displ_e], _lE[i_subleading_displ_e]);
-                hists["displ_SS_e_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
-                hists["displ_SS_e_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_e], event_weight);
-                if(_lVtx_valid[i_subleading_displ_e]){
-                    hists["displ_SS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
-                    hists["displ_SS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e], event_weight);
-                    hists["displ_SS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
-                    hists["displ_SS_e_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
-                    hists["displ_SS_e_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
-                }
-            */}else{
+            }else{
                 fill_histograms(&hists, "displ_OS_e");
-                /*hists["displ_OS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
-                hists["displ_OS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
-                hists["displ_OS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
-                lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
-                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_e], _lEta[i_subleading_displ_e], _lPhi[i_subleading_displ_e], _lE[i_subleading_displ_e]);
-                hists["displ_OS_e_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
-                hists["displ_OS_e_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_e], event_weight);
-                if(_lVtx_valid[i_subleading_displ_e]){
-                    hists["displ_OS_e_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
-                    hists["displ_OS_e_chi2"]->Fill(_lVtxpos_chi2[i_subleading_e], event_weight);
-                    hists["displ_OS_e_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
-                    hists["displ_OS_e_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
-                    hists["displ_OS_e_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
-                }
-            */}
+            }
         }
         if(_1mu1displmu0jet){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
                 fill_histograms(&hists, "displ_SS_mu");
-                /*hists["displ_SS_mu_leadpt"]->Fill(_lPt[i_leading_mu], event_weight);
-                hists["displ_SS_mu_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
-                hists["displ_SS_mu_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
-                lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
-                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
-                hists["displ_SS_mu_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
-                hists["displ_SS_mu_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
-                if(_lVtx_valid[i_subleading_displ_mu]){
-                    hists["displ_SS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
-                    hists["displ_SS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu], event_weight);
-                    hists["displ_SS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
-                    hists["displ_SS_mu_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
-                    hists["displ_SS_mu_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
-                }
-            */}else{
+            }else{
                 fill_histograms(&hists, "displ_OS_mu");
-                /*hists["displ_OS_mu_leadpt"]->Fill(_lPt[i_leading_mu], event_weight);
-                hists["displ_OS_mu_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
-                lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
-                lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
-                hists["displ_OS_mu_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
-                hists["displ_OS_mu_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
-                if(_lVtx_valid[i_subleading_displ_mu]){
-                    hists["displ_OS_mu_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
-                    hists["displ_OS_mu_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu], event_weight);
-                    hists["displ_OS_mu_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
-                    hists["displ_OS_mu_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
-                    hists["displ_OS_mu_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
-                }
-            */}
+            }
         }
         /*if(filename.Index("_e_") != -1){
             hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
@@ -473,7 +305,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "after invreliso and convveto " << n_after_invreliso_convveto << endl;
     cout << "after invreliso and missinghits " << n_after_invreliso_missinghits << endl;*/
 
-    //for(auto&& sh : hists){
+    //for(auto&& sh : hists){  //used to be just for ee_sigreg_fraction and mumu
 	//    auto&& h  = sh.second;
 	//    h->Scale(100/h->GetEntries());
     //}
@@ -572,261 +404,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
     output->Close();
 }
-
-// DELETE AFTER NEXT ITERATION
-/*void full_analyzer::get_electronID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	
-            _lFlavor[i] == 0 &&
-			fabs(_lEta[i]) < 2.5 &&
-			_lPt[i] > 7 &&
-			fabs(_dxy[i]) < 0.05 &&
-			fabs(_dz[i])  < 0.1 &&
-			_3dIPSig[i]   < 4 &&
-			_relIso[i]    < 0.2 &&
-			_lPOGMedium[i] &&
-			_lElectronPassConvVeto[i] &&
-			_lElectronMissingHits[i] < 1;
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_noniso_electronID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 0 &&
-			fabs(_lEta[i]) < 2.5 &&
-			_lPt[i] > 7 &&
-			fabs(_dxy[i]) < 0.05 &&
-			fabs(_dz[i])  < 0.1 &&
-			_3dIPSig[i]   < 4 &&
-			_relIso[i]    > 0.2 &&
-			//_lPOGMedium[i] && //->clashes with reliso > 0.2
-			_lElectronPassConvVeto[i] &&
-			_lElectronMissingHits[i] < 1;
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_displ_electronID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 0 &&
-			fabs(_lEta[i]) < 2.5 &&
-			_lPt[i] > 7 &&
-			fabs(_dxy[i])  > 0.05 &&
-			//no dz cut
-			//no SIP3D cut
-			//also invert reliso?
-			//no pogmedium?
-			_lElectronPassConvVeto[i];//figure out how this one works exactly to be sure it can still be applied!
-			//no missing hits cut?
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-
-void full_analyzer::get_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 1 &&
-			fabs(_lEta[i]) < 2.4 &&
-			_lPt[i] > 5 &&
-			fabs(_dxy[i]) < 0.05 &&
-			fabs(_dz[i])  < 0.1 &&
-			_3dIPSig[i]   < 4 &&
-			_relIso[i]    < 0.2 &&
-			_lPOGMedium[i];
-			// innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_noniso_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 1 &&
-			fabs(_lEta[i]) < 2.4 &&
-			_lPt[i] > 5 &&
-			fabs(_dxy[i]) < 0.05 &&
-			fabs(_dz[i])  < 0.1 &&
-			_3dIPSig[i]   < 4 &&
-			_relIso[i]    > 0.2 &&
-			_lPOGMedium[i];
-			// innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_displ_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	bool fullID = 	_lFlavor[i] == 1 &&
-			fabs(_lEta[i]) < 2.4 &&
-			_lPt[i] > 5 &&
-			fabs(_dxy[i]) > 0.05;
-			//no dz cut
-			//no SIP3D cut
-			//also invert reliso?
-			//no POGMedium? no because it requires dxy of the track to be small 
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-
-
-void full_analyzer::get_jetID(bool* ID)
-{
-    for(unsigned i = 0; i < _nJets; ++i){
-	bool fullID = 	fabs(_jetEta[i]) < 2.4 &&
-			_jetPt[i] > 20 &&
-			_jetIsTight[i];
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
-    }
-}
-
-
-
-
-void full_analyzer::get_clean_jets(bool* cleaned, bool* electronID, bool* muonID)
-{
-    // jets are cleaned from leptons if dR < 0.4 
-    TLorentzVector lepton;
-    TLorentzVector jet;
-
-    for(unsigned i = 0; i < _nJets; ++i){
-	*(cleaned + i) = true;
-	jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
-
-	for(unsigned j = 0; j < _nL; ++j){
-	    lepton.SetPtEtaPhiE(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
-	    if((_lFlavor[j] == 0 && *(electronID + j)) || (_lFlavor[j] == 1 && *(muonID + j))){
-		if(lepton.DeltaR(jet) < 0.4) *(cleaned + i) = false;
-	    }
-	}
-    }
-}
-
-
-
-
-void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
-{
-    // This function returns false in the boolean cleaned for electrons within a cone of 0.4 around muons
-    TLorentzVector muon;
-    TLorentzVector electron;
-
-    for(unsigned i_el = 0; i_el < _nL; ++i_el){
-	    *(cleaned + i_el) = true;
-	    if(_lFlavor[i_el] != 0) continue;
-	    electron.SetPtEtaPhiE(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
-
-	    for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
-	        if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
-	    	muon.SetPtEtaPhiE(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
-	    	if(muon.DeltaR(electron) < 0.4) *(cleaned + i_el) = false;
-	        }
-	    }
-    }
-}
-
-
-
-
-int full_analyzer::find_leading_e(bool* electronID, bool* ele_clean)
-{
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if(_lFlavor[i] != 0)   continue;
-	    if(!*(electronID + i)) continue;
-	    if(!*(ele_clean + i))  continue;
-	    //if(_lPt[i] < 30)       continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
-    }
-    return index_good_leading;
-}
-
-int full_analyzer::find_leading_mu(bool* muonID)
-{
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if(_lFlavor[i] != 1) continue;
-	    if(!*(muonID + i))   continue;
-	    //if(_lPt[i] < 25)     continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
-    }
-    return index_good_leading;
-}
-
-int full_analyzer::find_leading_jet(bool* jetID, bool* jet_clean)
-{
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nJets; ++i){
-	    if(!*(jetID + i))      continue;
-	    if(!*(jet_clean + i))  continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
-    }
-    return index_good_leading;
-}
-
-int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int index_good_leading)
-{
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
-	    if(_lFlavor[i] != 0)   	    continue;
-	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
-	    if(!*(electronID + i))      continue;
-	    if(!*(ele_clean + i))       continue;
-	    if(_lPt[i] < 7)             continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
-    }
-    return index_good_subleading;
-}
-
-int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
-{
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
-	    if(_lFlavor[i] != 1)   	    continue;
-	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
-	    if(!*(muonID + i))          continue;
-	    if(_lPt[i] < 5)             continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
-    }
-    return index_good_subleading;
-}
-
-int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_good_leading)
-{
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nJets; ++i){
-	    if(i == index_good_leading) continue;
-	    if(!*(jetID + i))           continue;
-	    if(!*(jet_clean + i))       continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
-    }
-    return index_good_subleading;
-}*/
-
 
 void full_analyzer::Loop()
 {
