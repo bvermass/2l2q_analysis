@@ -2,6 +2,8 @@
 //initializes histograms, part of class full_analyzer//
 ///////////////////////////////////////////////////////
 
+#include <iostream>
+
 #include "../interface/full_analyzer.h"
 
 using namespace std;
@@ -21,6 +23,16 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
 }
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix){
+    if(prefix.Index("_e") != -1) fill_histograms_e(hists, prefix);
+    else if(prefix.Index("_mu") != -1) fill_histograms_mu(hists, prefix);
+    else{ 
+        cout << "flavor was not specified in prefix" << endl;
+    }
+    return;
+}
+
+void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString prefix){
+
     (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
@@ -36,4 +48,28 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
         (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
+    }
+    return;
+}
+
+
+void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString prefix){
+
+    (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading_mu], event_weight);
+    (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
+    (*hists)[prefix+"_dxy"]->Fill(_dxy[i_subleading_displ_mu], event_weight);
+    TLorentzVector lepton1;
+    TLorentzVector lepton2;
+    lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
+    lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
+    (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
+    (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
+    if(_lVtx_valid[i_subleading_displ_mu]){
+        (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
+        (*hists)[prefix+"_chi2"]->Fill(_lVtxpos_chi2[i_subleading_mu], event_weight);
+        (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
+        (*hists)[prefix+"_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
+        (*hists)[prefix+"_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_mu], event_weight);
+    }
+    return;
 }

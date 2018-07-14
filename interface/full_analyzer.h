@@ -12,6 +12,8 @@
 #include <TChain.h>
 #include <TFile.h>
 
+#include <iostream>
+
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -616,7 +618,23 @@ public :
    TBranch        *b__jet_daughter_phi;   //!
    TBranch        *b__jet_daughter_energy;   //!
 */   
+   Double_t event_weight;
    
+   int i_leading_e;
+   int i_subleading_e;
+   int i_leading_mu;
+   int i_subleading_mu;
+   int i_subleading_noniso_e;
+   int i_subleading_noniso_mu;
+   int i_subleading_displ_e;
+   int i_subleading_displ_mu;
+   
+   int i_leading_jet_for_full;
+   int i_subleading_jet_for_full;
+   int i_leading_jet_for_noniso;
+   int i_subleading_jet_for_noniso;
+   int i_leading_jet_for_displ;
+   int i_subleading_jet_for_displ;
 
 
    full_analyzer(TTree *tree=0);
@@ -647,6 +665,8 @@ public :
    virtual void     print_table();
    virtual void     add_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms(std::map<TString, TH1*>*, TString);
+   virtual void     fill_histograms_e(std::map<TString, TH1*>*, TString);
+   virtual void     fill_histograms_mu(std::map<TString, TH1*>*, TString);
    
 };
 
