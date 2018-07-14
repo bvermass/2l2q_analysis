@@ -35,7 +35,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     //LeptonID b;
     //b.test_function();
-    cout << "full_analyzer 1" << endl;
 
     TString flavor = "bkg";
     if(filename.Index("_e_") != -1) flavor = "e";

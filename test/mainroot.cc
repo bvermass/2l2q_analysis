@@ -32,11 +32,9 @@ void mainroot(TString sample, double cross_section, int max_entries)
     TFile *input = new TFile(sample, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
-    cout << "mainroot 1" << endl;
     
     full_analyzer b(tree);
 
-    cout << "mainroot 2" << endl;
     b.run_over_file(sample, cross_section, max_entries);
 
 }
