@@ -667,6 +667,8 @@ public :
    virtual void     fill_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms_mu(std::map<TString, TH1*>*, TString);
+   virtual void     HLT_efficiency_init(std::map<TString, TH1*>*);
+   virtual void     HLT_efficiency_fill(std::map<TString, TH1*>*, bool, bool);
    
 };
 

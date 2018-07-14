@@ -80,7 +80,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // 10= 1iso l, 1jet
     // 11= 1iso l, 2jet
     // 12= other
-    hists["1_iso_ele_pt"]               = new TH1F("1_iso_ele_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
+
+
+    // DELETE THIS AFTER NEXT ITERATION
+    /*hists["1_iso_ele_pt"]               = new TH1F("1_iso_ele_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_Ele27_WPTight_Gsf_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_Ele27_WPTight_Gsf_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     hists["1_iso_ele_barrel_pt"]               = new TH1F("1_iso_ele_barrel_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
@@ -98,6 +101,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["1_iso_mu_endcap_pt"]               = new TH1F("1_iso_mu_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
+*/
+    HLT_efficiency_init(&hists);
 
     // DELETE THIS AFTER NEXT ITERATION 
     /*hists["displ_SS_e_leadpt"]              = new TH1F("displ_SS_e_leadpt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
@@ -326,7 +331,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
         //HLT efficiency stuff, put this in a separate function later
-        if(_1e){
+        HLT_efficiency_fill(&hists, _1e, _1mu);
+        /*if(_1e){
             hists["1_iso_ele_pt"]->Fill(_lPt[i_leading_e], event_weight);
             if(fabs(_lEta[i_leading_e]) < 1.2) hists["1_iso_ele_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);
             else hists["1_iso_ele_endcap_pt"]->Fill(_lPt[i_leading_e], event_weight);
@@ -356,7 +362,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 if(fabs(_lEta[i_leading_mu]) < 1.2) hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
                 else hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu], event_weight);
             }
-        }
+        }*/
 
         //TLorentzVector lepton1;
         //TLorentzVector lepton2;
