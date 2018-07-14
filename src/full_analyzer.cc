@@ -209,13 +209,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 	    
         //Get ID
-	    bool fullElectronID[10];
-	    bool nonisoElectronID[10];
-	    bool displElectronID[10];
-	    bool fullMuonID[10];
-	    bool nonisoMuonID[10];
-	    bool displMuonID[10];
-        bool fullJetID[20];
+	    bool fullElectronID[10], nonisoElectronID[10], displElectronID[10], fullMuonID[10], nonisoMuonID[10], displMuonID[10], fullJetID[10];
 	    get_electronID(&fullElectronID[0]);
 	    get_noniso_electronID(&nonisoElectronID[0]);
 	    get_displ_electronID(&displElectronID[0]);
@@ -225,11 +219,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    get_jetID(&fullJetID[0]);
 
         //Get Cleaning for jets
-	    bool jet_clean_full[20];
-	    bool jet_clean_noniso[20];
-	    bool jet_clean_displ[20];
-	    bool jet_clean_full_noniso[20];
-	    bool jet_clean_full_displ[20];
+	    bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
 	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
@@ -239,10 +229,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 	    
         //Get cleaning for electrons
-        bool ele_clean_full[10];
-	    bool ele_clean_noniso[10];
-	    bool ele_clean_displ[10];
-	    bool ele_clean_full_noniso_displ[10];
+        bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
@@ -251,20 +238,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
         //Find leptons and jets with leading pt
-	    int i_leading_e     		= find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
-	    int i_subleading_e  		= find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    int i_leading_mu    		= find_leading_mu(&fullMuonID[0]);
-	    int i_subleading_mu 		= find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    int i_subleading_noniso_e  	= find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    int i_subleading_noniso_mu 	= find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
-	    int i_subleading_displ_e  	= find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    int i_subleading_displ_mu 	= find_subleading_mu(&displMuonID[0], i_leading_mu);
+	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
+	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
+	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
+	    int i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_subleading_noniso_mu 	    = find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
+	    int i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    int i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
 	    
-	    int i_leading_jet_for_full	= find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
+	    int i_leading_jet_for_full	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
 	    int i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
 	    int i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
 	    int i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
-	    int i_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
+	    int i_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
 	    int i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
 
 
@@ -373,11 +360,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             }
         }
 
-        TLorentzVector lepton1;
-        TLorentzVector lepton2;
+        //TLorentzVector lepton1;
+        //TLorentzVector lepton2;
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                hists["displ_SS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
+                fill_histograms(hists, "displ_SS_e");
+/*                hists["displ_SS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
                 hists["displ_SS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
                 hists["displ_SS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
                 lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
@@ -391,7 +379,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                     hists["displ_SS_e_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
                     hists["displ_SS_e_vtxfit_maxdxy_valid"]->Fill(_lVtxpos_maxdxy_valid[i_subleading_displ_e], event_weight);
                 }
-            }else{
+            */}else{
                 hists["displ_OS_e_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
                 hists["displ_OS_e_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
                 hists["displ_OS_e_dxy"]->Fill(_dxy[i_subleading_displ_e], event_weight);
@@ -579,58 +567,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     output->Close();
 }
 
-
-
-
-void full_analyzer::testrun()
-{
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-1_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-10_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-20_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-30_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-40_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-50_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-60_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-80_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-100_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-120_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-200_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-400_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-800_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("prompt/HeavyNeutrino_lljj_M-1000_V-0.01_mu_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_e_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-1_V-0.59587618054_mu_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_e_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-2_V-0.1054524236_mu_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_e_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-3_V-0.03823254899_mu_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_onshell_pre2017_NLO");
-    //run_over_file("displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_onshell_pre2017_NLO");
-
-    print_table();
-}
-
-
-
-
-void full_analyzer::get_electronID(bool* ID)
+// DELETE AFTER NEXT ITERATION
+/*void full_analyzer::get_electronID(bool* ID)
 {
     for(unsigned i = 0; i < _nL; ++i){
 	bool fullID = 	
@@ -881,7 +819,7 @@ int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_g
 	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
     return index_good_subleading;
-}
+}*/
 
 void full_analyzer::print_table()
 {

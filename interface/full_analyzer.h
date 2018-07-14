@@ -616,6 +616,9 @@ public :
    TBranch        *b__jet_daughter_phi;   //!
    TBranch        *b__jet_daughter_energy;   //!
 */   
+   
+
+
    full_analyzer(TTree *tree=0);
    virtual ~full_analyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -626,7 +629,6 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    virtual void     run_over_file(TString, double, int);
-   virtual void     testrun();
    virtual void     get_electronID(bool*);
    virtual void     get_noniso_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
@@ -644,6 +646,7 @@ public :
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual void     print_table();
    virtual void     add_histograms(std::map<TString, TH1*>*, TString);
+   virtual void     fill_histograms(std::map<TString, TH1*>*, TString);
    
 };
 
