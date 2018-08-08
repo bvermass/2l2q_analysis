@@ -655,6 +655,11 @@ public :
    bool _1e1disple2jet;
 
    bool _1mu;
+   bool _1mu1displmu;
+   bool _1mu1displmu0addmu;
+   bool _1mu1displmu0jet;
+   bool _1mu1displmu0jet_aftermll;
+   
    bool _1mu0jet;
    bool _1mu1jet;
    bool _1mu2jet;
@@ -664,7 +669,6 @@ public :
    bool _1mu1nonisomu0jet;
    bool _1mu1nonisomu1jet;
    bool _1mu1nonisomu2jet;
-   bool _1mu1displmu0jet;
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 

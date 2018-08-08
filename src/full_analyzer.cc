@@ -68,6 +68,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, "displ_SS_e");
     add_histograms(&hists, "displ_OS_mu");
     add_histograms(&hists, "displ_SS_mu");
+    add_histograms(&hists, "displ_OS_e_beforemll");
 
     //assures statistical errors are dealt with correctly
     for(auto&& sh : hists){
@@ -252,14 +253,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //HLT efficiency stuff, put this in a separate function later
         HLT_efficiency_fill(&hists, _1e, _1mu);
 
+
         if(_1e1disple0jet){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+            }else{
+                fill_histograms(&hists, "displ_OS_e_beforemll");
+            }           
+        }
+
+        if(_1e1disple0jet_aftermll){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 fill_histograms(&hists, "displ_SS_e");
             }else{
                 fill_histograms(&hists, "displ_OS_e");
             }
         }
-        if(_1mu1displmu0jet){
+        if(_1mu1displmu0jet_aftermll){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
                 fill_histograms(&hists, "displ_SS_mu");
             }else{
