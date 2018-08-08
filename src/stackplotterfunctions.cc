@@ -69,6 +69,31 @@ int main(int argc, char * argv[])
         if (!cl->InheritsFrom("TH1")) continue;
         TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogram
         cout << h_ref->GetName() << endl;
+        TString histname = h_ref->GetName();
+
+        // append directories such as SS/OS, e/mu or HLT to pathname
+        TString SSorOS = "";
+        if((histname.Index("_SS_") != -1)){ 
+            SSorOS = "SS/";
+        }else if(histname.Index("_OS_") != -1){
+            SSorOS = "OS/";
+        }
+        TString eormu = "";
+        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
+            eormu = "e/";
+        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
+            eormu = "mu/";
+        }
+        TString HLT = "";
+        if(histname.Index("HLT_") != -1){
+            HLT = "HLT/";
+        }
+        
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/");
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/");
+        gSystem->Exec("mkdir -p " + pathname_with_signal + HLT + SSorOS + eormu + "lin/");
+        gSystem->Exec("mkdir -p " + pathname_with_signal + HLT + SSorOS + eormu + "log/");
+
 
         // find flavor e or mu
         TString flavor;
@@ -107,14 +132,14 @@ int main(int argc, char * argv[])
         }
         
  
-        draw_stack(pathname + "lin/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
-        draw_stack(pathname + "log/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
+        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
+        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
         
         lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~20.90mm");
         lgendrup.AddEntry(signals["2_7GeV"], "HNL 7GeV, c#tau~3.52mm");
         
-        draw_stack_with_signal(pathname_with_signal + "lin/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
-        draw_stack_with_signal(pathname_with_signal + "log/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
+        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
+        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
         
  
         //if(((TString)h->GetName()).Index("eff") == -1) draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "hist", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 

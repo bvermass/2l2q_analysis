@@ -35,3 +35,31 @@ LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_Tune
 LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1-v2/dilep.root 6020.85 -1
 \n13/07/2018 09:53:50
 LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1-v2/dilep.root 6020.85 -1
+\n03/08/2018 17:01:50
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep.root 18610 -1
+LocalJob_1 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1-v2/dilep.root 6020.85 -1
+LocalJob_2 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep.root 87.315 -1
+LocalJob_3 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep.root 182.175 -1
+LocalJob_4 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep.root 182.175 -1
+LocalJob_5 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1-v1/dilep.root 585.8 -1
+LocalJob_6 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep.root 61334.9 -1
+LocalJob_7 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWTo2L2Nu_13TeV-powheg/dilep.root 12.178 -1
+LocalJob_8 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWToLNuQQ_13TeV-powheg/dilep.root 49.997 -1
+LocalJob_9 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep.root 10.71 -1
+LocalJob_10 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8/dilep.root 30.5402 -1
+LocalJob_11 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep.root 5.60 -1
+LocalJob_12 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/dilep.root 4.4297 -1
+LocalJob_13 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1-v1/dilep.root 123.9 -1
+LocalJob_14 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV_powheg_pythia8/dilep.root 1.256 -1
+
+06/08/2018 10:33:54
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1-v2/dilep.root 6020.85 -1
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep.root 10.71 -1
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1-v1/dilep.root 123.9 -1
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV_powheg_pythia8/dilep.root 1.256 -1
+
+06/08/2018 10:34:51
+LocalJob_0 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_ext1-v2/dilep.root 6020.85 -1
+LocalJob_1 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep.root 10.71 -1
+LocalJob_2 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1-v1/dilep.root 123.9 -1
+LocalJob_3 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV_powheg_pythia8/dilep.root 1.256 -1

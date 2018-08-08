@@ -18,7 +18,7 @@ if g++ -o a_jobs.out ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${hea
     log=${headdir}"/test/log/submittedjobs.txt"
     >> $log
     dt=$(date '+%d/%m/%Y %H:%M:%S');
-    echo "\n$dt" >> $log
+    echo -e "\n$dt" >> $log
     tmp=${headdir}"/test/sampleLists/tmp/tmp.txt"
     inputtemplate=${headdir}"/test/sampleLists/tmp/LocalJob_"  #samples for 1 subjob will be put in tmp.txt
     jobnametemplate=${headdir}"/test/LocalJob_" #the name for the submitted jobs, numbered for clarity
@@ -29,7 +29,7 @@ if g++ -o a_jobs.out ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${hea
 
     while IFS='' read -r line || [[ -n "$line" ]]; do
         if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then
-            echo "white line or comment found"
+            echo -e "\n"
         else
             echo $line >> $tmp
             echo "LocalJob_"$submittedjobs" "$line >> $log

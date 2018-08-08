@@ -177,12 +177,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
 
 
+        
         //Get signal region -> put this into a function maybe
         bool _1e			    = i_leading_e != -1;
         bool leadptveto_e = false;
-        //if(i_leading_e != -1 && jentry%100 == 0) cout << "leading pt: " << _lPt[i_leading_e] << endl;
         if(i_leading_e != -1 and _lPt[i_leading_e] > 30) leadptveto_e = true;
-        //if(i_leading_e != -1 && jentry%100 == 0) cout << "leadptveto_e: " << leadptveto_e << endl;
 	    bool _2e0jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
 	    bool _2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
 	    bool _2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
@@ -266,27 +265,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 fill_histograms(&hists, "displ_OS_mu");
             }
         }
-        /*if(filename.Index("_e_") != -1){
-            hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-            hists["2isol_1jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-            hists["2isol_2jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-            hists["1iso1displ_0jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-            hists["1iso1displ_1jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-            hists["1iso1displ_2jet_leadlpt"]->Fill(_lPt[i_leading_e], event_weight);
-        }
-        else if(filename.Index("_mu_") != -1){
-            hists["2isol_0jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-            hists["2isol_1jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-            hists["2isol_2jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-            hists["1iso1displ_0jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-            hists["1iso1displ_1jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-            hists["1iso1displ_2jet_leadlpt"]->Fill(_lPt[i_leading_mu], event_weight);
-        }
-        else{
-
-
-        }*/
-
     }
 
     //cout << "ee else: " << ee_else << endl;
@@ -391,12 +369,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     //Determine efficiencies for HLT
-    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide(hists["1_iso_ele_pt"]);
-    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Divide(hists["1_iso_ele_barrel_pt"]);
-    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Divide(hists["1_iso_ele_endcap_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide(hists["1_iso_mu_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["1_iso_mu_barrel_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["1_iso_mu_endcap_pt"]);
+    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide(hists["HLT_1_iso_e_pt"]);
+    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Divide(hists["HLT_1_iso_e_barrel_pt"]);
+    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Divide(hists["HLT_1_iso_e_endcap_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide(hists["HLT_1_iso_mu_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["HLT_1_iso_mu_barrel_pt"]);
+    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["HLT_1_iso_mu_endcap_pt"]);
 
     for(auto&& sh : hists){
         auto&& h = sh.second;

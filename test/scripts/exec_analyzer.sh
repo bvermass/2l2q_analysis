@@ -2,7 +2,7 @@
 #executes
 while IFS='' read -r line || [[ -n "$line" ]]; do
     if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then
-        echo "white line or comment found"
+        echo -e "\n"
     else
         #split sample name, cross section and max_entries that are currenlty on single line
         counter=0

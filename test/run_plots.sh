@@ -5,8 +5,8 @@ headdir="/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analys
 cd $headdir
 
 read -p "separate plots(1), stack plots(2), all(3): " choice
-case $choice in
-[13]*)
+
+if [[ choice -eq 1 || choice -eq 3 ]]; then
     #Make plots for every file separately
     if g++ "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////"
@@ -27,9 +27,9 @@ case $choice in
         echo -e "\n//////////////////////"
         echo -e "//COMPILATION FAILED//"
         echo -e "//////////////////////\n"
-    fi;;
-
-[23]*)
+    fi
+fi
+if [[ choice -eq 2 || choice -eq 3 ]]; then
     #run stack plots
     if g++ "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////"
@@ -61,5 +61,5 @@ case $choice in
         echo -e "\n//////////////////////"
         echo -e "//COMPILATION FAILED//"
         echo -e "//////////////////////\n"
-    fi;;
-esac
+    fi
+fi
