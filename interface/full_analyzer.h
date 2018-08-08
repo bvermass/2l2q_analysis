@@ -636,6 +636,37 @@ public :
    int i_leading_jet_for_displ;
    int i_subleading_jet_for_displ;
 
+   bool _1e;
+   bool _1e1disple;
+   bool _1e1disple0adde;
+   bool _1e1disple0jet;
+   bool _1e1disple0jet_aftermll;
+   
+   bool _1e0jet;
+   bool _1e1jet;
+   bool _1e2jet;
+   bool _2e0jet;
+   bool _2e1jet;
+   bool _2e2jet;
+   bool _1e1nonisoe0jet;
+   bool _1e1nonisoe1jet;
+   bool _1e1nonisoe2jet;
+   bool _1e1disple1jet;
+   bool _1e1disple2jet;
+
+   bool _1mu;
+   bool _1mu0jet;
+   bool _1mu1jet;
+   bool _1mu2jet;
+   bool _2mu0jet;
+   bool _2mu1jet;
+   bool _2mu2jet;
+   bool _1mu1nonisomu0jet;
+   bool _1mu1nonisomu1jet;
+   bool _1mu1nonisomu2jet;
+   bool _1mu1displmu0jet;
+   bool _1mu1displmu1jet;
+   bool _1mu1displmu2jet;
 
    full_analyzer(TTree *tree=0);
    virtual ~full_analyzer();
@@ -647,6 +678,7 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    virtual void     run_over_file(TString, double, int);
+
    virtual void     get_electronID(bool*);
    virtual void     get_noniso_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
@@ -662,11 +694,18 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
+   
+   virtual void     signal_regions();
+   virtual bool     leadptcut(TString);
+   virtual bool     mllcut(int, int);
+   
    virtual void     print_table();
+   
    virtual void     add_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_histograms_mu(std::map<TString, TH1*>*, TString);
+   
    virtual void     HLT_efficiency_init(std::map<TString, TH1*>*);
    virtual void     HLT_efficiency_fill(std::map<TString, TH1*>*, bool, bool);
    
