@@ -641,6 +641,7 @@ public :
    bool _1e1disple0adde;
    bool _1e1disple0jet;
    bool _1e1disple0jet_aftermll;
+   bool _1e1disple0jet_afterdphi;
    
    bool _1e0jet;
    bool _1e1jet;
@@ -659,6 +660,7 @@ public :
    bool _1mu1displmu0addmu;
    bool _1mu1displmu0jet;
    bool _1mu1displmu0jet_aftermll;
+   bool _1mu1displmu0jet_afterdphi;
    
    bool _1mu0jet;
    bool _1mu1jet;
@@ -702,7 +704,8 @@ public :
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
-   
+   virtual bool     dphicut(int, int);
+
    virtual void     print_table();
    
    virtual void     add_histograms(std::map<TString, TH1*>*, TString);

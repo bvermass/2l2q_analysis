@@ -69,6 +69,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, "displ_OS_mu");
     add_histograms(&hists, "displ_SS_mu");
     add_histograms(&hists, "displ_OS_e_beforemll");
+    add_histograms(&hists, "displ_SS_e_beforemll");
+    add_histograms(&hists, "displ_OS_mu_beforemll");
+    add_histograms(&hists, "displ_SS_mu_beforemll");
+    add_histograms(&hists, "displ_OS_e_beforedphi");
+    add_histograms(&hists, "displ_SS_e_beforedphi");
+    add_histograms(&hists, "displ_OS_mu_beforedphi");
+    add_histograms(&hists, "displ_SS_mu_beforedphi");
 
     //assures statistical errors are dealt with correctly
     for(auto&& sh : hists){
@@ -100,6 +107,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
     
+    return;
     //main loop begins here
     for(unsigned jentry = 0; jentry < max_entries; ++jentry){
 	    LoadTree(jentry);
@@ -256,19 +264,42 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                fill_histograms(&hists, "displ_SS_e_beforemll");
             }else{
                 fill_histograms(&hists, "displ_OS_e_beforemll");
             }           
         }
-
+        if(_1mu1displmu0jet){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                fill_histograms(&hists, "displ_SS_mu_beforemll");
+            }else{
+                fill_histograms(&hists, "displ_OS_mu_beforemll");
+            }
+        }
+        
         if(_1e1disple0jet_aftermll){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                fill_histograms(&hists, "displ_SS_e_beforedphi");
+            }else{
+                fill_histograms(&hists, "displ_OS_e_beforedphi");
+            }           
+        }
+        if(_1mu1displmu0jet_aftermll){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                fill_histograms(&hists, "displ_SS_mu_beforedphi");
+            }else{
+                fill_histograms(&hists, "displ_OS_mu_beforedphi");
+            }
+        }
+
+        if(_1e1disple0jet_afterdphi){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 fill_histograms(&hists, "displ_SS_e");
             }else{
                 fill_histograms(&hists, "displ_OS_e");
             }
         }
-        if(_1mu1displmu0jet_aftermll){
+        if(_1mu1displmu0jet_afterdphi){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
                 fill_histograms(&hists, "displ_SS_mu");
             }else{

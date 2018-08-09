@@ -50,7 +50,7 @@ if g++ -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.c
                 echo "cd "${headdir} >> $job
                 echo "sh "${headdir}"/test/scripts/exec_analyzer.sh "$input" a_jobs.out"  >> $job
                 echo "rm "$input >> $job
-                cat $job
+                #cat $job
                 #if anything needs to be copied to or from scratch, it should happen here
                 # - resulting root file with histograms should be copied from scratch to its correct location in public/2l2q_analysis/histograms
     

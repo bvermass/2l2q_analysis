@@ -13,9 +13,12 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
             elif [ $counter -eq 1 ]; then
                 cross_section=$val
                 counter=2
-            else 
+            elif [ $counter -eq 2 ]; then
                 max_entries=$val
                 counter=0
+            #else 
+            #    nentries=$val
+            #    counter=0
             fi
         done
         #root -l -b -q ${headdir}"src/full_analyzer.cc+" ${headdir}"test/mainroot.cc(\"$line\")" #maybe add an option to compile using this line, meaning Aclic(but why?)
