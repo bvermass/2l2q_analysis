@@ -16,7 +16,7 @@
 using namespace std;
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
-void full_analyzer::run_over_file(TString filename, double cross_section, int max_entries)
+void full_analyzer::run_over_file(TString filename, double cross_section, int max_entries, int partition, int partitionjobnumber)
 {
 // Short description of program flow:
 //     - initialize file
@@ -100,16 +100,19 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     int n_after_invreliso_convveto = 0;
     int n_after_invreliso_missinghits = 0;
 
-
+    // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
     cout << "full_analyzer.cc file: " << filename << endl;
     cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
     
-    return;
+    Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
+    Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
+    std::cout << "j_begin j_end max_entries: " << j_begin << " " << j_end << " " << max_entries << std::endl;
+
     //main loop begins here
-    for(unsigned jentry = 0; jentry < max_entries; ++jentry){
+    for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
         unsigned notice = round(0.001 * max_entries / 20) * 1000;
@@ -376,9 +379,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
     TString outputfilename = "~/public/2l2q_analysis/histograms/full_analyzer/";
+    
+    if(partition != 1) {
+        outputfilename += "subfiles/";
+        if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced + "/";
+        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
+    }
     gSystem->Exec("mkdir -p " + outputfilename);
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced  + ".root";
-    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + ".root";
+
+    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced;
+    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15);
+    
+    if(partition != 1) outputfilename += "_job_" + to_string(partitionjobnumber) + ".root";
+    else outputfilename += ".root";
+
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
     for(auto&& sh : hists){

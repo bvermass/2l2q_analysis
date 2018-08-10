@@ -5,10 +5,10 @@
 
 using namespace std;
 
-void mainroot(TString sample, double cross_section, int max_entries)
+void mainroot(TString sample, double cross_section, int max_entries, int partition, int partitionjobnumber)
 {
     if (sample.Index(".root") == -1) sample+= "/dilep.root";//in case only the directory is given and not the actual root file. This should fix in almost all cases
-    cout << "mainroot.cc file - cross section - maxentry: " << sample << " - " << cross_section << " - " << max_entries << endl;
+    cout << "mainroot.cc file - cross section - maxentry - partition - partitionjobnumber: " << sample << " - " << cross_section << " - " << max_entries << " - " << partition << " - " << partitionjobnumber << endl;
     
     //how it should be: 
     //if(sample.Index("_e_") != -1){
@@ -35,7 +35,7 @@ void mainroot(TString sample, double cross_section, int max_entries)
     
     full_analyzer b(tree);
 
-    b.run_over_file(sample, cross_section, max_entries);
+    b.run_over_file(sample, cross_section, max_entries, partition, partitionjobnumber);
 
 }
 
@@ -45,7 +45,9 @@ int main(int argc, char * argv[])
 {
     double cross_section = atof(argv[2]);
     int max_entries = atof(argv[3]);
-    mainroot(argv[1], cross_section, max_entries);
+    int partition = atof(argv[4]);
+    int partitionjobnumber = atof(argv[5]);
+    mainroot(argv[1], cross_section, max_entries, partition, partitionjobnumber);
     return 0;
 }
 # endif
