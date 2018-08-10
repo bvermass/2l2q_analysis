@@ -37,7 +37,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     double total_weight = cross_section * 35900 / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
-    cout << "total weight: " << total_weight << endl;
+    //cout << "total weight: " << total_weight << endl;
     Init(tree);
 
 
@@ -102,8 +102,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
-    cout << "full_analyzer.cc file: " << filename << endl;
-    cout << "Number of events: " << nentries << endl;
+    //cout << "full_analyzer.cc file: " << filename << endl;
+    //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
     
@@ -115,10 +115,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
-        unsigned notice = round(0.001 * max_entries / 20) * 1000;
-	    bool printevent = (jentry%notice == 0);
+        unsigned notice = round(0.001 * (j_end - j_begin) / 20) * 1000;
+	    bool printevent = ((jentry -j_begin)%notice == 0);
 	    if(printevent){
-	        cout << jentry << " of " << max_entries << endl;
+	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
 	    }
 
         //Calculate Event weight
@@ -331,37 +331,37 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	//    auto&& h  = sh.second;
 	//    h->Scale(100/h->GetEntries());
     //}
-
-    if(flavor == "e" or flavor == "bkg"){
-        cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
-        cout << "2iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(2) << endl;
-        cout << "2iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(3) << endl;
-        cout << "1iso e, 1noniso e, 0jet: " << hists["ee_sigreg_fraction"]->GetBinContent(4) << endl;
-        cout << "1iso e, 1noniso e, 1jet: " << hists["ee_sigreg_fraction"]->GetBinContent(5) << endl;
-        cout << "1iso e, 1noniso e, 2jet: " << hists["ee_sigreg_fraction"]->GetBinContent(6) << endl;
-        cout << "1iso e, 1displ e, 0jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(7) << endl;
-        cout << "1iso e, 1displ e, 1jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(8) << endl;
-        cout << "1iso e, 1displ e, 2jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(9) << endl << endl;
-        cout << "1iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(10) << endl;
-        cout << "1iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(11) << endl;
-        cout << "1iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(12) << endl;
-        cout << "other:                   " << hists["ee_sigreg_fraction"]->GetBinContent(13) << endl;
-    }
-    if(flavor == "mu" or flavor == "bkg"){
-        cout << "2iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(1) << endl;
-        cout << "2iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(2) << endl;
-        cout << "2iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(3) << endl;
-        cout << "1iso mu, 1noniso mu, 0jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(4) << endl;
-        cout << "1iso mu, 1noniso mu, 1jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(5) << endl;
-        cout << "1iso mu, 1noniso mu, 2jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(6) << endl;
-        cout << "1iso mu, 1displ mu, 0jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(7) << endl;
-        cout << "1iso mu, 1displ mu, 1jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(8) << endl;
-        cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl;
-        cout << "1iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(10) << endl;
-        cout << "1iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(11) << endl;
-        cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
-        cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
-    }
+    // 
+    //if(flavor == "e" or flavor == "bkg"){
+    //    cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
+    //    cout << "2iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(2) << endl;
+    //    cout << "2iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(3) << endl;
+    //    cout << "1iso e, 1noniso e, 0jet: " << hists["ee_sigreg_fraction"]->GetBinContent(4) << endl;
+    //    cout << "1iso e, 1noniso e, 1jet: " << hists["ee_sigreg_fraction"]->GetBinContent(5) << endl;
+    //    cout << "1iso e, 1noniso e, 2jet: " << hists["ee_sigreg_fraction"]->GetBinContent(6) << endl;
+    //    cout << "1iso e, 1displ e, 0jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(7) << endl;
+    //    cout << "1iso e, 1displ e, 1jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(8) << endl;
+    //    cout << "1iso e, 1displ e, 2jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(9) << endl << endl;
+    //    cout << "1iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(10) << endl;
+    //    cout << "1iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(11) << endl;
+    //    cout << "1iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(12) << endl;
+    //    cout << "other:                   " << hists["ee_sigreg_fraction"]->GetBinContent(13) << endl;
+    //}
+    //if(flavor == "mu" or flavor == "bkg"){
+    //    cout << "2iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(1) << endl;
+    //    cout << "2iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(2) << endl;
+    //    cout << "2iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(3) << endl;
+    //    cout << "1iso mu, 1noniso mu, 0jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(4) << endl;
+    //    cout << "1iso mu, 1noniso mu, 1jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(5) << endl;
+    //    cout << "1iso mu, 1noniso mu, 2jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(6) << endl;
+    //    cout << "1iso mu, 1displ mu, 0jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(7) << endl;
+    //    cout << "1iso mu, 1displ mu, 1jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(8) << endl;
+    //    cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl;
+    //    cout << "1iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(10) << endl;
+    //    cout << "1iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(11) << endl;
+    //    cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
+    //    cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
+    //}
     //cout << endl << "it should be:" << endl;
     //cout << "2iso e, 0jet:            0.136727     " << endl; 
     //cout << "2iso e, 1jet:            0.0321711    " << endl; 

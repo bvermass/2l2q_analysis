@@ -8,26 +8,8 @@ using namespace std;
 void mainroot(TString sample, double cross_section, int max_entries, int partition, int partitionjobnumber)
 {
     if (sample.Index(".root") == -1) sample+= "/dilep.root";//in case only the directory is given and not the actual root file. This should fix in almost all cases
-    cout << "mainroot.cc file - cross section - maxentry - partition - partitionjobnumber: " << sample << " - " << cross_section << " - " << max_entries << " - " << partition << " - " << partitionjobnumber << endl;
+    cout << endl << endl << "mainroot.cc file: " << sample << endl << "- cross section - maxentry - partition - partitionjobnumber: " << cross_section << " - " << max_entries << " - " << partition << " - " << partitionjobnumber << endl;
     
-    //how it should be: 
-    //if(sample.Index("_e_") != -1){
-    //    full_analyzer_ee b;
-    //    b.run_over_file(sample);
-    //}
-    //else if(sample.Index("_mu_") != -1){
-    //    full_analyzer_mumu b;
-    //    b.run_over_file(sample);
-    //}
-    //else {
-    //    full_analyzer_ee b_ee;
-    //    b_ee.run_over_file(sample);
-    //    full_analyzer_mumu b_mumu;
-    //    b_mumu.run_over_file(sample);
-    //}
-    //
-    //full_analyzer_ee* a = new full_analyzer_ee(5);
-    //a->test();
     
     TFile *input = new TFile(sample, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
