@@ -34,17 +34,6 @@ public :
    ULong64_t       _lumiBlock;
    ULong64_t       _eventNb;
    UChar_t         _nVertex;
-   Double_t        _met;
-   Double_t        _metJECDown;
-   Double_t        _metJECUp;
-   Double_t        _metUnclDown;
-   Double_t        _metUnclUp;
-   Double_t        _metPhi;
-   Double_t        _metPhiJECDown;
-   Double_t        _metPhiJECUp;
-   Double_t        _metPhiUnclDown;
-   Double_t        _metPhiUnclUp;
-   Double_t        _metSignificance;
    Float_t         _nTrueInt;
    Double_t        _weight;
    Double_t        _lheHTIncoming;
@@ -79,9 +68,6 @@ public :
    Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
    Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
    Double_t        _gen_HT;
-   UChar_t         _gen_nW;
-   UInt_t          _gen_WMomPdg[1];   //[_gen_nW]
-   UChar_t         _gen_nWfromN;
    UChar_t         _gen_nN;
    Double_t        _gen_NPt;
    Double_t        _gen_NEta;
@@ -90,6 +76,24 @@ public :
    Double_t        _gen_Nvertex_x;
    Double_t        _gen_Nvertex_y;
    Double_t        _gen_Nvertex_z;
+   UChar_t         _gen_nNPackedDtrs;
+   Double_t        _gen_NPackedDtrsPt[20];
+   Double_t        _gen_NPackedDtrsEta[20];
+   Double_t        _gen_NPackedDtrsPhi[20];
+   Double_t        _gen_NPackedDtrsE[20];
+   Int_t           _gen_NPackedDtrsPdgId[20];
+   Int_t           _gen_NPackedDtrsCharge[20];
+   Int_t           matches[20];
+   Double_t        _gen_NPackedDtrsmineta[20];
+   Double_t        _gen_NPackedDtrsminphi[20];
+   Double_t        _gen_NPackedDtrsminpt[20];
+   Double_t        _gen_NPackedDtrs_matchPt[20];
+   Double_t        _gen_NPackedDtrs_matchEta[20];
+   Double_t        _gen_NPackedDtrs_matchPhi[20];
+   Double_t        _gen_NPackedDtrs_matchE[20];
+   Double_t        _gen_NPackedDtrs_matchdxy[20];
+   Double_t        _gen_NPackedDtrs_matchdz[20];
+   Int_t           _gen_NPackedDtrs_matchcharge[20];
    UChar_t         _gen_nNdaughters;
    UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
    UChar_t         _gen_nstatus23;
@@ -98,7 +102,7 @@ public :
    Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
    UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
    UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
-   UChar_t         _gen_nq23;
+   UChar_t         _gen_nq;
    Double_t        _gen_qPt[2];   //[_gen_nq23]
    Double_t        _gen_qEta[2];   //[_gen_nq23]
    Double_t        _gen_qPhi[2];   //[_gen_nq23]
@@ -158,9 +162,9 @@ public :
    Bool_t          _Flag_HBHENoiseIsoFilter;
    Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
    Bool_t          _Flag_goodVertices;
+   Bool_t          _Flag_BadPFMuonFilter;
+   Bool_t          _Flag_BadChargedCandidateFilter;
    Bool_t          _Flag_globalTightHalo2016Filter;
-   Bool_t          _flag_badPFMuonFilter;
-   Bool_t          _flag_badChCandFilter;
    Bool_t          _HLT_Ele105_CaloIdVT_GsfTrkIdT;
    Int_t           _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
    Bool_t          _HLT_Ele115_CaloIdVT_GsfTrkIdT;
@@ -201,8 +205,12 @@ public :
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
    UInt_t          _lElectronMissingHits[10];   //[_nLight]
-   Double_t        _leptonMvaSUSY[10];   //[_nLight]
-   Double_t        _leptonMvaTTH[10];   //[_nLight]
+   Double_t        _leptonMvaSUSY16[10];   //[_nLight]
+   Double_t        _leptonMvaTTH16[10];   //[_nLight]
+   Double_t        _leptonMvaSUSY17[10];   //[_nLight]
+   Double_t        _leptonMvaTTH17[10];   //[_nLight]
+   Double_t        _leptonMvatZqTTV16[10];   //[_nLight]
+   Double_t        _leptonMvatZqTTV17[10];   //[_nLight]
    Bool_t          _lHNLoose[10];   //[_nLight]
    Bool_t          _lHNFO[10];   //[_nLight]
    Bool_t          _lHNTight[10];   //[_nLight]
@@ -226,7 +234,8 @@ public :
    Bool_t          _tauVTightMvaNew[10];   //[_nL]
    Bool_t          _tauVTightMvaOld[10];   //[_nL]
    Double_t        _relIso[10];   //[_nLight]
-   Double_t        _relIso0p4Mu[2];   //[_nMu]
+   Double_t        _relIso0p4[10];   //[_nMu]
+   Double_t        _relIso0p4MuDeltaBeta[10];   //[_nMu]
    Double_t        _miniIso[10];   //[_nLight]
    Double_t        _miniIsoCharged[10];   //[_nLight]
    Double_t        _ptRel[10];   //[_nLight]
@@ -266,10 +275,8 @@ public :
    Double_t	       _lVtxpos_BSdxy[10];
    Double_t	       _lVtxpos_PVdz[10];
    Double_t	       _lVtxpos_BSdz[10];
-   Double_t        _lVtxpos_maxdxy_valid[10];
-   Double_t        _lVtxpos_maxdz_valid[10];
-   Double_t        _lVtxpos_maxdxy_Notvalid[10];
-   Double_t        _lVtxpos_maxdz_Notvalid[10];
+   Double_t        _lVtxpos_maxdxy[10];
+   Double_t        _lVtxpos_maxdz[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
@@ -302,8 +309,10 @@ public :
    Double_t        _jetPt[20];   //[_nJets]
    Double_t        _jetPt_JECUp[20];   //[_nJets]
    Double_t        _jetPt_JECDown[20];   //[_nJets]
-   Double_t        _jetPt_JERUp[20];   //[_nJets]
-   Double_t        _jetPt_JERDown[20];   //[_nJets]
+   Double_t        _jetPt_Uncorrected[20];   //[_nJets]
+   Double_t        _jetPt_L1[20];   //[_nJets]
+   Double_t        _jetPt_L2[20];   //[_nJets]
+   Double_t        _jetPt_L3[20];   //[_nJets]
    Double_t        _jetEta[20];   //[_nJets]
    Double_t        _jetPhi[20];   //[_nJets]
    Double_t        _jetE[20];   //[_nJets]
@@ -316,6 +325,26 @@ public :
    Bool_t          _jetIsLoose[20];   //[_nJets]
    Bool_t          _jetIsTight[20];   //[_nJets]
    Bool_t          _jetIsTightLepVeto[20];   //[_nJets]
+   Double_t        _jetNeutralHadronFraction[20];
+   Double_t        _jetChargedHadronFraction[20];
+   Double_t        _jetNeutralEmFraction[20];
+   Double_t        _jetChargedEmFraction[20];
+   Double_t        _jetHFHadronFraction[20];
+   Double_t        _jetHFEmFraction[20];
+   Double_t        _met;
+   Double_t        _metRaw;
+   Double_t        _metJECDown;
+   Double_t        _metJECUp;
+   Double_t        _metUnclDown;
+   Double_t        _metUnclUp;
+   Double_t        _metPhi;
+   Double_t        _metRawPhi;
+   Double_t        _metPhiJECDown;
+   Double_t        _metPhiJECUp;
+   Double_t        _metPhiUnclDown;
+   Double_t        _metPhiUnclUp;
+   Double_t        _metSignificance;
+
    /*Int_t           _nDaughters;
    Int_t           _jet_tag_for_daughters[300];   //[_nDaughters]
    Int_t           _jet_daughter_pdgid[300];   //[_nDaughters]
@@ -329,17 +358,6 @@ public :
    TBranch        *b__lumiBlock;   //!
    TBranch        *b__eventNb;   //!
    TBranch        *b__nVertex;   //!
-   TBranch        *b__met;   //!
-   TBranch        *b__metJECDown;   //!
-   TBranch        *b__metJECUp;   //!
-   TBranch        *b__metUnclDown;   //!
-   TBranch        *b__metUnclUp;   //!
-   TBranch        *b__metPhi;   //!
-   TBranch        *b__metPhiJECDown;   //!
-   TBranch        *b__metPhiJECUp;   //!
-   TBranch        *b__metPhiUnclDown;   //!
-   TBranch        *b__metPhiUnclUp;   //!
-   TBranch        *b__metSignificance;   //!
    TBranch        *b__nTrueInt;   //!
    TBranch        *b__weight;   //!
    TBranch        *b__lheHTIncoming;   //!
@@ -374,9 +392,6 @@ public :
    TBranch        *b__gen_lMinDeltaR;   //!
    TBranch        *b__gen_lPassParentage;   //!
    TBranch        *b__gen_HT;   //!
-   TBranch        *b__gen_nW;   //!
-   TBranch        *b__gen_WMomPdg;   //!
-   TBranch        *b__gen_nWfromN;   //!
    TBranch        *b__gen_nN;   //!
    TBranch        *b__gen_NPt;
    TBranch        *b__gen_NEta;
@@ -385,6 +400,24 @@ public :
    TBranch        *b__gen_Nvertex_x;
    TBranch        *b__gen_Nvertex_y;
    TBranch        *b__gen_Nvertex_z;
+   TBranch        *b__gen_nNPackedDtrs;
+   TBranch        *b__gen_NPackedDtrsPt;
+   TBranch        *b__gen_NPackedDtrsEta;
+   TBranch        *b__gen_NPackedDtrsPhi;
+   TBranch        *b__gen_NPackedDtrsE;
+   TBranch        *b__gen_NPackedDtrsPdgId;
+   TBranch        *b__gen_NPackedDtrsCharge;
+   TBranch        *b_matches;
+   TBranch        *b__gen_NPackedDtrsmineta;
+   TBranch        *b__gen_NPackedDtrsminphi;
+   TBranch        *b__gen_NPackedDtrsminpt;
+   TBranch        *b__gen_NPackedDtrs_matchPt;
+   TBranch        *b__gen_NPackedDtrs_matchEta;
+   TBranch        *b__gen_NPackedDtrs_matchPhi;
+   TBranch        *b__gen_NPackedDtrs_matchE;
+   TBranch        *b__gen_NPackedDtrs_matchdxy;
+   TBranch        *b__gen_NPackedDtrs_matchdz;
+   TBranch        *b__gen_NPackedDtrs_matchcharge;
    TBranch        *b__gen_nNdaughters;   //!
    TBranch        *b__gen_Ndaughters_pdg;   //!
    TBranch        *b__gen_nstatus23;   //!
@@ -393,7 +426,7 @@ public :
    TBranch        *b__gen_status23_pdg;   //!
    TBranch        *b__gen_status23_fromN_pdg;   //!
    TBranch        *b__gen_status23_fromW_pdg;   //!
-   TBranch        *b__gen_nq23;   //!
+   TBranch        *b__gen_nq;   //!
    TBranch        *b__gen_qPt;   //!
    TBranch        *b__gen_qEta;   //!
    TBranch        *b__gen_qPhi;   //!
@@ -454,8 +487,8 @@ public :
    TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
    TBranch        *b__Flag_goodVertices;   //!
    TBranch        *b__Flag_globalTightHalo2016Filter;   //!
-   TBranch        *b__flag_badPFMuonFilter;   //!
-   TBranch        *b__flag_badChCandFilter;   //!
+   TBranch        *b__Flag_BadPFMuonFilter;   //!
+   TBranch        *b__Flag_BadChargedCandidateFilter;   //!
    TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
    TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
    TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!
@@ -496,8 +529,12 @@ public :
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
    TBranch        *b__lElectronMissingHits;   //!
-   TBranch        *b__leptonMvaSUSY;   //!
-   TBranch        *b__leptonMvaTTH;   //!
+   TBranch        *b__leptonMvaSUSY16;   //!
+   TBranch        *b__leptonMvaTTH16;   //!
+   TBranch        *b__leptonMvaSUSY17;   //!
+   TBranch        *b__leptonMvaTTH17;   //!
+   TBranch        *b__leptonMvatZqTTV16;   //!
+   TBranch        *b__leptonMvatZqTTV17;   //!
    TBranch        *b__lHNLoose;   //!
    TBranch        *b__lHNFO;   //!
    TBranch        *b__lHNTight;   //!
@@ -521,7 +558,8 @@ public :
    TBranch        *b__tauVTightMvaNew;   //!
    TBranch        *b__tauVTightMvaOld;   //!
    TBranch        *b__relIso;   //!
-   TBranch        *b__relIso0p4Mu;   //!
+   TBranch        *b__relIso0p4;   //!
+   TBranch        *b__relIso0p4MuDeltaBeta;   //!
    TBranch        *b__miniIso;   //!
    TBranch        *b__miniIsoCharged;   //!
    TBranch        *b__ptRel;   //!
@@ -556,14 +594,13 @@ public :
    TBranch	      *b__lVtxpos_czx;
    TBranch	      *b__lVtxpos_df;
    TBranch	      *b__lVtxpos_chi2;
+   TBranch        *b__lVtxpos_ntracks;
    TBranch	      *b__lVtxpos_PVdxy;
    TBranch	      *b__lVtxpos_BSdxy;
    TBranch	      *b__lVtxpos_PVdz;
    TBranch	      *b__lVtxpos_BSdz;
-   TBranch        *b__lVtxpos_maxdxy_valid;
-   TBranch        *b__lVtxpos_maxdz_valid;
-   TBranch        *b__lVtxpos_maxdxy_Notvalid;
-   TBranch        *b__lVtxpos_maxdz_Notvalid;
+   TBranch        *b__lVtxpos_maxdxy;
+   TBranch        *b__lVtxpos_maxdz;
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
@@ -596,8 +633,10 @@ public :
    TBranch        *b__jetPt;   //!
    TBranch        *b__jetPt_JECUp;   //!
    TBranch        *b__jetPt_JECDown;   //!
-   TBranch        *b__jetPt_JERUp;   //!
-   TBranch        *b__jetPt_JERDown;   //!
+   TBranch        *b__jetPt_Uncorrected;
+   TBranch        *b__jetPt_L1;
+   TBranch        *b__jetPt_L2;
+   TBranch        *b__jetPt_L3;
    TBranch        *b__jetEta;   //!
    TBranch        *b__jetPhi;   //!
    TBranch        *b__jetE;   //!
@@ -610,6 +649,25 @@ public :
    TBranch        *b__jetIsLoose;   //!
    TBranch        *b__jetIsTight;   //!
    TBranch        *b__jetIsTightLepVeto;   //!
+   TBranch        *b__jetNeutralHadronFraction;   //!
+   TBranch        *b__jetChargedHadronFraction;   //!
+   TBranch        *b__jetNeutralEmFraction;   //!
+   TBranch        *b__jetChargedEmFraction;   //!
+   TBranch        *b__jetHFHadronFraction;   //!
+   TBranch        *b__jetHFEmFraction;   //!
+   TBranch        *b__met;   //!
+   TBranch        *b__metRaw;
+   TBranch        *b__metJECDown;   //!
+   TBranch        *b__metJECUp;   //!
+   TBranch        *b__metUnclDown;   //!
+   TBranch        *b__metUnclUp;   //!
+   TBranch        *b__metPhi;   //!
+   TBranch        *b__metRawPhi;   //!
+   TBranch        *b__metPhiJECDown;   //!
+   TBranch        *b__metPhiJECUp;   //!
+   TBranch        *b__metPhiUnclDown;   //!
+   TBranch        *b__metPhiUnclUp;   //!
+   TBranch        *b__metSignificance;   //!
 /*   TBranch        *b__nDaughters;   //!
    TBranch        *b__jet_tag_for_daughters;   //!
    TBranch        *b__jet_daughter_pdgid;   //!
@@ -700,7 +758,7 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
-   
+
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
