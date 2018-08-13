@@ -9,7 +9,7 @@ headdir=$(pwd)
 #execdir=${headdir}"/test/log/"
 
 # Compilation of Code
-if g++ -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer_ee.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
+if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer_ee.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
     echo -e "\n//////////////////////////"
     echo -e "//COMPILATION SUCCESSFUL//"
     echo -e "//////////////////////////\n"
@@ -62,12 +62,12 @@ if g++ -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.c
                 echo "sh "${headdir}"/test/scripts/exec_analyzer.sh "$input" a_jobs.out"  >> $job
                 echo "rm "$input >> $job
                 
-                qsub $job -l walltime=40:00:00 > scriptlog.txt 2>> scriptlog.txt
+                bsub -q 8nm -J LocalJob_$submittedjobs < $job > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do
                     echo "Invalid credential caught, resubmitting"
                     sleep 2 #sleep 2 seconds before attempting resubmission
-                    qsub $job -l walltime=40:00:00 > scriptlog.txt 2>>scriptlog.txt
+                    bsub -q 8nm -J LocalJob_$submittedjobs < $job > scriptlog.txt 2>>scriptlog.txt
                 done
 
                 cat scriptlog.txt

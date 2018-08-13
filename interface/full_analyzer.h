@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+#include <string>
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -676,6 +677,7 @@ public :
    TBranch        *b__jet_daughter_phi;   //!
    TBranch        *b__jet_daughter_energy;   //!
 */   
+   std::map<TString, TH1*>::iterator it;
    Double_t event_weight;
    
    int i_leading_e;

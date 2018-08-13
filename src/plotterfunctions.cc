@@ -10,17 +10,21 @@
 #include <TStyle.h>
 #include <TPad.h>
 #include <TCanvas.h>
+#include <TString.h>
 #include <iostream>
+#include <string>
 #include <cmath>
 
 #include "../interface/plotterfunctions.h"
 
 using namespace std;
 
+std::map<TString, TH1*>::iterator it;
+
 void mapmarkerstyle(std::map<TString, TH1*> hists)
 {
-    for(auto&& sh : hists){
-        auto&& h = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
         h->SetLineWidth(1);
@@ -65,8 +69,8 @@ void markerstyle(TH1F *hist, TString color)
 void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], double normalization_const[])
 {
     unsigned count = 0; //to count along with histograms in the map
-    for(auto&& sh : hists){
-        auto&& h = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
         markerstyle((TH1F*)h, colors[count]);
         if(normalization_const[count] == -1) h->Scale(1, "width");
         else h->Scale(normalization_const[count]/h->GetEntries(), "width");
@@ -78,8 +82,8 @@ void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& leg
 {
     unsigned count = 0; //to count along with histograms in the map
     legend.Clear();
-    for(auto&& sh : hists){
-        auto&& h = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
         markerstyle((TH1F*)h, colors[count]);
         legend.AddEntry(h, legend_entries[count]);
         if(normalization_const[count] == -1) h->Scale(1, "width");
@@ -120,7 +124,7 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     // "mass, coupling and flavor info if relevant in top right
     TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
     if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling;
+    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
     if(flavor != "" and coupling != "") couplinglatex += ", ";
     TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
     if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
@@ -144,15 +148,15 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
  
     // find the y range needed for the plot
     double ymax = 0;
-    for(auto&& sh : hists){
-        auto&& h = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
         if(1.1*h->GetMaximum() > ymax) ymax = 1.1*h->GetMaximum();
     }
   
     // design and draw the histograms
     bool firstlayout = true; // do only the range and title stuff for the first histogram
-    for(auto&& sh : hists){
-        auto&& h2 = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h2 = it->second;
         if(firstlayout){
             h2->GetXaxis()->SetRangeUser(xmin, xmax);
             h2->GetXaxis()->SetTitle(Xaxis);
@@ -181,7 +185,7 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     // "mass, coupling and flavor info if relevant in top right
     TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
     if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling;
+    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
     if(flavor != "" and coupling != "") couplinglatex += ", ";
     TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
     if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
@@ -244,14 +248,14 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     // draw signal on top
     // find the y range needed for the plot
     double max_for_scale = 0;
-    for(auto&& sh : signals){
-        auto&& h = sh.second;
+    for( it = signals.begin(); it != signals.end(); it++){
+        TH1* h = it->second;
         if(h->GetMaximum() > max_for_scale) max_for_scale = h->GetMaximum();
     }
     //double scale_factor = 0.01 * stack->GetMaximum() / max_for_scale;
     
-    for(auto&& sh : signals){
-        auto&& h = sh.second;
+    for( it = signals.begin(); it != signals.end(); it++){
+        TH1* h = it->second;
         double scale_factor = 0.01 * stack->GetMaximum() / h->GetMaximum();
         h->Scale(scale_factor);
         if(historE1 == "hist") h->Draw("hist same");

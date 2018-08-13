@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #First argument must be the txt file with the samples containing histograms
-headdir="/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis"
+headdir="/afs/cern.ch/work/b/bvermass/CMSSW_9_4_0/src/2l2q_analysis"
 cd $headdir
 
 read -p "separate plots(1), stack plots(2), all(3): " choice
 
 if [[ choice -eq 1 || choice -eq 3 ]]; then
     #Make plots for every file separately
-    if g++ "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////"
         echo -e "//COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////\n"
@@ -31,7 +31,7 @@ if [[ choice -eq 1 || choice -eq 3 ]]; then
 fi
 if [[ choice -eq 2 || choice -eq 3 ]]; then
     #run stack plots
-    if g++ "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////"
         echo -e "//COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////\n"

@@ -12,6 +12,7 @@
 #include <TPad.h>
 #include <TCanvas.h>
 #include <iostream>
+#include <string>
 #include <cmath>
 #include <TRandom3.h>
 #include <TKey.h>
@@ -23,12 +24,13 @@
 
 using namespace std;
 
+std::map<TString, TH1*>::iterator it2;
 
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    TString pathname                = "~/public/2l2q_analysis/plots/stacks/";
-    TString pathname_with_signal    = "~/public/2l2q_analysis/plots/stacks_with_signal/";
+    TString pathname                = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/stacks/";
+    TString pathname_with_signal    = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/stacks_with_signal/";
 
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);
@@ -48,10 +50,10 @@ int main(int argc, char * argv[])
         cout << argv[i] << endl;
     }
     // signal files
-    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL3GeV_e_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL3GeV_mu_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL7GeV_e_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL7GeV_mu_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
 
 
     // loop over histograms
@@ -105,7 +107,8 @@ int main(int argc, char * argv[])
         // get background and signal histograms
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
-            name = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
+            string i_string = to_string(static_cast<long long>(i));
+            name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
             hists[name] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
         }
         if(flavor == "e"){
@@ -124,8 +127,8 @@ int main(int argc, char * argv[])
         THStack *stack = new THStack("stack", h_ref->GetName());
         int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
         lgendrup.Clear();
-        for(auto&& sh : hists){
-	        auto&& h = sh.second;
+        for( it2 = hists.begin(); it2 != hists.end(); it2++){
+            TH1* h = it2->second;
 	        stack->Add(h);
             lgendrup.AddEntry(h, argv[i]);
             i++;

@@ -57,13 +57,13 @@ void test_plot()
     TString colors[]  = {"green", "blue"};
     double norms[]   = {1,1};
     style_legend_and_normalization(hists, lgendrup, legends, colors, norms);
-    draw_n_hists("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_9_4_0/src/2l2q_analysis/misc/testplot.pdf", c, hists, "hist", &lgendrup, "pt", "events", -1.5, 1.5, 0, "e", "2", "0.22");
+    draw_n_hists("/afs/cern.ch/work/b/bvermass/CMSSW_9_4_0/src/2l2q_analysis/misc/testplot.pdf", c, hists, "hist", &lgendrup, "pt", "events", -1.5, 1.5, 0, "e", "2", "0.22");
 }
 
 void plot_every_variable_in_root_file(TString filename)
 {
     //Make directory to store plots for this file
-    TString pathname = "~/public/2l2q_analysis/plots/";
+    TString pathname = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/";
     if(filename.Index("HeavyNeutrino") != -1)   pathname += filename(filename.Index("hists_") + 6, filename.Index("HeavyNeutrino") - 7 - filename.Index("hists_")) + "/" + filename(filename.Index("HeavyNeutrino"), filename.Index(".root") - filename.Index("HeavyNeutrino"));
     else if(filename.Index("Background") != -1) pathname += filename(filename.Index("hists_") + 6, filename.Index("Background") -7 - filename.Index("hists_")) + "/" + filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") -11);
     gSystem->Exec("mkdir -p " + pathname);

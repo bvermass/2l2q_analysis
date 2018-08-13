@@ -78,9 +78,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, "displ_SS_mu_beforedphi");
 
     //assures statistical errors are dealt with correctly
-    for(auto&& sh : hists){
-	auto&& h = sh.second;
-	h->Sumw2();
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
+        h->Sumw2();
     }
    
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
@@ -378,25 +378,26 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
-    TString outputfilename = "~/public/2l2q_analysis/histograms/full_analyzer/";
+    TString outputfilename = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
     
     if(partition != 1) {
         outputfilename += "subfiles/";
         if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced + "/";
-        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
+(0,6        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
     }
+    
     gSystem->Exec("mkdir -p " + outputfilename);
 
     if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced;
     else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15);
     
-    if(partition != 1) outputfilename += "_job_" + to_string(partitionjobnumber) + ".root";
+    if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
     else outputfilename += ".root";
 
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
-    for(auto&& sh : hists){
-	    auto&& h  = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
         int nb = h->GetNbinsX();
         double b0  = h->GetBinContent( 0  );
         double e0  = h->GetBinError  ( 0  );
@@ -431,8 +432,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["HLT_1_iso_mu_barrel_pt"]);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["HLT_1_iso_mu_endcap_pt"]);
 
-    for(auto&& sh : hists){
-        auto&& h = sh.second;
+    for( it = hists.begin(); it != hists.end(); it++){
+        TH1* h = it->second;
 	    h->Write();
     }
     output->Close();
