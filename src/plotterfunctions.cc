@@ -23,11 +23,16 @@ std::map<TString, TH1*>::iterator it;
 
 void mapmarkerstyle(std::map<TString, TH1*> hists)
 {
+    int i = 0;
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
         h->SetLineWidth(1);
+        if(i == 0) markerstyle((TH1F*)h, "green");
+        else if(i == 1) markerstyle((TH1F*)h, "red");
+        else if(i == 2) markerstyle((TH1F*)h, "magenta");
+        i++;
     }
 }
 
@@ -140,17 +145,18 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     c->Print(name);
 }
 
-void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
+void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString flavor, TString mass, TString coupling)
 {
-    //std::cout << "draw_n_hists" << std::endl;
-    // set x range lin or log
-    c->SetLogx(lin0log1);
+    // set y range lin or log
+    c->SetLogy(ylin0log1);
  
     // find the y range needed for the plot
-    double ymax = 0;
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
-        if(1.1*h->GetMaximum() > ymax) ymax = 1.1*h->GetMaximum();
+    if(ymax = -1){
+        ymax = 0;
+        for( it = hists.begin(); it != hists.end(); it++){
+            TH1* h = it->second;
+            if(1.1*h->GetMaximum() > ymax) ymax = 1.1*h->GetMaximum();
+        }
     }
   
     // design and draw the histograms
@@ -161,7 +167,7 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
             h2->GetXaxis()->SetRangeUser(xmin, xmax);
             h2->GetXaxis()->SetTitle(Xaxis);
             h2->GetXaxis()->SetTitleOffset(1.2);
-            h2->GetYaxis()->SetRangeUser(0, ymax);
+            h2->GetYaxis()->SetRangeUser(ymin, ymax);
             h2->GetYaxis()->SetTitle(Yaxis);
             h2->GetYaxis()->SetTitleOffset(1.5);
             if(historE1 == "hist") h2->Draw("hist");
@@ -200,11 +206,13 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     c->Print(name);
 }
 
-void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax)
+void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
+    gStyle->SetPalette(55);
     c->SetLogy(ylin0log1);
     
-    stack->Draw("PFC PLC hist");
+    if(nostackoption == "nostack") stack->Draw("PMC PLC nostack");
+    else stack->Draw("PMC PFC PLC");
 
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);
@@ -230,11 +238,12 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     c->Print(name);
 }
 
-void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax)
+void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
     c->SetLogy(ylin0log1);
     
-    stack->Draw("PFC PLC hist");
+    if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
+    else stack->Draw("PFC PLC hist");
 
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);

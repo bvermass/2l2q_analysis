@@ -107,7 +107,6 @@ int main(int argc, char * argv[])
         // get background and signal histograms
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
-            string i_string = to_string(static_cast<long long>(i));
             name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
             hists[name] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
         }
@@ -135,14 +134,14 @@ int main(int argc, char * argv[])
         }
         
  
-        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
-        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
+        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
+        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
         
         lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~20.90mm");
         lgendrup.AddEntry(signals["2_7GeV"], "HNL 7GeV, c#tau~3.52mm");
         
-        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1);
-        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1);
+        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
+        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
         
  
         //if(((TString)h->GetName()).Index("eff") == -1) draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "hist", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
