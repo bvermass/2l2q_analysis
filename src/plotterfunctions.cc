@@ -211,8 +211,8 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     gStyle->SetPalette(55);
     c->SetLogy(ylin0log1);
     
-    if(nostackoption == "nostack") stack->Draw("PMC PLC nostack");
-    else stack->Draw("PMC PFC PLC");
+    if(nostackoption == "nostack") stack->Draw("hist nostack");
+    else stack->Draw("hist");
 
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);

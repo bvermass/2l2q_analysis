@@ -105,9 +105,11 @@ int main(int argc, char * argv[])
         double scale_factor = 1000;
 
         lgendrup.Clear();
+        TRandom* var = new TRandom3();
         for( it3 = hists.begin(); it3 != hists.end(); it3++){
             TH1* h = it3->second;
-            h->Scale(scale_factor / h->GetMaximum());
+            double variation = (var->Rndm(i) / 5) + 0.9;
+            h->Scale(scale_factor / h->GetMaximum() * variation);
 	        stack->Add(h);
             lgendrup.AddEntry(h, argv[i]);
             i++;

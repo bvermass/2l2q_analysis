@@ -264,6 +264,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //HLT efficiency stuff, put this in a separate function later
         HLT_efficiency_fill(&hists, _1e, _1mu);
 
+        fill_cutflow_e(&hists, "displ_SS_e");
+        fill_cutflow_e(&hists, "displ_OS_e");
+        fill_cutflow_mu(&hists, "displ_SS_mu");
+        fill_cutflow_mu(&hists, "displ_OS_mu");
 
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
@@ -383,7 +387,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(partition != 1) {
         outputfilename += "subfiles/";
         if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced + "/";
-(0,6        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
+        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
     }
     
     gSystem->Exec("mkdir -p " + outputfilename);
