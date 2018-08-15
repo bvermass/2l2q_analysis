@@ -29,8 +29,8 @@ std::map<TString, TH1*>::iterator it2;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    TString pathname                = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/stacks/";
-    TString pathname_with_signal    = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/stacks_with_signal/";
+    TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/stacks/";
+    TString pathname_with_signal    = "/user/bvermass/public/2l2q_analysis/plots/stacks_with_signal/";
 
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);
@@ -50,10 +50,10 @@ int main(int argc, char * argv[])
         cout << argv[i] << endl;
     }
     // signal files
-    TFile * HNL3GeV_e_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL3GeV_mu_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_e_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_mu_file = TFile::Open("/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
 
 
     // loop over histograms

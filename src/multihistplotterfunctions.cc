@@ -29,7 +29,7 @@ std::map<TString, TH1*>::iterator it3;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    TString pathname                = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/plots/multihists/";
+    TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/";
 
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);

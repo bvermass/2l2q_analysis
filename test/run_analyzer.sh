@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #First argument must be the txt file containing: SAMPLENAME CROSS-SECTION MaxEntry(to avoid crashes)
-headdir="/afs/cern.ch/work/b/bvermass/CMSSW_9_4_0/src/2l2q_analysis"
-cd $headdir
+headdir=$(pwd)
 
 #compile code
 if g++ -std=c++0x -o a_interactive.out ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer_ee.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then

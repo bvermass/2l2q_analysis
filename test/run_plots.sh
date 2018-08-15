@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #First argument must be the txt file with the samples containing histograms
-headdir="/afs/cern.ch/work/b/bvermass/CMSSW_9_4_0/src/2l2q_analysis"
-cd $headdir
+headdir=$(pwd)
 
 read -p "separate plots(1), stack plots(2), multihists(3), all(4): " choice
 
