@@ -83,7 +83,7 @@ bool full_analyzer::mllcut(int i_lead, int i_sublead){
     TLorentzVector subleadinglepton;
     subleadinglepton.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
     double mll = (leadinglepton + subleadinglepton).M();
-    return (mll < 80 || mll > 100);
+    return mll < 80;
 }
 
 bool full_analyzer::dphicut(int i_lead, int i_sublead){
@@ -91,6 +91,6 @@ bool full_analyzer::dphicut(int i_lead, int i_sublead){
     leadinglepton.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     TLorentzVector subleadinglepton;
     subleadinglepton.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
-    double dphi = fabs(leadinglepton.DeltaPhi(subleadinglepton));
-    return dphi > 2.4;
+    double dR = fabs(leadinglepton.DeltaR(subleadinglepton));
+    return (dR > 2.4 && dR < 3.5);
 }
