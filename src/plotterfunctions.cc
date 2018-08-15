@@ -265,7 +265,7 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     
     for( it = signals.begin(); it != signals.end(); it++){
         TH1* h = it->second;
-        double scale_factor = 0.01 * stack->GetMaximum() / h->GetMaximum();
+        double scale_factor = stack->GetMaximum() / h->GetMaximum();
         h->Scale(scale_factor);
         if(historE1 == "hist") h->Draw("hist same");
         else if(historE1 == "E1") h->Draw("E1 same");
