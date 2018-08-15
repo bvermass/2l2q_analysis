@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
     gStyle->SetOptStat(0);
     gPad->SetTicks(1,1);
 
-    TLegend lgendrup(.6,.7,.85,.85);
+    TLegend lgendrup(.5,.7,.85,.85);
     lgendrup.SetBorderSize(0);
     lgendrup.SetFillStyle(0);
 
