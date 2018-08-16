@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
     gStyle->SetOptStat(0);
     gPad->SetTicks(1,1);
 
-    TLegend lgendrup(.6,.6,.85,.85);
+    TLegend lgendrup(.6,.6,.87,.87);
     lgendrup.SetBorderSize(0);
     lgendrup.SetFillStyle(0);
    
@@ -54,6 +54,8 @@ int main(int argc, char * argv[])
     TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
     TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
     TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL10GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL10GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
 
 
     // loop over histograms
@@ -107,20 +109,23 @@ int main(int argc, char * argv[])
         // get background and signal histograms
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
-            name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
-            hists[name] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
+            TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
+            hists[fullname] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
         }
         if(flavor == "e"){
             signals["1_3GeV"] = (TH1F*) HNL3GeV_e_file->Get(h_ref->GetName());
             signals["2_7GeV"] = (TH1F*) HNL7GeV_e_file->Get(h_ref->GetName());
+            signals["3_10GeV"] = (TH1F*) HNL10GeV_e_file->Get(h_ref->GetName());
         }else if(flavor == "mu"){
             signals["1_3GeV"] = (TH1F*) HNL3GeV_mu_file->Get(h_ref->GetName());
             signals["2_7GeV"] = (TH1F*) HNL7GeV_mu_file->Get(h_ref->GetName());
+            signals["3_10GeV"] = (TH1F*) HNL10GeV_mu_file->Get(h_ref->GetName());
         }
 
         // style of signal
         markerstyle((TH1F*)signals["1_3GeV"], "red");
         markerstyle((TH1F*)signals["2_7GeV"], "magenta");
+        markerstyle((TH1F*)signals["3_10GeV"], "blue");
         mapmarkerstyle(hists);
 
         THStack *stack = new THStack("stack", h_ref->GetName());
@@ -139,6 +144,7 @@ int main(int argc, char * argv[])
         
         lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~20.90mm");
         lgendrup.AddEntry(signals["2_7GeV"], "HNL 7GeV, c#tau~3.52mm");
+        lgendrup.AddEntry(signals["3_10GeV"], "HNL 10GeV, c#tau~0.59mm");
         
         draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
         draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");

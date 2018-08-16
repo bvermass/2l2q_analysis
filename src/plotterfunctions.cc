@@ -29,10 +29,6 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
         h->SetLineWidth(1);
-        if(i == 0) markerstyle((TH1F*)h, "green");
-        else if(i == 1) markerstyle((TH1F*)h, "red");
-        else if(i == 2) markerstyle((TH1F*)h, "magenta");
-        i++;
     }
 }
 
@@ -208,11 +204,11 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
 
 void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
-    gStyle->SetPalette(55);
+    //gStyle->SetPalette(55);
     c->SetLogy(ylin0log1);
     
-    if(nostackoption == "nostack") stack->Draw("hist nostack");
-    else stack->Draw("hist");
+    if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
+    else stack->Draw("PFC PLC hist");
 
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);

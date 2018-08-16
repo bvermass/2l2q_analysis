@@ -382,7 +382,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
-    TString outputfilename = "/afs/cern.ch/work/b/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
+    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
     
     if(partition != 1) {
         outputfilename += "subfiles/";
