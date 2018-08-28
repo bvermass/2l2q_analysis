@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void full_analyzer::HLT_efficiency_init(std::map<TString, TH1*>* hists){
+void full_analyzer::init_HLT_efficiency(std::map<TString, TH1*>* hists){
     (*hists)["HLT_1_iso_e_pt"]               = new TH1F("HLT_1_iso_e_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)["HLT_Ele27_WPTight_Gsf_pt"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)["HLT_Ele27_WPTight_Gsf_pt_eff"]   = new TH1F("HLT_Ele27_WPTight_Gsf_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
@@ -27,7 +27,7 @@ void full_analyzer::HLT_efficiency_init(std::map<TString, TH1*>* hists){
     (*hists)["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]   = new TH1F("HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
 }
 
-void full_analyzer::HLT_efficiency_fill(std::map<TString, TH1*>* hists, bool _1e, bool _1mu){
+void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, bool _1e, bool _1mu){
         if(_1e){
             (*hists)["HLT_1_iso_e_pt"]->Fill(_lPt[i_leading_e], event_weight);
             if(fabs(_lEta[i_leading_e]) < 1.2) (*hists)["HLT_1_iso_e_barrel_pt"]->Fill(_lPt[i_leading_e], event_weight);

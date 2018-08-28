@@ -774,6 +774,7 @@ public :
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
    virtual bool     dphicut(int, int);
+   virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
 
    virtual void     print_table();
@@ -788,9 +789,8 @@ public :
    virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    
-   virtual void     HLT_efficiency_init(std::map<TString, TH1*>*);
-   virtual void     HLT_efficiency_fill(std::map<TString, TH1*>*, bool, bool);
-   
+   virtual void     init_HLT_efficiency(std::map<TString, TH1*>*);
+   virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, bool, bool);
 };
 
 #endif

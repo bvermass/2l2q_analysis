@@ -96,6 +96,27 @@ bool full_analyzer::dphicut(int i_lead, int i_sublead){
 }
 
 
+void full_analyzer::init_sigreg_fraction(std::map<TString, TH1*>* hists){
+    (*hists)["ee_sigreg_fraction"]			= new TH1F("ee_sigreg_fraction",";signal regions;Events", 13, 0, 13);
+    (*hists)["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
+    (*hists)["1eovertotal"]			        = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
+    (*hists)["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
+    // signal regions that are included:
+    // 0 = 2iso l, 0jet
+    // 1 = 2iso l, 1jet
+    // 2 = 2iso l, 2jet
+    // 3 = 1iso l, 1non-iso l, 0jet
+    // 4 = 1iso l, 1non-iso l, 1jet
+    // 5 = 1iso l, 1non-iso l, 2jet
+    // 6 = 1iso l, 1displ l, 0jet
+    // 7 = 1iso l, 1displ l, 1jet
+    // 8 = 1iso l, 1displ l, 2jet
+    // 9 = 1iso l, 0jet
+    // 10= 1iso l, 1jet
+    // 11= 1iso l, 2jet
+    // 12= other
+}
+
 void full_analyzer::fill_sigreg_fraction(std::map<TString, TH1*>* hists){
 	(*hists)["1eovertotal"]->Fill(0., event_weight);
 	if(_1e){

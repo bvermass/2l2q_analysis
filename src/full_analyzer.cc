@@ -43,26 +43,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     //This map contains all 1D histograms
     std::map<TString, TH1*> hists;
-    hists["ee_sigreg_fraction"]			= new TH1F("ee_sigreg_fraction",";signal regions;Events", 13, 0, 13);
-    hists["mumu_sigreg_fraction"]		= new TH1F("mumu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
-    hists["1eovertotal"]			    = new TH1F("1eovertotal",";bin1 = total, bin2 = 1e;Events",2,0,2);
-    hists["1muovertotal"]			    = new TH1F("1muovertotal",";bin1 = total, bin2 = 1mu;Events",2,0,2);
-    // signal regions that are included:
-    // 0 = 2iso l, 0jet
-    // 1 = 2iso l, 1jet
-    // 2 = 2iso l, 2jet
-    // 3 = 1iso l, 1non-iso l, 0jet
-    // 4 = 1iso l, 1non-iso l, 1jet
-    // 5 = 1iso l, 1non-iso l, 2jet
-    // 6 = 1iso l, 1displ l, 0jet
-    // 7 = 1iso l, 1displ l, 1jet
-    // 8 = 1iso l, 1displ l, 2jet
-    // 9 = 1iso l, 0jet
-    // 10= 1iso l, 1jet
-    // 11= 1iso l, 2jet
-    // 12= other
 
-    HLT_efficiency_init(&hists);//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_sigreg_fraction(&hists);//found in src/signal_region.cc, shows fractions of events in possible signal regions with leptons and jets
+    init_HLT_efficiency(&hists);//found in src/HLT_eff.cc, does everything HLT efficiency related
 
     add_histograms(&hists, "displ_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
     add_histograms(&hists, "displ_SS_e");
@@ -233,7 +216,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_sigreg_fraction(&hists);
 
         //HLT efficiency stuff, put this in a separate function later
-        HLT_efficiency_fill(&hists, _1e, _1mu);
+        fill_HLT_efficiency(&hists, _1e, _1mu);
 
         fill_cutflow_e(&hists, "displ_SS_e");
         fill_cutflow_e(&hists, "displ_OS_e");
