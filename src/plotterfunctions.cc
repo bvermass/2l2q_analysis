@@ -250,22 +250,23 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     if(ymin != -1) stack->SetMinimum(ymin);
     if(ymax != -1) stack->SetMaximum(ymax);
 
-    // draw signal on top
-    // find the y range needed for the plot
-    double max_for_scale = 0;
-    for( it = signals.begin(); it != signals.end(); it++){
-        TH1* h = it->second;
-        if(h->GetMaximum() > max_for_scale) max_for_scale = h->GetMaximum();
+    // draw signal on top, scaled to integral of background
+    double stack_integral = 0;
+    TIter next(stack->GetHists());
+    TObject* hist = 0;
+    while( hist = next()){
+        stack_integral += ((TH1*)hist)->Integral();
     }
-    //double scale_factor = 0.01 * stack->GetMaximum() / max_for_scale;
-    
     for( it = signals.begin(); it != signals.end(); it++){
         TH1* h = it->second;
-        double scale_factor = stack->GetMaximum() / h->GetMaximum();
+        double scale_factor = stack_integral / h->Integral();
         h->Scale(scale_factor);
         if(historE1 == "hist") h->Draw("hist same");
         else if(historE1 == "E1") h->Draw("E1 same");
+    
+        if(ymax == -1 && h->GetMaximum() > stack->GetMaximum()) stack->SetMaximum(1.1 * h->GetMaximum());
     }
+
 
     lgend->DrawClone("same");
 
