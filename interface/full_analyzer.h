@@ -680,6 +680,13 @@ public :
    std::map<TString, TH1*>::iterator it;
    Double_t event_weight;
    
+   int i_gen_l1;
+   int i_gen_l2;
+   //int i_l1; might add these later, through geometric match with i_gen_l1or2, find i_l1or2
+   //int i_l2;
+   bool leading_is_l1;
+   bool subleading_is_l2; 
+
    int i_leading_e;
    int i_subleading_e;
    int i_leading_mu;
@@ -760,11 +767,14 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
+   virtual void     find_gen_l1_and_l2();
+   virtual void     match_gen_and_reco(int);
 
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
    virtual bool     dphicut(int, int);
+   virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
 
    virtual void     print_table();
    
@@ -775,6 +785,8 @@ public :
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
+   virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
+   virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    
    virtual void     HLT_efficiency_init(std::map<TString, TH1*>*);
    virtual void     HLT_efficiency_fill(std::map<TString, TH1*>*, bool, bool);

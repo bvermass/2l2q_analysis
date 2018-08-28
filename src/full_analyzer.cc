@@ -99,6 +99,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     int n_after_invreliso_pogmedium = 0;
     int n_after_invreliso_convveto = 0;
     int n_after_invreliso_missinghits = 0;
+    int k = 0;
+    int p = 0;
 
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
@@ -192,6 +194,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
         //Get signal region -> put this into a function maybe
         signal_regions();
+        find_gen_l1_and_l2();
+        if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);
+        if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
        // bool _1e			    = i_leading_e != -1;
        // bool leadptveto_e = false;
        // if(i_leading_e != -1 and _lPt[i_leading_e] > 30) leadptveto_e = true;
@@ -225,41 +230,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	   // bool _1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
 	   // bool _1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
         
-
-	    hists["1eovertotal"]->Fill(0., event_weight);
-	    if(_1e){
-	        hists["1eovertotal"]->Fill(1., event_weight);
-	        if(_2e0jet) hists["ee_sigreg_fraction"]->Fill(0., event_weight);
-	        else if(_2e1jet) hists["ee_sigreg_fraction"]->Fill(1., event_weight);
-	        else if(_2e2jet) hists["ee_sigreg_fraction"]->Fill(2., event_weight);
-	        else if(_1e1nonisoe0jet) hists["ee_sigreg_fraction"]->Fill(3., event_weight);
-	        else if(_1e1nonisoe1jet) hists["ee_sigreg_fraction"]->Fill(4., event_weight);
-	        else if(_1e1nonisoe2jet) hists["ee_sigreg_fraction"]->Fill(5., event_weight);
-	        else if(_1e1disple0jet)  hists["ee_sigreg_fraction"]->Fill(6., event_weight);
-	        else if(_1e1disple1jet)  hists["ee_sigreg_fraction"]->Fill(7., event_weight);
-	        else if(_1e1disple2jet)  hists["ee_sigreg_fraction"]->Fill(8., event_weight);
-	        else if(_1e0jet) hists["ee_sigreg_fraction"]->Fill(9., event_weight);
-	        else if(_1e1jet) hists["ee_sigreg_fraction"]->Fill(10., event_weight);
-	        else if(_1e2jet) hists["ee_sigreg_fraction"]->Fill(11., event_weight);
-	        else hists["ee_sigreg_fraction"]->Fill(12., event_weight);
-	    }
-	    hists["1muovertotal"]->Fill(0., event_weight);
-	    if(_1mu){
-	        hists["1muovertotal"]->Fill(1., event_weight);
-	        if(_2mu0jet) hists["mumu_sigreg_fraction"]->Fill(0., event_weight);
-	        else if(_2mu1jet) hists["mumu_sigreg_fraction"]->Fill(1., event_weight);
-	        else if(_2mu2jet) hists["mumu_sigreg_fraction"]->Fill(2., event_weight);
-	        else if(_1mu1nonisomu0jet) hists["mumu_sigreg_fraction"]->Fill(3., event_weight);
-	        else if(_1mu1nonisomu1jet) hists["mumu_sigreg_fraction"]->Fill(4., event_weight);
-	        else if(_1mu1nonisomu2jet) hists["mumu_sigreg_fraction"]->Fill(5., event_weight);
-	        else if(_1mu1displmu0jet)  hists["mumu_sigreg_fraction"]->Fill(6., event_weight);
-	        else if(_1mu1displmu1jet)  hists["mumu_sigreg_fraction"]->Fill(7., event_weight);
-	        else if(_1mu1displmu2jet)  hists["mumu_sigreg_fraction"]->Fill(8., event_weight);
-	        else if(_1mu0jet) hists["mumu_sigreg_fraction"]->Fill(9., event_weight);
-	        else if(_1mu1jet) hists["mumu_sigreg_fraction"]->Fill(10., event_weight);
-	        else if(_1mu2jet) hists["mumu_sigreg_fraction"]->Fill(11., event_weight);
-	        else hists["mumu_sigreg_fraction"]->Fill(12., event_weight);
-	    }
+        fill_sigreg_fraction(&hists);
 
         //HLT efficiency stuff, put this in a separate function later
         HLT_efficiency_fill(&hists, _1e, _1mu);
@@ -268,6 +239,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_cutflow_e(&hists, "displ_OS_e");
         fill_cutflow_mu(&hists, "displ_SS_mu");
         fill_cutflow_mu(&hists, "displ_OS_mu");
+
+        if(_1e1disple){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                fill_l2_eff(&hists, "displ_SS_e");
+            }else{
+                fill_l2_eff(&hists, "displ_OS_e");
+            }           
+        }
+        if(_1mu1displmu){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                fill_l2_eff(&hists, "displ_SS_mu");
+            }else{
+                fill_l2_eff(&hists, "displ_OS_mu");
+            }
+        }
 
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
@@ -309,12 +295,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmu0jet_afterdphi){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
                 fill_histograms(&hists, "displ_SS_mu");
+                k++;
             }else{
                 fill_histograms(&hists, "displ_OS_mu");
+                p++;
             }
         }
     }
 
+    cout << "SS: " << k << endl;
+    cout << "OS: " << p << endl;
     //cout << "ee else: " << ee_else << endl;
     /*cout << "n total " << n_ele << endl;
     cout << "after eta " << n_after_eta << endl;
@@ -435,6 +425,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide(hists["HLT_1_iso_mu_pt"]);
     hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["HLT_1_iso_mu_barrel_pt"]);
     hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["HLT_1_iso_mu_endcap_pt"]);
+    divide_for_eff(&hists, "displ_SS_e");
+    divide_for_eff(&hists, "displ_OS_e");
+    divide_for_eff(&hists, "displ_SS_mu");
+    divide_for_eff(&hists, "displ_OS_mu");
 
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;

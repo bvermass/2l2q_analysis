@@ -34,8 +34,15 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_invVtx_1tr_ngenmu"]   = new TH1F(prefix+"_invVtx_1tr_ngenmu", ";Gen-level # of Muons for invalid vtx with no found tracks;Events", 15, 0, 15);
     (*hists)[prefix+"_invVtx_1tr_deta"]   = new TH1F(prefix+"_invVtx_1tr_deta", ";#Delta #eta;Events", 40, 0, 4);
     (*hists)[prefix+"_invVtx_1tr_dphi"]   = new TH1F(prefix+"_invVtx_1tr_dphi", ";#Delta #phi;Events", 40, 0, 3.14);
+    (*hists)[prefix+"_invVtx_1tr_dR"]   = new TH1F(prefix+"_invVtx_1tr_dR", ";#Delta R;Events", 40, 0, 5);
     (*hists)[prefix+"_invVtx_1tr_dxy"]   = new TH1F(prefix+"_invVtx_1tr_dxy", ";#Delta_{xy}[cm];Events", 30, 0, 4);
     (*hists)[prefix+"_invVtx_1tr_dz"]   = new TH1F(prefix+"_invVtx_1tr_dz", ";#Delta_{z}[cm];Events", 30, 0, 10);
+    (*hists)[prefix+"_l2_ctau_eff"]   = new TH1F(prefix+"_l2_ctau_eff", ";c#tau [mm];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_num"]   = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [mm];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_den"]   = new TH1F(prefix+"_l2_ctau_eff_den", ";c#tau [mm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_vtxfitgen_eff"]   = new TH1F(prefix+"_l2_vtxfitgen_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_num"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_den"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     return;
 }
 
@@ -164,6 +171,7 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
     }
     // if reco lepton is not the correct one, there is no meaning to the following histograms 
     bool correct_reco_lepton = (fabs(_lEta[i_lep] - _gen_NPackedDtrsEta[i_lepHNL]) < 1 && fabs(_lPhi[i_lep] - _gen_NPackedDtrsPhi[i_lepHNL]) < 1 && fabs(_lPt[i_lep] - _gen_NPackedDtrsPt[i_lepHNL]) < 5);
+    
     if(correct_reco_lepton){
         for(int i = 0; i < _gen_nNPackedDtrs; i++){
             if(i == i_lepHNL) continue;
@@ -173,8 +181,30 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
             lep.SetPtEtaPhiE(_gen_NPackedDtrsPt[i_lepHNL], _gen_NPackedDtrsEta[i_lepHNL], _gen_NPackedDtrsPhi[i_lepHNL], _gen_NPackedDtrsE[i_lepHNL]);
             track.SetPtEtaPhiE(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
             (*hists)[prefix+"_invVtx_1tr_dphi"]->Fill(fabs(lep.DeltaPhi(track)));
+            (*hists)[prefix+"_invVtx_1tr_dR"]->Fill(fabs(lep.DeltaR(track)));
             if(matches[i] >= 1) (*hists)[prefix+"_invVtx_1tr_dxy"]->Fill(fabs(_gen_NPackedDtrs_matchdxy[i] - _gen_NPackedDtrs_matchdxy[i_lepHNL]));
             if(matches[i] >= 1) (*hists)[prefix+"_invVtx_1tr_dz"]->Fill(fabs(_gen_NPackedDtrs_matchdz[i] - _gen_NPackedDtrs_matchdz[i_lepHNL]));
         }
     }
+}
+
+void full_analyzer::fill_l2_eff(std::map<TString, TH1*>* hists, TString prefix)
+{
+    int i_lep = -1;
+    if(prefix.Index("_e") != -1) i_lep = i_subleading_displ_e;
+    if(prefix.Index("_mu") != -1) i_lep = i_subleading_displ_mu;
+    (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN, event_weight);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_den"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
+    if(subleading_is_l2){
+        (*hists)[prefix+"_l2_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+        (*hists)[prefix+"_l2_ctau_eff"]->Fill(_ctauHN, event_weight);
+        (*hists)[prefix+"_l2_vtxfitgen_eff_num"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
+        (*hists)[prefix+"_l2_vtxfitgen_eff"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
+    }
+}
+
+void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefix)
+{
+    (*hists)[prefix+"_l2_ctau_eff"]->Divide((*hists)[prefix+"_l2_ctau_eff_den"]);
+    (*hists)[prefix+"_l2_vtxfitgen_eff"]->Divide((*hists)[prefix+"_l2_vtxfitgen_eff_den"]);
 }

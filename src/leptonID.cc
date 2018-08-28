@@ -4,6 +4,7 @@
 
 #include "../interface/full_analyzer.h"
 
+using namespace std;
 
 void full_analyzer::get_electronID(bool* ID)
 {
@@ -197,5 +198,40 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
     return index_good_subleading;
+}
+
+
+void full_analyzer::find_gen_l1_and_l2()
+{
+    int fromW = 0;
+    int fromN = 0;
+    for(int i = 0; i < _gen_nL; i++){
+    	if(abs(_gen_lMomPdg[i]) == 24){ fromW++; i_gen_l1 = i; } // does not always find the lepton, sometimes its not found, very sometimes two are found
+        if(fabs(_gen_lMomPdg[i]) == 9900012){ fromN++; i_gen_l2 = i; } //works perfectly
+    }
+    //if(fromW != 1) cout << "fromW: " << fromW << endl;
+    //if(fromN != 1) cout << "fromN: " << fromN << endl;
+    if(fromW != 1) i_gen_l1 = -1; 
+    if(fromN != 1) i_gen_l2 = -1;
+}
+
+void full_analyzer::match_gen_and_reco(int i_subleading)
+{
+    //TLorentzVector gen_l1_vec;
+    //TLorentzVector leading_vec;
+    //gen_l1_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l1], _gen_lEta[i_gen_l1], _gen_lPhi[i_gen_l1], _gen_lE[i_gen_l1]);
+    //leading_vec.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
+    //
+    //leading_is_l1 = gen_l1_vec.DeltaR(leading_vec) < 0.2;
+    
+    TLorentzVector gen_l2_vec;
+    TLorentzVector subleading_vec;
+    if(i_gen_l2 != -1) gen_l2_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
+    else subleading_is_l2 = false;
+    subleading_vec.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+
+    subleading_is_l2 = (gen_l2_vec.DeltaR(subleading_vec) < 0.2);
+     
+    //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
 }
 

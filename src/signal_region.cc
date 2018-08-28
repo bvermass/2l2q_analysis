@@ -94,3 +94,41 @@ bool full_analyzer::dphicut(int i_lead, int i_sublead){
     double dR = fabs(leadinglepton.DeltaR(subleadinglepton));
     return (dR > 2.4 && dR < 3.5);
 }
+
+
+void full_analyzer::fill_sigreg_fraction(std::map<TString, TH1*>* hists){
+	(*hists)["1eovertotal"]->Fill(0., event_weight);
+	if(_1e){
+	    (*hists)["1eovertotal"]->Fill(1., event_weight);
+	    if(_2e0jet) (*hists)["ee_sigreg_fraction"]->Fill(0., event_weight);
+	    else if(_2e1jet) (*hists)["ee_sigreg_fraction"]->Fill(1., event_weight);
+	    else if(_2e2jet) (*hists)["ee_sigreg_fraction"]->Fill(2., event_weight);
+	    else if(_1e1nonisoe0jet) (*hists)["ee_sigreg_fraction"]->Fill(3., event_weight);
+	    else if(_1e1nonisoe1jet) (*hists)["ee_sigreg_fraction"]->Fill(4., event_weight);
+	    else if(_1e1nonisoe2jet) (*hists)["ee_sigreg_fraction"]->Fill(5., event_weight);
+	    else if(_1e1disple0jet)  (*hists)["ee_sigreg_fraction"]->Fill(6., event_weight);
+	    else if(_1e1disple1jet)  (*hists)["ee_sigreg_fraction"]->Fill(7., event_weight);
+	    else if(_1e1disple2jet)  (*hists)["ee_sigreg_fraction"]->Fill(8., event_weight);
+	    else if(_1e0jet) (*hists)["ee_sigreg_fraction"]->Fill(9., event_weight);
+	    else if(_1e1jet) (*hists)["ee_sigreg_fraction"]->Fill(10., event_weight);
+	    else if(_1e2jet) (*hists)["ee_sigreg_fraction"]->Fill(11., event_weight);
+	    else (*hists)["ee_sigreg_fraction"]->Fill(12., event_weight);
+	}
+	(*hists)["1muovertotal"]->Fill(0., event_weight);
+	if(_1mu){
+	    (*hists)["1muovertotal"]->Fill(1., event_weight);
+	    if(_2mu0jet) (*hists)["mumu_sigreg_fraction"]->Fill(0., event_weight);
+	    else if(_2mu1jet) (*hists)["mumu_sigreg_fraction"]->Fill(1., event_weight);
+	    else if(_2mu2jet) (*hists)["mumu_sigreg_fraction"]->Fill(2., event_weight);
+	    else if(_1mu1nonisomu0jet) (*hists)["mumu_sigreg_fraction"]->Fill(3., event_weight);
+	    else if(_1mu1nonisomu1jet) (*hists)["mumu_sigreg_fraction"]->Fill(4., event_weight);
+	    else if(_1mu1nonisomu2jet) (*hists)["mumu_sigreg_fraction"]->Fill(5., event_weight);
+	    else if(_1mu1displmu0jet)  (*hists)["mumu_sigreg_fraction"]->Fill(6., event_weight);
+	    else if(_1mu1displmu1jet)  (*hists)["mumu_sigreg_fraction"]->Fill(7., event_weight);
+	    else if(_1mu1displmu2jet)  (*hists)["mumu_sigreg_fraction"]->Fill(8., event_weight);
+	    else if(_1mu0jet) (*hists)["mumu_sigreg_fraction"]->Fill(9., event_weight);
+	    else if(_1mu1jet) (*hists)["mumu_sigreg_fraction"]->Fill(10., event_weight);
+	    else if(_1mu2jet) (*hists)["mumu_sigreg_fraction"]->Fill(11., event_weight);
+	    else (*hists)["mumu_sigreg_fraction"]->Fill(12., event_weight);
+	}
+}
