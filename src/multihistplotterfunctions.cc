@@ -80,9 +80,13 @@ int main(int argc, char * argv[])
         if(histname.Index("HLT_") != -1){
             HLT = "HLT/";
         }
+        TString partialcuts = "";
+        if(histname.Index("before") != -1){
+            partialcuts = "partialcuts/";
+        }
         
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/");
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/");
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/" + partialcuts);
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/" + partialcuts);
 
 
         // find flavor e or mu
@@ -115,8 +119,8 @@ int main(int argc, char * argv[])
             i++;
         }
  
-        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "nostack");
-        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
+        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "nostack");
+        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
     
     }
     return 0;
