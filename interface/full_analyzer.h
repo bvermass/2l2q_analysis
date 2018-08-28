@@ -773,7 +773,7 @@ public :
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
-   virtual bool     dphicut(int, int);
+   virtual bool     dRcut(int, int);
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
 

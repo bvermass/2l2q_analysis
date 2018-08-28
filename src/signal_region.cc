@@ -21,7 +21,7 @@ void full_analyzer::signal_regions(){
 
     _1e1disple0jet_aftermll     = _1e1disple0jet && mllcut(i_leading_e, i_subleading_displ_e);
 
-    _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dphicut(i_leading_e, i_subleading_displ_e);    
+    _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dRcut(i_leading_e, i_subleading_displ_e);    
     
     _1mu                        = i_leading_mu != -1 && leadptcut("mu");
     
@@ -33,7 +33,7 @@ void full_analyzer::signal_regions(){
 
     _1mu1displmu0jet_aftermll   = _1mu1displmu0jet && mllcut(i_leading_mu, i_subleading_displ_mu);
     
-    _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && dphicut(i_leading_mu, i_subleading_displ_mu);    
+    _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && dRcut(i_leading_mu, i_subleading_displ_mu);    
     
     // OLD signal region definitions, first require correct number of leptons and jets, new version first does also pt requirements;
     bool leadptveto_e = false;
@@ -86,7 +86,7 @@ bool full_analyzer::mllcut(int i_lead, int i_sublead){
     return mll < 80;
 }
 
-bool full_analyzer::dphicut(int i_lead, int i_sublead){
+bool full_analyzer::dRcut(int i_lead, int i_sublead){
     TLorentzVector leadinglepton;
     leadinglepton.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     TLorentzVector subleadinglepton;
