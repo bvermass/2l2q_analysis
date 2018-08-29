@@ -35,6 +35,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_invVtx_1tr_ngenl"]    = new TH1F(prefix+"_invVtx_1tr_ngenl", ";Gen-level # of Leptons for invalid vtx with no found tracks;Events", 15, 0, 15);
     (*hists)[prefix+"_invVtx_1tr_ngene"]    = new TH1F(prefix+"_invVtx_1tr_ngene", ";Gen-level # of Electrons for invalid vtx with no found tracks;Events", 15, 0, 15);
     (*hists)[prefix+"_invVtx_1tr_ngenmu"]   = new TH1F(prefix+"_invVtx_1tr_ngenmu", ";Gen-level # of Muons for invalid vtx with no found tracks;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_pt"]       = new TH1F(prefix+"_invVtx_1tr_pt", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_invVtx_1tr_deta"]   = new TH1F(prefix+"_invVtx_1tr_deta", ";#Delta #eta;Events", 40, 0, 4);
     (*hists)[prefix+"_invVtx_1tr_dphi"]   = new TH1F(prefix+"_invVtx_1tr_dphi", ";#Delta #phi;Events", 40, 0, 3.14);
     (*hists)[prefix+"_invVtx_1tr_dR"]   = new TH1F(prefix+"_invVtx_1tr_dR", ";#Delta R;Events", 40, 0, 5);
@@ -175,36 +176,37 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
     (*hists)[prefix+"_invVtx_1tr_ngene"]->Fill(i_gen_ne, event_weight);
     (*hists)[prefix+"_invVtx_1tr_ngenmu"]->Fill(i_gen_nmu, event_weight);
 
-    // find gen lepton from HNL
-    int i_genlep_HNL = 0;
-    for(int i = 0; i < _gen_nL; i++){
-        if(fabs(_gen_lMomPdg[i]) == 9900012) i_genlep_HNL = i;
-    }
     // using gen lepton from HNL, find lepton from HNL in Packed daughters
     double mineta = 5;
     int i_lepHNL = 0;
     for(int i = 0; i < _gen_nNPackedDtrs; i++){
-        if((fabs(_gen_NPackedDtrsPdgId[i]) == 11 || fabs(_gen_NPackedDtrsPdgId[i] == 13)) && fabs(_gen_NPackedDtrsEta[i] - _gen_lEta[i_genlep_HNL]) < mineta){
-            mineta = fabs(_gen_NPackedDtrsEta[i] - _gen_lEta[i_genlep_HNL]);
+        if((fabs(_gen_NPackedDtrsPdgId[i]) == 11 || fabs(_gen_NPackedDtrsPdgId[i] == 13)) && fabs(_gen_NPackedDtrsEta[i] - _gen_lEta[i_gen_l2]) < mineta){
+            mineta = fabs(_gen_NPackedDtrsEta[i] - _gen_lEta[i_gen_l2]);
             i_lepHNL = i;//lepton from HNL in packed daughters found
         }
     }
     // if reco lepton is not the correct one, there is no meaning to the following histograms 
     bool correct_reco_lepton = (fabs(_lEta[i_lep] - _gen_NPackedDtrsEta[i_lepHNL]) < 1 && fabs(_lPhi[i_lep] - _gen_NPackedDtrsPhi[i_lepHNL]) < 1 && fabs(_lPt[i_lep] - _gen_NPackedDtrsPt[i_lepHNL]) < 5);
+    if(correct_reco_lepton) cout << "correct reco lepton!!!" << endl;
     
     if(correct_reco_lepton){
+        double mindR  = 5;
+        double mindxy = 5;
         for(int i = 0; i < _gen_nNPackedDtrs; i++){
             if(i == i_lepHNL) continue;
             (*hists)[prefix+"_invVtx_1tr_deta"]->Fill(fabs(_gen_NPackedDtrsEta[i] - _gen_NPackedDtrsEta[i_lepHNL]));
+            (*hists)[prefix+"_invVtx_1tr_pt"]->Fill(_gen_NPackedDtrsPt[i]);
             TLorentzVector lep;
             TLorentzVector track;
             lep.SetPtEtaPhiE(_gen_NPackedDtrsPt[i_lepHNL], _gen_NPackedDtrsEta[i_lepHNL], _gen_NPackedDtrsPhi[i_lepHNL], _gen_NPackedDtrsE[i_lepHNL]);
             track.SetPtEtaPhiE(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
+            if(fabs(lep.DeltaR(track)) < mindR) mindR = fabs(lep.DeltaR(track));
             (*hists)[prefix+"_invVtx_1tr_dphi"]->Fill(fabs(lep.DeltaPhi(track)));
-            (*hists)[prefix+"_invVtx_1tr_dR"]->Fill(fabs(lep.DeltaR(track)));
-            if(matches[i] >= 1) (*hists)[prefix+"_invVtx_1tr_dxy"]->Fill(fabs(_gen_NPackedDtrs_matchdxy[i] - _gen_NPackedDtrs_matchdxy[i_lepHNL]));
+            if(matches[i] >= 1 && fabs(_gen_NPackedDtrs_matchdxy[i] - _gen_NPackedDtrs_matchdxy[i_lepHNL]) < mindxy) mindxy = fabs(_gen_NPackedDtrs_matchdxy[i] - _gen_NPackedDtrs_matchdxy[i_lepHNL]);
             if(matches[i] >= 1) (*hists)[prefix+"_invVtx_1tr_dz"]->Fill(fabs(_gen_NPackedDtrs_matchdz[i] - _gen_NPackedDtrs_matchdz[i_lepHNL]));
         }
+        if(mindR  != 5) (*hists)[prefix+"_invVtx_1tr_dR"]->Fill(mindR);
+        if(mindxy != 5) (*hists)[prefix+"_invVtx_1tr_dxy"]->Fill(mindxy);
     }
 }
 
