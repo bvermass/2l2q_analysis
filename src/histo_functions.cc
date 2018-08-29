@@ -40,11 +40,14 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_invVtx_1tr_dR"]   = new TH1F(prefix+"_invVtx_1tr_dR", ";#Delta R;Events", 40, 0, 5);
     (*hists)[prefix+"_invVtx_1tr_dxy"]   = new TH1F(prefix+"_invVtx_1tr_dxy", ";#Delta_{xy}[cm];Events", 30, 0, 4);
     (*hists)[prefix+"_invVtx_1tr_dz"]   = new TH1F(prefix+"_invVtx_1tr_dz", ";#Delta_{z}[cm];Events", 30, 0, 10);
+    (*hists)[prefix+"_l2_pt_eff"]   = new TH1F(prefix+"_l2_pt_eff", ";#it{p}_{T} [GeV];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_num"]   = new TH1F(prefix+"_l2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_den"]   = new TH1F(prefix+"_l2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_l2_ctau_eff"]   = new TH1F(prefix+"_l2_ctau_eff", ";c#tau [mm];Eff.", 40, 0, 40);
-    (*hists)[prefix+"_l2_ctau_eff_num"]   = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [mm];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_num"]   = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [mm];Events", 40, 0, 40);
     (*hists)[prefix+"_l2_ctau_eff_den"]   = new TH1F(prefix+"_l2_ctau_eff_den", ";c#tau [mm];Events", 40, 0, 40);
     (*hists)[prefix+"_l2_vtxfitgen_eff"]   = new TH1F(prefix+"_l2_vtxfitgen_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
-    (*hists)[prefix+"_l2_vtxfitgen_eff_num"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_num"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     (*hists)[prefix+"_l2_vtxfitgen_eff_den"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     return;
 }
@@ -213,10 +216,14 @@ void full_analyzer::fill_l2_eff(std::map<TString, TH1*>* hists, TString prefix)
     int i_lep = -1;
     if(prefix.Index("_e") != -1) i_lep = i_subleading_displ_e;
     if(prefix.Index("_mu") != -1) i_lep = i_subleading_displ_mu;
+
+    (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_lep], event_weight);
     (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN, event_weight);
     (*hists)[prefix+"_l2_vtxfitgen_eff_den"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
     if(subleading_is_l2){
+        (*hists)[prefix+"_l2_pt_eff_num"]->Fill(_lPt[i_lep], event_weight);
         (*hists)[prefix+"_l2_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+        (*hists)[prefix+"_l2_pt_eff"]->Fill(_lPt[i_lep], event_weight);
         (*hists)[prefix+"_l2_ctau_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_l2_vtxfitgen_eff_num"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
         (*hists)[prefix+"_l2_vtxfitgen_eff"]->Fill(sqrt((_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep])*(_gen_vertex_x[i_lep] - _lVtxpos_x[i_lep]) + (_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep])*(_gen_vertex_y[i_lep] - _lVtxpos_y[i_lep]) + (_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])*(_gen_vertex_z[i_lep] - _lVtxpos_z[i_lep])), event_weight);
@@ -225,6 +232,7 @@ void full_analyzer::fill_l2_eff(std::map<TString, TH1*>* hists, TString prefix)
 
 void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefix)
 {
+    (*hists)[prefix+"_l2_pt_eff"]->Divide((*hists)[prefix+"_l2_pt_eff_den"]);
     (*hists)[prefix+"_l2_ctau_eff"]->Divide((*hists)[prefix+"_l2_ctau_eff_den"]);
     (*hists)[prefix+"_l2_vtxfitgen_eff"]->Divide((*hists)[prefix+"_l2_vtxfitgen_eff_den"]);
 }
