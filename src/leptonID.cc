@@ -16,7 +16,7 @@ void full_analyzer::get_electronID(bool* ID)
 			fabs(_dxy[i]) < 0.05 &&
 			fabs(_dz[i])  < 0.1 &&
 			_3dIPSig[i]   < 4 &&
-			_relIso[i]    < 0.2 &&
+			_relIso[i]    < 0.1 &&
 			_lPOGMedium[i] &&
 			_lElectronPassConvVeto[i] &&
 			_lElectronMissingHits[i] < 1;
@@ -34,7 +34,7 @@ void full_analyzer::get_noniso_electronID(bool* ID)
 			fabs(_dxy[i]) < 0.05 &&
 			fabs(_dz[i])  < 0.1 &&
 			_3dIPSig[i]   < 4 &&
-			_relIso[i]    > 0.2 &&
+			_relIso[i]    > 0.1 &&
 			//_lPOGMedium[i] && //->clashes with reliso > 0.2
 			_lElectronPassConvVeto[i] &&
 			_lElectronMissingHits[i] < 1;
@@ -71,7 +71,7 @@ void full_analyzer::get_muonID(bool* ID)
 			fabs(_dxy[i]) < 0.05 &&
 			fabs(_dz[i])  < 0.1 &&
 			_3dIPSig[i]   < 4 &&
-			_relIso[i]    < 0.2 &&
+			_relIso[i]    < 0.1 &&
 			_lPOGMedium[i];
 			// innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
 	if(fullID) *(ID + i) = true;
@@ -88,7 +88,7 @@ void full_analyzer::get_noniso_muonID(bool* ID)
 			fabs(_dxy[i]) < 0.05 &&
 			fabs(_dz[i])  < 0.1 &&
 			_3dIPSig[i]   < 4 &&
-			_relIso[i]    > 0.2 &&
+			_relIso[i]    > 0.1 &&
 			_lPOGMedium[i];
 			// innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
 	if(fullID) *(ID + i) = true;

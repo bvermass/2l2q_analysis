@@ -127,24 +127,32 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
 
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
+    int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
+
     (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
     if(_1e) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
-    if(_1e1disple) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-    if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-    if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-    if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
+        (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
+        if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+        if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    }
 }
 
 
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
+    int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
+
     (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
     if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
-    if(_1mu1displmu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-    if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-    if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-    if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
+        (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
+        if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+        if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    }
 }
 
 
