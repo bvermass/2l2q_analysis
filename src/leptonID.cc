@@ -235,3 +235,14 @@ void full_analyzer::match_gen_and_reco(int i_subleading)
     //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
 }
 
+double full_analyzer::find_dRl2jet(TLorentzVector lepton){
+    double dR = 0;
+    for( unsigned i = 0; i < _nJets; i++){
+        if(!(jet_clean_full_displ[i] && fullJetID[i])) continue;
+        cout << "   " << i << endl << endl << endl;
+        TLorentzVector jet;
+        jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+        if(lepton.DeltaR(jet) < dR) dR = lepton.DeltaR(jet);
+    }
+    return dR;
+}

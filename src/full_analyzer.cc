@@ -128,7 +128,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 	    
         //Get ID
-	    bool fullElectronID[10], nonisoElectronID[10], displElectronID[10], fullMuonID[10], nonisoMuonID[10], displMuonID[10], fullJetID[10];
 	    get_electronID(&fullElectronID[0]);
 	    get_noniso_electronID(&nonisoElectronID[0]);
 	    get_displ_electronID(&displElectronID[0]);
@@ -138,7 +137,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    get_jetID(&fullJetID[0]);
 
         //Get Cleaning for jets
-	    bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
 	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
@@ -148,7 +146,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 	    
         //Get cleaning for electrons
-        bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
@@ -226,15 +223,19 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 fill_l2_eff(&hists, "displ_SS_e");
+                fill_jet_variables(&hists, "displ_SS_e");
             }else{
                 fill_l2_eff(&hists, "displ_OS_e");
+                fill_jet_variables(&hists, "displ_OS_e");
             }           
         }
         if(_1mu1displmu){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
                 fill_l2_eff(&hists, "displ_SS_mu");
+                fill_jet_variables(&hists, "displ_SS_mu");
             }else{
                 fill_l2_eff(&hists, "displ_OS_mu");
+                fill_jet_variables(&hists, "displ_OS_mu");
             }
         }
 

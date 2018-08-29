@@ -11,10 +11,13 @@ using namespace std;
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_pt"]                  = new TH1F(prefix+"_pt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
     (*hists)[prefix+"_leadpt"]              = new TH1F(prefix+"_leadpt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_leadjetpt"]           = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
     (*hists)[prefix+"_dxy"]                 = new TH1F(prefix+"_dxy", ";#Delta_{xy} [cm];Events", 60, 0, 1.5);
+    (*hists)[prefix+"_dz"]                  = new TH1F(prefix+"_dz", ";#Delta_{z} [cm];Events", 60, 0, 15);
     (*hists)[prefix+"_mll"]                 = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_dphill"]              = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
     (*hists)[prefix+"_dRll"]                = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 80, 0, 6);
+    (*hists)[prefix+"_dRl2jet"]             = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
     (*hists)[prefix+"_vtxfitgen"]           = new TH1F(prefix+"_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     (*hists)[prefix+"_vtxfitgen_zoom"]      = new TH1F(prefix+"_vtxfitgen_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 30, 0, 1);
     (*hists)[prefix+"_chi2"]                = new TH1F(prefix+"_chi2", ";#Chi^{2};Events", 100, 0, 10000);
@@ -60,6 +63,7 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
     (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading_e], event_weight);
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading_displ_e]), event_weight);
+    (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading_displ_e]), event_weight);
     TLorentzVector lepton1;
     TLorentzVector lepton2;
     lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
@@ -67,6 +71,7 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
     (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
+    (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     if(_lVtx_valid[i_subleading_displ_e]){
@@ -92,6 +97,7 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading_mu], event_weight);
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading_displ_mu]), event_weight);
+    (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading_displ_mu]), event_weight);
     TLorentzVector lepton1;
     TLorentzVector lepton2;
     lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
@@ -99,6 +105,7 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
+    (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     if(_lVtx_valid[i_subleading_displ_mu]){
@@ -186,6 +193,11 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
             if(matches[i] >= 1) (*hists)[prefix+"_invVtx_1tr_dz"]->Fill(fabs(_gen_NPackedDtrs_matchdz[i] - _gen_NPackedDtrs_matchdz[i_lepHNL]));
         }
     }
+}
+
+void full_analyzer::fill_jet_variables(std::map<TString, TH1*>* hists, TString prefix)
+{
+    (*hists)[prefix+"_leadjetpt"]->Fill(_lPt[i_leading_jet_for_displ], event_weight);
 }
 
 void full_analyzer::fill_l2_eff(std::map<TString, TH1*>* hists, TString prefix)

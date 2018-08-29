@@ -680,6 +680,10 @@ public :
    std::map<TString, TH1*>::iterator it;
    Double_t event_weight;
    
+   bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
+   bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
+   bool fullElectronID[10], nonisoElectronID[10], displElectronID[10], fullMuonID[10], nonisoMuonID[10], displMuonID[10], fullJetID[10];
+   
    int i_gen_l1;
    int i_gen_l2;
    //int i_l1; might add these later, through geometric match with i_gen_l1or2, find i_l1or2
@@ -769,6 +773,7 @@ public :
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
+   virtual double   find_dRl2jet(TLorentzVector);
 
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
@@ -786,6 +791,7 @@ public :
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
+   virtual void     fill_jet_variables(std::map<TString, TH1*>*, TString);
    virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    
