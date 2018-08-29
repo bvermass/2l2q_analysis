@@ -62,12 +62,12 @@ if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/sr
                 echo "sh "${headdir}"/test/scripts/exec_analyzer.sh "$input" a_jobs.out"  >> $job
                 echo "rm "$input >> $job
                 
-                qsub $job -l walltime=40:00:00 > scriptlog.txt 2>> scriptlog.txt
+                qsub $job -q express -l walltime=40:00:00 > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do
                     echo "Invalid credential caught, resubmitting"
                     sleep 2 #sleep 2 seconds before attempting resubmission
-                    qsub $job -l walltime=40:00:00 > scriptlog.txt 2>> scriptlog.txt
+                    qsub $job -q express -l walltime=40:00:00 > scriptlog.txt 2>> scriptlog.txt
                 done
 
                 cat scriptlog.txt
