@@ -27,7 +27,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_vtxfit_valid"]        = new TH1F(prefix+"_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
     (*hists)[prefix+"_ngentr"]              = new TH1F(prefix+"_ngentr", ";Gen-level # of tracks for all events;Events", 15, 0, 15);
     (*hists)[prefix+"_vtxfit_maxdxy"]       = new TH1F(prefix+"_vtxfit_maxdxy", ";dxy_{max} (Valid Vtx);Events", 30, 0, 1.1);
-    (*hists)[prefix+"_cutflow"]             = new TH1F(prefix+"_cutflow", ";cutflow;Events", 7, 0, 7);
+    (*hists)[prefix+"_cutflow"]             = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
     (*hists)[prefix+"_l1reliso"]            = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
     (*hists)[prefix+"_l2reliso"]            = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 0.8);
     (*hists)[prefix+"_invVtx_ntracks"]      = new TH1F(prefix+"_invVtx_ntracks", ";# of tracks for invalid vtxfits;Events", 15, 0, 15);
@@ -133,13 +133,14 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
     (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
-    if(_1e) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
+    if(_trige) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight);
+    if(_1e) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
     if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-        (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-        if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-        if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+        (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+        if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+        if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
     }
 }
 
@@ -148,13 +149,14 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
     (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
-    if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
+    if(_trigmu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
+    if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
     if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-        (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-        if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-        if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+        (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+        if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+        if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
     }
 }
 

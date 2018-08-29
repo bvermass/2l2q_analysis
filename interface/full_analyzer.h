@@ -707,6 +707,7 @@ public :
    int i_leading_jet_for_displ;
    int i_subleading_jet_for_displ;
 
+   bool _trige;
    bool _1e;
    bool _1e1disple;
    bool _1e1disple0adde;
@@ -726,6 +727,7 @@ public :
    bool _1e1disple1jet;
    bool _1e1disple2jet;
 
+   bool _trigmu;
    bool _1mu;
    bool _1mu1displmu;
    bool _1mu1displmu0addmu;

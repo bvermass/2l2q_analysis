@@ -11,7 +11,9 @@ void full_analyzer::signal_regions(){
     
     // NEW signal region method, sequential so that I can make histograms between each step if I want
     // others should be adapted to this method, do this NEXT WEEK WITH TIER2 DOWN
-    _1e			                = i_leading_e != -1 && leadptcut("e");
+    _trige                      = _HLT_Ele27_WPTight_Gsf;
+
+    _1e			                = _trige && i_leading_e != -1 && leadptcut("e");
     
     _1e1disple                  = _1e && i_subleading_displ_e != -1;
 
@@ -23,7 +25,9 @@ void full_analyzer::signal_regions(){
 
     _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dRcut(i_leading_e, i_subleading_displ_e);    
     
-    _1mu                        = i_leading_mu != -1 && leadptcut("mu");
+    _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
+
+    _1mu                        = _trigmu && i_leading_mu != -1 && leadptcut("mu");
     
     _1mu1displmu                = _1mu && i_subleading_displ_mu != -1;
 
