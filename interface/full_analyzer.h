@@ -795,6 +795,7 @@ public :
    virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
    virtual void     fill_jet_variables(std::map<TString, TH1*>*, TString);
    virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
+   virtual void     fill_l2_and_goodVtx_eff(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*);

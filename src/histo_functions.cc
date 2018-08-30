@@ -50,6 +50,26 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_l2_vtxfitgen_eff"]   = new TH1F(prefix+"_l2_vtxfitgen_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
     (*hists)[prefix+"_l2_vtxfitgen_eff_num"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     (*hists)[prefix+"_l2_vtxfitgen_eff_den"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
+   
+
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_eff"]   = new TH1F(prefix+"_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
     return;
 }
 
@@ -79,8 +99,8 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     if(_lVtx_valid[i_subleading_displ_e]){
-        (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
-        (*hists)[prefix+"_vtxfitgen_zoom"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
+        (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
+        (*hists)[prefix+"_vtxfitgen_zoom"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
         (*hists)[prefix+"_chi2"]->Fill(_lVtxpos_chi2[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_normchi2"]->Fill(_lVtxpos_chi2[i_subleading_displ_e] / _lVtxpos_df[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
@@ -113,8 +133,8 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     if(_lVtx_valid[i_subleading_displ_mu]){
-        (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
-        (*hists)[prefix+"_vtxfitgen_zoom"]->Fill(sqrt((_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_subleading_displ_mu] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_subleading_displ_mu] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_subleading_displ_mu] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
+        (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
+        (*hists)[prefix+"_vtxfitgen_zoom"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
         (*hists)[prefix+"_chi2"]->Fill(_lVtxpos_chi2[i_subleading_displ_mu], event_weight);
         (*hists)[prefix+"_normchi2"]->Fill(_lVtxpos_chi2[i_subleading_displ_mu] / _lVtxpos_df[i_subleading_displ_mu], event_weight);
         (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
@@ -187,7 +207,6 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
     }
     // if reco lepton is not the correct one, there is no meaning to the following histograms 
     bool correct_reco_lepton = (fabs(_lEta[i_lep] - _gen_NPackedDtrsEta[i_lepHNL]) < 1 && fabs(_lPhi[i_lep] - _gen_NPackedDtrsPhi[i_lepHNL]) < 1 && fabs(_lPt[i_lep] - _gen_NPackedDtrsPt[i_lepHNL]) < 5);
-    if(correct_reco_lepton) cout << "correct reco lepton!!!" << endl;
     
     if(correct_reco_lepton){
         double mindR  = 5;
@@ -234,9 +253,65 @@ void full_analyzer::fill_l2_eff(std::map<TString, TH1*>* hists, TString prefix)
     }
 }
 
+void full_analyzer::fill_l2_and_goodVtx_eff(std::map<TString, TH1*>* hists, TString prefix){
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_den"]->Fill(_ctauHN, event_weight);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_den"]->Fill(_ctauHN, event_weight);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_den"]->Fill(_ctauHN, event_weight);
+    if(prefix.Index("_e") != -1){
+        double vtxfitgen_dist = sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e]));
+        if(_1e1disple){
+            (*hists)[prefix+"_goodVtx_ctau_eff_den"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]->Fill(_ctauHN, event_weight);
+        }
+        if(_1e1disple && _lVtx_valid[i_subleading_displ_e] && vtxfitgen_dist < 0.2){
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]->Fill(_ctauHN, event_weight);
+        } 
+    }
+    if(prefix.Index("_mu") != -1){
+        double vtxfitgen_dist = sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu]));
+        if(_1mu1displmu){
+            (*hists)[prefix+"_goodVtx_ctau_eff_den"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]->Fill(_ctauHN, event_weight);
+        }
+        if(_1mu1displmu && _lVtx_valid[i_subleading_displ_mu] && vtxfitgen_dist < 0.2){
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]->Fill(_ctauHN, event_weight);
+            (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]->Fill(_ctauHN, event_weight);
+        }
+    }
+}
+
 void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefix)
 {
     (*hists)[prefix+"_l2_pt_eff"]->Divide((*hists)[prefix+"_l2_pt_eff_den"]);
     (*hists)[prefix+"_l2_ctau_eff"]->Divide((*hists)[prefix+"_l2_ctau_eff_den"]);
     (*hists)[prefix+"_l2_vtxfitgen_eff"]->Divide((*hists)[prefix+"_l2_vtxfitgen_eff_den"]);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]->Divide((*hists)[prefix+"_l2_and_goodVtx_ctau_eff_den"]);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]->Divide((*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_den"]);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]->Divide((*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_den"]);
+    (*hists)[prefix+"_goodVtx_ctau_eff"]->Divide((*hists)[prefix+"_goodVtx_ctau_eff_den"]);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]->Divide((*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]->Divide((*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]);
 }

@@ -220,6 +220,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_cutflow_mu(&hists, "displ_SS_mu");
         fill_cutflow_mu(&hists, "displ_OS_mu");
 
+        if(_1e){
+            fill_l2_and_goodVtx_eff(&hists, "displ_SS_e");
+            fill_l2_and_goodVtx_eff(&hists, "displ_OS_e");
+        }
+        if(_1mu){
+            fill_l2_and_goodVtx_eff(&hists, "displ_SS_mu");
+            fill_l2_and_goodVtx_eff(&hists, "displ_OS_mu");
+        }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 fill_l2_eff(&hists, "displ_SS_e");
