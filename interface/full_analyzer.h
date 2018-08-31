@@ -206,6 +206,16 @@ public :
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
    UInt_t          _lElectronMissingHits[10];   //[_nLight]
+   Bool_t          _lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
+   Bool_t          _lEleIsEE[10];
+   Double_t        _lEleSuperClusterOverP[10];
+   Double_t        _lEleEcalEnergy[10];
+   Double_t        _lElefull5x5SigmaIetaIeta[10];
+   Double_t        _lEleDEtaInSeed[10];
+   Double_t        _lEleDeltaPhiSuperClusterTrackAtVtx[10];
+   Double_t        _lElehadronicOverEm[10];
+   Double_t        _lEleInvMinusPInv[10];
+   Double_t        _eleNumberInnerHitsMissing[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
    Double_t        _leptonMvaTTH16[10];   //[_nLight]
    Double_t        _leptonMvaSUSY17[10];   //[_nLight]
@@ -245,20 +255,6 @@ public :
    Double_t        _closestJetDeepCsv_b[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_bb[10];   //[_nLight]
    UInt_t          _selectedTrackMult[10];   //[_nLight]
-   UInt_t          _TrackMult_pt0[10];   //[_nLight]
-   UInt_t          _TrackMult_pt1[6];   //[_nLight]
-   UInt_t          _TrackMult_pt2[6];   //[_nLight]
-   UInt_t          _TrackMult_pt3[6];   //[_nLight]
-   UInt_t          _TrackMult_pt4[6];   //[_nLight]
-   UInt_t          _TrackMult_pt5[10];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt0[6];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt1[6];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt2[6];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt3[6];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt4[6];   //[_nLight]
-   UInt_t          _TrackMult_noIP_pt5[6];   //[_nLight]
-   UInt_t	       _Nutau_TrackMult_pt1[10];
-   UInt_t	       _Nutau_TrackMult_pt5[10];
    Bool_t          _lVtx_valid[10];
    Double_t	       _lVtxpos_x[10];
    Double_t	       _lVtxpos_y[10];
@@ -278,6 +274,16 @@ public :
    Double_t	       _lVtxpos_BSdz[10];
    Double_t        _lVtxpos_maxdxy[10];
    Double_t        _lVtxpos_maxdz[10];
+   Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
+   Bool_t          _lTrackerMuon[10];
+   Double_t        _lInnerTrackValidFraction[10];
+   Double_t        _lGlobalTrackNormalizedChi2[10];
+   Double_t        _lCQChi2Position[10];
+   Double_t        _lCQTrackKink[10];
+   UChar_t         _lNumberOfMatchedStation[10];
+   UChar_t         _lNumberOfValidPixelHits[10];
+   UChar_t         _muNumberInnerHits[10];
+   UChar_t         _lTrackerLayersWithMeasurement[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
@@ -530,6 +536,16 @@ public :
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
    TBranch        *b__lElectronMissingHits;   //!
+   TBranch        *b__lEleIsEB;                                                                         //electron specific variables for displaced electron ID
+   TBranch        *b__lEleIsEE;
+   TBranch        *b__lEleSuperClusterOverP;
+   TBranch        *b__lEleEcalEnergy;
+   TBranch        *b__lElefull5x5SigmaIetaIeta;
+   TBranch        *b__lEleDEtaInSeed;
+   TBranch        *b__lEleDeltaPhiSuperClusterTrackAtVtx;
+   TBranch        *b__lElehadronicOverEm;
+   TBranch        *b__lEleInvMinusPInv;
+   TBranch        *b__eleNumberInnerHitsMissing;
    TBranch        *b__leptonMvaSUSY16;   //!
    TBranch        *b__leptonMvaTTH16;   //!
    TBranch        *b__leptonMvaSUSY17;   //!
@@ -569,20 +585,6 @@ public :
    TBranch        *b__closestJetDeepCsv_b;   //!
    TBranch        *b__closestJetDeepCsv_bb;   //!
    TBranch        *b__selectedTrackMult;   //!
-   TBranch        *b__TrackMult_pt0;   //!
-   TBranch        *b__TrackMult_pt1;   //!
-   TBranch        *b__TrackMult_pt2;   //!
-   TBranch        *b__TrackMult_pt3;   //!
-   TBranch        *b__TrackMult_pt4;   //!
-   TBranch        *b__TrackMult_pt5;   //!
-   TBranch        *b__TrackMult_noIP_pt0;   //!
-   TBranch        *b__TrackMult_noIP_pt1;   //!
-   TBranch        *b__TrackMult_noIP_pt2;   //!
-   TBranch        *b__TrackMult_noIP_pt3;   //!
-   TBranch        *b__TrackMult_noIP_pt4;   //!
-   TBranch        *b__TrackMult_noIP_pt5;   //!
-   TBranch	      *b__Nutau_TrackMult_pt1;
-   TBranch	      *b__Nutau_TrackMult_pt5;
    TBranch        *b__lVtx_valid;
    TBranch	      *b__lVtxpos_x;
    TBranch	      *b__lVtxpos_y;
@@ -602,6 +604,16 @@ public :
    TBranch	      *b__lVtxpos_BSdz;
    TBranch        *b__lVtxpos_maxdxy;
    TBranch        *b__lVtxpos_maxdz;
+   TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
+   TBranch        *b__lTrackerMuon;
+   TBranch        *b__lInnerTrackValidFraction;
+   TBranch        *b__lGlobalTrackNormalizedChi2;
+   TBranch        *b__lCQChi2Position;
+   TBranch        *b__lCQTrackKink;
+   TBranch        *b__lNumberOfMatchedStation;
+   TBranch        *b__lNumberOfValidPixelHits;
+   TBranch        *b__muNumberInnerHits;
+   TBranch        *b__lTrackerLayersWithMeasurement;
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
