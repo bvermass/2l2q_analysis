@@ -14,7 +14,7 @@ if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/signal_region.cc" ${headdir}"/sr
     echo -e "//COMPILATION SUCCESSFUL//"
     echo -e "//////////////////////////\n"
 
-    log=${headdir}"/test/log/submittedjobs.txt" #text file that will contain job numbers and their corresponding file
+    log="/user/bvermass/public/2l2q_analysis/log/submittedjobs.txt" #text file that will contain job numbers and their corresponding file
     >> $log
     dt=$(date '+%d/%m/%Y %H:%M:%S'); #also put date in submittedjobs.txt
     echo -e "\n$dt" >> $log
