@@ -93,14 +93,25 @@ void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& leg
     }
 }
 
+void draw_text_latex(double xmin, double ymin, int textsize, int textalign, TString text)
+{
+    TLatex *lumi    = new TLatex(xmin, ymin, text);//0.9,0.905,text);//"35.9 fb^{-1} (13 TeV)"); 
+    lumi->SetNDC();
+    lumi->SetTextAlign(textalign);
+    lumi->SetTextFont(43);
+    lumi->SetTextSize(textsize);
+    lumi->SetTextColor(kBlack);
+    lumi->Draw("same");
+}
+
+
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
 {
-    //std::cout << "draw_n_hists" << std::endl;
     // set x range lin or log
     c->SetLogx(lin0log1);
  
     // find the y range needed for the plot
-    double ymax = 1.1*h->GetMaximum();
+    double ymax = 1.25*h->GetMaximum();
   
     // design and draw the histograms
     if(xmax != xmin) h->GetXaxis()->SetRangeUser(xmin, xmax);
@@ -115,12 +126,6 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-    TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
-    cms_title->SetTextAlign(11);
-    cms_title->SetTextFont(43);
-    cms_title->SetTextSize(25);
-    cms_title->SetTextColor(kBlack);
-    cms_title->Draw("same");
 
     // "mass, coupling and flavor info if relevant in top right
     TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
@@ -129,17 +134,14 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     if(flavor != "" and coupling != "") couplinglatex += ", ";
     TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
     if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
-    double xmax_for_title = (xmax == xmin)? h->GetXaxis()->GetXmax() : xmax;
-    TLatex *massflavor_title    = new TLatex(xmax_for_title,1.012*ymax, masslatex + couplinglatex + flavorlatex);
-    massflavor_title->SetTextFont(43);
-    massflavor_title->SetTextSize(25);
-    massflavor_title->SetTextAlign(31);
-    massflavor_title->SetTextColor(kBlack);
-    massflavor_title->Draw("same");
+    
+    draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.87, 0.85, 22, 31, masslatex + couplinglatex + flavorlatex);
     
     //Add option to make several formats, like .root, .png,...
     c->Print(name);
 }
+
 
 void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString flavor, TString mass, TString coupling)
 {
@@ -177,12 +179,6 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-    TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
-    cms_title->SetTextAlign(11);
-    cms_title->SetTextFont(43);
-    cms_title->SetTextSize(25);
-    cms_title->SetTextColor(kBlack);
-    cms_title->Draw("same");
 
     // "mass, coupling and flavor info if relevant in top right
     TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
@@ -191,12 +187,8 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     if(flavor != "" and coupling != "") couplinglatex += ", ";
     TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
     if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
-    TLatex *massflavor_title    = new TLatex(xmax,1.012*ymax, masslatex + couplinglatex + flavorlatex);
-    massflavor_title->SetTextFont(43);
-    massflavor_title->SetTextSize(25);
-    massflavor_title->SetTextAlign(31);
-    massflavor_title->SetTextColor(kBlack);
-    massflavor_title->Draw("same");
+    draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.905, 22, 31, masslatex + couplinglatex + flavorlatex);
     
     //Add option to make several formats, like .root, .png,...
     c->Print(name);
@@ -210,6 +202,7 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
     else stack->Draw("PFC PLC hist");
 
+    stack->SetTitle("");
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);
     stack->GetXaxis()->SetTitleOffset(1.2);
@@ -222,12 +215,8 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-    //TLatex *cms_title    = new TLatex(xmin,1.01*ymax,"#bf{CMS} #it{simulation}"); 
-    //cms_title->SetTextAlign(11);
-    //cms_title->SetTextFont(43);
-    //cms_title->SetTextSize(25);
-    //cms_title->SetTextColor(kBlack);
-    //cms_title->Draw("same");
+    draw_text_latex(0.1, 0.905, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.905, 22, 31, "35.9 fb^{-1} (13 TeV)");
 
     //TLatex luminosity   = new TLatex(
     c->Modified();
@@ -241,6 +230,7 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
     else stack->Draw("PFC PLC hist");
 
+    stack->SetTitle("");
     stack->GetXaxis()->SetTitle(Xaxis);
     stack->GetYaxis()->SetTitle(Yaxis);
     stack->GetXaxis()->SetTitleOffset(1.2);
@@ -271,21 +261,8 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-    TLatex *cms_title    = new TLatex(0.1,0.905,"#bf{CMS} #it{simulation}"); 
-    cms_title->SetNDC();
-    cms_title->SetTextAlign(11);
-    cms_title->SetTextFont(43);
-    cms_title->SetTextSize(25);
-    cms_title->SetTextColor(kBlack);
-    cms_title->Draw("same");
-
-    TLatex *lumi    = new TLatex(0.9,0.905,"35.9 fb^{-1} (13 TeV)"); 
-    lumi->SetNDC();
-    lumi->SetTextAlign(31);
-    lumi->SetTextFont(43);
-    lumi->SetTextSize(22);
-    lumi->SetTextColor(kBlack);
-    lumi->Draw("same");
+    draw_text_latex(0.1, 0.905, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.905, 22, 31, "35.9 fb^{-1} (13 TeV)");
     
     c->Modified();
     c->Print(name);

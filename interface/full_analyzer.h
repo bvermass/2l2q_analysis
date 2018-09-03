@@ -691,6 +691,7 @@ public :
 */   
    std::map<TString, TH1*>::iterator it;
    Double_t event_weight;
+   TString sampleflavor;
    
    bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
    bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
@@ -711,6 +712,11 @@ public :
    int i_subleading_noniso_mu;
    int i_subleading_displ_e;
    int i_subleading_displ_mu;
+   
+   int i_gen_leading_e;
+   int i_gen_subleading_displ_e;
+   int i_gen_leading_mu;
+   int i_gen_subleading_displ_mu;
    
    int i_leading_jet_for_full;
    int i_subleading_jet_for_full;
@@ -785,6 +791,7 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
+   virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);

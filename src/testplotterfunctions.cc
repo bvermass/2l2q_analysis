@@ -66,7 +66,6 @@ void plot_every_variable_in_root_file(TString filename)
     TString pathname = "/user/bvermass/public/2l2q_analysis/plots/";
     if(filename.Index("HeavyNeutrino") != -1)   pathname += filename(filename.Index("hists_") + 6, filename.Index("HeavyNeutrino") - 7 - filename.Index("hists_")) + "/" + filename(filename.Index("HeavyNeutrino"), filename.Index(".root") - filename.Index("HeavyNeutrino"));
     else if(filename.Index("Background") != -1) pathname += filename(filename.Index("hists_") + 6, filename.Index("Background") -7 - filename.Index("hists_")) + "/" + filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") -11);
-    gSystem->Exec("mkdir -p " + pathname);
 
     //For HNL, make mass, coupling and flavor titles
     TString flavor = "";
@@ -94,16 +93,44 @@ void plot_every_variable_in_root_file(TString filename)
     TIter next(file->GetListOfKeys());
     TKey * key;
     while ((key = (TKey*)next())) {
+
         TClass *cl = gROOT->GetClass(key->GetClassName());
         if (!cl->InheritsFrom("TH1")) continue;
         TH1F *h = (TH1F*)key->ReadObj();
+        TString histname = h->GetName();
+
+        // append directories such as SS/OS, e/mu or HLT to pathname
+        TString SSorOS = "";
+        if((histname.Index("_SS_") != -1)){ 
+            SSorOS = "SS/";
+        }else if(histname.Index("_OS_") != -1){
+            SSorOS = "OS/";
+        }
+        TString eormu = "";
+        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
+            eormu = "e/";
+        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
+            eormu = "mu/";
+        }
+        TString HLT = "";
+        if(histname.Index("HLT_") != -1){
+            HLT = "HLT/";
+        }
+        TString partialcuts = "";
+        if(histname.Index("before") != -1){
+            partialcuts = "partialcuts/";
+        }
+       
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/" + partialcuts);
+        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/" + partialcuts);
+       
         markerstyle(h,"blue");
+        
         cout << h->GetName() << endl;
-        if(((TString)h->GetName()).Index("eff") == -1) draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "hist", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
-        else draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling);
+        
+        draw_1_hist(pathname + HLT + SSorOS + eormu + "lin/" + partialcuts + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
         //within public/2l2q_analysis/plots/ every different sample gets its own directory 
         //A higher/lower directory based on what cuts I apply? Higher makes more sense
-        //Make a directory all! (to easily copy to my pc)
     } 
 }
 

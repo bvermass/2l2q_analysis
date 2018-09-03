@@ -201,6 +201,25 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 }
 
 
+int full_analyzer::find_gen_lep(int i_lep)
+{
+    TLorentzVector reco_vec;
+    TLorentzVector gen_vec;
+    double dR = 0.2;
+    int i_gen = -1;
+    if(i_lep != -1) {
+        reco_vec.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
+        for(int i = 0; i< _gen_nL; i++){
+            gen_vec.SetPtEtaPhiE(_gen_lPt[i], _gen_lEta[i], _gen_lPhi[i], _gen_lE[i]);
+            if(_lFlavor[i_lep] == _gen_lFlavor[i] && gen_vec.DeltaR(reco_vec) < dR){
+                dR = gen_vec.DeltaR(reco_vec);
+                i_gen = i;
+            }
+        }
+    }
+    return i_gen;
+}
+
 void full_analyzer::find_gen_l1_and_l2()
 {
     int fromW = 0;

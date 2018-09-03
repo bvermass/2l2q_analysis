@@ -31,6 +31,9 @@ int main(int argc, char * argv[])
 {
     TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/";
 
+    string str(argv[1]); // used to only plot electron plots for e signal and mu plots for mu signal
+    cout << "        " << str  << " " << str.find("_mu_") << " " << str.find("_e_") << endl;
+
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);
     gStyle->SetPalette(55);
@@ -59,9 +62,12 @@ int main(int argc, char * argv[])
         // get correct reference histogram
         TClass *cl = gROOT->GetClass(key->GetClassName());
         if (!cl->InheritsFrom("TH1")) continue;
-        TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogram
+        TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogramt
         cout << h_ref->GetName() << endl;
         TString histname = h_ref->GetName();
+
+        if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)){ cout << "histname with e" << endl; continue;} //skip plots of opposite signal, these are empty anyway 
+        if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1)){ cout << "histname with mu" << endl; continue;}
 
         // append directories such as SS/OS, e/mu or HLT to pathname
         TString SSorOS = "";

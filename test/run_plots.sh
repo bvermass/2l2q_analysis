@@ -3,7 +3,11 @@
 #First argument must be the txt file with the samples containing histograms
 headdir=$(pwd)
 
-read -p "separate plots(1), stack plots(2), multihists(3), all(4): " choice
+if [ $# -eq 1 ] ; then
+    read -p "separate plots(1), stack plots(2), multihists(3), all(4): " choice
+else
+    choice=$2
+fi
 
 if [[ choice -eq 1 || choice -eq 4 ]]; then
     #Make plots for every file separately

@@ -26,9 +26,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - functions for every signal region event selection
 
 
-    TString flavor = "bkg";
-    if(filename.Index("_e_") != -1) flavor = "e";
-    else if(filename.Index("_mu_") != -1) flavor = "mu";
+    sampleflavor = "bkg";
+    if(filename.Index("_e_") != -1) sampleflavor = "e";
+    else if(filename.Index("_mu_") != -1) sampleflavor = "mu";
 
     TString promptordisplaced = "";
     if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
@@ -174,8 +174,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
         //Get signal region -> put this into a function maybe
         signal_regions();
-        find_gen_l1_and_l2();
-        if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);
+        i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
+        i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);
+        i_gen_leading_mu            = find_gen_lep(i_leading_mu);
+        i_gen_subleading_displ_mu   = find_gen_lep(i_subleading_displ_mu);
+        find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
+        if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
         if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
        // bool _1e			    = i_leading_e != -1;
        // bool leadptveto_e = false;
