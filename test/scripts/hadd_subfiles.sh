@@ -10,9 +10,6 @@ function hadd_all {
         else
             echo -e "\n\nhadding:        "$1
             if hadd -f ../hists_full_analyzer_${1}.root $1/*_job_* ; then
-                echo "HADD SUCCEEDED"
-            fi
-            if [[ -f ../hists_full_analyzer_${1}.root ]]; then
                 rm $1/*_job_*
             fi
         fi

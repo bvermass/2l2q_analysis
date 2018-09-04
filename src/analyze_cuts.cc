@@ -76,24 +76,6 @@ int main(int argc, char * argv[])
     hists["10GeV_displ_OS_e_cuts"] = (TH1F*) HNL10GeV_e_file->Get("displ_OS_e_cuts");
 
     //now get the efficiencies, dividing bins 8 and 9 by bin 7
-    //SS mu
-    double _bkg_displ_SS_mu_dR_eff = hists["bkg_displ_SS_mu_cuts"]->GetBinContent(9) / hists["bkg_displ_SS_mu_cuts"]->GetBinContent(7);
-    double _bkg_displ_OS_mu_dR_eff = hists["bkg_displ_OS_mu_cuts"]->GetBinContent(9) / hists["bkg_displ_OS_mu_cuts"]->GetBinContent(7);
-    double _bkg_displ_SS_e_dR_eff = hists["bkg_displ_SS_e_cuts"]->GetBinContent(9) / hists["bkg_displ_SS_e_cuts"]->GetBinContent(7);
-    double _bkg_displ_OS_e_dR_eff = hists["bkg_displ_OS_e_cuts"]->GetBinContent(9) / hists["bkg_displ_OS_e_cuts"]->GetBinContent(7);
-    double _3GeV_displ_SS_mu_dR_eff = hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(7);
-    double _3GeV_displ_OS_mu_dR_eff = hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(7);
-    double _3GeV_displ_SS_e_dR_eff = hists["3GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["3GeV_displ_SS_e_cuts"]->GetBinContent(7);
-    double _3GeV_displ_OS_e_dR_eff = hists["3GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["3GeV_displ_OS_e_cuts"]->GetBinContent(7);
-    double _7GeV_displ_SS_mu_dR_eff = hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(7);
-    double _7GeV_displ_OS_mu_dR_eff = hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(7);
-    double _7GeV_displ_SS_e_dR_eff = hists["7GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["7GeV_displ_SS_e_cuts"]->GetBinContent(7);
-    double _7GeV_displ_OS_e_dR_eff = hists["7GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["7GeV_displ_OS_e_cuts"]->GetBinContent(7);
-    double _10GeV_displ_SS_mu_dR_eff = hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(7);
-    double _10GeV_displ_OS_mu_dR_eff = hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(7);
-    double _10GeV_displ_SS_e_dR_eff = hists["10GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["10GeV_displ_SS_e_cuts"]->GetBinContent(7);
-    double _10GeV_displ_OS_e_dR_eff = hists["10GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["10GeV_displ_OS_e_cuts"]->GetBinContent(7);
-    
     double _bkg_displ_SS_mu_dphi_eff = hists["bkg_displ_SS_mu_cuts"]->GetBinContent(8) / hists["bkg_displ_SS_mu_cuts"]->GetBinContent(7);
     double _bkg_displ_OS_mu_dphi_eff = hists["bkg_displ_OS_mu_cuts"]->GetBinContent(8) / hists["bkg_displ_OS_mu_cuts"]->GetBinContent(7);
     double _bkg_displ_SS_e_dphi_eff = hists["bkg_displ_SS_e_cuts"]->GetBinContent(8) / hists["bkg_displ_SS_e_cuts"]->GetBinContent(7);
@@ -111,18 +93,77 @@ int main(int argc, char * argv[])
     double _10GeV_displ_SS_e_dphi_eff = hists["10GeV_displ_SS_e_cuts"]->GetBinContent(8) / hists["10GeV_displ_SS_e_cuts"]->GetBinContent(7);
     double _10GeV_displ_OS_e_dphi_eff = hists["10GeV_displ_OS_e_cuts"]->GetBinContent(8) / hists["10GeV_displ_OS_e_cuts"]->GetBinContent(7);
 
+    double _bkg_displ_SS_mu_dphi23_eff = hists["bkg_displ_SS_mu_cuts"]->GetBinContent(9) / hists["bkg_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_mu_dphi23_eff = hists["bkg_displ_OS_mu_cuts"]->GetBinContent(9) / hists["bkg_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_SS_e_dphi23_eff = hists["bkg_displ_SS_e_cuts"]->GetBinContent(9) / hists["bkg_displ_SS_e_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_e_dphi23_eff = hists["bkg_displ_OS_e_cuts"]->GetBinContent(9) / hists["bkg_displ_OS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_mu_dphi23_eff = hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_mu_dphi23_eff = hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_e_dphi23_eff = hists["3GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["3GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_e_dphi23_eff = hists["3GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["3GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_mu_dphi23_eff = hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_mu_dphi23_eff = hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_e_dphi23_eff = hists["7GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["7GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_e_dphi23_eff = hists["7GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["7GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_mu_dphi23_eff = hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(9) / hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_mu_dphi23_eff = hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(9) / hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_e_dphi23_eff = hists["10GeV_displ_SS_e_cuts"]->GetBinContent(9) / hists["10GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_e_dphi23_eff = hists["10GeV_displ_OS_e_cuts"]->GetBinContent(9) / hists["10GeV_displ_OS_e_cuts"]->GetBinContent(7);
+
+    double _bkg_displ_SS_mu_dphi25_eff = hists["bkg_displ_SS_mu_cuts"]->GetBinContent(10) / hists["bkg_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_mu_dphi25_eff = hists["bkg_displ_OS_mu_cuts"]->GetBinContent(10) / hists["bkg_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_SS_e_dphi25_eff = hists["bkg_displ_SS_e_cuts"]->GetBinContent(10) / hists["bkg_displ_SS_e_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_e_dphi25_eff = hists["bkg_displ_OS_e_cuts"]->GetBinContent(10) / hists["bkg_displ_OS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_mu_dphi25_eff = hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(10) / hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_mu_dphi25_eff = hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(10) / hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_e_dphi25_eff = hists["3GeV_displ_SS_e_cuts"]->GetBinContent(10) / hists["3GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_e_dphi25_eff = hists["3GeV_displ_OS_e_cuts"]->GetBinContent(10) / hists["3GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_mu_dphi25_eff = hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(10) / hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_mu_dphi25_eff = hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(10) / hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_e_dphi25_eff = hists["7GeV_displ_SS_e_cuts"]->GetBinContent(10) / hists["7GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_e_dphi25_eff = hists["7GeV_displ_OS_e_cuts"]->GetBinContent(10) / hists["7GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_mu_dphi25_eff = hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(10) / hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_mu_dphi25_eff = hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(10) / hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_e_dphi25_eff = hists["10GeV_displ_SS_e_cuts"]->GetBinContent(10) / hists["10GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_e_dphi25_eff = hists["10GeV_displ_OS_e_cuts"]->GetBinContent(10) / hists["10GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    
+    double _bkg_displ_SS_mu_dphi26_eff = hists["bkg_displ_SS_mu_cuts"]->GetBinContent(11) / hists["bkg_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_mu_dphi26_eff = hists["bkg_displ_OS_mu_cuts"]->GetBinContent(11) / hists["bkg_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _bkg_displ_SS_e_dphi26_eff = hists["bkg_displ_SS_e_cuts"]->GetBinContent(11) / hists["bkg_displ_SS_e_cuts"]->GetBinContent(7);
+    double _bkg_displ_OS_e_dphi26_eff = hists["bkg_displ_OS_e_cuts"]->GetBinContent(11) / hists["bkg_displ_OS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_mu_dphi26_eff = hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(11) / hists["3GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_mu_dphi26_eff = hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(11) / hists["3GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _3GeV_displ_SS_e_dphi26_eff = hists["3GeV_displ_SS_e_cuts"]->GetBinContent(11) / hists["3GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _3GeV_displ_OS_e_dphi26_eff = hists["3GeV_displ_OS_e_cuts"]->GetBinContent(11) / hists["3GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_mu_dphi26_eff = hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(11) / hists["7GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_mu_dphi26_eff = hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(11) / hists["7GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _7GeV_displ_SS_e_dphi26_eff = hists["7GeV_displ_SS_e_cuts"]->GetBinContent(11) / hists["7GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _7GeV_displ_OS_e_dphi26_eff = hists["7GeV_displ_OS_e_cuts"]->GetBinContent(11) / hists["7GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_mu_dphi26_eff = hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(11) / hists["10GeV_displ_SS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_mu_dphi26_eff = hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(11) / hists["10GeV_displ_OS_mu_cuts"]->GetBinContent(7);
+    double _10GeV_displ_SS_e_dphi26_eff = hists["10GeV_displ_SS_e_cuts"]->GetBinContent(11) / hists["10GeV_displ_SS_e_cuts"]->GetBinContent(7);
+    double _10GeV_displ_OS_e_dphi26_eff = hists["10GeV_displ_OS_e_cuts"]->GetBinContent(11) / hists["10GeV_displ_OS_e_cuts"]->GetBinContent(7);
+    
     cout << endl << endl << "SS mu" << endl;
-    cout << "dR bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dR_eff << " " << _3GeV_displ_SS_mu_dR_eff << " " << _7GeV_displ_SS_mu_dR_eff << " " << _10GeV_displ_SS_mu_dR_eff << endl;
-    cout << "dphi bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dphi_eff << " " << _3GeV_displ_SS_mu_dphi_eff << " " << _7GeV_displ_SS_mu_dphi_eff << " " << _10GeV_displ_SS_mu_dphi_eff << endl;
+    cout << "dphi23 bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dphi23_eff << " " << _3GeV_displ_SS_mu_dphi23_eff << " " << _7GeV_displ_SS_mu_dphi23_eff << " " << _10GeV_displ_SS_mu_dphi23_eff << endl;
+    cout << "dphi24 bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dphi_eff << " " << _3GeV_displ_SS_mu_dphi_eff << " " << _7GeV_displ_SS_mu_dphi_eff << " " << _10GeV_displ_SS_mu_dphi_eff << endl;
+    cout << "dphi25 bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dphi25_eff << " " << _3GeV_displ_SS_mu_dphi25_eff << " " << _7GeV_displ_SS_mu_dphi25_eff << " " << _10GeV_displ_SS_mu_dphi25_eff << endl;
+    cout << "dphi26 bkg, 3, 7, 10 : " << _bkg_displ_SS_mu_dphi26_eff << " " << _3GeV_displ_SS_mu_dphi26_eff << " " << _7GeV_displ_SS_mu_dphi26_eff << " " << _10GeV_displ_SS_mu_dphi26_eff << endl;
     cout << endl << endl << "OS mu" << endl;
-    cout << "dR bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dR_eff << " " << _3GeV_displ_OS_mu_dR_eff << " " << _7GeV_displ_OS_mu_dR_eff << " " << _10GeV_displ_OS_mu_dR_eff << endl;
-    cout << "dphi bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dphi_eff << " " << _3GeV_displ_OS_mu_dphi_eff << " " << _7GeV_displ_OS_mu_dphi_eff << " " << _10GeV_displ_OS_mu_dphi_eff << endl;
+    cout << "dphi23 bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dphi23_eff << " " << _3GeV_displ_OS_mu_dphi23_eff << " " << _7GeV_displ_OS_mu_dphi23_eff << " " << _10GeV_displ_OS_mu_dphi23_eff << endl;
+    cout << "dphi24 bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dphi_eff << " " << _3GeV_displ_OS_mu_dphi_eff << " " << _7GeV_displ_OS_mu_dphi_eff << " " << _10GeV_displ_OS_mu_dphi_eff << endl;
+    cout << "dphi25 bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dphi25_eff << " " << _3GeV_displ_OS_mu_dphi25_eff << " " << _7GeV_displ_OS_mu_dphi25_eff << " " << _10GeV_displ_OS_mu_dphi25_eff << endl;
+    cout << "dphi26 bkg, 3, 7, 10 : " << _bkg_displ_OS_mu_dphi26_eff << " " << _3GeV_displ_OS_mu_dphi26_eff << " " << _7GeV_displ_OS_mu_dphi26_eff << " " << _10GeV_displ_OS_mu_dphi26_eff << endl;
     cout << endl << endl << "SS e" << endl;
-    cout << "dR bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dR_eff << " " << _3GeV_displ_SS_e_dR_eff << " " << _7GeV_displ_SS_e_dR_eff << " " << _10GeV_displ_SS_e_dR_eff << endl;
-    cout << "dphi bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dphi_eff << " " << _3GeV_displ_SS_e_dphi_eff << " " << _7GeV_displ_SS_e_dphi_eff << " " << _10GeV_displ_SS_e_dphi_eff << endl;
+    cout << "dphi23 bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dphi23_eff << " " << _3GeV_displ_SS_e_dphi23_eff << " " << _7GeV_displ_SS_e_dphi23_eff << " " << _10GeV_displ_SS_e_dphi23_eff << endl;
+    cout << "dphi24 bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dphi_eff << " " << _3GeV_displ_SS_e_dphi_eff << " " << _7GeV_displ_SS_e_dphi_eff << " " << _10GeV_displ_SS_e_dphi_eff << endl;
+    cout << "dphi25 bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dphi25_eff << " " << _3GeV_displ_SS_e_dphi25_eff << " " << _7GeV_displ_SS_e_dphi25_eff << " " << _10GeV_displ_SS_e_dphi25_eff << endl;
+    cout << "dphi26 bkg, 3, 7, 10 : " << _bkg_displ_SS_e_dphi26_eff << " " << _3GeV_displ_SS_e_dphi26_eff << " " << _7GeV_displ_SS_e_dphi26_eff << " " << _10GeV_displ_SS_e_dphi26_eff << endl;
     cout << endl << endl << "OS e" << endl;
-    cout << "dR bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dR_eff << " " << _3GeV_displ_OS_e_dR_eff << " " << _7GeV_displ_OS_e_dR_eff << " " << _10GeV_displ_OS_e_dR_eff << endl;
-    cout << "dphi bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dphi_eff << " " << _3GeV_displ_OS_e_dphi_eff << " " << _7GeV_displ_OS_e_dphi_eff << " " << _10GeV_displ_OS_e_dphi_eff << endl;
+    cout << "dphi23 bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dphi23_eff << " " << _3GeV_displ_OS_e_dphi23_eff << " " << _7GeV_displ_OS_e_dphi23_eff << " " << _10GeV_displ_OS_e_dphi23_eff << endl;
+    cout << "dphi24 bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dphi_eff << " " << _3GeV_displ_OS_e_dphi_eff << " " << _7GeV_displ_OS_e_dphi_eff << " " << _10GeV_displ_OS_e_dphi_eff << endl;
+    cout << "dphi25 bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dphi25_eff << " " << _3GeV_displ_OS_e_dphi25_eff << " " << _7GeV_displ_OS_e_dphi25_eff << " " << _10GeV_displ_OS_e_dphi25_eff << endl;
+    cout << "dphi26 bkg, 3, 7, 10 : " << _bkg_displ_OS_e_dphi26_eff << " " << _3GeV_displ_OS_e_dphi26_eff << " " << _7GeV_displ_OS_e_dphi26_eff << " " << _10GeV_displ_OS_e_dphi26_eff << endl;
 
     return 0;
 }
