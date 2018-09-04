@@ -781,9 +781,11 @@ public :
    virtual void     get_electronID(bool*);
    virtual void     get_noniso_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
+   virtual void     get_new_displ_electronID(bool*);
    virtual void     get_muonID(bool*);
    virtual void     get_noniso_muonID(bool*);
    virtual void     get_displ_muonID(bool*);
+   virtual void     get_new_displ_muonID(bool*);
    virtual void     get_jetID(bool*);
    virtual void     get_clean_jets(bool*, bool*, bool*);
    virtual void     get_clean_ele(bool*, bool*);

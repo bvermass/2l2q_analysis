@@ -61,6 +61,33 @@ void full_analyzer::get_displ_electronID(bool* ID)
     }
 }
 
+void full_analyzer::get_new_displ_electronID(bool* ID)
+{
+    for(unsigned i = 0; i < _nL; i++){
+        bool fullID =   _lFlavor[i] == 0 &&
+                        fabs(_lEta[i]) < 2.5 &&
+                        _lPt[i] > 7 &&
+                        fabs(_dxy[i]) > 0.05 &&
+                        _lElectronPassConvVeto[i] &&
+                        (   (_lEleIsEB[i] &&
+                             _lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
+                             _lEleDEtaInSeed[i] <= 0.00477 &&
+                             _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.222 &&
+                             _lElehadronicOverEm[i] <= 0.298 &&
+                             _lEleInvMinusPInv[i] <= 0.241) 
+                            || 
+                            (_lEleIsEE[i] &&
+                             _lElefull5x5SigmaIetaIeta[i] <= 0.0314 &&
+                             _lEleDEtaInSeed[i] <= 0.00868 &&
+                             _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.213 &&
+                             _lElehadronicOverEm[i] <= 0.101 &&
+                             _lEleInvMinusPInv[i] <= 0.14
+                            )
+                        );
+	    if(fullID) *(ID + i) = true;
+	    else *(ID + i) = false;
+    }
+}
 
 void full_analyzer::get_muonID(bool* ID)
 {
@@ -112,6 +139,28 @@ void full_analyzer::get_displ_muonID(bool* ID)
     }
 }
 
+void full_analyzer::get_new_displ_muonID(bool* ID)
+{
+    for(unsigned i = 0; i < _nL; ++i){
+        bool goodglobalmuon =   _lGlobalMuon[i] &&
+                                _lGlobalTrackNormalizedChi2[i] < 3 &&
+                                _lCQChi2Position[i] < 12 &&
+                                _lCQTrackKink[i] < 20;
+	    bool fullID = 	_lFlavor[i] == 1 &&
+			            fabs(_lEta[i]) < 2.4 &&
+			            _lPt[i] > 5 &&
+			            fabs(_dxy[i]) > 0.05 &&
+                        _lPOGLoose[i] &&
+                        (   (goodglobalmuon &&
+                             _lMuonSegComp[i] > 0.303
+                            )
+                            ||
+                            _lMuonSegComp[i] > 0.451
+                        );
+        if(fullID) *(ID + i) = true;
+	    else *(ID + i) = false;
+    }
+}
 
 
 
