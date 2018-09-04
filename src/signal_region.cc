@@ -23,7 +23,8 @@ void full_analyzer::signal_regions(){
 
     _1e1disple0jet_aftermll     = _1e1disple0jet && mllcut(i_leading_e, i_subleading_displ_e);
 
-    _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dRcut(i_leading_e, i_subleading_displ_e);    
+    _1e1disple0jet_afterdR      = _1e1disple0jet_aftermll && dRcut(i_leading_e, i_subleading_displ_e);    
+    _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dphicut(i_leading_e, i_subleading_displ_e, 2.4);    
     
     _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
 
@@ -37,7 +38,8 @@ void full_analyzer::signal_regions(){
 
     _1mu1displmu0jet_aftermll   = _1mu1displmu0jet && mllcut(i_leading_mu, i_subleading_displ_mu);
     
-    _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && dRcut(i_leading_mu, i_subleading_displ_mu);    
+    _1mu1displmu0jet_afterdR    = _1mu1displmu0jet_aftermll && dRcut(i_leading_mu, i_subleading_displ_mu);    
+    _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
     
     // OLD signal region definitions, first require correct number of leptons and jets, new version first does also pt requirements;
     bool leadptveto_e = false;
@@ -99,6 +101,14 @@ bool full_analyzer::dRcut(int i_lead, int i_sublead){
     return (dR > 2.4 && dR < 3.5);
 }
 
+bool full_analyzer::dphicut(int i_lead, int i_sublead, double dphicut){
+    TLorentzVector leadinglepton;
+    leadinglepton.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
+    TLorentzVector subleadinglepton;
+    subleadinglepton.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
+    double dphi = fabs(leadinglepton.DeltaPhi(subleadinglepton));
+    return (dphi > dphicut);
+}
 
 void full_analyzer::init_sigreg_fraction(std::map<TString, TH1*>* hists){
     (*hists)["_e_sigreg_fraction"]			= new TH1F("_e_sigreg_fraction",";signal regions;Events", 13, 0, 13);

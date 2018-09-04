@@ -732,6 +732,7 @@ public :
    bool _1e1disple0jet;
    bool _1e1disple0jet_aftermll;
    bool _1e1disple0jet_afterdphi;
+   bool _1e1disple0jet_afterdR;
    
    bool _1e0jet;
    bool _1e1jet;
@@ -752,6 +753,7 @@ public :
    bool _1mu1displmu0jet;
    bool _1mu1displmu0jet_aftermll;
    bool _1mu1displmu0jet_afterdphi;
+   bool _1mu1displmu0jet_afterdR;
    
    bool _1mu0jet;
    bool _1mu1jet;
@@ -800,6 +802,7 @@ public :
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
    virtual bool     dRcut(int, int);
+   virtual bool     dphicut(int, int, double);
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
 
