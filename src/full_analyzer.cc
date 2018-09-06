@@ -131,44 +131,59 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    get_electronID(&fullElectronID[0]);
 	    get_noniso_electronID(&nonisoElectronID[0]);
 	    get_displ_electronID(&displElectronID[0]);
+        get_new_displ_electronID(&newdisplElectronID[0]);
 	    get_muonID(&fullMuonID[0]);
 	    get_noniso_muonID(&nonisoMuonID[0]);
 	    get_displ_muonID(&displMuonID[0]);
+	    get_new_displ_muonID(&newdisplMuonID[0]);
 	    get_jetID(&fullJetID[0]);
+
+        //fill_ID_histos(&hists, "displ_SS_mu");
+        //fill_ID_histos(&hists, "displ_OS_mu");
+        //fill_ID_histos(&hists, "displ_SS_e");
+        //fill_ID_histos(&hists, "displ_OS_e");
 
         //Get Cleaning for jets
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
 	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
+        get_clean_jets(&new_jet_clean_displ[0], &newdisplElectronID[0], &newdisplMuonID[0]);
 	    for(unsigned i = 0; i < 20; ++i){
 	        jet_clean_full_noniso[i] = jet_clean_full[i] && jet_clean_noniso[i];
 	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
+	        new_jet_clean_full_displ[i] = jet_clean_full[i] && new_jet_clean_displ[i];
 	    }
 	    
         //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
+	    get_clean_ele(&new_ele_clean_displ[0],  &newdisplMuonID[0]);
 	    for(unsigned i = 0; i < 10; ++i){
 	        ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && ele_clean_displ[i];
+	        new_ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && new_ele_clean_displ[i];
 	    }
 
         //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &new_ele_clean_full_noniso_displ[0]);
+	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_subleading_noniso_mu 	    = find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
 	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_new_subleading_displ_e  	= find_subleading_e(&newdisplElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
+	    i_new_subleading_displ_mu 	= find_subleading_mu(&newdisplMuonID[0], i_leading_mu);
 	    
 	    i_leading_jet_for_full	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
 	    i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
 	    i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
 	    i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
 	    i_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
+	    i_new_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &new_jet_clean_full_displ[0]);
 	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
+	    i_new_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &new_jet_clean_full_displ[0], i_new_leading_jet_for_displ);
 
 
         
@@ -217,7 +232,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_sigreg_fraction(&hists);
 
         //HLT efficiency stuff, put this in a separate function later
-        fill_HLT_efficiency(&hists, _1e, _1mu);
+        fill_HLT_efficiency(&hists, (i_leading_e != -1 && leadptcut("e")), (i_leading_mu != -1 && leadptcut("mu")));
 
         fill_cutflow_e(&hists, "displ_SS_e");
         fill_cutflow_e(&hists, "displ_OS_e");

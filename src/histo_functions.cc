@@ -71,6 +71,19 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
     (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
     (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
+    
+/*    (*hists)[prefix+"_n_prompte_ID"]   = new TH1F(prefix+"_n_prompte_ID", ";Number of electron with prompt ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_disple_ID"]   = new TH1F(prefix+"_n_disple_ID", ";Number of electron with displ ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_cleanede"]   = new TH1F(prefix+"_n_cleanede", ";Number of electron cleaned;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_cleaned_prompte_ID"]   = new TH1F(prefix+"_n_cleaned_prompte_ID", ";Number of electron with cleaned prompt ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_cleaned_disple_ID"]   = new TH1F(prefix+"_n_cleaned_disple_ID", ";Number of electron with cleaned displ ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_promptmu_ID"]   = new TH1F(prefix+"_n_promptmu_ID", ";Number of muon with prompt ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_displmu_ID"]   = new TH1F(prefix+"_n_displmu_ID", ";Number of muon with displ ID;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_ptcut"]   = new TH1F(prefix+"_n_ptcut", ";Number of muon with prompt ID passing ptcut;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_ptcut_trig"]   = new TH1F(prefix+"_n_ptcut_trig", ";Number of muon with prompt ID passing ptcut and trigger;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_leadingmu_trig"]   = new TH1F(prefix+"_n_leadingmu_trig", ";Number of muon with prompt ID passing ptcut and trigger;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_trige"]   = new TH1F(prefix+"_n_trige", ";Number of events passing e trigger;Events", 10, 0, 10);
+    (*hists)[prefix+"_n_trigmu"]   = new TH1F(prefix+"_n_trigmu", ";Number of events passing mu trigger;Events", 10, 0, 10);*/
     return;
 }
 
@@ -176,11 +189,13 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     if(_1e) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
     if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
         (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-        if(_1e1disple0adde) (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
-        if(_1e1disple0jet) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-        if(_1e1disple0jet_afterdR) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+        if(_1e1disple0adde) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
+        if(_1e1disple0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
+        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
+        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+    }
+    if(_new_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
+        (*hists)[prefix+"_cuts"]->Fill(4., event_weight);
     }
 }
 
@@ -206,11 +221,13 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     if(_1mu) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
     if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
         (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-        if(_1mu1displmu0addmu) (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
-        if(_1mu1displmu0jet) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-        if(_1mu1displmu0jet_afterdR) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+        if(_1mu1displmu0addmu) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
+        if(_1mu1displmu0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
+        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
+        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+    }
+    if(_new_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
+        (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
     }
 }
 
@@ -336,6 +353,47 @@ void full_analyzer::fill_l2_and_goodVtx_eff(std::map<TString, TH1*>* hists, TStr
     }
 }
 
+// This function tested the efficiencies for the prompt and displaced ID's, since something seemed to be wrong, turns out everything works fine!
+/*void full_analyzer::fill_ID_histos(std::map<TString, TH1*>* hists, TString prefix)
+{
+    int nprompte = 0;
+    int ndisple  = 0;
+    int ncleanede = 0;
+    int ncleanedandprompte = 0;
+    int ncleanedanddisple  = 0;
+    int npromptmu = 0;
+    int ndisplmu  = 0;
+    int nptcut = 0;
+    int nptcutandtrig = 0;
+    int ntrige = 0;
+    int ntrigmu = 0;
+    for(int i = 0; i < _nL; i++){
+        if(fullElectronID[i]) nprompte++;
+        if(newdisplElectronID[i]) ndisple++;
+        if(ele_clean_full_noniso_displ[i]) ncleanede++;
+        if(fullElectronID[i] && ele_clean_full_noniso_displ[i]) ncleanedandprompte++;
+        if(newdisplElectronID[i] && ele_clean_full_noniso_displ[i]) ncleanedanddisple++;
+        if(fullMuonID[i]) npromptmu++;
+        if(newdisplMuonID[i]) ndisplmu++;
+        if((fullElectronID[i] && _lPt[i] > 30) || (fullMuonID[i] && _lPt[i] > 25)) nptcut++;
+        if((_trige && fullElectronID[i] && _lPt[i] > 30) || (_trigmu && fullMuonID[i] && _lPt[i] > 25)) nptcutandtrig++;
+    }
+    if(_trigmu) ntrigmu++;
+    if(_trige)  ntrige++;
+    (*hists)[prefix+"_n_prompte_ID"]->Fill(nprompte, event_weight);
+    (*hists)[prefix+"_n_disple_ID"]->Fill(ndisple, event_weight);
+    (*hists)[prefix+"_n_cleanede"]->Fill(ncleanede, event_weight);
+    (*hists)[prefix+"_n_cleaned_prompte_ID"]->Fill(ncleanedandprompte, event_weight);
+    (*hists)[prefix+"_n_cleaned_disple_ID"]->Fill(ncleanedanddisple, event_weight);
+    (*hists)[prefix+"_n_promptmu_ID"]->Fill(npromptmu, event_weight);
+    (*hists)[prefix+"_n_displmu_ID"]->Fill(ndisplmu, event_weight);
+    (*hists)[prefix+"_n_ptcut"]->Fill(nptcut, event_weight);
+    (*hists)[prefix+"_n_ptcut_trig"]->Fill(nptcutandtrig, event_weight);
+    (*hists)[prefix+"_n_leadingmu_trig"]->Fill(_1mu, event_weight);
+    (*hists)[prefix+"_n_trige"]->Fill(ntrige, event_weight);
+    (*hists)[prefix+"_n_trigmu"]->Fill(ntrigmu, event_weight);
+}*/
+
 void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefix)
 {
     (*hists)[prefix+"_l2_pt_eff"]->Divide((*hists)[prefix+"_l2_pt_eff_den"]);
@@ -348,3 +406,4 @@ void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]->Divide((*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]);
     (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]->Divide((*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]);
 }
+

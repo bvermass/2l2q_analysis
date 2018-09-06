@@ -696,6 +696,7 @@ public :
    bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
    bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
    bool fullElectronID[10], nonisoElectronID[10], displElectronID[10], fullMuonID[10], nonisoMuonID[10], displMuonID[10], fullJetID[10];
+   bool newdisplElectronID[10], newdisplMuonID[10], new_jet_clean_displ[20], new_jet_clean_full_displ[20], new_ele_clean_displ[10], new_ele_clean_full_noniso_displ[10];
    
    int i_gen_l1;
    int i_gen_l2;
@@ -711,7 +712,9 @@ public :
    int i_subleading_noniso_e;
    int i_subleading_noniso_mu;
    int i_subleading_displ_e;
+   int i_new_subleading_displ_e;
    int i_subleading_displ_mu;
+   int i_new_subleading_displ_mu;
    
    int i_gen_leading_e;
    int i_gen_subleading_displ_e;
@@ -723,11 +726,14 @@ public :
    int i_leading_jet_for_noniso;
    int i_subleading_jet_for_noniso;
    int i_leading_jet_for_displ;
+   int i_new_leading_jet_for_displ;
    int i_subleading_jet_for_displ;
+   int i_new_subleading_jet_for_displ;
 
    bool _trige;
    bool _1e;
    bool _1e1disple;
+   bool _new_1e1disple;
    bool _1e1disple0adde;
    bool _1e1disple0jet;
    bool _1e1disple0jet_aftermll;
@@ -749,6 +755,7 @@ public :
    bool _trigmu;
    bool _1mu;
    bool _1mu1displmu;
+   bool _new_1mu1displmu;
    bool _1mu1displmu0addmu;
    bool _1mu1displmu0jet;
    bool _1mu1displmu0jet_aftermll;
@@ -820,6 +827,7 @@ public :
    virtual void     fill_jet_variables(std::map<TString, TH1*>*, TString);
    virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
    virtual void     fill_l2_and_goodVtx_eff(std::map<TString, TH1*>*, TString);
+   //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*);
