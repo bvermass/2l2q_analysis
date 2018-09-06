@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include "../interface/full_analyzer.h"
-#include "../interface/full_analyzer_ee.h"
 
 using namespace std;
 

@@ -274,6 +274,7 @@ public :
    Double_t	       _lVtxpos_BSdz[10];
    Double_t        _lVtxpos_maxdxy[10];
    Double_t        _lVtxpos_maxdz[10];
+   Double_t        _lVtxpos_dRcut[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -604,6 +605,7 @@ public :
    TBranch	      *b__lVtxpos_BSdz;
    TBranch        *b__lVtxpos_maxdxy;
    TBranch        *b__lVtxpos_maxdz;
+   TBranch        *b__lVtxpos_dRcut;
    TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
    TBranch        *b__lTrackerMuon;
    TBranch        *b__lInnerTrackValidFraction;

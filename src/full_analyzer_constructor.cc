@@ -319,6 +319,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lVtxpos_BSdz", _lVtxpos_BSdz, &b__lVtxpos_BSdz);
    fChain->SetBranchAddress("_lVtxpos_maxdxy", _lVtxpos_maxdxy, &b__lVtxpos_maxdxy);
    fChain->SetBranchAddress("_lVtxpos_maxdz", _lVtxpos_maxdz, &b__lVtxpos_maxdz);
+   fChain->SetBranchAddress("_lVtxpos_dRcut", _lVtxpos_dRcut, &b__lVtxpos_dRcut);
    fChain->SetBranchAddress("_lGlobalMuon", _lGlobalMuon, &b__lGlobalMuon);
    fChain->SetBranchAddress("_lTrackerMuon", _lTrackerMuon, &b__lTrackerMuon);
    fChain->SetBranchAddress("_lInnerTrackValidFraction", _lInnerTrackValidFraction, &b__lInnerTrackValidFraction);
