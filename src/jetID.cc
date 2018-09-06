@@ -7,11 +7,11 @@
 void full_analyzer::get_jetID(bool* ID)
 {
     for(unsigned i = 0; i < _nJets; ++i){
-	bool fullID = 	fabs(_jetEta[i]) < 2.4 &&
-			_jetPt[i] > 20 &&
-			_jetIsTight[i];
-	if(fullID) *(ID + i) = true;
-	else *(ID + i) = false;
+	    bool fullID = 	fabs(_jetEta[i]) < 2.4 &&
+			            _jetPt[i] > 20 &&
+			            _jetIsTight[i];
+	    if(fullID) *(ID + i) = true;
+	    else *(ID + i) = false;
     }
 }
 
@@ -23,15 +23,15 @@ void full_analyzer::get_clean_jets(bool* cleaned, bool* electronID, bool* muonID
     TLorentzVector jet;
 
     for(unsigned i = 0; i < _nJets; ++i){
-	*(cleaned + i) = true;
-	jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+	    *(cleaned + i) = true;
+	    jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
 
-	for(unsigned j = 0; j < _nL; ++j){
-	    lepton.SetPtEtaPhiE(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
-	    if((_lFlavor[j] == 0 && *(electronID + j)) || (_lFlavor[j] == 1 && *(muonID + j))){
-		if(lepton.DeltaR(jet) < 0.4) *(cleaned + i) = false;
+	    for(unsigned j = 0; j < _nL; ++j){
+	        lepton.SetPtEtaPhiE(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
+	        if((_lFlavor[j] == 0 && *(electronID + j)) || (_lFlavor[j] == 1 && *(muonID + j))){
+		        if(lepton.DeltaR(jet) < 0.4) *(cleaned + i) = false;
+	        }
 	    }
-	}
     }
 }
 

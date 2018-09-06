@@ -12,34 +12,22 @@ void full_analyzer::signal_regions(){
     // NEW signal region method, sequential so that I can make histograms between each step if I want
     // others should be adapted to this method, do this NEXT WEEK WITH TIER2 DOWN
     _trige                      = _HLT_Ele27_WPTight_Gsf;
-
     _1e			                = _trige && i_leading_e != -1 && leadptcut("e");
-    
     _1e1disple                  = _1e && i_subleading_displ_e != -1;
     _new_1e1disple              = _1e && i_new_subleading_displ_e != -1;
-
     _1e1disple0adde             = _new_1e1disple && i_subleading_e == -1 && i_subleading_noniso_e == -1;
-
     _1e1disple0jet              = _1e1disple0adde && i_leading_jet_for_displ == -1;
-
     _1e1disple0jet_aftermll     = _1e1disple0jet && mllcut(i_leading_e, i_subleading_displ_e);
-
     _1e1disple0jet_afterdR      = _1e1disple0jet_aftermll && dRcut(i_leading_e, i_subleading_displ_e);    
     _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && dphicut(i_leading_e, i_subleading_displ_e, 2.4);    
     
     _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
-
     _1mu                        = _trigmu && i_leading_mu != -1 && leadptcut("mu");
-    
     _1mu1displmu                = _1mu && i_subleading_displ_mu != -1;
     _new_1mu1displmu            = _1mu && i_new_subleading_displ_mu != -1;
-
     _1mu1displmu0addmu          = _new_1mu1displmu && i_subleading_mu == -1 && i_subleading_noniso_mu == -1;
-
     _1mu1displmu0jet            = _1mu1displmu0addmu && i_leading_jet_for_displ == -1;
-
     _1mu1displmu0jet_aftermll   = _1mu1displmu0jet && mllcut(i_leading_mu, i_subleading_displ_mu);
-    
     _1mu1displmu0jet_afterdR    = _1mu1displmu0jet_aftermll && dRcut(i_leading_mu, i_subleading_displ_mu);    
     _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
     
