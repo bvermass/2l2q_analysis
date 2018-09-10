@@ -249,18 +249,30 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
+                //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
+                //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
                 fill_l2_eff(&hists, "displ_SS_e");
                 fill_jet_variables(&hists, "displ_SS_e");
             }else{
+                //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
+                //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
+                //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
                 fill_l2_eff(&hists, "displ_OS_e");
                 fill_jet_variables(&hists, "displ_OS_e");
             }           
         }
         if(_1mu1displmu){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
+                //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
+                //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
                 fill_l2_eff(&hists, "displ_SS_mu");
                 fill_jet_variables(&hists, "displ_SS_mu");
             }else{
+                //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
+                //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
+                //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
                 fill_l2_eff(&hists, "displ_OS_mu");
                 fill_jet_variables(&hists, "displ_OS_mu");
             }

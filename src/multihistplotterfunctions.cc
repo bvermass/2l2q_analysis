@@ -63,11 +63,11 @@ int main(int argc, char * argv[])
         TClass *cl = gROOT->GetClass(key->GetClassName());
         if (!cl->InheritsFrom("TH1")) continue;
         TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogramt
-        cout << h_ref->GetName() << endl;
+        //cout << h_ref->GetName() << endl;
         TString histname = h_ref->GetName();
 
-        if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)){ cout << "histname with e" << endl; continue;} //skip plots of opposite signal, these are empty anyway 
-        if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1)){ cout << "histname with mu" << endl; continue;}
+        if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of opposite signal, these are empty anyway 
+        if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
 
         // append directories such as SS/OS, e/mu or HLT to pathname
         TString SSorOS = "";
@@ -112,12 +112,13 @@ int main(int argc, char * argv[])
 
         THStack *stack = new THStack("stack", h_ref->GetName());
         int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
-        double scale_factor = 1000;
+        double scale_factor = 100;
 
         lgendrup.Clear();
         for( it3 = hists.begin(); it3 != hists.end(); it3++){
             TH1* h = it3->second;
-            h->Scale(scale_factor / h->Integral());
+            TString histname = h->GetName();
+            if(histname.Index("eff") == -1 || histname.Index("eff_") != -1) h->Scale(scale_factor / h->Integral());
 	        stack->Add(h);
             lgendrup.AddEntry(h, argv[i]);
             i++;
