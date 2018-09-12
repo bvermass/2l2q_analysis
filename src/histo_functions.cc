@@ -9,70 +9,70 @@
 using namespace std;
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefix){
-    (*hists)[prefix+"_pt"]                  = new TH1F(prefix+"_pt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
-    (*hists)[prefix+"_leadpt"]              = new TH1F(prefix+"_leadpt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
-    (*hists)[prefix+"_leadjetpt"]           = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
-    (*hists)[prefix+"_dxy"]                 = new TH1F(prefix+"_dxy", ";#Delta_{xy} [cm];Events", 60, 0, 1.5);
-    (*hists)[prefix+"_dz"]                  = new TH1F(prefix+"_dz", ";#Delta_{z} [cm];Events", 60, 0, 15);
-    (*hists)[prefix+"_mll"]                 = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_dphill"]              = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
-    (*hists)[prefix+"_dRll"]                = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 80, 0, 6);
-    (*hists)[prefix+"_dRl2jet"]             = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
-    (*hists)[prefix+"_vtxfitgen"]           = new TH1F(prefix+"_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 30, 0, 10);
-    (*hists)[prefix+"_vtxfitgen_zoom"]      = new TH1F(prefix+"_vtxfitgen_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 15, 0, 1);
-    (*hists)[prefix+"_chi2"]                = new TH1F(prefix+"_chi2", ";#Chi^{2};Events", 100, 0, 1000);
-    (*hists)[prefix+"_normchi2"]            = new TH1F(prefix+"_normchi2", ";Normalized #Chi^{2};Events", 100, 0, 200);
-    (*hists)[prefix+"_vtxfitPV"]            = new TH1F(prefix+"_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 40, 0, 10);
-    (*hists)[prefix+"_vtxfit_ntracks"]      = new TH1F(prefix+"_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
-    (*hists)[prefix+"_vtxfit_valid"]        = new TH1F(prefix+"_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    (*hists)[prefix+"_ngentr"]              = new TH1F(prefix+"_ngentr", ";Gen-level # of tracks for all events;Events", 15, 0, 15);
-    (*hists)[prefix+"_vtxfit_maxdxy"]       = new TH1F(prefix+"_vtxfit_maxdxy", ";dxy_{max} (Valid Vtx);Events", 30, 0, 1.1);
-    (*hists)[prefix+"_vtxfit_maxdz"]        = new TH1F(prefix+"_vtxfit_maxdz", ";dz_{max} (Valid Vtx);Events", 30, 0, 15);
-    (*hists)[prefix+"_vtxfit_dRcut"]       = new TH1F(prefix+"_vtxfit_dRcut", ";dR cone size (Valid Vtx);Events", 11, 0, 1.1);
-    (*hists)[prefix+"_cutflow"]             = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
-    (*hists)[prefix+"_cuts"]                = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
-    (*hists)[prefix+"_l1reliso"]            = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
-    (*hists)[prefix+"_l2reliso"]            = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 3.5);
-    (*hists)[prefix+"_invVtx_ntracks"]      = new TH1F(prefix+"_invVtx_ntracks", ";# of tracks for invalid vtxfits;Events", 15, 0, 15);
-    (*hists)[prefix+"_invVtx_1tr_ngentr"]   = new TH1F(prefix+"_invVtx_1tr_ngentr", ";Gen-level # of tracks for invalid vtx with no found tracks;Events", 15, 0, 15);
-    (*hists)[prefix+"_invVtx_1tr_ngenl"]    = new TH1F(prefix+"_invVtx_1tr_ngenl", ";Gen-level # of Leptons for invalid vtx with no found tracks;Events", 15, 0, 15);
-    (*hists)[prefix+"_invVtx_1tr_ngene"]    = new TH1F(prefix+"_invVtx_1tr_ngene", ";Gen-level # of Electrons for invalid vtx with no found tracks;Events", 15, 0, 15);
-    (*hists)[prefix+"_invVtx_1tr_ngenmu"]   = new TH1F(prefix+"_invVtx_1tr_ngenmu", ";Gen-level # of Muons for invalid vtx with no found tracks;Events", 15, 0, 15);
-    (*hists)[prefix+"_invVtx_1tr_pt"]       = new TH1F(prefix+"_invVtx_1tr_pt", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_invVtx_1tr_deta"]   = new TH1F(prefix+"_invVtx_1tr_deta", ";#Delta #eta;Events", 40, 0, 4);
-    (*hists)[prefix+"_invVtx_1tr_dphi"]   = new TH1F(prefix+"_invVtx_1tr_dphi", ";#Delta #phi;Events", 40, 0, 3.14);
-    (*hists)[prefix+"_invVtx_1tr_dR"]   = new TH1F(prefix+"_invVtx_1tr_dR", ";#Delta R;Events", 40, 0, 5);
-    (*hists)[prefix+"_invVtx_1tr_dxy"]   = new TH1F(prefix+"_invVtx_1tr_dxy", ";#Delta_{xy}[cm];Events", 30, 0, 4);
-    (*hists)[prefix+"_invVtx_1tr_dz"]   = new TH1F(prefix+"_invVtx_1tr_dz", ";#Delta_{z}[cm];Events", 30, 0, 10);
-    (*hists)[prefix+"_l2_pt_eff"]   = new TH1F(prefix+"_l2_pt_eff", ";#it{p}_{T} [GeV];Eff.", 40, 0, 40);
-    (*hists)[prefix+"_l2_pt_eff_num"]   = new TH1F(prefix+"_l2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_l2_pt_eff_den"]   = new TH1F(prefix+"_l2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_l2_ctau_eff"]   = new TH1F(prefix+"_l2_ctau_eff", ";c#tau [mm];Eff.", 40, 0, 40);
-    (*hists)[prefix+"_l2_ctau_eff_num"]   = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [mm];Events", 40, 0, 40);
-    (*hists)[prefix+"_l2_ctau_eff_den"]   = new TH1F(prefix+"_l2_ctau_eff_den", ";c#tau [mm];Events", 40, 0, 40);
-    (*hists)[prefix+"_l2_vtxfitgen_eff"]   = new TH1F(prefix+"_l2_vtxfitgen_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
-    (*hists)[prefix+"_l2_vtxfitgen_eff_num"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
-    (*hists)[prefix+"_l2_vtxfitgen_eff_den"]   = new TH1F(prefix+"_l2_vtxfitgen_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
+    (*hists)[prefix+"_pt"]                      = new TH1F(prefix+"_pt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_leadpt"]                  = new TH1F(prefix+"_leadpt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_leadjetpt"]               = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
+    (*hists)[prefix+"_dxy"]                     = new TH1F(prefix+"_dxy", ";#Delta_{xy} [cm];Events", 60, 0, 1.5);
+    (*hists)[prefix+"_dz"]                      = new TH1F(prefix+"_dz", ";#Delta_{z} [cm];Events", 60, 0, 15);
+    (*hists)[prefix+"_mll"]                     = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
+    (*hists)[prefix+"_dphill"]                  = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
+    (*hists)[prefix+"_dRll"]                    = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 80, 0, 6);
+    (*hists)[prefix+"_dRl2jet"]                 = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
+    (*hists)[prefix+"_vtxfitgen"]               = new TH1F(prefix+"_vtxfitgen", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 30, 0, 10);
+    (*hists)[prefix+"_vtxfitgen_zoom"]          = new TH1F(prefix+"_vtxfitgen_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 15, 0, 1);
+    (*hists)[prefix+"_chi2"]                    = new TH1F(prefix+"_chi2", ";#Chi^{2};Events", 100, 0, 1000);
+    (*hists)[prefix+"_normchi2"]                = new TH1F(prefix+"_normchi2", ";Normalized #Chi^{2};Events", 100, 0, 200);
+    (*hists)[prefix+"_vtxfitPV"]                = new TH1F(prefix+"_vtxfitPV", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 40, 0, 10);
+    (*hists)[prefix+"_vtxfit_ntracks"]          = new TH1F(prefix+"_vtxfit_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
+    (*hists)[prefix+"_vtxfit_valid"]            = new TH1F(prefix+"_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
+    (*hists)[prefix+"_ngentr"]                  = new TH1F(prefix+"_ngentr", ";Gen-level # of tracks for all events;Events", 15, 0, 15);
+    (*hists)[prefix+"_vtxfit_maxdxy"]           = new TH1F(prefix+"_vtxfit_maxdxy", ";dxy_{max} (Valid Vtx);Events", 30, 0, 1.1);
+    (*hists)[prefix+"_vtxfit_maxdz"]            = new TH1F(prefix+"_vtxfit_maxdz", ";dz_{max} (Valid Vtx);Events", 30, 0, 15);
+    (*hists)[prefix+"_vtxfit_dRcut"]            = new TH1F(prefix+"_vtxfit_dRcut", ";dR cone size (Valid Vtx);Events", 11, 0, 1.1);
+    (*hists)[prefix+"_cutflow"]                 = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
+    (*hists)[prefix+"_cuts"]                    = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
+    (*hists)[prefix+"_l1reliso"]                = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
+    (*hists)[prefix+"_l2reliso"]                = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 3.5);
+    (*hists)[prefix+"_invVtx_ntracks"]          = new TH1F(prefix+"_invVtx_ntracks", ";# of tracks for invalid vtxfits;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_ngentr"]       = new TH1F(prefix+"_invVtx_1tr_ngentr", ";Gen-level # of tracks for invalid vtx with no found tracks;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_ngenl"]        = new TH1F(prefix+"_invVtx_1tr_ngenl", ";Gen-level # of Leptons for invalid vtx with no found tracks;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_ngene"]        = new TH1F(prefix+"_invVtx_1tr_ngene", ";Gen-level # of Electrons for invalid vtx with no found tracks;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_ngenmu"]       = new TH1F(prefix+"_invVtx_1tr_ngenmu", ";Gen-level # of Muons for invalid vtx with no found tracks;Events", 15, 0, 15);
+    (*hists)[prefix+"_invVtx_1tr_pt"]           = new TH1F(prefix+"_invVtx_1tr_pt", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_invVtx_1tr_deta"]         = new TH1F(prefix+"_invVtx_1tr_deta", ";#Delta #eta;Events", 40, 0, 4);
+    (*hists)[prefix+"_invVtx_1tr_dphi"]         = new TH1F(prefix+"_invVtx_1tr_dphi", ";#Delta #phi;Events", 40, 0, 3.14);
+    (*hists)[prefix+"_invVtx_1tr_dR"]           = new TH1F(prefix+"_invVtx_1tr_dR", ";#Delta R;Events", 40, 0, 5);
+    (*hists)[prefix+"_invVtx_1tr_dxy"]          = new TH1F(prefix+"_invVtx_1tr_dxy", ";#Delta_{xy}[cm];Events", 30, 0, 4);
+    (*hists)[prefix+"_invVtx_1tr_dz"]           = new TH1F(prefix+"_invVtx_1tr_dz", ";#Delta_{z}[cm];Events", 30, 0, 10);
+    (*hists)[prefix+"_l2_pt_eff"]               = new TH1F(prefix+"_l2_pt_eff", ";#it{p}_{T} [GeV];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_num"]           = new TH1F(prefix+"_l2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_den"]           = new TH1F(prefix+"_l2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff"]             = new TH1F(prefix+"_l2_ctau_eff", ";c#tau [mm];Eff.", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_num"]         = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [mm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_den"]         = new TH1F(prefix+"_l2_ctau_eff_den", ";c#tau [mm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_vtxfitgen_eff"]        = new TH1F(prefix+"_l2_vtxfitgen_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_num"]    = new TH1F(prefix+"_l2_vtxfitgen_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
+    (*hists)[prefix+"_l2_vtxfitgen_eff_den"]    = new TH1F(prefix+"_l2_vtxfitgen_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
    
 
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_num"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
-    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_den"]   = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
-    (*hists)[prefix+"_goodVtx_ctau_eff"]   = new TH1F(prefix+"_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_goodVtx_ctau_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_goodVtx_ctau_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
-    (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
-    (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
-    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
-    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]   = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff"]             = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_num"]         = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_eff_den"]         = new TH1F(prefix+"_l2_and_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff"]        = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_num"]    = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext1_eff_den"]    = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff"]        = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_num"]    = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_l2_and_goodVtx_ctau_ext2_eff_den"]    = new TH1F(prefix+"_l2_and_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_eff"]                    = new TH1F(prefix+"_goodVtx_ctau_eff", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_eff_num"]                = new TH1F(prefix+"_goodVtx_ctau_eff_num", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_eff_den"]                = new TH1F(prefix+"_goodVtx_ctau_eff_den", ";;Events", 5, 0, 6);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff"]               = new TH1F(prefix+"_goodVtx_ctau_ext1_eff", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_num"]           = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_num", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext1_eff_den"]           = new TH1F(prefix+"_goodVtx_ctau_ext1_eff_den", ";;Events", 5, 0, 30);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff"]               = new TH1F(prefix+"_goodVtx_ctau_ext2_eff", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_num"]           = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_num", ";;Events", 5, 0, 60);
+    (*hists)[prefix+"_goodVtx_ctau_ext2_eff_den"]           = new TH1F(prefix+"_goodVtx_ctau_ext2_eff_den", ";;Events", 5, 0, 60);
     
 /*    (*hists)[prefix+"_n_prompte_ID"]   = new TH1F(prefix+"_n_prompte_ID", ";Number of electron with prompt ID;Events", 10, 0, 10);
     (*hists)[prefix+"_n_disple_ID"]   = new TH1F(prefix+"_n_disple_ID", ";Number of electron with displ ID;Events", 10, 0, 10);
@@ -104,16 +104,21 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading_displ_e]), event_weight);
     (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading_displ_e]), event_weight);
+    (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading_e], event_weight);
+    (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading_displ_e], event_weight);
+
     TLorentzVector lepton1;
     TLorentzVector lepton2;
     lepton1.SetPtEtaPhiE(_lPt[i_leading_e], _lEta[i_leading_e], _lPhi[i_leading_e], _lE[i_leading_e]);
     lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_e], _lEta[i_subleading_displ_e], _lPhi[i_subleading_displ_e], _lE[i_subleading_displ_e]);
+    
     (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
     (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_e], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
+    
     if(_lVtx_valid[i_subleading_displ_e]){
         if(sampleflavor != "bkg") (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
         else (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e])*(_gen_vertex_x[i_gen_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_e]) + (_gen_vertex_y[i_gen_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e])*(_gen_vertex_y[i_gen_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_e]) + (_gen_vertex_z[i_gen_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])*(_gen_vertex_z[i_gen_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_e])), event_weight);
@@ -130,8 +135,6 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
         (*hists)[prefix+"_invVtx_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
         if(_lVtxpos_ntracks[i_subleading_displ_e] ==1) fill_1tr(hists, prefix, i_subleading_displ_e);
     }
-    (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading_e], event_weight);
-    (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading_displ_e], event_weight);
     return;
 }
 
@@ -142,16 +145,21 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading_displ_mu], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading_displ_mu]), event_weight);
     (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading_displ_mu]), event_weight);
+    (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading_mu], event_weight);
+    (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading_mu], event_weight);
+    
     TLorentzVector lepton1;
     TLorentzVector lepton2;
     lepton1.SetPtEtaPhiE(_lPt[i_leading_mu], _lEta[i_leading_mu], _lPhi[i_leading_mu], _lE[i_leading_mu]);
     lepton2.SetPtEtaPhiE(_lPt[i_subleading_displ_mu], _lEta[i_subleading_displ_mu], _lPhi[i_subleading_displ_mu], _lE[i_subleading_displ_mu]);
+    
     (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
     (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
     (*hists)[prefix+"_vtxfit_valid"]->Fill(_lVtx_valid[i_subleading_displ_mu], event_weight);
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
+    
     if(_lVtx_valid[i_subleading_displ_mu]){
         if(sampleflavor != "bkg") (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_gen_l2] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_gen_l2] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_gen_l2] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
         else (*hists)[prefix+"_vtxfitgen"]->Fill(sqrt((_gen_vertex_x[i_gen_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_mu])*(_gen_vertex_x[i_gen_subleading_displ_e] - _lVtxpos_x[i_subleading_displ_mu]) + (_gen_vertex_y[i_gen_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_mu])*(_gen_vertex_y[i_gen_subleading_displ_e] - _lVtxpos_y[i_subleading_displ_mu]) + (_gen_vertex_z[i_gen_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_mu])*(_gen_vertex_z[i_gen_subleading_displ_e] - _lVtxpos_z[i_subleading_displ_mu])), event_weight);
@@ -167,8 +175,6 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
         (*hists)[prefix+"_invVtx_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
         if(_lVtxpos_ntracks[i_subleading_displ_mu] ==1) fill_1tr(hists, prefix, i_subleading_displ_mu);
     }
-    (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading_mu], event_weight);
-    (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading_mu], event_weight);
     return;
 }
 
@@ -176,8 +182,7 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
-    //cutflow contains the legitimate actual cutflow of the analysis
-    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
+    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
     if(_trige) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight);
     if(_1e) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
     if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
@@ -188,8 +193,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
         if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
     }
 
-    //cuts contains all possible cuts and is more meant to analyze different cuts
-    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); 
+    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
     if(_trige) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight);
     if(_1e) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
     if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
@@ -199,6 +203,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
         if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
         if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
     }
+    
     if(_new_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
         (*hists)[prefix+"_cuts"]->Fill(4., event_weight);
     }
@@ -208,8 +213,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
-    //cutflow contains the legitimate actual cutflow of the analysis
-    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); 
+    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
     if(_trigmu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
     if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
     if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
@@ -220,8 +224,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
         if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
     }
 
-    //cuts contains all possible cuts and is more meant to analyze different cuts
-    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); 
+    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
     if(_trigmu) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight); 
     if(_1mu) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
     if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
@@ -231,6 +234,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
         if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
         if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
     }
+    
     if(_new_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
         (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
     }
