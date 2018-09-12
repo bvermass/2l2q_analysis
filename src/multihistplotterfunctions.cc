@@ -69,31 +69,10 @@ int main(int argc, char * argv[])
         if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of opposite signal, these are empty anyway 
         if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
 
-        // append directories such as SS/OS, e/mu or HLT to pathname
-        TString SSorOS = "";
-        if((histname.Index("_SS_") != -1)){ 
-            SSorOS = "SS/";
-        }else if(histname.Index("_OS_") != -1){
-            SSorOS = "OS/";
-        }
-        TString eormu = "";
-        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
-            eormu = "e/";
-        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
-            eormu = "mu/";
-        }
-        TString HLT = "";
-        if(histname.Index("HLT_") != -1){
-            HLT = "HLT/";
-        }
-        TString partialcuts = "";
-        if(histname.Index("before") != -1){
-            partialcuts = "partialcuts/";
-        }
-        
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/" + partialcuts);
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/" + partialcuts);
-
+        TString pathname_lin = make_pathname(histname, pathname, "lin");
+        TString pathname_log = make_pathname(histname, pathname, "log");
+        gSystem->Exec("mkdir -p " + pathname_lin);
+        gSystem->Exec("mkdir -p " + pathname_log);
 
         // find flavor e or mu
         TString flavor;
@@ -124,8 +103,8 @@ int main(int argc, char * argv[])
             i++;
         }
  
-        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "nostack");
-        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
+        draw_stack(pathname_lin + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "nostack");
+        draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
     
     }
     return 0;

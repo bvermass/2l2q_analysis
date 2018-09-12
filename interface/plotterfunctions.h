@@ -16,6 +16,7 @@
 #include <cmath>
 
 
+TString make_pathname(TString, TString, TString);
 void mapmarkerstyle(std::map<TString, TH1*>);
 void markerstyle(TH1F *hist, TString color);
 void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], double normalization_const[]);

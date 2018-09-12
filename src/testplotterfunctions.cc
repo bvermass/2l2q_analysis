@@ -25,7 +25,6 @@ using namespace std;
 void testplotterfunctions(TString sample)
 {
     cout << "testplotterfunctions file: " << sample << endl;
-    //test_plot();
     plot_every_variable_in_root_file(sample);
     //plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.004472135955_e_pre2017_leptonFirst_NLO_displaced.root");
     //plot_every_variable_in_root_file("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root");
@@ -99,38 +98,12 @@ void plot_every_variable_in_root_file(TString filename)
         TH1F *h = (TH1F*)key->ReadObj();
         TString histname = h->GetName();
 
-        // append directories such as SS/OS, e/mu or HLT to pathname
-        TString SSorOS = "";
-        if((histname.Index("_SS_") != -1)){ 
-            SSorOS = "SS/";
-        }else if(histname.Index("_OS_") != -1){
-            SSorOS = "OS/";
-        }
-        TString eormu = "";
-        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
-            eormu = "e/";
-        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
-            eormu = "mu/";
-        }
-        TString HLT = "";
-        if(histname.Index("HLT_") != -1){
-            HLT = "HLT/";
-        }
-        TString partialcuts = "";
-        if(histname.Index("before") != -1){
-            partialcuts = "partialcuts/";
-        }
-       
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/" + partialcuts);
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/" + partialcuts);
+        TString pathname_lin = make_pathname(histname, pathname, "lin");
+        gSystem->Exec("mkdir -p " + pathname_lin);
        
         markerstyle(h,"blue");
         
-        cout << h->GetName() << endl;
-        
-        draw_1_hist(pathname + HLT + SSorOS + eormu + "lin/" + partialcuts + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
-        //within public/2l2q_analysis/plots/ every different sample gets its own directory 
-        //A higher/lower directory based on what cuts I apply? Higher makes more sense
+        draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
     } 
 }
 

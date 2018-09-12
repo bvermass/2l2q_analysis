@@ -58,12 +58,12 @@ int main(int argc, char * argv[])
     TFile * HNL10GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
 
 
-    // loop over histograms
     std::map<TString, TH1*> hists;
     std::map<TString, TH1*> signals;
     TIter next(files[argv[1]]->GetListOfKeys());
     TKey * key;
 
+    // loop over histograms
     while ((key = (TKey*)next())) {
         hists.clear();
         signals.clear();
@@ -72,40 +72,20 @@ int main(int argc, char * argv[])
         TClass *cl = gROOT->GetClass(key->GetClassName());
         if (!cl->InheritsFrom("TH1")) continue;
         TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogram
-        cout << h_ref->GetName() << endl;
         TString histname = h_ref->GetName();
 
-        // append directories such as SS/OS, e/mu or HLT to pathname
-        TString SSorOS = "";
-        if((histname.Index("_SS_") != -1)){ 
-            SSorOS = "SS/";
-        }else if(histname.Index("_OS_") != -1){
-            SSorOS = "OS/";
-        }
-        TString eormu = "";
-        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
-            eormu = "e/";
-        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
-            eormu = "mu/";
-        }
-        TString HLT = "";
-        if(histname.Index("HLT_") != -1){
-            HLT = "HLT/";
-        }
-        TString partialcuts = "";
-        if(histname.Index("before") != -1){
-            partialcuts = "partialcuts/";
-        }
-        
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "lin/" + partialcuts);
-        gSystem->Exec("mkdir -p " + pathname + HLT + SSorOS + eormu + "log/" + partialcuts);
-        gSystem->Exec("mkdir -p " + pathname_with_signal + HLT + SSorOS + eormu + "lin/" + partialcuts);
-        gSystem->Exec("mkdir -p " + pathname_with_signal + HLT + SSorOS + eormu + "log/" + partialcuts);
-
+        TString pathname_lin                = make_pathname(histname, pathname, "lin");
+        TString pathname_log                = make_pathname(histname, pathname, "log");
+        TString pathname_with_signal_lin    = make_pathname(histname, pathname_with_signal, "lin");
+        TString pathname_with_signal_log    = make_pathname(histname, pathname_with_signal, "log");
+        gSystem->Exec("mkdir -p " + pathname_lin);
+        gSystem->Exec("mkdir -p " + pathname_log);
+        gSystem->Exec("mkdir -p " + pathname_with_signal_lin);
+        gSystem->Exec("mkdir -p " + pathname_with_signal_log);
 
         // find flavor e or mu
         TString flavor;
-        TString checkflavor = h_ref->GetName();                 //CHANGE THIS SECTION, MAKE h_ref->GetName() a separate variable and improve else option of flavor!
+        TString checkflavor = histname;                 //improve else option of flavor!
         if(checkflavor.Index("_e_") != -1) flavor = "e";
         else if(checkflavor.Index("_mu_") != -1) flavor = "mu";
         else flavor = "e";
@@ -114,16 +94,16 @@ int main(int argc, char * argv[])
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
             TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
-            hists[fullname] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
+            hists[fullname] = (TH1F*) files[argv[i]]->Get(histname);
         }
         if(flavor == "e"){
-            signals["1_3GeV"] = (TH1F*) HNL3GeV_e_file->Get(h_ref->GetName());
-            signals["2_7GeV"] = (TH1F*) HNL7GeV_e_file->Get(h_ref->GetName());
-            signals["3_10GeV"] = (TH1F*) HNL10GeV_e_file->Get(h_ref->GetName());
+            signals["1_3GeV"] = (TH1F*) HNL3GeV_e_file->Get(histname);
+            signals["2_7GeV"] = (TH1F*) HNL7GeV_e_file->Get(histname);
+            signals["3_10GeV"] = (TH1F*) HNL10GeV_e_file->Get(histname);
         }else if(flavor == "mu"){
-            signals["1_3GeV"] = (TH1F*) HNL3GeV_mu_file->Get(h_ref->GetName());
-            signals["2_7GeV"] = (TH1F*) HNL7GeV_mu_file->Get(h_ref->GetName());
-            signals["3_10GeV"] = (TH1F*) HNL10GeV_mu_file->Get(h_ref->GetName());
+            signals["1_3GeV"] = (TH1F*) HNL3GeV_mu_file->Get(histname);
+            signals["2_7GeV"] = (TH1F*) HNL7GeV_mu_file->Get(histname);
+            signals["3_10GeV"] = (TH1F*) HNL10GeV_mu_file->Get(histname);
         }
 
         // style of signal
@@ -132,7 +112,7 @@ int main(int argc, char * argv[])
         markerstyle((TH1F*)signals["3_10GeV"], "blue");
         mapmarkerstyle(hists);
 
-        THStack *stack = new THStack("stack", h_ref->GetName());
+        THStack *stack = new THStack("stack", histname);
         int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
         lgendrup.Clear();
         for( it2 = hists.begin(); it2 != hists.end(); it2++){
@@ -142,26 +122,16 @@ int main(int argc, char * argv[])
             i++;
         }
         
- 
-        draw_stack(pathname + HLT + SSorOS + eormu + "lin/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
-        draw_stack(pathname + HLT + SSorOS + eormu + "log/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
+        draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
+        draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
         
         lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~20.90mm");
         lgendrup.AddEntry(signals["2_7GeV"], "HNL 7GeV, c#tau~3.52mm");
         lgendrup.AddEntry(signals["3_10GeV"], "HNL 10GeV, c#tau~0.59mm");
         
-        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "lin/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
-        draw_stack_with_signal(pathname_with_signal + HLT + SSorOS + eormu + "log/" + partialcuts + h_ref->GetName() + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
-        
- 
-        //if(((TString)h->GetName()).Index("eff") == -1) draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "hist", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
-        //else draw_1_hist(pathname + "/" + h->GetName() + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling);
-        //within public/2l2q_analysis/plots/ every different sample gets its own directory 
-        //A higher/lower directory based on what cuts I apply? Higher makes more sense
-        //Make a directory all! (to easily copy to my pc)
+        draw_stack_with_signal(pathname_with_signal_lin + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
+        draw_stack_with_signal(pathname_with_signal_log + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
     } 
-
-
     return 0;
 }
 # endif
