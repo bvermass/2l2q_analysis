@@ -27,6 +27,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_vtxfit_valid"]        = new TH1F(prefix+"_vtxfit_valid", ";is Vertex Valid?;Events", 2, 0, 2);
     (*hists)[prefix+"_ngentr"]              = new TH1F(prefix+"_ngentr", ";Gen-level # of tracks for all events;Events", 15, 0, 15);
     (*hists)[prefix+"_vtxfit_maxdxy"]       = new TH1F(prefix+"_vtxfit_maxdxy", ";dxy_{max} (Valid Vtx);Events", 30, 0, 1.1);
+    (*hists)[prefix+"_vtxfit_maxdz"]        = new TH1F(prefix+"_vtxfit_maxdz", ";dz_{max} (Valid Vtx);Events", 30, 0, 15);
     (*hists)[prefix+"_vtxfit_dRcut"]       = new TH1F(prefix+"_vtxfit_dRcut", ";dR cone size (Valid Vtx);Events", 11, 0, 1.1);
     (*hists)[prefix+"_cutflow"]             = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
     (*hists)[prefix+"_cuts"]                = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
@@ -123,6 +124,7 @@ void full_analyzer::fill_histograms_e(std::map<TString, TH1*>* hists, TString pr
         (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfit_maxdxy"]->Fill(_lVtxpos_maxdxy[i_subleading_displ_e], event_weight);
+        (*hists)[prefix+"_vtxfit_maxdz"]->Fill(_lVtxpos_maxdz[i_subleading_displ_e], event_weight);
         (*hists)[prefix+"_vtxfit_dRcut"]->Fill(_lVtxpos_dRcut[i_subleading_displ_e], event_weight);
     }else{
         (*hists)[prefix+"_invVtx_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_e], event_weight);
@@ -159,7 +161,7 @@ void full_analyzer::fill_histograms_mu(std::map<TString, TH1*>* hists, TString p
         (*hists)[prefix+"_normchi2"]->Fill(_lVtxpos_chi2[i_subleading_displ_mu] / _lVtxpos_df[i_subleading_displ_mu], event_weight);
         (*hists)[prefix+"_vtxfitPV"]->Fill(_lVtxpos_PVdxy[i_subleading_displ_mu], event_weight);
         (*hists)[prefix+"_vtxfit_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
-        (*hists)[prefix+"_vtxfit_maxdxy"]->Fill(_lVtxpos_maxdxy[i_subleading_displ_mu], event_weight);
+        (*hists)[prefix+"_vtxfit_maxdz"]->Fill(_lVtxpos_maxdz[i_subleading_displ_mu], event_weight);
         (*hists)[prefix+"_vtxfit_dRcut"]->Fill(_lVtxpos_dRcut[i_subleading_displ_mu], event_weight);
     }else{
         (*hists)[prefix+"_invVtx_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading_displ_mu], event_weight);
