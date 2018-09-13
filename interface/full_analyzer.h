@@ -707,6 +707,8 @@ public :
    bool leading_is_l1;
    bool subleading_is_l2; 
 
+   //int i_leading;   //these are flavor unspecific, so not matter if leading or subleading are e or mu, this is usable
+   //int i_subleading;
    int i_leading_e;
    int i_subleading_e;
    int i_leading_mu;
@@ -776,6 +778,7 @@ public :
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
+   // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
    virtual ~full_analyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -785,8 +788,11 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+
+   // in src/full_analyzer.cc, the main code body
    virtual void     run_over_file(TString, double, int, int, int);
 
+   //in src/leptonID.cc and jetID.cc
    virtual void     get_electronID(bool*);
    virtual void     get_noniso_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
@@ -809,6 +815,7 @@ public :
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);
 
+   // in src/signal_regions.cc
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
    virtual bool     mllcut(int, int);
@@ -817,21 +824,23 @@ public :
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
 
+   // in src/print_tables.cc
    virtual void     print_table();
    
+   // in src/histo_functions.cc
    virtual void     add_histograms(std::map<TString, TH1*>*, TString);
-   virtual void     fill_histograms(std::map<TString, TH1*>*, TString);
-   virtual void     fill_histograms_e(std::map<TString, TH1*>*, TString);
-   virtual void     fill_histograms_mu(std::map<TString, TH1*>*, TString);
+   virtual void     fill_histograms(std::map<TString, TH1*>*, TString, int, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_jet_variables(std::map<TString, TH1*>*, TString);
-   virtual void     fill_l2_eff(std::map<TString, TH1*>*, TString);
-   virtual void     fill_l2_and_goodVtx_eff(std::map<TString, TH1*>*, TString);
+   virtual void     fill_jetmet_variables(std::map<TString, TH1*>*, TString);
+   virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString);
+   virtual void     fill_l2_and_vtx_eff(std::map<TString, TH1*>*, TString);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
+   virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
+   // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*);
    virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, bool, bool);
 };

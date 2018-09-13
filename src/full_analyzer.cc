@@ -240,26 +240,26 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_cutflow_mu(&hists, "displ_OS_mu");
 
         if(_1e){
-            fill_l2_and_goodVtx_eff(&hists, "displ_SS_e");
-            fill_l2_and_goodVtx_eff(&hists, "displ_OS_e");
+            fill_l2_and_vtx_eff(&hists, "displ_SS_e");
+            fill_l2_and_vtx_eff(&hists, "displ_OS_e");
         }
         if(_1mu){
-            fill_l2_and_goodVtx_eff(&hists, "displ_SS_mu");
-            fill_l2_and_goodVtx_eff(&hists, "displ_OS_mu");
+            fill_l2_and_vtx_eff(&hists, "displ_SS_mu");
+            fill_l2_and_vtx_eff(&hists, "displ_OS_mu");
         }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
                 //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
                 //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
                 //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
-                fill_l2_eff(&hists, "displ_SS_e");
-                fill_jet_variables(&hists, "displ_SS_e");
+                fill_corrl2_eff(&hists, "displ_SS_e");
+                fill_jetmet_variables(&hists, "displ_SS_e");
             }else{
                 //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
                 //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
                 //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
-                fill_l2_eff(&hists, "displ_OS_e");
-                fill_jet_variables(&hists, "displ_OS_e");
+                fill_corrl2_eff(&hists, "displ_OS_e");
+                fill_jetmet_variables(&hists, "displ_OS_e");
             }           
         }
         if(_1mu1displmu){
@@ -267,60 +267,60 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
                 //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
                 //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
-                fill_l2_eff(&hists, "displ_SS_mu");
-                fill_jet_variables(&hists, "displ_SS_mu");
+                fill_corrl2_eff(&hists, "displ_SS_mu");
+                fill_jetmet_variables(&hists, "displ_SS_mu");
             }else{
                 //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
                 //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
                 //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
-                fill_l2_eff(&hists, "displ_OS_mu");
-                fill_jet_variables(&hists, "displ_OS_mu");
+                fill_corrl2_eff(&hists, "displ_OS_mu");
+                fill_jetmet_variables(&hists, "displ_OS_mu");
             }
         }
 
         if(_1e1disple0jet){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "displ_SS_e_beforemll");
+                fill_histograms(&hists, "displ_SS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }else{
-                fill_histograms(&hists, "displ_OS_e_beforemll");
+                fill_histograms(&hists, "displ_OS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }           
         }
         if(_1mu1displmu0jet){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "displ_SS_mu_beforemll");
+                fill_histograms(&hists, "displ_SS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             }else{
-                fill_histograms(&hists, "displ_OS_mu_beforemll");
+                fill_histograms(&hists, "displ_OS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             }
         }
         
         if(_1e1disple0jet_aftermll){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "displ_SS_e_beforedphi");
+                fill_histograms(&hists, "displ_SS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }else{
-                fill_histograms(&hists, "displ_OS_e_beforedphi");
+                fill_histograms(&hists, "displ_OS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }           
         }
         if(_1mu1displmu0jet_aftermll){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "displ_SS_mu_beforedphi");
+                fill_histograms(&hists, "displ_SS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             }else{
-                fill_histograms(&hists, "displ_OS_mu_beforedphi");
+                fill_histograms(&hists, "displ_OS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             }
         }
 
         if(_1e1disple0jet_afterdphi){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "displ_SS_e");
+                fill_histograms(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }else{
-                fill_histograms(&hists, "displ_OS_e");
+                fill_histograms(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             }
         }
         if(_1mu1displmu0jet_afterdphi){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "displ_SS_mu");
+                fill_histograms(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
                 k++;
             }else{
-                fill_histograms(&hists, "displ_OS_mu");
+                fill_histograms(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
                 p++;
             }
         }
@@ -452,6 +452,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     divide_for_eff(&hists, "displ_OS_e");
     divide_for_eff(&hists, "displ_SS_mu");
     divide_for_eff(&hists, "displ_OS_mu");
+    give_alphanumeric_labels(&hists, "displ_SS_e");
+    give_alphanumeric_labels(&hists, "displ_OS_e");
+    give_alphanumeric_labels(&hists, "displ_SS_mu");
+    give_alphanumeric_labels(&hists, "displ_OS_mu");
 
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;

@@ -303,7 +303,7 @@ void full_analyzer::match_gen_and_reco(int i_subleading)
 }
 
 double full_analyzer::find_dRl2jet(TLorentzVector lepton){
-    double dR = 0;
+    double dR = 6;
     for( unsigned i = 0; i < _nJets; i++){
         if(!(jet_clean_full_displ[i] && fullJetID[i])) continue;
         cout << "   " << i << endl << endl << endl;

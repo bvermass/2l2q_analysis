@@ -24,29 +24,22 @@ std::map<TString, TH1*>::iterator it;
 TString make_pathname(TString histname, TString pathname, TString linorlog)
 {
         // append directories such as SS/OS, e/mu or HLT to pathname
-        TString SSorOS = "";
-        if((histname.Index("_SS_") != -1)){ 
-            SSorOS = "SS/";
-        }else if(histname.Index("_OS_") != -1){
-            SSorOS = "OS/";
-        }
         TString eormu = "";
         if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
             eormu = "e/";
         }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
             eormu = "mu/";
         }
-        TString HLT = "";
-        if(histname.Index("HLT_") != -1){
-            HLT = "HLT/";
-        }
-        TString partialcuts = "";
-        if(histname.Index("before") != -1){
-            partialcuts = "partialcuts/";
-        }
+        TString SSorOS      = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
+        TString HLT         = (histname.Index("HLT_") == -1)?       "" : "HLT/";
+        TString partialcuts = (histname.Index("before") == -1)?     "" : "partialcuts/";
+        TString vtx         = (histname.Index("_vtx_") == -1)?      "" : "vtx/";
+        TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
+        TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
+
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + HLT + SSorOS + eormu + linorlog + partialcuts;
+        return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + vtx + invVtx + corrl2;
 }
 
 void mapmarkerstyle(std::map<TString, TH1*> hists)
