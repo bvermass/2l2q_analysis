@@ -94,16 +94,27 @@ void plot_every_variable_in_root_file(TString filename)
     while ((key = (TKey*)next())) {
 
         TClass *cl = gROOT->GetClass(key->GetClassName());
-        if (!cl->InheritsFrom("TH1")) continue;
-        TH1F *h = (TH1F*)key->ReadObj();
-        TString histname = h->GetName();
+        if (cl->InheritsFrom("TH1")){
+            TH1F *h = (TH1F*)key->ReadObj();
+            TString histname = h->GetName();
 
-        TString pathname_lin = make_pathname(histname, pathname, "lin");
-        gSystem->Exec("mkdir -p " + pathname_lin);
+            TString pathname_lin = make_pathname(histname, pathname, "lin");
+            gSystem->Exec("mkdir -p " + pathname_lin);
        
-        markerstyle(h,"blue");
+            markerstyle(h,"blue");
         
-        draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
+            draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, 0, flavor, mass, coupling); 
+        }else if(cl->InheritsFrom("TH2")){
+            TH2F *h = (TH2F*)key->ReadObj();
+            TString histname = h->GetName();
+
+            TString pathname_lin = make_pathname(histname, pathname, "lin");
+            gSystem->Exec("mkdir -p " + pathname_lin);
+
+            //markerstyle2D(h);
+
+            draw_2D_hist(pathname_lin + histname + ".pdf", c, h, "colz text", &lgendrup, "", "", flavor, mass, coupling);
+        }
     } 
 }
 

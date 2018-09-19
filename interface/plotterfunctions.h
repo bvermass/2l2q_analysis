@@ -22,6 +22,7 @@ void markerstyle(TH1F *hist, TString color);
 void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], double normalization_const[]);
 void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& legend, TString legend_entries[], TString colors[], double normalization_const[]);
 void draw_text_latex(double xmin, double ymin, int textsize, int textalign, TString text);
+void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, TString flavor, TString mass, TString coupling);
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling);
 void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, double ymin, double ymax, TString flavor, TString mass, TString coupling);
 void draw_stack(TString, TCanvas *c, THStack *, TLegend *, TString, TString, int, double, double, double, double, TString);

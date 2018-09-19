@@ -33,13 +33,14 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString SSorOS      = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
         TString HLT         = (histname.Index("HLT_") == -1)?       "" : "HLT/";
         TString partialcuts = (histname.Index("before") == -1)?     "" : "partialcuts/";
+        TString gen         = (histname.Index("_gen_") == -1)?      "" : "gen/";
         TString vtx         = (histname.Index("_vtx_") == -1)?      "" : "vtx/";
         TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
         TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + vtx + invVtx + corrl2;
+        return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + gen + vtx + invVtx + corrl2;
 }
 
 void mapmarkerstyle(std::map<TString, TH1*> hists)
@@ -125,6 +126,30 @@ void draw_text_latex(double xmin, double ymin, int textsize, int textalign, TStr
     lumi->Draw("same");
 }
 
+void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, TString flavor, TString mass, TString coupling)
+{
+    h->GetXaxis()->SetTitleOffset(1.2);
+    h->GetYaxis()->SetTitleOffset(1.5);
+    if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
+    if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
+
+    h->Draw(drawoptions);
+
+    lgend->DrawClone("same");
+    
+    //mass, coupling, flavor in top right corner
+    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
+    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
+    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
+    if(flavor != "" and coupling != "") couplinglatex += ", ";
+    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
+    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
+    
+    draw_text_latex(0.1, 0.91, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.91, 22, 31, "#bf{CMS} #it{simulation}");
+
+    c->Print(name);
+}
 
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
 {
@@ -145,8 +170,6 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     else if(historE1 == "E1") h->Draw("E1");
   
     lgend->DrawClone("same");
-
-    // "CMS simulation" in top left
 
     // "mass, coupling and flavor info if relevant in top right
     TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";

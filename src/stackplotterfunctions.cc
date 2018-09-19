@@ -50,12 +50,12 @@ int main(int argc, char * argv[])
         cout << argv[i] << endl;
     }
     // signal files
-    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-7_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL10GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_e_onshell_pre2017_leptonFirst_NLO_displaced.root");
-    TFile * HNL10GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_mu_onshell_pre2017_leptonFirst_NLO_displaced.root");
+    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_V-0.0141421356237_e_massiveAndCKM_LO_displaced.root");
+    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_V-0.0141421356237_mu_massiveAndCKM_LO_displaced.root");
+    TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO_displaced.root");
+    TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00707106781187_mu_massiveAndCKM_LO_displaced.root");
+    TFile * HNL10GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.004472135955_e_massiveAndCKM_LO_displaced.root");
+    TFile * HNL10GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.004472135955_mu_massiveAndCKM_LO_displaced.root");
 
 
     std::map<TString, TH1*> hists;
@@ -125,9 +125,9 @@ int main(int argc, char * argv[])
         draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
         draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
         
-        lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~20.90mm");
-        lgendrup.AddEntry(signals["2_7GeV"], "HNL 7GeV, c#tau~3.52mm");
-        lgendrup.AddEntry(signals["3_10GeV"], "HNL 10GeV, c#tau~0.59mm");
+        lgendrup.AddEntry(signals["1_3GeV"], "HNL 2GeV, c#tau~96.09mm");
+        lgendrup.AddEntry(signals["2_7GeV"], "HNL 5GeV, c#tau~2.95mm");
+        lgendrup.AddEntry(signals["3_10GeV"], "HNL 8GeV, c#tau~0.62mm");
         
         draw_stack_with_signal(pathname_with_signal_lin + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
         draw_stack_with_signal(pathname_with_signal_log + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");

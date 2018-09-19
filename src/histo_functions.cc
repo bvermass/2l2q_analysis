@@ -24,17 +24,22 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_dRl2jet"]                 = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
     (*hists)[prefix+"_l1reliso"]                = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
     (*hists)[prefix+"_l2reliso"]                = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 3.5);
+
     (*hists)[prefix+"_ngentr"]                  = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
+    (*hists)[prefix+"_ctauHN"]                  = new TH1F(prefix+"_ctauHN", ";c#tau_{HNL} [mm];Events", 40, 0, 150);
 
     (*hists)[prefix+"_vtx_gendist"]             = new TH1F(prefix+"_vtx_gendist", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 30, 0, 10);
     (*hists)[prefix+"_vtx_gendist_zoom"]        = new TH1F(prefix+"_vtx_gendist_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 15, 0, 1);
-    (*hists)[prefix+"_vtx_chi2"]                = new TH1F(prefix+"_vtx_chi2", ";#Chi^{2};Events", 100, 0, 1000);
+    (*hists)[prefix+"_vtx_chi2"]                = new TH1F(prefix+"_vtx_chi2", ";#Chi^{2};Events", 100, 0, 200);
     (*hists)[prefix+"_vtx_normchi2"]            = new TH1F(prefix+"_vtx_normchi2", ";Normalized #Chi^{2};Events", 100, 0, 200);
+    (*hists)[prefix+"_vtx_normchi2_zoom"]       = new TH1F(prefix+"_vtx_normchi2_zoom", ";Normalized #Chi^{2};Events", 20, 0, 30);
     (*hists)[prefix+"_vtx_PVdist"]              = new TH1F(prefix+"_vtx_PVdist", ";#Delta_{xy}(Vtx_{fit}, PV) [cm];Events", 40, 0, 10);
     (*hists)[prefix+"_vtx_ntracks"]             = new TH1F(prefix+"_vtx_ntracks", ";# of tracks used in Vtxfit;Events", 15, 0, 15);
     (*hists)[prefix+"_vtx_valid"]               = new TH1F(prefix+"_vtx_valid", ";is Vertex Valid?;Events", 2, 0, 2);
-    (*hists)[prefix+"_vtx_maxdxy"]              = new TH1F(prefix+"_vtx_maxdxy", ";dxy_{max} (Valid Vtx);Events", 30, 0, 1.1);
-    (*hists)[prefix+"_vtx_maxdz"]               = new TH1F(prefix+"_vtx_maxdz", ";dz_{max} (Valid Vtx);Events", 30, 0, 15);
+    (*hists)[prefix+"_vtx_maxdxy"]              = new TH1F(prefix+"_vtx_maxdxy", ";Max(dxy^{l2} - dxy^{trk}) (Valid Vtx);Events", 30, 0, 1.1);
+    (*hists)[prefix+"_vtx_maxdz"]               = new TH1F(prefix+"_vtx_maxdz", ";Max(dz^{l2} - dz^{trk}) (Valid Vtx);Events", 30, 0, 15);
+    (*hists)[prefix+"_vtx_mindxy"]              = new TH1F(prefix+"_vtx_mindxy", ";Min(dxy^{l2} - dxy^{trk}) (Valid Vtx);Events", 30, 0, 1.1);
+    (*hists)[prefix+"_vtx_mindz"]               = new TH1F(prefix+"_vtx_mindz", ";Min(dz^{l2} - dz^{trk}) (Valid Vtx);Events", 30, 0, 15);
     (*hists)[prefix+"_vtx_dRcut"]               = new TH1F(prefix+"_vtx_dRcut", ";dR cone size (Valid Vtx);Events", 11, 0, 1.1);
     
     (*hists)[prefix+"_vtx_ctau_eff"]            = new TH1F(prefix+"_vtx_ctau_eff", ";;Events", 5, 0, 60);
@@ -114,7 +119,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
     (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
     (*hists)[prefix+"_vtx_valid"]->Fill(_lVtx_valid[i_subleading], event_weight);
+
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
+    (*hists)[prefix+"_ctauHN"]->Fill(_ctauHN, event_weight);
     
     // valid vertex
     if(_lVtx_valid[i_subleading]){
@@ -124,10 +131,24 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
         else (*hists)[prefix+"_vtx_gendist_zoom"]->Fill(sqrt((_gen_vertex_x[i_gen_subleading] - _lVtxpos_x[i_subleading])*(_gen_vertex_x[i_gen_subleading] - _lVtxpos_x[i_subleading]) + (_gen_vertex_y[i_gen_subleading] - _lVtxpos_y[i_subleading])*(_gen_vertex_y[i_gen_subleading] - _lVtxpos_y[i_subleading]) + (_gen_vertex_z[i_gen_subleading] - _lVtxpos_z[i_subleading])*(_gen_vertex_z[i_gen_subleading] - _lVtxpos_z[i_subleading])), event_weight);
         (*hists)[prefix+"_vtx_chi2"]->Fill(_lVtxpos_chi2[i_subleading], event_weight);
         (*hists)[prefix+"_vtx_normchi2"]->Fill(_lVtxpos_chi2[i_subleading] / _lVtxpos_df[i_subleading], event_weight);
+        (*hists)[prefix+"_vtx_normchi2_zoom"]->Fill(_lVtxpos_chi2[i_subleading] / _lVtxpos_df[i_subleading], event_weight);
         (*hists)[prefix+"_vtx_PVdist"]->Fill(_lVtxpos_PVdxy[i_subleading], event_weight);
         (*hists)[prefix+"_vtx_ntracks"]->Fill(_lVtxpos_ntracks[i_subleading], event_weight);
-        (*hists)[prefix+"_vtx_maxdxy"]->Fill(_lVtxpos_maxdxy[i_subleading], event_weight);
-        (*hists)[prefix+"_vtx_maxdz"]->Fill(_lVtxpos_maxdz[i_subleading], event_weight);
+        
+        double maxdxy = 0;
+        double maxdz  = 0;
+        double mindxy = 5;
+        double mindz  = 5;
+        for(int i = 0; i < _lVtxpos_ntracks[i_subleading]; i++){
+            if(_lVtxpos_trackddxy[i_subleading][i] > maxdxy) maxdxy = _lVtxpos_trackddxy[i_subleading][i];
+            if(_lVtxpos_trackddz[i_subleading][i]  > maxdz)  maxdz  = _lVtxpos_trackddz[i_subleading][i];
+            if(_lVtxpos_trackddxy[i_subleading][i] < mindxy) mindxy = _lVtxpos_trackddxy[i_subleading][i];
+            if(_lVtxpos_trackddz[i_subleading][i]  < mindz)  mindz  = _lVtxpos_trackddz[i_subleading][i];
+        }
+        (*hists)[prefix+"_vtx_maxdxy"]->Fill(maxdxy, event_weight);
+        (*hists)[prefix+"_vtx_maxdz"]->Fill(maxdz, event_weight);
+        (*hists)[prefix+"_vtx_mindxy"]->Fill(mindxy, event_weight);
+        (*hists)[prefix+"_vtx_mindz"]->Fill(mindz, event_weight);
         (*hists)[prefix+"_vtx_dRcut"]->Fill(_lVtxpos_dRcut[i_subleading], event_weight);
     
 
@@ -369,8 +390,8 @@ void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_corrl2_gendist_eff"]->Divide((*hists)[prefix+"_corrl2_gendist_eff_den"]);
 
     (*hists)[prefix+"_l2_and_vtx_ctau_eff"]->Divide((*hists)[prefix+"_l2_and_vtx_ctau_eff_den"]);
-    (*hists)[prefix+"_l2_and_vtx_ctau_ext1_eff"]->Divide((*hists)[prefix+"_l2_and_vtx_ctau_ext1_eff_den"]);
-    (*hists)[prefix+"_l2_and_vtx_ctau_ext2_eff"]->Divide((*hists)[prefix+"_l2_and_vtx_ctau_ext2_eff_den"]);
+    (*hists)[prefix+"_l2_and_vtx_ctau_zoom_eff"]->Divide((*hists)[prefix+"_l2_and_vtx_ctau_zoom_eff_den"]);
+    (*hists)[prefix+"_l2_and_vtx_ctau_zoom2_eff"]->Divide((*hists)[prefix+"_l2_and_vtx_ctau_zoom2_eff_den"]);
 
     (*hists)[prefix+"_vtx_ctau_eff"]->Divide((*hists)[prefix+"_vtx_ctau_eff_den"]);
     (*hists)[prefix+"_vtx_ctau_zoom_eff"]->Divide((*hists)[prefix+"_vtx_ctau_zoom_eff_den"]);

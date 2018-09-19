@@ -317,9 +317,16 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lVtxpos_BSdxy", _lVtxpos_BSdxy, &b__lVtxpos_BSdxy);
    fChain->SetBranchAddress("_lVtxpos_PVdz", _lVtxpos_PVdz, &b__lVtxpos_PVdz);
    fChain->SetBranchAddress("_lVtxpos_BSdz", _lVtxpos_BSdz, &b__lVtxpos_BSdz);
-   fChain->SetBranchAddress("_lVtxpos_maxdxy", _lVtxpos_maxdxy, &b__lVtxpos_maxdxy);
-   fChain->SetBranchAddress("_lVtxpos_maxdz", _lVtxpos_maxdz, &b__lVtxpos_maxdz);
    fChain->SetBranchAddress("_lVtxpos_dRcut", _lVtxpos_dRcut, &b__lVtxpos_dRcut);
+   fChain->SetBranchAddress("_lVtxpos_trackPt", _lVtxpos_trackPt, &b__lVtxpos_trackPt);
+   fChain->SetBranchAddress("_lVtxpos_trackEta", _lVtxpos_trackEta, &b__lVtxpos_trackEta);
+   fChain->SetBranchAddress("_lVtxpos_trackPhi", _lVtxpos_trackPhi, &b__lVtxpos_trackPhi);
+   fChain->SetBranchAddress("_lVtxpos_trackE", _lVtxpos_trackE, &b__lVtxpos_trackE);
+   fChain->SetBranchAddress("_lVtxpos_trackdR", _lVtxpos_trackdR, &b__lVtxpos_trackdR);
+   fChain->SetBranchAddress("_lVtxpos_trackdxy", _lVtxpos_trackdxy, &b__lVtxpos_trackdxy);
+   fChain->SetBranchAddress("_lVtxpos_trackdz", _lVtxpos_trackdz, &b__lVtxpos_trackdz);
+   fChain->SetBranchAddress("_lVtxpos_trackddxy", _lVtxpos_trackddxy, &b__lVtxpos_trackddxy);
+   fChain->SetBranchAddress("_lVtxpos_trackddz", _lVtxpos_trackddz, &b__lVtxpos_trackddz);
    fChain->SetBranchAddress("_lGlobalMuon", _lGlobalMuon, &b__lGlobalMuon);
    fChain->SetBranchAddress("_lTrackerMuon", _lTrackerMuon, &b__lTrackerMuon);
    fChain->SetBranchAddress("_lInnerTrackValidFraction", _lInnerTrackValidFraction, &b__lInnerTrackValidFraction);

@@ -12,9 +12,9 @@ fi
 if [[ choice -eq 1 || choice -eq 5 ]]; then
     #Make plots for every file separately
     if g++ -std=c++0x "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////"
-        echo -e "//COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////\n"
+        echo -e "\n///////////////////////////////////////////////"
+        echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "///////////////////////////////////////////////\n"
         
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
@@ -28,16 +28,16 @@ if [[ choice -eq 1 || choice -eq 5 ]]; then
     rm a.out
     else
         echo -e "\n//////////////////////"
-        echo -e "//COMPILATION FAILED//"
+        echo -e "//SINGLE PROCESS PLOTS COMPILATION FAILED//"
         echo -e "//////////////////////\n"
     fi
 fi
 if [[ choice -eq 2 || choice -eq 5 ]]; then
     #run stack plots
     if g++ -std=c++0x "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////"
-        echo -e "//COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////\n"
+        echo -e "\n//////////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "//////////////////////////////////////\n"
     
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
@@ -61,17 +61,17 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         echo
     rm a.out    
     else
-        echo -e "\n//////////////////////"
-        echo -e "//COMPILATION FAILED//"
-        echo -e "//////////////////////\n"
+        echo -e "\n//////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION FAILED//"
+        echo -e "//////////////////////////////////\n"
     fi
 fi
 if [[ choice -eq 3 || choice -eq 5 ]]; then
     #run multi hist plots
     if g++ -std=c++0x "src/plotterfunctions.cc" "src/multihistplotterfunctions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////"
-        echo -e "//COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////\n"
+        echo -e "\n//////////////////////////////////////////"
+        echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "//////////////////////////////////////////\n"
     
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
@@ -95,17 +95,17 @@ if [[ choice -eq 3 || choice -eq 5 ]]; then
         echo
     rm a.out    
     else
-        echo -e "\n//////////////////////"
-        echo -e "//COMPILATION FAILED//"
-        echo -e "//////////////////////\n"
+        echo -e "\n//////////////////////////////////////"
+        echo -e "//MULTIHIST PLOTS COMPILATION FAILED//"
+        echo -e "//////////////////////////////////////\n"
     fi
 fi
 if [[ choice -eq 4 || choice -eq 5 ]]; then
     #run analyze_cuts
     if g++ -std=c++0x "src/analyze_cuts.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////"
-        echo -e "//COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////\n"
+        echo -e "\n///////////////////////////////////////"
+        echo -e "//ANALYZE CUTS COMPILATION SUCCESSFUL//"
+        echo -e "///////////////////////////////////////\n"
     
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
@@ -129,9 +129,9 @@ if [[ choice -eq 4 || choice -eq 5 ]]; then
         echo
     rm a.out    
     else
-        echo -e "\n//////////////////////"
-        echo -e "//COMPILATION FAILED//"
-        echo -e "//////////////////////\n"
+        echo -e "\n///////////////////////////////////"
+        echo -e "//ANALYZE CUTS COMPILATION FAILED//"
+        echo -e "///////////////////////////////////\n"
     fi
 
 fi

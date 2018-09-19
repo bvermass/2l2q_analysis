@@ -272,9 +272,16 @@ public :
    Double_t	       _lVtxpos_BSdxy[10];
    Double_t	       _lVtxpos_PVdz[10];
    Double_t	       _lVtxpos_BSdz[10];
-   Double_t        _lVtxpos_maxdxy[10];
-   Double_t        _lVtxpos_maxdz[10];
    Double_t        _lVtxpos_dRcut[10];
+   Double_t        _lVtxpos_trackPt[10][20];
+   Double_t        _lVtxpos_trackEta[10][20];
+   Double_t        _lVtxpos_trackPhi[10][20];
+   Double_t        _lVtxpos_trackE[10][20];
+   Double_t        _lVtxpos_trackdR[10][20];
+   Double_t        _lVtxpos_trackdxy[10][20];
+   Double_t        _lVtxpos_trackdz[10][20];
+   Double_t        _lVtxpos_trackddxy[10][20];
+   Double_t        _lVtxpos_trackddz[10][20];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -603,9 +610,16 @@ public :
    TBranch	      *b__lVtxpos_BSdxy;
    TBranch	      *b__lVtxpos_PVdz;
    TBranch	      *b__lVtxpos_BSdz;
-   TBranch        *b__lVtxpos_maxdxy;
-   TBranch        *b__lVtxpos_maxdz;
    TBranch        *b__lVtxpos_dRcut;
+   TBranch        *b__lVtxpos_trackPt;
+   TBranch        *b__lVtxpos_trackEta;
+   TBranch        *b__lVtxpos_trackPhi;
+   TBranch        *b__lVtxpos_trackE;
+   TBranch        *b__lVtxpos_trackdR;
+   TBranch        *b__lVtxpos_trackdxy;
+   TBranch        *b__lVtxpos_trackdz;
+   TBranch        *b__lVtxpos_trackddxy;
+   TBranch        *b__lVtxpos_trackddz;
    TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
    TBranch        *b__lTrackerMuon;
    TBranch        *b__lInnerTrackValidFraction;
@@ -692,6 +706,7 @@ public :
    TBranch        *b__jet_daughter_energy;   //!
 */   
    std::map<TString, TH1*>::iterator it;
+   std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
    TString sampleflavor;
    
@@ -843,6 +858,9 @@ public :
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*);
    virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, bool, bool);
+
+   virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+   virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
 };
 
 #endif

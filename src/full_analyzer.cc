@@ -43,9 +43,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     //This map contains all 1D histograms
     std::map<TString, TH1*> hists;
+    std::map<TString, TH2*> hists2D;
 
     init_sigreg_fraction(&hists);//found in src/signal_region.cc, shows fractions of events in possible signal regions with leptons and jets
     init_HLT_efficiency(&hists);//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HNL_MC_check(&hists, &hists2D);
 
     add_histograms(&hists, "displ_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
     add_histograms(&hists, "displ_SS_e");
@@ -63,6 +65,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
+        h->Sumw2();
+    }
+    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
+        TH2* h = it2D->second;
         h->Sumw2();
     }
    
@@ -107,7 +113,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
         //Calculate Event weight
-        if(filename.Index("HeavyNeutrino") == -1) event_weight = _weight; //WHEN WEIGHTS ARE CORRECT CHANGE THIS SO CORRECT WEIGHTS ARE ALSO USED FOR HEAVYNEUTRINO SAMPLES
+        //if(filename.Index("HeavyNeutrino") == -1) event_weight = _weight; //WHEN WEIGHTS ARE CORRECT CHANGE THIS SO CORRECT WEIGHTS ARE ALSO USED FOR HEAVYNEUTRINO SAMPLES
+        event_weight = _weight;
 
 	    for(unsigned i = 0; i < _nL; ++i){
         	if(_lFlavor[i] != 0) continue;
@@ -196,40 +203,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
         if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
         if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
-       // bool _1e			    = i_leading_e != -1;
-       // bool leadptveto_e = false;
-       // if(i_leading_e != -1 and _lPt[i_leading_e] > 30) leadptveto_e = true;
-	   // bool _2e0jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	   // bool _2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	   // bool _2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	   // bool _1e1nonisoe0jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	   // bool _1e1nonisoe1jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	   // bool _1e1nonisoe2jet	= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	   // bool _1e1disple0jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	   // bool _1e1disple1jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	   // bool _1e1disple2jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	   // bool _1e0jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	   // bool _1e1jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	   // bool _1e2jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-       // 
-
-	   // bool _1mu			    = i_leading_mu != -1;
-       // bool leadptveto_mu = false;
-	   // if(i_leading_mu != -1 and _lPt[i_leading_mu] > 25) leadptveto_mu = true;
-       // bool _2mu0jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	   // bool _2mu1jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	   // bool _2mu2jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	   // bool _1mu1nonisomu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	   // bool _1mu1nonisomu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	   // bool _1mu1nonisomu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
-	   // bool _1mu1displmu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	   // bool _1mu1displmu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	   // bool _1mu1displmu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	   // bool _1mu0jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	   // bool _1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	   // bool _1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
         
         fill_sigreg_fraction(&hists);
+        fill_HNL_MC_check(&hists, &hists2D);
 
         //HLT efficiency stuff, put this in a separate function later
         fill_HLT_efficiency(&hists, (i_leading_e != -1 && leadptcut("e")), (i_leading_mu != -1 && leadptcut("mu")));
@@ -440,6 +416,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         h->Scale(total_weight);
     }
+    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
+        TH2* h = it2D->second;
+        h->Scale(total_weight);
+    }
 
     //Determine efficiencies for HLT
     hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide(hists["HLT_1_iso_e_pt"]);
@@ -460,6 +440,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
 	    h->Write();
+    }
+
+    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
+        TH2* h = it2D->second;
+        h->Write();
     }
     output->Close();
 }
