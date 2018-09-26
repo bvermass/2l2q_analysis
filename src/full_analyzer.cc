@@ -16,6 +16,11 @@
 using namespace std;
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
+//  'filename' is the file containing the events over which we will run
+//  'cross_section' is the cross section of the process
+//  'max_entries' is the maximal entry over which must be ran, if its 50000, then we will run over the first 50000 events, if its -1, all events will be ran
+//  'partition' is the number of jobs that the file will be split in, if 5, then the code knows it is 1 of 5 jobs running over this file
+//  'partitionjobnumber' is the number of the particular job in the partition, so if it's 3 and partition is 5, then this code will run over the third fraction of events if they are divided in 5 fractions
 void full_analyzer::run_over_file(TString filename, double cross_section, int max_entries, int partition, int partitionjobnumber)
 {
 // Short description of program flow:
@@ -36,8 +41,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    double total_weight = cross_section * 35900 / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
-    //cout << "total weight: " << total_weight << endl;
+    double total_weight = ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1) / (cross_section * 35900) ; 
+    
+    //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
+    //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
+    
+
     Init(tree);
 
 
@@ -46,7 +55,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     std::map<TString, TH2*> hists2D;
 
     init_sigreg_fraction(&hists);//found in src/signal_region.cc, shows fractions of events in possible signal regions with leptons and jets
-    init_HLT_efficiency(&hists);//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     init_HNL_MC_check(&hists, &hists2D);
 
     add_histograms(&hists, "displ_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
@@ -97,6 +107,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
+    //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
     Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
@@ -137,12 +148,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Get ID
 	    get_electronID(&fullElectronID[0]);
 	    get_noniso_electronID(&nonisoElectronID[0]);
-	    get_displ_electronID(&displElectronID[0]);
-        get_new_displ_electronID(&newdisplElectronID[0]);
+	    get_displ_electronID(&olddisplElectronID[0]);
+        get_new_displ_electronID(&displElectronID[0]);
 	    get_muonID(&fullMuonID[0]);
 	    get_noniso_muonID(&nonisoMuonID[0]);
-	    get_displ_muonID(&displMuonID[0]);
-	    get_new_displ_muonID(&newdisplMuonID[0]);
+	    get_displ_muonID(&olddisplMuonID[0]);
+	    get_new_displ_muonID(&displMuonID[0]);
 	    get_jetID(&fullJetID[0]);
 
         //fill_ID_histos(&hists, "displ_SS_mu");
@@ -154,61 +165,65 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
 	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
-        get_clean_jets(&new_jet_clean_displ[0], &newdisplElectronID[0], &newdisplMuonID[0]);
+        get_clean_jets(&old_jet_clean_displ[0], &olddisplElectronID[0], &olddisplMuonID[0]);
 	    for(unsigned i = 0; i < 20; ++i){
 	        jet_clean_full_noniso[i] = jet_clean_full[i] && jet_clean_noniso[i];
 	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
-	        new_jet_clean_full_displ[i] = jet_clean_full[i] && new_jet_clean_displ[i];
+	        old_jet_clean_full_displ[i] = jet_clean_full[i] && old_jet_clean_displ[i];
 	    }
 	    
         //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
-	    get_clean_ele(&new_ele_clean_displ[0],  &newdisplMuonID[0]);
+	    get_clean_ele(&old_ele_clean_displ[0],  &olddisplMuonID[0]);
 	    for(unsigned i = 0; i < 10; ++i){
 	        ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && ele_clean_displ[i];
-	        new_ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && new_ele_clean_displ[i];
+	        old_ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && old_ele_clean_displ[i];
 	    }
 
         //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &new_ele_clean_full_noniso_displ[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
+	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_subleading_noniso_mu 	    = find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
 	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    i_new_subleading_displ_e  	= find_subleading_e(&newdisplElectronID[0], &new_ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_old_subleading_displ_e  	= find_subleading_e(&olddisplElectronID[0], &old_ele_clean_full_noniso_displ[0], i_leading_e);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
-	    i_new_subleading_displ_mu 	= find_subleading_mu(&newdisplMuonID[0], i_leading_mu);
+	    i_old_subleading_displ_mu 	= find_subleading_mu(&olddisplMuonID[0], i_leading_mu);
 	    
 	    i_leading_jet_for_full	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
 	    i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
 	    i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
 	    i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
 	    i_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
-	    i_new_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &new_jet_clean_full_displ[0]);
+	    i_old_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &old_jet_clean_full_displ[0]);
 	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
-	    i_new_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &new_jet_clean_full_displ[0], i_new_leading_jet_for_displ);
+	    i_old_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &old_jet_clean_full_displ[0], i_old_leading_jet_for_displ);
 
 
         
         //Get signal region -> put this into a function maybe
         signal_regions();
+        
+        
         i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
         i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);
         i_gen_leading_mu            = find_gen_lep(i_leading_mu);
         i_gen_subleading_displ_mu   = find_gen_lep(i_subleading_displ_mu);
+        
+        
         find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
         if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
         if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
         
+        
         fill_sigreg_fraction(&hists);
         fill_HNL_MC_check(&hists, &hists2D);
-
-        //HLT efficiency stuff, put this in a separate function later
-        fill_HLT_efficiency(&hists, (i_leading_e != -1 && leadptcut("e")), (i_leading_mu != -1 && leadptcut("mu")));
+        fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
+        fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut("e")), (i_leading_mu != -1 && leadptcut("mu")));
 
         fill_cutflow_e(&hists, "displ_SS_e");
         fill_cutflow_e(&hists, "displ_OS_e");
@@ -216,39 +231,27 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_cutflow_mu(&hists, "displ_OS_mu");
 
         if(_1e){
-            fill_l2_and_vtx_eff(&hists, "displ_SS_e");
-            fill_l2_and_vtx_eff(&hists, "displ_OS_e");
+            fill_l2_and_vtx_eff(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_l2_and_vtx_eff(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu){
-            fill_l2_and_vtx_eff(&hists, "displ_SS_mu");
-            fill_l2_and_vtx_eff(&hists, "displ_OS_mu");
+            fill_l2_and_vtx_eff(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_l2_and_vtx_eff(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
-                //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
-                //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
                 fill_corrl2_eff(&hists, "displ_SS_e");
                 fill_jetmet_variables(&hists, "displ_SS_e");
             }else{
-                //cout << "1e1disple dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
-                //if(_lVtx_valid[i_subleading_displ_e]) cout << "1e1disple valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_e] << endl;
-                //if(_lVtxpos_dRcut[i_subleading_displ_e] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_e] << endl;
                 fill_corrl2_eff(&hists, "displ_OS_e");
                 fill_jetmet_variables(&hists, "displ_OS_e");
             }           
         }
         if(_1mu1displmu){
             if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
-                //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
-                //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
                 fill_corrl2_eff(&hists, "displ_SS_mu");
                 fill_jetmet_variables(&hists, "displ_SS_mu");
             }else{
-                //cout << "1mu1displmu dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
-                //if(_lVtx_valid[i_subleading_displ_mu]) cout << "1mu1displmu valid dRcut: " << _lVtxpos_dRcut[i_subleading_displ_mu] << endl;
-                //if(_lVtxpos_dRcut[i_subleading_displ_mu] > 0.5) cout << "for larger dR        : " << _lVtxpos_ntracks[i_subleading_displ_mu] << endl;
                 fill_corrl2_eff(&hists, "displ_OS_mu");
                 fill_jetmet_variables(&hists, "displ_OS_mu");
             }
@@ -414,7 +417,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(int i = 0; i < nb+1; i++){
             if(h->GetBinContent(i) < 0.2) h->SetBinContent(i, 0.);
         }
-        h->Scale(total_weight);
+        h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
     }
     for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
         TH2* h = it2D->second;
@@ -422,12 +425,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     //Determine efficiencies for HLT
-    hists["HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide(hists["HLT_1_iso_e_pt"]);
-    hists["HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Divide(hists["HLT_1_iso_e_barrel_pt"]);
-    hists["HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Divide(hists["HLT_1_iso_e_endcap_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide(hists["HLT_1_iso_mu_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide(hists["HLT_1_iso_mu_barrel_pt"]);
-    hists["HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide(hists["HLT_1_iso_mu_endcap_pt"]);
+    divide_for_eff_HLT(&hists, "Beforeptcut");
+    divide_for_eff_HLT(&hists, "Afterptcut");
     divide_for_eff(&hists, "displ_SS_e");
     divide_for_eff(&hists, "displ_OS_e");
     divide_for_eff(&hists, "displ_SS_mu");
@@ -446,6 +445,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D->second;
         h->Write();
     }
+    //hweight->Write();
     output->Close();
 }
 

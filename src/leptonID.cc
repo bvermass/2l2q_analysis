@@ -46,27 +46,22 @@ void full_analyzer::get_displ_electronID(bool* ID)
 {
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID = 	_lFlavor[i] == 0 &&
-			            fabs(_lEta[i]) < 2.5 &&
+                        fabs(_lEta[i]) < 2.5 &&
 			            _lPt[i] > 7 &&
-			            fabs(_dxy[i])  > 0.05 &&
-			            //no dz cut
-			            //no SIP3D cut
-			            //also invert reliso?
-			            //no pogmedium?
-			            _lElectronPassConvVeto[i];//figure out how this one works exactly to be sure it can still be applied!
-			            //no missing hits cut?
+                        _lPOGLoose[i] &&
+			            _lElectronPassConvVeto[i];
 	    if(fullID) *(ID + i) = true;
 	    else *(ID + i) = false;
     }
 }
 
-void full_analyzer::get_new_displ_electronID(bool* ID)
+void full_analyzer::get_new_displ_electronID(bool* ID)  //basically medium POG cut-based ID without displacement interfering requirements
 {
     for(unsigned i = 0; i < _nL; i++){
         bool fullID =   _lFlavor[i] == 0 &&
                         fabs(_lEta[i]) < 2.5 &&
                         _lPt[i] > 7 &&
-                        fabs(_dxy[i]) > 0.05 &&
+                        //fabs(_dxy[i]) > 0.05 &&
                         _lElectronPassConvVeto[i] &&
                         (   (_lEleIsEB[i] &&
                              _lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
@@ -126,13 +121,10 @@ void full_analyzer::get_displ_muonID(bool* ID)
 {
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID = 	_lFlavor[i] == 1 &&
-			            fabs(_lEta[i]) < 2.4 &&
-			            _lPt[i] > 5 &&
-			            fabs(_dxy[i]) > 0.05;
-			            //no dz cut
-			            //no SIP3D cut
-			            //also invert reliso?
-			            //no POGMedium? no because it requires dxy of the track to be small 
+                        _lPOGLoose[i] &&
+                        fabs(_lEta[i]) < 2.4 &&
+			            _lPt[i] > 5;
+			            //fabs(_dxy[i]) > 0.05;
 	    if(fullID) *(ID + i) = true;
 	    else *(ID + i) = false;
     }

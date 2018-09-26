@@ -23,24 +23,24 @@
 
 
 #new samples
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0141421356237_e_massiveAndCKM_LO/dilep.root                   1.602       -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0141421356237_mu_massiveAndCKM_LO/dilep.root                  1.565i      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0173205080757_e_massiveAndCKM_LO/dilep.root                   2.379       -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0173205080757_mu_massiveAndCKM_LO/dilep.root                  2.373       -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.01_e_massiveAndCKM_LO/dilep.root                              0.7930      -1      1      
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.01_mu_massiveAndCKM_LO/dilep.root                             0.7886      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.022360679775_e_massiveAndCKM_LO/dilep.root                    3.964       -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.022360679775_mu_massiveAndCKM_LO/dilep.root                   3.912       -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO/dilep.root                  0.4581      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_mu_massiveAndCKM_LO/dilep.root                 0.4605      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00836660026534_e_massiveAndCKM_LO/dilep.root                  0.6464      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00836660026534_mu_massiveAndCKM_LO/dilep.root                 0.6433      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_massiveAndCKM_LO/dilep.root                              0.9410      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_massiveAndCKM_LO/dilep.root                             0.9306      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.00244948974278_e_massiveAndCKM_LO/dilep.root                  0.05576     -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.00244948974278_mu_massiveAndCKM_LO/dilep.root                 0.05484     -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_e_massiveAndCKM_LO/dilep.root                    0.1816      -1      1
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_mu_massiveAndCKM_LO/dilep.root                   0.1828      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0141421356237_e_massiveAndCKM_LO/dilep.root                   1.602       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0141421356237_mu_massiveAndCKM_LO/dilep.root                  1.565i      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0173205080757_e_massiveAndCKM_LO/dilep.root                   2.379       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.0173205080757_mu_massiveAndCKM_LO/dilep.root                  2.373       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.01_e_massiveAndCKM_LO/dilep.root                              0.7930      -1      1      
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.01_mu_massiveAndCKM_LO/dilep.root                             0.7886      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.022360679775_e_massiveAndCKM_LO/dilep.root                    3.964       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-2_V-0.022360679775_mu_massiveAndCKM_LO/dilep.root                   3.912       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO/dilep.root                  0.4581      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_mu_massiveAndCKM_LO/dilep.root                 0.4605      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00836660026534_e_massiveAndCKM_LO/dilep.root                  0.6464      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00836660026534_mu_massiveAndCKM_LO/dilep.root                 0.6433      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.01_e_massiveAndCKM_LO/dilep.root                              0.9410      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.01_mu_massiveAndCKM_LO/dilep.root                             0.9306      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.00244948974278_e_massiveAndCKM_LO/dilep.root                  0.05576     -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.00244948974278_mu_massiveAndCKM_LO/dilep.root                 0.05484     -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_e_massiveAndCKM_LO/dilep.root                    0.1816      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_mu_massiveAndCKM_LO/dilep.root                   0.1828      -1      1
 
 
 #old samples

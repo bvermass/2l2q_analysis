@@ -17,9 +17,12 @@
 
 #include "../interface/plotterfunctions.h"
 
+
 using namespace std;
 
+
 std::map<TString, TH1*>::iterator it;
+
 
 TString make_pathname(TString histname, TString pathname, TString linorlog)
 {
@@ -43,6 +46,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + gen + vtx + invVtx + corrl2;
 }
 
+
 void mapmarkerstyle(std::map<TString, TH1*> hists)
 {
     int i = 0;
@@ -53,6 +57,7 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
         h->SetLineWidth(1);
     }
 }
+
 
 void markerstyle(TH1F *hist, TString color)
 {
@@ -89,6 +94,7 @@ void markerstyle(TH1F *hist, TString color)
     }
 }
 
+
 void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], double normalization_const[])
 {
     unsigned count = 0; //to count along with histograms in the map
@@ -100,6 +106,7 @@ void style_and_normalization(std::map<TString, TH1*>& hists, TString colors[], d
         count++;
     }
 }
+
 
 void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& legend, TString legend_entries[], TString colors[], double normalization_const[])
 {
@@ -115,16 +122,18 @@ void style_legend_and_normalization(std::map<TString, TH1*>& hists, TLegend& leg
     }
 }
 
+
 void draw_text_latex(double xmin, double ymin, int textsize, int textalign, TString text)
 {
-    TLatex *lumi    = new TLatex(xmin, ymin, text);//0.9,0.905,text);//"35.9 fb^{-1} (13 TeV)"); 
-    lumi->SetNDC();
-    lumi->SetTextAlign(textalign);
-    lumi->SetTextFont(43);
-    lumi->SetTextSize(textsize);
-    lumi->SetTextColor(kBlack);
-    lumi->Draw("same");
+    TLatex *textltx    = new TLatex(xmin, ymin, text);//0.9,0.905,text);//"35.9 fb^{-1} (13 TeV)"); 
+    textltx->SetNDC();
+    textltx->SetTextAlign(textalign);
+    textltx->SetTextFont(43);
+    textltx->SetTextSize(textsize);
+    textltx->SetTextColor(kBlack);
+    textltx->Draw("same");
 }
+
 
 void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, TString flavor, TString mass, TString coupling)
 {
@@ -133,7 +142,7 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
     if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
     if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
 
-    h->Draw(drawoptions);
+    h->Draw("BOX");//drawoptions);
 
     lgend->DrawClone("same");
     
@@ -150,6 +159,7 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
 
     c->Print(name);
 }
+
 
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
 {
@@ -238,9 +248,9 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     c->Print(name);
 }
 
-void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+
+void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
-    //gStyle->SetPalette(55);
     c->SetLogy(ylin0log1);
     
     if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
@@ -253,37 +263,32 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     stack->GetYaxis()->SetTitleOffset(1.5);
 
     if(xmin != -1) stack->GetXaxis()->SetRangeUser(xmin,xmax);
-    if(ymin != -1) stack->SetMinimum(ymin);
+    if(ymin != -1 && stack->GetMaximum() > xmin) stack->SetMinimum(ymin);
+    else if(ymin != -1 && ylin0log1 == 0) stack->SetMinimum(0.05 * stack->GetMaximum());
+    else if(ymin != -1 && ylin0log1 == 1) stack->SetMinimum(0.0001 * stack->GetMaximum());
     if(ymax != -1) stack->SetMaximum(ymax);
-
-    lgend->DrawClone("same");
-
+    
     // "CMS simulation" in top left
     draw_text_latex(0.1, 0.905, 25, 11, "#bf{CMS} #it{simulation}");
     draw_text_latex(0.9, 0.905, 22, 31, "35.9 fb^{-1} (13 TeV)");
+}
 
+
+void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+{
+    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xmin, xmax, ymin, ymax, nostackoption);
+    lgend->DrawClone("same");
+    
     //TLatex luminosity   = new TLatex(
     c->Modified();
     c->Print(name);
 }
 
+
 void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
-    c->SetLogy(ylin0log1);
+    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xmin, xmax, ymin, ymax, nostackoption);
     
-    if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
-    else stack->Draw("PFC PLC hist");
-
-    stack->SetTitle("");
-    stack->GetXaxis()->SetTitle(Xaxis);
-    stack->GetYaxis()->SetTitle(Yaxis);
-    stack->GetXaxis()->SetTitleOffset(1.2);
-    stack->GetYaxis()->SetTitleOffset(1.5);
-
-    if(xmin != -1) stack->GetXaxis()->SetRangeUser(xmin,xmax);
-    if(ymin != -1) stack->SetMinimum(ymin);
-    if(ymax != -1) stack->SetMaximum(ymax);
-
     // draw signal on top, scaled to integral of background
     double stack_integral = 0;
     TIter next(stack->GetHists());
@@ -304,10 +309,6 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
 
     lgend->DrawClone("same");
 
-    // "CMS simulation" in top left
-    draw_text_latex(0.1, 0.905, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.9, 0.905, 22, 31, "35.9 fb^{-1} (13 TeV)");
-    
     c->Modified();
     c->Print(name);
 }

@@ -97,6 +97,7 @@ void plot_every_variable_in_root_file(TString filename)
         if (cl->InheritsFrom("TH1")){
             TH1F *h = (TH1F*)key->ReadObj();
             TString histname = h->GetName();
+            if(h->GetMaximum() == 0) continue;
 
             TString pathname_lin = make_pathname(histname, pathname, "lin");
             gSystem->Exec("mkdir -p " + pathname_lin);
@@ -107,6 +108,7 @@ void plot_every_variable_in_root_file(TString filename)
         }else if(cl->InheritsFrom("TH2")){
             TH2F *h = (TH2F*)key->ReadObj();
             TString histname = h->GetName();
+            if(h->GetMaximum() == 0) continue;
 
             TString pathname_lin = make_pathname(histname, pathname, "lin");
             gSystem->Exec("mkdir -p " + pathname_lin);

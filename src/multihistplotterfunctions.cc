@@ -65,6 +65,7 @@ int main(int argc, char * argv[])
         TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogramt
         //cout << h_ref->GetName() << endl;
         TString histname = h_ref->GetName();
+        if(h_ref->GetMaximum() == 0) continue;
 
         if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of opposite signal, these are empty anyway 
         if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
