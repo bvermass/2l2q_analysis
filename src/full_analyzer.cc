@@ -204,10 +204,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_old_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &old_jet_clean_full_displ[0], i_old_leading_jet_for_displ);
 
 
-        
-        //Get signal region -> put this into a function maybe
+        //get signal region booleans
         signal_regions();
         
+        i_vtx_subleading_displ_e    = _lIVF_match[i_subleading_displ_e];
+        i_vtx_subleading_displ_mu   = _lIVF_match[i_subleading_displ_mu];
+        //i_vtx_subleading_displ_e    = find_vtx_matching_to_lepton(i_subleading_displ_e);
+        //i_vtx_subleading_displ_mu   = find_vtx_matching_to_lepton(i_subleading_displ_mu);
         
         i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
         i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);

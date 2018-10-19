@@ -35,6 +35,12 @@ public :
    ULong64_t       _lumiBlock;
    ULong64_t       _eventNb;
    UChar_t         _nVertex;
+   Double_t        _BS_x;
+   Double_t        _BS_y;
+   Double_t        _BS_z;
+   Double_t        _PV_x;
+   Double_t        _PV_y;
+   Double_t        _PV_z;
    Float_t         _nTrueInt;
    Double_t        _weight;
    Double_t        _lheHTIncoming;
@@ -255,33 +261,43 @@ public :
    Double_t        _closestJetDeepCsv_b[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_bb[10];   //[_nLight]
    UInt_t          _selectedTrackMult[10];   //[_nLight]
-   Bool_t          _lVtx_valid[10];
-   Double_t	       _lVtxpos_x[10];
-   Double_t	       _lVtxpos_y[10];
-   Double_t	       _lVtxpos_z[10];
-   Double_t	       _lVtxpos_cxx[10];
-   Double_t	       _lVtxpos_cyy[10];
-   Double_t	       _lVtxpos_czz[10];
-   Double_t	       _lVtxpos_cyx[10];
-   Double_t	       _lVtxpos_czy[10];
-   Double_t	       _lVtxpos_czx[10];
-   Double_t	       _lVtxpos_df[10];
-   Double_t	       _lVtxpos_chi2[10];
-   UInt_t	       _lVtxpos_ntracks[10];
-   Double_t	       _lVtxpos_PVdxy[10];
-   Double_t	       _lVtxpos_BSdxy[10];
-   Double_t	       _lVtxpos_PVdz[10];
-   Double_t	       _lVtxpos_BSdz[10];
-   Double_t        _lVtxpos_dRcut[10];
-   Double_t        _lVtxpos_trackPt[10][20];
-   Double_t        _lVtxpos_trackEta[10][20];
-   Double_t        _lVtxpos_trackPhi[10][20];
-   Double_t        _lVtxpos_trackE[10][20];
-   Double_t        _lVtxpos_trackdR[10][20];
-   Double_t        _lVtxpos_trackdxy[10][20];
-   Double_t        _lVtxpos_trackdz[10][20];
-   Double_t        _lVtxpos_trackddxy[10][20];
-   Double_t        _lVtxpos_trackddz[10][20];
+   Bool_t          _lKVF_valid[10];
+   Double_t	       _lKVF_x[10];
+   Double_t	       _lKVF_y[10];
+   Double_t	       _lKVF_z[10];
+   Double_t	       _lKVF_cxx[10];
+   Double_t	       _lKVF_cyy[10];
+   Double_t	       _lKVF_czz[10];
+   Double_t	       _lKVF_cyx[10];
+   Double_t	       _lKVF_czy[10];
+   Double_t	       _lKVF_czx[10];
+   Double_t	       _lKVF_df[10];
+   Double_t	       _lKVF_chi2[10];
+   UInt_t	       _lKVF_ntracks[10];
+   Double_t        _lKVF_dRcut[10];
+   Double_t        _lKVF_trackPt[10][20];
+   Double_t        _lKVF_trackEta[10][20];
+   Double_t        _lKVF_trackPhi[10][20];
+   Double_t        _lKVF_trackE[10][20];
+   Double_t        _lKVF_trackdR[10][20];
+   Double_t        _lKVF_trackdxy[10][20];
+   Double_t        _lKVF_trackdz[10][20];
+   UChar_t         _IVF_nvertex;
+   Double_t        _IVF_x[50];
+   Double_t        _IVF_y[50];
+   Double_t        _IVF_z[50];
+   Double_t        _IVF_cx[50];
+   Double_t        _IVF_cy[50];
+   Double_t        _IVF_cz[50];
+   Double_t        _IVF_df[50];
+   Double_t        _IVF_chi2[50];
+   UChar_t         _IVF_ntracks[50];
+   Double_t        _IVF_trackpt[50][15];
+   Double_t        _IVF_tracketa[50][15];
+   Double_t        _IVF_trackphi[50][15];
+   Double_t        _IVF_trackE[50][15];
+   Double_t        _IVF_trackcharge[50][15];
+   Int_t           _lIVF_match[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -373,6 +389,12 @@ public :
    TBranch        *b__lumiBlock;   //!
    TBranch        *b__eventNb;   //!
    TBranch        *b__nVertex;   //!
+   TBranch        *b__BS_x;
+   TBranch        *b__BS_y;
+   TBranch        *b__BS_z;
+   TBranch        *b__PV_x;
+   TBranch        *b__PV_y;
+   TBranch        *b__PV_z;
    TBranch        *b__nTrueInt;   //!
    TBranch        *b__weight;   //!
    TBranch        *b__lheHTIncoming;   //!
@@ -593,33 +615,43 @@ public :
    TBranch        *b__closestJetDeepCsv_b;   //!
    TBranch        *b__closestJetDeepCsv_bb;   //!
    TBranch        *b__selectedTrackMult;   //!
-   TBranch        *b__lVtx_valid;
-   TBranch	      *b__lVtxpos_x;
-   TBranch	      *b__lVtxpos_y;
-   TBranch	      *b__lVtxpos_z;
-   TBranch	      *b__lVtxpos_cxx;
-   TBranch	      *b__lVtxpos_cyy;
-   TBranch	      *b__lVtxpos_czz;
-   TBranch	      *b__lVtxpos_cyx;
-   TBranch	      *b__lVtxpos_czy;
-   TBranch	      *b__lVtxpos_czx;
-   TBranch	      *b__lVtxpos_df;
-   TBranch	      *b__lVtxpos_chi2;
-   TBranch        *b__lVtxpos_ntracks;
-   TBranch	      *b__lVtxpos_PVdxy;
-   TBranch	      *b__lVtxpos_BSdxy;
-   TBranch	      *b__lVtxpos_PVdz;
-   TBranch	      *b__lVtxpos_BSdz;
-   TBranch        *b__lVtxpos_dRcut;
-   TBranch        *b__lVtxpos_trackPt;
-   TBranch        *b__lVtxpos_trackEta;
-   TBranch        *b__lVtxpos_trackPhi;
-   TBranch        *b__lVtxpos_trackE;
-   TBranch        *b__lVtxpos_trackdR;
-   TBranch        *b__lVtxpos_trackdxy;
-   TBranch        *b__lVtxpos_trackdz;
-   TBranch        *b__lVtxpos_trackddxy;
-   TBranch        *b__lVtxpos_trackddz;
+   TBranch        *b__lKVF_valid;
+   TBranch	      *b__lKVF_x;
+   TBranch	      *b__lKVF_y;
+   TBranch	      *b__lKVF_z;
+   TBranch	      *b__lKVF_cxx;
+   TBranch	      *b__lKVF_cyy;
+   TBranch	      *b__lKVF_czz;
+   TBranch	      *b__lKVF_cyx;
+   TBranch	      *b__lKVF_czy;
+   TBranch	      *b__lKVF_czx;
+   TBranch	      *b__lKVF_df;
+   TBranch	      *b__lKVF_chi2;
+   TBranch        *b__lKVF_ntracks;
+   TBranch        *b__lKVF_dRcut;
+   TBranch        *b__lKVF_trackPt;
+   TBranch        *b__lKVF_trackEta;
+   TBranch        *b__lKVF_trackPhi;
+   TBranch        *b__lKVF_trackE;
+   TBranch        *b__lKVF_trackdR;
+   TBranch        *b__lKVF_trackdxy;
+   TBranch        *b__lKVF_trackdz;
+   TBranch        *b__IVF_nvertex;
+   TBranch        *b__IVF_x;
+   TBranch        *b__IVF_y;
+   TBranch        *b__IVF_z;
+   TBranch        *b__IVF_cx;
+   TBranch        *b__IVF_cy;
+   TBranch        *b__IVF_cz;
+   TBranch        *b__IVF_df;
+   TBranch        *b__IVF_chi2;
+   TBranch        *b__IVF_ntracks;
+   TBranch        *b__IVF_trackpt;
+   TBranch        *b__IVF_tracketa;
+   TBranch        *b__IVF_trackphi;
+   TBranch        *b__IVF_trackE;
+   TBranch        *b__IVF_trackcharge;
+   TBranch        *b__lIVF_match;
    TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
    TBranch        *b__lTrackerMuon;
    TBranch        *b__lInnerTrackValidFraction;
@@ -735,6 +767,9 @@ public :
    int i_subleading_displ_mu;
    int i_old_subleading_displ_mu;
    
+   int i_vtx_subleading_displ_e;
+   int i_vtx_subleading_displ_mu;
+
    int i_gen_leading_e;
    int i_gen_subleading_displ_e;
    int i_gen_leading_mu;
@@ -829,6 +864,9 @@ public :
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);
+
+   // in src/vtxID.cc
+   virtual int      find_vtx_matching_to_lepton(int);
 
    // in src/signal_regions.cc
    virtual void     signal_regions();
