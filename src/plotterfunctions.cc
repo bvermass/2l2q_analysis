@@ -27,23 +27,26 @@ std::map<TString, TH1*>::iterator it;
 TString make_pathname(TString histname, TString pathname, TString linorlog)
 {
         // append directories such as SS/OS, e/mu or HLT to pathname
-        TString eormu = "";
-        if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
-            eormu = "e/";
-        }else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
-            eormu = "mu/";
-        }
+        //TString eormu = "";
+        //if(histname.Index("_e_") != -1 || histname.Index("Ele") != -1){ 
+        //    eormu = "e/";
+        //}else if(histname.Index("_mu_") != -1 || histname.Index("Mu") != -1){
+        //    eormu = "mu/";
+        //}
+
+        TString eormu       = (histname.Index("_e_") == -1 && histname.Index("Ele") == -1)? ((histname.Index("_mu_") == -1 && histname.Index("Mu") == -1)? "" : "mu/") : "e/";
         TString SSorOS      = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
         TString HLT         = (histname.Index("HLT_") == -1)?       "" : "HLT/";
         TString partialcuts = (histname.Index("before") == -1)?     "" : "partialcuts/";
         TString gen         = (histname.Index("_gen_") == -1)?      "" : "gen/";
         TString vtx         = (histname.Index("_vtx_") == -1)?      "" : "vtx/";
+        TString IVF         = (histname.Index("_IVF_") == -1)?      "" : "IVF/";
         TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
         TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + gen + vtx + invVtx + corrl2;
+        return pathname + HLT + eormu + SSorOS + linorlog + partialcuts + gen + vtx + IVF + invVtx + corrl2;
 }
 
 

@@ -889,6 +889,7 @@ public :
    virtual void     fill_jetmet_variables(std::map<TString, TH1*>*, TString);
    virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString);
    virtual void     fill_l2_and_vtx_eff(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);

@@ -236,10 +236,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e){
             fill_l2_and_vtx_eff(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_l2_and_vtx_eff(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_eff(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_eff(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu){
             fill_l2_and_vtx_eff(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_l2_and_vtx_eff(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_eff(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_eff(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
