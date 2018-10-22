@@ -71,6 +71,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, "displ_SS_e_beforedphi");
     add_histograms(&hists, "displ_OS_mu_beforedphi");
     add_histograms(&hists, "displ_SS_mu_beforedphi");
+    add_histograms(&hists, "displ_OS_e_oldID");
+    add_histograms(&hists, "displ_SS_e_oldID");
+    add_histograms(&hists, "displ_OS_mu_oldID");
+    add_histograms(&hists, "displ_SS_mu_oldID");
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
@@ -236,14 +240,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e){
             fill_l2_and_vtx_eff(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_l2_and_vtx_eff(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_l2_and_vtx_eff(&hists, "displ_SS_e_oldID", i_leading_e, i_old_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_l2_and_vtx_eff(&hists, "displ_OS_e_oldID", i_leading_e, i_old_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_eff(&hists, "displ_SS_e_oldID", i_leading_e, i_old_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_eff(&hists, "displ_OS_e_oldID", i_leading_e, i_old_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu){
             fill_l2_and_vtx_eff(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_l2_and_vtx_eff(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_l2_and_vtx_eff(&hists, "displ_SS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_l2_and_vtx_eff(&hists, "displ_OS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_eff(&hists, "displ_SS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_eff(&hists, "displ_OS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1e1disple){
             if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
@@ -438,6 +450,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     divide_for_eff(&hists, "displ_OS_e");
     divide_for_eff(&hists, "displ_SS_mu");
     divide_for_eff(&hists, "displ_OS_mu");
+    divide_for_eff(&hists, "displ_OS_e_oldID");
+    divide_for_eff(&hists, "displ_SS_e_oldID");
+    divide_for_eff(&hists, "displ_OS_mu_oldID");
+    divide_for_eff(&hists, "displ_SS_mu_oldID");
     give_alphanumeric_labels(&hists, "displ_SS_e");
     give_alphanumeric_labels(&hists, "displ_OS_e");
     give_alphanumeric_labels(&hists, "displ_SS_mu");

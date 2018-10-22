@@ -140,7 +140,7 @@ void full_analyzer::get_new_displ_muonID(bool* ID)
 	    bool fullID = 	_lFlavor[i] == 1 &&
 			            fabs(_lEta[i]) < 2.4 &&
 			            _lPt[i] > 5 &&
-			            fabs(_dxy[i]) > 0.05 &&
+			            //fabs(_dxy[i]) > 0.05 &&
                         _lPOGLoose[i] &&
                         (   (goodglobalmuon &&
                              _lMuonSegComp[i] > 0.303
@@ -210,9 +210,9 @@ int full_analyzer::find_leading_mu(bool* muonID)
 int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int index_good_leading)
 {
     int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
+    //if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
+	    if(index_good_leading != -1 and i == index_good_leading) continue;
 	    if(_lFlavor[i] != 0)   	    continue;
 	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
 	    if(!*(electronID + i))      continue;
@@ -227,9 +227,9 @@ int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int inde
 int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 {
     int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
+    //if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
+	    if(index_good_leading != -1 and i == index_good_leading) continue;
 	    if(_lFlavor[i] != 1)   	    continue;
 	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
 	    if(!*(muonID + i))          continue;
