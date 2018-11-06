@@ -26,7 +26,12 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         done
         #root -l -b -q ${headdir}"src/full_analyzer.cc+" ${headdir}"test/mainroot.cc(\"$line\")" #maybe add an option to compile using this line, meaning Aclic(but why?)
     
-        echo "inputfile:"$inputfile
+        echo "inputfile      :  "$inputfile
+        echo "cross section  :  "$cross_section
+        echo "max_entries    :  "$max_entries
+        echo "partition      :  "$partition
+        echo "partitionjobnr :  "$partitionjobnumber
+
         ./$2 $inputfile $cross_section $max_entries $partition $partitionjobnumber
         echo 
     

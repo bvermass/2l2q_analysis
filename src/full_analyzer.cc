@@ -41,7 +41,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    double total_weight = ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1) / (cross_section * 35900) ; 
+    double total_weight = (cross_section * 35900) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
     
     //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
@@ -75,6 +75,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, "displ_SS_e_oldID");
     add_histograms(&hists, "displ_OS_mu_oldID");
     add_histograms(&hists, "displ_SS_mu_oldID");
+    add_histograms(&hists, "displ_OS_e_invgendist");
+    add_histograms(&hists, "displ_SS_e_invgendist");
+    add_histograms(&hists, "displ_OS_mu_invgendist");
+    add_histograms(&hists, "displ_SS_mu_invgendist");
+    add_histograms(&hists, "displ_OS_e_close");
+    add_histograms(&hists, "displ_SS_e_close");
+    add_histograms(&hists, "displ_OS_mu_close");
+    add_histograms(&hists, "displ_SS_mu_close");
+    add_histograms(&hists, "displ_OS_e_far");
+    add_histograms(&hists, "displ_SS_e_far");
+    add_histograms(&hists, "displ_OS_mu_far");
+    add_histograms(&hists, "displ_SS_mu_far");
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
@@ -102,8 +114,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     int n_after_invreliso_pogmedium = 0;
     int n_after_invreliso_convveto = 0;
     int n_after_invreliso_missinghits = 0;
-    int k = 0;
-    int p = 0;
+    int SSe = 0;
+    int OSe = 0;
+    int SSmu = 0;
+    int OSmu = 0;
+    int SSe_weight = 0;
+    int OSe_weight = 0;
+    int SSmu_weight = 0;
+    int OSmu_weight = 0;
 
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
@@ -328,11 +346,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
                 else fill_KVF_inv_histograms(&hists, "displ_SS_e", i_subleading_displ_e);
                 if(_lIVF_match[i_subleading_displ_e] != -1) fill_IVF_histograms(&hists, "displ_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, "displ_SS_e_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, "displ_SS_e_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, "displ_SS_e_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                SSe++;
+                SSe_weight += event_weight;
             }else{
                 fill_histograms(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
                 if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
                 else fill_KVF_inv_histograms(&hists, "displ_OS_e", i_subleading_displ_e);
                 if(_lIVF_match[i_subleading_displ_e] != -1) fill_IVF_histograms(&hists, "displ_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, "displ_OS_e_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, "displ_OS_e_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                if(_lIVF_match[i_subleading_displ_e] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, "displ_OS_e_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+                OSe++;
+                OSe_weight += event_weight;
             }
         }
         if(_1mu1displmu0jet_afterdphi){
@@ -341,19 +369,31 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
                 else fill_KVF_inv_histograms(&hists, "displ_SS_mu", i_subleading_displ_mu);
                 if(_lIVF_match[i_subleading_displ_mu] != -1) fill_IVF_histograms(&hists, "displ_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                k++;
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, "displ_SS_mu_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, "displ_SS_mu_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, "displ_SS_mu_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                SSmu++;
+                SSmu_weight += event_weight;
             }else{
                 fill_histograms(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
                 if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
                 else fill_KVF_inv_histograms(&hists, "displ_OS_mu", i_subleading_displ_mu);
                 if(_lIVF_match[i_subleading_displ_mu] != -1) fill_IVF_histograms(&hists, "displ_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                p++;
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, "displ_OS_mu_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, "displ_OS_mu_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, "displ_OS_mu_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+                OSmu++;
+                OSmu_weight += event_weight;
             }
         }
     }
 
-    cout << "SS: " << k << endl;
-    cout << "OS: " << p << endl;
+    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
+    cout << "SS ee:       " << SSe <<  "        " << SSe_weight <<  "       " << 1.0*SSe_weight*total_weight << endl;
+    cout << "SS mumu:     " << SSmu << "        " << SSmu_weight << "       " << 1.0*SSmu_weight*total_weight << endl;
+    cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
+    cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
     //cout << "ee else: " << ee_else << endl;
     /*cout << "n total " << n_ele << endl;
     cout << "after eta " << n_after_eta << endl;

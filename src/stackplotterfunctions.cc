@@ -73,7 +73,9 @@ int main(int argc, char * argv[])
         if (!cl->InheritsFrom("TH1")) continue;
         TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogram
         TString histname = h_ref->GetName();
+        
         if(h_ref->GetMaximum() == 0) continue; //if h_ref is empty, no need to draw the histogram
+        if(histname.Index("ctau") != -1) continue; // if this is a histogram of ctau, I shouldn't plot it for background (and it gave a segmentation fault for some reason)
 
         TString pathname_lin                = make_pathname(histname, pathname, "lin");
         TString pathname_log                = make_pathname(histname, pathname, "log");

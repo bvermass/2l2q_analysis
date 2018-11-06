@@ -62,6 +62,11 @@ if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/vtxID.cc" ${headdir}"/src/HNL_MC
                 echo "sh "${headdir}"/test/scripts/exec_analyzer.sh "$input" a_jobs.out"  >> $job
                 echo "rm "$input >> $job
                 
+                echo "inputfile     :   "$inputfile
+                echo "cross section :   "$cross_section
+                echo "max_entries   :   "$max_entries
+                echo "partition     :   "$partition
+
                 qsub $job -l walltime=00:30:00 > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do

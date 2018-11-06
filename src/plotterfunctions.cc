@@ -44,10 +44,12 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString oldID       = (histname.Index("_oldID_") == -1)?    "" : "oldID/";
         TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
         TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
+        TString far         = (histname.Index("_far_") == -1)?      "" : "far/";
+        TString close       = (histname.Index("_close_") == -1)?    "" : "close/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + gen + HLT + eormu + SSorOS + linorlog + partialcuts + KVF + IVF + oldID + invVtx + corrl2;
+        return pathname + gen + HLT + eormu + SSorOS + linorlog + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + close + far;
 }
 
 
@@ -146,7 +148,7 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
     if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
     if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
 
-    h->Draw("BOX");//drawoptions);
+    h->Draw("COLZ TEXT");//drawoptions);
 
     lgend->DrawClone("same");
     

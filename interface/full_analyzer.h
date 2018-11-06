@@ -864,6 +864,8 @@ public :
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);
+   virtual double   get_IVF_gendist(int, int);
+   virtual double   get_PVSVdist(int);
 
    // in src/vtxID.cc
    virtual int      find_vtx_matching_to_lepton(int);
