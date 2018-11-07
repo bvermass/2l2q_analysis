@@ -148,7 +148,7 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
     if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
     if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
 
-    h->Draw("COLZ TEXT");//drawoptions);
+    h->Draw(drawoptions);
 
     lgend->DrawClone("same");
     
@@ -161,7 +161,7 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
     if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
     
     draw_text_latex(0.1, 0.91, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.9, 0.91, 22, 31, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.91, 22, 31, masslatex + couplinglatex + flavorlatex);
 
     c->Print(name);
 }

@@ -81,6 +81,7 @@ void plot_every_variable_in_root_file(TString filename)
 
     TCanvas *c = new TCanvas("c","",700,700);
     gStyle->SetOptStat(0);
+    gStyle->SetPaintTextFormat("4.0f");//defines number of digits displayed in text (for example for 2D plots with colz text)
     gPad->SetTicks(1,1);
 
     TLegend lgendrup(.6,.6,.85,.85);
@@ -94,7 +95,7 @@ void plot_every_variable_in_root_file(TString filename)
     while ((key = (TKey*)next())) {
 
         TClass *cl = gROOT->GetClass(key->GetClassName());
-        if (cl->InheritsFrom("TH1")){
+        if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){
             TH1F *h = (TH1F*)key->ReadObj();
             TString histname = h->GetName();
             if(h->GetMaximum() == 0) continue;
