@@ -310,6 +310,38 @@ double full_analyzer::get_IVF_gendist(int i_gen_l, int i_vtx){
     return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])); 
 }
 
-double full_analyzer::get_PVSVdist(int i_vtx){
+double full_analyzer::get_IVF_gendist_2D(int i_gen_l, int i_vtx){
+    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])); 
+}
+
+double full_analyzer::get_IVF_PVSVdist(int i_vtx){
     return sqrt((_PV_x - _IVF_x[i_vtx])*(_PV_x - _IVF_x[i_vtx]) + (_PV_y - _IVF_y[i_vtx])*(_PV_y - _IVF_y[i_vtx]) + (_PV_z - _IVF_z[i_vtx])*(_PV_z - _IVF_z[i_vtx])); 
+}
+
+double full_analyzer::get_IVF_PVSVdist_2D(int i_vtx){
+    return sqrt((_PV_x - _IVF_x[i_vtx])*(_PV_x - _IVF_x[i_vtx]) + (_PV_y - _IVF_y[i_vtx])*(_PV_y - _IVF_y[i_vtx])); 
+}
+
+double full_analyzer::get_KVF_gendist(int i_gen_l, int i_lepton){
+    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])); 
+}
+
+double full_analyzer::get_KVF_gendist_2D(int i_gen_l, int i_lepton){
+    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])); 
+}
+
+double full_analyzer::get_KVF_PVSVdist(int i_lepton){
+    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton]) + (_PV_z - _lKVF_z[i_lepton])*(_PV_z - _lKVF_z[i_lepton])); 
+}
+
+double full_analyzer::get_KVF_PVSVdist_2D(int i_lepton){
+    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton])); 
+}
+
+double full_analyzer::get_PVSVdist_gen(int i_gen_l){
+    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]) + (_gen_Nvertex_z - _gen_vertex_z[i_gen_l])*(_gen_Nvertex_z - _gen_vertex_z[i_gen_l]));
+}
+
+double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
+    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
 }

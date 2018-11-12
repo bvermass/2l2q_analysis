@@ -865,7 +865,15 @@ public :
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);
    virtual double   get_IVF_gendist(int, int);
-   virtual double   get_PVSVdist(int);
+   virtual double   get_IVF_gendist_2D(int, int);
+   virtual double   get_IVF_PVSVdist(int);
+   virtual double   get_IVF_PVSVdist_2D(int);
+   virtual double   get_KVF_gendist(int, int);
+   virtual double   get_KVF_gendist_2D(int, int);
+   virtual double   get_KVF_PVSVdist(int);
+   virtual double   get_KVF_PVSVdist_2D(int);
+   virtual double   get_PVSVdist_gen(int);
+   virtual double   get_PVSVdist_gen_2D(int);
 
    // in src/vtxID.cc
    virtual int      find_vtx_matching_to_lepton(int);
@@ -883,17 +891,17 @@ public :
    virtual void     print_table();
    
    // in src/histo_functions.cc
-   virtual void     add_histograms(std::map<TString, TH1*>*, TString);
+   virtual void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
    virtual void     fill_histograms(std::map<TString, TH1*>*, TString, int, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, TString, int, int, int);
    virtual void     fill_KVF_inv_histograms(std::map<TString, TH1*>*, TString, int);
    virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_jetmet_variables(std::map<TString, TH1*>*, TString);
    virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString);
-   virtual void     fill_l2_and_vtx_eff(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_l2_and_vtx_eff(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);

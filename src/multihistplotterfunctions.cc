@@ -47,13 +47,17 @@ int main(int argc, char * argv[])
     // put all files in a map that can be looped over
     std::map<TString, TFile*> files;
     for(int i = 1; i < (argc + 1)/2; i++){
-        files[argv[i]] = TFile::Open(argv[i]);
-        cout << argv[i] << endl;
+        TString name = (TString)argv[i];
+        name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14);
+        files[name] = TFile::Open(argv[i]);
+        cout << name << endl;
     }
 
     // loop over histograms
     std::map<TString, TH1*> hists;
-    TIter next(files[argv[1]]->GetListOfKeys());
+    TString nameforkey = (TString)argv[1];
+    nameforkey = 1 + "_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
+    TIter next(files[nameforkey]->GetListOfKeys());
     TKey * key;
 
     while ((key = (TKey*)next())) {
@@ -86,7 +90,7 @@ int main(int argc, char * argv[])
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
             name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
-            hists[name] = (TH1F*) files[argv[i]]->Get(h_ref->GetName());
+            hists[name] = (TH1F*) files[name]->Get(h_ref->GetName());
         }
         mapmarkerstyle(hists);
 
@@ -108,6 +112,7 @@ int main(int argc, char * argv[])
         draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
     
     }
+    cout << "plots finished" << endl;
     return 0;
 }
 # endif

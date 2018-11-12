@@ -119,6 +119,7 @@ void plot_every_variable_in_root_file(TString filename)
             draw_2D_hist(pathname_lin + histname + ".pdf", c, h, "colz text", &lgendrup, "", "", flavor, mass, coupling);
         }
     } 
+    cout << "plots finished" << endl;
 }
 
 # ifndef __CINT__

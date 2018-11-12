@@ -1,17 +1,22 @@
 #!/bin/bash
 
-#First argument must be the txt file with the samples containing histograms
+#Argument 1 must be the txt file with the samples containing histograms
+#Argument 2 is the name of the executable a_xxx.out
+#Argument 3 is the choice of which type of plots need to be made
 headdir=$(pwd)
 
 if [ $# -eq 1 ] ; then
+    2=a.out
+    read -p "separate plots(1), stack plots(2), multihists(3), analyze_cuts(4), all(5): " choice
+elif [ $# -eq 2 ] ; then
     read -p "separate plots(1), stack plots(2), multihists(3), analyze_cuts(4), all(5): " choice
 else
-    choice=$2
+    choice=$3
 fi
 
 if [[ choice -eq 1 || choice -eq 5 ]]; then
     #Make plots for every file separately
-    if g++ -std=c++0x "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x -o $2 "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////////////\n"
@@ -21,11 +26,11 @@ if [[ choice -eq 1 || choice -eq 5 ]]; then
                 echo "white line or comment found!"
             else
                 echo "run_test.sh file: "$line
-                ./a.out $line
+                ./$2 $line
                 echo
             fi
         done < "$1"
-    rm a.out
+    rm $2
     else
         echo -e "\n//////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION FAILED//"
@@ -34,7 +39,7 @@ if [[ choice -eq 1 || choice -eq 5 ]]; then
 fi
 if [[ choice -eq 2 || choice -eq 5 ]]; then
     #run stack plots
-    if g++ -std=c++0x "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x -o $2 "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////\n"
@@ -57,9 +62,9 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $2
-        ./a.out ${samples[@]} ${legend[@]}
+        ./$2 ${samples[@]} ${legend[@]}
         echo
-    rm a.out    
+    rm $2
     else
         echo -e "\n//////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION FAILED//"
@@ -68,7 +73,7 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
 fi
 if [[ choice -eq 3 || choice -eq 5 ]]; then
     #run multi hist plots
-    if g++ -std=c++0x "src/plotterfunctions.cc" "src/multihistplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x -o $2 "src/plotterfunctions.cc" "src/multihistplotterfunctions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////////\n"
@@ -91,9 +96,9 @@ if [[ choice -eq 3 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $2
-        ./a.out ${samples[@]} ${legend[@]}
+        ./$2 ${samples[@]} ${legend[@]}
         echo
-    rm a.out    
+    rm $2
     else
         echo -e "\n//////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION FAILED//"
@@ -102,7 +107,7 @@ if [[ choice -eq 3 || choice -eq 5 ]]; then
 fi
 if [[ choice -eq 4 || choice -eq 5 ]]; then
     #run analyze_cuts
-    if g++ -std=c++0x "src/analyze_cuts.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x -o $2 "src/analyze_cuts.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////"
         echo -e "//ANALYZE CUTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////\n"
@@ -125,13 +130,12 @@ if [[ choice -eq 4 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $2
-        ./a.out ${samples[@]} ${legend[@]}
+        ./$2 ${samples[@]} ${legend[@]}
         echo
-    rm a.out    
+    rm $2    
     else
         echo -e "\n///////////////////////////////////"
         echo -e "//ANALYZE CUTS COMPILATION FAILED//"
         echo -e "///////////////////////////////////\n"
     fi
-
 fi
