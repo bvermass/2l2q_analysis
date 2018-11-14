@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
     TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/";
 
     string str(argv[1]); // used to only plot electron plots for e signal and mu plots for mu signal
-    cout << "        " << str  << " " << str.find("_mu_") << " " << str.find("_e_") << endl;
+    cout << str  << " " << str.find("_mu_") << " " << str.find("_e_") << endl;
 
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);
@@ -48,16 +48,16 @@ int main(int argc, char * argv[])
     std::map<TString, TFile*> files;
     for(int i = 1; i < (argc + 1)/2; i++){
         TString name = (TString)argv[i];
-        name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14);
-        files[name] = TFile::Open(argv[i]);
-        cout << name << endl;
+        TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14);
+        files[fullname] = TFile::Open(argv[i]);
+        cout << fullname << endl;
     }
 
     // loop over histograms
     std::map<TString, TH1*> hists;
     TString nameforkey = (TString)argv[1];
-    nameforkey = 1 + "_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
-    TIter next(files[nameforkey]->GetListOfKeys());
+    TString fullnameforkey = "1_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
+    TIter next(files[fullnameforkey]->GetListOfKeys());
     TKey * key;
 
     while ((key = (TKey*)next())) {
@@ -89,8 +89,8 @@ int main(int argc, char * argv[])
         // get background and signal histograms
         for(int i = 1; i < (argc +1)/2; i++){
             TString name = (TString)argv[i];
-            name = i + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
-            hists[name] = (TH1F*) files[name]->Get(h_ref->GetName());
+            TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
+            hists[fullname] = (TH1F*) files[fullname]->Get(histname);
         }
         mapmarkerstyle(hists);
 
@@ -101,8 +101,8 @@ int main(int argc, char * argv[])
         lgendrup.Clear();
         for( it3 = hists.begin(); it3 != hists.end(); it3++){
             TH1* h = it3->second;
-            TString histname = h->GetName();
-            if(histname.Index("eff") == -1 || histname.Index("eff_") != -1) h->Scale(scale_factor / h->Integral());
+            //cout << "histname: " << it3->first << " legend: " << argv[i] << endl;
+            if(histname.Index("eff") == -1) h->Scale(scale_factor / h->Integral());
 	        stack->Add(h);
             lgendrup.AddEntry(h, argv[i]);
             i++;

@@ -49,7 +49,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + gen + HLT + eormu + SSorOS + linorlog + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + close + far;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + close + far;
 }
 
 
@@ -60,7 +60,7 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
         TH1* h = it->second;
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
-        h->SetLineWidth(1);
+        h->SetLineWidth(2);
     }
 }
 
@@ -138,6 +138,15 @@ void draw_text_latex(double xmin, double ymin, int textsize, int textalign, TStr
     textltx->SetTextSize(textsize);
     textltx->SetTextColor(kBlack);
     textltx->Draw("same");
+}
+
+
+TString get_2D_draw_options(TH2F* h)
+{
+    int nbinsx = h->GetNbinsX();
+    int nbinsy = h->GetNbinsY();
+    if(nbinsx > 10 or nbinsy > 10) return "colz";
+    else return "colz text";
 }
 
 

@@ -18,12 +18,19 @@ function submitjob {
 headdir=$(pwd)
 
 #stack plots:
-#job=${headdir}"/test/LocalJob_stackplots.sh"
-#echo "#!/bin/bash" > $job 
-#echo "cd "${headdir} >> $job
-#echo "sh "${headdir}"/test/run_plots.sh "${headdir}"/test/sampleLists/plots_bkg.txt a_stack.out 2" >> $job
-#cat $job
-#submitjob $job
+partition=10            #currently only stack plots need to be divided into subjobs, the other plots go fast enough, at a later point it might be interesting to do this partition for all type of plots
+partitionjobnumber=0
+while [[ ! $partitionjobnumber -eq $partition ]]; do
+    
+    job=${headdir}"/test/LocalJob_stackplots_"$partitionjobnumber".sh"
+    echo "#!/bin/bash" > $job 
+    echo "cd "${headdir} >> $job
+    echo "sh "${headdir}"/test/run_plots.sh "${headdir}"/test/sampleLists/plots_bkg.txt a_stack_"$partitionjobnumber".out 2 "$partition" "$partitionjobnumber >> $job
+    cat $job
+    submitjob $job
+
+    let "partitionjobnumber++"
+done
 
 #multihist plots:
 job=${headdir}"/test/LocalJob_multihistplots258e.sh"

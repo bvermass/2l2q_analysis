@@ -536,6 +536,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D->second;
         h->Write();
     }
+
+    TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
+    hadd_counter->Fill(0);
+    hadd_counter->Write();
+
     //hweight->Write();
     output->Close();
 }

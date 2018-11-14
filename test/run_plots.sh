@@ -25,7 +25,6 @@ if [[ choice -eq 1 || choice -eq 5 ]]; then
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
                 echo "white line or comment found!"
             else
-                echo "run_test.sh file: "$line
                 ./$2 $line
                 echo
             fi
@@ -62,7 +61,7 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $2
-        ./$2 ${samples[@]} ${legend[@]}
+        ./$2 $4 $5 ${samples[@]} ${legend[@]} 
         echo
     rm $2
     else
