@@ -108,8 +108,11 @@ int main(int argc, char * argv[])
             i++;
         }
  
-        draw_stack(pathname_lin + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "nostack");
-        draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "nostack");
+        // x lin or log
+        int xlog = (histname.Index("xlog") == -1)? 0 : 1;
+
+        draw_stack(pathname_lin + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, xlog, -1, -1, -1, -1, "nostack");
+        draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, xlog, -1, -1, -1, -1, "nostack");
     
     }
     cout << "plots finished" << endl;

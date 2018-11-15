@@ -175,11 +175,21 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
     c->Print(name);
 }
 
+void divide_by_binwidth(TH1F* h)
+{
+    for(int i = 1; i <= h->GetNbinsX(); i++){
+        double bincontent = h->GetBinContent(i);
+        double binwidth   = h->GetBinWidth(i);
+        h->SetBinContent(i, bincontent/binwidth);
+    }
+    if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
+}
 
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
 {
     // set x range lin or log
     c->SetLogx(lin0log1);
+    if(lin0log1) divide_by_binwidth(h);
  
     // find the y range needed for the plot
     double ymax = 1.25*h->GetMaximum();
@@ -264,9 +274,17 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
 }
 
 
-void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
     c->SetLogy(ylin0log1);
+    c->SetLogx(xlin0log1);
+    if(xlin0log1){
+        TIter next(stack->GetHists());
+        TObject* hist = 0;
+        while( hist = next()){
+            divide_by_binwidth((TH1F*) hist);
+        }
+    }
     
     if(nostackoption == "nostack") stack->Draw("PLC hist nostack");
     else stack->Draw("PFC PLC hist");
@@ -278,7 +296,7 @@ void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString 
     stack->GetYaxis()->SetTitleOffset(1.5);
 
     if(xmin != -1) stack->GetXaxis()->SetRangeUser(xmin,xmax);
-    if(ymin != -1 && stack->GetMaximum() > xmin) stack->SetMinimum(ymin);
+    if(ymin != -1 && stack->GetMaximum() > ymin) stack->SetMinimum(ymin);
     else if(ymin != -1 && ylin0log1 == 0) stack->SetMinimum(0.05 * stack->GetMaximum());
     else if(ymin != -1 && ylin0log1 == 1) stack->SetMinimum(0.0001 * stack->GetMaximum());
     if(ymax != -1) stack->SetMaximum(ymax);
@@ -289,9 +307,9 @@ void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString 
 }
 
 
-void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
-    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xmin, xmax, ymin, ymax, nostackoption);
+    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
     lgend->DrawClone("same");
     
     //TLatex luminosity   = new TLatex(
@@ -300,9 +318,9 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
 }
 
 
-void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
-    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xmin, xmax, ymin, ymax, nostackoption);
+    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
     
     // draw signal on top, scaled to integral of background
     double stack_integral = 0;

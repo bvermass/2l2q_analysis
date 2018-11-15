@@ -9,7 +9,7 @@ headdir=$(pwd)
 #execdir=${headdir}"/test/log/"
 
 # Compilation of Code
-if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/vtxID.cc" ${headdir}"/src/HNL_MC_check.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
+if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/helper_histo_functions.cc" ${headdir}"/src/vtxID.cc" ${headdir}"/src/HNL_MC_check.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
     echo -e "\n//////////////////////////"
     echo -e "//COMPILATION SUCCESSFUL//"
     echo -e "//////////////////////////\n"

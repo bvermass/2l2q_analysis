@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//obsolete at the moment (the matching is done at gen level!
 int full_analyzer::find_vtx_matching_to_lepton(int i_lepton){
     //find track in vtx matching to lepton
     //for now, by matching lepton pt eta phi to track pt eta phi, but change this at ntuplizer level to use track information and store linked vertex in a variable

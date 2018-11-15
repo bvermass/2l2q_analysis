@@ -139,17 +139,20 @@ int main(int argc, char * argv[])
                 lgendrup.AddEntry(h, argv[i]);
                 i++;
             }
+
+            // x log or lin
+            int xlog = (histname.Index("xlog") == -1)? 0 : 1;
             
             cout << histname << endl;
-            draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
-            draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
+            draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, xlog, -1, -1, -1, -1, "");
+            draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, xlog, -1, -1, 10, -1, "");
             
             lgendrup.AddEntry(signals["1_3GeV"], "HNL 2GeV, c#tau~96.09mm");
             lgendrup.AddEntry(signals["2_7GeV"], "HNL 5GeV, c#tau~2.95mm");
             lgendrup.AddEntry(signals["3_10GeV"], "HNL 8GeV, c#tau~0.62mm");
             
-            draw_stack_with_signal(pathname_with_signal_lin + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, -1, -1, -1, -1, "");
-            draw_stack_with_signal(pathname_with_signal_log + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, -1, -1, 10, -1, "");
+            draw_stack_with_signal(pathname_with_signal_lin + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, xlog, -1, -1, -1, -1, "");
+            draw_stack_with_signal(pathname_with_signal_log + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, xlog, -1, -1, 10, -1, "");
         }
         counter++;
     } 
