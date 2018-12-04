@@ -110,9 +110,11 @@ int main(int argc, char * argv[])
  
         // x lin or log
         int xlog = (histname.Index("xlog") == -1)? 0 : 1;
+        // Events or Eff. in yaxis title
+        TString yaxistitle = get_yaxistitle(histname, h_ref->GetYaxis()->GetTitle()); 
 
-        draw_stack(pathname_lin + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 0, xlog, -1, -1, -1, -1, "nostack");
-        draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), h_ref->GetYaxis()->GetTitle(), 1, xlog, -1, -1, -1, -1, "nostack");
+        draw_stack(pathname_lin + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "nostack");
+        draw_stack(pathname_log + h_ref->GetName() + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "nostack");
     
     }
     cout << "plots finished" << endl;

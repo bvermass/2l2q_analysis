@@ -46,6 +46,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
         TString far         = (histname.Index("_far_") == -1)?      "" : "far/";
         TString close       = (histname.Index("_close_") == -1)?    "" : "close/";
+        TString eff         = (histname.Index("_eff") == -1)?       "" : "eff/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
@@ -183,6 +184,12 @@ void divide_by_binwidth(TH1F* h)
         h->SetBinContent(i, bincontent/binwidth);
     }
     if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
+}
+
+TString get_yaxistitle(TString histname, TString current_title)
+{
+    if(histname.Index("eff") != -1 and histname.Index("eff_num") == -1 and histname.Index("eff_den") == -1) return "Eff.";
+    else return current_title;
 }
 
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)

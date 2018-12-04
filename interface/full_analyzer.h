@@ -754,6 +754,7 @@ public :
    bool leading_is_l1;
    bool subleading_is_l2; 
 
+
    //int i_leading;   //these are flavor unspecific, so not matter if leading or subleading are e or mu, this is usable
    //int i_subleading;
    int i_leading_e;
@@ -918,6 +919,7 @@ public :
 
    // in src/helper_histo_functions.cc
    virtual void     make_logscale(double*, int, double, double);
+   virtual double   calc_betagamma(int, double);
 };
 
 #endif

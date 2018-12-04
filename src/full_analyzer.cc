@@ -1,6 +1,7 @@
 
 //Include C++ libraries
 #include <iostream>
+#include <fstream>
 
 //Include header for this class
 #include "../interface/full_analyzer.h"
@@ -43,6 +44,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     double total_weight = (cross_section * 35900) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
     
+    i_subleading_jet_for_noniso = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
+
     //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
     
@@ -139,7 +142,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
-        unsigned notice = round(0.001 * (j_end - j_begin) / 20) * 1000;
+        unsigned notice = round(0.01 * (j_end - j_begin) / 20) * 100;
 	    bool printevent = ((jentry -j_begin)%notice == 0);
 	    if(printevent){
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
@@ -219,7 +222,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_leading_jet_for_full	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
 	    i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
 	    i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
-	    i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
+	    //i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
 	    i_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
 	    i_old_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &old_jet_clean_full_displ[0]);
 	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);

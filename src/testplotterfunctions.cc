@@ -109,8 +109,10 @@ void plot_every_variable_in_root_file(TString filename)
         
             // xlin or log
             int xlog = (histname.Index("xlog") == -1)? 0 : 1;
+            // Events or Eff. in yaxis title
+            TString yaxistitle = get_yaxistitle(histname, h->GetYaxis()->GetTitle());
 
-            draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", "", 0, 0, xlog, flavor, mass, coupling); 
+            draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling); 
         }else if(cl->InheritsFrom("TH2")){
             TH2F *h = (TH2F*)key->ReadObj();
             TString histname = h->GetName();
