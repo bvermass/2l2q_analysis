@@ -134,62 +134,62 @@ public :
    Int_t           _HLT_IsoMu24_prescale;
    Bool_t          _HLT_IsoTkMu24;
    Int_t           _HLT_IsoTkMu24_prescale;
-   Bool_t          _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
-   Int_t           _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
-   Bool_t          _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
-   Int_t           _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   Bool_t          _HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
-   Int_t           _HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
-   Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
-   Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
-   Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
-   Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
-   Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
-   Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
-   Bool_t          _HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
-   Int_t           _HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
-   Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
-   Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
-   Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
-   Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
-   Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
-   Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
-   Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
-   Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
-   Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
-   Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
-   Bool_t          _HLT_TripleMu_12_10_5;
-   Int_t           _HLT_TripleMu_12_10_5_prescale;
-   Bool_t          _passMETFilters;
-   Bool_t          _Flag_HBHENoiseFilter;
-   Bool_t          _Flag_HBHENoiseIsoFilter;
-   Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
-   Bool_t          _Flag_goodVertices;
-   Bool_t          _Flag_BadPFMuonFilter;
-   Bool_t          _Flag_BadChargedCandidateFilter;
-   Bool_t          _Flag_globalTightHalo2016Filter;
-   Bool_t          _HLT_Ele105_CaloIdVT_GsfTrkIdT;
-   Int_t           _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
-   Bool_t          _HLT_Ele115_CaloIdVT_GsfTrkIdT;
-   Int_t           _HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
-   Bool_t          _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
-   Int_t           _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   Bool_t          _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
-   Int_t           _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
-   Bool_t          _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
-   Int_t           _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
-   Bool_t          _HLT_Mu50;
-   Int_t           _HLT_Mu50_prescale;
-   Bool_t          _HLT_TkMu50;
-   Int_t           _HLT_TkMu50_prescale;
-   Bool_t          _HLT_Mu45_eta2p1;
-   Int_t           _HLT_Mu45_eta2p1_prescale;
-   Bool_t          _HLT_Mu30_TkMu11;
-   Int_t           _HLT_Mu30_TkMu11_prescale;
+   //Bool_t          _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
+   //Int_t           _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
+   //Int_t           _HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
+   //Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
+   //Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
+   //Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
+   //Bool_t          _HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
+   //Int_t           _HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+   //Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_TripleMu_12_10_5;
+   //Int_t           _HLT_TripleMu_12_10_5_prescale;
+   //Bool_t          _passMETFilters;
+   //Bool_t          _Flag_HBHENoiseFilter;
+   //Bool_t          _Flag_HBHENoiseIsoFilter;
+   //Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
+   //Bool_t          _Flag_goodVertices;
+   //Bool_t          _Flag_BadPFMuonFilter;
+   //Bool_t          _Flag_BadChargedCandidateFilter;
+   //Bool_t          _Flag_globalTightHalo2016Filter;
+   //Bool_t          _HLT_Ele105_CaloIdVT_GsfTrkIdT;
+   //Int_t           _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
+   //Bool_t          _HLT_Ele115_CaloIdVT_GsfTrkIdT;
+   //Int_t           _HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
+   //Bool_t          _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
+   //Int_t           _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
+   //Bool_t          _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
+   //Int_t           _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
+   //Bool_t          _HLT_Mu50;
+   //Int_t           _HLT_Mu50_prescale;
+   //Bool_t          _HLT_TkMu50;
+   //Int_t           _HLT_TkMu50_prescale;
+   //Bool_t          _HLT_Mu45_eta2p1;
+   //Int_t           _HLT_Mu45_eta2p1_prescale;
+   //Bool_t          _HLT_Mu30_TkMu11;
+   //Int_t           _HLT_Mu30_TkMu11_prescale;
    UChar_t         _nL;
    UChar_t         _nMu;
    UChar_t         _nEle;
@@ -488,62 +488,62 @@ public :
    TBranch        *b__HLT_IsoMu24_prescale;   //!
    TBranch        *b__HLT_IsoTkMu24;   //!
    TBranch        *b__HLT_IsoTkMu24_prescale;   //!
-   TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
-   TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
-   TBranch        *b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
-   TBranch        *b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
-   TBranch        *b__HLT_Mu8_DiEle12_CaloIdL_TrackIdL;   //!
-   TBranch        *b__HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;   //!
-   TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;   //!
-   TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
-   TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;   //!
-   TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;   //!
-   TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;   //!
-   TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
-   TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;   //!
-   TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;   //!
-   TBranch        *b__HLT_DiMu9_Ele9_CaloIdL_TrackIdL;   //!
-   TBranch        *b__HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
-   TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
-   TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
-   TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
-   TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
-   TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
-   TBranch        *b__HLT_TripleMu_12_10_5;   //!
-   TBranch        *b__HLT_TripleMu_12_10_5_prescale;   //!
-   TBranch        *b__passMETFilters;   //!
-   TBranch        *b__Flag_HBHENoiseFilter;   //!
-   TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
-   TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
-   TBranch        *b__Flag_goodVertices;   //!
-   TBranch        *b__Flag_globalTightHalo2016Filter;   //!
-   TBranch        *b__Flag_BadPFMuonFilter;   //!
-   TBranch        *b__Flag_BadChargedCandidateFilter;   //!
-   TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
-   TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
-   TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!
-   TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;   //!
-   TBranch        *b__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
-   TBranch        *b__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
-   TBranch        *b__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;   //!
-   TBranch        *b__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;   //!
-   TBranch        *b__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;   //!
-   TBranch        *b__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;   //!
-   TBranch        *b__HLT_Mu50;   //!
-   TBranch        *b__HLT_Mu50_prescale;   //!
-   TBranch        *b__HLT_TkMu50;   //!
-   TBranch        *b__HLT_TkMu50_prescale;   //!
-   TBranch        *b__HLT_Mu45_eta2p1;   //!
-   TBranch        *b__HLT_Mu45_eta2p1_prescale;   //!
-   TBranch        *b__HLT_Mu30_TkMu11;   //!
-   TBranch        *b__HLT_Mu30_TkMu11_prescale;   //!
+   //TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
+   //TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
+   //TBranch        *b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+   //TBranch        *b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_Mu8_DiEle12_CaloIdL_TrackIdL;   //!
+   //TBranch        *b__HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;   //!
+   //TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+   //TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;   //!
+   //TBranch        *b__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;   //!
+   //TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+   //TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;   //!
+   //TBranch        *b__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;   //!
+   //TBranch        *b__HLT_DiMu9_Ele9_CaloIdL_TrackIdL;   //!
+   //TBranch        *b__HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
+   //TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
+   //TBranch        *b__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
+   //TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
+   //TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
+   //TBranch        *b__HLT_TripleMu_12_10_5;   //!
+   //TBranch        *b__HLT_TripleMu_12_10_5_prescale;   //!
+   //TBranch        *b__passMETFilters;   //!
+   //TBranch        *b__Flag_HBHENoiseFilter;   //!
+   //TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
+   //TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
+   //TBranch        *b__Flag_goodVertices;   //!
+   //TBranch        *b__Flag_globalTightHalo2016Filter;   //!
+   //TBranch        *b__Flag_BadPFMuonFilter;   //!
+   //TBranch        *b__Flag_BadChargedCandidateFilter;   //!
+   //TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
+   //TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
+   //TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!
+   //TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;   //!
+   //TBranch        *b__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+   //TBranch        *b__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+   //TBranch        *b__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;   //!
+   //TBranch        *b__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;   //!
+   //TBranch        *b__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;   //!
+   //TBranch        *b__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;   //!
+   //TBranch        *b__HLT_Mu50;   //!
+   //TBranch        *b__HLT_Mu50_prescale;   //!
+   //TBranch        *b__HLT_TkMu50;   //!
+   //TBranch        *b__HLT_TkMu50_prescale;   //!
+   //TBranch        *b__HLT_Mu45_eta2p1;   //!
+   //TBranch        *b__HLT_Mu45_eta2p1_prescale;   //!
+   //TBranch        *b__HLT_Mu30_TkMu11;   //!
+   //TBranch        *b__HLT_Mu30_TkMu11_prescale;   //!
    TBranch        *b__nL;   //!
    TBranch        *b__nMu;   //!
    TBranch        *b__nEle;   //!
@@ -749,6 +749,7 @@ public :
    
    int i_gen_l1;
    int i_gen_l2;
+   int _gen_Nmass;
    //int i_l1; might add these later, through geometric match with i_gen_l1or2, find i_l1or2
    //int i_l2;
    bool leading_is_l1;

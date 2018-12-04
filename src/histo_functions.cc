@@ -246,7 +246,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
 
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
-    (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
+    (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
     
     (*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
     (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
@@ -453,8 +453,8 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco2"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
     (*hists2D)[prefix+"_IVF_ctauHN_PV-SVdxyz"]->Fill(_ctauHN, IVF_PVSVdist, event_weight);
     (*hists2D)[prefix+"_IVF_ctauHN_genPV-SVdxyz"]->Fill(_ctauHN, gen_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), IVF_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), gen_PVSVdist, event_weight);
+    (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), IVF_PVSVdist, event_weight);
+    (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), gen_PVSVdist, event_weight);
     (*hists)[prefix+"_IVF_ntracks"]->Fill(_IVF_ntracks[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_df"]->Fill(_IVF_df[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_cxy"]->Fill(sqrt(_IVF_cx[i_vtx]*_IVF_cx[i_vtx] + _IVF_cy[i_vtx]*_IVF_cy[i_vtx]), event_weight);
@@ -558,9 +558,9 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         (*hists)[prefix+"_IVF_ctau_eff_den"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom_eff_den"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom2_eff_den"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_IVF_ctaug_eff_den"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom_eff_den"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
         if(_lIVF_match[i_subleading] != -1){
             (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_den"]->Fill(IVF_PVSVdist_2D, event_weight);
             (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_den"]->Fill(IVF_PVSVdist, event_weight);
@@ -594,12 +594,12 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         (*hists)[prefix+"_IVF_ctau_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom2_eff"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_IVF_ctaug_eff_num"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_eff"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom_eff"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom2_eff"]->Fill(_ctauHN*calc_betagamma(i_subleading_jet_for_noniso, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        (*hists)[prefix+"_IVF_ctaug_zoom2_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_num"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_num"]->Fill(IVF_PVSVdist, event_weight);
