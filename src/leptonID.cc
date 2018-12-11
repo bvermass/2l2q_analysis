@@ -298,7 +298,7 @@ double full_analyzer::find_dRl2jet(TLorentzVector lepton){
     double dR = 6;
     for( unsigned i = 0; i < _nJets; i++){
         if(!(jet_clean_full_displ[i] && fullJetID[i])) continue;
-        cout << "   " << i << endl << endl << endl;
+        //cout << "   " << i << endl << endl << endl;
         TLorentzVector jet;
         jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
         if(lepton.DeltaR(jet) < dR) dR = lepton.DeltaR(jet);

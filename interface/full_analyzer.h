@@ -789,6 +789,7 @@ public :
    bool _trige;
    bool _1e;
    bool _1e1disple;
+   bool _1e1displevtx;
    bool _1e1disple0adde;
    bool _1e1disple0jet;
    bool _1e1disple0jet_aftermll;
@@ -811,6 +812,7 @@ public :
    bool _trigmu;
    bool _1mu;
    bool _1mu1displmu;
+   bool _1mu1displmuvtx;
    bool _1mu1displmu0addmu;
    bool _1mu1displmu0jet;
    bool _1mu1displmu0jet_aftermll;

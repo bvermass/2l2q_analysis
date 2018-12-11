@@ -73,6 +73,15 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff"]         = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff_num"]     = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff_den"]     = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]            = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]       = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]       = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_ctau_eff"]                    = new TH1F(prefix+"_KVF_ctau_eff", ";c #tau [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_ctau_eff_num"]                = new TH1F(prefix+"_KVF_ctau_eff_num", ";c #tau [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_ctau_eff_den"]                = new TH1F(prefix+"_KVF_ctau_eff_den", ";c #tau [cm] (KVF);Events", 20, 0, 100);
@@ -478,7 +487,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 
 void full_analyzer::fill_jetmet_variables(std::map<TString, TH1*>* hists, TString prefix)
 {
-    (*hists)[prefix+"_leadjetpt"]->Fill(_lPt[i_leading_jet_for_displ], event_weight);
+    (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet_for_displ], event_weight);
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
 }
 
@@ -621,14 +630,17 @@ void full_analyzer::fill_l2_and_vtx_eff(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_l2_and_vtx_ctau_zoom_eff_den"]->Fill(_ctauHN, event_weight);
     (*hists)[prefix+"_l2_and_vtx_ctau_zoom2_eff_den"]->Fill(_ctauHN, event_weight);
     
-    double KVF_gendist  = 0;
-    double gen_PVSVdist = 0;
+    double KVF_gendist      = 0;
+    double gen_PVSVdist     = 0;
+    double gen_PVSVdist_2D  = 0;
     if(sampleflavor != "bkg"){
-        KVF_gendist  = get_KVF_gendist(i_gen_l2, i_subleading);
-        gen_PVSVdist = get_PVSVdist_gen(i_gen_l2);
+        KVF_gendist         = get_KVF_gendist(i_gen_l2, i_subleading);
+        gen_PVSVdist        = get_PVSVdist_gen(i_gen_l2);
+        gen_PVSVdist_2D     = get_PVSVdist_gen_2D(i_gen_l2);
     } else {
-        KVF_gendist  = get_KVF_gendist(i_gen_subleading, i_subleading);
-        gen_PVSVdist = get_PVSVdist_gen(i_gen_subleading);
+        KVF_gendist         = get_KVF_gendist(i_gen_subleading, i_subleading);
+        gen_PVSVdist        = get_PVSVdist_gen(i_gen_subleading);
+        gen_PVSVdist_2D     = get_PVSVdist_gen_2D(i_gen_subleading);
     }
     double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
     double KVF_PVSVdist_2D  = get_KVF_PVSVdist_2D(i_subleading);
@@ -647,6 +659,9 @@ void full_analyzer::fill_l2_and_vtx_eff(std::map<TString, TH1*>* hists, std::map
         (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco2"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]->Fill(KVF_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_den"]->Fill(KVF_PVSVdist, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den"]->Fill(gen_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_ctau_eff_den"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_KVF_ctau_zoom_eff_den"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_KVF_ctau_zoom2_eff_den"]->Fill(_ctauHN, event_weight);
@@ -669,6 +684,12 @@ void full_analyzer::fill_l2_and_vtx_eff(std::map<TString, TH1*>* hists, std::map
         (*hists)[prefix+"_KVF_PV-SVdxyz_eff"]->Fill(KVF_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_num"]->Fill(KVF_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff"]->Fill(KVF_PVSVdist, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
+        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]->Fill(gen_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_l2_and_vtx_ctau_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_l2_and_vtx_ctau_zoom_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_l2_and_vtx_ctau_zoom2_eff_num"]->Fill(_ctauHN, event_weight);
@@ -740,6 +761,9 @@ void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefi
     (*hists)[prefix+"_KVF_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_eff_den"]);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_den"]);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_den"]);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den"]);
+    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den"]);
     //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_den"]);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_den"]);

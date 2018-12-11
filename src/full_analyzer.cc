@@ -85,6 +85,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e");
     add_histograms(&hists, &hists2D, "_OS_mu");
     add_histograms(&hists, &hists2D, "_SS_mu");
+    add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
+    add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
+    add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
+    add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
+    add_histograms(&hists, &hists2D, "_OS_e_before0jet");
+    add_histograms(&hists, &hists2D, "_SS_e_before0jet");
+    add_histograms(&hists, &hists2D, "_OS_mu_before0jet");
+    add_histograms(&hists, &hists2D, "_SS_mu_before0jet");
     add_histograms(&hists, &hists2D, "_OS_e_beforemll");
     add_histograms(&hists, &hists2D, "_SS_e_beforemll");
     add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
@@ -336,6 +344,36 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             }else{
                 fill_corrl2_eff(&hists, "_OS_mu");
                 fill_jetmet_variables(&hists, "_OS_mu");
+            }
+        }
+
+        if(_1e1disple){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                fill_histograms(&hists, "_SS_e_beforevtx", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            }else{
+                fill_histograms(&hists, "_OS_e_beforevtx", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            }           
+        }
+        if(_1mu1displmu){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                fill_histograms(&hists, "_SS_mu_beforevtx", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            }else{
+                fill_histograms(&hists, "_OS_mu_beforevtx", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            }
+        }
+        
+        if(_1e1displevtx){
+            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
+                fill_histograms(&hists, "_SS_e_before0jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            }else{
+                fill_histograms(&hists, "_OS_e_before0jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            }           
+        }
+        if(_1mu1displmuvtx){
+            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
+                fill_histograms(&hists, "_SS_mu_before0jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            }else{
+                fill_histograms(&hists, "_OS_mu_before0jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             }
         }
 
