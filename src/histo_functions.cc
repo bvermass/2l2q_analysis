@@ -31,6 +31,8 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_dRl2jet"]                         = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
     (*hists)[prefix+"_l1reliso"]                        = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
     (*hists)[prefix+"_l2reliso"]                        = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 3.5);
+    (*hists)[prefix+"_leadptrel"]                       = new TH1F(prefix+"_leadptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_ptrel"]                           = new TH1F(prefix+"_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
 
     (*hists)[prefix+"_ngentr"]                          = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
     (*hists)[prefix+"_ctau"]                            = new TH1F(prefix+"_ctau", ";c#tau_{HNL} [cm];Events", 40, 0, 100);
@@ -242,6 +244,8 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
     (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading], event_weight);
     (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading], event_weight);
+    (*hists)[prefix+"_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
+    (*hists)[prefix+"_leadptrel"]->Fill(_ptRel[i_leading], event_weight);
 
     TLorentzVector lepton1;
     TLorentzVector lepton2;
@@ -528,6 +532,7 @@ void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString pref
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     Int_t i_vtx = _lIVF_match[i_subleading];
+    cout << "i_vtx and _lIVF_match: " << i_vtx << " " << _lIVF_match[i_subleading] << endl;
     bool _1prompt1displ = false;
     if(prefix.Index("_oldID") == -1){
         if(prefix.Index("_e") != -1) _1prompt1displ = _1e1disple;
@@ -547,7 +552,6 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
     }
     double IVF_PVSVdist = get_IVF_PVSVdist(i_vtx);
-    //cout << "i_vtx: " << i_vtx << "PVSV dist: " << IVF_PVSVdist << endl;
     double IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_vtx);
 
     //double IVF_gendist = sqrt((_gen_vertex_x[i_gen_l2] - _IVF_x[_lIVF_match[i_subleading]])*(_gen_vertex_x[i_gen_l2] - _IVF_x[_lIVF_match[i_subleading]]) + (_gen_vertex_y[i_gen_l2] - _IVF_y[_lIVF_match[i_subleading]])*(_gen_vertex_y[i_gen_l2] - _IVF_y[_lIVF_match[i_subleading]]) + (_gen_vertex_z[i_gen_l2] - _IVF_z[_lIVF_match[i_subleading]])*(_gen_vertex_z[i_gen_l2] - _IVF_z[_lIVF_match[i_subleading]]));
