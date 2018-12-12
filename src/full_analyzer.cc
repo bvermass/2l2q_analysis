@@ -279,6 +279,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_old_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &old_jet_clean_full_displ[0], i_old_leading_jet_for_displ);
 
 
+        //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.
+        if(i_leading_e != -1 and i_leading_mu != -1){
+            if(_lPt[i_leading_e] > _lPt[i_leading_mu]) i_leading_mu = -1;
+            else i_leading_e = -1;
+        }
+
         //get signal region booleans
         signal_regions();
         
@@ -297,6 +303,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
         if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
         
+        
+        // Fill histograms
         
         fill_sigreg_fraction(&hists);
         fill_HNL_MC_check(&hists, &hists2D);
@@ -328,146 +336,66 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_IVF_eff(&hists, "_SS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, "_OS_mu_oldID", i_leading_mu, i_old_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
-        if(_1e1disple){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_corrl2_eff(&hists, "_SS_e");
-                fill_jetmet_variables(&hists, "_SS_e");
-            }else{
-                fill_corrl2_eff(&hists, "_OS_e");
-                fill_jetmet_variables(&hists, "_OS_e");
-            }           
-        }
-        if(_1mu1displmu){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_corrl2_eff(&hists, "_SS_mu");
-                fill_jetmet_variables(&hists, "_SS_mu");
-            }else{
-                fill_corrl2_eff(&hists, "_OS_mu");
-                fill_jetmet_variables(&hists, "_OS_mu");
-            }
-        }
+
+
+        TString signs_and_flavor = "";
+        if(_1e1disple) signs_and_flavor = (_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e])? "_SS_e" : "_OS_e";
+        else if(_1mu1displmu) signs_and_flavor = (_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu])? "_SS_mu" : "_OS_mu"; 
+        
 
         if(_1e1disple){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "_SS_e_beforevtx", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            }else{
-                fill_histograms(&hists, "_OS_e_beforevtx", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            }           
+            fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_histograms(&hists, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmu){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "_SS_mu_beforevtx", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            }else{
-                fill_histograms(&hists, "_OS_mu_beforevtx", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            }
+            fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_histograms(&hists, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
-        
+
         if(_1e1displevtx){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "_SS_e_before0jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            }else{
-                fill_histograms(&hists, "_OS_e_before0jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            }           
+            fill_histograms(&hists, signs_and_flavor + "_before0jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmuvtx){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "_SS_mu_before0jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            }else{
-                fill_histograms(&hists, "_OS_mu_before0jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            }
+            fill_histograms(&hists, signs_and_flavor + "_before0jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
 
         if(_1e1disple0jet){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "_SS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_SS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_SS_e_beforemll", i_subleading_displ_e);
-            }else{
-                fill_histograms(&hists, "_OS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_OS_e_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_OS_e_beforemll", i_subleading_displ_e);
-            }           
+            fill_histograms(&hists, signs_and_flavor + "_beforemll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmu0jet){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "_SS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_SS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_SS_mu_beforemll", i_subleading_displ_mu);
-            }else{
-                fill_histograms(&hists, "_OS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_OS_mu_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_OS_mu_beforemll", i_subleading_displ_mu);
-            }
+            fill_histograms(&hists, signs_and_flavor + "_beforemll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         
         if(_1e1disple0jet_aftermll){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "_SS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_SS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_SS_e_beforedphi", i_subleading_displ_e);
-            }else{
-                fill_histograms(&hists, "_OS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_OS_e_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_OS_e_beforedphi", i_subleading_displ_e);
-            }           
+            fill_histograms(&hists, signs_and_flavor + "_beforedphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmu0jet_aftermll){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "_SS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_SS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_SS_mu_beforedphi", i_subleading_displ_mu);
-            }else{
-                fill_histograms(&hists, "_OS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_OS_mu_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_OS_mu_beforedphi", i_subleading_displ_mu);
-            }
+            fill_histograms(&hists, signs_and_flavor + "_beforedphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
 
         if(_1e1disple0jet_afterdphi){
-            if(_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e]){
-                fill_histograms(&hists, "_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_SS_e", i_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1) fill_IVF_histograms(&hists, &hists2D, "_SS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, "_SS_e_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, &hists2D, "_SS_e_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, &hists2D, "_SS_e_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                SSe++;
-                SSe_weight += event_weight;
-            }else{
-                fill_histograms(&hists, "_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lKVF_valid[i_subleading_displ_e]) fill_KVF_histograms(&hists, "_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                else fill_KVF_inv_histograms(&hists, "_OS_e", i_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1) fill_IVF_histograms(&hists, &hists2D, "_OS_e", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, "_OS_e_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, &hists2D, "_OS_e_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                if(_lIVF_match[i_subleading_displ_e] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, &hists2D, "_OS_e_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-                OSe++;
-                OSe_weight += event_weight;
-            }
+            fill_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_KVF_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_KVF_inv_histograms(&hists, signs_and_flavor, i_subleading_displ_e); //is this one necessary still?
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+
+            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}//make this a separate block of code at the end of the loop (more readable)
+            else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmu0jet_afterdphi){
-            if(_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu]){
-                fill_histograms(&hists, "_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_SS_mu", i_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1) fill_IVF_histograms(&hists, &hists2D, "_SS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, "_SS_mu_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, &hists2D, "_SS_mu_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, &hists2D, "_SS_mu_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                SSmu++;
-                SSmu_weight += event_weight;
-            }else{
-                fill_histograms(&hists, "_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lKVF_valid[i_subleading_displ_mu]) fill_KVF_histograms(&hists, "_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                else fill_KVF_inv_histograms(&hists, "_OS_mu", i_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1) fill_IVF_histograms(&hists, &hists2D, "_OS_mu", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, "_OS_mu_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, &hists2D, "_OS_mu_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                if(_lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, &hists2D, "_OS_mu_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-                OSmu++;
-                OSmu_weight += event_weight;
-            }
+            fill_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_KVF_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_KVF_inv_histograms(&hists, signs_and_flavor, i_subleading_displ_mu); //is this one necessary still?
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+
+            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}//make this a separate block of code at the end of the loop (more readable)
+            else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
     }
 

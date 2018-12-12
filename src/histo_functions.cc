@@ -247,6 +247,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
     (*hists)[prefix+"_leadptrel"]->Fill(_ptRel[i_leading], event_weight);
 
+    (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet_for_displ], event_weight);
+    (*hists)[prefix+"_met"]->Fill(_met, event_weight);
+
     TLorentzVector lepton1;
     TLorentzVector lepton2;
     lepton1.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
@@ -330,6 +333,8 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
 
 
 void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+    if(!_lKVF_valid[i_subleading]) return;
+
     //plots for valid KVF vertices
     if(sampleflavor != "bkg") (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_l2, i_subleading));
     else (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
@@ -381,6 +386,7 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, TString 
 
 
 void full_analyzer::fill_KVF_inv_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_subleading){
+    if(_lKVF_valid[i_subleading]) return;
     (*hists)[prefix+"_invVtx_ntracks"]->Fill(_lKVF_ntracks[i_subleading], event_weight);
     if(_lKVF_ntracks[i_subleading] == 1) fill_1tr(hists, prefix, i_subleading);
 }
@@ -435,6 +441,9 @@ void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int
 
 
 void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+    if(_lIVF_match[i_subleading] > _IVF_nvertex) cout << "too high value for _lIVF_match!" << endl;
+    if(_lIVF_match[i_subleading] == -1 or _lIVF_match[i_subleading] >= _IVF_nvertex) return;
+
     Int_t i_vtx = _lIVF_match[i_subleading];
     
     double IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_vtx);
@@ -489,40 +498,22 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 }
 
 
-void full_analyzer::fill_jetmet_variables(std::map<TString, TH1*>* hists, TString prefix)
+void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString prefix, int i_subleading, int i_gen_subleading)
 {
-    (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet_for_displ], event_weight);
-    (*hists)[prefix+"_met"]->Fill(_met, event_weight);
-}
-
-
-void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString prefix)
-{
-    int i_lep = -1;
-    int i_gen_lep = -1;
-    if(prefix.Index("_e") != -1){
-        i_lep = i_subleading_displ_e;
-        i_gen_lep = i_gen_subleading_displ_e;
-    }
-    if(prefix.Index("_mu") != -1){ 
-        i_lep = i_subleading_displ_mu;
-        i_gen_lep = i_gen_subleading_displ_mu;
-    }
-
     double KVF_gendist = 0;
     if(sampleflavor != "bkg"){
-        KVF_gendist = get_KVF_gendist(i_gen_l2, i_lep);
+        KVF_gendist = get_KVF_gendist(i_gen_l2, i_subleading);
     } else {
-        KVF_gendist = get_KVF_gendist(i_gen_lep, i_lep);
+        KVF_gendist = get_KVF_gendist(i_gen_subleading, i_subleading);
     }
 
-    (*hists)[prefix+"_corrl2_pt_eff_den"]->Fill(_lPt[i_lep], event_weight);
+    (*hists)[prefix+"_corrl2_pt_eff_den"]->Fill(_lPt[i_subleading], event_weight);
     (*hists)[prefix+"_corrl2_ctau_eff_den"]->Fill(_ctauHN, event_weight);
     (*hists)[prefix+"_corrl2_gendist_eff_den"]->Fill(KVF_gendist, event_weight);
     if(subleading_is_l2){
-        (*hists)[prefix+"_corrl2_pt_eff_num"]->Fill(_lPt[i_lep], event_weight);
+        (*hists)[prefix+"_corrl2_pt_eff_num"]->Fill(_lPt[i_subleading], event_weight);
         (*hists)[prefix+"_corrl2_ctau_eff_num"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_corrl2_pt_eff"]->Fill(_lPt[i_lep], event_weight);
+        (*hists)[prefix+"_corrl2_pt_eff"]->Fill(_lPt[i_subleading], event_weight);
         (*hists)[prefix+"_corrl2_ctau_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_corrl2_gendist_eff_num"]->Fill(KVF_gendist, event_weight);
         (*hists)[prefix+"_corrl2_gendist_eff"]->Fill(KVF_gendist, event_weight);
@@ -532,7 +523,6 @@ void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString pref
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     Int_t i_vtx = _lIVF_match[i_subleading];
-    cout << "i_vtx and _lIVF_match: " << i_vtx << " " << _lIVF_match[i_subleading] << endl;
     bool _1prompt1displ = false;
     if(prefix.Index("_oldID") == -1){
         if(prefix.Index("_e") != -1) _1prompt1displ = _1e1disple;
