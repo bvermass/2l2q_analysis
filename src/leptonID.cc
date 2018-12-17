@@ -183,7 +183,6 @@ int full_analyzer::find_leading_e(bool* electronID, bool* ele_clean)
 {
     int index_good_leading = -1;
     for(unsigned i = 0; i < _nL; ++i){
-	    if(_lFlavor[i] != 0)   continue;
 	    if(!*(electronID + i)) continue;
 	    if(!*(ele_clean + i))  continue;
 	    //if(_lPt[i] < 30)       continue;
@@ -197,7 +196,6 @@ int full_analyzer::find_leading_mu(bool* muonID)
 {
     int index_good_leading = -1;
     for(unsigned i = 0; i < _nL; ++i){
-	    if(_lFlavor[i] != 1) continue;
 	    if(!*(muonID + i))   continue;
 	    //if(_lPt[i] < 25)     continue;
 	    if(index_good_leading == -1) index_good_leading = i;
@@ -210,14 +208,13 @@ int full_analyzer::find_leading_mu(bool* muonID)
 int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int index_good_leading)
 {
     int index_good_subleading = -1;
-    //if(index_good_leading == -1) return index_good_subleading;
+    if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	    if(index_good_leading != -1 and i == index_good_leading) continue;
-	    if(_lFlavor[i] != 0)   	    continue;
-	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
+	    if(i == index_good_leading) continue;
 	    if(!*(electronID + i))      continue;
 	    if(!*(ele_clean + i))       continue;
 	    if(_lPt[i] < 7)             continue;
+        if(_lPt[i] > _lPt[index_good_leading]) continue;
 	    if(index_good_subleading == -1) index_good_subleading = i;
 	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
@@ -227,13 +224,12 @@ int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int inde
 int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 {
     int index_good_subleading = -1;
-    //if(index_good_leading == -1) return index_good_subleading;
+    if(index_good_leading == -1) return index_good_subleading;
     for(int i = 0; i < _nL; ++i){
-	    if(index_good_leading != -1 and i == index_good_leading) continue;
-	    if(_lFlavor[i] != 1)   	    continue;
-	    //if(_lCharge[i] != _lCharge[index_good_leading]) continue;
+	    if(i == index_good_leading) continue;
 	    if(!*(muonID + i))          continue;
 	    if(_lPt[i] < 5)             continue;
+        if(_lPt[i] > _lPt[index_good_leading]) continue;
 	    if(index_good_subleading == -1) index_good_subleading = i;
 	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
     }
