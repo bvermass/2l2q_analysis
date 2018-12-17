@@ -19,6 +19,11 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
     (*hists)[prefix+"_cuts"]                            = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
 
+    (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
+    (*hists)[prefix+"_nMu"]                             = new TH1F(prefix+"_nMu", ";N_{muon};Events", 10, 0, 10);
+    (*hists)[prefix+"_nLight"]                          = new TH1F(prefix+"_nLight", ";N_{lepton};Events", 10, 0, 10);
+    (*hists)[prefix+"_nJets_uncl"]                      = new TH1F(prefix+"_nJets_uncl", ";N_{jets(uncl.)};Events", 10, 0, 10);
+    (*hists)[prefix+"_nJets_cl"]                        = new TH1F(prefix+"_nJets_cl", ";N_{jets(cl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_pt"]                              = new TH1F(prefix+"_pt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
     (*hists)[prefix+"_leadpt"]                          = new TH1F(prefix+"_leadpt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
     (*hists)[prefix+"_leadjetpt"]                       = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
@@ -226,6 +231,26 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+    int nEle    = 0;
+    int nMu     = 0;
+    for(unsigned i = 0; i < _nL; i++){
+        if(olddisplElectronID[i]) nEle++;
+        if(olddisplMuonID[i]) nMu++;
+    }
+
+    int nJets_uncl = 0;
+    int nJets_cl = 0;
+    for(unsigned i = 0; i < _nJets; i++){
+        if(fullJetID[i]) nJets_uncl++;
+        if(fullJetID[i] and old_jet_clean_full_displ[i]) nJets_cl++;
+    }
+
+    (*hists)[prefix+"_nEle"]->Fill(nEle, event_weight);
+    (*hists)[prefix+"_nMu"]->Fill(nMu, event_weight);
+    (*hists)[prefix+"_nLight"]->Fill(nEle + nMu, event_weight);
+    (*hists)[prefix+"_nJets_uncl"]->Fill(nJets_uncl, event_weight);
+    (*hists)[prefix+"_nJets_cl"]->Fill(nJets_cl, event_weight);
+
     (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading], event_weight);
     (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading], event_weight);
     (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading]), event_weight);
