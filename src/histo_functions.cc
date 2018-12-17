@@ -234,15 +234,15 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(olddisplElectronID[i]) nEle++;
-        if(olddisplMuonID[i]) nMu++;
+        if(displElectronID[i]) nEle++;
+        if(displMuonID[i]) nMu++;
     }
 
     int nJets_uncl = 0;
     int nJets_cl = 0;
     for(unsigned i = 0; i < _nJets; i++){
         if(fullJetID[i]) nJets_uncl++;
-        if(fullJetID[i] and old_jet_clean_full_displ[i]) nJets_cl++;
+        if(fullJetID[i] and jet_clean_full_displ[i]) nJets_cl++;
     }
 
     (*hists)[prefix+"_nEle"]->Fill(nEle, event_weight);
