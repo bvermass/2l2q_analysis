@@ -50,23 +50,23 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
     
     //Find out what is different about events in Moham_noBasile.csv
-    ifstream maskinputstream;
-    maskinputstream.open("../Moham_noBasile.csv");
-    string maskline;
-    int eventnumber[57];
-    double leppt[57];
-    int i_stream = 0;
-    if(maskinputstream.is_open()) {
-        while(!maskinputstream.eof()) {
-            getline(maskinputstream, maskline);
-            if(maskline == "") continue;
-            eventnumber[i_stream] = stoi(maskline.substr(0, maskline.find(" ")));
-            leppt[i_stream]       = stod(maskline.substr(maskline.find(" ")));
-            cout << "nb and pt: " << eventnumber[i_stream] << ", " << leppt[i_stream] << endl;
-            i_stream++;
-        }
-    }
-    maskinputstream.close();
+    // ifstream maskinputstream;
+    // maskinputstream.open("../Moham_noBasile.csv");
+    // string maskline;
+    // int eventnumber[57];
+    // double leppt[57];
+    // int i_stream = 0;
+    // if(maskinputstream.is_open()) {
+    //     while(!maskinputstream.eof()) {
+    //         getline(maskinputstream, maskline);
+    //         if(maskline == "") continue;
+    //         eventnumber[i_stream] = stoi(maskline.substr(0, maskline.find(" ")));
+    //         leppt[i_stream]       = stod(maskline.substr(maskline.find(" ")));
+    //         cout << "nb and pt: " << eventnumber[i_stream] << ", " << leppt[i_stream] << endl;
+    //         i_stream++;
+    //     }
+    // }
+    // maskinputstream.close();
     
 
     Init(tree);
@@ -177,20 +177,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
 	    }
 
-        bool matchmask = false;
-        //use Moham_noBasile.csv mask
-        for(int i = 0; i < 57; i++){
-            //if(_eventNb == eventnumber[i]){
-                //cout << "eventNb match, pt:";
-                for(unsigned j = 0; j < _nL; j++){
-                    if(fabs(_lPt[j] - leppt[i]) <  0.0001){
-                        matchmask == true;
-                        count++;
-                        //cout << " " << _lPt[j] << " - " << leppt[i] << " eventnb: " << _eventNb << " " << eventnumber[i] << endl;
-                    }
-                }
-            //}
-        }
+        //bool matchmask = false;
+        ////use Moham_noBasile.csv mask
+        //for(int i = 0; i < 57; i++){
+        //    //if(_eventNb == eventnumber[i]){
+        //        //cout << "eventNb match, pt:";
+        //        for(unsigned j = 0; j < _nL; j++){
+        //            if(fabs(_lPt[j] - leppt[i]) <  0.0001){
+        //                matchmask == true;
+        //                count++;
+        //                //cout << " " << _lPt[j] << " - " << leppt[i] << " eventnb: " << _eventNb << " " << eventnumber[i] << endl;
+        //            }
+        //        }
+        //    //}
+        //}
         //if(!matchmask) continue;
             //cout << "what";
             //cout << "nL, nJets, IsoTkMu24, IsoMu24: " << _nL << " " << _nJets << " " << _HLT_IsoTkMu24 << " " << _HLT_IsoMu24 << endl;
