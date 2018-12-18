@@ -230,7 +230,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 }
 
 
-void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading){
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
@@ -349,15 +349,7 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, TString 
     if(!_lKVF_valid[i_subleading]) return;
 
     //plots for valid KVF vertices
-    if(sampleflavor != "bkg") (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_l2, i_subleading));
-    else (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
-    if(sampleflavor != "bkg") (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(get_KVF_gendist(i_gen_l2, i_subleading));
-    else (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
     
-    //if(sampleflavor != "bkg") (*hists)[prefix+"_KVF_gendist"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lKVF_x[i_subleading])*(_gen_vertex_x[i_gen_l2] - _lKVF_x[i_subleading]) + (_gen_vertex_y[i_gen_l2] - _lKVF_y[i_subleading])*(_gen_vertex_y[i_gen_l2] - _lKVF_y[i_subleading]) + (_gen_vertex_z[i_gen_l2] - _lKVF_z[i_subleading])*(_gen_vertex_z[i_gen_l2] - _lKVF_z[i_subleading])), event_weight);
-    //else (*hists)[prefix+"_KVF_gendist"]->Fill(sqrt((_gen_vertex_x[i_gen_subleading] - _lKVF_x[i_subleading])*(_gen_vertex_x[i_gen_subleading] - _lKVF_x[i_subleading]) + (_gen_vertex_y[i_gen_subleading] - _lKVF_y[i_subleading])*(_gen_vertex_y[i_gen_subleading] - _lKVF_y[i_subleading]) + (_gen_vertex_z[i_gen_subleading] - _lKVF_z[i_subleading])*(_gen_vertex_z[i_gen_subleading] - _lKVF_z[i_subleading])), event_weight);
-    //if(sampleflavor != "bkg") (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(sqrt((_gen_vertex_x[i_gen_l2] - _lKVF_x[i_subleading])*(_gen_vertex_x[i_gen_l2] - _lKVF_x[i_subleading]) + (_gen_vertex_y[i_gen_l2] - _lKVF_y[i_subleading])*(_gen_vertex_y[i_gen_l2] - _lKVF_y[i_subleading]) + (_gen_vertex_z[i_gen_l2] - _lKVF_z[i_subleading])*(_gen_vertex_z[i_gen_l2] - _lKVF_z[i_subleading])), event_weight);
-    //else (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(sqrt((_gen_vertex_x[i_gen_subleading] - _lKVF_x[i_subleading])*(_gen_vertex_x[i_gen_subleading] - _lKVF_x[i_subleading]) + (_gen_vertex_y[i_gen_subleading] - _lKVF_y[i_subleading])*(_gen_vertex_y[i_gen_subleading] - _lKVF_y[i_subleading]) + (_gen_vertex_z[i_gen_subleading] - _lKVF_z[i_subleading])*(_gen_vertex_z[i_gen_subleading] - _lKVF_z[i_subleading])), event_weight);
     (*hists)[prefix+"_KVF_chi2"]->Fill(_lKVF_chi2[i_subleading], event_weight);
     (*hists)[prefix+"_KVF_normchi2"]->Fill(_lKVF_chi2[i_subleading] / _lKVF_df[i_subleading], event_weight);
     (*hists)[prefix+"_KVF_normchi2_zoom"]->Fill(_lKVF_chi2[i_subleading] / _lKVF_df[i_subleading], event_weight);
@@ -395,6 +387,11 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, TString 
         }
         (*hists)[prefix+"_KVF_mass"]->Fill(all.M(), event_weight);
     }
+    
+    if(i_gen_subleading != -1){
+        (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
+        (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
+    }
 }
 
 
@@ -406,6 +403,7 @@ void full_analyzer::fill_KVF_inv_histograms(std::map<TString, TH1*>* hists, TStr
 
 
 void full_analyzer::fill_1tr(std::map<TString, TH1*>* hists, TString prefix, int i_lep){
+    //rewrite this function?
     (*hists)[prefix+"_invVtx_1tr_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
 
     // find out how many leptons are in the packed daughters of HNL
@@ -460,35 +458,15 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     
     double IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_vtx);
     double IVF_PVSVdist    = get_IVF_PVSVdist(i_vtx);
-    double IVF_gendist = 0;
-    double gen_PVSVdist = 0;
-    if(sampleflavor != "bkg"){ 
-        IVF_gendist     = get_IVF_gendist(i_gen_l2, i_vtx);
-        gen_PVSVdist    = get_PVSVdist_gen(i_gen_l2);
-    } else {
-        IVF_gendist     = get_IVF_gendist(i_gen_subleading, i_vtx);
-        gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
-    }
-    //if(sampleflavor != "bkg") gendist = sqrt((_gen_vertex_x[i_gen_l2] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l2] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l2] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l2] - _IVF_y[i_vtx]) + (_gen_vertex_z[i_gen_l2] - _IVF_z[i_vtx])*(_gen_vertex_z[i_gen_l2] - _IVF_z[i_vtx]));
-    //else gendist = sqrt((_gen_vertex_x[i_gen_subleading] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_subleading] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_subleading] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_subleading] - _IVF_y[i_vtx]) + (_gen_vertex_z[i_gen_subleading] - _IVF_z[i_vtx])*(_gen_vertex_z[i_gen_subleading] - _IVF_z[i_vtx]));
-
-    //double PVSVdxy = sqrt((_PV_x - _IVF_x[i_vtx])*(_PV_x - _IVF_x[i_vtx]) + (_PV_y - _IVF_y[i_vtx])*(_PV_y - _IVF_y[i_vtx]));
-    //double PVSVdxyz = sqrt(PVSVdxy*PVSVdxy + (_PV_z - _IVF_z[i_vtx])*(_PV_z - _IVF_z[i_vtx]));
 
     (*hists)[prefix+"_IVF_ctau"]->Fill(_ctauHN, event_weight);
-    (*hists)[prefix+"_IVF_gendist"]->Fill(IVF_gendist, event_weight);
-    (*hists)[prefix+"_IVF_gendist_zoom"]->Fill(IVF_gendist, event_weight);
     (*hists)[prefix+"_IVF_chi2"]->Fill(_IVF_chi2[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_normchi2"]->Fill(_IVF_chi2[i_vtx]/_IVF_df[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_normchi2_zoom"]->Fill(_IVF_chi2[i_vtx]/_IVF_df[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxy"]->Fill(IVF_PVSVdist_2D, event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxyz"]->Fill(IVF_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco2"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
     (*hists2D)[prefix+"_IVF_ctauHN_PV-SVdxyz"]->Fill(_ctauHN, IVF_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_ctauHN_genPV-SVdxyz"]->Fill(_ctauHN, gen_PVSVdist, event_weight);
     (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), IVF_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), gen_PVSVdist, event_weight);
     (*hists)[prefix+"_IVF_ntracks"]->Fill(_IVF_ntracks[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_df"]->Fill(_IVF_df[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_cxy"]->Fill(sqrt(_IVF_cx[i_vtx]*_IVF_cx[i_vtx] + _IVF_cy[i_vtx]*_IVF_cy[i_vtx]), event_weight);
@@ -507,17 +485,26 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
         tracksum += tmptrack;
     }
     (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
+    
+    
+    if(i_gen_subleading != -1){
+        double IVF_gendist     = get_IVF_gendist(i_gen_subleading, i_vtx);
+        double gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
+        (*hists)[prefix+"_IVF_gendist"]->Fill(IVF_gendist, event_weight);
+        (*hists)[prefix+"_IVF_gendist_zoom"]->Fill(IVF_gendist, event_weight);
+        (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
+        (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco2"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
+        (*hists2D)[prefix+"_IVF_ctauHN_genPV-SVdxyz"]->Fill(_ctauHN, gen_PVSVdist, event_weight);
+        (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), gen_PVSVdist, event_weight);
+    }
 }
 
 
 void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString prefix, int i_subleading, int i_gen_subleading)
 {
-    double KVF_gendist = 0;
-    if(sampleflavor != "bkg"){
-        KVF_gendist = get_KVF_gendist(i_gen_l2, i_subleading);
-    } else {
-        KVF_gendist = get_KVF_gendist(i_gen_subleading, i_subleading);
-    }
+    if(i_gen_subleading == -1) return;
+
+    double KVF_gendist = get_KVF_gendist(i_gen_subleading, i_subleading);
 
     (*hists)[prefix+"_corrl2_pt_eff_den"]->Fill(_lPt[i_subleading], event_weight);
     (*hists)[prefix+"_corrl2_ctau_eff_den"]->Fill(_ctauHN, event_weight);
@@ -535,21 +522,14 @@ void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString pref
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     //To get rid of absurdly high _lIVF_match values that cause a segmentation violation (in TTJets_SingleleptfromT_...)
-    if( _lIVF_match[i_subleading] >= 3000){ /*cout << "too high value for _lIVF_match! _lIVF_match and _IVF_nvertex: " <<  _lIVF_match[i_subleading] << " " << (int)_IVF_nvertex << endl;*/ return;}
+    if( _lIVF_match[i_subleading] >= 3000 or i_gen_subleading == -1){ /*cout << "too high value for _lIVF_match! _lIVF_match and _IVF_nvertex: " <<  _lIVF_match[i_subleading] << " " << (int)_IVF_nvertex << endl;*/ return;}
 
     Int_t i_vtx = _lIVF_match[i_subleading];
     
-    double IVF_gendist = 0;
-    double IVF_PVSVdist_gen_2D = 0;
-    if(sampleflavor != "bkg"){ 
-        IVF_gendist     = get_IVF_gendist(i_gen_l2, i_vtx);
-        IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_l2);
-    }else {
-        IVF_gendist     = get_IVF_gendist(i_gen_subleading, i_vtx);
-        IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
-    }
-    double IVF_PVSVdist = get_IVF_PVSVdist(i_vtx);
-    double IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_vtx);
+    double IVF_gendist          = get_IVF_gendist(i_gen_subleading, i_vtx);
+    double IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
+    double IVF_PVSVdist         = get_IVF_PVSVdist(i_vtx);
+    double IVF_PVSVdist_2D      = get_IVF_PVSVdist_2D(i_vtx);
 
     (*hists)[prefix+"_IVF_PV-SVdxy_eff_den"]->Fill(IVF_PVSVdist_2D, event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_den"]->Fill(IVF_PVSVdist_2D, event_weight);
@@ -611,18 +591,11 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
 }
 
 void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){   
-    double KVF_gendist      = 0;
-    double gen_PVSVdist     = 0;
-    double gen_PVSVdist_2D  = 0;
-    if(sampleflavor != "bkg"){
-        KVF_gendist         = get_KVF_gendist(i_gen_l2, i_subleading);
-        gen_PVSVdist        = get_PVSVdist_gen(i_gen_l2);
-        gen_PVSVdist_2D     = get_PVSVdist_gen_2D(i_gen_l2);
-    } else {
-        KVF_gendist         = get_KVF_gendist(i_gen_subleading, i_subleading);
-        gen_PVSVdist        = get_PVSVdist_gen(i_gen_subleading);
-        gen_PVSVdist_2D     = get_PVSVdist_gen_2D(i_gen_subleading);
-    }
+    if(i_gen_subleading == -1) return;
+
+    double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
+    double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
+    double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
     double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
     double KVF_PVSVdist_2D  = get_KVF_PVSVdist_2D(i_subleading);
 
