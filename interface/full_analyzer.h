@@ -885,6 +885,7 @@ public :
    // in src/signal_regions.cc
    virtual void     signal_regions();
    virtual bool     leadptcut(TString);
+   virtual bool     no_additional_leptons();
    virtual bool     mllcut(int, int);
    virtual bool     dRcut(int, int);
    virtual bool     dphicut(int, int, double);

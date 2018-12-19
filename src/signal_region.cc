@@ -23,13 +23,12 @@ void full_analyzer::signal_regions(){
 
     _1e1disple                  = _1e && 
                                   i_subleading_displ_e != -1;
-    
+
     _1e1displevtx               = _1e1disple &&
                                   _lIVF_match[i_subleading_displ_e] != -1;
 
-    _1e1disple0adde             = _1e1displevtx && 
-                                  i_subleading_e == -1 && 
-                                  i_subleading_noniso_e == -1;
+    _1e1disple0adde             = _1e1displevtx &&
+                                  no_additional_leptons();
     
     _1e1disple0jet              = _1e1disple0adde && 
                                   i_leading_jet_for_displ == -1;
@@ -61,8 +60,7 @@ void full_analyzer::signal_regions(){
                                   _lIVF_match[i_subleading_displ_mu] != -1;
     
     _1mu1displmu0addmu          = _1mu1displmuvtx && 
-                                  i_subleading_mu == -1 && 
-                                  i_subleading_noniso_mu == -1;
+                                  no_additional_leptons();
     
     _1mu1displmu0jet            = _1mu1displmu0addmu && 
                                   i_leading_jet_for_displ == -1;
@@ -128,6 +126,15 @@ bool full_analyzer::leadptcut(TString flavor){
     else if(flavor == "mu" && i_leading_mu != -1 && _lPt[i_leading_mu] > 25) return true;
     else return false;
 }
+
+bool full_analyzer::no_additional_leptons(){
+    int loose_leptons = 0;
+    for(unsigned i = 0; i < _nL; i++){
+        if(displElectronID[i] and ele_clean_full_noniso_displ[i] or displMuonID[i]) loose_leptons++;
+    }
+    return (loose_leptons == 2);
+}
+
 
 bool full_analyzer::mllcut(int i_lead, int i_sublead){
     TLorentzVector leadinglepton;

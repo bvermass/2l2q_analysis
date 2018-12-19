@@ -290,8 +290,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
         i_vtx_subleading_displ_e    = _lIVF_match[i_subleading_displ_e];
         i_vtx_subleading_displ_mu   = _lIVF_match[i_subleading_displ_mu];
-        //i_vtx_subleading_displ_e    = find_vtx_matching_to_lepton(i_subleading_displ_e);
-        //i_vtx_subleading_displ_mu   = find_vtx_matching_to_lepton(i_subleading_displ_mu);
         
         // Find gen level leptons matching to the leading and subleading lepton (geometrically when its background or data, pgdID when its signal
         i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
