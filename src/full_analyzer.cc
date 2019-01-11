@@ -470,6 +470,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
     else outputfilename += ".root";
 
+    
+    TGraphAsymmErrors* HLT_eff      = new TGraphAsymmErrors((TH1F*)hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"], (TH1F*)hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"], "cpv");
+    
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
     for( it = hists.begin(); it != hists.end(); it++){
@@ -519,6 +522,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     give_alphanumeric_labels(&hists, "_OS_e");
     give_alphanumeric_labels(&hists, "_SS_mu");
     give_alphanumeric_labels(&hists, "_OS_mu");
+
+
+    for(int i = 0; i < 80; i++){
+        cout << "num content, error + den content, error bin " << i << ": " << hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->GetBinContent(i) << " " << hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->GetBinError(i) << " + " << hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]->GetBinContent(i) << " " << hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]->GetBinError(i) << " " <<  hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->GetBinContent(i)/hists["Afterptcut_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]->GetBinContent(i) << endl;
+    }
+    HLT_eff->Write();
 
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
