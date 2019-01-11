@@ -22,6 +22,7 @@ using namespace std;
 
 
 std::map<TString, TH1*>::iterator it;
+std::map<TString, TGraphAsymmErrors*>::iterator it_graphs;
 
 
 TString make_pathname(TString histname, TString pathname, TString linorlog)
@@ -56,7 +57,6 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
 
 void mapmarkerstyle(std::map<TString, TH1*> hists)
 {
-    int i = 0;
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
         //h->SetMarkerStyle(20);
@@ -65,6 +65,15 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
     }
 }
 
+void mapmarkerstyle(std::map<TString, TGraphAsymmErrors*> graphs)
+{
+    for( it_graphs = graphs.begin(); it_graphs != graphs.end(); it_graphs++){
+        TGraphAsymmErrors* h = it_graphs->second;
+        //h->SetMarkerStyle(20);
+        h->SetMarkerSize(0);
+        h->SetLineWidth(2);
+    }
+}
 
 void markerstyle(TH1F *hist, TString color)
 {
@@ -229,6 +238,36 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
 }
 
 
+void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
+{
+    c->SetLogx(lin0log1);
+    if(xmax != xmin) h->GetXaxis()->SetLimits(xmin, xmax);
+    if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
+    h->GetXaxis()->SetTitleOffset(1.2);
+    h->GetHistogram()->SetMinimum(0.);
+    h->GetHistogram()->SetMaximum(1.2*h->GetHistogram()->GetMaximum());
+    if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
+    h->GetYaxis()->SetTitleOffset(1.5);
+    h->Draw(drawoptions);
+  
+    lgend->DrawClone("same");
+
+    // "mass, coupling and flavor info if relevant in top right
+    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
+    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
+    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
+    if(flavor != "" and coupling != "") couplinglatex += ", ";
+    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
+    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
+    
+    draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.87, 0.85, 22, 31, masslatex + couplinglatex + flavorlatex);
+    
+    //Add option to make several formats, like .root, .png,...
+    c->Print(name);
+}
+
+
 void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString flavor, TString mass, TString coupling)
 {
     // set y range lin or log
@@ -319,7 +358,6 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
     stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
     lgend->DrawClone("same");
     
-    //TLatex luminosity   = new TLatex(
     c->Modified();
     c->Print(name);
 }
@@ -352,3 +390,34 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     c->Modified();
     c->Print(name);
 }
+
+
+void draw_multigraph(TString name, TCanvas *c, TMultiGraph* multigraph, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString drawoptions)
+{
+    c->SetLogy(ylin0log1);
+    c->SetLogx(xlin0log1);
+    
+    multigraph->Draw(drawoptions);
+
+    multigraph->SetTitle("");
+    multigraph->GetXaxis()->SetTitle(Xaxis);
+    multigraph->GetYaxis()->SetTitle(Yaxis);
+    multigraph->GetXaxis()->SetTitleOffset(1.2);
+    multigraph->GetYaxis()->SetTitleOffset(1.5);
+
+    if(xmin != -1) multigraph->GetXaxis()->SetLimits(xmin,xmax);
+    if(ymin != -1 && multigraph->GetHistogram()->GetMaximum() > ymin) multigraph->SetMinimum(ymin);
+    else if(ymin != -1 && ylin0log1 == 0) multigraph->SetMinimum(0.05 * multigraph->GetHistogram()->GetMaximum());
+    else if(ymin != -1 && ylin0log1 == 1) multigraph->SetMinimum(0.0001 * multigraph->GetHistogram()->GetMaximum());
+    if(ymax != -1) multigraph->SetMaximum(ymax);
+    
+    // "CMS simulation" in top left
+    draw_text_latex(0.1, 0.905, 25, 11, "#bf{CMS} #it{simulation}");
+    draw_text_latex(0.9, 0.905, 22, 31, "35.9 fb^{-1} (13 TeV)");
+
+    lgend->DrawClone("same");
+
+    c->Modified();
+    c->Print(name);
+}
+
