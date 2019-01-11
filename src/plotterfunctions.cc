@@ -195,12 +195,6 @@ void divide_by_binwidth(TH1F* h)
     if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
 }
 
-TString get_yaxistitle(TString histname, TString current_title)
-{
-    if(histname.Index("eff") != -1 and histname.Index("eff_num") == -1 and histname.Index("eff_den") == -1) return "Eff.";
-    else return current_title;
-}
-
 void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
 {
     // set x range lin or log

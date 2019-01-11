@@ -95,6 +95,7 @@ void plot_every_variable_in_root_file(TString filename)
     while ((key = (TKey*)next())) {
 
         TClass *cl = gROOT->GetClass(key->GetClassName());
+
         if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
             TH1F *h = (TH1F*)key->ReadObj();
             TString histname = h->GetName();
@@ -103,22 +104,26 @@ void plot_every_variable_in_root_file(TString filename)
             // xlin or log
             int xlog = (histname.Index("xlog") == -1)? 0 : 1;
             // Events or Eff. in yaxis title
-            TString yaxistitle = get_yaxistitle(histname, h->GetYaxis()->GetTitle());
+            TString yaxistitle = h->GetYaxis()->GetTitle();
 
             TString pathname_lin = make_pathname(histname, pathname, "lin");
             TString pathname_log = make_pathname(histname, pathname, "log");
             gSystem->Exec("mkdir -p " + pathname_lin);
             gSystem->Exec("mkdir -p " + pathname_log);
-       
-            // If a histogram is an efficiency, draw it as a TGraphAsymmErrors
-            if(histname.Index("eff") != -1 and histname.Index("eff_num") == -1 and histname.Index("eff_den") == -1){
-                TGraphAsymmErrors* h_eff = new TGraphAsymmErrors(h);
-                draw_TGraphAsymmErrors(pathname_lin + histname + "_asymm.pdf", c, h_eff, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling);
-            }
+
+            
             markerstyle(h,"blue");
-        
 
             draw_1_hist(pathname_lin + histname + ".pdf", c, h, "E1", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling); 
+            
+            // Efficiencies are calculated right here as TGraphAsymmErrors:       
+            if(histname.Index("eff_num") != -1){
+                TGraphAsymmErrors* efficiency_graph = new TGraphAsymmErrors((TH1F*)h, (TH1F*)file->Get(histname(0, histname.Index("eff_num") + 4) + "den"), "cp");
+                efficiency_graph->GetXaxis()->SetTitle(h->GetXaxis()->GetTitle());
+                yaxistitle = "Eff.";
+                draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling);
+            }
+
         }else if(cl->InheritsFrom("TH2")){
             TH2F *h = (TH2F*)key->ReadObj();
             TString histname = h->GetName();
@@ -131,20 +136,22 @@ void plot_every_variable_in_root_file(TString filename)
 
             TString drawoptions = get_2D_draw_options(h);
             draw_2D_hist(pathname_lin + histname + ".pdf", c, h, drawoptions, &lgendrup, "", "", flavor, mass, coupling);
-        }else if(cl->InheritsFrom("TGraphAsymmErrors")){
-            TGraphAsymmErrors* h = (TGraphAsymmErrors*)key->ReadObj();
-            TString histname = h->GetName();
-            
-            // xlin or log
-            int xlog = (histname.Index("xlog") == -1)? 0 : 1;
-            // Events or Eff. in yaxis title
-            TString yaxistitle = get_yaxistitle(histname, h->GetYaxis()->GetTitle());
-                                                 
-            TString pathname_lin = make_pathname(histname, pathname, "lin");
-            gSystem->Exec("mkdir -p " + pathname_lin);
-
-            draw_TGraphAsymmErrors(pathname_lin + histname + "_asymm2.pdf", c, h, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling);
         }
+        //This part is obsolete already?    
+        //}else if(cl->InheritsFrom("TGraphAsymmErrors")){
+        //    TGraphAsymmErrors* h = (TGraphAsymmErrors*)key->ReadObj();
+        //    TString histname = h->GetName();
+        //    
+        //    // xlin or log
+        //    int xlog = (histname.Index("xlog") == -1)? 0 : 1;
+        //    // Events or Eff. in yaxis title
+        //    TString yaxistitle = "Eff.";
+        //                                         
+        //    TString pathname_lin = make_pathname(histname, pathname, "lin");
+        //    gSystem->Exec("mkdir -p " + pathname_lin);
+
+        //    draw_TGraphAsymmErrors(pathname_lin + histname + "_asymm2.pdf", c, h, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling);
+        //}
     } 
     cout << "plots finished" << endl;
 }

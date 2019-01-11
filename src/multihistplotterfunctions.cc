@@ -67,6 +67,7 @@ int main(int argc, char * argv[])
         
         // get correct reference histogram
         TClass *cl = gROOT->GetClass(key->GetClassName());
+
         if (cl->InheritsFrom("TH1")){
             TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogramt
             if(h_ref->GetMaximum() == 0) continue;
@@ -82,26 +83,23 @@ int main(int argc, char * argv[])
             gSystem->Exec("mkdir -p " + pathname_lin);
             gSystem->Exec("mkdir -p " + pathname_log);
 
-            // find flavor e or mu // DELETE if everything works fine without it
-            //TString flavor;
-            //if(histname.Index("_e_") != -1) flavor = "e";
-            //else if(histname.Index("_mu_") != -1) flavor = "#mu";
-            //else flavor = "e";
-
             // get background and signal histograms
             hists.clear();
+            if(histname.Index("eff_num") != -1) graphs.clear();
             for(int i = 1; i < (argc +1)/2; i++){
                 TString name = (TString)argv[i];
                 TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
                 hists[fullname] = (TH1F*) files[fullname]->Get(histname);
+                if(histname.Index("eff_num") != -1) graphs[fullname] = new TGraphAsymmErrors((TH1F*) files[fullname]->Get(histname), (TH1F*) files[fullname]->Get(histname(0, histname.Index("eff_num")+4) + "den"));
             }
+            
             mapmarkerstyle(hists);
 
             THStack *stack = new THStack("stack", histname);
             int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
             double scale_factor = 100;
-
             lgendrup.Clear();
+
             for( it3 = hists.begin(); it3 != hists.end(); it3++){
                 TH1* h = it3->second;
                 //cout << "histname: " << it3->first << " legend: " << argv[i] << endl;
@@ -114,54 +112,66 @@ int main(int argc, char * argv[])
             // x lin or log
             int xlog = (histname.Index("xlog") == -1)? 0 : 1;
             // Events or Eff. in yaxis title
-            TString yaxistitle = get_yaxistitle(histname, h_ref->GetYaxis()->GetTitle()); 
+            TString yaxistitle = h_ref->GetYaxis()->GetTitle(); 
+
 
             draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "nostack");
             draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "nostack");
+
+            // Calculate and draw efficiencies as TGraphAsymmErrors
+            if(histname.Index("eff_num") != -1){
+                TMultiGraph* multigraph = new TMultiGraph();
+                for( it3_graph = graphs.begin(); it3_graph != graphs.end(); it3_graph++){
+                    multigraph->Add(it3_graph->second);
+                }
+                yaxistitle = "Eff.";
+                draw_multigraph(pathname_lin + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "A pmc plc");
+                draw_multigraph(pathname_log + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "A pmc plc");
+            }
         }
 
-        // TGraphAsymmErrors for efficiencies
-        else if(cl->InheritsFrom("TGraphAsymmErrors")){
-            TGraphAsymmErrors* h_ref = (TGraphAsymmErrors*)key->ReadObj();
-            if(h_ref->GetHistogram()->GetMaximum() == 0) continue;
-            
-            TString histname = h_ref->GetName();
-            
-            if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of wrong flavor for signal, as these are empty anyway 
-            if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
-            
-            TString pathname_lin = make_pathname(histname, pathname, "lin");
-            TString pathname_log = make_pathname(histname, pathname, "log");
-            gSystem->Exec("mkdir -p " + pathname_lin);
-            gSystem->Exec("mkdir -p " + pathname_log);
-            
-            graphs.clear();
-            for(int i = 1; i < (argc +1)/2; i++){
-                TString name = (TString)argv[i];
-                TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
-                graphs[fullname] = (TGraphAsymmErrors*) files[fullname]->Get(histname);
-            }
-            mapmarkerstyle(graphs);
-            
-            TMultiGraph *multigraph = new TMultiGraph("multigraph", histname);
-            int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
+        // TGraphAsymmErrors for efficiencies. Obsolete already
+       // else if(cl->InheritsFrom("TGraphAsymmErrors")){
+       //     TGraphAsymmErrors* h_ref = (TGraphAsymmErrors*)key->ReadObj();
+       //     if(h_ref->GetHistogram()->GetMaximum() == 0) continue;
+       //     
+       //     TString histname = h_ref->GetName();
+       //     
+       //     if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of wrong flavor for signal, as these are empty anyway 
+       //     if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
+       //     
+       //     TString pathname_lin = make_pathname(histname, pathname, "lin");
+       //     TString pathname_log = make_pathname(histname, pathname, "log");
+       //     gSystem->Exec("mkdir -p " + pathname_lin);
+       //     gSystem->Exec("mkdir -p " + pathname_log);
+       //     
+       //     graphs.clear();
+       //     for(int i = 1; i < (argc +1)/2; i++){
+       //         TString name = (TString)argv[i];
+       //         TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
+       //         graphs[fullname] = (TGraphAsymmErrors*) files[fullname]->Get(histname);
+       //     }
+       //     mapmarkerstyle(graphs);
+       //     
+       //     TMultiGraph *multigraph = new TMultiGraph("multigraph", histname);
+       //     int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
 
-            lgendrup.Clear();
-            for( it3_graph = graphs.begin(); it3_graph != graphs.end(); it3_graph++){
-                TGraphAsymmErrors* h = it3_graph->second;
-	            multigraph->Add(h);//maybe I need an option with adding? see class reference
-                lgendrup.AddEntry(h, argv[i]);
-                i++;
-            }
-            
-            // x lin or log
-            int xlog = (histname.Index("xlog") == -1)? 0 : 1;
-            // Events or Eff. in yaxis title
-            TString yaxistitle = get_yaxistitle(histname, h_ref->GetYaxis()->GetTitle()); 
-            
-            draw_multigraph(pathname_lin + histname + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "A pmc plc");
-            draw_multigraph(pathname_log + histname + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "A pmc plc");
-        }
+       //     lgendrup.Clear();
+       //     for( it3_graph = graphs.begin(); it3_graph != graphs.end(); it3_graph++){
+       //         TGraphAsymmErrors* h = it3_graph->second;
+	   //         multigraph->Add(h);//maybe I need an option with adding? see class reference
+       //         lgendrup.AddEntry(h, argv[i]);
+       //         i++;
+       //     }
+       //     
+       //     // x lin or log
+       //     int xlog = (histname.Index("xlog") == -1)? 0 : 1;
+       //     // Events or Eff. in yaxis title
+       //     TString yaxistitle = get_yaxistitle(histname, h_ref->GetYaxis()->GetTitle()); 
+       //     
+       //     draw_multigraph(pathname_lin + histname + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "A pmc plc");
+       //     draw_multigraph(pathname_log + histname + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "A pmc plc");
+       // }
     }
     cout << "plots finished" << endl;
     return 0;

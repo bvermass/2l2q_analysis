@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
     
             // get correct reference histogram
             TClass *cl = gROOT->GetClass(key->GetClassName());
-            if (!cl->InheritsFrom("TH1") or cl->InheritsFrom("TH2")) continue; //don't plot 2d plots for now ( don't know why a stack plot of this would be useful
+            if (!cl->InheritsFrom("TH1") or cl->InheritsFrom("TH2")) continue; //don't plot 2d plots or TGraphAsymmErrors(efficiencies) for now ( don't know why a stack plot of this would be useful
             TH1F *h_ref = (TH1F*)key->ReadObj(); //h_ref is the reference histogram that knows the name etc. of the histogram
             TString histname = h_ref->GetName();
             
@@ -143,7 +143,7 @@ int main(int argc, char * argv[])
             // x log or lin
             int xlog = (histname.Index("xlog") == -1)? 0 : 1;
             // Events or Eff. in yaxis title
-            TString yaxistitle = get_yaxistitle(histname, h_ref->GetYaxis()->GetTitle()); 
+            TString yaxistitle = h_ref->GetYaxis()->GetTitle(); 
             
             cout << histname << endl;
             draw_stack(pathname_lin + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "");
