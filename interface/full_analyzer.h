@@ -909,13 +909,11 @@ public :
    virtual void     fill_KVF_eff(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
-   virtual void     divide_for_eff(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
    virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
-   virtual void     divide_for_eff_HLT(std::map<TString, TH1*>*, TString);
 
    // in src/HNL_MC_check.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);

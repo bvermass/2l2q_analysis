@@ -59,49 +59,34 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_KVF_dRcut"]                       = new TH1F(prefix+"_KVF_dRcut", ";dR cone size (KVF);Events", 11, 0, 1.1);
     (*hists)[prefix+"_KVF_mass"]                        = new TH1F(prefix+"_KVF_mass", ";vertex mass [GeV] (KVF);Events", 40, 0, 30);
     
-    (*hists)[prefix+"_KVF_PV-SVdxy_eff"]                = new TH1F(prefix+"_KVF_PV-SVdxy_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_PV-SVdxy_eff_num"]            = new TH1F(prefix+"_KVF_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_PV-SVdxy_eff_den"]            = new TH1F(prefix+"_KVF_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 60);
-    (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff"]           = new TH1F(prefix+"_KVF_PV-SVdxy_zoom_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_num"]       = new TH1F(prefix+"_KVF_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_den"]       = new TH1F(prefix+"_KVF_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff"]          = new TH1F(prefix+"_KVF_PV-SVdxy_zoom2_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_den"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
-    //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff"]          = new TH1F(prefix+"_KVF_PV-SVdxy_zoom3_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 50, 0, 10);
     //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom3_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 50, 0, 10);
     //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_den"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom3_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 50, 0, 10);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_eff"]               = new TH1F(prefix+"_KVF_PV-SVdxyz_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff_num"]           = new TH1F(prefix+"_KVF_PV-SVdxyz_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]           = new TH1F(prefix+"_KVF_PV-SVdxyz_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff"]          = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_den"]      = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff"]         = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff_num"]     = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2_eff_den"]     = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom2_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]            = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]       = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]       = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_KVF_ctau_eff"]                    = new TH1F(prefix+"_KVF_ctau_eff", ";c #tau [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_ctau_eff_num"]                = new TH1F(prefix+"_KVF_ctau_eff_num", ";c #tau [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_ctau_eff_den"]                = new TH1F(prefix+"_KVF_ctau_eff_den", ";c #tau [cm] (KVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_KVF_ctau_zoom_eff"]               = new TH1F(prefix+"_KVF_ctau_zoom_eff", ";c #tau [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_ctau_zoom_eff_num"]           = new TH1F(prefix+"_KVF_ctau_zoom_eff_num", ";c #tau [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_ctau_zoom_eff_den"]           = new TH1F(prefix+"_KVF_ctau_zoom_eff_den", ";c #tau [cm] (KVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_KVF_ctau_zoom2_eff"]              = new TH1F(prefix+"_KVF_ctau_zoom2_eff", ";c #tau [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_ctau_zoom2_eff_num"]          = new TH1F(prefix+"_KVF_ctau_zoom2_eff_num", ";c #tau [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_ctau_zoom2_eff_den"]          = new TH1F(prefix+"_KVF_ctau_zoom2_eff_den", ";c #tau [cm] (KVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_KVF_PV-SVdxy_onlygendist_eff"]    = new TH1F(prefix+"_KVF_PV-SVdxy_onlygendist_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxy_onlygendist_eff_num"]= new TH1F(prefix+"_KVF_PV-SVdxy_onlygendist_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxy_onlygendist_eff_den"]= new TH1F(prefix+"_KVF_PV-SVdxy_onlygendist_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff"]   = new TH1F(prefix+"_KVF_PV-SVdxyz_onlygendist_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff_num"]= new TH1F(prefix+"_KVF_PV-SVdxyz_onlygendist_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff_den"]= new TH1F(prefix+"_KVF_PV-SVdxyz_onlygendist_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]       = new TH2F(prefix+"_KVF_PV-SVdxyz_genvsreco", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);#Delta_{xyz}(PV, SV_{fit}) [cm] (gen)", 100, 0, 60, 100, 0, 60);
@@ -136,58 +121,40 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]      = new TH2F(prefix+"_IVF_ctaugHN_gen_PV-SVdxyz", ";#gamma c#tau (HNL) [cm]; #Delta_{xyz} (PV, SV)^{gen} [cm]", 20, 0, 30, 20, 0, 30);
 
     (*hists)[prefix+"_IVF_ctau"]                        = new TH1F(prefix+"_IVF_ctau", ";c#tau [cm] (IVF);Events", 40, 0, 100);
-    (*hists)[prefix+"_IVF_PV-SVdxy_eff"]                = new TH1F(prefix+"_IVF_PV-SVdxy_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 60);
     (*hists)[prefix+"_IVF_PV-SVdxy_eff_num"]            = new TH1F(prefix+"_IVF_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 60);
     (*hists)[prefix+"_IVF_PV-SVdxy_eff_den"]            = new TH1F(prefix+"_IVF_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 60);
-    (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff"]           = new TH1F(prefix+"_IVF_PV-SVdxy_zoom_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_num"]       = new TH1F(prefix+"_IVF_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_den"]       = new TH1F(prefix+"_IVF_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff"]          = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
-    //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff"]          = new TH1F(prefix+"_IVF_PV-SVdxy_zoom3_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 50, 0, 10);
     //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom3_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 50, 0, 10);
     //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom3_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 50, 0, 10);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_eff"]               = new TH1F(prefix+"_IVF_PV-SVdxyz_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_PV-SVdxyz_eff_num"]           = new TH1F(prefix+"_IVF_PV-SVdxyz_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_PV-SVdxyz_eff_den"]           = new TH1F(prefix+"_IVF_PV-SVdxyz_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff"]          = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2_eff"]          = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff"]            = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 60);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 60);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 60);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff"]       = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_num"]   = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_den"]   = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff"]       = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]   = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]   = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_IVF_ctau_eff"]                    = new TH1F(prefix+"_IVF_ctau_eff", ";c #tau [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_ctau_eff_num"]                = new TH1F(prefix+"_IVF_ctau_eff_num", ";c #tau [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_ctau_eff_den"]                = new TH1F(prefix+"_IVF_ctau_eff_den", ";c #tau [cm] (IVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_IVF_ctau_zoom_eff"]               = new TH1F(prefix+"_IVF_ctau_zoom_eff", ";c #tau [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_ctau_zoom_eff_num"]           = new TH1F(prefix+"_IVF_ctau_zoom_eff_num", ";c #tau [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_ctau_zoom_eff_den"]           = new TH1F(prefix+"_IVF_ctau_zoom_eff_den", ";c #tau [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_ctau_zoom2_eff"]              = new TH1F(prefix+"_IVF_ctau_zoom2_eff", ";c #tau [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_ctau_zoom2_eff_num"]          = new TH1F(prefix+"_IVF_ctau_zoom2_eff_num", ";c #tau [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_ctau_zoom2_eff_den"]          = new TH1F(prefix+"_IVF_ctau_zoom2_eff_den", ";c #tau [cm] (IVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_IVF_ctaug_eff"]                    = new TH1F(prefix+"_IVF_ctaug_eff", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_ctaug_eff_num"]                = new TH1F(prefix+"_IVF_ctaug_eff_num", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_ctaug_eff_den"]                = new TH1F(prefix+"_IVF_ctaug_eff_den", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_IVF_ctaug_zoom_eff"]               = new TH1F(prefix+"_IVF_ctaug_zoom_eff", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]           = new TH1F(prefix+"_IVF_ctaug_zoom_eff_num", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_ctaug_zoom_eff_den"]           = new TH1F(prefix+"_IVF_ctaug_zoom_eff_den", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_ctaug_zoom2_eff"]              = new TH1F(prefix+"_IVF_ctaug_zoom2_eff", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]          = new TH1F(prefix+"_IVF_ctaug_zoom2_eff_num", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]          = new TH1F(prefix+"_IVF_ctaug_zoom2_eff_den", ";#gamma c #tau [cm] (IVF);Events", 20, 0, 1);
-    (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff"]     = new TH1F(prefix+"_IVF_PV-SVdxy_onlygendist_eff", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_num"] = new TH1F(prefix+"_IVF_PV-SVdxy_onlygendist_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_den"] = new TH1F(prefix+"_IVF_PV-SVdxy_onlygendist_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff"]    = new TH1F(prefix+"_IVF_PV-SVdxyz_onlygendist_eff", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_num"]= new TH1F(prefix+"_IVF_PV-SVdxyz_onlygendist_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_den"]= new TH1F(prefix+"_IVF_PV-SVdxyz_onlygendist_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_nomatch"]             = new TH1F(prefix+"_IVF_PV-SVdxy_nomatch", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 20, 0, 10);
@@ -204,13 +171,10 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_invVtx_1tr_dxy"]                  = new TH1F(prefix+"_invVtx_1tr_dxy", ";#Delta_{xy}[cm];Events", 30, 0, 4);
     (*hists)[prefix+"_invVtx_1tr_dz"]                   = new TH1F(prefix+"_invVtx_1tr_dz", ";#Delta_{z}[cm];Events", 30, 0, 10);
 
-    (*hists)[prefix+"_corrl2_pt_eff"]                   = new TH1F(prefix+"_corrl2_pt_eff", ";#it{p}_{T} [GeV];Eff.", 40, 0, 40);
     (*hists)[prefix+"_corrl2_pt_eff_num"]               = new TH1F(prefix+"_corrl2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_corrl2_pt_eff_den"]               = new TH1F(prefix+"_corrl2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_ctau_eff"]                 = new TH1F(prefix+"_corrl2_ctau_eff", ";c#tau [cm];Eff.", 40, 0, 40);
     (*hists)[prefix+"_corrl2_ctau_eff_num"]             = new TH1F(prefix+"_corrl2_ctau_eff_num", ";c#tau [cm];Events", 40, 0, 40);
     (*hists)[prefix+"_corrl2_ctau_eff_den"]             = new TH1F(prefix+"_corrl2_ctau_eff_den", ";c#tau [cm];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_gendist_eff"]              = new TH1F(prefix+"_corrl2_gendist_eff", ";|Vtx_{fit} - Vtx_{gen}| [cm];Eff.", 60, 0, 10);
     (*hists)[prefix+"_corrl2_gendist_eff_num"]          = new TH1F(prefix+"_corrl2_gendist_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     (*hists)[prefix+"_corrl2_gendist_eff_den"]          = new TH1F(prefix+"_corrl2_gendist_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
    
@@ -512,10 +476,7 @@ void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString pref
     if(subleading_is_l2){
         (*hists)[prefix+"_corrl2_pt_eff_num"]->Fill(_lPt[i_subleading], event_weight);
         (*hists)[prefix+"_corrl2_ctau_eff_num"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_corrl2_pt_eff"]->Fill(_lPt[i_subleading], event_weight);
-        (*hists)[prefix+"_corrl2_ctau_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_corrl2_gendist_eff_num"]->Fill(KVF_gendist, event_weight);
-        (*hists)[prefix+"_corrl2_gendist_eff"]->Fill(KVF_gendist, event_weight);
     }
 }
 
@@ -556,37 +517,21 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     if((_lIVF_match[i_subleading] != -1 or ((int)_IVF_nvertex == 0 and _lIVF_match[i_subleading] > -1)) && IVF_gendist < 0.2 && IVF_PVSVdist > 0.05){
         (*hists)[prefix+"_IVF_gendist_aftercut_zoom"]->Fill(IVF_gendist, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_eff_num"]->Fill(IVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxy_eff"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_num"]->Fill(IVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_num"]->Fill(IVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxyz_eff_num"]->Fill(IVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxyz_eff"]->Fill(IVF_PVSVdist, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_num"]->Fill(IVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff"]->Fill(IVF_PVSVdist, event_weight);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_num"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff"]->Fill(IVF_PVSVdist_gen_2D, event_weight);
         (*hists)[prefix+"_IVF_ctau_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctau_zoom2_eff_num"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_IVF_ctau_eff"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_IVF_ctau_zoom_eff"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_IVF_ctau_zoom2_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_IVF_ctaug_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
         (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
         (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
-        (*hists)[prefix+"_IVF_ctaug_zoom2_eff"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_num"]->Fill(IVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff"]->Fill(IVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_num"]->Fill(IVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff"]->Fill(IVF_PVSVdist, event_weight);
     } 
 }
 
@@ -621,29 +566,17 @@ void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
     if(_lKVF_valid[i_subleading] && KVF_gendist < 0.2 && KVF_PVSVdist > 0.05){
         (*hists)[prefix+"_KVF_gendist_aftercut_zoom"]->Fill(KVF_gendist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxy_eff_num"]->Fill(KVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxy_eff"]->Fill(KVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_num"]->Fill(KVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff"]->Fill(KVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_num"]->Fill(KVF_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff"]->Fill(KVF_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_eff_num"]->Fill(KVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxyz_eff"]->Fill(KVF_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_num"]->Fill(KVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff"]->Fill(KVF_PVSVdist, event_weight);
         (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]->Fill(gen_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]->Fill(gen_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_num"]->Fill(gen_PVSVdist_2D, event_weight);
-        (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]->Fill(gen_PVSVdist_2D, event_weight);
         (*hists)[prefix+"_KVF_ctau_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_KVF_ctau_zoom_eff_num"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_KVF_ctau_zoom2_eff_num"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_KVF_ctau_eff"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_KVF_ctau_zoom_eff"]->Fill(_ctauHN, event_weight);
-        (*hists)[prefix+"_KVF_ctau_zoom2_eff"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff_num"]->Fill(KVF_PVSVdist, event_weight);
-        (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff"]->Fill(KVF_PVSVdist, event_weight);
     } 
 }
 
@@ -687,42 +620,6 @@ void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
     (*hists)[prefix+"_n_trige"]->Fill(ntrige, event_weight);
     (*hists)[prefix+"_n_trigmu"]->Fill(ntrigmu, event_weight);
 }*/
-
-void full_analyzer::divide_for_eff(std::map<TString, TH1*>* hists, TString prefix)
-{
-    (*hists)[prefix+"_corrl2_pt_eff"]->Divide((*hists)[prefix+"_corrl2_pt_eff_den"]);
-    (*hists)[prefix+"_corrl2_ctau_eff"]->Divide((*hists)[prefix+"_corrl2_ctau_eff_den"]);
-    (*hists)[prefix+"_corrl2_gendist_eff"]->Divide((*hists)[prefix+"_corrl2_gendist_eff_den"]);
-
-    (*hists)[prefix+"_KVF_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_eff_den"]);
-    (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_den"]);
-    (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_den"]);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_den"]);
-    (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom2_eff_den"]);
-    //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_den"]);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_den"]);
-    (*hists)[prefix+"_KVF_ctau_eff"]->Divide((*hists)[prefix+"_KVF_ctau_eff_den"]);
-    (*hists)[prefix+"_KVF_ctau_zoom_eff"]->Divide((*hists)[prefix+"_KVF_ctau_zoom_eff_den"]);
-    (*hists)[prefix+"_KVF_ctau_zoom2_eff"]->Divide((*hists)[prefix+"_KVF_ctau_zoom2_eff_den"]);
-    
-    (*hists)[prefix+"_IVF_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxy_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_den"]);
-    //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxyz_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_den"]);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff"]->Divide((*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_den"]);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff"]->Divide((*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_den"]);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff"]->Divide((*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]);
-    (*hists)[prefix+"_IVF_ctau_eff"]->Divide((*hists)[prefix+"_IVF_ctau_eff_den"]);
-    (*hists)[prefix+"_IVF_ctau_zoom_eff"]->Divide((*hists)[prefix+"_IVF_ctau_zoom_eff_den"]);
-    (*hists)[prefix+"_IVF_ctau_zoom2_eff"]->Divide((*hists)[prefix+"_IVF_ctau_zoom2_eff_den"]);
-    (*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff"]->Divide((*hists)[prefix+"_KVF_PV-SVdxyz_onlygendist_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxy_onlygendist_eff_den"]);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff"]->Divide((*hists)[prefix+"_IVF_PV-SVdxyz_onlygendist_eff_den"]);
-}
 
 void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TString prefix)
 {

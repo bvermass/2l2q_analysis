@@ -9,22 +9,16 @@ using namespace std;
 void full_analyzer::init_HLT_efficiency(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_den"]            = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_num"]            = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff"]                = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]     = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]     = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]         = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_den"]     = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_num"]     = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]         = new TH1F(prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_den"]            = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_num"]            = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff"]                = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_den"]     = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_num"]     = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]         = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_den"]     = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_den", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_num"]     = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_num", ";#it{p}_{T} [GeV];Events", 80, 0, 200);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]         = new TH1F(prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff", ";#it{p}_{T} [GeV];Efficiency", 80, 0, 200);
 }
 
 void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString prefix, bool _1Ele, bool _1Mu){
@@ -37,10 +31,6 @@ void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString 
                 (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_num"]->Fill(_lPt[i_leading_e]);
                 if(fabs(_lEta[i_leading_e]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->Fill(_lPt[i_leading_e]);
                 else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_num"]->Fill(_lPt[i_leading_e]);
-                
-                (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff"]->Fill(_lPt[i_leading_e]);
-                if(fabs(_lEta[i_leading_e]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Fill(_lPt[i_leading_e]);
-                else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Fill(_lPt[i_leading_e]);
             }
 
         }
@@ -53,20 +43,6 @@ void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString 
                 (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
                 if(fabs(_lEta[i_leading_mu]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
                 else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
-                
-                (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff"]->Fill(_lPt[i_leading_mu]);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Fill(_lPt[i_leading_mu]);
-                else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Fill(_lPt[i_leading_mu]);
             }
         }
-}
-
-void full_analyzer::divide_for_eff_HLT(std::map<TString, TH1*>* hists, TString prefix)
-{
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff"]->Divide((*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_den"]);
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff"]->Divide((*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]);
-    (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff"]->Divide((*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_den"]);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff"]->Divide((*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_den"]);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff"]->Divide((*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_den"]);
-    (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff"]->Divide((*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_den"]);
 }

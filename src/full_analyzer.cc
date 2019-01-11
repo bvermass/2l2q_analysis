@@ -495,28 +495,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         h->SetBinContent(nb+1, 0.);
         h->SetBinError  (nb+1, 0.);
         
-        //if bin content is below zero, set it to 0
+        //if bin content is below zero, set it to 0 (dealing with negative weights)
         for(int i = 0; i < nb+1; i++){
             if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
         }
-        h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
+        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
     }
     for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
         TH2* h = it2D->second;
-        h->Scale(total_weight);
+        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
     }
-
-    //Determine efficiencies for HLT
-    divide_for_eff_HLT(&hists, "Beforeptcut");
-    divide_for_eff_HLT(&hists, "Afterptcut");
-    divide_for_eff(&hists, "_SS_e");
-    divide_for_eff(&hists, "_OS_e");
-    divide_for_eff(&hists, "_SS_mu");
-    divide_for_eff(&hists, "_OS_mu");
-    divide_for_eff(&hists, "_OS_e_oldID");
-    divide_for_eff(&hists, "_SS_e_oldID");
-    divide_for_eff(&hists, "_OS_mu_oldID");
-    divide_for_eff(&hists, "_SS_mu_oldID");
 
     give_alphanumeric_labels(&hists, "_SS_e");
     give_alphanumeric_labels(&hists, "_OS_e");
