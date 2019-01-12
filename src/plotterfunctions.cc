@@ -55,6 +55,38 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
 }
 
 
+TString make_toprighttitle(TString filename)
+{
+    TString title;
+    //For HNL, make mass, coupling and flavor titles
+    if(filename.Index("HeavyNeutrino") != -1){
+        TString flavor, coupling, mass;
+        if(filename.Index("_e_") != -1) flavor = "e";
+        else if(filename.Index("_mu_") != -1) flavor = "mu";
+        else if(filename.Index("_2l_") != -1) flavor = "l";
+        mass = filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3);
+        coupling = filename(filename.Index("_V-") + 3, filename.Index("_" + flavor + "_") - filename.Index("_V-") - 3);
+    
+        // "mass, coupling and flavor info if relevant in top right
+        TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
+        if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
+        TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
+        if(flavor != "" and coupling != "") couplinglatex += ", ";
+        TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : (flavor == "l")? "l" : "#mu";
+        if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
+
+        title = masslatex + couplinglatex + flavorlatex;
+
+    }else if(filename.Index("Background") != -1){
+        //first check for TuneCUE, then for 13TeV, then for .root to catch all remaining non specified ones
+        if(filename.Index("TuneCUE") != -1)     title = filename(filename.Index("Background") + 10, filename.Index("TuneCUE") - 11 - filename.Index("Background"));
+        else if(filename.Index("13TeV") != -1)  title = filename(filename.Index("Background") + 10, filename.Index("13TeV") - 11 - filename.Index("Background"));
+        else                                    title = filename(filename.Index("Background") + 10, filename.Index(".root") - 11 - filename.Index("Background"));
+    }
+    return title;
+}
+
+
 void mapmarkerstyle(std::map<TString, TH1*> hists)
 {
     for( it = hists.begin(); it != hists.end(); it++){
@@ -160,7 +192,7 @@ TString get_2D_draw_options(TH2F* h)
 }
 
 
-void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, TString flavor, TString mass, TString coupling)
+void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, TString toprighttitle)
 {
     h->GetXaxis()->SetTitleOffset(1.2);
     h->GetYaxis()->SetTitleOffset(1.5);
@@ -171,16 +203,8 @@ void draw_2D_hist(TString name, TCanvas *c, TH2F* h, TString drawoptions, TLegen
 
     lgend->DrawClone("same");
     
-    //mass, coupling, flavor in top right corner
-    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
-    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
-    if(flavor != "" and coupling != "") couplinglatex += ", ";
-    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
-    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
-    
     draw_text_latex(0.1, 0.91, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.9, 0.91, 22, 31, masslatex + couplinglatex + flavorlatex);
+    draw_text_latex(0.9, 0.91, 22, 31, toprighttitle);
 
     c->Print(name);
 }
@@ -195,7 +219,7 @@ void divide_by_binwidth(TH1F* h)
     if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
 }
 
-void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
+void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString toprighttitle)
 {
     // set x range lin or log
     c->SetLogx(lin0log1);
@@ -215,24 +239,16 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     else if(historE1 == "E1") h->Draw("E1");
   
     lgend->DrawClone("same");
-
-    // "mass, coupling and flavor info if relevant in top right
-    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
-    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
-    if(flavor != "" and coupling != "") couplinglatex += ", ";
-    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
-    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
-    
+   
     draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.87, 0.85, 22, 31, masslatex + couplinglatex + flavorlatex);
+    draw_text_latex(0.87, 0.85, 22, 31, toprighttitle);
     
     //Add option to make several formats, like .root, .png,...
     c->Print(name);
 }
 
 
-void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString flavor, TString mass, TString coupling)
+void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString toprighttitle)
 {
     c->SetLogx(lin0log1);
     if(xmax != xmin) h->GetXaxis()->SetLimits(xmin, xmax);
@@ -246,23 +262,15 @@ void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TStr
   
     lgend->DrawClone("same");
 
-    // "mass, coupling and flavor info if relevant in top right
-    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
-    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
-    if(flavor != "" and coupling != "") couplinglatex += ", ";
-    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
-    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
-    
     draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.87, 0.85, 22, 31, masslatex + couplinglatex + flavorlatex);
+    draw_text_latex(0.87, 0.85, 22, 31, toprighttitle);
     
     //Add option to make several formats, like .root, .png,...
     c->Print(name);
 }
 
 
-void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString flavor, TString mass, TString coupling)
+void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString toprighttitle)
 {
     // set y range lin or log
     c->SetLogy(ylin0log1);
@@ -298,16 +306,8 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
     lgend->DrawClone("same");
 
     // "CMS simulation" in top left
-
-    // "mass, coupling and flavor info if relevant in top right
-    TString masslatex     = (mass == "")? "" : "m_{N}=" + mass + "GeV";
-    if((coupling != "" or flavor != "") and mass != "") masslatex += ", ";
-    TString couplinglatex = (coupling == "")? "" : "|V|=" + coupling(0,6);
-    if(flavor != "" and coupling != "") couplinglatex += ", ";
-    TString flavorlatex   = (flavor == "")? "" : (flavor == "e")? "e" : "#mu";
-    if(flavor != "") flavorlatex = flavorlatex + flavorlatex + "qq";
     draw_text_latex(0.13, 0.85, 25, 11, "#bf{CMS} #it{simulation}");
-    draw_text_latex(0.9, 0.905, 22, 31, masslatex + couplinglatex + flavorlatex);
+    draw_text_latex(0.9, 0.905, 22, 31, toprighttitle);
     
     //Add option to make several formats, like .root, .png,...
     c->Print(name);
