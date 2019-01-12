@@ -357,7 +357,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1disple0jet_afterdphi){
             fill_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e);
             fill_KVF_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_KVF_inv_histograms(&hists, signs_and_flavor, i_subleading_displ_e); //is this one necessary still?
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
@@ -369,7 +368,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmu0jet_afterdphi){
             fill_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
             fill_KVF_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_KVF_inv_histograms(&hists, signs_and_flavor, i_subleading_displ_mu); //is this one necessary still?
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(i_gen_l2 != -1 and get_IVF_gendist(i_gen_l2, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);

@@ -902,8 +902,6 @@ public :
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, TString, int, int, int);
-   virtual void     fill_KVF_inv_histograms(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_1tr(std::map<TString, TH1*>*, TString, int);
    virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString, int, int);
    virtual void     fill_KVF_eff(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
