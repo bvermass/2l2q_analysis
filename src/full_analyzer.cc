@@ -362,7 +362,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_e]) > 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_far", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
 
-            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}//make this a separate block of code at the end of the loop (more readable)
+            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmu0jet_afterdphi){
@@ -373,7 +373,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) < 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_close", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(get_IVF_PVSVdist(_lIVF_match[i_subleading_displ_mu]) > 10) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_far", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
 
-            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}//make this a separate block of code at the end of the loop (more readable)
+            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
     }
