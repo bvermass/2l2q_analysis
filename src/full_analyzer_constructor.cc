@@ -32,9 +32,6 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    i_leading_jet_for_displ = -1;
    i_subleading_jet_for_displ = -1;
 
-   i_vtx_subleading_displ_e = -1;
-   i_vtx_subleading_displ_mu = -1;
-
 }
 
 full_analyzer::~full_analyzer()

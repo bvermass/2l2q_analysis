@@ -770,9 +770,6 @@ public :
    int i_subleading_displ_mu;
    int i_old_subleading_displ_mu;
    
-   int i_vtx_subleading_displ_e;
-   int i_vtx_subleading_displ_mu;
-
    int i_gen_leading_e;
    int i_gen_subleading_displ_e;
    int i_gen_leading_mu;

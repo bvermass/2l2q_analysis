@@ -288,9 +288,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //get signal region booleans
         signal_regions();
         
-        i_vtx_subleading_displ_e    = _lIVF_match[i_subleading_displ_e];
-        i_vtx_subleading_displ_mu   = _lIVF_match[i_subleading_displ_mu];
-        
         // Find gen level leptons matching to the leading and subleading lepton (geometrically when its background or data, pgdID when its signal
         i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
         i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);
