@@ -49,7 +49,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_KVF_chi2"]                        = new TH1F(prefix+"_KVF_chi2", ";#Chi^{2} (KVF);Events", 100, 0, 200);
     (*hists)[prefix+"_KVF_normchi2"]                    = new TH1F(prefix+"_KVF_normchi2", ";Normalized #Chi^{2} (KVF);Events", 100, 0, 200);
     (*hists)[prefix+"_KVF_normchi2_zoom"]               = new TH1F(prefix+"_KVF_normchi2_zoom", ";Normalized #Chi^{2} (KVF);Events", 20, 0, 30);
-    (*hists)[prefix+"_KVF_PVdist"]                      = new TH1F(prefix+"_KVF_PVdist", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 40, 0, 10);
     (*hists)[prefix+"_KVF_ntracks"]                     = new TH1F(prefix+"_KVF_ntracks", ";# of tracks used in Vtxfit (KVF);Events", 15, 0, 15);
     (*hists)[prefix+"_KVF_valid"]                       = new TH1F(prefix+"_KVF_valid", ";is Vertex Valid? (KVF);Events", 2, 0, 2);
     (*hists)[prefix+"_KVF_maxdxy"]                      = new TH1F(prefix+"_KVF_maxdxy", ";Max(dxy^{l2} - dxy^{trk}) (KVF);Events", 30, 0, 1.1);
@@ -297,17 +296,25 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
 }
 
 
-void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     if(!_lKVF_valid[i_subleading]) return;
+    
+    double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
+    double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
+    double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
+    double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
+    double KVF_PVSVdist_2D  = get_KVF_PVSVdist_2D(i_subleading);
 
     //plots for valid KVF vertices
     
     (*hists)[prefix+"_KVF_chi2"]->Fill(_lKVF_chi2[i_subleading], event_weight);
     (*hists)[prefix+"_KVF_normchi2"]->Fill(_lKVF_chi2[i_subleading] / _lKVF_df[i_subleading], event_weight);
     (*hists)[prefix+"_KVF_normchi2_zoom"]->Fill(_lKVF_chi2[i_subleading] / _lKVF_df[i_subleading], event_weight);
-    //(*hists)[prefix+"_KVF_PVdist"]->Fill(_lKVF_PVdxy[i_subleading], event_weight);
     (*hists)[prefix+"_KVF_ntracks"]->Fill(_lKVF_ntracks[i_subleading], event_weight);
     
+    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
+    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco2"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
+
     //IF i want the following plots again, I need to rewrite this, but probably not
     //double maxdxy = 0;
     //double maxdz  = 0;
@@ -467,7 +474,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     } 
 }
 
-void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){   
+void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){   
     if(i_gen_subleading == -1) return;
 
     double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
@@ -480,8 +487,6 @@ void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
     (*hists)[prefix+"_KVF_PV-SVdxy_eff_den"]->Fill(KVF_PVSVdist_2D);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_den"]->Fill(KVF_PVSVdist_2D);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_den"]->Fill(KVF_PVSVdist_2D);
-    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco2"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]->Fill(KVF_PVSVdist);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_den"]->Fill(KVF_PVSVdist);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]->Fill(gen_PVSVdist_2D);

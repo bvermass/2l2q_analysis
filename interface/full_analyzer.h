@@ -898,10 +898,10 @@ public :
    virtual void     fill_histograms(std::map<TString, TH1*>*, TString, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
-   virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString, int, int);
-   virtual void     fill_KVF_eff(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
+   virtual void     fill_KVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
