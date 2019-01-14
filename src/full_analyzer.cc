@@ -219,6 +219,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	        if(_relIso[i] > 0.2 && _lElectronPassConvVeto[i])   ++n_after_invreliso_convveto;
 	        if(_relIso[i] > 0.2 && _lElectronMissingHits[i])    ++n_after_invreliso_missinghits;
 	    }
+
+        fix_validity_of_lIVF_match();
 	    
         //Get ID
 	    get_electronID(&fullElectronID[0]);

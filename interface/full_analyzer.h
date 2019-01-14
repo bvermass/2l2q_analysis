@@ -879,6 +879,7 @@ public :
 
    // in src/vtxID.cc
    virtual int      find_vtx_matching_to_lepton(int);
+   virtual void     fix_validity_of_lIVF_match();
 
    // in src/signal_regions.cc
    virtual void     signal_regions();
