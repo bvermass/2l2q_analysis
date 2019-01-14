@@ -45,13 +45,11 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString oldID       = (histname.Index("_oldID_") == -1)?    "" : "oldID/";
         TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
         TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
-        TString far         = (histname.Index("_far_") == -1)?      "" : "far/";
-        TString close       = (histname.Index("_close_") == -1)?    "" : "close/";
         TString eff         = (histname.Index("_eff") == -1)?       "" : "eff/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + close + far;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2;
 }
 
 
