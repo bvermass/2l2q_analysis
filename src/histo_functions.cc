@@ -100,7 +100,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l1_IVF_match"]                    = new TH1F(prefix+"_l1_IVF_match", ";l1 IVF match (IVF);Events", 22, -2, 20);
     (*hists)[prefix+"_l2_IVF_match"]                    = new TH1F(prefix+"_L2_IVF_match", ";l2 IVF match (IVF);Events", 22, -2, 20);
     (*hists)[prefix+"_IVF_gendist"]                     = new TH1F(prefix+"_IVF_gendist", ";|Vtx_{fit} - Vtx_{gen}| [cm] (IVF);Events", 30, 0, 10);
-    (*hists)[prefix+"_IVF_gendist_zoom"]                = new TH1F(prefix+"_IVF_gendist_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm] (IVF);Events", 30, 0, 1);
+    (*hists)[prefix+"_IVF_gendist_zoom"]                = new TH1F(prefix+"_IVF_gendist_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm] (IVF);Events", 15, 0, 1);
     (*hists)[prefix+"_IVF_gendist_aftercut_zoom"]       = new TH1F(prefix+"_IVF_gendist_aftercut_zoom", ";|Vtx_{fit} - Vtx_{gen}| [cm] (IVF);Events", 10, 0, 0.3);
     (*hists)[prefix+"_IVF_chi2"]                        = new TH1F(prefix+"_IVF_chi2", ";#Chi^{2} (IVF);Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_normchi2"]                    = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2} (IVF);Events", 30, 0, 10);
@@ -309,9 +309,6 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
 void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     if(!_lKVF_valid[i_subleading]) return;
     
-    double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
-    double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
-    double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
     double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
     double KVF_PVSVdist_2D  = get_KVF_PVSVdist_2D(i_subleading);
 
@@ -329,8 +326,6 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom"]->Fill(KVF_PVSVdist, event_weight);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2"]->Fill(KVF_PVSVdist, event_weight);
 
-    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
-    (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco2"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
 
     //IF i want the following plots again, I need to rewrite this, but probably not
     //double maxdxy = 0;
@@ -365,8 +360,13 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map
     }
     
     if(i_gen_subleading != -1){
-        (*hists)[prefix+"_KVF_gendist"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
-        (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(get_KVF_gendist(i_gen_subleading, i_subleading));
+        double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
+        double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
+        double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
+        (*hists)[prefix+"_KVF_gendist"]->Fill(KVF_gendist);
+        (*hists)[prefix+"_KVF_gendist_zoom"]->Fill(KVF_gendist);
+        (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
+        (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco2"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
     }
 }
 
