@@ -13,6 +13,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_l2_pt"]                           = new TH1F("gen_l2_pt", ";l_{1}^{gen} #it{p}_{T} [GeV]; Events", 40, 0, 80);
     (*hists)["gen_N_pt"]                            = new TH1F("gen_N_pt", ";HNL #it{p}_{T} [GeV]; Events", 40, 0, 80);
     (*hists)["gen_M_l1_N"]                          = new TH1F("gen_M_l1_N", ";M_{Nl1} [GeV]; Events", 40, 0, 150);
+    (*hists)["gen_l2_tracks_dR"]                    = new TH1F("gen_l2_tracks_dR", ";#Delta R (l_{2}, tracks); Events", 40, 0, 1.5);
     (*hists)["gen_PV_Nvertex_dxyz"]                 = new TH1F("gen_PV_Nvertex_dxyz", ";#Delta_{3D} (PV^{reco} - Nvtx^{gen}) [cm]; Events", 40, 0, 0.05);
 
     //log scale
@@ -38,5 +39,13 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
         (*hists)["gen_M_l1_N"]->Fill((lepton1_vec + HNL_vec).M(), event_weight);
         (*hists)["gen_PV_Nvertex_dxyz"]->Fill(sqrt((_PV_x - _gen_Nvertex_x)*(_PV_x - _gen_Nvertex_x) + (_PV_y - _gen_Nvertex_y)*(_PV_y - _gen_Nvertex_y) + (_PV_z - _gen_Nvertex_z)*(_PV_z - _gen_Nvertex_z)), event_weight);
         (*hists)["gen_PV-SVdist_xlog"]->Fill(get_PVSVdist_gen(i_gen_l2), event_weight);
+
+        TLorentzVector l2_vector; l2_vector.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
+        TLorentzVector track_vector;
+        double dR = 0;
+        for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+            track_vector.SetPtEtaPhiE(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);                    
+            (*hists)["gen_l2_tracks_dR"]->Fill(l2_vector.DeltaR(track_vector), event_weight);
+        }
     }
 }

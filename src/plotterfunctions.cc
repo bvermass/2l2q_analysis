@@ -49,7 +49,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + eff;
 }
 
 

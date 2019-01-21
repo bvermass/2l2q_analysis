@@ -16,8 +16,11 @@ double full_analyzer::calc_betagamma(int particle_mass, double particle_energy)
 }
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
-    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
-    (*hists)[prefix+"_cuts"]                            = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
+    (*hists)[prefix+"_KVForIVF"]                        = new TH1F(prefix+"_KVForIVF", ";;Events", 4, 0, 4);
+    (*hists)[prefix+"_KVForIVF_gendistcut"]             = new TH1F(prefix+"_KVForIVF_gendistcut", ";;Events", 4, 0, 4);
+    (*hists)[prefix+"_KVFnoIVF_gendist"]                = new TH1F(prefix+"_KVFnoIVF_gendist", ";;Events", 2, 0, 2);
+    //(*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";cutflow;Events", 8, 0, 8);
+    //(*hists)[prefix+"_cuts"]                            = new TH1F(prefix+"_cuts", ";cuts;Events", 9, 0, 9);
 
     (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
     (*hists)[prefix+"_nMu"]                             = new TH1F(prefix+"_nMu", ";N_{muon};Events", 10, 0, 10);
@@ -245,63 +248,113 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
-    int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
+    //int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
-    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
-    if(_trige) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight);
-    if(_1e) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-        (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-        if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-        if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
-        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
-    }
+    //(*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
+    //if(_trige) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight);
+    //if(_1e) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
+    //if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
+    //    (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+    //    if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+    //    if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+    //    if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    //    if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
+    //}
 
-    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
-    if(_trige) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight);
-    if(_1e) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
-    if(_1e1displolde && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-        (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-        if(_1e1disple0adde) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-        if(_1e1disple0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-        if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-        if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
-    }
-    
-    if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-        (*hists)[prefix+"_cuts"]->Fill(4., event_weight);
+    //(*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
+    //if(_trige) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight);
+    //if(_1e) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
+    //if(_1e1displolde && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
+    //    (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
+    //    if(_1e1disple0adde) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
+    //    if(_1e1disple0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
+    //    if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
+    //    if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+    //}
+    //
+    //if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
+    //    (*hists)[prefix+"_cuts"]->Fill(4., event_weight);
+    //}
+    if(_1e1disple){
+        int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
+        if(fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) != SSorOS) return;
+        if(i_gen_subleading_displ_e == -1) return;
+        double KVF_gendist = get_KVF_gendist(i_gen_subleading_displ_e, i_subleading_displ_e);
+
+        if(_lIVF_match[i_subleading_displ_e] != -1){
+            if(_lKVF_valid[i_subleading_displ_e]) (*hists)[prefix+"_KVForIVF"]->Fill(0., event_weight);
+            else (*hists)[prefix+"_KVForIVF"]->Fill(1., event_weight);
+
+            if(get_IVF_gendist(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) < 0.2){
+                if(_lKVF_valid[i_subleading_displ_e] and get_KVF_gendist(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(0., event_weight);
+                else (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(1., event_weight);
+            }
+        }else {
+            if(_lKVF_valid[i_subleading_displ_e]){
+                (*hists)[prefix+"_KVForIVF"]->Fill(2., event_weight);
+                if(fabs(KVF_gendist) < 0.2) (*hists)[prefix+"_KVFnoIVF_gendist"]->Fill(0., event_weight);
+                else (*hists)[prefix+"_KVFnoIVF_gendist"]->Fill(1., event_weight);
+            }else (*hists)[prefix+"_KVForIVF"]->Fill(3., event_weight);
+
+            if(_lKVF_valid[i_subleading_displ_e] and get_KVF_gendist(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(2., event_weight);
+            else (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(3., event_weight);
+        }
     }
 }
 
 
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
-    int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
+    //int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
 
-    (*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
-    if(_trigmu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
-    if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-        (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-        if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-        if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
-        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
-    }
+    //(*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
+    //if(_trigmu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
+    //if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
+    //if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
+    //    (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
+    //    if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
+    //    if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
+    //    if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
+    //    if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
+    //}
 
-    (*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
-    if(_trigmu) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight); 
-    if(_1mu) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
-    if(_1mu1disploldmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-        (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-        if(_1mu1displmu0addmu) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-        if(_1mu1displmu0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-        if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-        if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
-    }
-    
-    if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-        (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
+    //(*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
+    //if(_trigmu) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight); 
+    //if(_1mu) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
+    //if(_1mu1disploldmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
+    //    (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
+    //    if(_1mu1displmu0addmu) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
+    //    if(_1mu1displmu0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
+    //    if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
+    //    if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
+    //}
+    //
+    //if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
+    //    (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
+    //}
+    if(_1mu1displmu){
+        int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
+        if(fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) != SSorOS) return;
+        if(i_gen_subleading_displ_mu == -1) return;
+        double KVF_gendist = get_KVF_gendist(i_gen_subleading_displ_mu, i_subleading_displ_mu);
+
+        if(_lIVF_match[i_subleading_displ_mu] != -1){
+            if(_lKVF_valid[i_subleading_displ_mu]) (*hists)[prefix+"_KVForIVF"]->Fill(0., event_weight);
+            else (*hists)[prefix+"_KVForIVF"]->Fill(1., event_weight);
+            
+            if(get_IVF_gendist(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) < 0.2){
+                if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_gendist(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(0., event_weight);
+                else (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(1., event_weight);
+            }
+        }else {
+            if(_lKVF_valid[i_subleading_displ_mu]){
+                (*hists)[prefix+"_KVForIVF"]->Fill(2., event_weight);
+                if(fabs(KVF_gendist) < 0.2) (*hists)[prefix+"_KVFnoIVF_gendist"]->Fill(0., event_weight);
+                else (*hists)[prefix+"_KVFnoIVF_gendist"]->Fill(1., event_weight);
+            }else (*hists)[prefix+"_KVForIVF"]->Fill(3., event_weight);
+
+            if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_gendist(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(2., event_weight);
+            else (*hists)[prefix+"_KVForIVF_gendistcut"]->Fill(3., event_weight);
+        }
     }
 }
 
@@ -584,11 +637,20 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     TString SSorOS = (prefix.Index("SS") == -1)? "OS" : "SS";
     TString l = (prefix.Index("_e") == -1)? "mu" : "e";
 
-    int nx = 8;
-    const char *cutflow_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
-    for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i,cutflow_labels[i-1]);
-    nx = 9;
-    const char *cuts_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "new displ ID " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
-    for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cuts"]->GetXaxis()->SetBinLabel(i,cuts_labels[i-1]);
+    int nx_KVForIVF = 4;
+    const char *KVForIVF_labels[nx_KVForIVF] = {"IVF, KVF", "IVF, no KVF", "no IVF, KVF", "no IVF, no KVF"};
+    for(int i = 0; i < nx_KVForIVF; i++){ 
+        (*hists)[prefix+"_KVForIVF"]->GetXaxis()->SetBinLabel(i+1,KVForIVF_labels[i]);
+        (*hists)[prefix+"_KVForIVF_gendistcut"]->GetXaxis()->SetBinLabel(i+1,KVForIVF_labels[i]);
+    }
+    int nx_KVFnoIVF_gendist = 2;
+    const char *KVFnoIVF_gendist_labels[nx_KVFnoIVF_gendist] = {"|SV_{reco} - SV_{gen}| < 0.2 (KVF)", "|SV_{reco} - SV_{gen}| > 0.2 (KVF)"};
+    for(int i = 0; i < nx_KVFnoIVF_gendist; i++) (*hists)[prefix+"_KVFnoIVF_gendist"]->GetXaxis()->SetBinLabel(i+1,KVFnoIVF_gendist_labels[i]);
+    //int nx = 8;
+    //const char *cutflow_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
+    //for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i,cutflow_labels[i-1]);
+    //nx = 9;
+    //const char *cuts_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "new displ ID " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
+    //for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cuts"]->GetXaxis()->SetBinLabel(i,cuts_labels[i-1]);
 }
 
