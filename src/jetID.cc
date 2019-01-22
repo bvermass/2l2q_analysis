@@ -62,3 +62,17 @@ int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_g
     return index_good_subleading;
 }
 
+int full_analyzer::find_thirdleading_jet(bool* jetID, bool* jet_clean, int index_good_leading, int index_good_subleading)
+{
+    int index_good_thirdleading = -1;
+    if(index_good_leading == -1 or index_good_subleading == -1) return index_good_thirdleading;
+    for(int i = 0; i < _nJets; ++i){
+	    if(i == index_good_leading or i == index_good_subleading) continue;
+	    if(!*(jetID + i))           continue;
+	    if(!*(jet_clean + i))       continue;
+	    if(index_good_thirdleading == -1) index_good_thirdleading = i;
+	    if(_lPt[i] > _lPt[index_good_thirdleading]) index_good_thirdleading = i;
+    }
+    return index_good_thirdleading;
+}
+

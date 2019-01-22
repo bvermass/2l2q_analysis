@@ -271,6 +271,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_old_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &old_jet_clean_full_displ[0]);
 	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
 	    i_old_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &old_jet_clean_full_displ[0], i_old_leading_jet_for_displ);
+        i_thirdleading_jet_for_displ    = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ, i_subleading_jet_for_displ);
 
 
         //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.

@@ -31,6 +31,7 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    i_subleading_jet_for_noniso = -1;
    i_leading_jet_for_displ = -1;
    i_subleading_jet_for_displ = -1;
+   i_thirdleading_jet_for_displ = -1;
 
 }
 

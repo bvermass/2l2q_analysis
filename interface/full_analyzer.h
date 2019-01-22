@@ -783,6 +783,7 @@ public :
    int i_old_leading_jet_for_displ;
    int i_subleading_jet_for_displ;
    int i_old_subleading_jet_for_displ;
+   int i_thirdleading_jet_for_displ;
 
    bool _trige;
    bool _1e;
@@ -862,6 +863,7 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
+   virtual int      find_thirdleading_jet(bool*, bool*, int, int);
    virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
