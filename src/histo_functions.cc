@@ -196,7 +196,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i]) nEle++;
+        if(displElectronID[i] and ele_clean_full_noniso_displ[i]) nEle++;
         if(displMuonID[i]) nMu++;
     }
 
@@ -470,18 +470,28 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_IVF_cz"]->Fill(_IVF_cz[i_vtx], event_weight);
     (*hists)[prefix+"_IVF_cxyz"]->Fill(sqrt(_IVF_cx[i_vtx]*_IVF_cx[i_vtx] + _IVF_cy[i_vtx]*_IVF_cy[i_vtx] + _IVF_cz[i_vtx]*_IVF_cz[i_vtx]), event_weight);
     
-    TLorentzVector tracksum;
-    TLorentzVector tmptrack;
-    for(Int_t i_track = 0; i_track < _IVF_ntracks[i_vtx]; i_track++){
-        (*hists)[prefix+"_IVF_trackpt"]->Fill(_IVF_trackpt[i_vtx][i_track], event_weight);
-        (*hists)[prefix+"_IVF_tracketa"]->Fill(_IVF_tracketa[i_vtx][i_track], event_weight);
-        (*hists)[prefix+"_IVF_trackphi"]->Fill(_IVF_trackphi[i_vtx][i_track], event_weight);
-        (*hists)[prefix+"_IVF_trackE"]->Fill(_IVF_trackE[i_vtx][i_track], event_weight);
-        (*hists)[prefix+"_IVF_trackcharge"]->Fill(_IVF_trackcharge[i_vtx][i_track], event_weight);
-        tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_vtx][i_track], _IVF_tracketa[i_vtx][i_track], _IVF_trackphi[i_vtx][i_track], _IVF_trackE[i_vtx][i_track]);
-        tracksum += tmptrack;
+    if(_IVF_ntracks[i_vtx] > 1){
+        TLorentzVector tracksum;
+        TLorentzVector tmptrack;
+        for(Int_t i_track = 0; i_track < _IVF_ntracks[i_vtx]; i_track++){
+            (*hists)[prefix+"_IVF_trackpt"]->Fill(_IVF_trackpt[i_vtx][i_track], event_weight);
+            (*hists)[prefix+"_IVF_tracketa"]->Fill(_IVF_tracketa[i_vtx][i_track], event_weight);
+            (*hists)[prefix+"_IVF_trackphi"]->Fill(_IVF_trackphi[i_vtx][i_track], event_weight);
+            (*hists)[prefix+"_IVF_trackE"]->Fill(_IVF_trackE[i_vtx][i_track], event_weight);
+            (*hists)[prefix+"_IVF_trackcharge"]->Fill(_IVF_trackcharge[i_vtx][i_track], event_weight);
+            tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_vtx][i_track], _IVF_tracketa[i_vtx][i_track], _IVF_trackphi[i_vtx][i_track], _IVF_trackE[i_vtx][i_track]);
+            tracksum += tmptrack;
+        }
+        (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
     }
-    (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
+    //if(tracksum.M() == 0){
+    //    cout << "IVF_ntracks: " << (int)_IVF_ntracks[i_vtx] << endl;
+    //    cout << "tracksum pt, eta, phi, e: " <<  tracksum.Pt() << " " << tracksum.Eta() << " " << tracksum.Phi() << " " << tracksum.E() << endl;
+    //    if(_IVF_ntracks[i_vtx] == 0){
+    //        cout << "i_vtx: " << i_vtx << endl;
+    //        cout << "_IVF_nvertex: " << (int)_IVF_nvertex << endl;
+    //        cout << "_lIVF_match: " << _lIVF_match[i_subleading] << endl;
+    //    }
     
     
     if(i_gen_subleading != -1){
