@@ -163,7 +163,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    LoadTree(jentry);
 	    tree->GetEntry(jentry);
-        unsigned notice = round(0.01 * (j_end - j_begin) / 20) * 100;
+        unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
 	    bool printevent = ((jentry -j_begin)%notice == 0);
 	    if(printevent){
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;

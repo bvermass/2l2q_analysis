@@ -126,7 +126,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dphi", ";#Delta#phi diff: HNL flight - tracks (IVF);Events", 30, 0, 0.08);
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_deta", ";#Delta#eta diff: HNL flight - tracks (IVF);Events", 30, 0, 0.3);
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR diff: HNL flight - tracks (IVF);Events", 30, 0, 0.3);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";dot product: HNL flight - tracks (IVF);Events", 30, 0.95, 1);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";dot product: HNL flight - tracks (IVF);Events", 100, -1.1, 1.1);
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";perp. comp.: HNL flight - tracks (IVF);Events", 30, 0, 0.15);
     (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]       = new TH2F(prefix+"_IVF_PV-SVdxyz_genvsreco", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);#Delta_{xyz}(PV, SV_{gen}) [cm] (gen)", 100, 0, 60, 100, 0, 60);
     (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco2"]      = new TH2F(prefix+"_IVF_PV-SVdxyz_genvsreco2", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);#Delta_{xyz}(PV, SV_{gen}) [cm] (gen)", 100, 0, 5, 100, 0, 5);
@@ -493,7 +493,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]->Fill(tracksum.DeltaPhi(PVSV_vector), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]->Fill(fabs(tracksum.Eta() - PVSV_vector.Eta()), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]->Fill(tracksum.DeltaR(PVSV_vector), event_weight);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"]->Fill(fabs(tracksum*PVSV_vector/tracksum.Vect().Mag()/PVSV_vector.Vect().Mag()), event_weight);
+        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"]->Fill(-tracksum*PVSV_vector/tracksum.Vect().Mag()/PVSV_vector.Vect().Mag(), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]->Fill(fabs(tracksum.Perp(PVSV_vector.Vect())/tracksum.Vect().Mag()), event_weight);
     }
     //if(tracksum.M() == 0){

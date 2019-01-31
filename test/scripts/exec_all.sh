@@ -9,7 +9,8 @@ qstatoutput="qstatoutput.txt"
 function wait_until_jobs_are_finished {
     jobsrunning=true
     while $jobsrunning; do
-        while qstat -u bvermass > $qstatoutput | grep -q "Premature end of message"; do
+        while ! qstat -u bvermass > $qstatoutput; do
+            echo -e "caught qstat error, retrying"
             sleep 2
         done
         if cat "$qstatoutput" | grep -q "bvermass"; then
