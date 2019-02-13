@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
 
     std::map<TString, TH1*> hists;
     std::map<TString, TH1*> signals;
-    TString nameforkey = (TString)argv[3];
-    TString fullnameforkey = "3_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
+    TString nameforkey = (TString)argv[(argc + 3)/2 - 1];
+    TString fullnameforkey = to_string((argc + 3)/2 - 1) + "_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
     TIter next(files[fullnameforkey]->GetListOfKeys());
     TKey * key;
 

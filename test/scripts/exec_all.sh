@@ -24,9 +24,16 @@ function wait_until_jobs_are_finished {
     rm $qstatoutput
 }
 
-./test/local_submit.sh test/sampleLists/histos_all.txt
-wait_until_jobs_are_finished
-./test/scripts/hadd_subfiles.sh
-./test/scripts/submit_plots_all.sh
-wait_until_jobs_are_finished
-cp -R ~/public/2l2q_analysis/plots/ ~/public_html/
+read -p "all(1), test(2): " choice
+
+if [[ choice -eq 1 ]]; then
+    ./test/local_submit.sh test/sampleLists/histos_all.txt
+    wait_until_jobs_are_finished
+    ./test/scripts/hadd_subfiles.sh
+    ./test/scripts/submit_plots_all.sh
+    wait_until_jobs_are_finished
+    cp -R ~/public/2l2q_analysis/plots/ ~/public_html/
+elif [[ choice -eq 2 ]]; then
+    ./test/run_analyzer.sh test/sampleLists/test.txt
+    ./test/run_plots.sh test/sampleLists/plots_test.txt
+fi

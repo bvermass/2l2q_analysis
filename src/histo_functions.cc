@@ -18,6 +18,10 @@ double full_analyzer::calc_betagamma(int particle_mass, double particle_energy)
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     (*hists)[prefix+"_KVForIVF_categories"]             = new TH1F(prefix+"_KVForIVF_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_l2_jets_categories"]              = new TH1F(prefix+"_l2_jets_categories", ";;Events", 8, 0, 8);
+    (*hists)[prefix+"_jets_categories"]                 = new TH1F(prefix+"_jets_categories", ";;Events", 4, 0, 4);
+    //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
+    //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
+    (*hists)[prefix+"_dxy_categories"]                  = new TH1F(prefix+"_dxy_categories", ";;Events", 3, 0, 3);
     (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 7, 0, 7);
 
     (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
@@ -25,20 +29,25 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_nLight"]                          = new TH1F(prefix+"_nLight", ";N_{lepton};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_uncl"]                      = new TH1F(prefix+"_nJets_uncl", ";N_{jets(uncl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_cl"]                        = new TH1F(prefix+"_nJets_cl", ";N_{jets(cl.)};Events", 10, 0, 10);
-    (*hists)[prefix+"_pt"]                              = new TH1F(prefix+"_pt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
-    (*hists)[prefix+"_leadpt"]                          = new TH1F(prefix+"_leadpt", ";#it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_l1_pt"]                           = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_l2_pt"]                           = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 60, 0, 100);
+    (*hists)[prefix+"_l1_dxy"]                          = new TH1F(prefix+"_l1_dxy", ";l_{1} dxy [cm];Events", 60, 0, 0.15);
+    (*hists)[prefix+"_l2_dxy"]                          = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 60, 0, 1.5);
+    (*hists)[prefix+"_l1_dz"]                           = new TH1F(prefix+"_l1_dz", ";l_{1} dz [cm];Events", 60, 0, 1);
+    (*hists)[prefix+"_l2_dz"]                           = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 60, 0, 15);
+    (*hists)[prefix+"_l1_reliso"]                       = new TH1F(prefix+"_l1_reliso", ";l_{1} Rel Iso;Events", 60, 0, 0.3);
+    (*hists)[prefix+"_l2_reliso"]                       = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 40, 0, 3.5);
+    (*hists)[prefix+"_l1_ptrel"]                        = new TH1F(prefix+"_l1_ptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_ptrel"]                        = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_leadjetpt"]                       = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 60, 0, 200);
-    (*hists)[prefix+"_dxy"]                             = new TH1F(prefix+"_dxy", ";#Delta_{xy} [cm];Events", 60, 0, 1.5);
-    (*hists)[prefix+"_dz"]                              = new TH1F(prefix+"_dz", ";#Delta_{z} [cm];Events", 60, 0, 15);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
     (*hists)[prefix+"_dRll"]                            = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 80, 0, 6);
-    (*hists)[prefix+"_dRl2jet"]                         = new TH1F(prefix+"_dRl2jet", ";#it{#Delta R}_{l^{2}jet};Events", 80, 0, 6);
-    (*hists)[prefix+"_l1reliso"]                        = new TH1F(prefix+"_l1reliso", ";L1 Rel Iso;Events", 60, 0, 0.3);
-    (*hists)[prefix+"_l2reliso"]                        = new TH1F(prefix+"_l2reliso", ";L2 Rel Iso;Events", 40, 0, 3.5);
-    (*hists)[prefix+"_leadptrel"]                       = new TH1F(prefix+"_leadptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_ptrel"]                           = new TH1F(prefix+"_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_dRl2jet1"]                        = new TH1F(prefix+"_dRl2jet1", ";#it{#Delta R}(l_{2},jet_{1});Events", 80, 0, 6);
+    (*hists)[prefix+"_dRl2jet2"]                        = new TH1F(prefix+"_dRl2jet2", ";#it{#Delta R}(l_{2},jet_{2});Events", 80, 0, 6);
+    (*hists)[prefix+"_dRjet1jet2"]                      = new TH1F(prefix+"_dRjet1jet2", ";#it{#Delta R}(jet_{1},jet_{2});Events", 80, 0, 6);
+
 
     (*hists)[prefix+"_ngentr"]                          = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
     (*hists)[prefix+"_ctau"]                            = new TH1F(prefix+"_ctau", ";c#tau_{HNL} [cm];Events", 40, 0, 100);
@@ -123,11 +132,13 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_trackE"]                      = new TH1F(prefix+"_IVF_trackE", ";track Energy (IVF);Events", 15, 0, 40);
     (*hists)[prefix+"_IVF_trackcharge"]                 = new TH1F(prefix+"_IVF_trackcharge", ";track charge (IVF);Events", 15, -2, 2);
     (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";Vtx Mass [GeV] (IVF);Events", 30, 0, 9);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dphi", ";#Delta#phi diff: HNL flight - tracks (IVF);Events", 30, 0, 0.08);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_deta", ";#Delta#eta diff: HNL flight - tracks (IVF);Events", 30, 0, 0.3);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR diff: HNL flight - tracks (IVF);Events", 30, 0, 0.3);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";dot product: HNL flight - tracks (IVF);Events", 100, -1.1, 1.1);
-    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";perp. comp.: HNL flight - tracks (IVF);Events", 30, 0, 0.15);
+    (*hists)[prefix+"_IVF_ptsum"]                       = new TH1F(prefix+"_IVF_ptsum", ";Vtx #it{p}_{T}^{sum} [GeV] (IVF);Events", 30, 0, 80);
+    (*hists)[prefix+"_IVF_l1_mass"]                     = new TH1F(prefix+"_IVF_l1_mass", ";l_{1} + Vtx Mass [GeV] (IVF);Events", 40, 0, 150);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dphi", ";#Delta#phi: HNL flight - IVF track sum;Events", 30, 0, 0.08);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_deta", ";#Delta#eta: HNL flight - IVF track sum;Events", 30, 0, 0.3);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR: HNL flight - IVF track sum;Events", 30, 0, 0.3);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";cos #theta: HNL flight - IVF track sum;Events", 100, -1.1, 1.1);
+    (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";sin #theta: HNL flight - IVF track sum;Events", 30, 0, 0.15);
     (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]       = new TH2F(prefix+"_IVF_PV-SVdxyz_genvsreco", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);#Delta_{xyz}(PV, SV_{gen}) [cm] (gen)", 100, 0, 60, 100, 0, 60);
     (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco2"]      = new TH2F(prefix+"_IVF_PV-SVdxyz_genvsreco2", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);#Delta_{xyz}(PV, SV_{gen}) [cm] (gen)", 100, 0, 5, 100, 0, 5);
     (*hists2D)[prefix+"_IVF_ctauHN_PV-SVdxyz"]          = new TH2F(prefix+"_IVF_ctauHN_PV-SVdxyz", ";c#tau (HNL) [cm]; #Delta_{xyz} (PV, SV_{fit}) [cm]", 20, 0, 30, 20, 0, 30);
@@ -198,6 +209,11 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading){
+    TLorentzVector lepton1;
+    TLorentzVector lepton2;
+    lepton1.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
+    lepton2.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+    
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
@@ -207,8 +223,12 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
 
     int nJets_uncl = 0;
     int nJets_cl = 0;
+    TLorentzVector jets_uncl[3];
     for(unsigned i = 0; i < _nJets; i++){
-        if(fullJetID[i]) nJets_uncl++;
+        if(fullJetID[i]){ 
+            jets_uncl[nJets_uncl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            nJets_uncl++;
+        }
         if(fullJetID[i] and jet_clean_full_displ[i]) nJets_cl++;
     }
 
@@ -218,27 +238,26 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_nJets_uncl"]->Fill(nJets_uncl, event_weight);
     (*hists)[prefix+"_nJets_cl"]->Fill(nJets_cl, event_weight);
 
-    (*hists)[prefix+"_leadpt"]->Fill(_lPt[i_leading], event_weight);
-    (*hists)[prefix+"_pt"]->Fill(_lPt[i_subleading], event_weight);
-    (*hists)[prefix+"_dxy"]->Fill(fabs(_dxy[i_subleading]), event_weight);
-    (*hists)[prefix+"_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
-    (*hists)[prefix+"_l1reliso"]->Fill(_relIso[i_leading], event_weight);
-    (*hists)[prefix+"_l2reliso"]->Fill(_relIso[i_subleading], event_weight);
-    (*hists)[prefix+"_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
-    (*hists)[prefix+"_leadptrel"]->Fill(_ptRel[i_leading], event_weight);
+    (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
+    (*hists)[prefix+"_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
+    (*hists)[prefix+"_l1_dxy"]->Fill(fabs(_dxy[i_leading]), event_weight);
+    (*hists)[prefix+"_l2_dxy"]->Fill(fabs(_dxy[i_subleading]), event_weight);
+    (*hists)[prefix+"_l1_dz"]->Fill(fabs(_dz[i_leading]), event_weight);
+    (*hists)[prefix+"_l2_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
+    (*hists)[prefix+"_l1_reliso"]->Fill(_relIso[i_leading], event_weight);
+    (*hists)[prefix+"_l2_reliso"]->Fill(_relIso[i_subleading], event_weight);
+    (*hists)[prefix+"_l1_ptrel"]->Fill(_ptRel[i_leading], event_weight);
+    (*hists)[prefix+"_l2_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
 
     (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet_for_displ], event_weight);
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
 
-    TLorentzVector lepton1;
-    TLorentzVector lepton2;
-    lepton1.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    lepton2.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
-    
     (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
-    (*hists)[prefix+"_dRl2jet"]->Fill(find_dRl2jet(lepton2),event_weight);
+    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1"]->Fill(lepton2.DeltaR(jets_uncl[0]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2"]->Fill(lepton2.DeltaR(jets_uncl[1]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2"]->Fill(jets_uncl[0].DeltaR(jets_uncl[1]),event_weight);
 
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
@@ -302,11 +321,15 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
         }
     }
     if(_1e){
-        if(_1e1disple){
+        if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
             if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(5., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(6., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(7., event_weight);
+            if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(0., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(1., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(2., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_jets_categories"]->Fill(3., event_weight);
         }else {
             if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(0., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(1., event_weight);
@@ -314,6 +337,12 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(3., event_weight);
         }
     }
+    if(_1e1disple0jet_afterdphi and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
+        (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
+        if(_dxy[i_subleading_displ_e] > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
+        if(_dxy[i_subleading_displ_e] > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
+    }
+
 }
 
 
@@ -369,17 +398,26 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
         }
     }
     if(_1mu){
-        if(_1mu1displmu){
+        if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
             if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(5., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(6., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(7., event_weight);
+            if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(0., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(1., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ == -1) (*hists)[prefix+"_jets_categories"]->Fill(2., event_weight);
+            else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_jets_categories"]->Fill(3., event_weight);
         }else {
             if(i_leading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(0., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(1., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(2., event_weight);
             else if(i_leading_jet_for_displ != -1 and i_subleading_jet_for_displ != -1 and i_thirdleading_jet_for_displ != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(3., event_weight);
         }
+    }
+    if(_1mu1displmu0jet_afterdphi and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
+        (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
+        if(_dxy[i_subleading_displ_mu] > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
+        if(_dxy[i_subleading_displ_mu] > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
     }
 }
 
@@ -478,6 +516,8 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     TLorentzVector PVSV_vector(_IVF_x[i_vtx] - _PV_x, _IVF_y[i_vtx] - _PV_y, _IVF_z[i_vtx] - _PV_z, 0);
 
     if(_IVF_ntracks[i_vtx] > 1){
+        TLorentzVector l1vector;
+        l1vector.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
         TLorentzVector tracksum;
         TLorentzVector tmptrack;
         for(Int_t i_track = 0; i_track < _IVF_ntracks[i_vtx]; i_track++){
@@ -490,6 +530,8 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             tracksum += tmptrack;
         }
         (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
+        (*hists)[prefix+"_IVF_ptsum"]->Fill(tracksum.Pt(), event_weight);
+        (*hists)[prefix+"_IVF_l1_mass"]->Fill((tracksum+l1vector).M(), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]->Fill(tracksum.DeltaPhi(PVSV_vector), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]->Fill(fabs(tracksum.Eta() - PVSV_vector.Eta()), event_weight);
         (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]->Fill(tracksum.DeltaR(PVSV_vector), event_weight);
@@ -689,11 +731,22 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     for(int i = 0; i < nx_l2_jets; i++){ 
         (*hists)[prefix+"_l2_jets_categories"]->GetXaxis()->SetBinLabel(i+1,l2_jets_labels[i]);
     }
+    int nx_jets = 4;
+    const char *jets_labels[nx_jets] = {"0 jets", "1 jet", "2 jets", "3+ jets"};
+    for(int i = 0; i < nx_jets; i++){ 
+        (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
+    }
     int nx_cutflow = 7;
     const char *cutflow_labels[nx_cutflow] = {"good l1", "good l2", "Vertex", "lepton veto", "jet veto", "M_{ll}", "#Delta #phi"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }
+    int nx_dxy = 3;
+    const char *dxy_labels[nx_dxy] = {"No dxy cut", "dxy(l2) > 0.01cm", "dxy(l2) > 0.05cm"};
+    for(int i = 0; i < nx_dxy; i++){
+        (*hists)[prefix+"_dxy_categories"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
+    }
+
     //int nx = 8;
     //const char *cutflow_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
     //for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i,cutflow_labels[i-1]);

@@ -35,21 +35,22 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         //    eormu = "mu/";
         //}
 
-        TString gen         = (histname.Index("gen_") == -1)?       "" : "gen/";
-        TString eormu       = (histname.Index("_e_") == -1 && histname.Index("Ele") == -1)? ((histname.Index("_mu_") == -1 && histname.Index("Mu") == -1)? "" : "mu/") : "e/";
-        TString SSorOS      = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
-        TString HLT         = (histname.Index("HLT_") == -1)?       "" : "HLT/";
-        TString partialcuts = (histname.Index("before") == -1)?     "" : "partialcuts/";
-        TString KVF         = (histname.Index("_KVF_") == -1)?      "" : "KVF/";
-        TString IVF         = (histname.Index("_IVF_") == -1)?      "" : "IVF/";
-        TString oldID       = (histname.Index("_oldID_") == -1)?    "" : "oldID/";
-        TString invVtx      = (histname.Index("_invVtx_") == -1)?   "" : "invVtx/";
-        TString corrl2      = (histname.Index("_corrl2_") == -1)?   "" : "corrl2/";
-        TString eff         = (histname.Index("_eff") == -1)?       "" : "eff/";
+        TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
+        TString eormu           = (histname.Index("_e_") == -1 && histname.Index("Ele") == -1)? ((histname.Index("_mu_") == -1 && histname.Index("Mu") == -1)? "" : "mu/") : "e/";
+        TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
+        TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
+        TString partialcuts     = (histname.Index("before") == -1)?         "" : "partialcuts/";
+        TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
+        TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
+        TString oldID           = (histname.Index("_oldID_") == -1)?        "" : "oldID/";
+        TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
+        TString corrl2          = (histname.Index("_corrl2_") == -1)?       "" : "corrl2/";
+        TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
+        TString invIVFgendist   = (histname.Index("_invIVFgendist") == -1)? "" : "invIVFgendist/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + eff;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + eff + invIVFgendist;
 }
 
 
