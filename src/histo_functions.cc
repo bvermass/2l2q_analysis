@@ -84,8 +84,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom_eff_den"]       = new TH1F(prefix+"_KVF_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
     (*hists)[prefix+"_KVF_PV-SVdxy_zoom2_eff_den"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 1);
-    //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom3_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 50, 0, 10);
-    //(*hists)[prefix+"_KVF_PV-SVdxy_zoom3_eff_den"]      = new TH1F(prefix+"_KVF_PV-SVdxy_zoom3_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 50, 0, 10);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff_num"]           = new TH1F(prefix+"_KVF_PV-SVdxyz_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_PV-SVdxyz_eff_den"]           = new TH1F(prefix+"_KVF_PV-SVdxyz_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 100);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom_eff_num"]      = new TH1F(prefix+"_KVF_PV-SVdxyz_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (KVF);Events", 20, 0, 10);
@@ -157,8 +155,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_den"]       = new TH1F(prefix+"_IVF_PV-SVdxy_zoom_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 1);
-    //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom3_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 50, 0, 10);
-    //(*hists)[prefix+"_IVF_PV-SVdxy_zoom3_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxy_zoom3_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 50, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxyz_eff_num"]           = new TH1F(prefix+"_IVF_PV-SVdxyz_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_PV-SVdxyz_eff_den"]           = new TH1F(prefix+"_IVF_PV-SVdxyz_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
@@ -196,18 +192,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_corrl2_gendist_eff_num"]          = new TH1F(prefix+"_corrl2_gendist_eff_num", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
     (*hists)[prefix+"_corrl2_gendist_eff_den"]          = new TH1F(prefix+"_corrl2_gendist_eff_den", ";|Vtx_{fit} - Vtx_{gen}| [cm];Events", 60, 0, 10);
    
-/*    (*hists)[prefix+"_n_prompte_ID"]   = new TH1F(prefix+"_n_prompte_ID", ";Number of electron with prompt ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_disple_ID"]   = new TH1F(prefix+"_n_disple_ID", ";Number of electron with displ ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_cleanede"]   = new TH1F(prefix+"_n_cleanede", ";Number of electron cleaned;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_cleaned_prompte_ID"]   = new TH1F(prefix+"_n_cleaned_prompte_ID", ";Number of electron with cleaned prompt ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_cleaned_disple_ID"]   = new TH1F(prefix+"_n_cleaned_disple_ID", ";Number of electron with cleaned displ ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_promptmu_ID"]   = new TH1F(prefix+"_n_promptmu_ID", ";Number of muon with prompt ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_displmu_ID"]   = new TH1F(prefix+"_n_displmu_ID", ";Number of muon with displ ID;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_ptcut"]   = new TH1F(prefix+"_n_ptcut", ";Number of muon with prompt ID passing ptcut;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_ptcut_trig"]   = new TH1F(prefix+"_n_ptcut_trig", ";Number of muon with prompt ID passing ptcut and trigger;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_leadingmu_trig"]   = new TH1F(prefix+"_n_leadingmu_trig", ";Number of muon with prompt ID passing ptcut and trigger;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_trige"]   = new TH1F(prefix+"_n_trige", ";Number of events passing e trigger;Events", 10, 0, 10);
-    (*hists)[prefix+"_n_trigmu"]   = new TH1F(prefix+"_n_trigmu", ";Number of events passing mu trigger;Events", 10, 0, 10);*/
     return;
 }
 
@@ -282,33 +266,6 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
-    //int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
-
-    //(*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
-    //if(_trige) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight);
-    //if(_1e) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    //if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-    //    (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-    //    if(_1e1disple0adde) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-    //    if(_1e1disple0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-    //    if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
-    //    if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
-    //}
-
-    //(*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
-    //if(_trige) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight);
-    //if(_1e) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
-    //if(_1e1displolde && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-    //    (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-    //    if(_1e1disple0adde) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-    //    if(_1e1disple0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-    //    if(_1e1disple0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-    //    if(_1e1disple0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
-    //}
-    //
-    //if(_1e1disple && fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) {
-    //    (*hists)[prefix+"_cuts"]->Fill(4., event_weight);
-    //}
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
     if(_1e)                             (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
@@ -360,33 +317,6 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
 
 
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
-    //int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;//sum of charges is 2 if SS, 0 if OS
-
-    //(*hists)[prefix+"_cutflow"]->Fill(0.,event_weight); //cutflow contains the legitimate actual cutflow of the analysis
-    //if(_trigmu) (*hists)[prefix+"_cutflow"]->Fill(1.,event_weight); 
-    //if(_1mu) (*hists)[prefix+"_cutflow"]->Fill(2.,event_weight); 
-    //if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-    //    (*hists)[prefix+"_cutflow"]->Fill(3.,event_weight); 
-    //    if(_1mu1displmu0addmu) (*hists)[prefix+"_cutflow"]->Fill(4.,event_weight); 
-    //    if(_1mu1displmu0jet) (*hists)[prefix+"_cutflow"]->Fill(5.,event_weight); 
-    //    if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cutflow"]->Fill(6.,event_weight); 
-    //    if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cutflow"]->Fill(7.,event_weight); 
-    //}
-
-    //(*hists)[prefix+"_cuts"]->Fill(0.,event_weight); //cuts contains all possible cuts and is more meant to analyze different cuts
-    //if(_trigmu) (*hists)[prefix+"_cuts"]->Fill(1.,event_weight); 
-    //if(_1mu) (*hists)[prefix+"_cuts"]->Fill(2.,event_weight); 
-    //if(_1mu1disploldmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-    //    (*hists)[prefix+"_cuts"]->Fill(3.,event_weight); 
-    //    if(_1mu1displmu0addmu) (*hists)[prefix+"_cuts"]->Fill(5.,event_weight); 
-    //    if(_1mu1displmu0jet) (*hists)[prefix+"_cuts"]->Fill(6.,event_weight); 
-    //    if(_1mu1displmu0jet_aftermll) (*hists)[prefix+"_cuts"]->Fill(7.,event_weight); 
-    //    if(_1mu1displmu0jet_afterdphi) (*hists)[prefix+"_cuts"]->Fill(8.,event_weight); 
-    //}
-    //
-    //if(_1mu1displmu && fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) {
-    //    (*hists)[prefix+"_cuts"]->Fill(4.,event_weight); 
-    //}
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
     if(_1mu)                              (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
@@ -455,40 +385,8 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_KVF_PV-SVdxyz"]->Fill(KVF_PVSVdist, event_weight);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom"]->Fill(KVF_PVSVdist, event_weight);
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2"]->Fill(KVF_PVSVdist, event_weight);
-
-
-    //IF i want the following plots again, I need to rewrite this, but probably not
-    //double maxdxy = 0;
-    //double maxdz  = 0;
-    //double mindxy = 5;
-    //double mindz  = 5;
-    //for(int i = 0; i < _lKVF_ntracks[i_subleading]; i++){
-    //    //if(_lKVF_trackddxy[i_subleading][i] > maxdxy) maxdxy = _lKVF_trackddxy[i_subleading][i];
-    //    //if(_lKVF_trackddz[i_subleading][i]  > maxdz)  maxdz  = _lKVF_trackddz[i_subleading][i];
-    //    //if(_lKVF_trackddxy[i_subleading][i] < mindxy) mindxy = _lKVF_trackddxy[i_subleading][i];
-    //    //if(_lKVF_trackddz[i_subleading][i]  < mindz)  mindz  = _lKVF_trackddz[i_subleading][i];
-    //}
-    //(*hists)[prefix+"_KVF_maxdxy"]->Fill(maxdxy, event_weight);
-    //(*hists)[prefix+"_KVF_maxdz"]->Fill(maxdz, event_weight);
-    //(*hists)[prefix+"_KVF_mindxy"]->Fill(mindxy, event_weight);
-    //(*hists)[prefix+"_KVF_mindz"]->Fill(mindz, event_weight);
     (*hists)[prefix+"_KVF_dRcut"]->Fill(_lKVF_dRcut[i_subleading], event_weight);
 
-    if(sampleflavor != "bkg"){ //this does not work yet
-        int i_track = 0;
-        TLorentzVector all;
-        all.SetPtEtaPhiE(0,0,0,0);
-        for(int i = 0; i_track < _lKVF_ntracks[i_subleading]; i++){
-            if(_lKVF_trackdR[i_subleading][i] < _lKVF_dRcut[i_subleading]){
-                i_track++;
-                TLorentzVector temp;
-                temp.SetPtEtaPhiE(_lKVF_trackPt[i_subleading][i], _lKVF_trackEta[i_subleading][i], _lKVF_trackPhi[i_subleading][i], _lKVF_trackE[i_subleading][i]);
-                all += temp;
-            }
-        }
-        (*hists)[prefix+"_KVF_mass"]->Fill(all.M(), event_weight);
-    }
-    
     if(i_gen_subleading != -1){
         double KVF_gendist      = get_KVF_gendist(i_gen_subleading, i_subleading);
         double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
@@ -689,46 +587,6 @@ void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     } 
 }
 
-// This function tested the efficiencies for the prompt and displaced ID's, since something seemed to be wrong, turns out everything works fine!
-/*void full_analyzer::fill_ID_histos(std::map<TString, TH1*>* hists, TString prefix)
-{
-    int nprompte = 0;
-    int ndisple  = 0;
-    int ncleanede = 0;
-    int ncleanedandprompte = 0;
-    int ncleanedanddisple  = 0;
-    int npromptmu = 0;
-    int ndisplmu  = 0;
-    int nptcut = 0;
-    int nptcutandtrig = 0;
-    int ntrige = 0;
-    int ntrigmu = 0;
-    for(int i = 0; i < _nL; i++){
-        if(fullElectronID[i]) nprompte++;
-        if(newdisplElectronID[i]) ndisple++;
-        if(ele_clean_full_displ[i]) ncleanede++;
-        if(fullElectronID[i] && ele_clean_full_displ[i]) ncleanedandprompte++;
-        if(newdisplElectronID[i] && ele_clean_full_displ[i]) ncleanedanddisple++;
-        if(fullMuonID[i]) npromptmu++;
-        if(newdisplMuonID[i]) ndisplmu++;
-        if((fullElectronID[i] && _lPt[i] > 30) || (fullMuonID[i] && _lPt[i] > 25)) nptcut++;
-        if((_trige && fullElectronID[i] && _lPt[i] > 30) || (_trigmu && fullMuonID[i] && _lPt[i] > 25)) nptcutandtrig++;
-    }
-    if(_trigmu) ntrigmu++;
-    if(_trige)  ntrige++;
-    (*hists)[prefix+"_n_prompte_ID"]->Fill(nprompte, event_weight);
-    (*hists)[prefix+"_n_disple_ID"]->Fill(ndisple, event_weight);
-    (*hists)[prefix+"_n_cleanede"]->Fill(ncleanede, event_weight);
-    (*hists)[prefix+"_n_cleaned_prompte_ID"]->Fill(ncleanedandprompte, event_weight);
-    (*hists)[prefix+"_n_cleaned_disple_ID"]->Fill(ncleanedanddisple, event_weight);
-    (*hists)[prefix+"_n_promptmu_ID"]->Fill(npromptmu, event_weight);
-    (*hists)[prefix+"_n_displmu_ID"]->Fill(ndisplmu, event_weight);
-    (*hists)[prefix+"_n_ptcut"]->Fill(nptcut, event_weight);
-    (*hists)[prefix+"_n_ptcut_trig"]->Fill(nptcutandtrig, event_weight);
-    (*hists)[prefix+"_n_leadingmu_trig"]->Fill(_1mu, event_weight);
-    (*hists)[prefix+"_n_trige"]->Fill(ntrige, event_weight);
-    (*hists)[prefix+"_n_trigmu"]->Fill(ntrigmu, event_weight);
-}*/
 
 void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TString prefix)
 {
@@ -760,12 +618,5 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     for(int i = 0; i < nx_dxy; i++){
         (*hists)[prefix+"_dxy_categories"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
     }
-
-    //int nx = 8;
-    //const char *cutflow_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
-    //for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i,cutflow_labels[i-1]);
-    //nx = 9;
-    //const char *cuts_labels[nx] = {"2 lep. presel.", "HLT single " + l, "1 prompt " + l, "1 displ " + l + " " + SSorOS, "new displ ID " + l + " " + SSorOS, "0 add. lepton", "0 tight ID jets", "M_ll < 80", "dphi_ll > 2.4"};
-    //for(int i = 1; i <= nx; i++) (*hists)[prefix+"_cuts"]->GetXaxis()->SetBinLabel(i,cuts_labels[i-1]);
 }
 
