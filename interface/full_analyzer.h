@@ -856,12 +856,12 @@ public :
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
    virtual double   find_dRl2jet(TLorentzVector);
-   virtual double   get_IVF_gendist(int, int);
-   virtual double   get_IVF_gendist_2D(int, int);
+   virtual double   get_IVF_SVgenreco(int, int);
+   virtual double   get_IVF_SVgenreco_2D(int, int);
    virtual double   get_IVF_PVSVdist(int);
    virtual double   get_IVF_PVSVdist_2D(int);
-   virtual double   get_KVF_gendist(int, int);
-   virtual double   get_KVF_gendist_2D(int, int);
+   virtual double   get_KVF_SVgenreco(int, int);
+   virtual double   get_KVF_SVgenreco_2D(int, int);
    virtual double   get_KVF_PVSVdist(int);
    virtual double   get_KVF_PVSVdist_2D(int);
    virtual double   get_PVSVdist_gen(int);

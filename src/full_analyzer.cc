@@ -105,10 +105,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
     add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
     add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_e_invIVFgendist");
-    add_histograms(&hists, &hists2D, "_SS_e_invIVFgendist");
-    add_histograms(&hists, &hists2D, "_OS_mu_invIVFgendist");
-    add_histograms(&hists, &hists2D, "_SS_mu_invIVFgendist");
+    add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
+    add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
+    add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
+    add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
@@ -314,7 +314,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e);
             fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_gendist(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFgendist", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
 
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
@@ -323,7 +323,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
             fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_gendist(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFgendist", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
 
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
