@@ -105,10 +105,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
     add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
     add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_e_oldID");
-    add_histograms(&hists, &hists2D, "_SS_e_oldID");
-    add_histograms(&hists, &hists2D, "_OS_mu_oldID");
-    add_histograms(&hists, &hists2D, "_SS_mu_oldID");
     add_histograms(&hists, &hists2D, "_OS_e_invIVFgendist");
     add_histograms(&hists, &hists2D, "_SS_e_invIVFgendist");
     add_histograms(&hists, &hists2D, "_OS_mu_invIVFgendist");
@@ -125,21 +121,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
    
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
-    int ee_else = 0; 
-    int n_ele = 0;
-    int n_after_eta = 0;
-    int n_after_pt = 0;
-    int n_after_dxy = 0;
-    int n_after_dz = 0;
-    int n_after_sip3d = 0;
-    int n_after_reliso = 0;
-    int n_after_invreliso = 0;
-    int n_after_pogmedium = 0;
-    int n_after_convveto = 0;
-    int n_after_missinghits = 0;
-    int n_after_invreliso_pogmedium = 0;
-    int n_after_invreliso_convveto = 0;
-    int n_after_invreliso_missinghits = 0;
     int SSe = 0;
     int OSe = 0;
     int SSmu = 0;
@@ -198,24 +179,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //if(filename.Index("HeavyNeutrino") == -1) event_weight = _weight; //WHEN WEIGHTS ARE CORRECT CHANGE THIS SO CORRECT WEIGHTS ARE ALSO USED FOR HEAVYNEUTRINO SAMPLES
         event_weight = _weight;
 
-	    for(unsigned i = 0; i < _nL; ++i){
-        	if(_lFlavor[i] != 0) continue;
-	        ++n_ele;
-	        if(fabs(_lEta[i]) < 2.5)    ++n_after_eta;
-        	if(_lPt[i] > 30)            ++n_after_pt;
-        	if(fabs(_dxy[i]) < 0.05)    ++n_after_dxy;
-        	if(fabs(_dz[i])  < 0.1)     ++n_after_dz;
-        	if(_3dIPSig[i]   < 4)       ++n_after_sip3d;
-        	if(_relIso[i]    < 0.2)     ++n_after_reliso;
-	        if(_relIso[i]    > 0.2)     ++n_after_invreliso;
-        	if(_lPOGMedium[i])          ++n_after_pogmedium;
-        	if(_lElectronPassConvVeto[i])       ++n_after_convveto;
-        	if(_lElectronMissingHits[i] < 1)    ++n_after_missinghits;
-	        if(_relIso[i] > 0.03 && _lPOGMedium[i])             ++n_after_invreliso_pogmedium;
-	        if(_relIso[i] > 0.2 && _lElectronPassConvVeto[i])   ++n_after_invreliso_convveto;
-	        if(_relIso[i] > 0.2 && _lElectronMissingHits[i])    ++n_after_invreliso_missinghits;
-	    }
-
         fix_validity_of_lIVF_match();
 	    
         //Get ID
@@ -229,10 +192,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    get_new_displ_muonID(&displMuonID[0]);
 	    get_jetID(&fullJetID[0]);
 
-        //fill_ID_histos(&hists, "_SS_mu");
-        //fill_ID_histos(&hists, "_OS_mu");
-        //fill_ID_histos(&hists, "_SS_e");
-        //fill_ID_histos(&hists, "_OS_e");
 
         //Get Cleaning for jets
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
@@ -370,7 +329,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
     }
-
+/*
+ * Small summary to write to terminal in order to quickly check state of results
+ */
     cout << "-----------------------------------------------------------------------" << endl;
     cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
     cout << "SS ee:       " << SSe <<  "        " << SSe_weight <<  "       " << 1.0*SSe_weight*total_weight << endl;
@@ -378,64 +339,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
     cout << "count:       " << count << endl;
-    //cout << "ee else: " << ee_else << endl;
-    /*cout << "n total " << n_ele << endl;
-    cout << "after eta " << n_after_eta << endl;
-    cout << "after pt " << n_after_pt << endl;
-    cout << "after dxy " << n_after_dxy << endl;
-    cout << "after dz " << n_after_dz << endl;
-    cout << "after sip3d " << n_after_sip3d << endl;
-    cout << "after reliso " << n_after_reliso << endl;
-    cout << "after inverted reliso " << n_after_invreliso << endl;
-    cout << "after pogmedium " << n_after_pogmedium << endl;
-    cout << "after convveto " << n_after_convveto << endl;
-    cout << "after missinghits " << n_after_missinghits << endl;
-    cout << "after invreliso and pogmedium " << n_after_invreliso_pogmedium << endl;
-    cout << "after invreliso and convveto " << n_after_invreliso_convveto << endl;
-    cout << "after invreliso and missinghits " << n_after_invreliso_missinghits << endl;*/
-
-    //for(auto&& sh : hists){  //used to be just for ee_sigreg_fraction and mumu
-	//    auto&& h  = sh.second;
-	//    h->Scale(100/h->GetEntries());
-    //}
-    // 
-    //if(flavor == "e" or flavor == "bkg"){
-    //    cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
-    //    cout << "2iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(2) << endl;
-    //    cout << "2iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(3) << endl;
-    //    cout << "1iso e, 1displ e, 0jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(7) << endl;
-    //    cout << "1iso e, 1displ e, 1jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(8) << endl;
-    //    cout << "1iso e, 1displ e, 2jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(9) << endl << endl;
-    //    cout << "1iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(10) << endl;
-    //    cout << "1iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(11) << endl;
-    //    cout << "1iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(12) << endl;
-    //    cout << "other:                   " << hists["ee_sigreg_fraction"]->GetBinContent(13) << endl;
-    //}
-    //if(flavor == "mu" or flavor == "bkg"){
-    //    cout << "2iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(1) << endl;
-    //    cout << "2iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(2) << endl;
-    //    cout << "2iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(3) << endl;
-    //    cout << "1iso mu, 1displ mu, 0jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(7) << endl;
-    //    cout << "1iso mu, 1displ mu, 1jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(8) << endl;
-    //    cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl;
-    //    cout << "1iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(10) << endl;
-    //    cout << "1iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(11) << endl;
-    //    cout << "1iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(12) << endl;
-    //    cout << "other:                     " << hists["mumu_sigreg_fraction"]->GetBinContent(13) << endl;
-    //}
-    //cout << endl << "it should be:" << endl;
-    //cout << "2iso e, 0jet:            0.136727     " << endl; 
-    //cout << "2iso e, 1jet:            0.0321711    " << endl; 
-    //cout << "2iso e, 2jet:            0.00402139   " << endl; 
-    //cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
-    //cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
-    //cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 
-    //
-    //cout << "1iso e, 0jet:            17.7906      " << endl; 
-    //cout << "1iso e, 1jet:            47.8707      " << endl; 
-    //cout << "1iso e, 2jet:            11.7143      " << endl; 
 
 
+/*
+ * Write everything to output
+ * output name is based on input sample name
+ */
     TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
     
     if(partition != 1) {
