@@ -743,10 +743,10 @@ public :
    Double_t event_weight;
    TString sampleflavor;
    
-   bool jet_clean_full[20], jet_clean_noniso[20], jet_clean_displ[20], jet_clean_full_noniso[20], jet_clean_full_displ[20];
-   bool ele_clean_full[10], ele_clean_noniso[10], ele_clean_displ[10], ele_clean_full_noniso_displ[10];
-   bool fullElectronID[10], nonisoElectronID[10], displElectronID[10], fullMuonID[10], nonisoMuonID[10], displMuonID[10], fullJetID[10];
-   bool olddisplElectronID[10], olddisplMuonID[10], old_jet_clean_displ[20], old_jet_clean_full_displ[20], old_ele_clean_displ[10], old_ele_clean_full_noniso_displ[10];
+   bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
+   bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
+   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10];
+   bool olddisplElectronID[10], olddisplMuonID[10], old_jet_clean_displ[20], old_jet_clean_full_displ[20], old_ele_clean_displ[10], old_ele_clean_full_displ[10], old_ele_clean_loose[10];
    
    int i_gen_l1;
    int i_gen_l2;
@@ -763,8 +763,6 @@ public :
    int i_subleading_e;
    int i_leading_mu;
    int i_subleading_mu;
-   int i_subleading_noniso_e;
-   int i_subleading_noniso_mu;
    int i_subleading_displ_e;
    int i_old_subleading_displ_e;
    int i_subleading_displ_mu;
@@ -775,20 +773,15 @@ public :
    int i_gen_leading_mu;
    int i_gen_subleading_displ_mu;
    
-   int i_leading_jet_for_full;
-   int i_subleading_jet_for_full;
-   int i_leading_jet_for_noniso;
-   int i_subleading_jet_for_noniso;
-   int i_leading_jet_for_displ;
-   int i_old_leading_jet_for_displ;
-   int i_subleading_jet_for_displ;
-   int i_old_subleading_jet_for_displ;
-   int i_thirdleading_jet_for_displ;
+   int i_leading_jet;
+   int i_subleading_jet;
+   int i_thirdleading_jet;
 
    bool _trige;
    bool _1e;
    bool _1e1disple;
    bool _1e1displevtx;
+   bool _1e1displedispl;
    bool _1e1disple0adde;
    bool _1e1disple0jet;
    bool _1e1disple0jet_aftermll;
@@ -802,9 +795,6 @@ public :
    bool _2e0jet;
    bool _2e1jet;
    bool _2e2jet;
-   bool _1e1nonisoe0jet;
-   bool _1e1nonisoe1jet;
-   bool _1e1nonisoe2jet;
    bool _1e1disple1jet;
    bool _1e1disple2jet;
 
@@ -812,6 +802,7 @@ public :
    bool _1mu;
    bool _1mu1displmu;
    bool _1mu1displmuvtx;
+   bool _1mu1displmudispl;
    bool _1mu1displmu0addmu;
    bool _1mu1displmu0jet;
    bool _1mu1displmu0jet_aftermll;
@@ -825,9 +816,6 @@ public :
    bool _2mu0jet;
    bool _2mu1jet;
    bool _2mu2jet;
-   bool _1mu1nonisomu0jet;
-   bool _1mu1nonisomu1jet;
-   bool _1mu1nonisomu2jet;
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
@@ -847,13 +835,13 @@ public :
 
    //in src/leptonID.cc and jetID.cc
    virtual void     get_electronID(bool*);
-   virtual void     get_noniso_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
    virtual void     get_new_displ_electronID(bool*);
+   virtual void     get_loose_electronID(bool*);
    virtual void     get_muonID(bool*);
-   virtual void     get_noniso_muonID(bool*);
    virtual void     get_displ_muonID(bool*);
    virtual void     get_new_displ_muonID(bool*);
+   virtual void     get_loose_muonID(bool*);
    virtual void     get_jetID(bool*);
    virtual void     get_clean_jets(bool*, bool*, bool*);
    virtual void     get_clean_ele(bool*, bool*);

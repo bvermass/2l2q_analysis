@@ -15,23 +15,17 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
 
    }
    Init(tree);
-   event_weight = 1;
-   i_leading_e = -1;
-   i_subleading_e = -1;
-   i_leading_mu = -1;
-   i_subleading_mu = -1;
-   i_subleading_noniso_e = -1;
-   i_subleading_noniso_mu = -1;
-   i_subleading_displ_e = -1;
-   i_subleading_displ_mu = -1;
+   event_weight             = 1;
+   i_leading_e              = -1;
+   i_subleading_e           = -1;
+   i_leading_mu             = -1;
+   i_subleading_mu          = -1;
+   i_subleading_displ_e     = -1;
+   i_subleading_displ_mu    = -1;
                               
-   i_leading_jet_for_full = -1;
-   i_subleading_jet_for_full = -1;
-   i_leading_jet_for_noniso = -1;
-   i_subleading_jet_for_noniso = -1;
-   i_leading_jet_for_displ = -1;
-   i_subleading_jet_for_displ = -1;
-   i_thirdleading_jet_for_displ = -1;
+   i_leading_jet        = -1;
+   i_subleading_jet     = -1;
+   i_thirdleading_jet   = -1;
 
 }
 

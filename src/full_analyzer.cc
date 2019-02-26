@@ -89,6 +89,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
     add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
     add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
+    add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
+    add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
+    add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
+    add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
     add_histograms(&hists, &hists2D, "_OS_e_before0jet");
     add_histograms(&hists, &hists2D, "_SS_e_before0jet");
     add_histograms(&hists, &hists2D, "_OS_mu_before0jet");
@@ -216,11 +220,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    
         //Get ID
 	    get_electronID(&fullElectronID[0]);
-	    get_noniso_electronID(&nonisoElectronID[0]);
+        get_loose_electronID(&looseElectronID[0]);
 	    get_displ_electronID(&olddisplElectronID[0]);
         get_new_displ_electronID(&displElectronID[0]);
 	    get_muonID(&fullMuonID[0]);
-	    get_noniso_muonID(&nonisoMuonID[0]);
+        get_loose_muonID(&looseMuonID[0]);
 	    get_displ_muonID(&olddisplMuonID[0]);
 	    get_new_displ_muonID(&displMuonID[0]);
 	    get_jetID(&fullJetID[0]);
@@ -232,46 +236,38 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //Get Cleaning for jets
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
-	    get_clean_jets(&jet_clean_noniso[0], &nonisoElectronID[0], &nonisoMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
         get_clean_jets(&old_jet_clean_displ[0], &olddisplElectronID[0], &olddisplMuonID[0]);
+        get_clean_jets(&jet_clean_loose[0],  &looseElectronID[0], &looseMuonID[0]);
 	    for(unsigned i = 0; i < 20; ++i){
-	        jet_clean_full_noniso[i] = jet_clean_full[i] && jet_clean_noniso[i];
 	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
 	        old_jet_clean_full_displ[i] = jet_clean_full[i] && old_jet_clean_displ[i];
 	    }
 	    
         //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
-	    get_clean_ele(&ele_clean_noniso[0], &nonisoMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
 	    get_clean_ele(&old_ele_clean_displ[0],  &olddisplMuonID[0]);
+	    get_clean_ele(&old_ele_clean_loose[0],  &olddisplMuonID[0]);
+        get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
 	    for(unsigned i = 0; i < 10; ++i){
-	        ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && ele_clean_displ[i];
-	        old_ele_clean_full_noniso_displ[i] = ele_clean_full[i] && ele_clean_noniso[i] && old_ele_clean_displ[i];
+	        ele_clean_full_displ[i] = ele_clean_full[i] && ele_clean_displ[i];
+	        old_ele_clean_full_displ[i] = ele_clean_full[i] && old_ele_clean_displ[i];
 	    }
 
         //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_loose[0]);
+	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_loose[0], i_leading_e);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    i_subleading_noniso_e  	    = find_subleading_e(&nonisoElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    i_subleading_noniso_mu 	    = find_subleading_mu(&nonisoMuonID[0], i_leading_mu);
-	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_noniso_displ[0], i_leading_e);
-	    i_old_subleading_displ_e  	= find_subleading_e(&olddisplElectronID[0], &old_ele_clean_full_noniso_displ[0], i_leading_e);
+	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_loose[0], i_leading_e);
+	    i_old_subleading_displ_e  	= find_subleading_e(&olddisplElectronID[0], &old_ele_clean_loose[0], i_leading_e);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
 	    i_old_subleading_displ_mu 	= find_subleading_mu(&olddisplMuonID[0], i_leading_mu);
 	    
-	    i_leading_jet_for_full	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
-	    i_subleading_jet_for_full	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet_for_full);
-	    i_leading_jet_for_noniso	= find_leading_jet(&fullJetID[0], &jet_clean_full_noniso[0]);
-	    //i_subleading_jet_for_noniso	= find_subleading_jet(&fullJetID[0], &jet_clean_full_noniso[0], i_leading_jet_for_noniso);
-	    i_leading_jet_for_displ	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
-	    i_old_leading_jet_for_displ	= find_leading_jet(&fullJetID[0], &old_jet_clean_full_displ[0]);
-	    i_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ);
-	    i_old_subleading_jet_for_displ	= find_subleading_jet(&fullJetID[0], &old_jet_clean_full_displ[0], i_old_leading_jet_for_displ);
-        i_thirdleading_jet_for_displ    = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet_for_displ, i_subleading_jet_for_displ);
+	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_loose[0]);
+	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet);
+        i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet, i_subleading_jet);
 
 
         //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.
@@ -326,9 +322,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
 
         if(_1e1displevtx){
-            fill_histograms(&hists, signs_and_flavor + "_before0jet", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmuvtx){
+            fill_histograms(&hists, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        }
+        
+        if(_1e1displedispl){
+            fill_histograms(&hists, signs_and_flavor + "_before0jet", i_leading_e, i_subleading_displ_e);
+        }
+        if(_1mu1displmudispl){
             fill_histograms(&hists, signs_and_flavor + "_before0jet", i_leading_mu, i_subleading_displ_mu);
         }
 
@@ -398,9 +403,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //    cout << "2iso e, 0jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(1) << endl;
     //    cout << "2iso e, 1jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(2) << endl;
     //    cout << "2iso e, 2jet:            " << hists["ee_sigreg_fraction"]->GetBinContent(3) << endl;
-    //    cout << "1iso e, 1noniso e, 0jet: " << hists["ee_sigreg_fraction"]->GetBinContent(4) << endl;
-    //    cout << "1iso e, 1noniso e, 1jet: " << hists["ee_sigreg_fraction"]->GetBinContent(5) << endl;
-    //    cout << "1iso e, 1noniso e, 2jet: " << hists["ee_sigreg_fraction"]->GetBinContent(6) << endl;
     //    cout << "1iso e, 1displ e, 0jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(7) << endl;
     //    cout << "1iso e, 1displ e, 1jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(8) << endl;
     //    cout << "1iso e, 1displ e, 2jet:  " << hists["ee_sigreg_fraction"]->GetBinContent(9) << endl << endl;
@@ -413,9 +415,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //    cout << "2iso mu, 0jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(1) << endl;
     //    cout << "2iso mu, 1jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(2) << endl;
     //    cout << "2iso mu, 2jet:             " << hists["mumu_sigreg_fraction"]->GetBinContent(3) << endl;
-    //    cout << "1iso mu, 1noniso mu, 0jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(4) << endl;
-    //    cout << "1iso mu, 1noniso mu, 1jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(5) << endl;
-    //    cout << "1iso mu, 1noniso mu, 2jet: " << hists["mumu_sigreg_fraction"]->GetBinContent(6) << endl;
     //    cout << "1iso mu, 1displ mu, 0jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(7) << endl;
     //    cout << "1iso mu, 1displ mu, 1jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(8) << endl;
     //    cout << "1iso mu, 1displ mu, 2jet:  " << hists["mumu_sigreg_fraction"]->GetBinContent(9) << endl;
@@ -428,9 +427,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "2iso e, 0jet:            0.136727     " << endl; 
     //cout << "2iso e, 1jet:            0.0321711    " << endl; 
     //cout << "2iso e, 2jet:            0.00402139   " << endl; 
-    //cout << "1iso e, 1noniso e, 0jet: 1.25467      " << endl; 
-    //cout << "1iso e, 1noniso e, 1jet: 1.18229      " << endl; 
-    //cout << "1iso e, 1noniso e, 2jet: 0.305626     " << endl; 
     //cout << "1iso e, 1displ e, 0jet:  15.4904      " << endl; 
     //cout << "1iso e, 1displ e, 1jet:  3.58306      " << endl; 
     //cout << "1iso e, 1displ e, 2jet:  0.63538      " << endl; 

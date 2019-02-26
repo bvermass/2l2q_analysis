@@ -27,11 +27,14 @@ void full_analyzer::signal_regions(){
     _1e1displevtx               = _1e1disple &&
                                   _lIVF_match[i_subleading_displ_e] != -1;
 
-    _1e1disple0adde             = _1e1displevtx &&
+    _1e1displedispl             = _1e1displevtx &&
+                                  fabs(_dxy[i_subleading_displ_e]) > 0.01;
+
+    _1e1disple0adde             = _1e1displedispl &&
                                   no_additional_leptons();
     
     _1e1disple0jet              = _1e1disple0adde && 
-                                  i_leading_jet_for_displ == -1;
+                                  i_leading_jet == -1;
     
     _1e1disple0jet_aftermll     = _1e1disple0jet && 
                                   mllcut(i_leading_e, i_subleading_displ_e);
@@ -59,11 +62,14 @@ void full_analyzer::signal_regions(){
     _1mu1displmuvtx             = _1mu1displmu &&
                                   _lIVF_match[i_subleading_displ_mu] != -1;
     
-    _1mu1displmu0addmu          = _1mu1displmuvtx && 
+    _1mu1displmudispl           = _1mu1displmuvtx &&
+                                  fabs(_dxy[i_subleading_displ_mu]) > 0.01;
+
+    _1mu1displmu0addmu          = _1mu1displmudispl && 
                                   no_additional_leptons();
     
     _1mu1displmu0jet            = _1mu1displmu0addmu && 
-                                  i_leading_jet_for_displ == -1;
+                                  i_leading_jet == -1;
     
     _1mu1displmu0jet_aftermll   = _1mu1displmu0jet && 
                                   mllcut(i_leading_mu, i_subleading_displ_mu);
@@ -92,32 +98,26 @@ void full_analyzer::signal_regions(){
     bool leadptveto_mu = false;
 	if(i_leading_mu != -1 and _lPt[i_leading_mu] > 25) leadptveto_mu = true;
 
-	_2e0jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	_2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	_2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	_1e1nonisoe0jet	    = leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	_1e1nonisoe1jet	    = leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	_1e1nonisoe2jet	    = leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+	_2e0jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet == -1 && i_subleading_jet == -1;
+	_2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet != -1 && i_subleading_jet == -1;
+	_2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet != -1 && i_subleading_jet != -1;
 	//_1e1disple0jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	_1e1disple1jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	_1e1disple2jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	_1e0jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	_1e1jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	_1e2jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	//_1e1disple1jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	//_1e1disple2jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	//_1e0jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet == -1 && i_subleading_jet == -1;
+	//_1e1jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet != -1 && i_subleading_jet == -1;
+	//_1e2jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet != -1 && i_subleading_jet != -1;
     
 
-    _2mu0jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	_2mu1jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	_2mu2jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
-	_1mu1nonisomu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso == -1 && i_subleading_jet_for_noniso == -1;
-	_1mu1nonisomu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso == -1;
-	_1mu1nonisomu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu != -1 && i_leading_jet_for_noniso != -1 && i_subleading_jet_for_noniso != -1;
+    _2mu0jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet == -1 && i_subleading_jet == -1;
+	_2mu1jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet != -1 && i_subleading_jet == -1;
+	_2mu2jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet != -1 && i_subleading_jet != -1;
 	//_1mu1displmu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	_1mu1displmu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
-	_1mu1displmu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
-	_1mu0jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full == -1 && i_subleading_jet_for_full == -1;
-	_1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full == -1;
-	_1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet_for_full != -1 && i_subleading_jet_for_full != -1;
+	//_1mu1displmu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
+	//_1mu1displmu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
+	//_1mu0jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet == -1 && i_subleading_jet == -1;
+	//_1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet != -1 && i_subleading_jet == -1;
+	//_1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet != -1 && i_subleading_jet != -1;
     
 }
 
@@ -130,7 +130,7 @@ bool full_analyzer::leadptcut(TString flavor){
 bool full_analyzer::no_additional_leptons(){
     int loose_leptons = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i] and ele_clean_full_noniso_displ[i] or displMuonID[i]) loose_leptons++;
+        if(displElectronID[i] and ele_clean_loose[i] or displMuonID[i]) loose_leptons++;
     }
     return (loose_leptons == 2);
 }
@@ -191,15 +191,12 @@ void full_analyzer::fill_sigreg_fraction(std::map<TString, TH1*>* hists){
 	    if(_2e0jet) (*hists)["_e_sigreg_fraction"]->Fill(0., event_weight);
 	    else if(_2e1jet) (*hists)["_e_sigreg_fraction"]->Fill(1., event_weight);
 	    else if(_2e2jet) (*hists)["_e_sigreg_fraction"]->Fill(2., event_weight);
-	    else if(_1e1nonisoe0jet) (*hists)["_e_sigreg_fraction"]->Fill(3., event_weight);
-	    else if(_1e1nonisoe1jet) (*hists)["_e_sigreg_fraction"]->Fill(4., event_weight);
-	    else if(_1e1nonisoe2jet) (*hists)["_e_sigreg_fraction"]->Fill(5., event_weight);
-	    else if(_1e1disple0jet)  (*hists)["_e_sigreg_fraction"]->Fill(6., event_weight);
-	    else if(_1e1disple1jet)  (*hists)["_e_sigreg_fraction"]->Fill(7., event_weight);
-	    else if(_1e1disple2jet)  (*hists)["_e_sigreg_fraction"]->Fill(8., event_weight);
-	    else if(_1e0jet) (*hists)["_e_sigreg_fraction"]->Fill(9., event_weight);
-	    else if(_1e1jet) (*hists)["_e_sigreg_fraction"]->Fill(10., event_weight);
-	    else if(_1e2jet) (*hists)["_e_sigreg_fraction"]->Fill(11., event_weight);
+	    //else if(_1e1disple0jet)  (*hists)["_e_sigreg_fraction"]->Fill(6., event_weight);
+	    //else if(_1e1disple1jet)  (*hists)["_e_sigreg_fraction"]->Fill(7., event_weight);
+	    //else if(_1e1disple2jet)  (*hists)["_e_sigreg_fraction"]->Fill(8., event_weight);
+	    //else if(_1e0jet) (*hists)["_e_sigreg_fraction"]->Fill(9., event_weight);
+	    //else if(_1e1jet) (*hists)["_e_sigreg_fraction"]->Fill(10., event_weight);
+	    //else if(_1e2jet) (*hists)["_e_sigreg_fraction"]->Fill(11., event_weight);
 	    else (*hists)["_e_sigreg_fraction"]->Fill(12., event_weight);
 	}
 	(*hists)["1_mu_overtotal"]->Fill(0., event_weight);
@@ -208,15 +205,12 @@ void full_analyzer::fill_sigreg_fraction(std::map<TString, TH1*>* hists){
 	    if(_2mu0jet) (*hists)["_mu_sigreg_fraction"]->Fill(0., event_weight);
 	    else if(_2mu1jet) (*hists)["_mu_sigreg_fraction"]->Fill(1., event_weight);
 	    else if(_2mu2jet) (*hists)["_mu_sigreg_fraction"]->Fill(2., event_weight);
-	    else if(_1mu1nonisomu0jet) (*hists)["_mu_sigreg_fraction"]->Fill(3., event_weight);
-	    else if(_1mu1nonisomu1jet) (*hists)["_mu_sigreg_fraction"]->Fill(4., event_weight);
-	    else if(_1mu1nonisomu2jet) (*hists)["_mu_sigreg_fraction"]->Fill(5., event_weight);
-	    else if(_1mu1displmu0jet)  (*hists)["_mu_sigreg_fraction"]->Fill(6., event_weight);
-	    else if(_1mu1displmu1jet)  (*hists)["_mu_sigreg_fraction"]->Fill(7., event_weight);
-	    else if(_1mu1displmu2jet)  (*hists)["_mu_sigreg_fraction"]->Fill(8., event_weight);
-	    else if(_1mu0jet) (*hists)["_mu_sigreg_fraction"]->Fill(9., event_weight);
-	    else if(_1mu1jet) (*hists)["_mu_sigreg_fraction"]->Fill(10., event_weight);
-	    else if(_1mu2jet) (*hists)["_mu_sigreg_fraction"]->Fill(11., event_weight);
+	    //else if(_1mu1displmu0jet)  (*hists)["_mu_sigreg_fraction"]->Fill(6., event_weight);
+	    //else if(_1mu1displmu1jet)  (*hists)["_mu_sigreg_fraction"]->Fill(7., event_weight);
+	    //else if(_1mu1displmu2jet)  (*hists)["_mu_sigreg_fraction"]->Fill(8., event_weight);
+	    //else if(_1mu0jet) (*hists)["_mu_sigreg_fraction"]->Fill(9., event_weight);
+	    //else if(_1mu1jet) (*hists)["_mu_sigreg_fraction"]->Fill(10., event_weight);
+	    //else if(_1mu2jet) (*hists)["_mu_sigreg_fraction"]->Fill(11., event_weight);
 	    else (*hists)["_mu_sigreg_fraction"]->Fill(12., event_weight);
 	}
 }
