@@ -218,7 +218,7 @@ void divide_by_binwidth(TH1F* h)
     if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
 }
 
-void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString toprighttitle)
+void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString toprighttitle)
 {
     // set x range lin or log
     c->SetLogx(lin0log1);
@@ -234,8 +234,8 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString historE1, TLegend *l
     h->GetYaxis()->SetRangeUser(0, ymax);
     if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
     h->GetYaxis()->SetTitleOffset(1.5);
-    if(historE1 == "hist") h->Draw("hist");
-    else if(historE1 == "E1") h->Draw("E1");
+    if(drawoptions == "hist") h->Draw("hist");
+    else if(drawoptions == "E1") h->Draw("E1");
   
     lgend->DrawClone("same");
    
@@ -269,7 +269,7 @@ void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TStr
 }
 
 
-void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString toprighttitle)
+void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int ylin0log1, double ymin, double ymax, TString toprighttitle)
 {
     // set y range lin or log
     c->SetLogy(ylin0log1);
@@ -294,12 +294,12 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
             h2->GetYaxis()->SetRangeUser(ymin, ymax);
             h2->GetYaxis()->SetTitle(Yaxis);
             h2->GetYaxis()->SetTitleOffset(1.5);
-            if(historE1 == "hist") h2->Draw("hist");
-            else if(historE1 == "E1") h2->Draw("E1");
+            if(drawoptions == "hist") h2->Draw("hist");
+            else if(drawoptions == "E1") h2->Draw("E1");
             firstlayout = false;
         }
-        else if(historE1 == "hist") h2->Draw("hist same");
-        else if(historE1 == "E1")   h2->Draw("E1 same");
+        else if(drawoptions == "hist") h2->Draw("hist same");
+        else if(drawoptions == "E1")   h2->Draw("E1 same");
     }
   
     lgend->DrawClone("same");
@@ -356,7 +356,7 @@ void draw_stack(TString name, TCanvas *c, THStack* stack, TLegend *lgend, TStrin
 }
 
 
-void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString historE1, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<TString, TH1*> signals, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
 {
     stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
     
@@ -371,8 +371,8 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
         TH1* h = it->second;
         double scale_factor = stack_integral / h->Integral();
         h->Scale(scale_factor);
-        if(historE1 == "hist") h->Draw("hist same");
-        else if(historE1 == "E1") h->Draw("E1 same");
+        if(drawoptions == "hist") h->Draw("hist same");
+        else if(drawoptions == "E1") h->Draw("E1 same");
     
         if(ymax == -1 && h->GetMaximum() > stack->GetMaximum()) stack->SetMaximum(1.1 * h->GetMaximum());
     }
