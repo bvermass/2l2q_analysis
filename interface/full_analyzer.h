@@ -745,9 +745,8 @@ public :
    
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
    bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
-   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10];
-   bool olddisplElectronID[10], olddisplMuonID[10], old_jet_clean_displ[20], old_jet_clean_full_displ[20], old_ele_clean_displ[10], old_ele_clean_full_displ[10], old_ele_clean_loose[10];
-   
+   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10], pogmediumElectronID[10], pogmediumMuonID[10];
+
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
@@ -761,12 +760,12 @@ public :
    //int i_subleading;
    int i_leading_e;
    int i_subleading_e;
+   int i_subleading_displ_e;
+   int i_leading_pogmedium_e;
    int i_leading_mu;
    int i_subleading_mu;
-   int i_subleading_displ_e;
-   int i_old_subleading_displ_e;
    int i_subleading_displ_mu;
-   int i_old_subleading_displ_mu;
+   int i_leading_pogmedium_mu;
    
    int i_gen_leading_e;
    int i_gen_subleading_displ_e;
@@ -787,8 +786,8 @@ public :
    bool _1e1disple0jet_aftermll;
    bool _1e1disple0jet_afterdphi;
    bool _1e1disple0jet_afterdR;
-   bool _1e1displolde;
-   
+   bool _1pogmediume;
+
    bool _1e0jet;
    bool _1e1jet;
    bool _1e2jet;
@@ -808,7 +807,7 @@ public :
    bool _1mu1displmu0jet_aftermll;
    bool _1mu1displmu0jet_afterdphi;
    bool _1mu1displmu0jet_afterdR;
-   bool _1mu1disploldmu;
+   bool _1pogmediummu;
    
    bool _1mu0jet;
    bool _1mu1jet;
@@ -835,12 +834,12 @@ public :
 
    //in src/leptonID.cc and jetID.cc
    virtual void     get_electronID(bool*);
+   virtual void     get_pogmedium_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
-   virtual void     get_new_displ_electronID(bool*);
    virtual void     get_loose_electronID(bool*);
    virtual void     get_muonID(bool*);
+   virtual void     get_pogmedium_muonID(bool*);
    virtual void     get_displ_muonID(bool*);
-   virtual void     get_new_displ_muonID(bool*);
    virtual void     get_loose_muonID(bool*);
    virtual void     get_jetID(bool*);
    virtual void     get_clean_jets(bool*, bool*, bool*);
@@ -873,7 +872,7 @@ public :
 
    // in src/signal_regions.cc
    virtual void     signal_regions();
-   virtual bool     leadptcut(TString);
+   virtual bool     leadptcut(int);
    virtual bool     no_additional_leptons();
    virtual bool     mllcut(int, int);
    virtual bool     dRcut(int, int);

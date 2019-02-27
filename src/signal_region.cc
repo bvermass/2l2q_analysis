@@ -19,7 +19,7 @@ void full_analyzer::signal_regions(){
     
     _1e			                = _trige && 
                                   i_leading_e != -1 && 
-                                  leadptcut("e");
+                                  leadptcut(i_leading_e);
 
     _1e1disple                  = _1e && 
                                   i_subleading_displ_e != -1;
@@ -54,7 +54,7 @@ void full_analyzer::signal_regions(){
     
     _1mu                        = _trigmu && 
                                   i_leading_mu != -1 && 
-                                  leadptcut("mu");
+                                  leadptcut(i_leading_mu);
     
     _1mu1displmu                = _1mu && 
                                   i_subleading_displ_mu != -1;
@@ -81,15 +81,18 @@ void full_analyzer::signal_regions(){
                                   dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
     
     
-    ////////////////////////////
-    // Old loose cut-based ID //
-    ////////////////////////////
+    ////////////////////////
+    // POGMedium prompt ID//
+    ////////////////////////
 
-    _1e1displolde               = _1e && 
-                                  i_old_subleading_displ_e != -1;
-    
-    _1mu1disploldmu             = _1mu && 
-                                  i_old_subleading_displ_mu != -1;
+    _1pogmediume                = _trige &&
+                                  i_leading_pogmedium_e != -1 &&
+                                  leadptcut(i_leading_pogmedium_e);
+
+    _1pogmediummu               = _trigmu &&
+                                  i_leading_pogmedium_mu != -1 &&
+                                  leadptcut(i_leading_pogmedium_mu);
+
 
     // OLD signal region definitions, first require correct number of leptons and jets, new version first does also pt requirements;
     bool leadptveto_e = false;
@@ -120,10 +123,15 @@ void full_analyzer::signal_regions(){
 	//_1mu2jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet != -1 && i_subleading_jet != -1;
     
 }
+ 
+bool full_analyzer::leadptcut(int i_lep){
+    if(i_lep == -1){ cout << "giving value -1 as i_lep to full_analyzer::leadptcut" << endl; return false;}
 
-bool full_analyzer::leadptcut(TString flavor){
-    if(flavor == "e"       && i_leading_e  != -1 && _lPt[i_leading_e]  > 30) return true;
-    else if(flavor == "mu" && i_leading_mu != -1 && _lPt[i_leading_mu] > 25) return true;
+    double ptcutval;
+    if(_lFlavor[i_lep]      == 0) ptcutval = 30; //electron
+    else if(_lFlavor[i_lep] == 1) ptcutval = 25; //muon
+    
+    if(_lPt[i_lep] >= ptcutval) return true;
     else return false;
 }
 

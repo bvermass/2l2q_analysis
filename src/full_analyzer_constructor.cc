@@ -18,10 +18,12 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    event_weight             = 1;
    i_leading_e              = -1;
    i_subleading_e           = -1;
+   i_subleading_displ_e     = -1;
+   i_leading_pogmedium_e    = -1;
    i_leading_mu             = -1;
    i_subleading_mu          = -1;
-   i_subleading_displ_e     = -1;
    i_subleading_displ_mu    = -1;
+   i_leading_pogmedium_mu   = -1;
                               
    i_leading_jet        = -1;
    i_subleading_jet     = -1;

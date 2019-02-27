@@ -140,47 +140,42 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fix_validity_of_lIVF_match();
 	    
         //Get ID
-	    get_electronID(&fullElectronID[0]);
+        get_electronID(&fullElectronID[0]);
         get_loose_electronID(&looseElectronID[0]);
-	    get_displ_electronID(&olddisplElectronID[0]);
-        get_new_displ_electronID(&displElectronID[0]);
-	    get_muonID(&fullMuonID[0]);
+        get_pogmedium_electronID(&pogmediumElectronID[0]);
+        get_displ_electronID(&displElectronID[0]);
+        get_muonID(&fullMuonID[0]);
         get_loose_muonID(&looseMuonID[0]);
-	    get_displ_muonID(&olddisplMuonID[0]);
-	    get_new_displ_muonID(&displMuonID[0]);
-	    get_jetID(&fullJetID[0]);
+        get_pogmedium_muonID(&pogmediumMuonID[0]);
+        get_displ_muonID(&displMuonID[0]);
+        get_jetID(&fullJetID[0]);
 
 
         //Get Cleaning for jets
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
 	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
-        get_clean_jets(&old_jet_clean_displ[0], &olddisplElectronID[0], &olddisplMuonID[0]);
         get_clean_jets(&jet_clean_loose[0],  &looseElectronID[0], &looseMuonID[0]);
 	    for(unsigned i = 0; i < 20; ++i){
 	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
-	        old_jet_clean_full_displ[i] = jet_clean_full[i] && old_jet_clean_displ[i];
 	    }
 	    
         //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
-	    get_clean_ele(&old_ele_clean_displ[0],  &olddisplMuonID[0]);
-	    get_clean_ele(&old_ele_clean_loose[0],  &olddisplMuonID[0]);
         get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
 	    for(unsigned i = 0; i < 10; ++i){
 	        ele_clean_full_displ[i] = ele_clean_full[i] && ele_clean_displ[i];
-	        old_ele_clean_full_displ[i] = ele_clean_full[i] && old_ele_clean_displ[i];
 	    }
 
         //Find leptons and jets with leading pt
 	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_loose[0]);
 	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_loose[0], i_leading_e);
+	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_loose[0], i_leading_e);
+        i_leading_pogmedium_e       = find_leading_e(&pogmediumElectronID[0], &ele_clean_loose[0]);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_loose[0], i_leading_e);
-	    i_old_subleading_displ_e  	= find_subleading_e(&olddisplElectronID[0], &old_ele_clean_loose[0], i_leading_e);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
-	    i_old_subleading_displ_mu 	= find_subleading_mu(&olddisplMuonID[0], i_leading_mu);
+        i_leading_pogmedium_mu      = find_leading_mu(&pogmediumMuonID[0]);
 	    
 	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_loose[0]);
 	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet);
@@ -212,7 +207,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_sigreg_fraction(&hists);
         fill_HNL_MC_check(&hists, &hists2D);
         fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
-        fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut("e")), (i_leading_mu != -1 && leadptcut("mu")));
+        fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
         fill_cutflow_e(&hists, "_SS_e");
         fill_cutflow_e(&hists, "_OS_e");

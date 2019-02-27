@@ -22,6 +22,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_dxy_categories"]                  = new TH1F(prefix+"_dxy_categories", ";;Events", 3, 0, 3);
+    (*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
 
     (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
@@ -263,6 +264,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
+    /*
+     * Cutflow
+     */
     if(_1e)                             (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
     if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){ 
                                         (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
@@ -274,6 +278,17 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
         if(_1e1disple0jet_afterdphi)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
     }
 
+    /*
+     * MVA ID versus cutbased medium prompt ID
+     */
+    if(_1e and _1pogmediume)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
+    if(_1e and !_1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
+    if(!_1e and _1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
+    if(!_1e and !_1pogmediume)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
+
+    /*
+     * KVF vs IVF for events
+     */
     if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS and i_gen_subleading_displ_e != -1) {
         double KVF_SVgenreco = get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e);
 
@@ -285,6 +300,10 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
             else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
         }
     }
+
+    /*
+     * l2 identification and jets(cleaned)
+     */
     if(_1e){
         if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
             if(i_leading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
@@ -302,6 +321,10 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
             else if(i_leading_jet != -1 and i_subleading_jet != -1 and i_thirdleading_jet != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(3., event_weight);
         }
     }
+
+    /*
+     * dxy > 0.01cm and 0.05cm
+     */
     if(_1e1disple0jet_afterdphi and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
@@ -314,6 +337,9 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
+    /*
+     * Cutflow
+     */
     if(_1mu)                              (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
     if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){ 
                                           (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
@@ -325,6 +351,17 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
         if(_1mu1displmu0jet_afterdphi)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
     }
 
+    /*
+     * MVA ID versus cutbased medium prompt ID
+     */
+    if(_1mu and _1pogmediummu)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
+    if(_1mu and !_1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
+    if(!_1mu and _1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
+    if(!_1mu and !_1pogmediummu)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
+
+    /*
+     * KVF vs IVF for events
+     */
     if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS and i_gen_subleading_displ_mu != -1) {
         double KVF_SVgenreco = get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu);
 
@@ -336,6 +373,10 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
             else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
         }
     }
+
+    /*
+     * l2 identification and jets(cleaned)
+     */
     if(_1mu){
         if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
             if(i_leading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
@@ -353,6 +394,10 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
             else if(i_leading_jet != -1 and i_subleading_jet != -1 and i_thirdleading_jet != -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(3., event_weight);
         }
     }
+
+    /*
+     * dxy > 0.01cm and 0.05cm
+     */
     if(_1mu1displmu0jet_afterdphi and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
@@ -589,6 +634,11 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     TString SSorOS = (prefix.Index("SS") == -1)? "OS" : "SS";
     TString l = (prefix.Index("_e") == -1)? "mu" : "e";
 
+    int nx_MVAvsPOGMedium = 4;
+    const char *MVAvsPOGMedium_labels[nx_MVAvsPOGMedium] = {"MVA, POGMedium", "MVA, no POGMedium", "no MVA, POGMedium", "no MVA, no POGMedium"};
+    for(int i = 0; i < nx_MVAvsPOGMedium; i++){ 
+        (*hists)[prefix+"_MVAvsPOGMedium_categories"]->GetXaxis()->SetBinLabel(i+1,MVAvsPOGMedium_labels[i]);
+    }
     int nx_KVForIVF = 4;
     const char *KVForIVF_labels[nx_KVForIVF] = {"IVF, KVF", "IVF, no KVF", "no IVF, KVF", "no IVF, no KVF"};
     for(int i = 0; i < nx_KVForIVF; i++){ 
