@@ -130,21 +130,6 @@ void plot_every_variable_in_root_file(TString filename)
             TString drawoptions = get_2D_draw_options(h);
             draw_2D_hist(pathname_lin + histname + ".pdf", c, h, drawoptions, &lgendrup, "", "", toprighttitle);
         }
-        //This part is obsolete already?    
-        //}else if(cl->InheritsFrom("TGraphAsymmErrors")){
-        //    TGraphAsymmErrors* h = (TGraphAsymmErrors*)key->ReadObj();
-        //    TString histname = h->GetName();
-        //    
-        //    // xlin or log
-        //    int xlog = (histname.Index("xlog") == -1)? 0 : 1;
-        //    // Events or Eff. in yaxis title
-        //    TString yaxistitle = "Eff.";
-        //                                         
-        //    TString pathname_lin = make_pathname(histname, pathname, "lin");
-        //    gSystem->Exec("mkdir -p " + pathname_lin);
-
-        //    draw_TGraphAsymmErrors(pathname_lin + histname + "_asymm2.pdf", c, h, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, flavor, mass, coupling);
-        //}
     } 
     cout << "plots finished" << endl;
 }
