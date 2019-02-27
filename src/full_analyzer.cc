@@ -121,7 +121,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
     Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
-    std::cout << "j_begin j_end max_entries: " << j_begin << " " << j_end << " " << max_entries << std::endl;
+    cout << "j_begin j_end max_entries: " << j_begin << " " << j_end << " " << max_entries << endl;
+    if(j_end - j_begin > 2000000) cout << "More than 2million events to run over! Increase partition (" << j_end - j_begin << ")" << endl;
 
     //main loop begins here
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
