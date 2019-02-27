@@ -287,7 +287,7 @@ void full_analyzer::match_gen_and_reco(int i_subleading)
     else subleading_is_l2 = false;
     subleading_vec.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
 
-    subleading_is_l2 = (gen_l2_vec.DeltaR(subleading_vec) < 0.2);
+    subleading_is_l2 = (gen_l2_vec.DeltaR(subleading_vec) < 0.1);
      
     //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
 }
