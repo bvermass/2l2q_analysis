@@ -782,10 +782,10 @@ public :
    bool _1e1displevtx;
    bool _1e1displedispl;
    bool _1e1disple0adde;
-   bool _1e1disple0jet;
-   bool _1e1disple0jet_aftermll;
-   bool _1e1disple0jet_afterdphi;
-   bool _1e1disple0jet_afterdR;
+   //bool _1e1disple0jet;
+   bool _1e1displemll;
+   bool _1e1displedphi;
+   bool _1e1displedR;
    bool _1pogmediume;
 
    bool _1e0jet;
@@ -803,10 +803,10 @@ public :
    bool _1mu1displmuvtx;
    bool _1mu1displmudispl;
    bool _1mu1displmu0addmu;
-   bool _1mu1displmu0jet;
-   bool _1mu1displmu0jet_aftermll;
-   bool _1mu1displmu0jet_afterdphi;
-   bool _1mu1displmu0jet_afterdR;
+   //bool _1mu1displmu0jet;
+   bool _1mu1displmumll;
+   bool _1mu1displmudphi;
+   bool _1mu1displmudR;
    bool _1pogmediummu;
    
    bool _1mu0jet;

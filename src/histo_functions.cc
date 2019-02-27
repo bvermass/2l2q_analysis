@@ -23,7 +23,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_dxy_categories"]                  = new TH1F(prefix+"_dxy_categories", ";;Events", 3, 0, 3);
     (*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
-    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
+    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 7, 0, 7);
 
     (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
     (*hists)[prefix+"_nMu"]                             = new TH1F(prefix+"_nMu", ";N_{muon};Events", 10, 0, 10);
@@ -273,9 +273,9 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
         if(_1e1displevtx)               (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
         if(_1e1displedispl)             (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
         if(_1e1disple0adde)             (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
-        if(_1e1disple0jet)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
-        if(_1e1disple0jet_aftermll)     (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
-        if(_1e1disple0jet_afterdphi)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
+        //if(_1e1disple0jet)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+        if(_1e1displemll)               (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+        if(_1e1displedphi)              (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
     }
 
     /*
@@ -325,7 +325,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1e1disple0jet_afterdphi and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
+    if(_1e1displedphi and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
         if(fabs(_dxy[i_subleading_displ_e]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
@@ -346,9 +346,9 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
         if(_1mu1displmuvtx)               (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
         if(_1mu1displmudispl)             (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
         if(_1mu1displmu0addmu)            (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
-        if(_1mu1displmu0jet)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
-        if(_1mu1displmu0jet_aftermll)     (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
-        if(_1mu1displmu0jet_afterdphi)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
+        //if(_1mu1displmu0jet)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+        if(_1mu1displmumll)               (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+        if(_1mu1displmudphi)              (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
     }
 
     /*
@@ -398,7 +398,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1mu1displmu0jet_afterdphi and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
+    if(_1mu1displmudphi and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
         if(fabs(_dxy[i_subleading_displ_mu]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
@@ -654,8 +654,8 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     for(int i = 0; i < nx_jets; i++){ 
         (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     }
-    int nx_cutflow = 8;
-    const char *cutflow_labels[nx_cutflow] = {"good l1", "good l2", "Vertex", "dxy(l2) > 0.01cm", "lepton veto", "jet veto", "M_{ll}", "#Delta #phi"};
+    int nx_cutflow = 7;
+    const char *cutflow_labels[nx_cutflow] = {"good l1", "good l2", "Vertex", "dxy(l2) > 0.01cm", "lepton veto", "M_{ll}", "#Delta #phi"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }

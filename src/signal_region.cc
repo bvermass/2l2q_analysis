@@ -33,16 +33,16 @@ void full_analyzer::signal_regions(){
     _1e1disple0adde             = _1e1displedispl &&
                                   no_additional_leptons();
     
-    _1e1disple0jet              = _1e1disple0adde && 
-                                  i_leading_jet == -1;
+    //_1e1disple0jet              = _1e1disple0adde && 
+    //                              i_leading_jet == -1;
     
-    _1e1disple0jet_aftermll     = _1e1disple0jet && 
+    _1e1displemll               = _1e1disple0adde && 
                                   mllcut(i_leading_e, i_subleading_displ_e);
     
-    _1e1disple0jet_afterdR      = _1e1disple0jet_aftermll && 
+    _1e1displedR                = _1e1displemll && 
                                   dRcut(i_leading_e, i_subleading_displ_e);    
     
-    _1e1disple0jet_afterdphi    = _1e1disple0jet_aftermll && 
+    _1e1displedphi              = _1e1displemll && 
                                   dphicut(i_leading_e, i_subleading_displ_e, 2.4);    
     
     
@@ -68,16 +68,16 @@ void full_analyzer::signal_regions(){
     _1mu1displmu0addmu          = _1mu1displmudispl && 
                                   no_additional_leptons();
     
-    _1mu1displmu0jet            = _1mu1displmu0addmu && 
-                                  i_leading_jet == -1;
+    //_1mu1displmu0jet            = _1mu1displmu0addmu && 
+    //                              i_leading_jet == -1;
     
-    _1mu1displmu0jet_aftermll   = _1mu1displmu0jet && 
+    _1mu1displmumll             = _1mu1displmu0addmu && 
                                   mllcut(i_leading_mu, i_subleading_displ_mu);
     
-    _1mu1displmu0jet_afterdR    = _1mu1displmu0jet_aftermll && 
+    _1mu1displmudR              = _1mu1displmumll && 
                                   dRcut(i_leading_mu, i_subleading_displ_mu);    
     
-    _1mu1displmu0jet_afterdphi  = _1mu1displmu0jet_aftermll && 
+    _1mu1displmudphi            = _1mu1displmumll && 
                                   dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
     
     
