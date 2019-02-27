@@ -42,7 +42,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    double total_weight = (cross_section * 35900) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1);
+    double total_weight = (cross_section * 35900) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn
     
     _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
 
@@ -116,7 +116,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "full_analyzer.cc file: " << filename << endl;
     //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
-    total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran
+    total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran (if only 20.000 of 100.000 are ran, then each event should have 5 times its original weight)
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
@@ -288,8 +288,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
 /*
- * Write everything to output
- * output name is based on input sample name
+ * Write everything to output:
+ * 1. find output name based on input sample name
+ * 2. create output TFile
+ * 3. normalize histograms and make under- and overflow visible
+ * 4. give necessary text bin labels
+ * 5. write events to output
  */
     TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
     
@@ -311,6 +315,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
+    // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
         int nb = h->GetNbinsX();
@@ -338,27 +343,34 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
     }
+    // Normalize 2D histograms to correct total weight
     for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
         TH2* h = it2D->second;
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
     }
 
+    // Give histograms that need it the correct text bin labels
     give_alphanumeric_labels(&hists, "_SS_e");
     give_alphanumeric_labels(&hists, "_OS_e");
     give_alphanumeric_labels(&hists, "_SS_mu");
     give_alphanumeric_labels(&hists, "_OS_mu");
 
 
+    // Write 1D histograms to outputfile
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
 	    h->Write();
     }
 
+    // Write 2D histograms to outputfile
     for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
         TH2* h = it2D->second;
         h->Write();
     }
-
+ 
+    // This is a histogram with 1 bin that is filled with value 1.
+    // After hadding files together, this allows to see how many were hadded together.
+    // This was used for efficiency histograms that were elevated by number of hadded files. at the moment it is not used anymore (efficiencies are calculated after hadding, in plotting step)
     TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
     hadd_counter->Fill(0);
     hadd_counter->Write();
