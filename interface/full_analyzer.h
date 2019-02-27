@@ -743,10 +743,12 @@ public :
    Double_t event_weight;
    TString sampleflavor;
    
+   // lepton and jet ID and cleaning bool arrays
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
    bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
    bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10], pogmediumElectronID[10], pogmediumMuonID[10];
 
+   // gen variables related to truth of event
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
@@ -755,27 +757,30 @@ public :
    bool leading_is_l1;
    bool subleading_is_l2; 
 
-
-   //int i_leading;   //these are flavor unspecific, so not matter if leading or subleading are e or mu, this is usable
-   //int i_subleading;
+   // signal region lepton indices 
    int i_leading_e;
-   int i_subleading_e;
    int i_subleading_displ_e;
-   int i_leading_pogmedium_e;
    int i_leading_mu;
-   int i_subleading_mu;
    int i_subleading_displ_mu;
-   int i_leading_pogmedium_mu;
    
+   // gen indices corresponding to signal region leptons (geometric)
    int i_gen_leading_e;
    int i_gen_subleading_displ_e;
    int i_gen_leading_mu;
    int i_gen_subleading_displ_mu;
    
+   // extra lepton indices
+   int i_subleading_e;
+   int i_leading_pogmedium_e;
+   int i_subleading_mu;
+   int i_leading_pogmedium_mu;
+   
+   // jet indices
    int i_leading_jet;
    int i_subleading_jet;
    int i_thirdleading_jet;
 
+   // signal region booleans: ee
    bool _trige;
    bool _1e;
    bool _1e1disple;
@@ -785,9 +790,12 @@ public :
    //bool _1e1disple0jet;
    bool _1e1displemll;
    bool _1e1displedphi;
+
+   // extra booleans: ee
    bool _1e1displedR;
    bool _1pogmediume;
 
+   // old booleans: ee
    bool _1e0jet;
    bool _1e1jet;
    bool _1e2jet;
@@ -797,6 +805,7 @@ public :
    bool _1e1disple1jet;
    bool _1e1disple2jet;
 
+   // signal region booleans: mumu
    bool _trigmu;
    bool _1mu;
    bool _1mu1displmu;
@@ -806,9 +815,12 @@ public :
    //bool _1mu1displmu0jet;
    bool _1mu1displmumll;
    bool _1mu1displmudphi;
+
+   // extra booleans: mumu
    bool _1mu1displmudR;
    bool _1pogmediummu;
    
+   // old booleans: mumu
    bool _1mu0jet;
    bool _1mu1jet;
    bool _1mu2jet;
@@ -818,6 +830,7 @@ public :
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
+   // functions
    // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
    virtual ~full_analyzer();
