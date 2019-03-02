@@ -42,6 +42,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l1_ptrel"]                        = new TH1F(prefix+"_l1_ptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_l2_ptrel"]                        = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_leadjetpt"]                       = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
+    (*hists)[prefix+"_jetIsTightLepVeto"]               = new TH1F(prefix+"_jetIsTightLepVeto", ";Tight ID + LepVeto;Events", 2, 0, 2);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 60, 0, 200);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
@@ -193,11 +194,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading){
-    TLorentzVector lepton1;
-    TLorentzVector lepton2;
-    lepton1.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    lepton2.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
-    
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
@@ -212,6 +208,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     for(unsigned i = 0; i < _nJets; i++){
         if(fullJetID[i]){ 
             jets_uncl[nJets_uncl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            (*hists)[prefix+"_jetIsTightLepVeto"]->Fill(_jetIsTightLepVeto[i], event_weight);
             nJets_uncl++;
         }
         if(fullJetID[i] and jet_clean_loose[i]){
@@ -238,17 +235,17 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_l1_ptrel"]->Fill(_ptRel[i_leading], event_weight);
     (*hists)[prefix+"_l2_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
 
-    (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet], event_weight);
+    if(i_leading_jet != -1) (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet], event_weight);
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
 
-    (*hists)[prefix+"_mll"]->Fill((lepton1 + lepton2).M(), event_weight);
-    (*hists)[prefix+"_dphill"]->Fill(fabs(lepton1.DeltaPhi(lepton2)), event_weight);
-    (*hists)[prefix+"_dRll"]->Fill(lepton1.DeltaR(lepton2), event_weight);
-    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(lepton2.DeltaR(jets_uncl[0]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(lepton2.DeltaR(jets_uncl[1]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(jets_uncl[0].DeltaR(jets_uncl[1]),event_weight);
-    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(lepton2.DeltaR(jets_cl[0]),event_weight);
-    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(lepton2.DeltaR(jets_cl[1]),event_weight);
+    (*hists)[prefix+"_mll"]->Fill(g_mll, event_weight);
+    (*hists)[prefix+"_dphill"]->Fill(g_dphill, event_weight);
+    (*hists)[prefix+"_dRll"]->Fill(g_dRll, event_weight);
+    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[0]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[1]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[1]),event_weight);
+    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(get_dRljet(i_subleading, jets_cl[0]),event_weight);
+    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(get_dRljet(i_subleading, jets_cl[1]),event_weight);
     if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(jets_cl[0].DeltaR(jets_cl[1]),event_weight);
 
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
@@ -325,7 +322,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1e1displedphi and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
+    if(_1e1displevtx and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
         if(fabs(_dxy[i_subleading_displ_e]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
@@ -398,7 +395,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1mu1displmudphi and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
+    if(_1mu1displmuvtx and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
         (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
         if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
         if(fabs(_dxy[i_subleading_displ_mu]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
@@ -663,6 +660,11 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     const char *dxy_labels[nx_dxy] = {"No dxy cut", "dxy(l2) > 0.01cm", "dxy(l2) > 0.05cm"};
     for(int i = 0; i < nx_dxy; i++){
         (*hists)[prefix+"_dxy_categories"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
+    }
+    int nx_jetIsTightLepVeto = 2;
+    const char *jetIsTightLepVeto_labels[nx_jetIsTightLepVeto] = {"!jetIsTightLepVeto", "jetIsTightLepVeto"};
+    for(int i = 0; i < nx_jetIsTightLepVeto; i++){
+        (*hists)[prefix+"_jetIsTightLepVeto"]->GetXaxis()->SetBinLabel(i+1, jetIsTightLepVeto_labels[i]);
     }
 }
 

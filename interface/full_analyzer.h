@@ -780,6 +780,10 @@ public :
    int i_subleading_jet;
    int i_thirdleading_jet;
 
+   double g_mll;
+   double g_dphill;
+   double g_dRll;
+
    // signal region booleans: ee
    bool _trige;
    bool _1e;
@@ -887,11 +891,16 @@ public :
    virtual void     signal_regions();
    virtual bool     leadptcut(int);
    virtual bool     no_additional_leptons();
-   virtual bool     mllcut(int, int);
-   virtual bool     dRcut(int, int);
+   virtual bool     mllcut(int, int, double);
+   virtual double   get_mll(int, int);
+   virtual bool     dRcut(int, int, double, double);
+   virtual double   get_dRll(int, int);
    virtual bool     dphicut(int, int, double);
+   virtual double   get_dphill(int, int);
+   virtual double   get_dRljet(int, TLorentzVector&);
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
+   virtual void     reset_signal_regions();
 
    // in src/print_tables.cc
    virtual void     print_table();
