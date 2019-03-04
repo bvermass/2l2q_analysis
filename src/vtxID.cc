@@ -32,6 +32,9 @@ int full_analyzer::find_vtx_matching_to_lepton(int i_lepton){
 void full_analyzer::fix_validity_of_lIVF_match()
 {
     for(unsigned i = 0; i < _nL; i++){
-        if(_lIVF_match[i] >= (int)_IVF_nvertex) _lIVF_match[i] = -1;
+        if(_lIVF_match[i] >= (int)_IVF_nvertex){
+            IVFmatch_larger_than_IVF_nvertex++;
+            _lIVF_match[i] = -1;
+        }
     }
 }

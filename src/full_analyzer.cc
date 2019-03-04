@@ -286,6 +286,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
     cout << "count:       " << count << endl;
+    cout << "Times _lIVF_match was larger than _IVF_nvertex: " << IVFmatch_larger_than_IVF_nvertex << endl;
 
 
 /*

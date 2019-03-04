@@ -191,11 +191,11 @@ public :
    //Int_t           _HLT_Mu45_eta2p1_prescale;
    //Bool_t          _HLT_Mu30_TkMu11;
    //Int_t           _HLT_Mu30_TkMu11_prescale;
-   UChar_t         _nL;
-   UChar_t         _nMu;
-   UChar_t         _nEle;
-   UChar_t         _nLight;
-   UChar_t         _nTau;
+   unsigned         _nL;
+   unsigned         _nMu;
+   unsigned         _nEle;
+   unsigned         _nLight;
+   unsigned         _nTau;
    Double_t        _lPt[10];   //[_nL]
    Double_t        _lEta[10];   //[_nL]
    Double_t        _lEtaSC[10];   //[_nLight]
@@ -283,7 +283,7 @@ public :
    Double_t        _lKVF_trackdR[10][20];
    Double_t        _lKVF_trackdxy[10][20];
    Double_t        _lKVF_trackdz[10][20];
-   UChar_t         _IVF_nvertex;
+   unsigned         _IVF_nvertex;
    Double_t        _IVF_x[50];
    Double_t        _IVF_y[50];
    Double_t        _IVF_z[50];
@@ -292,13 +292,13 @@ public :
    Double_t        _IVF_cz[50];
    Double_t        _IVF_df[50];
    Double_t        _IVF_chi2[50];
-   UChar_t         _IVF_ntracks[50];
+   unsigned         _IVF_ntracks[50];
    Double_t        _IVF_trackpt[50][15];
    Double_t        _IVF_tracketa[50][15];
    Double_t        _IVF_trackphi[50][15];
    Double_t        _IVF_trackE[50][15];
    Double_t        _IVF_trackcharge[50][15];
-   Int_t           _lIVF_match[10];
+   int             _lIVF_match[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -833,6 +833,8 @@ public :
    bool _2mu2jet;
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
+
+   int IVFmatch_larger_than_IVF_nvertex;
 
    // functions
    // in src/full_analyzer_constructor.cc
