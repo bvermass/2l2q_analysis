@@ -114,7 +114,7 @@ void plot_every_variable_in_root_file(TString filename)
                 TGraphAsymmErrors* efficiency_graph = new TGraphAsymmErrors((TH1F*)h, (TH1F*)file->Get(histname(0, histname.Index("eff_num") + 4) + "den"), "cp");
                 efficiency_graph->GetXaxis()->SetTitle(h->GetXaxis()->GetTitle());
                 yaxistitle = "Eff.";
-                draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "ALP", &lgendrup, "", yaxistitle, 0, 0, xlog, toprighttitle);
+                draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "AP", &lgendrup, "", yaxistitle, 0, 0, xlog, toprighttitle);
             }
 
         }else if(cl->InheritsFrom("TH2")){
