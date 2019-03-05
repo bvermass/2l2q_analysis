@@ -834,7 +834,7 @@ public :
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
-   int IVFmatch_larger_than_IVF_nvertex;
+   int count_IVFmatch_larger_than_IVF_nvertex;
 
    // functions
    // in src/full_analyzer_constructor.cc
@@ -920,9 +920,15 @@ public :
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
+   // in src/jet_histograms.cc
+   virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
+   virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString);
+
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
+   virtual void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
    virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
+   virtual void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
    // in src/HNL_MC_check.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);

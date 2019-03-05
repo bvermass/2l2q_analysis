@@ -58,6 +58,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_sigreg_fraction(&hists);//found in src/signal_region.cc, shows fractions of events in possible signal regions with leptons and jets
     init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);
 
     add_histograms(&hists, &hists2D, "_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
@@ -182,6 +183,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet);
         i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet, i_subleading_jet);
 
+        // Trigger efficiency of all events (before selection matches 
+        fill_HLT_allevents_efficiency(&hists, "");
 
         //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.
         if(i_leading_e != -1 and i_leading_mu != -1){
@@ -286,7 +289,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
     cout << "count:       " << count << endl;
-    cout << "Times _lIVF_match was larger than _IVF_nvertex: " << IVFmatch_larger_than_IVF_nvertex << endl;
+    cout << "Times _lIVF_match was larger than _IVF_nvertex: " << count_IVFmatch_larger_than_IVF_nvertex << endl;
 
 
 /*
