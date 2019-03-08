@@ -191,12 +191,6 @@ double full_analyzer::get_dphill(int i_lead, int i_sublead){
     return fabs(leadingvec.DeltaPhi(subleadingvec));
 }
 
-double full_analyzer::get_dRljet(int i_l, TLorentzVector& jetvec){
-    TLorentzVector leptonvec;
-    leptonvec.SetPtEtaPhiE(_lPt[i_l], _lEta[i_l], _lPhi[i_l], _lE[i_l]);
-    return fabs(leptonvec.DeltaR(jetvec));
-}
-
 void full_analyzer::init_sigreg_fraction(std::map<TString, TH1*>* hists){
     (*hists)["_e_sigreg_fraction"]			= new TH1F("_e_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     (*hists)["_mu_sigreg_fraction"]		    = new TH1F("_mu_sigreg_fraction",";signal regions;Events", 13, 0, 13);

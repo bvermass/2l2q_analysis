@@ -76,3 +76,39 @@ int full_analyzer::find_thirdleading_jet(bool* jetID, bool* jet_clean, int index
     return index_good_thirdleading;
 }
 
+int full_analyzer::find_jet_closest_to_lepton(bool* jetID, int i_lep)
+{
+    int index_jet = -1;
+    if(i_lep == -1) return index_jet;
+    
+    double dR    = -1;
+    double mindR = 10;
+    
+    for(int i_jet = 0; i_jet < _nJets; i_jet++){
+        if(!*(jetID + i_jet)) continue;
+        dR = get_dR_lepton_jet(i_lep, i_jet);
+        if(index_jet == -1){ index_jet = i_jet;}
+        if(dR < mindR){ index_jet = i_jet; mindR = dR;}
+    }
+
+    return index_jet;
+}
+
+double full_analyzer::get_dR_lepton_jet(TLorentzVector vec_lep, TLorentzVector vec_jet){
+    return fabs(vec_lep.DeltaR(vec_jet));
+}
+
+double full_analyzer::get_dR_lepton_jet(int i_lep, int i_jet){
+    TLorentzVector vec_lep;
+    vec_lep.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
+    TLorentzVector vec_jet;
+    vec_jet.SetPtEtaPhiE(_jetPt[i_jet], _jetEta[i_jet], _jetPhi[i_jet], _jetE[i_jet]);
+    return fabs(vec_lep.DeltaR(vec_jet));
+}
+
+double full_analyzer::get_dR_lepton_jet(int i_lep, TLorentzVector& vec_jet){
+    TLorentzVector vec_lep;
+    vec_lep.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
+    return fabs(vec_lep.DeltaR(vec_jet));
+}
+

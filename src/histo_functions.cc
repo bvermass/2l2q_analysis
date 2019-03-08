@@ -238,11 +238,11 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_mll"]->Fill(g_mll, event_weight);
     (*hists)[prefix+"_dphill"]->Fill(g_dphill, event_weight);
     (*hists)[prefix+"_dRll"]->Fill(g_dRll, event_weight);
-    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[0]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[1]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(get_dRljet(i_subleading, jets_uncl[1]),event_weight);
-    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(get_dRljet(i_subleading, jets_cl[0]),event_weight);
-    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(get_dRljet(i_subleading, jets_cl[1]),event_weight);
+    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
+    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]),event_weight);
+    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[1]),event_weight);
     if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(jets_cl[0].DeltaR(jets_cl[1]),event_weight);
 
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);

@@ -201,6 +201,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         i_gen_leading_mu            = find_gen_lep(i_leading_mu);
         i_gen_subleading_displ_mu   = find_gen_lep(i_subleading_displ_mu);
         
+        // Find jet closest to l2, this jet can contain l2
+        if(_1e1disple)   i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
+        if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
         
         find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
         if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2

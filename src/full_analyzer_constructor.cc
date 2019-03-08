@@ -28,6 +28,7 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    i_leading_jet        = -1;
    i_subleading_jet     = -1;
    i_thirdleading_jet   = -1;
+   i_closel2_jet        = -1;
 
    count_IVFmatch_larger_than_IVF_nvertex   = 0;
 

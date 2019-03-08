@@ -301,18 +301,6 @@ void full_analyzer::match_gen_and_reco(int i_subleading)
     //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
 }
 
-double full_analyzer::find_dRl2jet(TLorentzVector lepton){
-    double dR = 6;
-    for( unsigned i = 0; i < _nJets; i++){
-        if(!(jet_clean_full_displ[i] && fullJetID[i])) continue;
-        //cout << "   " << i << endl << endl << endl;
-        TLorentzVector jet;
-        jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
-        if(lepton.DeltaR(jet) < dR) dR = lepton.DeltaR(jet);
-    }
-    return dR;
-}
-
 double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_vtx){
     if(i_gen_l == -1 or i_vtx == -1) return -1; 
     return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])); 

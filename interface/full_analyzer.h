@@ -779,6 +779,7 @@ public :
    int i_leading_jet;
    int i_subleading_jet;
    int i_thirdleading_jet;
+   int i_closel2_jet;
 
    double g_mll;
    double g_dphill;
@@ -870,10 +871,13 @@ public :
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual int      find_thirdleading_jet(bool*, bool*, int, int);
+   virtual int      find_jet_closest_to_lepton(bool*, int);
    virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
-   virtual double   find_dRl2jet(TLorentzVector);
+   virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
+   virtual double   get_dR_lepton_jet(int, TLorentzVector&);
+   virtual double   get_dR_lepton_jet(int, int);
    virtual double   get_IVF_SVgenreco(int, int);
    virtual double   get_IVF_SVgenreco_2D(int, int);
    virtual double   get_IVF_PVSVdist(int);
@@ -899,7 +903,6 @@ public :
    virtual double   get_dRll(int, int);
    virtual bool     dphicut(int, int, double);
    virtual double   get_dphill(int, int);
-   virtual double   get_dRljet(int, TLorentzVector&);
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     reset_signal_regions();
