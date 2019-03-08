@@ -170,18 +170,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
         //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_loose[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_loose[0], i_leading_e);
-	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_loose[0], i_leading_e);
-        i_leading_pogmedium_e       = find_leading_e(&pogmediumElectronID[0], &ele_clean_loose[0]);
+	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
+	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading_e);
+	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
+        i_leading_pogmedium_e       = find_leading_e(&pogmediumElectronID[0], &ele_clean_full_displ[0]);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
         i_leading_pogmedium_mu      = find_leading_mu(&pogmediumMuonID[0]);
 	    
-	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_loose[0]);
-	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet);
-        i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_loose[0], i_leading_jet, i_subleading_jet);
+	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
+	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
+        i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet, i_subleading_jet);
 
         // Trigger efficiency of all events (before selection matches 
         fill_HLT_allevents_efficiency(&hists, "");

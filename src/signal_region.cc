@@ -143,7 +143,7 @@ bool full_analyzer::leadptcut(int i_lep){
 bool full_analyzer::no_additional_leptons(){
     int loose_leptons = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i] and ele_clean_loose[i] or displMuonID[i]) loose_leptons++;
+        if(displElectronID[i] and ele_clean_full_displ[i] or looseMuonID[i]) loose_leptons++;
     }
     return (loose_leptons == 2);
 }

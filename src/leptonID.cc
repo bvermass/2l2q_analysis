@@ -169,7 +169,7 @@ void full_analyzer::get_displ_muonID(bool* ID)
 
 void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
 {
-    // This function returns false in the boolean cleaned for electrons within a cone of 0.4 around muons
+    // The array cleaned will contain value true when the electron is not within dR < 0.05 around a muon
     TLorentzVector muon;
     TLorentzVector electron;
 
@@ -181,7 +181,7 @@ void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
 	    for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
 	        if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
 	    	    muon.SetPtEtaPhiE(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
-	    	    if(muon.DeltaR(electron) < 0.4) *(cleaned + i_el) = false;
+	    	    if(muon.DeltaR(electron) < 0.05) *(cleaned + i_el) = false;
 	        }
 	    }
     }

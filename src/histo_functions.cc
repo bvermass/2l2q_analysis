@@ -41,8 +41,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l2_reliso"]                       = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 40, 0, 3.5);
     (*hists)[prefix+"_l1_ptrel"]                        = new TH1F(prefix+"_l1_ptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
     (*hists)[prefix+"_l2_ptrel"]                        = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_leadjetpt"]                       = new TH1F(prefix+"_leadjetpt", ";#it{p}_{T} [GeV];Events", 60, 0, 140);
-    (*hists)[prefix+"_jetIsTightLepVeto"]               = new TH1F(prefix+"_jetIsTightLepVeto", ";Tight ID + LepVeto;Events", 2, 0, 2);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 60, 0, 200);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 80, 0, 200);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 60, 0, 3.14);
@@ -53,7 +51,6 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_dRl2jet1_uncl"]                   = new TH1F(prefix+"_dRl2jet1_uncl", ";#it{#Delta R}(l_{2},jet_{1}^{uncl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRl2jet2_uncl"]                   = new TH1F(prefix+"_dRl2jet2_uncl", ";#it{#Delta R}(l_{2},jet_{2}^{uncl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRjet1jet2_uncl"]                 = new TH1F(prefix+"_dRjet1jet2_uncl", ";#it{#Delta R}(jet_{1}^{uncl},jet_{2}^{uncl});Events", 80, 0, 6);
-
 
     (*hists)[prefix+"_ngentr"]                          = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
     (*hists)[prefix+"_ctau"]                            = new TH1F(prefix+"_ctau", ";c#tau_{HNL} [cm];Events", 40, 0, 100);
@@ -188,7 +185,9 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_corrl2_ctau_eff_den"]             = new TH1F(prefix+"_corrl2_ctau_eff_den", ";c#tau [cm];Events", 40, 0, 40);
     (*hists)[prefix+"_corrl2_SVgen-reco_eff_num"]          = new TH1F(prefix+"_corrl2_SVgen-reco_eff_num", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
     (*hists)[prefix+"_corrl2_SVgen-reco_eff_den"]          = new TH1F(prefix+"_corrl2_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
-   
+
+    add_jet_histograms(hists, prefix);
+    
     return;
 }
 
@@ -197,8 +196,8 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i] and ele_clean_loose[i]) nEle++;
-        if(displMuonID[i]) nMu++;
+        if(displElectronID[i] and ele_clean_full_displ[i]) nEle++;
+        if(looseMuonID[i]) nMu++;
     }
 
     int nJets_uncl = 0;
@@ -208,10 +207,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     for(unsigned i = 0; i < _nJets; i++){
         if(fullJetID[i]){ 
             jets_uncl[nJets_uncl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
-            (*hists)[prefix+"_jetIsTightLepVeto"]->Fill(_jetIsTightLepVeto[i], event_weight);
             nJets_uncl++;
         }
-        if(fullJetID[i] and jet_clean_loose[i]){
+        if(fullJetID[i] and jet_clean_full_displ[i]){
             jets_cl[nJets_cl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
             nJets_cl++;
         }
@@ -235,7 +233,6 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_l1_ptrel"]->Fill(_ptRel[i_leading], event_weight);
     (*hists)[prefix+"_l2_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
 
-    if(i_leading_jet != -1) (*hists)[prefix+"_leadjetpt"]->Fill(_jetPt[i_leading_jet], event_weight);
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
 
     (*hists)[prefix+"_mll"]->Fill(g_mll, event_weight);
@@ -256,6 +253,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
     (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
 
+    fill_jet_histograms(hists, prefix);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
@@ -660,11 +658,6 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     const char *dxy_labels[nx_dxy] = {"No dxy cut", "dxy(l2) > 0.01cm", "dxy(l2) > 0.05cm"};
     for(int i = 0; i < nx_dxy; i++){
         (*hists)[prefix+"_dxy_categories"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
-    }
-    int nx_jetIsTightLepVeto = 2;
-    const char *jetIsTightLepVeto_labels[nx_jetIsTightLepVeto] = {"!jetIsTightLepVeto", "jetIsTightLepVeto"};
-    for(int i = 0; i < nx_jetIsTightLepVeto; i++){
-        (*hists)[prefix+"_jetIsTightLepVeto"]->GetXaxis()->SetBinLabel(i+1, jetIsTightLepVeto_labels[i]);
     }
 }
 
