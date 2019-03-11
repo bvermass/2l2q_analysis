@@ -912,7 +912,7 @@ public :
    
    // in src/histo_functions.cc
    virtual void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-   virtual void     fill_histograms(std::map<TString, TH1*>*, TString, int, int);
+   virtual void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
@@ -925,7 +925,7 @@ public :
    
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
-   virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString);
+   virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
 
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);

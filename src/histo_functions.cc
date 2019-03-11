@@ -48,9 +48,11 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_dRl2jet1_cl"]                     = new TH1F(prefix+"_dRl2jet1_cl", ";#it{#Delta R}(l_{2},jet_{1}^{cl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRl2jet2_cl"]                     = new TH1F(prefix+"_dRl2jet2_cl", ";#it{#Delta R}(l_{2},jet_{2}^{cl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRjet1jet2_cl"]                   = new TH1F(prefix+"_dRjet1jet2_cl", ";#it{#Delta R}(jet_{1}^{cl},jet_{2}^{cl});Events", 80, 0, 6);
+    (*hists2D)[prefix+"_dRl2jet1_2_cl"]                 = new TH2F(prefix+"_dRl2jet1_2_cl", ";#it{#Delta R}(l_{2}, jet_{1}^{cl});#it{#Delta R}(l_{2}, jet_{2}^{cl})", 30, 0, 6, 30, 0, 6);
     (*hists)[prefix+"_dRl2jet1_uncl"]                   = new TH1F(prefix+"_dRl2jet1_uncl", ";#it{#Delta R}(l_{2},jet_{1}^{uncl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRl2jet2_uncl"]                   = new TH1F(prefix+"_dRl2jet2_uncl", ";#it{#Delta R}(l_{2},jet_{2}^{uncl});Events", 80, 0, 6);
     (*hists)[prefix+"_dRjet1jet2_uncl"]                 = new TH1F(prefix+"_dRjet1jet2_uncl", ";#it{#Delta R}(jet_{1}^{uncl},jet_{2}^{uncl});Events", 80, 0, 6);
+    (*hists2D)[prefix+"_dRl2jet1_2_uncl"]               = new TH2F(prefix+"_dRl2jet1_2_uncl", ";#it{#Delta R}(l_{2}, jet_{1}^{uncl});#it{#Delta R}(l_{2}, jet_{2}^{uncl})", 60, 0, 6, 60, 0, 6);
 
     (*hists)[prefix+"_ngentr"]                          = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
     (*hists)[prefix+"_ctau"]                            = new TH1F(prefix+"_ctau", ";c#tau_{HNL} [cm];Events", 40, 0, 100);
@@ -192,7 +194,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 }
 
 
-void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading){
+void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
@@ -240,10 +242,12 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_dRll"]->Fill(g_dRll, event_weight);
     if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]),event_weight);
     if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(jets_uncl[0].DeltaR(jets_uncl[1]),event_weight);
+    if(nJets_uncl > 1) (*hists2D)[prefix+"_dRl2jet1_2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]), get_dR_lepton_jet(i_subleading, jets_uncl[1]), event_weight);
     if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]),event_weight);
     if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[1]),event_weight);
     if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(jets_cl[0].DeltaR(jets_cl[1]),event_weight);
+    if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]), get_dR_lepton_jet(i_subleading, jets_cl[1]), event_weight);
 
     (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
     (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
@@ -253,7 +257,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
     (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
 
-    fill_jet_histograms(hists, prefix);
+    fill_jet_histograms(hists, prefix, i_subleading);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){

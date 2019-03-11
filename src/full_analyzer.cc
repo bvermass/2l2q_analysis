@@ -231,40 +231,40 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_histograms(&hists, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmu){
             fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_histograms(&hists, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
         }
 
         if(_1e1displevtx){
-            fill_histograms(&hists, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmuvtx){
-            fill_histograms(&hists, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         
         if(_1e1disple0adde){
-            fill_histograms(&hists, signs_and_flavor + "_beforemll", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforemll", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmu0addmu){
-            fill_histograms(&hists, signs_and_flavor + "_beforemll", i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforemll", i_leading_mu, i_subleading_displ_mu);
         }
 
         if(_1e1displemll){
-            fill_histograms(&hists, signs_and_flavor + "_beforedphi", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedphi", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmumll){
-            fill_histograms(&hists, signs_and_flavor + "_beforedphi", i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedphi", i_leading_mu, i_subleading_displ_mu);
         }
 
         if(_1e1displedphi){
-            fill_histograms(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
             fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
@@ -273,7 +273,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmudphi){
-            fill_histograms(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
             fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
