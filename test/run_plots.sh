@@ -45,6 +45,15 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////\n"
     
+        #if no partition info is given to this script, then assume no partition is necessary.
+        if [ $# -eq 5 ] ; then
+            partition=$4
+            partitionjobnumber=$5
+        else
+            partition=1
+            partitionjobnumber=0
+        fi
+
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
                 echo "white line or comment found!"
@@ -63,7 +72,7 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $exec_name
-        ./$exec_name $4 $5 ${samples[@]} ${legend[@]} 
+        ./$exec_name $partition $partitionjobnumber ${samples[@]} ${legend[@]} 
         echo
     rm $exec_name
     else
