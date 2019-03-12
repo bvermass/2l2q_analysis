@@ -42,6 +42,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString partialcuts     = (histname.Index("before") == -1)?         "" : "partialcuts/";
         TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
         TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
+        TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
         TString oldID           = (histname.Index("_oldID_") == -1)?        "" : "oldID/";
         TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
         TString corrl2          = (histname.Index("_corrl2_") == -1)?       "" : "corrl2/";
@@ -50,7 +51,7 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + oldID + invVtx + corrl2 + eff + invIVFSVgenreco;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + corrl2 + eff + invIVFSVgenreco;
 }
 
 
