@@ -16,7 +16,7 @@ if [[ choice -eq 1 ]]; then
     ./test/scripts/hadd_subfiles.sh
     ./test/scripts/submit_plots_all.sh
     ./test/scripts/wait_until_jobs_are_finished.sh
-    cp -R ~/public/2l2q_analysis/plots/ ~/public_html/
+    #cp -R ~/public/2l2q_analysis/plots/ ~/public_html/     # only uncomment if connection to tier2 is extremely slow, then access through web browser
 elif [[ choice -eq 2 ]]; then
     ./test/run_analyzer.sh test/sampleLists/test.txt
     ./test/run_plots.sh test/sampleLists/plots_test.txt a_test_plot.out 1
