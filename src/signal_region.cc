@@ -40,13 +40,13 @@ void full_analyzer::signal_regions(){
         //                              i_leading_jet == -1;
         
         _1e1displemll               = _1e1disple0adde && 
-                                      mllcut(i_leading_e, i_subleading_displ_e, 80);
+                                      mllcut(i_leading_e, i_subleading_displ_e, 75);
         
         _1e1displedR                = _1e1displemll && 
                                       dRcut(i_leading_e, i_subleading_displ_e, 2.4, 3.5);    
         
         _1e1displedphi              = _1e1displemll && 
-                                      dphicut(i_leading_e, i_subleading_displ_e, 2.4);
+                                      dphicut(i_leading_e, i_subleading_displ_e, 2.6);
     }
     
 
@@ -76,13 +76,13 @@ void full_analyzer::signal_regions(){
         //                              i_leading_jet == -1;
         
         _1mu1displmumll             = _1mu1displmu0addmu && 
-                                      mllcut(i_leading_mu, i_subleading_displ_mu, 80);
+                                      mllcut(i_leading_mu, i_subleading_displ_mu, 75);
         
         _1mu1displmudR              = _1mu1displmumll && 
                                       dRcut(i_leading_mu, i_subleading_displ_mu, 2.4, 3.5);    
         
         _1mu1displmudphi            = _1mu1displmumll && 
-                                      dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
+                                      dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
     }
     
     
