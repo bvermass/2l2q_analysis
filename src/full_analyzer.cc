@@ -242,11 +242,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         if(_1e1displevtx){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1mu1displmuvtx){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         
         if(_1e1disple0adde){
