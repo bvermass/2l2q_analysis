@@ -14,7 +14,7 @@ int full_analyzer::find_vtx_matching_to_lepton(int i_lepton){
     int i_match = -1;
     if(i_lepton == -1) return -1;
     //cout << endl << endl << "LEPTON pt, eta, phi: " << _lPt[i_lepton] << " " << _lEta[i_lepton] << " " << _lPhi[i_lepton] << endl;
-    for(int i_vtx = 0; i_vtx < _IVF_nvertex; i_vtx++){
+    for(unsigned i_vtx = 0; i_vtx < _IVF_nvertex; i_vtx++){
         for(int i_track = 0; i_track < _IVF_ntracks[i_vtx]; i_track++){
             if(fabs(_lPt[i_lepton] - _IVF_trackpt[i_vtx][i_track]) < 5 and fabs(_lEta[i_lepton] - _IVF_tracketa[i_vtx][i_track]) < 0.1 and fabs(_lPhi[i_lepton] - _IVF_trackphi[i_vtx][i_track]) < 0.1){
                 if(fabs(_lEta[i_lepton] - _IVF_tracketa[i_vtx][i_track]) + fabs(_lPhi[i_lepton] - _IVF_trackphi[i_vtx][i_track]) < mindR){
