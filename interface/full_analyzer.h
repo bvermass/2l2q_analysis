@@ -32,358 +32,358 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
-   unsigned long    _runNb;
-   unsigned long    _lumiBlock;
-   unsigned long    _eventNb;
-   unsigned     _nVertex;
-   double       _BS_x;
-   double       _BS_y;
-   double       _BS_z;
-   double       _PV_x;
-   double       _PV_y;
-   double       _PV_z;
-   float        _nTrueInt;
-   double       _weight;
-   double       _lheHTIncoming;
-   double       _ctauHN;
-   unsigned     _nLheWeights;
-   double       _lheWeight[110];   //[_nLheWeights]
-   unsigned     _ttgEventType;
-   unsigned     _zgEventType;
-   double       _gen_met;
-   double       _gen_metPhi;
-   unsigned     _gen_nPh;
-   double       _gen_phPt[20];   //[_gen_nPh]
-   double       _gen_phEta[20];   //[_gen_nPh]
-   double       _gen_phPhi[20];   //[_gen_nPh]
-   double       _gen_phE[20];   //[_gen_nPh]
-   int          _gen_phMomPdg[20];   //[_gen_nPh]
-   bool         _gen_phIsPrompt[20];   //[_gen_nPh]
-   double       _gen_phMinDeltaR[20];   //[_gen_nPh]
-   bool         _gen_phPassParentage[20];   //[_gen_nPh]
-   unsigned     _gen_nL;
-   double       _gen_lPt[20];   //[_gen_nL]
-   double       _gen_lEta[20];   //[_gen_nL]
-   double       _gen_lPhi[20];   //[_gen_nL]
-   double       _gen_lE[20];   //[_gen_nL]
-   unsigned     _gen_lFlavor[20];   //[_gen_nL]
-   int          _gen_lCharge[20];   //[_gen_nL]
-   int          _gen_lMomPdg[20];   //[_gen_nL]
-   double       _gen_vertex_x[20];
-   double       _gen_vertex_y[20];
-   double       _gen_vertex_z[20];
-   bool         _gen_lIsPrompt[20];   //[_gen_nL]
-   double       _gen_lMinDeltaR[20];   //[_gen_nL]
-   bool         _gen_lPassParentage[20];   //[_gen_nL]
-   double       _gen_HT;
-   unsigned     _gen_nN;
-   double       _gen_NPt;
-   double       _gen_NEta;
-   double       _gen_NPhi;
-   double       _gen_NE;
-   double       _gen_Nvertex_x;
-   double       _gen_Nvertex_y;
-   double       _gen_Nvertex_z;
-   unsigned     _gen_nNPackedDtrs;
-   double       _gen_NPackedDtrsPt[20];
-   double       _gen_NPackedDtrsEta[20];
-   double       _gen_NPackedDtrsPhi[20];
-   double       _gen_NPackedDtrsE[20];
-   int          _gen_NPackedDtrsPdgId[20];
-   int          _gen_NPackedDtrsCharge[20];
-   int          matches[20];
-   double       _gen_NPackedDtrsmineta[20];
-   double       _gen_NPackedDtrsminphi[20];
-   double       _gen_NPackedDtrsminpt[20];
-   double       _gen_NPackedDtrs_matchPt[20];
-   double       _gen_NPackedDtrs_matchEta[20];
-   double       _gen_NPackedDtrs_matchPhi[20];
-   double       _gen_NPackedDtrs_matchE[20];
-   double       _gen_NPackedDtrs_matchdxy[20];
-   double       _gen_NPackedDtrs_matchdz[20];
-   int          _gen_NPackedDtrs_matchcharge[20];
-   unsigned     _gen_nNdaughters;
-   unsigned     _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
-   unsigned     _gen_nstatus23;
-   unsigned     _gen_nstatus23_fromN;
-   unsigned     _gen_nstatus23_fromW;
-   int          _gen_status23_pdg[5];   //[_gen_nstatus23]
-   unsigned     _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-   unsigned     _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
-   unsigned     _gen_nq;
-   double       _gen_qPt[2];   //[_gen_nq23]
-   double       _gen_qEta[2];   //[_gen_nq23]
-   double       _gen_qPhi[2];   //[_gen_nq23]
-   double       _gen_qE[2];   //[_gen_nq23]
-   unsigned     _gen_nq1dtr;
-   int          _gen_q1dtr_status[20];   //[_gen_nq1dtr]
-   int          _gen_q1dtr_pdgid[20];   //[_gen_nq1dtr]
-   double       _gen_q1dtr_Pt[20];   //[_gen_nq1dtr]
-   double       _gen_q1dtr_Eta[20];   //[_gen_nq1dtr]
-   double       _gen_q1dtr_Phi[20];   //[_gen_nq1dtr]
-   double       _gen_q1dtr_E[20];   //[_gen_nq1dtr]
-   unsigned     _gen_nq2dtr;
-   int          _gen_q2dtr_status[20];   //[_gen_nq2dtr]
-   int          _gen_q2dtr_pdgid[20];   //[_gen_nq2dtr]
-   double       _gen_q2dtr_Pt[20];   //[_gen_nq2dtr]
-   double       _gen_q2dtr_Eta[20];   //[_gen_nq2dtr]
-   double       _gen_q2dtr_Phi[20];   //[_gen_nq2dtr]
-   double       _gen_q2dtr_E[20];   //[_gen_nq2dtr]
-   bool         _HLT_Ele27_WPTight_Gsf;
-   int          _HLT_Ele27_WPTight_Gsf_prescale;
-   bool         _HLT_IsoMu24;
-   int          _HLT_IsoMu24_prescale;
-   bool         _HLT_IsoTkMu24;
-   int          _HLT_IsoTkMu24_prescale;
-   //bool         _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
-   //int          _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
-   //bool         _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
-   //int          _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   //bool         _HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
-   //int          _HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
-   //bool         _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
-   //int          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   //bool         _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
-   //int          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
-   //bool         _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
-   //int          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   //bool         _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
-   //int          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
-   //bool         _HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
-   //int          _HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
-   //bool         _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
-   //int          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
-   //bool         _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   //int          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
-   //bool         _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   //int          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
-   //bool         _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
-   //int          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
-   //bool         _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
-   //int          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
-   //bool         _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
-   //int          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
-   //bool         _HLT_TripleMu_12_10_5;
-   //int          _HLT_TripleMu_12_10_5_prescale;
-   //bool         _passMETFilters;
-   //bool         _Flag_HBHENoiseFilter;
-   //bool         _Flag_HBHENoiseIsoFilter;
-   //bool         _Flag_EcalDeadCellTriggerPrimitiveFilter;
-   //bool         _Flag_goodVertices;
-   //bool         _Flag_BadPFMuonFilter;
-   //bool         _Flag_BadChargedCandidateFilter;
-   //bool         _Flag_globalTightHalo2016Filter;
-   //bool         _HLT_Ele105_CaloIdVT_GsfTrkIdT;
-   //int          _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
-   //bool         _HLT_Ele115_CaloIdVT_GsfTrkIdT;
-   //int          _HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
-   //bool         _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
-   //int          _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
-   //bool         _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
-   //int          _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
-   //bool         _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
-   //int          _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
-   //bool         _HLT_Mu50;
-   //int          _HLT_Mu50_prescale;
-   //bool         _HLT_TkMu50;
-   //int          _HLT_TkMu50_prescale;
-   //bool         _HLT_Mu45_eta2p1;
-   //int          _HLT_Mu45_eta2p1_prescale;
-   //bool         _HLT_Mu30_TkMu11;
-   //int          _HLT_Mu30_TkMu11_prescale;
-   unsigned     _nL;
-   unsigned     _nMu;
-   unsigned     _nEle;
-   unsigned     _nLight;
-   unsigned     _nTau;
-   double       _lPt[10];   //[_nL]
-   double       _lEta[10];   //[_nL]
-   double       _lEtaSC[10];   //[_nLight]
-   double       _lPhi[10];   //[_nL]
-   double       _lE[10];   //[_nL]
-   unsigned     _lFlavor[10];   //[_nL]
-   int          _lCharge[10];   //[_nL]
-   double       _dxy[10];   //[_nL]
-   double       _dz[10];   //[_nL]
-   double       _3dIP[10];   //[_nL]
-   double       _3dIPSig[10];   //[_nL]
-   float        _lElectronMva[10];   //[_nLight]
-   float        _lElectronMvaHZZ[10];   //[_nLight]
-   bool         _lElectronPassEmu[10];   //[_nLight]
-   bool         _lElectronPassConvVeto[10];   //[_nLight]
-   bool         _lElectronChargeConst[10];   //[_nLight]
-   unsigned     _lElectronMissingHits[10];   //[_nLight]
-   bool         _lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
-   bool         _lEleIsEE[10];
-   double       _lEleSuperClusterOverP[10];
-   double       _lEleEcalEnergy[10];
-   double       _lElefull5x5SigmaIetaIeta[10];
-   double       _lEleDEtaInSeed[10];
-   double       _lEleDeltaPhiSuperClusterTrackAtVtx[10];
-   double       _lElehadronicOverEm[10];
-   double       _lEleInvMinusPInv[10];
-   double       _eleNumberInnerHitsMissing[10];
-   double       _leptonMvaSUSY16[10];   //[_nLight]
-   double       _leptonMvaTTH16[10];   //[_nLight]
-   double       _leptonMvaSUSY17[10];   //[_nLight]
-   double       _leptonMvaTTH17[10];   //[_nLight]
-   double       _leptonMvatZqTTV16[10];   //[_nLight]
-   double       _leptonMvatZqTTV17[10];   //[_nLight]
-   bool         _lHNLoose[10];   //[_nLight]
-   bool         _lHNFO[10];   //[_nLight]
-   bool         _lHNTight[10];   //[_nLight]
-   bool         _lEwkLoose[10];   //[_nL]
-   bool         _lEwkFO[10];   //[_nL]
-   bool         _lEwkTight[10];   //[_nL]
-   bool         _lPOGVeto[10];   //[_nL]
-   bool         _lPOGLoose[10];   //[_nL]
-   bool         _lPOGMedium[10];   //[_nL]
-   bool         _lPOGTight[10];   //[_nL]
-   bool         _lPOGLooseWOIso[10];   //[_nLight]
-   bool         _lPOGMediumWOIso[10];   //[_nLight]
-   bool         _lPOGTightWOIso[10];   //[_nLight]
-   bool         _tauMuonVeto[10];   //[_nL]
-   bool         _tauEleVeto[10];   //[_nL]
-   bool         _decayModeFindingNew[10];   //[_nL]
-   bool         _tauVLooseMvaNew[10];   //[_nL]
-   bool         _tauLooseMvaNew[10];   //[_nL]
-   bool         _tauMediumMvaNew[10];   //[_nL]
-   bool         _tauTightMvaNew[10];   //[_nL]
-   bool         _tauVTightMvaNew[10];   //[_nL]
-   bool         _tauVTightMvaOld[10];   //[_nL]
-   double       _relIso[10];   //[_nLight]
-   double       _relIso0p4[10];   //[_nMu]
-   double       _relIso0p4MuDeltaBeta[10];   //[_nMu]
-   double       _miniIso[10];   //[_nLight]
-   double       _miniIsoCharged[10];   //[_nLight]
-   double       _ptRel[10];   //[_nLight]
-   double       _ptRatio[10];   //[_nLight]
-   double       _closestJetCsvV2[10];   //[_nLight]
-   double       _closestJetDeepCsv_b[10];   //[_nLight]
-   double       _closestJetDeepCsv_bb[10];   //[_nLight]
-   unsigned     _selectedTrackMult[10];   //[_nLight]
-   bool         _lKVF_valid[10];
-   double	    _lKVF_x[10];
-   double	    _lKVF_y[10];
-   double	    _lKVF_z[10];
-   double	    _lKVF_cxx[10];
-   double	    _lKVF_cyy[10];
-   double	    _lKVF_czz[10];
-   double	    _lKVF_cyx[10];
-   double	    _lKVF_czy[10];
-   double	    _lKVF_czx[10];
-   double	    _lKVF_df[10];
-   double	    _lKVF_chi2[10];
-   unsigned	    _lKVF_ntracks[10];
-   double       _lKVF_dRcut[10];
-   double       _lKVF_trackPt[10][20];
-   double       _lKVF_trackEta[10][20];
-   double       _lKVF_trackPhi[10][20];
-   double       _lKVF_trackE[10][20];
-   double       _lKVF_trackdR[10][20];
-   double       _lKVF_trackdxy[10][20];
-   double       _lKVF_trackdz[10][20];
-   unsigned     _IVF_nvertex;
-   double       _IVF_x[50];
-   double       _IVF_y[50];
-   double       _IVF_z[50];
-   double       _IVF_cx[50];
-   double       _IVF_cy[50];
-   double       _IVF_cz[50];
-   double       _IVF_df[50];
-   double       _IVF_chi2[50];
-   unsigned     _IVF_ntracks[50];
-   double       _IVF_trackpt[50][15];
-   double       _IVF_tracketa[50][15];
-   double       _IVF_trackphi[50][15];
-   double       _IVF_trackE[50][15];
-   double       _IVF_trackcharge[50][15];
-   int          _lIVF_match[10];
-   bool         _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
-   bool         _lTrackerMuon[10];
-   double       _lInnerTrackValidFraction[10];
-   double       _lGlobalTrackNormalizedChi2[10];
-   double       _lCQChi2Position[10];
-   double       _lCQTrackKink[10];
-   unsigned     _lNumberOfMatchedStation[10];
-   unsigned     _lNumberOfValidPixelHits[10];
-   unsigned     _muNumberInnerHits[10];
-   unsigned     _lTrackerLayersWithMeasurement[10];
-   double       _lMuonSegComp[10];   //[_nMu]
-   double       _lMuonTrackPt[10];   //[_nMu]
-   double       _lMuonTrackPtErr[10];   //[_nMu]
-   bool         _lIsPrompt[10];   //[_nL]
-   int          _lMatchPdgId[10];   //[_nL]
-   unsigned     _nPh;
-   double       _phPt[10];   //[_nPh]
-   double       _phEta[10];   //[_nPh]
-   double       _phEtaSC[10];   //[_nPh]
-   double       _phPhi[10];   //[_nPh]
-   double       _phE[10];   //[_nPh]
-   bool         _phCutBasedLoose[10];   //[_nPh]
-   bool         _phCutBasedMedium[10];   //[_nPh]
-   bool         _phCutBasedTight[10];   //[_nPh]
-   double       _phMva[10];   //[_nPh]
-   double       _phRandomConeChargedIsolation[10];   //[_nPh]
-   double       _phChargedIsolation[10];   //[_nPh]
-   double       _phNeutralHadronIsolation[10];   //[_nPh]
-   double       _phPhotonIsolation[10];   //[_nPh]
-   double       _phSigmaIetaIeta[10];   //[_nPh]
-   double       _phSigmaIetaIphi[10];   //[_nPh]
-   double       _phHadronicOverEm[10];   //[_nPh]
-   bool         _phPassElectronVeto[10];   //[_nPh]
-   bool         _phHasPixelSeed[10];   //[_nPh]
-   bool         _phIsPrompt[10];   //[_nPh]
-   int          _phMatchMCPhotonAN15165[10];   //[_nPh]
-   int          _phMatchMCLeptonAN15165[10];   //[_nPh]
-   int          _phMatchPdgId[10];   //[_nPh]
-   unsigned     _nJets;
-   double       _jetPt[20];   //[_nJets]
-   double       _jetPt_JECUp[20];   //[_nJets]
-   double       _jetPt_JECDown[20];   //[_nJets]
-   double       _jetPt_Uncorrected[20];   //[_nJets]
-   double       _jetPt_L1[20];   //[_nJets]
-   double       _jetPt_L2[20];   //[_nJets]
-   double       _jetPt_L3[20];   //[_nJets]
-   double       _jetEta[20];   //[_nJets]
-   double       _jetPhi[20];   //[_nJets]
-   double       _jetE[20];   //[_nJets]
-   double       _jetCsvV2[20];   //[_nJets]
-   double       _jetDeepCsv_udsg[20];   //[_nJets]
-   double       _jetDeepCsv_b[20];   //[_nJets]
-   double       _jetDeepCsv_c[20];   //[_nJets]
-   double       _jetDeepCsv_bb[20];   //[_nJets]
-   unsigned     _jetHadronFlavor[20];   //[_nJets]
-   bool         _jetIsLoose[20];   //[_nJets]
-   bool         _jetIsTight[20];   //[_nJets]
-   bool         _jetIsTightLepVeto[20];   //[_nJets]
-   double       _jetNeutralHadronFraction[20];
-   double       _jetChargedHadronFraction[20];
-   double       _jetNeutralEmFraction[20];
-   double       _jetChargedEmFraction[20];
-   double       _jetHFHadronFraction[20];
-   double       _jetHFEmFraction[20];
-   double       _met;
-   double       _metRaw;
-   double       _metJECDown;
-   double       _metJECUp;
-   double       _metUnclDown;
-   double       _metUnclUp;
-   double       _metPhi;
-   double       _metRawPhi;
-   double       _metPhiJECDown;
-   double       _metPhiJECUp;
-   double       _metPhiUnclDown;
-   double       _metPhiUnclUp;
-   double       _metSignificance;
+   ULong64_t       _runNb;
+   ULong64_t       _lumiBlock;
+   ULong64_t       _eventNb;
+   UChar_t         _nVertex;
+   Double_t        _BS_x;
+   Double_t        _BS_y;
+   Double_t        _BS_z;
+   Double_t        _PV_x;
+   Double_t        _PV_y;
+   Double_t        _PV_z;
+   Float_t         _nTrueInt;
+   Double_t        _weight;
+   Double_t        _lheHTIncoming;
+   Double_t        _ctauHN;
+   UChar_t         _nLheWeights;
+   Double_t        _lheWeight[110];   //[_nLheWeights]
+   UChar_t         _ttgEventType;
+   UChar_t         _zgEventType;
+   Double_t        _gen_met;
+   Double_t        _gen_metPhi;
+   UChar_t         _gen_nPh;
+   Double_t        _gen_phPt[20];   //[_gen_nPh]
+   Double_t        _gen_phEta[20];   //[_gen_nPh]
+   Double_t        _gen_phPhi[20];   //[_gen_nPh]
+   Double_t        _gen_phE[20];   //[_gen_nPh]
+   Int_t           _gen_phMomPdg[20];   //[_gen_nPh]
+   Bool_t          _gen_phIsPrompt[20];   //[_gen_nPh]
+   Double_t        _gen_phMinDeltaR[20];   //[_gen_nPh]
+   Bool_t          _gen_phPassParentage[20];   //[_gen_nPh]
+   UChar_t         _gen_nL;
+   Double_t        _gen_lPt[20];   //[_gen_nL]
+   Double_t        _gen_lEta[20];   //[_gen_nL]
+   Double_t        _gen_lPhi[20];   //[_gen_nL]
+   Double_t        _gen_lE[20];   //[_gen_nL]
+   UInt_t          _gen_lFlavor[20];   //[_gen_nL]
+   Int_t           _gen_lCharge[20];   //[_gen_nL]
+   Int_t           _gen_lMomPdg[20];   //[_gen_nL]
+   Double_t        _gen_vertex_x[20];
+   Double_t        _gen_vertex_y[20];
+   Double_t        _gen_vertex_z[20];
+   Bool_t          _gen_lIsPrompt[20];   //[_gen_nL]
+   Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
+   Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
+   Double_t        _gen_HT;
+   UChar_t         _gen_nN;
+   Double_t        _gen_NPt;
+   Double_t        _gen_NEta;
+   Double_t        _gen_NPhi;
+   Double_t        _gen_NE;
+   Double_t        _gen_Nvertex_x;
+   Double_t        _gen_Nvertex_y;
+   Double_t        _gen_Nvertex_z;
+   UChar_t         _gen_nNPackedDtrs;
+   Double_t        _gen_NPackedDtrsPt[20];
+   Double_t        _gen_NPackedDtrsEta[20];
+   Double_t        _gen_NPackedDtrsPhi[20];
+   Double_t        _gen_NPackedDtrsE[20];
+   Int_t           _gen_NPackedDtrsPdgId[20];
+   Int_t           _gen_NPackedDtrsCharge[20];
+   Int_t           matches[20];
+   Double_t        _gen_NPackedDtrsmineta[20];
+   Double_t        _gen_NPackedDtrsminphi[20];
+   Double_t        _gen_NPackedDtrsminpt[20];
+   Double_t        _gen_NPackedDtrs_matchPt[20];
+   Double_t        _gen_NPackedDtrs_matchEta[20];
+   Double_t        _gen_NPackedDtrs_matchPhi[20];
+   Double_t        _gen_NPackedDtrs_matchE[20];
+   Double_t        _gen_NPackedDtrs_matchdxy[20];
+   Double_t        _gen_NPackedDtrs_matchdz[20];
+   Int_t           _gen_NPackedDtrs_matchcharge[20];
+   UChar_t         _gen_nNdaughters;
+   UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+   UChar_t         _gen_nstatus23;
+   UChar_t         _gen_nstatus23_fromN;
+   UChar_t         _gen_nstatus23_fromW;
+   Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
+   UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
+   UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
+   UChar_t         _gen_nq;
+   Double_t        _gen_qPt[2];   //[_gen_nq23]
+   Double_t        _gen_qEta[2];   //[_gen_nq23]
+   Double_t        _gen_qPhi[2];   //[_gen_nq23]
+   Double_t        _gen_qE[2];   //[_gen_nq23]
+   UChar_t         _gen_nq1dtr;
+   Int_t           _gen_q1dtr_status[20];   //[_gen_nq1dtr]
+   Int_t           _gen_q1dtr_pdgid[20];   //[_gen_nq1dtr]
+   Double_t        _gen_q1dtr_Pt[20];   //[_gen_nq1dtr]
+   Double_t        _gen_q1dtr_Eta[20];   //[_gen_nq1dtr]
+   Double_t        _gen_q1dtr_Phi[20];   //[_gen_nq1dtr]
+   Double_t        _gen_q1dtr_E[20];   //[_gen_nq1dtr]
+   UChar_t         _gen_nq2dtr;
+   Int_t           _gen_q2dtr_status[20];   //[_gen_nq2dtr]
+   Int_t           _gen_q2dtr_pdgid[20];   //[_gen_nq2dtr]
+   Double_t        _gen_q2dtr_Pt[20];   //[_gen_nq2dtr]
+   Double_t        _gen_q2dtr_Eta[20];   //[_gen_nq2dtr]
+   Double_t        _gen_q2dtr_Phi[20];   //[_gen_nq2dtr]
+   Double_t        _gen_q2dtr_E[20];   //[_gen_nq2dtr]
+   Bool_t          _HLT_Ele27_WPTight_Gsf;
+   Int_t           _HLT_Ele27_WPTight_Gsf_prescale;
+   Bool_t          _HLT_IsoMu24;
+   Int_t           _HLT_IsoMu24_prescale;
+   Bool_t          _HLT_IsoTkMu24;
+   Int_t           _HLT_IsoTkMu24_prescale;
+   //Bool_t          _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
+   //Int_t           _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
+   //Int_t           _HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
+   //Int_t           _HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
+   //Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
+   //Int_t           _HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
+   //Bool_t          _HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
+   //Int_t           _HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+   //Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+   //Int_t           _HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+   //Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+   //Bool_t          _HLT_TripleMu_12_10_5;
+   //Int_t           _HLT_TripleMu_12_10_5_prescale;
+   //Bool_t          _passMETFilters;
+   //Bool_t          _Flag_HBHENoiseFilter;
+   //Bool_t          _Flag_HBHENoiseIsoFilter;
+   //Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
+   //Bool_t          _Flag_goodVertices;
+   //Bool_t          _Flag_BadPFMuonFilter;
+   //Bool_t          _Flag_BadChargedCandidateFilter;
+   //Bool_t          _Flag_globalTightHalo2016Filter;
+   //Bool_t          _HLT_Ele105_CaloIdVT_GsfTrkIdT;
+   //Int_t           _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
+   //Bool_t          _HLT_Ele115_CaloIdVT_GsfTrkIdT;
+   //Int_t           _HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
+   //Bool_t          _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+   //Int_t           _HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+   //Bool_t          _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
+   //Int_t           _HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
+   //Bool_t          _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
+   //Int_t           _HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
+   //Bool_t          _HLT_Mu50;
+   //Int_t           _HLT_Mu50_prescale;
+   //Bool_t          _HLT_TkMu50;
+   //Int_t           _HLT_TkMu50_prescale;
+   //Bool_t          _HLT_Mu45_eta2p1;
+   //Int_t           _HLT_Mu45_eta2p1_prescale;
+   //Bool_t          _HLT_Mu30_TkMu11;
+   //Int_t           _HLT_Mu30_TkMu11_prescale;
+   unsigned         _nL;
+   unsigned         _nMu;
+   unsigned         _nEle;
+   unsigned         _nLight;
+   unsigned         _nTau;
+   Double_t        _lPt[10];   //[_nL]
+   Double_t        _lEta[10];   //[_nL]
+   Double_t        _lEtaSC[10];   //[_nLight]
+   Double_t        _lPhi[10];   //[_nL]
+   Double_t        _lE[10];   //[_nL]
+   UInt_t          _lFlavor[10];   //[_nL]
+   Int_t           _lCharge[10];   //[_nL]
+   Double_t        _dxy[10];   //[_nL]
+   Double_t        _dz[10];   //[_nL]
+   Double_t        _3dIP[10];   //[_nL]
+   Double_t        _3dIPSig[10];   //[_nL]
+   Float_t         _lElectronMva[10];   //[_nLight]
+   Float_t         _lElectronMvaHZZ[10];   //[_nLight]
+   Bool_t          _lElectronPassEmu[10];   //[_nLight]
+   Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
+   Bool_t          _lElectronChargeConst[10];   //[_nLight]
+   UInt_t          _lElectronMissingHits[10];   //[_nLight]
+   Bool_t          _lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
+   Bool_t          _lEleIsEE[10];
+   Double_t        _lEleSuperClusterOverP[10];
+   Double_t        _lEleEcalEnergy[10];
+   Double_t        _lElefull5x5SigmaIetaIeta[10];
+   Double_t        _lEleDEtaInSeed[10];
+   Double_t        _lEleDeltaPhiSuperClusterTrackAtVtx[10];
+   Double_t        _lElehadronicOverEm[10];
+   Double_t        _lEleInvMinusPInv[10];
+   Double_t        _eleNumberInnerHitsMissing[10];
+   Double_t        _leptonMvaSUSY16[10];   //[_nLight]
+   Double_t        _leptonMvaTTH16[10];   //[_nLight]
+   Double_t        _leptonMvaSUSY17[10];   //[_nLight]
+   Double_t        _leptonMvaTTH17[10];   //[_nLight]
+   Double_t        _leptonMvatZqTTV16[10];   //[_nLight]
+   Double_t        _leptonMvatZqTTV17[10];   //[_nLight]
+   Bool_t          _lHNLoose[10];   //[_nLight]
+   Bool_t          _lHNFO[10];   //[_nLight]
+   Bool_t          _lHNTight[10];   //[_nLight]
+   Bool_t          _lEwkLoose[10];   //[_nL]
+   Bool_t          _lEwkFO[10];   //[_nL]
+   Bool_t          _lEwkTight[10];   //[_nL]
+   Bool_t          _lPOGVeto[10];   //[_nL]
+   Bool_t          _lPOGLoose[10];   //[_nL]
+   Bool_t          _lPOGMedium[10];   //[_nL]
+   Bool_t          _lPOGTight[10];   //[_nL]
+   Bool_t          _lPOGLooseWOIso[10];   //[_nLight]
+   Bool_t          _lPOGMediumWOIso[10];   //[_nLight]
+   Bool_t          _lPOGTightWOIso[10];   //[_nLight]
+   Bool_t          _tauMuonVeto[10];   //[_nL]
+   Bool_t          _tauEleVeto[10];   //[_nL]
+   Bool_t          _decayModeFindingNew[10];   //[_nL]
+   Bool_t          _tauVLooseMvaNew[10];   //[_nL]
+   Bool_t          _tauLooseMvaNew[10];   //[_nL]
+   Bool_t          _tauMediumMvaNew[10];   //[_nL]
+   Bool_t          _tauTightMvaNew[10];   //[_nL]
+   Bool_t          _tauVTightMvaNew[10];   //[_nL]
+   Bool_t          _tauVTightMvaOld[10];   //[_nL]
+   Double_t        _relIso[10];   //[_nLight]
+   Double_t        _relIso0p4[10];   //[_nMu]
+   Double_t        _relIso0p4MuDeltaBeta[10];   //[_nMu]
+   Double_t        _miniIso[10];   //[_nLight]
+   Double_t        _miniIsoCharged[10];   //[_nLight]
+   Double_t        _ptRel[10];   //[_nLight]
+   Double_t        _ptRatio[10];   //[_nLight]
+   Double_t        _closestJetCsvV2[10];   //[_nLight]
+   Double_t        _closestJetDeepCsv_b[10];   //[_nLight]
+   Double_t        _closestJetDeepCsv_bb[10];   //[_nLight]
+   UInt_t          _selectedTrackMult[10];   //[_nLight]
+   Bool_t          _lKVF_valid[10];
+   Double_t	       _lKVF_x[10];
+   Double_t	       _lKVF_y[10];
+   Double_t	       _lKVF_z[10];
+   Double_t	       _lKVF_cxx[10];
+   Double_t	       _lKVF_cyy[10];
+   Double_t	       _lKVF_czz[10];
+   Double_t	       _lKVF_cyx[10];
+   Double_t	       _lKVF_czy[10];
+   Double_t	       _lKVF_czx[10];
+   Double_t	       _lKVF_df[10];
+   Double_t	       _lKVF_chi2[10];
+   UInt_t	       _lKVF_ntracks[10];
+   Double_t        _lKVF_dRcut[10];
+   Double_t        _lKVF_trackPt[10][20];
+   Double_t        _lKVF_trackEta[10][20];
+   Double_t        _lKVF_trackPhi[10][20];
+   Double_t        _lKVF_trackE[10][20];
+   Double_t        _lKVF_trackdR[10][20];
+   Double_t        _lKVF_trackdxy[10][20];
+   Double_t        _lKVF_trackdz[10][20];
+   unsigned         _IVF_nvertex;
+   Double_t        _IVF_x[50];
+   Double_t        _IVF_y[50];
+   Double_t        _IVF_z[50];
+   Double_t        _IVF_cx[50];
+   Double_t        _IVF_cy[50];
+   Double_t        _IVF_cz[50];
+   Double_t        _IVF_df[50];
+   Double_t        _IVF_chi2[50];
+   unsigned         _IVF_ntracks[50];
+   Double_t        _IVF_trackpt[50][15];
+   Double_t        _IVF_tracketa[50][15];
+   Double_t        _IVF_trackphi[50][15];
+   Double_t        _IVF_trackE[50][15];
+   Double_t        _IVF_trackcharge[50][15];
+   int             _lIVF_match[10];
+   Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
+   Bool_t          _lTrackerMuon[10];
+   Double_t        _lInnerTrackValidFraction[10];
+   Double_t        _lGlobalTrackNormalizedChi2[10];
+   Double_t        _lCQChi2Position[10];
+   Double_t        _lCQTrackKink[10];
+   UChar_t         _lNumberOfMatchedStation[10];
+   UChar_t         _lNumberOfValidPixelHits[10];
+   UChar_t         _muNumberInnerHits[10];
+   UChar_t         _lTrackerLayersWithMeasurement[10];
+   Double_t        _lMuonSegComp[10];   //[_nMu]
+   Double_t        _lMuonTrackPt[10];   //[_nMu]
+   Double_t        _lMuonTrackPtErr[10];   //[_nMu]
+   Bool_t          _lIsPrompt[10];   //[_nL]
+   Int_t           _lMatchPdgId[10];   //[_nL]
+   UChar_t         _nPh;
+   Double_t        _phPt[10];   //[_nPh]
+   Double_t        _phEta[10];   //[_nPh]
+   Double_t        _phEtaSC[10];   //[_nPh]
+   Double_t        _phPhi[10];   //[_nPh]
+   Double_t        _phE[10];   //[_nPh]
+   Bool_t          _phCutBasedLoose[10];   //[_nPh]
+   Bool_t          _phCutBasedMedium[10];   //[_nPh]
+   Bool_t          _phCutBasedTight[10];   //[_nPh]
+   Double_t        _phMva[10];   //[_nPh]
+   Double_t        _phRandomConeChargedIsolation[10];   //[_nPh]
+   Double_t        _phChargedIsolation[10];   //[_nPh]
+   Double_t        _phNeutralHadronIsolation[10];   //[_nPh]
+   Double_t        _phPhotonIsolation[10];   //[_nPh]
+   Double_t        _phSigmaIetaIeta[10];   //[_nPh]
+   Double_t        _phSigmaIetaIphi[10];   //[_nPh]
+   Double_t        _phHadronicOverEm[10];   //[_nPh]
+   Bool_t          _phPassElectronVeto[10];   //[_nPh]
+   Bool_t          _phHasPixelSeed[10];   //[_nPh]
+   Bool_t          _phIsPrompt[10];   //[_nPh]
+   Int_t           _phMatchMCPhotonAN15165[10];   //[_nPh]
+   Int_t           _phMatchMCLeptonAN15165[10];   //[_nPh]
+   Int_t           _phMatchPdgId[10];   //[_nPh]
+   UChar_t         _nJets;
+   Double_t        _jetPt[20];   //[_nJets]
+   Double_t        _jetPt_JECUp[20];   //[_nJets]
+   Double_t        _jetPt_JECDown[20];   //[_nJets]
+   Double_t        _jetPt_Uncorrected[20];   //[_nJets]
+   Double_t        _jetPt_L1[20];   //[_nJets]
+   Double_t        _jetPt_L2[20];   //[_nJets]
+   Double_t        _jetPt_L3[20];   //[_nJets]
+   Double_t        _jetEta[20];   //[_nJets]
+   Double_t        _jetPhi[20];   //[_nJets]
+   Double_t        _jetE[20];   //[_nJets]
+   Double_t        _jetCsvV2[20];   //[_nJets]
+   Double_t        _jetDeepCsv_udsg[20];   //[_nJets]
+   Double_t        _jetDeepCsv_b[20];   //[_nJets]
+   Double_t        _jetDeepCsv_c[20];   //[_nJets]
+   Double_t        _jetDeepCsv_bb[20];   //[_nJets]
+   UInt_t          _jetHadronFlavor[20];   //[_nJets]
+   Bool_t          _jetIsLoose[20];   //[_nJets]
+   Bool_t          _jetIsTight[20];   //[_nJets]
+   Bool_t          _jetIsTightLepVeto[20];   //[_nJets]
+   Double_t        _jetNeutralHadronFraction[20];
+   Double_t        _jetChargedHadronFraction[20];
+   Double_t        _jetNeutralEmFraction[20];
+   Double_t        _jetChargedEmFraction[20];
+   Double_t        _jetHFHadronFraction[20];
+   Double_t        _jetHFEmFraction[20];
+   Double_t        _met;
+   Double_t        _metRaw;
+   Double_t        _metJECDown;
+   Double_t        _metJECUp;
+   Double_t        _metUnclDown;
+   Double_t        _metUnclUp;
+   Double_t        _metPhi;
+   Double_t        _metRawPhi;
+   Double_t        _metPhiJECDown;
+   Double_t        _metPhiJECUp;
+   Double_t        _metPhiUnclDown;
+   Double_t        _metPhiUnclUp;
+   Double_t        _metSignificance;
 
-   /*int          _nDaughters;
-   int          _jet_tag_for_daughters[300];   //[_nDaughters]
-   int          _jet_daughter_pdgid[300];   //[_nDaughters]
-   double       _jet_daughter_pt[300];   //[_nDaughters]
-   double       _jet_daughter_eta[300];   //[_nDaughters]
-   double       _jet_daughter_phi[300];   //[_nDaughters]
-   double       _jet_daughter_energy[300];   //[_nDaughters]
+   /*Int_t           _nDaughters;
+   Int_t           _jet_tag_for_daughters[300];   //[_nDaughters]
+   Int_t           _jet_daughter_pdgid[300];   //[_nDaughters]
+   Double_t        _jet_daughter_pt[300];   //[_nDaughters]
+   Double_t        _jet_daughter_eta[300];   //[_nDaughters]
+   Double_t        _jet_daughter_phi[300];   //[_nDaughters]
+   Double_t        _jet_daughter_energy[300];   //[_nDaughters]
 */
    // List of branches
    TBranch        *b__runNb;   //!
