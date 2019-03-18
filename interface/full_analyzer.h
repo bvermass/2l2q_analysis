@@ -852,7 +852,7 @@ public :
    // in src/full_analyzer.cc, the main code body
    virtual void     run_over_file(TString, double, int, int, int);
 
-   //in src/leptonID.cc and jetID.cc
+   // in src/leptonID.cc
    virtual void     get_electronID(bool*);
    virtual void     get_pogmedium_electronID(bool*);
    virtual void     get_displ_electronID(bool*);
@@ -861,23 +861,14 @@ public :
    virtual void     get_pogmedium_muonID(bool*);
    virtual void     get_displ_muonID(bool*);
    virtual void     get_loose_muonID(bool*);
-   virtual void     get_jetID(bool*);
-   virtual void     get_clean_jets(bool*, bool*, bool*);
    virtual void     get_clean_ele(bool*, bool*);
    virtual int      find_leading_e(bool*, bool*);
    virtual int      find_leading_mu(bool*);
-   virtual int      find_leading_jet(bool*, bool*);
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
-   virtual int      find_subleading_jet(bool*, bool*, int);
-   virtual int      find_thirdleading_jet(bool*, bool*, int, int);
-   virtual int      find_jet_closest_to_lepton(bool*, int);
    virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
    virtual void     match_gen_and_reco(int);
-   virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
-   virtual double   get_dR_lepton_jet(int, TLorentzVector&);
-   virtual double   get_dR_lepton_jet(int, int);
    virtual double   get_IVF_SVgenreco(int, int);
    virtual double   get_IVF_SVgenreco_2D(int, int);
    virtual double   get_IVF_PVSVdist(int);
@@ -888,6 +879,17 @@ public :
    virtual double   get_KVF_PVSVdist_2D(int);
    virtual double   get_PVSVdist_gen(int);
    virtual double   get_PVSVdist_gen_2D(int);
+
+   // in src/jetID.cc
+   virtual void     get_jetID(bool*);
+   virtual void     get_clean_jets(bool*, bool*, bool*);
+   virtual int      find_leading_jet(bool*, bool*);
+   virtual int      find_subleading_jet(bool*, bool*, int);
+   virtual int      find_thirdleading_jet(bool*, bool*, int, int);
+   virtual int      find_jet_closest_to_lepton(bool*, int);
+   virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
+   virtual double   get_dR_lepton_jet(int, TLorentzVector&);
+   virtual double   get_dR_lepton_jet(int, int);
 
    // in src/vtxID.cc
    virtual int      find_vtx_matching_to_lepton(int);

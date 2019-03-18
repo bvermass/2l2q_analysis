@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#script to submit all plot code. Multihist and stack plots are one job per, since it is harder (and unnecessary at the moment) to split it up further.
-#full_analyzer plots can be split up for every inputfile and this is what is done.
+#script to submit all plot code. stack plots are split up in 10 different jobs since otherwise it's slow.
+#full_analyzer plots are split up for every inputfile.
 function submitjob {
     qsub $1 -l walltime=00:50:00 > scriptlog.txt 2>> scriptlog.txt
     
