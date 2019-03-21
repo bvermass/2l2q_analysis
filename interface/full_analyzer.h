@@ -207,8 +207,6 @@ public :
    Double_t        _dz[10];   //[_nL]
    Double_t        _3dIP[10];   //[_nL]
    Double_t        _3dIPSig[10];   //[_nL]
-   Float_t         _lElectronMva[10];   //[_nLight]
-   Float_t         _lElectronMvaHZZ[10];   //[_nLight]
    Bool_t          _lElectronPassEmu[10];   //[_nLight]
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
@@ -239,9 +237,6 @@ public :
    Bool_t          _lPOGLoose[10];   //[_nL]
    Bool_t          _lPOGMedium[10];   //[_nL]
    Bool_t          _lPOGTight[10];   //[_nL]
-   Bool_t          _lPOGLooseWOIso[10];   //[_nLight]
-   Bool_t          _lPOGMediumWOIso[10];   //[_nLight]
-   Bool_t          _lPOGTightWOIso[10];   //[_nLight]
    Bool_t          _tauMuonVeto[10];   //[_nL]
    Bool_t          _tauEleVeto[10];   //[_nL]
    Bool_t          _decayModeFindingNew[10];   //[_nL]
@@ -329,13 +324,10 @@ public :
    Double_t        _phNeutralHadronIsolation[10];   //[_nPh]
    Double_t        _phPhotonIsolation[10];   //[_nPh]
    Double_t        _phSigmaIetaIeta[10];   //[_nPh]
-   Double_t        _phSigmaIetaIphi[10];   //[_nPh]
    Double_t        _phHadronicOverEm[10];   //[_nPh]
    Bool_t          _phPassElectronVeto[10];   //[_nPh]
    Bool_t          _phHasPixelSeed[10];   //[_nPh]
    Bool_t          _phIsPrompt[10];   //[_nPh]
-   Int_t           _phMatchMCPhotonAN15165[10];   //[_nPh]
-   Int_t           _phMatchMCLeptonAN15165[10];   //[_nPh]
    Int_t           _phMatchPdgId[10];   //[_nPh]
    UChar_t         _nJets;
    Double_t        _jetPt[20];   //[_nJets]
@@ -561,8 +553,6 @@ public :
    TBranch        *b__dz;   //!
    TBranch        *b__3dIP;   //!
    TBranch        *b__3dIPSig;   //!
-   TBranch        *b__lElectronMva;   //!
-   TBranch        *b__lElectronMvaHZZ;   //!
    TBranch        *b__lElectronPassEmu;   //!
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
@@ -593,9 +583,6 @@ public :
    TBranch        *b__lPOGLoose;   //!
    TBranch        *b__lPOGMedium;   //!
    TBranch        *b__lPOGTight;   //!
-   TBranch        *b__lPOGLooseWOIso;   //!
-   TBranch        *b__lPOGMediumWOIso;   //!
-   TBranch        *b__lPOGTightWOIso;   //!
    TBranch        *b__tauMuonVeto;   //!
    TBranch        *b__tauEleVeto;   //!
    TBranch        *b__decayModeFindingNew;   //!
@@ -683,13 +670,10 @@ public :
    TBranch        *b__phNeutralHadronIsolation;   //!
    TBranch        *b__phPhotonIsolation;   //!
    TBranch        *b__phSigmaIetaIeta;   //!
-   TBranch        *b__phSigmaIetaIphi;   //!
    TBranch        *b__phHadronicOverEm;   //!
    TBranch        *b__phPassElectronVeto;   //!
    TBranch        *b__phHasPixelSeed;   //!
    TBranch        *b__phIsPrompt;   //!
-   TBranch        *b__phMatchMCPhotonAN15165;   //!
-   TBranch        *b__phMatchMCLeptonAN15165;   //!
    TBranch        *b__phMatchPdgId;   //!
    TBranch        *b__nJets;   //!
    TBranch        *b__jetPt;   //!
