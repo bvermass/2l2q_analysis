@@ -67,6 +67,8 @@ void plot_every_variable_in_root_file(TString filename)
 {
     //Make directory to store plots for this file
     TString pathname = "/user/bvermass/public/2l2q_analysis/plots/";
+    pathname += filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
+
     if(filename.Index("HeavyNeutrino") != -1)   pathname += filename(filename.Index("hists_") + 6, filename.Index("HeavyNeutrino") - 7 - filename.Index("hists_")) + "/" + filename(filename.Index("HeavyNeutrino"), filename.Index(".root") - filename.Index("HeavyNeutrino")) + "/";
     else if(filename.Index("Background") != -1) pathname += filename(filename.Index("hists_") + 6, filename.Index("Background") -7 - filename.Index("hists_")) + "/" + filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") -11) + "/";
 
@@ -113,6 +115,7 @@ void plot_every_variable_in_root_file(TString filename)
             if(histname.Index("eff_num") != -1){
                 TGraphAsymmErrors* efficiency_graph = new TGraphAsymmErrors((TH1F*)h, (TH1F*)file->Get(histname(0, histname.Index("eff_num") + 4) + "den"), "cp");
                 efficiency_graph->GetXaxis()->SetTitle(h->GetXaxis()->GetTitle());
+                efficiency_graph->SetLineWidth(2);
                 yaxistitle = "Eff.";
                 draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "AP", &lgendrup, "", yaxistitle, 0, 0, xlog, toprighttitle);
             }

@@ -122,11 +122,12 @@ int main(int argc, char * argv[])
             if(histname.Index("eff_num") != -1){
                 TMultiGraph* multigraph = new TMultiGraph();
                 for( it3_graph = graphs.begin(); it3_graph != graphs.end(); it3_graph++){
+                    it3_graph->second->SetLineWidth(2);
                     multigraph->Add(it3_graph->second);
                 }
                 yaxistitle = "Eff.";
-                draw_multigraph(pathname_lin + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "A pmc plc");
-                draw_multigraph(pathname_log + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "A pmc plc");
+                draw_multigraph(pathname_lin + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "AP pmc plc");
+                draw_multigraph(pathname_log + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "AP pmc plc");
             }
         }
     }
