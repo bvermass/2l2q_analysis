@@ -101,6 +101,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
    
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
+    int SSe_beforevtx = 0;
+    int OSe_beforevtx = 0;
+    int SSmu_beforevtx = 0;
+    int OSmu_beforevtx = 0;
+    int SSe_weight_beforevtx = 0;
+    int OSe_weight_beforevtx = 0;
+    int SSmu_weight_beforevtx = 0;
+    int OSmu_weight_beforevtx = 0;
     int SSe = 0;
     int OSe = 0;
     int SSmu = 0;
@@ -232,12 +240,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
+            if(signs_and_flavor == "_SS_e"){ SSe_beforevtx++; SSe_weight_beforevtx += event_weight;}
+            else if(signs_and_flavor == "_OS_e"){ OSe_beforevtx++; OSe_weight_beforevtx += event_weight;}
         }
         if(_1mu1displmu){
         //    fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
+            if(signs_and_flavor == "_SS_mu"){ SSmu_beforevtx++; SSmu_weight_beforevtx += event_weight;}
+            else if(signs_and_flavor == "_OS_mu"){ OSmu_beforevtx++; OSmu_weight_beforevtx += event_weight;}
         }
 
         //if(_1e1displevtx){
@@ -285,8 +297,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 /*
  * Small summary to write to terminal in order to quickly check state of results
  */
-    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------" << endl;
     cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
+    cout << "-------------------------2 leptons-------------------------------------------" << endl;
+    cout << "SS ee:       " << SSe_beforevtx <<  "        " << SSe_weight_beforevtx <<  "       " << 1.0*SSe_weight_beforevtx*total_weight << endl;
+    cout << "SS mumu:     " << SSmu_beforevtx << "        " << SSmu_weight_beforevtx << "       " << 1.0*SSmu_weight_beforevtx*total_weight << endl;
+    cout << "OS ee:       " << OSe_beforevtx <<  "        " << OSe_weight_beforevtx <<  "       " << 1.0*OSe_weight_beforevtx*total_weight << endl;
+    cout << "OS mumu:     " << OSmu_beforevtx << "        " << OSmu_weight_beforevtx << "       " << 1.0*OSmu_weight_beforevtx*total_weight << endl;
+    cout << "-------------------------Signal region---------------------------------------" << endl;
     cout << "SS ee:       " << SSe <<  "        " << SSe_weight <<  "       " << 1.0*SSe_weight*total_weight << endl;
     cout << "SS mumu:     " << SSmu << "        " << SSmu_weight << "       " << 1.0*SSmu_weight*total_weight << endl;
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
@@ -303,18 +321,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
+    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/";
+    if(outputfilename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
+    else outputfilename += "full_analyzer/";
     
     if(partition != 1) {
         outputfilename += "subfiles/";
-        if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced + "/";
-        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15) + "/";
+        if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_")) + "/";
+        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
     }
     
     gSystem->Exec("mkdir -p " + outputfilename);
 
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep.root") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced;
-    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep.root") - filename.Index("heavyNeutrino") - 15);
+    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_"));
+    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15);
     
     if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
     else outputfilename += ".root";
