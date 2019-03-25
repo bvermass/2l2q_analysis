@@ -278,22 +278,26 @@ public :
    Double_t        _lKVF_trackdR[10][15];
    Double_t        _lKVF_trackdxy[10][15];
    Double_t        _lKVF_trackdz[10][15];
-   unsigned         _IVF_nvertex;
-   Double_t        _IVF_x[50];
-   Double_t        _IVF_y[50];
-   Double_t        _IVF_z[50];
-   Double_t        _IVF_cx[50];
-   Double_t        _IVF_cy[50];
-   Double_t        _IVF_cz[50];
-   Double_t        _IVF_df[50];
-   Double_t        _IVF_chi2[50];
-   unsigned         _IVF_ntracks[50];
-   Double_t        _IVF_trackpt[50][15];
-   Double_t        _IVF_tracketa[50][15];
-   Double_t        _IVF_trackphi[50][15];
-   Double_t        _IVF_trackE[50][15];
-   Double_t        _IVF_trackcharge[50][15];
-   int             _lIVF_match[10];
+   Double_t        _IVF_x[10];
+   Double_t        _IVF_y[10];
+   Double_t        _IVF_z[10];
+   Double_t        _IVF_cx[10];
+   Double_t        _IVF_cy[10];
+   Double_t        _IVF_cz[10];
+   Double_t        _IVF_df[10];
+   Double_t        _IVF_chi2[10];
+   Double_t        _IVF_pt[10];
+   Double_t        _IVF_eta[10];
+   Double_t        _IVF_phi[10];
+   Double_t        _IVF_E[10];
+   Double_t        _IVF_mass[10];
+   unsigned         _IVF_ntracks[10];
+   Double_t        _IVF_trackpt[10][15];
+   Double_t        _IVF_tracketa[10][15];
+   Double_t        _IVF_trackphi[10][15];
+   Double_t        _IVF_trackE[10][15];
+   Double_t        _IVF_trackcharge[10][15];
+   Bool_t          _lIVF_match[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -624,7 +628,6 @@ public :
    TBranch        *b__lKVF_trackdR;
    TBranch        *b__lKVF_trackdxy;
    TBranch        *b__lKVF_trackdz;
-   TBranch        *b__IVF_nvertex;
    TBranch        *b__IVF_x;
    TBranch        *b__IVF_y;
    TBranch        *b__IVF_z;
@@ -633,6 +636,11 @@ public :
    TBranch        *b__IVF_cz;
    TBranch        *b__IVF_df;
    TBranch        *b__IVF_chi2;
+   TBranch        *b__IVF_pt;
+   TBranch        *b__IVF_eta;
+   TBranch        *b__IVF_phi;
+   TBranch        *b__IVF_E;
+   TBranch        *b__IVF_mass;
    TBranch        *b__IVF_ntracks;
    TBranch        *b__IVF_trackpt;
    TBranch        *b__IVF_tracketa;
@@ -819,8 +827,6 @@ public :
    bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
-   int count_IVFmatch_larger_than_IVF_nvertex;
-
    // functions
    // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
@@ -874,10 +880,6 @@ public :
    virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
    virtual double   get_dR_lepton_jet(int, TLorentzVector&);
    virtual double   get_dR_lepton_jet(int, int);
-
-   // in src/vtxID.cc
-   virtual int      find_vtx_matching_to_lepton(int);
-   virtual void     fix_validity_of_lIVF_match();
 
    // in src/signal_regions.cc
    virtual void     signal_regions();

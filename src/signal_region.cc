@@ -28,7 +28,7 @@ void full_analyzer::signal_regions(){
                                       i_subleading_displ_e != -1;
 
         _1e1displevtx               = _1e1disple &&
-                                      _lIVF_match[i_subleading_displ_e] != -1;
+                                      _lIVF_match[i_subleading_displ_e];
 
         _1e1displedispl             = _1e1displevtx &&
                                       fabs(_dxy[i_subleading_displ_e]) > 0.01;
@@ -64,7 +64,7 @@ void full_analyzer::signal_regions(){
                                       i_subleading_displ_mu != -1;
         
         _1mu1displmuvtx             = _1mu1displmu &&
-                                      _lIVF_match[i_subleading_displ_mu] != -1;
+                                      _lIVF_match[i_subleading_displ_mu];
         
         _1mu1displmudispl           = _1mu1displmuvtx &&
                                       fabs(_dxy[i_subleading_displ_mu]) > 0.01;

@@ -30,8 +30,6 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    i_thirdleading_jet   = -1;
    i_closel2_jet        = -1;
 
-   count_IVFmatch_larger_than_IVF_nvertex   = 0;
-
 }
 
 full_analyzer::~full_analyzer()
@@ -322,7 +320,6 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lKVF_trackdR", _lKVF_trackdR, &b__lKVF_trackdR);
    fChain->SetBranchAddress("_lKVF_trackdxy", _lKVF_trackdxy, &b__lKVF_trackdxy);
    fChain->SetBranchAddress("_lKVF_trackdz", _lKVF_trackdz, &b__lKVF_trackdz);
-   fChain->SetBranchAddress("_IVF_nvertex", &_IVF_nvertex, &b__IVF_nvertex); //FIX THIS
    fChain->SetBranchAddress("_IVF_x", _IVF_x, &b__IVF_x);
    fChain->SetBranchAddress("_IVF_y", _IVF_y, &b__IVF_y);
    fChain->SetBranchAddress("_IVF_z", _IVF_z, &b__IVF_z);
@@ -331,6 +328,11 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_IVF_cz", _IVF_cz, &b__IVF_cz);
    fChain->SetBranchAddress("_IVF_df", _IVF_df, &b__IVF_df);
    fChain->SetBranchAddress("_IVF_chi2", _IVF_chi2, &b__IVF_chi2);
+   fChain->SetBranchAddress("_IVF_pt", _IVF_pt, &b__IVF_pt);
+   fChain->SetBranchAddress("_IVF_eta", _IVF_eta, &b__IVF_eta);
+   fChain->SetBranchAddress("_IVF_phi", _IVF_phi, &b__IVF_phi);
+   fChain->SetBranchAddress("_IVF_E", _IVF_E, &b__IVF_E);
+   fChain->SetBranchAddress("_IVF_mass", _IVF_mass, &b__IVF_mass);
    fChain->SetBranchAddress("_IVF_ntracks", _IVF_ntracks, &b__IVF_ntracks);
    fChain->SetBranchAddress("_IVF_trackpt", _IVF_trackpt, &b__IVF_trackpt);
    fChain->SetBranchAddress("_IVF_tracketa", _IVF_tracketa, &b__IVF_tracketa);

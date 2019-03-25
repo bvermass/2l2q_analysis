@@ -147,8 +147,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Calculate Event weight
         event_weight = _weight;
 
-        fix_validity_of_lIVF_match();
-	    
         //Get ID
         get_electronID(&fullElectronID[0]);
         get_loose_electronID(&looseElectronID[0]);
@@ -279,7 +277,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        //    if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] and get_IVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
 
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
@@ -288,7 +286,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        //    if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] and get_IVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
 
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
@@ -310,7 +308,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
     cout << "count:       " << count << endl;
-    cout << "Times _lIVF_match was larger than _IVF_nvertex: " << count_IVFmatch_larger_than_IVF_nvertex << endl;
 
 
 /*
