@@ -319,7 +319,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 5. write events to output
  */
     TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/";
-    if(outputfilename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
+    if(filename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
     else outputfilename += "full_analyzer/";
     
     if(partition != 1) {
