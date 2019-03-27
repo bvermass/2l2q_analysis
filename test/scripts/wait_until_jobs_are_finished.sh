@@ -6,7 +6,7 @@ while $jobsrunning; do
         echo -e "caught qstat error, retrying"
         sleep 2
     done
-    if cat "$qstatoutput" | grep -q "bvermass"; then
+    if cat "$qstatoutput" | grep -q "LocalJob"; then
         echo -e "jobs running"
         sleep 60 #wait a minute before trying again
     else 
