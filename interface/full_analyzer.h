@@ -776,9 +776,10 @@ public :
    bool _1e1displevtx;
    bool _1e1displedispl;
    bool _1e1disple0adde;
-   //bool _1e1disple0jet;
    bool _1e1displemll;
    bool _1e1displedphi;
+   bool _1e1displeReliso;
+   bool _1e1disple1jet;
 
    // extra booleans: ee
    bool _1e1displedR;
@@ -791,7 +792,6 @@ public :
    bool _2e0jet;
    bool _2e1jet;
    bool _2e2jet;
-   bool _1e1disple1jet;
    bool _1e1disple2jet;
 
    // signal region booleans: mumu
@@ -801,9 +801,10 @@ public :
    bool _1mu1displmuvtx;
    bool _1mu1displmudispl;
    bool _1mu1displmu0addmu;
-   //bool _1mu1displmu0jet;
    bool _1mu1displmumll;
    bool _1mu1displmudphi;
+   bool _1mu1displmuReliso;
+   bool _1mu1displmu1jet;
 
    // extra booleans: mumu
    bool _1mu1displmudR;
@@ -816,7 +817,6 @@ public :
    bool _2mu0jet;
    bool _2mu1jet;
    bool _2mu2jet;
-   bool _1mu1displmu1jet;
    bool _1mu1displmu2jet;
 
    int count_IVFmatch_larger_than_IVF_nvertex;
@@ -889,6 +889,7 @@ public :
    virtual double   get_dRll(int, int);
    virtual bool     dphicut(int, int, double);
    virtual double   get_dphill(int, int);
+   virtual bool     relisocut(int, double);
    virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
    virtual void     reset_signal_regions();

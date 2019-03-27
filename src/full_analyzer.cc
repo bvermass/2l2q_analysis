@@ -65,30 +65,34 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e");
     add_histograms(&hists, &hists2D, "_OS_mu");
     add_histograms(&hists, &hists2D, "_SS_mu");
-    add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
-    add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
-    add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
-    add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
-    //add_histograms(&hists, &hists2D, "_OS_e_before0jet");
-    //add_histograms(&hists, &hists2D, "_SS_e_before0jet");
-    //add_histograms(&hists, &hists2D, "_OS_mu_before0jet");
-    //add_histograms(&hists, &hists2D, "_SS_mu_before0jet");
-    add_histograms(&hists, &hists2D, "_OS_e_beforemll");
-    add_histograms(&hists, &hists2D, "_SS_e_beforemll");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforemll");
-    add_histograms(&hists, &hists2D, "_OS_e_beforedphi");
-    add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
+    add_histograms(&hists, &hists2D, "_OS_e_beforereliso");
+    add_histograms(&hists, &hists2D, "_SS_e_beforereliso");
+    add_histograms(&hists, &hists2D, "_OS_mu_beforereliso");
+    add_histograms(&hists, &hists2D, "_SS_mu_beforereliso");
+    add_histograms(&hists, &hists2D, "_OS_e_before1jet");
+    add_histograms(&hists, &hists2D, "_SS_e_before1jet");
+    add_histograms(&hists, &hists2D, "_OS_mu_before1jet");
+    add_histograms(&hists, &hists2D, "_SS_mu_before1jet");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforemll");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforemll");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforemll");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforedphi");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
+    //add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
@@ -101,14 +105,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
    
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
-    int SSe = 0;
-    int OSe = 0;
-    int SSmu = 0;
-    int OSmu = 0;
-    int SSe_weight = 0;
-    int OSe_weight = 0;
-    int SSmu_weight = 0;
-    int OSmu_weight = 0;
+    int SSe = 0, SSe2 = 0, SSe3 = 0;
+    int OSe = 0, OSe2 = 0, OSe3 = 0;
+    int SSmu = 0, SSmu2 = 0, SSmu3 = 0;
+    int OSmu = 0, OSmu2 = 0, OSmu3 = 0;
+    int SSe_weight = 0, SSe2_weight = 0, SSe3_weight = 0;
+    int OSe_weight = 0, OSe2_weight = 0, OSe3_weight = 0;
+    int SSmu_weight = 0, SSmu2_weight = 0, SSmu3_weight = 0;
+    int OSmu_weight = 0, OSmu2_weight = 0, OSmu3_weight = 0;
 
     int count = 0;
 
@@ -264,33 +268,73 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //}
 
         if(_1e1displedphi){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_e, i_subleading_displ_e);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
 
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmudphi){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_mu, i_subleading_displ_mu);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavori + "_beforereliso", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
 
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
+        if(_1e1displeReliso){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_e, i_subleading_displ_e);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(signs_and_flavor == "_SS_e"){ SSe2++; SSe2_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_e"){ OSe2++; OSe2_weight += event_weight;}
+        }
+        if(_1mu1displmuReliso){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_mu, i_subleading_displ_mu);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(signs_and_flavor == "_SS_mu"){ SSmu2++; SSmu2_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_mu"){ OSmu2++; OSmu2_weight += event_weight;}
+        }
+        if(_1e1disple1jet){
+            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
+        }
+        if(_1mu1displmu1jet){
+            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
+        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
+        }
+
     }
 /*
  * Small summary to write to terminal in order to quickly check state of results
  */
     cout << "-----------------------------------------------------------------------" << endl;
     cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
+    cout << "---------------------------After dphi----------------------------------" << endl;
     cout << "SS ee:       " << SSe <<  "        " << SSe_weight <<  "       " << 1.0*SSe_weight*total_weight << endl;
     cout << "SS mumu:     " << SSmu << "        " << SSmu_weight << "       " << 1.0*SSmu_weight*total_weight << endl;
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
+    cout << "---------------------------After Reliso----------------------------------" << endl;
+    cout << "SS ee:       " << SSe2 <<  "        " << SSe2_weight <<  "       " << 1.0*SSe2_weight*total_weight << endl;
+    cout << "SS mumu:     " << SSmu2 << "        " << SSmu2_weight << "       " << 1.0*SSmu2_weight*total_weight << endl;
+    cout << "OS ee:       " << OSe2 <<  "        " << OSe2_weight <<  "       " << 1.0*OSe2_weight*total_weight << endl;
+    cout << "OS mumu:     " << OSmu2 << "        " << OSmu2_weight << "       " << 1.0*OSmu2_weight*total_weight << endl;
+    cout << "---------------------------After 1jet----------------------------------" << endl;
+    cout << "SS ee:       " << SSe3 <<  "        " << SSe3_weight <<  "       " << 1.0*SSe3_weight*total_weight << endl;
+    cout << "SS mumu:     " << SSmu3 << "        " << SSmu3_weight << "       " << 1.0*SSmu3_weight*total_weight << endl;
+    cout << "OS ee:       " << OSe3 <<  "        " << OSe3_weight <<  "       " << 1.0*OSe3_weight*total_weight << endl;
+    cout << "OS mumu:     " << OSmu3 << "        " << OSmu3_weight << "       " << 1.0*OSmu3_weight*total_weight << endl;
     cout << "count:       " << count << endl;
     cout << "Times _lIVF_match was larger than _IVF_nvertex: " << count_IVFmatch_larger_than_IVF_nvertex << endl;
 

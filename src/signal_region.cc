@@ -36,8 +36,6 @@ void full_analyzer::signal_regions(){
         _1e1disple0adde             = _1e1displedispl &&
                                       no_additional_leptons();
         
-        //_1e1disple0jet              = _1e1disple0adde && 
-        //                              i_leading_jet == -1;
         
         _1e1displemll               = _1e1disple0adde && 
                                       mllcut(i_leading_e, i_subleading_displ_e, 75);
@@ -47,6 +45,12 @@ void full_analyzer::signal_regions(){
         
         _1e1displedphi              = _1e1displemll && 
                                       dphicut(i_leading_e, i_subleading_displ_e, 2.6);
+
+        _1e1displeReliso            = _1e1displedphi &&
+                                      relisocut(i_subleading_displ_e, 1.5);
+        
+        _1e1disple1jet              = _1e1displeReliso &&
+                                      i_subleading_jet == -1;
     }
     
 
@@ -72,9 +76,6 @@ void full_analyzer::signal_regions(){
         _1mu1displmu0addmu          = _1mu1displmudispl && 
                                       no_additional_leptons();
         
-        //_1mu1displmu0jet            = _1mu1displmu0addmu && 
-        //                              i_leading_jet == -1;
-        
         _1mu1displmumll             = _1mu1displmu0addmu && 
                                       mllcut(i_leading_mu, i_subleading_displ_mu, 75);
         
@@ -83,6 +84,12 @@ void full_analyzer::signal_regions(){
         
         _1mu1displmudphi            = _1mu1displmumll && 
                                       dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
+        
+        _1mu1displmuReliso          = _1mu1displmudphi &&
+                                      relisocut(i_subleading_displ_mu, 1.5);
+        
+        _1mu1displmu1jet            = _1mu1displmuReliso &&
+                                      i_subleading_jet == -1;
     }
     
     
@@ -110,7 +117,6 @@ void full_analyzer::signal_regions(){
 	_2e1jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet != -1 && i_subleading_jet == -1;
 	_2e2jet 			= leadptveto_e && i_leading_e != -1 && i_subleading_e != -1 && i_leading_jet != -1 && i_subleading_jet != -1;
 	//_1e1disple0jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	//_1e1disple1jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
 	//_1e1disple2jet		= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
 	//_1e0jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet == -1 && i_subleading_jet == -1;
 	//_1e1jet			= leadptveto_e && i_leading_e != -1 && i_subleading_e == -1 && i_subleading_noniso_e == -1 && i_subleading_displ_e == -1 && i_leading_jet != -1 && i_subleading_jet == -1;
@@ -121,7 +127,6 @@ void full_analyzer::signal_regions(){
 	_2mu1jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet != -1 && i_subleading_jet == -1;
 	_2mu2jet 			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu != -1 && i_leading_jet != -1 && i_subleading_jet != -1;
 	//_1mu1displmu0jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ == -1 && i_subleading_jet_for_displ == -1;
-	//_1mu1displmu1jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ == -1;
 	//_1mu1displmu2jet	= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu != -1 && i_leading_jet_for_displ != -1 && i_subleading_jet_for_displ != -1;
 	//_1mu0jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet == -1 && i_subleading_jet == -1;
 	//_1mu1jet			= leadptveto_mu && i_leading_mu != -1 && i_subleading_mu == -1 && i_subleading_noniso_mu == -1 && i_subleading_displ_mu == -1 && i_leading_jet != -1 && i_subleading_jet == -1;
@@ -191,6 +196,10 @@ double full_analyzer::get_dphill(int i_lead, int i_sublead){
     return fabs(leadingvec.DeltaPhi(subleadingvec));
 }
 
+bool full_analyzer::relisocut(int i_sublead, double uppercut){
+    return (_relIso[i_sublead] < uppercut);
+}
+
 void full_analyzer::init_sigreg_fraction(std::map<TString, TH1*>* hists){
     (*hists)["_e_sigreg_fraction"]			= new TH1F("_e_sigreg_fraction",";signal regions;Events", 13, 0, 13);
     (*hists)["_mu_sigreg_fraction"]		    = new TH1F("_mu_sigreg_fraction",";signal regions;Events", 13, 0, 13);
@@ -251,9 +260,10 @@ void full_analyzer::reset_signal_regions(){
    _1e1displevtx = false;
    _1e1displedispl = false;
    _1e1disple0adde = false;
-   //_1e1disple0jet = false;
    _1e1displemll = false;
    _1e1displedphi = false;
+   _1e1displeReliso = false;
+   _1e1disple1jet = false;
 
    // extra booleans: ee
    _1e1displedR = false;
@@ -266,7 +276,6 @@ void full_analyzer::reset_signal_regions(){
    _2e0jet = false;
    _2e1jet = false;
    _2e2jet = false;
-   _1e1disple1jet = false;
    _1e1disple2jet = false;
 
    // signal region booleans: mumu
@@ -276,9 +285,10 @@ void full_analyzer::reset_signal_regions(){
    _1mu1displmuvtx = false;
    _1mu1displmudispl = false;
    _1mu1displmu0addmu = false;
-   //_1mu1displmu0jet = false;
    _1mu1displmumll = false;
    _1mu1displmudphi = false;
+   _1mu1displmuReliso = false;
+   _1mu1displmu1jet = false;
 
    // extra booleans: mumu
    _1mu1displmudR = false;
@@ -291,7 +301,6 @@ void full_analyzer::reset_signal_regions(){
    _2mu0jet = false;
    _2mu1jet = false;
    _2mu2jet = false;
-   _1mu1displmu1jet = false;
    _1mu1displmu2jet = false;
 
    g_mll = -1;
