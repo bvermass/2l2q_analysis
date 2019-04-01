@@ -16,6 +16,8 @@ double full_analyzer::calc_betagamma(int particle_mass, double particle_energy)
 }
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+    (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
+    (*hists)[prefix+"_nTrueInteractions_sigreg"]        = new TH1F(prefix+"_nTrueInteractions_sigreg", ";N(true interactions);Events", 50, 0, 100);
     (*hists)[prefix+"_KVForIVF_categories"]             = new TH1F(prefix+"_KVForIVF_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_l2_jets_categories"]              = new TH1F(prefix+"_l2_jets_categories", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_jets_categories"]                 = new TH1F(prefix+"_jets_categories", ";;Events", 4, 0, 4);
@@ -33,6 +35,10 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_nvtx"]                        = new TH1F(prefix+"_IVF_nvtx", ";N_{vtx} (IVF);Events", 50, 0, 50);
     (*hists)[prefix+"_l1_pt"]                           = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 30, 0, 100);
     (*hists)[prefix+"_l2_pt"]                           = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 30, 0, 50);
+    (*hists)[prefix+"_l1_eta"]                          = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 30, -3, 3);
+    (*hists)[prefix+"_l2_eta"]                          = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 30, -3, 3);
+    (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, 0, 3.14);
+    (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, 0, 3.14);
     (*hists)[prefix+"_l1_dxy"]                          = new TH1F(prefix+"_l1_dxy", ";l_{1} dxy [cm];Events", 30, 0, 0.02);
     (*hists)[prefix+"_l2_dxy_zoom"]                     = new TH1F(prefix+"_l2_dxy_zoom", ";l_{2} dxy [cm];Events", 30, 0, 0.05);
     (*hists)[prefix+"_l2_dxy"]                          = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 30, 0, 0.5);
@@ -236,6 +242,10 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
     (*hists)[prefix+"_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
+    (*hists)[prefix+"_l1_eta"]->Fill(_lEta[i_leading], event_weight);
+    (*hists)[prefix+"_l2_eta"]->Fill(_lEta[i_subleading], event_weight);
+    (*hists)[prefix+"_l1_phi"]->Fill(_lPhi[i_leading], event_weight);
+    (*hists)[prefix+"_l2_phi"]->Fill(_lPhi[i_subleading], event_weight);
     (*hists)[prefix+"_l1_dxy"]->Fill(fabs(_dxy[i_leading]), event_weight);
     (*hists)[prefix+"_l2_dxy"]->Fill(fabs(_dxy[i_subleading]), event_weight);
     (*hists)[prefix+"_l2_dxy_zoom"]->Fill(fabs(_dxy[i_subleading]), event_weight);
@@ -282,6 +292,12 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
+    /*
+     * Number of true interactions
+     */
+    (*hists)[prefix+"_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
+    if(_1e1disple1jet and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS) (*hists)[prefix+"_nTrueInteractions_sigreg"]->Fill(_nTrueInt, event_weight);
+ 
     /*
      * Cutflow
      */
@@ -355,6 +371,12 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
 void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString prefix){
     int SSorOS = (prefix.Index("OS") == -1)? 2 : 0;
 
+    /*
+     * Number of true interactions
+     */
+    (*hists)[prefix+"_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
+    if(_1mu1displmu1jet and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS) (*hists)[prefix+"_nTrueInteractions_sigreg"]->Fill(_nTrueInt, event_weight);
+    
     /*
      * Cutflow
      */
