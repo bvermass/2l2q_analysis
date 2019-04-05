@@ -15,6 +15,7 @@
 #include <cmath>
 
 
+std::vector<TString> get_signs_and_flavor(int argc, char * argv[]);
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif
