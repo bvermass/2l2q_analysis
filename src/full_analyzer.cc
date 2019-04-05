@@ -238,6 +238,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
+        }
+        if(_1e1displedispl){
             if(signs_and_flavor == "_SS_e"){ SSe_beforevtx++; SSe_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe_beforevtx++; OSe_weight_beforevtx += event_weight;}
         }
@@ -246,6 +248,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
+        }
+        if(_1mu1displmudispl){
             if(signs_and_flavor == "_SS_mu"){ SSmu_beforevtx++; SSmu_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu_beforevtx++; OSmu_weight_beforevtx += event_weight;}
         }
@@ -297,7 +301,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  */
     cout << "-----------------------------------------------------------------------------" << endl;
     cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
-    cout << "-------------------------2 leptons-------------------------------------------" << endl;
+    cout << "-------------------------2 leptons, vtx, displ-------------------------------" << endl;
     cout << "SS ee:       " << SSe_beforevtx <<  "        " << SSe_weight_beforevtx <<  "       " << 1.0*SSe_weight_beforevtx*total_weight << endl;
     cout << "SS mumu:     " << SSmu_beforevtx << "        " << SSmu_weight_beforevtx << "       " << 1.0*SSmu_weight_beforevtx*total_weight << endl;
     cout << "OS ee:       " << OSe_beforevtx <<  "        " << OSe_weight_beforevtx <<  "       " << 1.0*OSe_weight_beforevtx*total_weight << endl;
