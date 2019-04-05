@@ -117,7 +117,7 @@ void plot_every_variable_in_root_file(TString filename)
                 efficiency_graph->GetXaxis()->SetTitle(h->GetXaxis()->GetTitle());
                 efficiency_graph->SetLineWidth(2);
                 yaxistitle = "Eff.";
-                draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "AP", &lgendrup, "", yaxistitle, 0, 0, xlog, toprighttitle);
+                draw_TGraphAsymmErrors(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf", c, efficiency_graph, "AP", &lgendrup, "", yaxistitle, 0, 1.1, xlog, toprighttitle);
             }
 
         }else if(cl->InheritsFrom("TH2")){
