@@ -64,7 +64,6 @@ int main(int argc, char * argv[])
             TString name = (TString)argv[(argc - 1)/2 + i];
             TFile*  file = TFile::Open(argv[i]);
             TH1F* hist = (TH1F*) file->Get(sf_it+"_IVF_categories");
-            cout << hist->GetXaxis()->GetBinLabel(1) << " " << hist->GetXaxis()->GetBinLabel(2) << endl;
             cout << name << " & " << accuracy*round(hist->GetBinContent(2)/hist->GetBinContent(1)/accuracy) << " & " << accuracy*round(hist->GetBinContent(3)/hist->GetBinContent(1)/accuracy) << " \\\\" << endl;
         }
         cout << "\\hline" << endl;
