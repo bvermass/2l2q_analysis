@@ -927,6 +927,7 @@ public :
 
    // in src/helper_histo_functions.cc
    virtual void     make_logscale(double*, int, double, double);
+   virtual TString  make_outputfilename(TString, TString, int, int);
    virtual double   calc_betagamma(int, double);
 };
 

@@ -322,25 +322,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/";
-    if(filename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
-    else outputfilename += "full_analyzer/";
-    
-    if(partition != 1) {
-        outputfilename += "subfiles/";
-        if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_")) + "/";
-        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
-    }
-    
-    gSystem->Exec("mkdir -p " + outputfilename);
-
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_"));
-    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15);
-    
-    if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
-    else outputfilename += ".root";
-
-    
+    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", partition, partitionjobnumber);
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
