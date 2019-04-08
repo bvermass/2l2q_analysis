@@ -24,6 +24,9 @@
 
 // Header file for the classes stored in the TTree if any.
 
+// helper functions
+#include "../interface/helper_histo_functions.h"
+
 class full_analyzer {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
@@ -924,11 +927,6 @@ public :
    // in src/HNL_MC_check.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-
-   // in src/helper_histo_functions.cc
-   virtual void     make_logscale(double*, int, double, double);
-   virtual TString  make_outputfilename(TString, TString, int, int);
-   virtual double   calc_betagamma(int, double);
 };
 
 #endif
