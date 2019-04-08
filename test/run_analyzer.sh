@@ -36,10 +36,7 @@ if g++ -std=c++0x -o a_interactive.out ${headdir}"/src/jet_histograms.cc" ${head
              
             partitionjobnumber=0
             while [[ ! $partitionjobnumber -eq $partition ]]; do
-                #$newline="$line $partitionjobnumber"
                 echo $line" "$partitionjobnumber > $tmp
-                cat $tmp
-
                 #exec_analyzer will process the input in tmp again and run a_interactive.out
                 bash ${headdir}/test/scripts/exec_analyzer.sh $tmp a_interactive.out
                 let "partitionjobnumber++"

@@ -7,17 +7,12 @@ using namespace std;
 void mainroot(TString sample, double cross_section, int max_entries, int partition, int partitionjobnumber)
 {
     if (sample.Index(".root") == -1) sample+= "/dilep.root";//in case only the directory is given and not the actual root file. This should fix in almost all cases
-    cout << endl << endl << "mainroot.cc file: " << sample << endl << "- cross section - maxentry - partition - partitionjobnumber: " << cross_section << " - " << max_entries << " - " << partition << " - " << partitionjobnumber << endl;
-    
     
     TFile *input = new TFile(sample, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
-    
     full_analyzer b(tree);
-
     b.run_over_file(sample, cross_section, max_entries, partition, partitionjobnumber);
-
 }
 
 
