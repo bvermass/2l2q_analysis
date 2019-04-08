@@ -26,6 +26,7 @@
 
 // helper functions
 #include "../interface/helper_histo_functions.h"
+#include "../interface/HNLtagger.h"
 
 class full_analyzer {
 public :
@@ -917,6 +918,7 @@ public :
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
+   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger);
 
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);

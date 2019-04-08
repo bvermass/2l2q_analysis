@@ -56,3 +56,25 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
     }
 }
+
+// fill function is part of full_analyzer class to access the tree variables
+void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
+{
+    if(i_closel2_jet == -1) return;
+    hnltagger._nJetConstituents                    = _nJets;//Constituents[i_closel2_jet];
+    //for(unsigned i = 0; i < _nJetConstituents[i_closel2_jet]; i++){
+    //    hnltagger._JetConstituentPt[0]                 = _JetConstituentPt[i_closel2_jet][i];
+    //    hnltagger._JetConstituentEta[0]                = _JetConstituentEta[i_closel2_jet][i];
+    //    hnltagger._JetConstituentPhi[0]                = _JetConstituentPhi[i_closel2_jet][i];
+    //    hnltagger._JetConstituentMass[0]               = _JetConstituentMass[i_closel2_jet][i];
+    //    hnltagger._JetConstituentPdgId[0]              = _JetConstituentPdgId[i_closel2_jet][i];
+    //    hnltagger._JetConstituentCharge[0]             = _JetConstituentCharge[i_closel2_jet][i];
+    //    hnltagger._JetConstituentdxySig[0]             = _JetConstituentdxySig[i_closel2_jet][i];
+    //    hnltagger._JetConstituentdzSig[0]              = _JetConstituentdzSig[i_closel2_jet][i];
+    //    hnltagger._JetConstituentsNumberOfHits[0]      = _JetConstituentsNumberOfHits[i_closel2_jet][i];
+    //    hnltagger._JetConstituentsNumberOfPixelHits[0] = _JetConstituentsNumberOfPixelHits[i_closel2_jet][i];
+    //    hnltagger._JetConstituentsHasTrack[0]          = _JetConstituentsHasTrack[i_closel2_jet][i];
+    //}
+
+    hnltagger.HNLtagger_tree->Fill();
+}
