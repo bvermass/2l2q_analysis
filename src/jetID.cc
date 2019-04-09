@@ -112,3 +112,13 @@ double full_analyzer::get_dR_lepton_jet(int i_lep, TLorentzVector& vec_jet){
     return fabs(vec_lep.DeltaR(vec_jet));
 }
 
+bool full_analyzer::get_JetIsFromHNL(int i_jet){
+    bool JetIsFromHNL = false;
+    for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+        if(get_dR(_jetEta[i_jet], _jetPhi[i_jet], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i]) < 0.4){
+            JetIsFromHNL = true;
+            break;
+        }
+    }
+    return JetIsFromHNL;
+}

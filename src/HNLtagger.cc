@@ -10,6 +10,7 @@ HNLtagger::HNLtagger(TString filename, int partition, int partitionjobnumber)
     TString HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", "HNLtagger", partition, partitionjobnumber);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
+    HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_nJetConstituents",                 &_nJetConstituents,                 "_nJetConstituents/i");
     //HNLtagger_tree->Branch("_JetConstituentPt",                 &_JetConstituentPt,                 "_JetConstituentPt[_nJetConstituents]/D");
     //HNLtagger_tree->Branch("_JetConstituentEta",                &_JetConstituentEta,                "_JetConstituentEta[_nJetConstituents]/D");

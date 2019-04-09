@@ -884,6 +884,7 @@ public :
    virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
    virtual double   get_dR_lepton_jet(int, TLorentzVector&);
    virtual double   get_dR_lepton_jet(int, int);
+   virtual bool     get_JetIsFromHNL(int i_jet);
 
    // in src/signal_regions.cc
    virtual void     signal_regions();

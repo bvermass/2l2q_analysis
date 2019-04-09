@@ -20,6 +20,7 @@ class HNLtagger
         TTree* HNLtagger_tree;
 
         static const unsigned maxJetSize = 50;
+        bool     _JetIsFromHNL;
         unsigned _nJetConstituents;
         double   _JetConstituentPt[maxJetSize];
         double   _JetConstituentEta[maxJetSize];

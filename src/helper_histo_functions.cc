@@ -45,3 +45,9 @@ double calc_betagamma(int particle_mass, double particle_energy)
     double particle_betagamma = sqrt(particle_energy*particle_energy - particle_mass*particle_mass)/particle_mass;
     return particle_betagamma;
 }
+
+double get_dR(double eta1, double phi1, double eta2, double phi2){
+    double deta = fabs(eta1 - eta2);
+    double dphi = (fabs(phi1 - phi2) < 3.14)? fabs(phi1 - phi2) : 6.28 - fabs(phi1 - phi2);
+    return sqrt(deta*deta + dphi*dphi);
+}
