@@ -214,8 +214,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
         
         find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
-        if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
-        if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
+        if(_1e)          leadingIsl1 = leptonIsGenLepton(i_leading_e, i_gen_l1);
+        if(_1mu)         leadingIsl1 = leptonIsGenLepton(i_leading_mu, i_gen_l1);
+        if(_1e1disple)   subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_e, i_gen_l2);                
+        if(_1mu1displmu) subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_mu, i_gen_l2);
         
         // Fill histograms
         

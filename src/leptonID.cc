@@ -281,24 +281,12 @@ void full_analyzer::find_gen_l1_and_l2()
     if(fromN != 1) i_gen_l2 = -1;
 }
 
-void full_analyzer::match_gen_and_reco(int i_subleading)
+bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
 {
-    //TLorentzVector gen_l1_vec;
-    //TLorentzVector leading_vec;
-    //gen_l1_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l1], _gen_lEta[i_gen_l1], _gen_lPhi[i_gen_l1], _gen_lE[i_gen_l1]);
-    //leading_vec.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    //
-    //leading_is_l1 = gen_l1_vec.DeltaR(leading_vec) < 0.2;
-    
-    TLorentzVector gen_l2_vec;
-    TLorentzVector subleading_vec;
-    if(i_gen_l2 != -1) gen_l2_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
-    else subleading_is_l2 = false;
-    subleading_vec.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
-
-    subleading_is_l2 = (gen_l2_vec.DeltaR(subleading_vec) < 0.1);
-     
-    //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
+    double dR = get_dR(_lEta[i_lep], _lPhi[i_lep], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
+    double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
+    if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
+    else return false;
 }
 
 double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){

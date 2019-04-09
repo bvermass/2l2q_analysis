@@ -748,10 +748,8 @@ public :
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
-   //int i_l1; might add these later, through geometric match with i_gen_l1or2, find i_l1or2
-   //int i_l2;
-   bool leading_is_l1;
-   bool subleading_is_l2; 
+   bool leadingIsl1;
+   bool subleadingIsl2; 
 
    // signal region lepton indices 
    int i_leading_e;
@@ -862,7 +860,7 @@ public :
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
-   virtual void     match_gen_and_reco(int);
+   virtual bool     leptonIsGenLepton(int, int);
    virtual double   get_IVF_SVgenreco(int, int);
    virtual double   get_IVF_SVgenreco_2D(int, int);
    virtual double   get_IVF_PVSVdist(int);

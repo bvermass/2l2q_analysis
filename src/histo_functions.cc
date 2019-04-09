@@ -551,7 +551,7 @@ void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_corrl2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     (*hists)[prefix+"_corrl2_ctau_eff_den"]->Fill(_ctauHN);
     if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_corrl2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
-    if(subleading_is_l2){
+    if(subleadingIsl2){
         (*hists)[prefix+"_corrl2_pt_eff_num"]->Fill(_lPt[i_subleading]);
         (*hists)[prefix+"_corrl2_ctau_eff_num"]->Fill(_ctauHN);
         if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_corrl2_SVgen-reco_eff_num"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
