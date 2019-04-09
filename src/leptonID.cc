@@ -252,7 +252,7 @@ int full_analyzer::find_gen_lep(int i_lep)
 {
     TLorentzVector reco_vec;
     TLorentzVector gen_vec;
-    double dR = 0.2;
+    double dR = 0.3;
     int i_gen = -1;
     if(i_lep != -1) {
         reco_vec.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);

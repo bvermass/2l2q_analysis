@@ -193,12 +193,16 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_den"]= new TH1F(prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy_nomatch"]             = new TH1F(prefix+"_IVF_PV-SVdxy_nomatch", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 20, 0, 10);
 
-    (*hists)[prefix+"_corrl2_pt_eff_num"]               = new TH1F(prefix+"_corrl2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_pt_eff_den"]               = new TH1F(prefix+"_corrl2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_ctau_eff_num"]             = new TH1F(prefix+"_corrl2_ctau_eff_num", ";c#tau [cm];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_ctau_eff_den"]             = new TH1F(prefix+"_corrl2_ctau_eff_den", ";c#tau [cm];Events", 40, 0, 40);
-    (*hists)[prefix+"_corrl2_SVgen-reco_eff_num"]          = new TH1F(prefix+"_corrl2_SVgen-reco_eff_num", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
-    (*hists)[prefix+"_corrl2_SVgen-reco_eff_den"]          = new TH1F(prefix+"_corrl2_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
+    (*hists)[prefix+"_l1_pt_eff_num"]                   = new TH1F(prefix+"_l1_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l1_pt_eff_den"]                   = new TH1F(prefix+"_l1_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l1_ctau_eff_num"]                 = new TH1F(prefix+"_l1_ctau_eff_num", ";c#tau [cm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l1_ctau_eff_den"]                 = new TH1F(prefix+"_l1_ctau_eff_den", ";c#tau [cm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_num"]                   = new TH1F(prefix+"_l2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_pt_eff_den"]                   = new TH1F(prefix+"_l2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_num"]                 = new TH1F(prefix+"_l2_ctau_eff_num", ";c#tau [cm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_ctau_eff_den"]                 = new TH1F(prefix+"_l2_ctau_eff_den", ";c#tau [cm];Events", 40, 0, 40);
+    (*hists)[prefix+"_l2_SVgen-reco_eff_num"]           = new TH1F(prefix+"_l2_SVgen-reco_eff_num", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
+    (*hists)[prefix+"_l2_SVgen-reco_eff_den"]           = new TH1F(prefix+"_l2_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 60, -1.5, 10);
 
     add_jet_histograms(hists, prefix);
     
@@ -547,14 +551,20 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 }
 
 
-void full_analyzer::fill_corrl2_eff(std::map<TString, TH1*>* hists, TString prefix, int i_subleading, int i_gen_subleading){
-    (*hists)[prefix+"_corrl2_pt_eff_den"]->Fill(_lPt[i_subleading]);
-    (*hists)[prefix+"_corrl2_ctau_eff_den"]->Fill(_ctauHN);
-    if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_corrl2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
+void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_gen_leading, int i_subleading, int i_gen_subleading){
+    (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
+    (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN);
+    if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
     if(subleadingIsl2){
-        (*hists)[prefix+"_corrl2_pt_eff_num"]->Fill(_lPt[i_subleading]);
-        (*hists)[prefix+"_corrl2_ctau_eff_num"]->Fill(_ctauHN);
-        if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_corrl2_SVgen-reco_eff_num"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
+        (*hists)[prefix+"_l2_pt_eff_num"]->Fill(_lPt[i_subleading]);
+        (*hists)[prefix+"_l2_ctau_eff_num"]->Fill(_ctauHN);
+        if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_num"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
+    }
+    (*hists)[prefix+"_l1_pt_eff_den"]->Fill(_lPt[i_leading]);
+    (*hists)[prefix+"_l1_ctau_eff_den"]->Fill(_ctauHN);
+    if(leadingIsl1){
+        (*hists)[prefix+"_l1_pt_eff_num"]->Fill(_lPt[i_leading]);
+        (*hists)[prefix+"_l1_ctau_eff_num"]->Fill(_ctauHN);
     }
 }
 
