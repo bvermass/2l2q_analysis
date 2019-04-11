@@ -363,6 +363,18 @@ public :
    Double_t        _jetChargedEmFraction[20];
    Double_t        _jetHFHadronFraction[20];
    Double_t        _jetHFEmFraction[20];
+   UChar_t         _nJetConstituents[20];
+   Double_t        _JetConstituentPt[20][50];
+   Double_t        _JetConstituentEta[20][50];
+   Double_t        _JetConstituentPhi[20][50];
+   Double_t        _JetConstituentMass[20][50];
+   Int_t           _JetConstituentPdgId[20][50];
+   Int_t           _JetConstituentCharge[20][50];
+   Double_t        _JetConstituentdxySig[20][50];
+   Double_t        _JetConstituentdzSig[20][50];
+   Int_t           _JetConstituentsNumberOfHits[20][50];
+   Int_t           _JetConstituentsNumberOfPixelHits[20][50];
+   Bool_t          _JetConstituentsHasTrack[20][50];
    Double_t        _met;
    Double_t        _metRaw;
    Double_t        _metJECDown;
@@ -377,14 +389,6 @@ public :
    Double_t        _metPhiUnclUp;
    Double_t        _metSignificance;
 
-   /*Int_t           _nDaughters;
-   Int_t           _jet_tag_for_daughters[300];   //[_nDaughters]
-   Int_t           _jet_daughter_pdgid[300];   //[_nDaughters]
-   Double_t        _jet_daughter_pt[300];   //[_nDaughters]
-   Double_t        _jet_daughter_eta[300];   //[_nDaughters]
-   Double_t        _jet_daughter_phi[300];   //[_nDaughters]
-   Double_t        _jet_daughter_energy[300];   //[_nDaughters]
-*/
    // List of branches
    TBranch        *b__runNb;   //!
    TBranch        *b__lumiBlock;   //!
@@ -713,6 +717,18 @@ public :
    TBranch        *b__jetChargedEmFraction;   //!
    TBranch        *b__jetHFHadronFraction;   //!
    TBranch        *b__jetHFEmFraction;   //!
+   TBranch        *b__nJetConstituents;
+   TBranch        *b__JetConstituentPt;
+   TBranch        *b__JetConstituentEta;
+   TBranch        *b__JetConstituentPhi;
+   TBranch        *b__JetConstituentMass;
+   TBranch        *b__JetConstituentPdgId;
+   TBranch        *b__JetConstituentCharge;
+   TBranch        *b__JetConstituentdxySig;
+   TBranch        *b__JetConstituentdzSig;
+   TBranch        *b__JetConstituentsNumberOfHits;
+   TBranch        *b__JetConstituentsNumberOfPixelHits;
+   TBranch        *b__JetConstituentsHasTrack;
    TBranch        *b__met;   //!
    TBranch        *b__metRaw;
    TBranch        *b__metJECDown;   //!
@@ -726,14 +742,7 @@ public :
    TBranch        *b__metPhiUnclDown;   //!
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
-/*   TBranch        *b__nDaughters;   //!
-   TBranch        *b__jet_tag_for_daughters;   //!
-   TBranch        *b__jet_daughter_pdgid;   //!
-   TBranch        *b__jet_daughter_pt;   //!
-   TBranch        *b__jet_daughter_eta;   //!
-   TBranch        *b__jet_daughter_phi;   //!
-   TBranch        *b__jet_daughter_energy;   //!
-*/   
+   
    std::map<TString, TH1*>::iterator it;
    std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
@@ -917,7 +926,7 @@ public :
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger);
+   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet);
 
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);

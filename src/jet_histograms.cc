@@ -58,23 +58,36 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
 }
 
 // fill function is part of full_analyzer class to access the tree variables
-void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
+void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
 {
-    if(i_closel2_jet == -1) return;
-    hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_closel2_jet);
-    hnltagger._nJetConstituents                    = _nJets;//Constituents[i_closel2_jet];
-    //for(unsigned i = 0; i < _nJetConstituents[i_closel2_jet]; i++){
-    //    hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_closel2_jet][i];
-    //    hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_closel2_jet][i];
-    //    hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_closel2_jet][i];
-    //    hnltagger._JetConstituentMass[i]               = _JetConstituentMass[i_closel2_jet][i];
-    //    hnltagger._JetConstituentPdgId[i]              = _JetConstituentPdgId[i_closel2_jet][i];
-    //    hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_closel2_jet][i];
-    //    hnltagger._JetConstituentdxySig[i]             = _JetConstituentdxySig[i_closel2_jet][i];
-    //    hnltagger._JetConstituentdzSig[i]              = _JetConstituentdzSig[i_closel2_jet][i];
-    //    hnltagger._JetConstituentsNumberOfHits[i]      = _JetConstituentsNumberOfHits[i_closel2_jet][i];
-    //    hnltagger._JetConstituentsNumberOfPixelHits[i] = _JetConstituentsNumberOfPixelHits[i_closel2_jet][i];
-    //    hnltagger._JetConstituentsHasTrack[i]          = _JetConstituentsHasTrack[i_closel2_jet][i];
-    //}
+    if(i_jet == -1) return;
+    hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
+    hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
+    for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
+        hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jet][i];
+        hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jet][i];
+        hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jet][i];
+        hnltagger._JetConstituentMass[i]               = _JetConstituentMass[i_jet][i];
+        hnltagger._JetConstituentPdgId[i]              = _JetConstituentPdgId[i_jet][i];
+        hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
+        hnltagger._JetConstituentdxySig[i]             = _JetConstituentdxySig[i_jet][i];
+        hnltagger._JetConstituentdzSig[i]              = _JetConstituentdzSig[i_jet][i];
+        hnltagger._JetConstituentsNumberOfHits[i]      = _JetConstituentsNumberOfHits[i_jet][i];
+        hnltagger._JetConstituentsNumberOfPixelHits[i] = _JetConstituentsNumberOfPixelHits[i_jet][i];
+        hnltagger._JetConstituentsHasTrack[i]          = _JetConstituentsHasTrack[i_jet][i];
+    }
+    for(unsigned i = _nJetConstituents[i_jet]; i < 50; i++){
+        hnltagger._JetConstituentPt[i]                 = 0;
+        hnltagger._JetConstituentEta[i]                = 0;
+        hnltagger._JetConstituentPhi[i]                = 0;
+        hnltagger._JetConstituentMass[i]               = 0;
+        hnltagger._JetConstituentPdgId[i]              = 0;
+        hnltagger._JetConstituentCharge[i]             = 0;
+        hnltagger._JetConstituentdxySig[i]             = 0;
+        hnltagger._JetConstituentdzSig[i]              = 0;
+        hnltagger._JetConstituentsNumberOfHits[i]      = 0;
+        hnltagger._JetConstituentsNumberOfPixelHits[i] = 0;
+        hnltagger._JetConstituentsHasTrack[i]          = 0;
+    }
     hnltagger.HNLtagger_tree->Fill();
 }

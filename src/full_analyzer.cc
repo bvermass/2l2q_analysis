@@ -244,7 +244,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
         }
         if(_1e1displedispl){
-            fill_HNLtagger_tree(hnltagger);
+            fill_HNLtagger_tree(hnltagger, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe_beforevtx++; SSe_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe_beforevtx++; OSe_weight_beforevtx += event_weight;}
         }
@@ -255,7 +255,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
         }
         if(_1mu1displmudispl){
-            fill_HNLtagger_tree(hnltagger);
+            fill_HNLtagger_tree(hnltagger, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu_beforevtx++; SSmu_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu_beforevtx++; OSmu_weight_beforevtx += event_weight;}
         }
