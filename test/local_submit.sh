@@ -67,12 +67,12 @@ if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/HNLtagger.cc" ${headdir}"/src/je
                 echo "max_entries   :   "$max_entries
                 echo "partition     :   "$partition
 
-                qsub $job -l walltime=00:30:00 > scriptlog.txt 2>> scriptlog.txt
+                qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do
                     echo "Invalid credential caught, resubmitting"
                     sleep 2 #sleep 2 seconds before attempting resubmission
-                    qsub $job -l walltime=00:30:00 > scriptlog.txt 2>> scriptlog.txt
+                    qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
                 done
 
                 cat scriptlog.txt

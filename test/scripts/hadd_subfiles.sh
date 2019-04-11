@@ -31,10 +31,16 @@ function hadd_specific_backgrounds {
     fi
 }
 
-function hadd_all_backgrounds {
+function hadd_all_backgrounds_and_signal_for_HNLtagger {
     if [ 0 -lt $(ls ${1}${2}Background_* 2>/dev/null | wc -w) ]; then
-        echo -e "Hadd all background"
+        echo -e "Hadd all background for HNL tagger"
         hadd -f ${1}${2}Background.root ${1}${2}Background_*
+    fi
+
+    if [ 0 -lt $(ls ${1}${2}HeavyNeutrino_lljj_M-5_* 2>/dev/null | wc -w) ]; then
+        echo -e "Hadd 5 GeV signal e or mu for HNL tagger"
+        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_mu.root ${1}${2}HeavyNeutrino_lljj_M-5_*_mu_*
+        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_e.root ${1}${2}HeavyNeutrino_lljj_M-5_*_e_*
     fi
 }
 
@@ -60,4 +66,10 @@ echo -e "Looking for HNLtagger files\n"
 for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/subfiles/*; do
     hadd_subfiles $D HNLtagger_
 done
-hadd_all_backgrounds /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_
+hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_
+for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/*; do
+    for E in $D/full_analyzer/subfiles/*; do
+        hadd_subfiles $E HNLtagger_
+    done
+    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_
+done
