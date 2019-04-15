@@ -238,7 +238,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
 
         if(_1e1disple){
-        //    fill_lepton_eff(&hists, signs_and_flavor, i_leading_e, i_gen_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_lepton_eff(&hists, signs_and_flavor, i_leading_e, i_gen_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
@@ -249,7 +249,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_e"){ OSe_beforevtx++; OSe_weight_beforevtx += event_weight;}
         }
         if(_1mu1displmu){
-        //    fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_gen_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_gen_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
