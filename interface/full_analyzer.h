@@ -363,7 +363,7 @@ public :
    Double_t        _jetChargedEmFraction[20];
    Double_t        _jetHFHadronFraction[20];
    Double_t        _jetHFEmFraction[20];
-   UChar_t         _nJetConstituents[20];
+   unsigned         _nJetConstituents[20];
    Double_t        _JetConstituentPt[20][50];
    Double_t        _JetConstituentEta[20][50];
    Double_t        _JetConstituentPhi[20][50];
