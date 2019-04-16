@@ -16,11 +16,14 @@
 class HNLtagger
 {
     public:
+        TString HNLtagger_filename;
         TFile* HNLtagger_file;
         TTree* HNLtagger_tree;
 
         static const unsigned maxJetSize = 50;
         bool     _JetIsFromHNL;
+        double   _JetPt;
+        double   _JetEta;
         unsigned _nJetConstituents;
         double   _JetConstituentPt[maxJetSize];
         double   _JetConstituentEta[maxJetSize];
@@ -34,8 +37,9 @@ class HNLtagger
         int      _JetConstituentsNumberOfPixelHits[maxJetSize];
         bool     _JetConstituentsHasTrack[maxJetSize];
 
-        HNLtagger(TString filename, int partition, int partitionjobnumber);
+        HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
         void write_HNLtagger_tree();
+        void delete_HNLtagger_tree();
 };
 
 #endif

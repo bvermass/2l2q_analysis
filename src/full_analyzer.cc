@@ -100,7 +100,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         h->Sumw2();
     }
    
-    HNLtagger hnltagger(filename, partition, partitionjobnumber);
+    HNLtagger hnltagger_e(filename, "electron", partition, partitionjobnumber);
+    HNLtagger hnltagger_mu(filename, "muon", partition, partitionjobnumber);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe_beforevtx = 0;
@@ -244,7 +245,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
         }
         if(_1e1displedispl){
-            fill_HNLtagger_tree(hnltagger, i_closel2_jet);
+            fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe_beforevtx++; SSe_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe_beforevtx++; OSe_weight_beforevtx += event_weight;}
         }
@@ -255,7 +256,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
         }
         if(_1mu1displmudispl){
-            fill_HNLtagger_tree(hnltagger, i_closel2_jet);
+            fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu_beforevtx++; SSmu_weight_beforevtx += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu_beforevtx++; OSmu_weight_beforevtx += event_weight;}
         }
@@ -328,7 +329,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    hnltagger.write_HNLtagger_tree();
+    if(sampleflavor != "mu") hnltagger_e.write_HNLtagger_tree();
+    else hnltagger_e.delete_HNLtagger_tree();
+    if(sampleflavor != "e") hnltagger_mu.write_HNLtagger_tree();
+    else hnltagger_mu.delete_HNLtagger_tree();
 
     TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
     cout << "output to: " << outputfilename << endl;

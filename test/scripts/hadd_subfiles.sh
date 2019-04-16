@@ -5,8 +5,8 @@ function hadd_subfiles {
     if [[ -d "$1" ]]; then 
         if [ 0 -lt $(ls $1/*_job_* 2>/dev/null | wc -w) ]; then
             echo -e "\n\nhadding subfiles:        "$1
-            if hadd -f ${1%%subfiles*}${2}${1#*subfiles/}.root $1/*_job_* ; then
-                rm $1/*_job_*
+            if hadd -f ${1%%subfiles*}${2}${1#*subfiles/}.root $1/$2*_job_* ; then
+                rm $1/$2*_job_*
             fi
             echo -e "\n"
         fi
@@ -64,12 +64,16 @@ done
 echo -e "\n---------------------------"
 echo -e "Looking for HNLtagger files\n"
 for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/subfiles/*; do
-    hadd_subfiles $D HNLtagger_
+    hadd_subfiles $D HNLtagger_electron_
+    hadd_subfiles $D HNLtagger_muon_
 done
-hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_
+hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_electron_
+hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_muon_
 for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/*; do
     for E in $D/full_analyzer/subfiles/*; do
-        hadd_subfiles $E HNLtagger_
+        hadd_subfiles $E HNLtagger_electron_
+        hadd_subfiles $E HNLtagger_muon_
     done
-    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_
+    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_electron_
+    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_muon_
 done

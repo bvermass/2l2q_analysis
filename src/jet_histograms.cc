@@ -62,6 +62,8 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
 {
     if(i_jet == -1) return;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
+    hnltagger._JetPt        = _jetPt[i_jet];
+    hnltagger._JetEta       = _jetEta[i_jet];
     hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
     for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
         hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jet][i];

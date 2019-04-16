@@ -5,12 +5,14 @@
 //Include header for the class
 #include "../interface/HNLtagger.h"
 
-HNLtagger::HNLtagger(TString filename, int partition, int partitionjobnumber)
+HNLtagger::HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber)
 {
-    TString HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", "HNLtagger", partition, partitionjobnumber);
+    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", "HNLtagger_" + flavor, partition, partitionjobnumber);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
+    HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
+    HNLtagger_tree->Branch("_JetEta",                           &_JetEta,                           "_JetPt/D");
     HNLtagger_tree->Branch("_nJetConstituents",                 &_nJetConstituents,                 "_nJetConstituents/i");
     HNLtagger_tree->Branch("_JetConstituentPt",                 &_JetConstituentPt,                 "_JetConstituentPt[50]/D");
     HNLtagger_tree->Branch("_JetConstituentEta",                &_JetConstituentEta,                "_JetConstituentEta[50]/D");
@@ -30,4 +32,11 @@ void HNLtagger::write_HNLtagger_tree()
     HNLtagger_tree->Print();
     HNLtagger_file->Write();
     HNLtagger_file->Close();
+}
+
+void HNLtagger::delete_HNLtagger_tree()
+{
+    HNLtagger_file->Close();
+    gSystem->Exec("rm " + HNLtagger_filename);
+    
 }
