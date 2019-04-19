@@ -570,7 +570,7 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
 
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
-    if(i_gen_subleading == -1) return;
+    if(i_gen_subleading == -1 or !(leadingIsl1 and subleadingIsl2)) return;
 
     double IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
     double IVF_PVSVdist_gen     = get_PVSVdist_gen(i_gen_subleading);
