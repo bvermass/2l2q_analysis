@@ -28,7 +28,7 @@ void full_analyzer::signal_regions(){
                                       i_subleading_displ_e != -1;
 
         _1e1displevtx               = _1e1disple &&
-                                      _lIVF_match[i_subleading_displ_e] != -1;
+                                      _lIVF_match[i_subleading_displ_e];
 
         _1e1displedispl             = _1e1displevtx &&
                                       fabs(_dxy[i_subleading_displ_e]) > 0.01;
@@ -41,7 +41,7 @@ void full_analyzer::signal_regions(){
                                       mllcut(i_leading_e, i_subleading_displ_e, 75);
         
         _1e1displedR                = _1e1displemll && 
-                                      dRcut(i_leading_e, i_subleading_displ_e, 2.4, 3.5);    
+                                      dRcut(i_leading_e, i_subleading_displ_e, 2.6, 4); 
         
         _1e1displedphi              = _1e1displemll && 
                                       dphicut(i_leading_e, i_subleading_displ_e, 2.6);
@@ -51,6 +51,12 @@ void full_analyzer::signal_regions(){
         
         _1e1disple1jet              = _1e1displeReliso &&
                                       i_subleading_jet == -1;
+
+        _1e1displedphi_novtx        = _1e1disple &&
+                                      fabs(_dxy[i_subleading_displ_e]) > 0.01 &&
+                                      no_additional_leptons() &&
+                                      mllcut(i_leading_e, i_subleading_displ_e, 75) &&
+                                      dphicut(i_leading_e, i_subleading_displ_e, 2.6);
     }
     
 
@@ -68,7 +74,7 @@ void full_analyzer::signal_regions(){
                                       i_subleading_displ_mu != -1;
         
         _1mu1displmuvtx             = _1mu1displmu &&
-                                      _lIVF_match[i_subleading_displ_mu] != -1;
+                                      _lIVF_match[i_subleading_displ_mu];
         
         _1mu1displmudispl           = _1mu1displmuvtx &&
                                       fabs(_dxy[i_subleading_displ_mu]) > 0.01;
@@ -80,7 +86,7 @@ void full_analyzer::signal_regions(){
                                       mllcut(i_leading_mu, i_subleading_displ_mu, 75);
         
         _1mu1displmudR              = _1mu1displmumll && 
-                                      dRcut(i_leading_mu, i_subleading_displ_mu, 2.4, 3.5);    
+                                      dRcut(i_leading_mu, i_subleading_displ_mu, 2.6, 4);    
         
         _1mu1displmudphi            = _1mu1displmumll && 
                                       dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
@@ -90,6 +96,12 @@ void full_analyzer::signal_regions(){
         
         _1mu1displmu1jet            = _1mu1displmuReliso &&
                                       i_subleading_jet == -1;
+
+        _1mu1displmudphi_novtx      = _1mu1displmu &&
+                                      fabs(_dxy[i_subleading_displ_mu]) > 0.01 &&
+                                      no_additional_leptons() &&
+                                      mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
+                                      dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
     }
     
     
@@ -268,6 +280,7 @@ void full_analyzer::reset_signal_regions(){
    // extra booleans: ee
    _1e1displedR = false;
    _1pogmediume = false;
+   _1e1displedphi_novtx = false;
 
    // old booleans: ee
    _1e0jet = false;
@@ -293,6 +306,7 @@ void full_analyzer::reset_signal_regions(){
    // extra booleans: mumu
    _1mu1displmudR = false;
    _1pogmediummu = false;
+   _1mu1displmudphi_novtx = false;
    
    // old booleans: mumu
    _1mu0jet = false;

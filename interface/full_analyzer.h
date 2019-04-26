@@ -24,6 +24,10 @@
 
 // Header file for the classes stored in the TTree if any.
 
+// helper functions
+#include "../interface/helper_histo_functions.h"
+#include "../interface/HNLtagger.h"
+
 class full_analyzer {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
@@ -278,22 +282,26 @@ public :
    Double_t        _lKVF_trackdR[10][15];
    Double_t        _lKVF_trackdxy[10][15];
    Double_t        _lKVF_trackdz[10][15];
-   unsigned         _IVF_nvertex;
-   Double_t        _IVF_x[50];
-   Double_t        _IVF_y[50];
-   Double_t        _IVF_z[50];
-   Double_t        _IVF_cx[50];
-   Double_t        _IVF_cy[50];
-   Double_t        _IVF_cz[50];
-   Double_t        _IVF_df[50];
-   Double_t        _IVF_chi2[50];
-   unsigned         _IVF_ntracks[50];
-   Double_t        _IVF_trackpt[50][15];
-   Double_t        _IVF_tracketa[50][15];
-   Double_t        _IVF_trackphi[50][15];
-   Double_t        _IVF_trackE[50][15];
-   Double_t        _IVF_trackcharge[50][15];
-   int             _lIVF_match[10];
+   Double_t        _IVF_x[10];
+   Double_t        _IVF_y[10];
+   Double_t        _IVF_z[10];
+   Double_t        _IVF_cx[10];
+   Double_t        _IVF_cy[10];
+   Double_t        _IVF_cz[10];
+   Double_t        _IVF_df[10];
+   Double_t        _IVF_chi2[10];
+   Double_t        _IVF_pt[10];
+   Double_t        _IVF_eta[10];
+   Double_t        _IVF_phi[10];
+   Double_t        _IVF_E[10];
+   Double_t        _IVF_mass[10];
+   unsigned         _IVF_ntracks[10];
+   Double_t        _IVF_trackpt[10][15];
+   Double_t        _IVF_tracketa[10][15];
+   Double_t        _IVF_trackphi[10][15];
+   Double_t        _IVF_trackE[10][15];
+   Double_t        _IVF_trackcharge[10][15];
+   Bool_t          _lIVF_match[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -355,6 +363,18 @@ public :
    Double_t        _jetChargedEmFraction[20];
    Double_t        _jetHFHadronFraction[20];
    Double_t        _jetHFEmFraction[20];
+   unsigned         _nJetConstituents[20];
+   Double_t        _JetConstituentPt[20][50];
+   Double_t        _JetConstituentEta[20][50];
+   Double_t        _JetConstituentPhi[20][50];
+   Double_t        _JetConstituentMass[20][50];
+   Int_t           _JetConstituentPdgId[20][50];
+   Int_t           _JetConstituentCharge[20][50];
+   Double_t        _JetConstituentdxySig[20][50];
+   Double_t        _JetConstituentdzSig[20][50];
+   Int_t           _JetConstituentsNumberOfHits[20][50];
+   Int_t           _JetConstituentsNumberOfPixelHits[20][50];
+   Bool_t          _JetConstituentsHasTrack[20][50];
    Double_t        _met;
    Double_t        _metRaw;
    Double_t        _metJECDown;
@@ -369,14 +389,6 @@ public :
    Double_t        _metPhiUnclUp;
    Double_t        _metSignificance;
 
-   /*Int_t           _nDaughters;
-   Int_t           _jet_tag_for_daughters[300];   //[_nDaughters]
-   Int_t           _jet_daughter_pdgid[300];   //[_nDaughters]
-   Double_t        _jet_daughter_pt[300];   //[_nDaughters]
-   Double_t        _jet_daughter_eta[300];   //[_nDaughters]
-   Double_t        _jet_daughter_phi[300];   //[_nDaughters]
-   Double_t        _jet_daughter_energy[300];   //[_nDaughters]
-*/
    // List of branches
    TBranch        *b__runNb;   //!
    TBranch        *b__lumiBlock;   //!
@@ -624,7 +636,6 @@ public :
    TBranch        *b__lKVF_trackdR;
    TBranch        *b__lKVF_trackdxy;
    TBranch        *b__lKVF_trackdz;
-   TBranch        *b__IVF_nvertex;
    TBranch        *b__IVF_x;
    TBranch        *b__IVF_y;
    TBranch        *b__IVF_z;
@@ -633,6 +644,11 @@ public :
    TBranch        *b__IVF_cz;
    TBranch        *b__IVF_df;
    TBranch        *b__IVF_chi2;
+   TBranch        *b__IVF_pt;
+   TBranch        *b__IVF_eta;
+   TBranch        *b__IVF_phi;
+   TBranch        *b__IVF_E;
+   TBranch        *b__IVF_mass;
    TBranch        *b__IVF_ntracks;
    TBranch        *b__IVF_trackpt;
    TBranch        *b__IVF_tracketa;
@@ -701,6 +717,18 @@ public :
    TBranch        *b__jetChargedEmFraction;   //!
    TBranch        *b__jetHFHadronFraction;   //!
    TBranch        *b__jetHFEmFraction;   //!
+   TBranch        *b__nJetConstituents;
+   TBranch        *b__JetConstituentPt;
+   TBranch        *b__JetConstituentEta;
+   TBranch        *b__JetConstituentPhi;
+   TBranch        *b__JetConstituentMass;
+   TBranch        *b__JetConstituentPdgId;
+   TBranch        *b__JetConstituentCharge;
+   TBranch        *b__JetConstituentdxySig;
+   TBranch        *b__JetConstituentdzSig;
+   TBranch        *b__JetConstituentsNumberOfHits;
+   TBranch        *b__JetConstituentsNumberOfPixelHits;
+   TBranch        *b__JetConstituentsHasTrack;
    TBranch        *b__met;   //!
    TBranch        *b__metRaw;
    TBranch        *b__metJECDown;   //!
@@ -714,14 +742,7 @@ public :
    TBranch        *b__metPhiUnclDown;   //!
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
-/*   TBranch        *b__nDaughters;   //!
-   TBranch        *b__jet_tag_for_daughters;   //!
-   TBranch        *b__jet_daughter_pdgid;   //!
-   TBranch        *b__jet_daughter_pt;   //!
-   TBranch        *b__jet_daughter_eta;   //!
-   TBranch        *b__jet_daughter_phi;   //!
-   TBranch        *b__jet_daughter_energy;   //!
-*/   
+   
    std::map<TString, TH1*>::iterator it;
    std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
@@ -736,10 +757,8 @@ public :
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
-   //int i_l1; might add these later, through geometric match with i_gen_l1or2, find i_l1or2
-   //int i_l2;
-   bool leading_is_l1;
-   bool subleading_is_l2; 
+   bool leadingIsl1;
+   bool subleadingIsl2; 
 
    // signal region lepton indices 
    int i_leading_e;
@@ -784,6 +803,7 @@ public :
    // extra booleans: ee
    bool _1e1displedR;
    bool _1pogmediume;
+   bool _1e1displedphi_novtx;
 
    // old booleans: ee
    bool _1e0jet;
@@ -809,6 +829,7 @@ public :
    // extra booleans: mumu
    bool _1mu1displmudR;
    bool _1pogmediummu;
+   bool _1mu1displmudphi_novtx;
    
    // old booleans: mumu
    bool _1mu0jet;
@@ -818,8 +839,6 @@ public :
    bool _2mu1jet;
    bool _2mu2jet;
    bool _1mu1displmu2jet;
-
-   int count_IVFmatch_larger_than_IVF_nvertex;
 
    // functions
    // in src/full_analyzer_constructor.cc
@@ -852,7 +871,7 @@ public :
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_gen_lep(int i_lep);
    virtual void     find_gen_l1_and_l2();
-   virtual void     match_gen_and_reco(int);
+   virtual bool     leptonIsGenLepton(int, int);
    virtual double   get_IVF_SVgenreco(int, int);
    virtual double   get_IVF_SVgenreco_2D(int, int);
    virtual double   get_IVF_PVSVdist(int);
@@ -874,10 +893,7 @@ public :
    virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
    virtual double   get_dR_lepton_jet(int, TLorentzVector&);
    virtual double   get_dR_lepton_jet(int, int);
-
-   // in src/vtxID.cc
-   virtual int      find_vtx_matching_to_lepton(int);
-   virtual void     fix_validity_of_lIVF_match();
+   virtual bool     get_JetIsFromHNL(int i_jet);
 
    // in src/signal_regions.cc
    virtual void     signal_regions();
@@ -904,7 +920,7 @@ public :
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
    virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
    virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
-   virtual void     fill_corrl2_eff(std::map<TString, TH1*>*, TString, int, int);
+   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int, int, int);
    virtual void     fill_KVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
@@ -913,6 +929,7 @@ public :
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
+   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet);
 
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
@@ -923,10 +940,6 @@ public :
    // in src/HNL_MC_check.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-
-   // in src/helper_histo_functions.cc
-   virtual void     make_logscale(double*, int, double, double);
-   virtual double   calc_betagamma(int, double);
 };
 
 #endif

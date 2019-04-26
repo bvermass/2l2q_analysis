@@ -30,8 +30,6 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
    i_thirdleading_jet   = -1;
    i_closel2_jet        = -1;
 
-   count_IVFmatch_larger_than_IVF_nvertex   = 0;
-
 }
 
 full_analyzer::~full_analyzer()
@@ -322,7 +320,6 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lKVF_trackdR", _lKVF_trackdR, &b__lKVF_trackdR);
    fChain->SetBranchAddress("_lKVF_trackdxy", _lKVF_trackdxy, &b__lKVF_trackdxy);
    fChain->SetBranchAddress("_lKVF_trackdz", _lKVF_trackdz, &b__lKVF_trackdz);
-   fChain->SetBranchAddress("_IVF_nvertex", &_IVF_nvertex, &b__IVF_nvertex); //FIX THIS
    fChain->SetBranchAddress("_IVF_x", _IVF_x, &b__IVF_x);
    fChain->SetBranchAddress("_IVF_y", _IVF_y, &b__IVF_y);
    fChain->SetBranchAddress("_IVF_z", _IVF_z, &b__IVF_z);
@@ -331,6 +328,11 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_IVF_cz", _IVF_cz, &b__IVF_cz);
    fChain->SetBranchAddress("_IVF_df", _IVF_df, &b__IVF_df);
    fChain->SetBranchAddress("_IVF_chi2", _IVF_chi2, &b__IVF_chi2);
+   fChain->SetBranchAddress("_IVF_pt", _IVF_pt, &b__IVF_pt);
+   fChain->SetBranchAddress("_IVF_eta", _IVF_eta, &b__IVF_eta);
+   fChain->SetBranchAddress("_IVF_phi", _IVF_phi, &b__IVF_phi);
+   fChain->SetBranchAddress("_IVF_E", _IVF_E, &b__IVF_E);
+   fChain->SetBranchAddress("_IVF_mass", _IVF_mass, &b__IVF_mass);
    fChain->SetBranchAddress("_IVF_ntracks", _IVF_ntracks, &b__IVF_ntracks);
    fChain->SetBranchAddress("_IVF_trackpt", _IVF_trackpt, &b__IVF_trackpt);
    fChain->SetBranchAddress("_IVF_tracketa", _IVF_tracketa, &b__IVF_tracketa);
@@ -399,6 +401,18 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_jetChargedEmFraction", _jetChargedEmFraction, &b__jetChargedEmFraction);
    fChain->SetBranchAddress("_jetHFHadronFraction", _jetHFHadronFraction, &b__jetHFHadronFraction);
    fChain->SetBranchAddress("_jetHFEmFraction", _jetHFEmFraction, &b__jetHFEmFraction);
+   fChain->SetBranchAddress("_nJetConstituents", _nJetConstituents, &b__nJetConstituents);
+   fChain->SetBranchAddress("_JetConstituentPt", _JetConstituentPt, &b__JetConstituentPt);
+   fChain->SetBranchAddress("_JetConstituentEta", _JetConstituentEta, &b__JetConstituentEta);
+   fChain->SetBranchAddress("_JetConstituentPhi", _JetConstituentPhi, &b__JetConstituentPhi);
+   fChain->SetBranchAddress("_JetConstituentMass", _JetConstituentMass, &b__JetConstituentMass);
+   fChain->SetBranchAddress("_JetConstituentPdgId", _JetConstituentPdgId, &b__JetConstituentPdgId);
+   fChain->SetBranchAddress("_JetConstituentCharge", _JetConstituentCharge, &b__JetConstituentCharge);
+   fChain->SetBranchAddress("_JetConstituentdxySig", _JetConstituentdxySig, &b__JetConstituentdxySig);
+   fChain->SetBranchAddress("_JetConstituentdzSig", _JetConstituentdzSig, &b__JetConstituentdzSig);
+   fChain->SetBranchAddress("_JetConstituentsNumberOfHits", _JetConstituentsNumberOfHits, &b__JetConstituentsNumberOfHits);
+   fChain->SetBranchAddress("_JetConstituentsNumberOfPixelHits", _JetConstituentsNumberOfPixelHits, &b__JetConstituentsNumberOfPixelHits);
+   fChain->SetBranchAddress("_JetConstituentsHasTrack", _JetConstituentsHasTrack, &b__JetConstituentsHasTrack);
    fChain->SetBranchAddress("_met", &_met, &b__met);
    fChain->SetBranchAddress("_metRaw", &_metRaw, &b__metRaw);
    fChain->SetBranchAddress("_metJECDown", &_metJECDown, &b__metJECDown);
@@ -412,14 +426,6 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_metPhiUnclDown", &_metPhiUnclDown, &b__metPhiUnclDown);
    fChain->SetBranchAddress("_metPhiUnclUp", &_metPhiUnclUp, &b__metPhiUnclUp);
    fChain->SetBranchAddress("_metSignificance", &_metSignificance, &b__metSignificance);
-/*   fChain->SetBranchAddress("_nDaughters", &_nDaughters, &b__nDaughters);
-   fChain->SetBranchAddress("_jet_tag_for_daughters", _jet_tag_for_daughters, &b__jet_tag_for_daughters);
-   fChain->SetBranchAddress("_jet_daughter_pdgid", _jet_daughter_pdgid, &b__jet_daughter_pdgid);
-   fChain->SetBranchAddress("_jet_daughter_pt", _jet_daughter_pt, &b__jet_daughter_pt);
-   fChain->SetBranchAddress("_jet_daughter_eta", _jet_daughter_eta, &b__jet_daughter_eta);
-   fChain->SetBranchAddress("_jet_daughter_phi", _jet_daughter_phi, &b__jet_daughter_phi);
-   fChain->SetBranchAddress("_jet_daughter_energy", _jet_daughter_energy, &b__jet_daughter_energy);
-*/
    Notify();
 }
 

@@ -45,13 +45,13 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
         TString oldID           = (histname.Index("_oldID_") == -1)?        "" : "oldID/";
         TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
-        TString corrl2          = (histname.Index("_corrl2_") == -1)?       "" : "corrl2/";
         TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
         TString invIVFSVgenreco = (histname.Index("_invIVFSVgenreco") == -1)? "" : "invIVFSVgenreco/";
+        TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + corrl2 + eff + invIVFSVgenreco;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
 }
 
 
@@ -251,11 +251,10 @@ void draw_1_hist(TString name, TCanvas *c, TH1F* h, TString drawoptions, TLegend
 void draw_TGraphAsymmErrors(TString name, TCanvas *c, TGraphAsymmErrors* h, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, double xmin, double xmax, int lin0log1, TString toprighttitle)
 {
     c->SetLogx(lin0log1);
-    if(xmax != xmin) h->GetXaxis()->SetLimits(xmin, xmax);
+    if(xmax != xmin){ h->GetHistogram()->SetMaximum(xmax); h->GetHistogram()->SetMinimum(xmin);}
+    else{ h->GetHistogram()->SetMaximum(1.2*h->GetHistogram()->GetMaximum()); h->GetHistogram()->SetMinimum(0.);}
     if(Xaxis != "") h->GetXaxis()->SetTitle(Xaxis);
     h->GetXaxis()->SetTitleOffset(1.2);
-    h->GetHistogram()->SetMinimum(0.);
-    h->GetHistogram()->SetMaximum(1.2*h->GetHistogram()->GetMaximum());
     if(Yaxis != "") h->GetYaxis()->SetTitle(Yaxis);
     h->GetYaxis()->SetTitleOffset(1.5);
     h->Draw(drawoptions);

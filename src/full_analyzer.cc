@@ -73,14 +73,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     add_histograms(&hists, &hists2D, "_SS_e_before1jet");
     add_histograms(&hists, &hists2D, "_OS_mu_before1jet");
     add_histograms(&hists, &hists2D, "_SS_mu_before1jet");
-    //add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
-    //add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
-    //add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
-    //add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
-    //add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
-    //add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
-    //add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
-    //add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
+    add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
+    add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
+    add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
+    add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
+    add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
+    add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
+    add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
+    add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
     //add_histograms(&hists, &hists2D, "_OS_e_beforemll");
     //add_histograms(&hists, &hists2D, "_SS_e_beforemll");
     //add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
@@ -89,6 +89,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
     //add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
     //add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
+    add_histograms(&hists, &hists2D, "_OS_e_endofselection");
+    add_histograms(&hists, &hists2D, "_SS_e_endofselection");
+    add_histograms(&hists, &hists2D, "_OS_mu_endofselection");
+    add_histograms(&hists, &hists2D, "_SS_mu_endofselection");
     //add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
     //add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
     //add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
@@ -104,6 +108,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         h->Sumw2();
     }
    
+    HNLtagger hnltagger_e(filename, "electron", partition, partitionjobnumber);
+    HNLtagger hnltagger_mu(filename, "muon", partition, partitionjobnumber);
+
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe = 0, SSe2 = 0, SSe3 = 0;
     int OSe = 0, OSe2 = 0, OSe3 = 0;
@@ -143,8 +150,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Calculate Event weight
         event_weight = _weight;
 
-        fix_validity_of_lIVF_match();
-	    
         //Get ID
         get_electronID(&fullElectronID[0]);
         get_loose_electronID(&looseElectronID[0]);
@@ -210,13 +215,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
         
         find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
-        if(_1e1disple) match_gen_and_reco(i_subleading_displ_e);                //sets booleans true if leading and subleading match l1 and l2
-        if(_1mu1displmu) match_gen_and_reco(i_subleading_displ_mu);
+        if(_1e)          leadingIsl1 = leptonIsGenLepton(i_leading_e, i_gen_l1);
+        if(_1mu)         leadingIsl1 = leptonIsGenLepton(i_leading_mu, i_gen_l1);
+        if(_1e1disple)   subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_e, i_gen_l2);                
+        if(_1mu1displmu) subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_mu, i_gen_l2);
         
         // Fill histograms
         
         //fill_sigreg_fraction(&hists);
-        //fill_HNL_MC_check(&hists, &hists2D);
+        fill_HNL_MC_check(&hists, &hists2D);
         //fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
         //fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
@@ -232,16 +239,32 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
 
         if(_1e1disple){
-        //    fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_lepton_eff(&hists, signs_and_flavor, i_leading_e, i_gen_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
         }
+        if(_1e1displevtx){
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        }
+        if(_1e1displedispl){
+            fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
+        }
         if(_1mu1displmu){
-        //    fill_corrl2_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_gen_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
+        }
+        if(_1mu1displmuvtx){
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        }
+        if(_1mu1displmudispl){
+            fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
+            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
 
         //if(_1e1displevtx){
@@ -272,18 +295,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    if(i_gen_subleading_displ_e != -1 and _lIVF_match[i_subleading_displ_e] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_e, _lIVF_match[i_subleading_displ_e]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-
-            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmudphi){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_mu, i_subleading_displ_mu);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavori + "_beforereliso", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforereliso", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    if(i_gen_subleading_displ_mu != -1 and _lIVF_match[i_subleading_displ_mu] != -1 and get_IVF_SVgenreco(i_gen_subleading_displ_mu, _lIVF_match[i_subleading_displ_mu]) > 0.2) fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_invIVFSVgenreco", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-
-            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
         if(_1e1displeReliso){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_before1jet", i_leading_e, i_subleading_displ_e);
@@ -314,13 +331,19 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
         }
 
+        if(_1e1displedphi_novtx){
+            fill_IVF_eff(&hists, signs_and_flavor + "_endofselection", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        }
+        if(_1mu1displmudphi_novtx){
+            fill_IVF_eff(&hists, signs_and_flavor + "_endofselection", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        }
     }
 /*
  * Small summary to write to terminal in order to quickly check state of results
  */
-    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------" << endl;
     cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
-    cout << "---------------------------After dphi----------------------------------" << endl;
+    cout << "-------------------------2 leptons, vtx, displ-------------------------------" << endl;
     cout << "SS ee:       " << SSe <<  "        " << SSe_weight <<  "       " << 1.0*SSe_weight*total_weight << endl;
     cout << "SS mumu:     " << SSmu << "        " << SSmu_weight << "       " << 1.0*SSmu_weight*total_weight << endl;
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
@@ -336,7 +359,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "OS ee:       " << OSe3 <<  "        " << OSe3_weight <<  "       " << 1.0*OSe3_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu3 << "        " << OSmu3_weight << "       " << 1.0*OSmu3_weight*total_weight << endl;
     cout << "count:       " << count << endl;
-    cout << "Times _lIVF_match was larger than _IVF_nvertex: " << count_IVFmatch_larger_than_IVF_nvertex << endl;
 
 
 /*
@@ -347,23 +369,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    TString outputfilename = "/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/";
-    
-    if(partition != 1) {
-        outputfilename += "subfiles/";
-        if(filename.Index("HeavyNeutrino") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced + "/";
-        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
-    }
-    
-    gSystem->Exec("mkdir -p " + outputfilename);
+    if(sampleflavor != "mu") hnltagger_e.write_HNLtagger_tree();
+    else hnltagger_e.delete_HNLtagger_tree();
+    if(sampleflavor != "e") hnltagger_mu.write_HNLtagger_tree();
+    else hnltagger_mu.delete_HNLtagger_tree();
 
-    if(filename.Index("HeavyNeutrino") != -1) outputfilename += "hists_full_analyzer_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_")) + "_" + promptordisplaced;
-    else outputfilename += "hists_full_analyzer_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15);
-    
-    if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
-    else outputfilename += ".root";
-
-    
+    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 

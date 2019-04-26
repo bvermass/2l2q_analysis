@@ -31,11 +31,12 @@ std::map<TString, TGraphAsymmErrors*>::iterator it3_graph;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/";
+    if(argc%2 != 1) std::cout << "did you forget a title in the sampleList file?" << std::endl;
 
-    string str(argv[1]); // used to only plot electron plots for e signal and mu plots for mu signal
-    cout << str  << " " << str.find("_mu_") << " " << str.find("_e_") << endl;
+    TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/" + (TString)argv[1] + "/";
 
+    string flavor(argv[2]); // used to only plot electron plots for e signal and mu plots for mu signal
+    
     // define canvas and legend(s)
     TCanvas *c = new TCanvas("c","",700,700);
     gStyle->SetPalette(55);
@@ -48,7 +49,7 @@ int main(int argc, char * argv[])
 
     // put all files in a map that can be looped over
     std::map<TString, TFile*> files;
-    for(int i = 1; i < (argc + 1)/2; i++){
+    for(int i = 3; i < (argc + 3)/2; i++){
         TString name = (TString)argv[i];
         TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14);
         files[fullname] = TFile::Open(argv[i]);
@@ -58,8 +59,8 @@ int main(int argc, char * argv[])
     // loop over histograms
     std::map<TString, TH1*> hists;
     std::map<TString, TGraphAsymmErrors*> graphs;
-    TString nameforkey = (TString)argv[1];
-    TString fullnameforkey = "1_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
+    TString nameforkey = (TString)argv[3];
+    TString fullnameforkey = "3_" + nameforkey(nameforkey.Index("full_analyzer/") + 14, nameforkey.Index(".root") - nameforkey.Index("full_analyzer") - 14);
     TIter next(files[fullnameforkey]->GetListOfKeys());
     TKey * key;
 
@@ -75,8 +76,8 @@ int main(int argc, char * argv[])
             //cout << h_ref->GetName() << endl;
             TString histname = h_ref->GetName();
 
-            if(str.find("_mu_") != std::string::npos && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of wrong flavor for signal, as these are empty anyway 
-            if(str.find("_e_") != std::string::npos && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
+            if(flavor == "mu" && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of wrong flavor for signal, as these are empty anyway 
+            if(flavor == "e"  && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
 
             TString pathname_lin = make_pathname(histname, pathname, "lin");
             TString pathname_log = make_pathname(histname, pathname, "log");
@@ -86,7 +87,7 @@ int main(int argc, char * argv[])
             // get background and signal histograms
             hists.clear();
             if(histname.Index("eff_num") != -1) graphs.clear();
-            for(int i = 1; i < (argc +1)/2; i++){
+            for(int i = 3; i < (argc + 3)/2; i++){
                 TString name = (TString)argv[i];
                 TString fullname = to_string(i) + "_" + name(name.Index("full_analyzer/") + 14, name.Index(".root") - name.Index("full_analyzer") - 14) ;
                 hists[fullname] = (TH1F*) files[fullname]->Get(histname);
@@ -96,7 +97,7 @@ int main(int argc, char * argv[])
             mapmarkerstyle(hists);
 
             THStack *stack = new THStack("stack", histname);
-            int i = (argc + 1) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
+            int i = (argc + 3) / 2;//to iterate over legends    CHANGE THIS TO LET A FUNCTION DECIDE ON THE LEGEND NAME BASED ON THE FILENAME
             double scale_factor = 100;
             lgendrup.Clear();
 
@@ -122,11 +123,12 @@ int main(int argc, char * argv[])
             if(histname.Index("eff_num") != -1){
                 TMultiGraph* multigraph = new TMultiGraph();
                 for( it3_graph = graphs.begin(); it3_graph != graphs.end(); it3_graph++){
+                    it3_graph->second->SetLineWidth(2);
                     multigraph->Add(it3_graph->second);
                 }
                 yaxistitle = "Eff.";
-                draw_multigraph(pathname_lin + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "A pmc plc");
-                draw_multigraph(pathname_log + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "A pmc plc");
+                draw_multigraph(pathname_lin + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "AP pmc plc");
+                draw_multigraph(pathname_log + histname(0,histname.Index("eff_num")+3) + ".pdf", c, multigraph, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, -1, -1, "AP pmc plc");
             }
         }
     }

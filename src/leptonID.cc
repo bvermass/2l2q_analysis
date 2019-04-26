@@ -252,7 +252,7 @@ int full_analyzer::find_gen_lep(int i_lep)
 {
     TLorentzVector reco_vec;
     TLorentzVector gen_vec;
-    double dR = 0.2;
+    double dR = 0.3;
     int i_gen = -1;
     if(i_lep != -1) {
         reco_vec.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
@@ -281,44 +281,32 @@ void full_analyzer::find_gen_l1_and_l2()
     if(fromN != 1) i_gen_l2 = -1;
 }
 
-void full_analyzer::match_gen_and_reco(int i_subleading)
+bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
 {
-    //TLorentzVector gen_l1_vec;
-    //TLorentzVector leading_vec;
-    //gen_l1_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l1], _gen_lEta[i_gen_l1], _gen_lPhi[i_gen_l1], _gen_lE[i_gen_l1]);
-    //leading_vec.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    //
-    //leading_is_l1 = gen_l1_vec.DeltaR(leading_vec) < 0.2;
-    
-    TLorentzVector gen_l2_vec;
-    TLorentzVector subleading_vec;
-    if(i_gen_l2 != -1) gen_l2_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
-    else subleading_is_l2 = false;
-    subleading_vec.SetPtEtaPhiE(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
-
-    subleading_is_l2 = (gen_l2_vec.DeltaR(subleading_vec) < 0.1);
-     
-    //if(!subleading_is_l2) cout << "deta: " << fabs(_gen_lEta[i_gen_l2] - _lEta[i_subleading]) << " dphi: " << min(fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading]), 6.28 - fabs(_gen_lPhi[i_gen_l2] - _lPhi[i_subleading])) << " dpt: " << fabs(_gen_lPt[i_gen_l2] - _lPt[i_subleading]) << endl;
+    double dR = get_dR(_lEta[i_lep], _lPhi[i_lep], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
+    double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
+    if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
+    else return false;
 }
 
-double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_vtx){
-    if(i_gen_l == -1 or i_vtx == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_vtx])); 
+double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){
+    if(i_gen_l == -1 or i_lepton == -1) return -1; 
+    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])); 
 }
 
-double full_analyzer::get_IVF_SVgenreco_2D(int i_gen_l, int i_vtx){
-    if(i_gen_l == -1 or i_vtx == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_vtx]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_vtx])); 
+double full_analyzer::get_IVF_SVgenreco_2D(int i_gen_l, int i_lepton){
+    if(i_gen_l == -1 or i_lepton == -1) return -1; 
+    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])); 
 }
 
-double full_analyzer::get_IVF_PVSVdist(int i_vtx){
-    if(i_vtx == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_vtx])*(_PV_x - _IVF_x[i_vtx]) + (_PV_y - _IVF_y[i_vtx])*(_PV_y - _IVF_y[i_vtx]) + (_PV_z - _IVF_z[i_vtx])*(_PV_z - _IVF_z[i_vtx])); 
+double full_analyzer::get_IVF_PVSVdist(int i_lepton){
+    if(i_lepton == -1) return -1; 
+    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton]) + (_PV_z - _IVF_z[i_lepton])*(_PV_z - _IVF_z[i_lepton])); 
 }
 
-double full_analyzer::get_IVF_PVSVdist_2D(int i_vtx){
-    if(i_vtx == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_vtx])*(_PV_x - _IVF_x[i_vtx]) + (_PV_y - _IVF_y[i_vtx])*(_PV_y - _IVF_y[i_vtx])); 
+double full_analyzer::get_IVF_PVSVdist_2D(int i_lepton){
+    if(i_lepton == -1) return -1; 
+    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton])); 
 }
 
 double full_analyzer::get_KVF_SVgenreco(int i_gen_l, int i_lepton){

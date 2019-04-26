@@ -9,7 +9,7 @@ headdir=$(pwd)
 #execdir=${headdir}"/test/log/"
 
 # Compilation of Code
-if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/jet_histograms.cc" ${headdir}"/src/helper_histo_functions.cc" ${headdir}"/src/vtxID.cc" ${headdir}"/src/HNL_MC_check.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
+if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/HNLtagger.cc" ${headdir}"/src/jet_histograms.cc" ${headdir}"/src/helper_histo_functions.cc" ${headdir}"/src/HNL_MC_check.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
     echo -e "\n//////////////////////////"
     echo -e "//COMPILATION SUCCESSFUL//"
     echo -e "//////////////////////////\n"
@@ -67,12 +67,12 @@ if g++ -std=c++0x -o a_jobs.out ${headdir}"/src/jet_histograms.cc" ${headdir}"/s
                 echo "max_entries   :   "$max_entries
                 echo "partition     :   "$partition
 
-                qsub $job -l walltime=00:30:00 > scriptlog.txt 2>> scriptlog.txt
+                qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do
                     echo "Invalid credential caught, resubmitting"
                     sleep 2 #sleep 2 seconds before attempting resubmission
-                    qsub $job -l walltime=00:30:00 > scriptlog.txt 2>> scriptlog.txt
+                    qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
                 done
 
                 cat scriptlog.txt

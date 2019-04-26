@@ -15,7 +15,7 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     (*hists)[prefix+"_jetl2_pt"]                    = new TH1F(prefix+"_jetl2_pt", ";closestJet(l_{2}) #it{p}_{T} [GeV];Events", 30, 0, 140);
     (*hists)[prefix+"_jetl2_eta"]                   = new TH1F(prefix+"_jetl2_eta", ";closestJet(l_{2}) #eta;Events", 20, -3, 3);
     (*hists)[prefix+"_jetl2_phi"]                   = new TH1F(prefix+"_jetl2_phi", ";closestJet(l_{2}) #phi;Events", 20, -3.14, 3.14);
-    (*hists)[prefix+"_jetl2_l2dR"]                  = new TH1F(prefix+"_jetl2_l2dR", ";closestJet(l_{2}) #Delta R;Events", 30, 0, 0.5);
+    (*hists)[prefix+"_jetl2_l2dR"]                  = new TH1F(prefix+"_jetl2_l2dR", ";closestJet(l_{2}) #Delta R;Events", 30, 0, 1);
     //(*hists)[prefix+"_jetl2_l2dphi"]                = new TH1F(prefix+"_jetl2_l2dphi", ";closestJet(l_{2}) #Delta #phi;Events", 30, 0, 3.14);
     (*hists)[prefix+"_jetl2_IsTightLepVeto"]        = new TH1F(prefix+"_jetl2_IsTightLepVeto", ";closestJet(l_{2}) TightLepVeto ID;Events", 2, 0, 2);
     (*hists)[prefix+"_jetl2_CsvV2"]                 = new TH1F(prefix+"_jetl2_CsvV2", ";closestJet(l_{2}) CsvV2;Events", 30, -0.1, 1.1);
@@ -55,4 +55,41 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
     }
+}
+
+// fill function is part of full_analyzer class to access the tree variables
+void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
+{
+    if(i_jet == -1) return;
+    hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
+    hnltagger._JetPt        = _jetPt[i_jet];
+    hnltagger._JetEta       = _jetEta[i_jet];
+    hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
+    for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
+        hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jet][i];
+        hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jet][i];
+        hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jet][i];
+        hnltagger._JetConstituentMass[i]               = _JetConstituentMass[i_jet][i];
+        hnltagger._JetConstituentPdgId[i]              = _JetConstituentPdgId[i_jet][i];
+        hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
+        hnltagger._JetConstituentdxySig[i]             = _JetConstituentdxySig[i_jet][i];
+        hnltagger._JetConstituentdzSig[i]              = _JetConstituentdzSig[i_jet][i];
+        hnltagger._JetConstituentsNumberOfHits[i]      = _JetConstituentsNumberOfHits[i_jet][i];
+        hnltagger._JetConstituentsNumberOfPixelHits[i] = _JetConstituentsNumberOfPixelHits[i_jet][i];
+        hnltagger._JetConstituentsHasTrack[i]          = _JetConstituentsHasTrack[i_jet][i];
+    }
+    for(unsigned i = _nJetConstituents[i_jet]; i < 50; i++){
+        hnltagger._JetConstituentPt[i]                 = 0;
+        hnltagger._JetConstituentEta[i]                = 0;
+        hnltagger._JetConstituentPhi[i]                = 0;
+        hnltagger._JetConstituentMass[i]               = 0;
+        hnltagger._JetConstituentPdgId[i]              = 0;
+        hnltagger._JetConstituentCharge[i]             = 0;
+        hnltagger._JetConstituentdxySig[i]             = 0;
+        hnltagger._JetConstituentdzSig[i]              = 0;
+        hnltagger._JetConstituentsNumberOfHits[i]      = 0;
+        hnltagger._JetConstituentsNumberOfPixelHits[i] = 0;
+        hnltagger._JetConstituentsHasTrack[i]          = 0;
+    }
+    hnltagger.HNLtagger_tree->Fill();
 }
