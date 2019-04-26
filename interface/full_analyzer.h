@@ -802,6 +802,7 @@ public :
    // extra booleans: ee
    bool _1e1displedR;
    bool _1pogmediume;
+   bool _1e1displedphi_novtx;
 
    // old booleans: ee
    bool _1e0jet;
@@ -827,6 +828,7 @@ public :
    // extra booleans: mumu
    bool _1mu1displmudR;
    bool _1pogmediummu;
+   bool _1mu1displmudphi_novtx;
    
    // old booleans: mumu
    bool _1mu0jet;

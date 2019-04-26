@@ -77,18 +77,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //add_histograms(&hists, &hists2D, "_SS_e_before0jet");
     //add_histograms(&hists, &hists2D, "_OS_mu_before0jet");
     //add_histograms(&hists, &hists2D, "_SS_mu_before0jet");
-    add_histograms(&hists, &hists2D, "_OS_e_beforemll");
-    add_histograms(&hists, &hists2D, "_SS_e_beforemll");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforemll");
-    add_histograms(&hists, &hists2D, "_OS_e_beforedphi");
-    add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
-    add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforemll");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforemll");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforemll");
+    //add_histograms(&hists, &hists2D, "_OS_e_beforedphi");
+    //add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
+    //add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
+    //add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
+    add_histograms(&hists, &hists2D, "_OS_e_endofselection");
+    add_histograms(&hists, &hists2D, "_SS_e_endofselection");
+    add_histograms(&hists, &hists2D, "_OS_mu_endofselection");
+    add_histograms(&hists, &hists2D, "_SS_mu_endofselection");
+    //add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
+    //add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
@@ -223,7 +227,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Fill histograms
         
         //fill_sigreg_fraction(&hists);
-        //fill_HNL_MC_check(&hists, &hists2D);
+        fill_HNL_MC_check(&hists, &hists2D);
         //fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
         //fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
@@ -244,6 +248,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
         }
+        if(_1e1displevtx){
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        }
         if(_1e1displedispl){
             fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe_beforevtx++; SSe_weight_beforevtx += event_weight;}
@@ -254,6 +261,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
+        }
+        if(_1mu1displmuvtx){
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1mu1displmudispl){
             fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
@@ -301,6 +311,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
+        }
+        if(_1e1displedphi_novtx){
+            fill_IVF_eff(&hists, signs_and_flavor + "_endofselection", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        }
+        if(_1mu1displmudphi_novtx){
+            fill_IVF_eff(&hists, signs_and_flavor + "_endofselection", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
     }
 /*

@@ -15,6 +15,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_M_l1_N"]                          = new TH1F("gen_M_l1_N", ";M_{Nl1} [GeV]; Events", 40, 0, 150);
     (*hists)["gen_l2_tracks_dR"]                    = new TH1F("gen_l2_tracks_dR", ";#Delta R (l_{2}, tracks); Events", 40, 0, 1.5);
     (*hists)["gen_PV_Nvertex_dxyz"]                 = new TH1F("gen_PV_Nvertex_dxyz", ";#Delta_{3D} (PV^{reco} - Nvtx^{gen}) [cm]; Events", 40, 0, 0.05);
+    (*hists)["gen_NPackedDtrs_charged_pt"]          = new TH1F("gen_NPackedDtrs_charged_pt", ";N Ch. Daughters^{gen} #it{p}_{T} [GeV] ; Events", 50, 0, 10);
 
     //log scale
     double xmin = 0.8;
@@ -27,6 +28,10 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
 void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D)
 {
+    for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+        if(_gen_NPackedDtrsCharge[i] != 0) (*hists)["gen_NPackedDtrs_charged_pt"]->Fill(_gen_NPackedDtrsPt[i], event_weight);
+    }
+
     if(i_gen_l1 != -1 && i_gen_l2 != -1){
         (*hists2D)["MC_check_gen_l1_l2_charge"]->Fill(_gen_lCharge[i_gen_l1], _gen_lCharge[i_gen_l2], event_weight);
         (*hists)["gen_l1_pt"]->Fill(_gen_lPt[i_gen_l1], event_weight);

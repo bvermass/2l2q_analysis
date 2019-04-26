@@ -47,10 +47,11 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
         TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
         TString invIVFSVgenreco = (histname.Index("_invIVFSVgenreco") == -1)? "" : "invIVFSVgenreco/";
+        TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
 
         if(linorlog == "lin" || linorlog == "log") linorlog += "/";
         
-        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco;
+        return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
 }
 
 
