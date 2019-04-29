@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
             for( it3 = hists.begin(); it3 != hists.end(); it3++){
                 TH1* h = it3->second;
                 //cout << "histname: " << it3->first << " legend: " << argv[i] << endl;
-                if(histname.Index("eff") == -1) h->Scale(scale_factor / h->Integral());
+                if(histname.Index("eff") == -1 and histname.Index("_cutflow") == -1) h->Scale(scale_factor / h->Integral());
 	            stack->Add(h);
                 lgendrup.AddEntry(h, argv[i]);
                 i++;

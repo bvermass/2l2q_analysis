@@ -17,11 +17,11 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_jets_categories"]                 = new TH1F(prefix+"_jets_categories", ";;Events", 4, 0, 4);
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
-    (*hists)[prefix+"_dxy_categories"]                  = new TH1F(prefix+"_dxy_categories", ";;Events", 3, 0, 3);
+    (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
     (*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
-    (*hists)[prefix+"_IVF_categories"]                  = new TH1F(prefix+"_IVF_categories", ";;Events", 3, 0, 3);
+    (*hists)[prefix+"_IVF_cutflow"]                     = new TH1F(prefix+"_IVF_cutflow", ";;Events", 3, 0, 3);
 
     (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
     (*hists)[prefix+"_nMu"]                             = new TH1F(prefix+"_nMu", ";N_{muon};Events", 10, 0, 10);
@@ -371,9 +371,9 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
      * dxy > 0.01cm and 0.05cm
      */
     if(_1e1displevtx and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
-        (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
-        if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
-        if(fabs(_dxy[i_subleading_displ_e]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
+        (*hists)[prefix+"_dxy_cutflow"]->Fill(0., event_weight);
+        if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
+        if(fabs(_dxy[i_subleading_displ_e]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
     }
     
     /*
@@ -463,9 +463,9 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
      * dxy > 0.01cm and 0.05cm
      */
     if(_1mu1displmuvtx and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
-        (*hists)[prefix+"_dxy_categories"]->Fill(0., event_weight);
-        if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_categories"]->Fill(1., event_weight);
-        if(fabs(_dxy[i_subleading_displ_mu]) > 0.05) (*hists)[prefix+"_dxy_categories"]->Fill(2., event_weight);
+        (*hists)[prefix+"_dxy_cutflow"]->Fill(0., event_weight);
+        if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
+        if(fabs(_dxy[i_subleading_displ_mu]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
     }
     
     /*
@@ -599,7 +599,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     double IVF_PVSVdist         = get_IVF_PVSVdist(i_subleading);
     double IVF_PVSVdist_2D      = get_IVF_PVSVdist_2D(i_subleading);
 
-    (*hists)[prefix+"_IVF_categories"]->Fill(0., event_weight);
+    (*hists)[prefix+"_IVF_cutflow"]->Fill(0., event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxy_eff_den"]->Fill(IVF_PVSVdist_2D);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_den"]->Fill(IVF_PVSVdist_2D);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_den"]->Fill(IVF_PVSVdist_2D);
@@ -619,7 +619,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
     
     if(_lIVF_match[i_subleading]){
-        (*hists)[prefix+"_IVF_categories"]->Fill(1., event_weight);
+        (*hists)[prefix+"_IVF_cutflow"]->Fill(1., event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist_2D);
         (*hists)[prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist);
     }else {
@@ -627,7 +627,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     }
     
     if(_lIVF_match[i_subleading] && get_IVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2 && IVF_PVSVdist > 0.05){
-        (*hists)[prefix+"_IVF_categories"]->Fill(2., event_weight);
+        (*hists)[prefix+"_IVF_cutflow"]->Fill(2., event_weight);
         (*hists)[prefix+"_IVF_SVgen-reco_aftercut_zoom"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading), event_weight);
         (*hists)[prefix+"_IVF_PV-SVdxy_eff_num"]->Fill(IVF_PVSVdist_2D);
         (*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_num"]->Fill(IVF_PVSVdist_2D);
@@ -733,12 +733,12 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     int nx_dxy = 3;
     const char *dxy_labels[nx_dxy] = {"No dxy cut", "dxy(l2) > 0.01cm", "dxy(l2) > 0.05cm"};
     for(int i = 0; i < nx_dxy; i++){
-        (*hists)[prefix+"_dxy_categories"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
+        (*hists)[prefix+"_dxy_cutflow"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
     }
     int nx_IVF = 3;
     const char *IVF_labels[nx_IVF] = {"Preselection", "Vertex", "|SV-SVgen| < 0.2cm"};
     for(int i = 0; i < nx_IVF; i++){
-        (*hists)[prefix+"_IVF_categories"]->GetXaxis()->SetBinLabel(i+1, IVF_labels[i]);
+        (*hists)[prefix+"_IVF_cutflow"]->GetXaxis()->SetBinLabel(i+1, IVF_labels[i]);
     }
 }
 
