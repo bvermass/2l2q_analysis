@@ -93,7 +93,7 @@ void mapmarkerstyle(std::map<TString, TH1*> hists)
         TH1* h = it->second;
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
-        h->SetLineWidth(2);
+        h->SetLineWidth(2.5);
     }
 }
 
