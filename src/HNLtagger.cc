@@ -5,9 +5,9 @@
 //Include header for the class
 #include "../interface/HNLtagger.h"
 
-HNLtagger::HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber)
+HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
-    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", "HNLtagger_" + flavor, partition, partitionjobnumber);
+    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", type_and_flavor, partition, partitionjobnumber);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");

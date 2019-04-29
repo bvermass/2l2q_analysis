@@ -54,3 +54,39 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
         }
     }
 }
+
+void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
+{
+    if(i_jet == -1) return;
+    hnltagger_gen._JetIsFromHNL = get_JetIsFromHNL(i_jet);
+    hnltagger_gen._JetPt        = _jetPt[i_jet];
+    hnltagger_gen._JetEta       = _jetEta[i_jet];
+    hnltagger_gen._nJetConstituents                    = _gen_nNPackedDtrs;
+    for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+        hnltagger_gen._JetConstituentPt[i]                 = _gen_NPackedDtrsPt[i];
+        hnltagger_gen._JetConstituentEta[i]                = _gen_NPackedDtrsEta[i];
+        hnltagger_gen._JetConstituentPhi[i]                = _gen_NPackedDtrsPhi[i];
+        hnltagger_gen._JetConstituentMass[i]               = 0;
+        hnltagger_gen._JetConstituentPdgId[i]              = _gen_NPackedDtrsPdgId[i];
+        hnltagger_gen._JetConstituentCharge[i]             = _gen_NPackedDtrsCharge[i];
+        hnltagger_gen._JetConstituentdxySig[i]             = _gen_NPackedDtrs_matchdxy[i];
+        hnltagger_gen._JetConstituentdzSig[i]              = _gen_NPackedDtrs_matchdz[i];
+        hnltagger_gen._JetConstituentsNumberOfHits[i]      = 0;
+        hnltagger_gen._JetConstituentsNumberOfPixelHits[i] = 0;
+        hnltagger_gen._JetConstituentsHasTrack[i]          = 0;
+    }
+    for(unsigned i = _gen_nNPackedDtrs; i < 50; i++){
+        hnltagger_gen._JetConstituentPt[i]                 = 0;
+        hnltagger_gen._JetConstituentEta[i]                = 0;
+        hnltagger_gen._JetConstituentPhi[i]                = 0;
+        hnltagger_gen._JetConstituentMass[i]               = 0;
+        hnltagger_gen._JetConstituentPdgId[i]              = 0;
+        hnltagger_gen._JetConstituentCharge[i]             = 0;
+        hnltagger_gen._JetConstituentdxySig[i]             = 0;
+        hnltagger_gen._JetConstituentdzSig[i]              = 0;
+        hnltagger_gen._JetConstituentsNumberOfHits[i]      = 0;
+        hnltagger_gen._JetConstituentsNumberOfPixelHits[i] = 0;
+        hnltagger_gen._JetConstituentsHasTrack[i]          = 0;
+    }
+    hnltagger_gen.HNLtagger_tree->Fill();
+}

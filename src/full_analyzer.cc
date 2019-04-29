@@ -108,8 +108,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         h->Sumw2();
     }
    
-    HNLtagger hnltagger_e(filename, "electron", partition, partitionjobnumber);
-    HNLtagger hnltagger_mu(filename, "muon", partition, partitionjobnumber);
+    HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
+    HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
+    if(sampleflavor != "bkg"){
+        HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
+        HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
+    }
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe = 0, SSe2 = 0, SSe3 = 0;
@@ -249,6 +253,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(_1e1displedispl){
             fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
@@ -263,6 +268,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(_1mu1displmudispl){
             fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
+            if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
@@ -369,10 +375,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    if(sampleflavor != "mu") hnltagger_e.write_HNLtagger_tree();
-    else hnltagger_e.delete_HNLtagger_tree();
-    if(sampleflavor != "e") hnltagger_mu.write_HNLtagger_tree();
-    else hnltagger_mu.delete_HNLtagger_tree();
+    if(sampleflavor == "bkg"){
+        hnltagger_e.write_HNLtagger_tree();
+        hnltagger_mu.write_HNLtagger_tree();
+        hnltagger_gen_e.delete_HNLtagger_tree();
+        hnltagger_gen_mu.delete_HNLtagger_tree();
+    }else if(sampleflavor == "e"){
+        hnltagger_e.write_HNLtagger_tree();
+        hnltagger_mu.delete_HNLtagger_tree();
+        hnltagger_gen_e.write_HNLtagger_tree();
+        hnltagger_gen_mu.delete_HNLtagger_tree();
+    }else if(sampleflavor == "mu"){
+        hnltagger_e.delete_HNLtagger_tree();
+        hnltagger_mu.write_HNLtagger_tree();
+        hnltagger_gen_e.delete_HNLtagger_tree();
+        hnltagger_gen_mu.write_HNLtagger_tree();
+    }
 
     TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
     cout << "output to: " << outputfilename << endl;
