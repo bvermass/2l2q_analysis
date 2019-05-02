@@ -110,10 +110,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
    
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
-    if(sampleflavor != "bkg"){
-        HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
-        HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
-    }
+    HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
+    HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe = 0, SSe2 = 0, SSe3 = 0;
