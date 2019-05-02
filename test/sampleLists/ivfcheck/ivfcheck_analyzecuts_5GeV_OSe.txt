@@ -1,0 +1,7 @@
+HNL_5GeV_e_direct_basicChange_cMD e
+/user/bvermass/public/2l2q_analysis/histograms/direct_noChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root      0.No-change
+/user/bvermass/public/2l2q_analysis/histograms/direct_basicChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root   1.Basic-change
+/user/bvermass/public/2l2q_analysis/histograms/direct_basicChange_cMD/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root 2.Cl.Max.Dist.
+#/user/bvermass/public/2l2q_analysis/histograms/nodirect_basicChange_clusterMaxDistance/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root   3.cl.Max.Dist.
+#/user/bvermass/public/2l2q_analysis/histograms/nodirect_basicChange_cMDAndDistcut/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root        4.Distcut
+#/user/bvermass/public/2l2q_analysis/histograms/nodirect_basicChange_cMDAndDistcutAndFrac/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root 5.MaxFraction

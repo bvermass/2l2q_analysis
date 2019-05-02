@@ -1,0 +1,6 @@
+/user/bvermass/public/2l2q_analysis/histograms/direct_noChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root      3GeV,c$\tau=45.40$mm 
+/user/bvermass/public/2l2q_analysis/histograms/direct_noChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO.root      5GeV,c$\tau=18.37$mm
+/user/bvermass/public/2l2q_analysis/histograms/direct_noChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO.root      8GeV,c$\tau=1.56$mm
+/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root                  W+Jets
+/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                             DY+Jets
+/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_Background_TTJets.root                                                             $t\bar{t}$

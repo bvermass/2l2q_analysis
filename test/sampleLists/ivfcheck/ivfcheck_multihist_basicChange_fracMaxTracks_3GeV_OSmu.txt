@@ -1,0 +1,4 @@
+HNL_3GeV_mu_direct_basicChange_fracMaxTracks mu
+/user/bvermass/public/2l2q_analysis/histograms/direct_noChange/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root      0.No-change
+/user/bvermass/public/2l2q_analysis/histograms/direct_basicChange_frac/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root   1.Basic-change
+/user/bvermass/public/2l2q_analysis/histograms/direct_basicChange_fracMaxTracks/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root   2.MaxTracks

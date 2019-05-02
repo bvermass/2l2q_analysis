@@ -1,0 +1,8 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root       18610       -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root        18610       -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root            6020.85     -1      29
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root              87.315      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root     182.175     -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root  182.175     -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_nodirect_basicChange_cMDAndDistcutAndFrac.root                 61334.9     -1      3
+
