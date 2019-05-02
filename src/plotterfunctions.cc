@@ -103,7 +103,7 @@ void mapmarkerstyle(std::map<TString, TGraphAsymmErrors*> graphs)
         TGraphAsymmErrors* h = it_graphs->second;
         //h->SetMarkerStyle(20);
         h->SetMarkerSize(0);
-        h->SetLineWidth(2);
+        h->SetLineWidth(2.5);
     }
 }
 
