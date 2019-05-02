@@ -32,20 +32,17 @@ while [[ ! $partitionjobnumber -eq $partition ]]; do
     let "partitionjobnumber++"
 done
 
-#multihist plots:
-job=${headdir}"/test/LocalJob_multihistplots258e.sh"
-echo "#!/bin/bash" > $job 
-echo "cd "${headdir} >> $job
-echo "sh "${headdir}"/test/run_plots.sh "${headdir}"/test/sampleLists/plots_HNL258e.txt a_multihist_e.out 3" >> $job
-cat $job
-submitjob $job
-
-job=${headdir}"/test/LocalJob_multihistplots258mu.sh"
-echo "#!/bin/bash" > $job 
-echo "cd "${headdir} >> $job
-echo "sh "${headdir}"/test/run_plots.sh "${headdir}"/test/sampleLists/plots_HNL258mu.txt a_multihist_mu.out 3" >> $job
-cat $job
-submitjob $job
+#Multihist plots
+multihistcounter=0
+for D in ${headdir}/test/sampleLists/multihists/* ; do
+    job=${headdir}"/test/LocalJob_multihistplots"${multihistcounter}".sh"
+    echo "#!/bin/bash" > $job 
+    echo "cd "${headdir} >> $job
+    echo "sh "${headdir}"/test/run_plots.sh "$D" a_multihist_"${multihistcounter}".out 3" >> $job
+    cat $job
+    submitjob $job
+    let "multihistcounter++"
+done
 
 
 #single plots:
