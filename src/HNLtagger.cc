@@ -17,14 +17,15 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetConstituentPt",                 &_JetConstituentPt,                 "_JetConstituentPt[50]/D");
     HNLtagger_tree->Branch("_JetConstituentEta",                &_JetConstituentEta,                "_JetConstituentEta[50]/D");
     HNLtagger_tree->Branch("_JetConstituentPhi",                &_JetConstituentPhi,                "_JetConstituentPhi[50]/D");
-    HNLtagger_tree->Branch("_JetConstituentMass",               &_JetConstituentMass,               "_JetConstituentMass[50]/D");
     HNLtagger_tree->Branch("_JetConstituentPdgId",              &_JetConstituentPdgId,              "_JetConstituentPdgId[50]/I");
     HNLtagger_tree->Branch("_JetConstituentCharge",             &_JetConstituentCharge,             "_JetConstituentCharge[50]/I");
-    HNLtagger_tree->Branch("_JetConstituentdxySig",             &_JetConstituentdxySig,             "_JetConstituentdxySig[50]/D");
-    HNLtagger_tree->Branch("_JetConstituentdzSig",              &_JetConstituentdzSig,              "_JetConstituentdzSig[50]/D");
-    HNLtagger_tree->Branch("_JetConstituentsNumberOfHits",      &_JetConstituentsNumberOfHits,      "_JetConstituentsNumberOfHits[50]/I");
-    HNLtagger_tree->Branch("_JetConstituentsNumberOfPixelHits", &_JetConstituentsNumberOfPixelHits, "_JetConstituentsNumberOfPixelHits[50]/I");
-    HNLtagger_tree->Branch("_JetConstituentsHasTrack",          &_JetConstituentsHasTrack,          "_JetConstituentsHasTrack[50]/O");
+    HNLtagger_tree->Branch("_JetConstituentdxy",                &_JetConstituentdxy,                "_JetConstituentdxy[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentdxyErr",             &_JetConstituentdxyErr,             "_JetConstituentdxyErr[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentdz",                 &_JetConstituentdz,                 "_JetConstituentdz[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentdzErr",              &_JetConstituentdzErr,              "_JetConstituentdzErr[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentNumberOfHits",      &_JetConstituentNumberOfHits,      "_JetConstituentNumberOfHits[50]/I");
+    HNLtagger_tree->Branch("_JetConstituentNumberOfPixelHits", &_JetConstituentNumberOfPixelHits, "_JetConstituentNumberOfPixelHits[50]/I");
+    HNLtagger_tree->Branch("_JetConstituentHasTrack",          &_JetConstituentHasTrack,          "_JetConstituentHasTrack[50]/O");
 }
 
 void HNLtagger::write_HNLtagger_tree()

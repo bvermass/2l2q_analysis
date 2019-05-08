@@ -66,27 +66,29 @@ void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
         hnltagger_gen._JetConstituentPt[i]                 = _gen_NPackedDtrsPt[i];
         hnltagger_gen._JetConstituentEta[i]                = _gen_NPackedDtrsEta[i];
         hnltagger_gen._JetConstituentPhi[i]                = _gen_NPackedDtrsPhi[i];
-        hnltagger_gen._JetConstituentMass[i]               = 0;
         hnltagger_gen._JetConstituentPdgId[i]              = _gen_NPackedDtrsPdgId[i];
         hnltagger_gen._JetConstituentCharge[i]             = _gen_NPackedDtrsCharge[i];
-        hnltagger_gen._JetConstituentdxySig[i]             = _gen_NPackedDtrs_matchdxy[i];
-        hnltagger_gen._JetConstituentdzSig[i]              = _gen_NPackedDtrs_matchdz[i];
-        hnltagger_gen._JetConstituentsNumberOfHits[i]      = 0;
-        hnltagger_gen._JetConstituentsNumberOfPixelHits[i] = 0;
-        hnltagger_gen._JetConstituentsHasTrack[i]          = 0;
+        hnltagger_gen._JetConstituentdxy[i]                = _gen_NPackedDtrs_matchdxy[i];
+        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
+        hnltagger_gen._JetConstituentdz[i]                 = _gen_NPackedDtrs_matchdz[i];
+        hnltagger_gen._JetConstituentdzErr[i]              = 0;
+        hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
+        hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
+        hnltagger_gen._JetConstituentHasTrack[i]          = 0;
     }
     for(unsigned i = _gen_nNPackedDtrs; i < 50; i++){
         hnltagger_gen._JetConstituentPt[i]                 = 0;
         hnltagger_gen._JetConstituentEta[i]                = 0;
         hnltagger_gen._JetConstituentPhi[i]                = 0;
-        hnltagger_gen._JetConstituentMass[i]               = 0;
         hnltagger_gen._JetConstituentPdgId[i]              = 0;
         hnltagger_gen._JetConstituentCharge[i]             = 0;
-        hnltagger_gen._JetConstituentdxySig[i]             = 0;
-        hnltagger_gen._JetConstituentdzSig[i]              = 0;
-        hnltagger_gen._JetConstituentsNumberOfHits[i]      = 0;
-        hnltagger_gen._JetConstituentsNumberOfPixelHits[i] = 0;
-        hnltagger_gen._JetConstituentsHasTrack[i]          = 0;
+        hnltagger_gen._JetConstituentdxy[i]                = 0;
+        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
+        hnltagger_gen._JetConstituentdz[i]                 = 0;
+        hnltagger_gen._JetConstituentdzErr[i]              = 0;
+        hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
+        hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
+        hnltagger_gen._JetConstituentHasTrack[i]          = 0;
     }
     hnltagger_gen.HNLtagger_tree->Fill();
 }

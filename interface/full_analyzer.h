@@ -370,11 +370,13 @@ public :
    Double_t        _JetConstituentMass[20][50];
    Int_t           _JetConstituentPdgId[20][50];
    Int_t           _JetConstituentCharge[20][50];
-   Double_t        _JetConstituentdxySig[20][50];
-   Double_t        _JetConstituentdzSig[20][50];
-   Int_t           _JetConstituentsNumberOfHits[20][50];
-   Int_t           _JetConstituentsNumberOfPixelHits[20][50];
-   Bool_t          _JetConstituentsHasTrack[20][50];
+   Double_t        _JetConstituentdxy[20][50];
+   Double_t        _JetConstituentdxyErr[20][50];
+   Double_t        _JetConstituentdz[20][50];
+   Double_t        _JetConstituentdzErr[20][50];
+   Int_t           _JetConstituentNumberOfHits[20][50];
+   Int_t           _JetConstituentNumberOfPixelHits[20][50];
+   Bool_t          _JetConstituentHasTrack[20][50];
    Double_t        _met;
    Double_t        _metRaw;
    Double_t        _metJECDown;
@@ -615,27 +617,27 @@ public :
    TBranch        *b__closestJetDeepCsv_b;   //!
    TBranch        *b__closestJetDeepCsv_bb;   //!
    TBranch        *b__selectedTrackMult;   //!
-   TBranch        *b__lKVF_valid;
-   TBranch	      *b__lKVF_x;
-   TBranch	      *b__lKVF_y;
-   TBranch	      *b__lKVF_z;
-   TBranch	      *b__lKVF_cxx;
-   TBranch	      *b__lKVF_cyy;
-   TBranch	      *b__lKVF_czz;
-   TBranch	      *b__lKVF_cyx;
-   TBranch	      *b__lKVF_czy;
-   TBranch	      *b__lKVF_czx;
-   TBranch	      *b__lKVF_df;
-   TBranch	      *b__lKVF_chi2;
-   TBranch        *b__lKVF_ntracks;
-   TBranch        *b__lKVF_dRcut;
-   TBranch        *b__lKVF_trackPt;
-   TBranch        *b__lKVF_trackEta;
-   TBranch        *b__lKVF_trackPhi;
-   TBranch        *b__lKVF_trackE;
-   TBranch        *b__lKVF_trackdR;
-   TBranch        *b__lKVF_trackdxy;
-   TBranch        *b__lKVF_trackdz;
+   //TBranch        *b__lKVF_valid;
+   //TBranch	      *b__lKVF_x;
+   //TBranch	      *b__lKVF_y;
+   //TBranch	      *b__lKVF_z;
+   //TBranch	      *b__lKVF_cxx;
+   //TBranch	      *b__lKVF_cyy;
+   //TBranch	      *b__lKVF_czz;
+   //TBranch	      *b__lKVF_cyx;
+   //TBranch	      *b__lKVF_czy;
+   //TBranch	      *b__lKVF_czx;
+   //TBranch	      *b__lKVF_df;
+   //TBranch	      *b__lKVF_chi2;
+   //TBranch        *b__lKVF_ntracks;
+   //TBranch        *b__lKVF_dRcut;
+   //TBranch        *b__lKVF_trackPt;
+   //TBranch        *b__lKVF_trackEta;
+   //TBranch        *b__lKVF_trackPhi;
+   //TBranch        *b__lKVF_trackE;
+   //TBranch        *b__lKVF_trackdR;
+   //TBranch        *b__lKVF_trackdxy;
+   //TBranch        *b__lKVF_trackdz;
    TBranch        *b__IVF_x;
    TBranch        *b__IVF_y;
    TBranch        *b__IVF_z;
@@ -724,11 +726,13 @@ public :
    TBranch        *b__JetConstituentMass;
    TBranch        *b__JetConstituentPdgId;
    TBranch        *b__JetConstituentCharge;
-   TBranch        *b__JetConstituentdxySig;
-   TBranch        *b__JetConstituentdzSig;
-   TBranch        *b__JetConstituentsNumberOfHits;
-   TBranch        *b__JetConstituentsNumberOfPixelHits;
-   TBranch        *b__JetConstituentsHasTrack;
+   TBranch        *b__JetConstituentdxy;
+   TBranch        *b__JetConstituentdxyErr;
+   TBranch        *b__JetConstituentdz;
+   TBranch        *b__JetConstituentdzErr;
+   TBranch        *b__JetConstituentNumberOfHits;
+   TBranch        *b__JetConstituentNumberOfPixelHits;
+   TBranch        *b__JetConstituentHasTrack;
    TBranch        *b__met;   //!
    TBranch        *b__metRaw;
    TBranch        *b__metJECDown;   //!
