@@ -56,12 +56,12 @@ int main(int argc, char * argv[])
         cout << fullname << endl;
     }
     // signal files
-    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_e_massiveAndCKM_LO_displaced.root");
-    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO_displaced.root");
-    TFile * HNL7GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO_displaced.root");
-    TFile * HNL7GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00707106781187_mu_massiveAndCKM_LO_displaced.root");
-    TFile * HNL10GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.004472135955_e_massiveAndCKM_LO_displaced.root");
-    TFile * HNL10GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.004472135955_mu_massiveAndCKM_LO_displaced.root");
+    TFile * HNL3GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_e_massiveAndCKM_LO.root");
+    TFile * HNL3GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root");
+    TFile * HNL5GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.004472135955_e_massiveAndCKM_LO.root");
+    TFile * HNL5GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.004472135955_mu_massiveAndCKM_LO.root");
+    TFile * HNL8GeV_e_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.00282842712475_e_massiveAndCKM_LO.root");
+    TFile * HNL8GeV_mu_file = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO.root");
 
 
     std::map<TString, TH1*> hists;
@@ -116,18 +116,18 @@ int main(int argc, char * argv[])
             }
             if(flavor == "e"){
                 signals["1_3GeV"] = (TH1F*) HNL3GeV_e_file->Get(histname);
-                signals["2_7GeV"] = (TH1F*) HNL7GeV_e_file->Get(histname);
-                signals["3_10GeV"] = (TH1F*) HNL10GeV_e_file->Get(histname);
+                signals["2_5GeV"] = (TH1F*) HNL5GeV_e_file->Get(histname);
+                signals["3_8GeV"] = (TH1F*) HNL8GeV_e_file->Get(histname);
             }else if(flavor == "mu"){
                 signals["1_3GeV"] = (TH1F*) HNL3GeV_mu_file->Get(histname);
-                signals["2_7GeV"] = (TH1F*) HNL7GeV_mu_file->Get(histname);
-                signals["3_10GeV"] = (TH1F*) HNL10GeV_mu_file->Get(histname);
+                signals["2_5GeV"] = (TH1F*) HNL5GeV_mu_file->Get(histname);
+                signals["3_8GeV"] = (TH1F*) HNL8GeV_mu_file->Get(histname);
             }
 
             // style of signal
             markerstyle((TH1F*)signals["1_3GeV"], "red");
-            markerstyle((TH1F*)signals["2_7GeV"], "magenta");
-            markerstyle((TH1F*)signals["3_10GeV"], "blue");
+            markerstyle((TH1F*)signals["2_5GeV"], "magenta");
+            markerstyle((TH1F*)signals["3_8GeV"], "blue");
             mapmarkerstyle(hists);
 
             THStack *stack = new THStack("stack", histname);
@@ -150,8 +150,8 @@ int main(int argc, char * argv[])
             draw_stack(pathname_log + histname + ".pdf", c, stack, &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, 10, -1, "");
             
             lgendrup.AddEntry(signals["1_3GeV"], "HNL 3GeV, c#tau~45.40mm");
-            lgendrup.AddEntry(signals["2_7GeV"], "HNL 5GeV, c#tau~2.95mm");
-            lgendrup.AddEntry(signals["3_10GeV"], "HNL 8GeV, c#tau~0.62mm");
+            lgendrup.AddEntry(signals["2_5GeV"], "HNL 5GeV, c#tau~7.35mm");
+            lgendrup.AddEntry(signals["3_8GeV"], "HNL 8GeV, c#tau~1.56mm");
             
             draw_stack_with_signal(pathname_with_signal_lin + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 0, xlog, -1, -1, -1, -1, "");
             draw_stack_with_signal(pathname_with_signal_log + histname + ".pdf", c, stack, signals, "hist", &lgendrup, h_ref->GetXaxis()->GetTitle(), yaxistitle, 1, xlog, -1, -1, 10, -1, "");
