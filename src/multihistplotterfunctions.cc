@@ -33,7 +33,7 @@ int main(int argc, char * argv[])
 {
     if(argc%2 != 1) std::cout << "did you forget a title in the sampleList file?" << std::endl;
 
-    TString pathname                = "/user/bvermass/public/2l2q_analysis/plots/multihists/" + (TString)argv[1] + "/";
+    TString pathname = make_general_pathname("multihists/",((TString)argv[1]) + "/", "");
 
     string flavor(argv[2]); // used to only plot electron plots for e signal and mu plots for mu signal
     
@@ -79,8 +79,8 @@ int main(int argc, char * argv[])
             if(flavor == "mu" && (histname.Index("_e_") != -1 || histname.Index("_Ele_") != -1)) continue; //skip plots of wrong flavor for signal, as these are empty anyway 
             if(flavor == "e"  && (histname.Index("_mu_") != -1 || histname.Index("_Mu_") != -1))  continue;
 
-            TString pathname_lin = make_pathname(histname, pathname, "lin");
-            TString pathname_log = make_pathname(histname, pathname, "log");
+            TString pathname_lin = make_plotspecific_pathname(histname, pathname, "lin");
+            TString pathname_log = make_plotspecific_pathname(histname, pathname, "log");
             gSystem->Exec("mkdir -p " + pathname_lin);
             gSystem->Exec("mkdir -p " + pathname_log);
 

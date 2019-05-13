@@ -66,11 +66,11 @@ void test_plot()
 void plot_every_variable_in_root_file(TString filename)
 {
     //Make directory to store plots for this file
-    TString pathname = "/user/bvermass/public/2l2q_analysis/plots/";
-    pathname += filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
-
-    if(filename.Index("HeavyNeutrino") != -1)   pathname += filename(filename.Index("hists_") + 6, filename.Index("HeavyNeutrino") - 7 - filename.Index("hists_")) + "/" + filename(filename.Index("HeavyNeutrino"), filename.Index(".root") - filename.Index("HeavyNeutrino")) + "/";
-    else if(filename.Index("Background") != -1) pathname += filename(filename.Index("hists_") + 6, filename.Index("Background") -7 - filename.Index("hists_")) + "/" + filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") -11) + "/";
+    TString specific_sample;
+    if(filename.Index("HeavyNeutrino") != -1) specific_sample = filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
+    else if(filename.Index("Background") != -1) specific_sample = filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") - 11) + "/";
+    TString specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
+    TString pathname = make_general_pathname("singlehists/", specific_dir, specific_sample);
 
     TString toprighttitle = make_toprighttitle(filename);
 
@@ -101,8 +101,8 @@ void plot_every_variable_in_root_file(TString filename)
             // Events or Eff. in yaxis title
             TString yaxistitle = h->GetYaxis()->GetTitle();
 
-            TString pathname_lin = make_pathname(histname, pathname, "lin");
-            TString pathname_log = make_pathname(histname, pathname, "log");
+            TString pathname_lin = make_plotspecific_pathname(histname, pathname, "lin");
+            TString pathname_log = make_plotspecific_pathname(histname, pathname, "log");
             gSystem->Exec("mkdir -p " + pathname_lin);
             gSystem->Exec("mkdir -p " + pathname_log);
 
@@ -125,7 +125,7 @@ void plot_every_variable_in_root_file(TString filename)
             TString histname = h->GetName();
             if(h->GetMaximum() == 0) continue;
 
-            TString pathname_lin = make_pathname(histname, pathname, "lin");
+            TString pathname_lin = make_plotspecific_pathname(histname, pathname, "lin");
             gSystem->Exec("mkdir -p " + pathname_lin);
 
             //markerstyle2D(h);

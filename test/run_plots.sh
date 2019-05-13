@@ -54,13 +54,17 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
             partitionjobnumber=0
         fi
 
+        firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
                 echo "white line or comment found!"
             else
                 counter=0
                 for val in $line; do
-                    if [ $counter -eq 0 ]; then
+                    if [ $firstline -eq 0 ]; then
+                        subdirectory_name=($val)
+                        firstline=1
+                    elif [ $counter -eq 0 ]; then
                         samples+=($val)
                         counter=1
                     else 
@@ -72,7 +76,7 @@ if [[ choice -eq 2 || choice -eq 5 ]]; then
         done < "$1"
         #IFS=$'\n' read -d '' -r -a samples < $1
         #IFS=$'\n' read -d '' -r -a legend < $exec_name
-        ./$exec_name $partition $partitionjobnumber ${samples[@]} ${legend[@]} 
+        ./$exec_name $subdirectory_name $partition $partitionjobnumber ${samples[@]} ${legend[@]} 
         echo
     rm $exec_name
     else

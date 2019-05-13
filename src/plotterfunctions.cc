@@ -25,7 +25,7 @@ std::map<TString, TH1*>::iterator it;
 std::map<TString, TGraphAsymmErrors*>::iterator it_graphs;
 
 
-TString make_pathname(TString histname, TString pathname, TString linorlog)
+TString make_plotspecific_pathname(TString histname, TString pathname, TString linorlog)
 {
         // append directories such as SS/OS, e/mu or HLT to pathname
         //TString eormu = "";
@@ -54,6 +54,12 @@ TString make_pathname(TString histname, TString pathname, TString linorlog)
         return pathname + linorlog + gen + HLT + eormu + SSorOS + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
 }
 
+TString make_general_pathname(TString plottype, TString specific_dir, TString specific_sample)
+{
+    // pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow
+    // or plots/singlehists/final/WJets/ and then plotspecific stuff
+    return "/user/bvermass/public/2l2q_analysis/plots/" + plottype + specific_dir + specific_sample;
+}
 
 TString make_toprighttitle(TString filename)
 {

@@ -18,7 +18,8 @@
 #include <TMultiGraph.h>
 
 
-TString make_pathname(TString, TString, TString);
+TString make_plotspecific_pathname(TString histname, TString pathname, TString linorlog);
+TString make_general_pathname(TString plottype, TString specific_dir, TString specific_sample);
 TString make_toprighttitle(TString filename);
 void mapmarkerstyle(std::map<TString, TH1*>);
 void mapmarkerstyle(std::map<TString, TGraphAsymmErrors*>);
