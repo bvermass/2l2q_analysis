@@ -61,42 +61,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);
 
-    add_histograms(&hists, &hists2D, "_OS_e");//found in src/histo_functions.cc, basically main interesting variables for now, if this gets big, should branch to different files with clearer names
-    add_histograms(&hists, &hists2D, "_SS_e");
-    add_histograms(&hists, &hists2D, "_OS_mu");
-    add_histograms(&hists, &hists2D, "_SS_mu");
-    add_histograms(&hists, &hists2D, "_OS_e_beforereliso");
-    add_histograms(&hists, &hists2D, "_SS_e_beforereliso");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforereliso");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforereliso");
-    add_histograms(&hists, &hists2D, "_OS_e_before1jet");
-    add_histograms(&hists, &hists2D, "_SS_e_before1jet");
-    add_histograms(&hists, &hists2D, "_OS_mu_before1jet");
-    add_histograms(&hists, &hists2D, "_SS_mu_before1jet");
-    add_histograms(&hists, &hists2D, "_OS_e_beforevtx");
-    add_histograms(&hists, &hists2D, "_SS_e_beforevtx");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforevtx");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforevtx");
-    add_histograms(&hists, &hists2D, "_OS_e_beforedispl");
-    add_histograms(&hists, &hists2D, "_SS_e_beforedispl");
-    add_histograms(&hists, &hists2D, "_OS_mu_beforedispl");
-    add_histograms(&hists, &hists2D, "_SS_mu_beforedispl");
-    //add_histograms(&hists, &hists2D, "_OS_e_beforemll");
-    //add_histograms(&hists, &hists2D, "_SS_e_beforemll");
-    //add_histograms(&hists, &hists2D, "_OS_mu_beforemll");
-    //add_histograms(&hists, &hists2D, "_SS_mu_beforemll");
-    //add_histograms(&hists, &hists2D, "_OS_e_beforedphi");
-    //add_histograms(&hists, &hists2D, "_SS_e_beforedphi");
-    //add_histograms(&hists, &hists2D, "_OS_mu_beforedphi");
-    //add_histograms(&hists, &hists2D, "_SS_mu_beforedphi");
-    add_histograms(&hists, &hists2D, "_OS_e_endofselection");
-    add_histograms(&hists, &hists2D, "_SS_e_endofselection");
-    add_histograms(&hists, &hists2D, "_OS_mu_endofselection");
-    add_histograms(&hists, &hists2D, "_SS_mu_endofselection");
-    //add_histograms(&hists, &hists2D, "_OS_e_invIVFSVgenreco");
-    //add_histograms(&hists, &hists2D, "_SS_e_invIVFSVgenreco");
-    //add_histograms(&hists, &hists2D, "_OS_mu_invIVFSVgenreco");
-    //add_histograms(&hists, &hists2D, "_SS_mu_invIVFSVgenreco");
+    for(const TString &lep_region : {"_OS_e", "_SS_e", "_OS_mu", "_SS_mu"}){
+        for(const TString &ev_region : {"", "_beforereliso", "_before1jet", "_beforevtx", "_beforedispl", "_endofselection"}){
+            add_histograms(&hists, &hists2D, lep_region + ev_region);
+        }
+    }
 
     //assures statistical errors are dealt with correctly
     for( it = hists.begin(); it != hists.end(); it++){
