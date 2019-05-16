@@ -72,8 +72,8 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
         hnltagger._JetConstituentPdgId[i]              = _JetConstituentPdgId[i_jet][i];
         hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
         hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jet][i];
-        hnltagger._JetConstituentdxyErr[i]             = _JetConstituentdxyErr[i_jet][i];
         hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jet][i];
+        hnltagger._JetConstituentdxyErr[i]             = _JetConstituentdxyErr[i_jet][i];
         hnltagger._JetConstituentdzErr[i]              = _JetConstituentdzErr[i_jet][i];
         hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jet][i];
         hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jet][i];
@@ -86,8 +86,8 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
         hnltagger._JetConstituentPdgId[i]              = 0;
         hnltagger._JetConstituentCharge[i]             = 0;
         hnltagger._JetConstituentdxy[i]                = 0;
-        hnltagger._JetConstituentdxyErr[i]             = 0;
         hnltagger._JetConstituentdz[i]                 = 0;
+        hnltagger._JetConstituentdxyErr[i]             = 0;
         hnltagger._JetConstituentdzErr[i]              = 0;
         hnltagger._JetConstituentNumberOfHits[i]      = 0;
         hnltagger._JetConstituentNumberOfPixelHits[i] = 0;

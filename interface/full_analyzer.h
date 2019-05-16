@@ -371,8 +371,8 @@ public :
    Int_t           _JetConstituentPdgId[20][50];
    Int_t           _JetConstituentCharge[20][50];
    Double_t        _JetConstituentdxy[20][50];
-   Double_t        _JetConstituentdxyErr[20][50];
    Double_t        _JetConstituentdz[20][50];
+   Double_t        _JetConstituentdxyErr[20][50];
    Double_t        _JetConstituentdzErr[20][50];
    Int_t           _JetConstituentNumberOfHits[20][50];
    Int_t           _JetConstituentNumberOfPixelHits[20][50];
@@ -727,8 +727,8 @@ public :
    TBranch        *b__JetConstituentPdgId;
    TBranch        *b__JetConstituentCharge;
    TBranch        *b__JetConstituentdxy;
-   TBranch        *b__JetConstituentdxyErr;
    TBranch        *b__JetConstituentdz;
+   TBranch        *b__JetConstituentdxyErr;
    TBranch        *b__JetConstituentdzErr;
    TBranch        *b__JetConstituentNumberOfHits;
    TBranch        *b__JetConstituentNumberOfPixelHits;

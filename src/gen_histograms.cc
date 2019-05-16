@@ -69,8 +69,8 @@ void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
         hnltagger_gen._JetConstituentPdgId[i]              = _gen_NPackedDtrsPdgId[i];
         hnltagger_gen._JetConstituentCharge[i]             = _gen_NPackedDtrsCharge[i];
         hnltagger_gen._JetConstituentdxy[i]                = _gen_NPackedDtrs_matchdxy[i];
-        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
         hnltagger_gen._JetConstituentdz[i]                 = _gen_NPackedDtrs_matchdz[i];
+        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
         hnltagger_gen._JetConstituentdzErr[i]              = 0;
         hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
         hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
@@ -83,8 +83,8 @@ void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
         hnltagger_gen._JetConstituentPdgId[i]              = 0;
         hnltagger_gen._JetConstituentCharge[i]             = 0;
         hnltagger_gen._JetConstituentdxy[i]                = 0;
-        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
         hnltagger_gen._JetConstituentdz[i]                 = 0;
+        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
         hnltagger_gen._JetConstituentdzErr[i]              = 0;
         hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
         hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
