@@ -30,7 +30,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
 
 void HNLtagger::write_HNLtagger_tree()
 {
-    HNLtagger_tree->Print();
+    //HNLtagger_tree->Print();
     HNLtagger_file->Write();
     HNLtagger_file->Close();
 }

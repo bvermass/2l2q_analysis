@@ -73,8 +73,8 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
         hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
         hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jet][i];
         hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jet][i];
-        hnltagger._JetConstituentdxyErr[i]             = _JetConstituentdxyErr[i_jet][i];
-        hnltagger._JetConstituentdzErr[i]              = _JetConstituentdzErr[i_jet][i];
+        hnltagger._JetConstituentdxyErr[i]             = (std::isinf(_JetConstituentdxyErr[i_jet][i]))? -1 : _JetConstituentdxyErr[i_jet][i];  //Rarely, dxy(z)Err were infinite, keras didn't like this
+        hnltagger._JetConstituentdzErr[i]              = (std::isinf(_JetConstituentdzErr[i_jet][i]))? -1 : _JetConstituentdzErr[i_jet][i];
         hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jet][i];
         hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jet][i];
         hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jet][i];
