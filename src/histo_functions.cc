@@ -283,7 +283,13 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(jets_cl[0].DeltaR(jets_cl[1]),event_weight);
     if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]), get_dR_lepton_jet(i_subleading, jets_cl[1]), event_weight);
 
-    (*hists)[prefix+"_ngentr"]->Fill(_gen_nNPackedDtrs, event_weight);
+    int charged_count = 0;
+    for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+        if(_gen_NPackedDtrsCharge[i] != 0){
+            charged_count++;
+        }
+    }
+    (*hists)[prefix+"_ngentr"]->Fill(charged_count, event_weight);
     (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
     (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
     
