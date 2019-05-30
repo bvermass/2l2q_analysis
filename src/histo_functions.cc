@@ -10,6 +10,7 @@ using namespace std;
 
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+    (*hists)[prefix+"_pfnevaluation"]                   = new TH1F(prefix+"_pfnevaluation", ";HNL jet tag value;Events", 20, 0, 1);
     (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
     (*hists)[prefix+"_nTrueInteractions_sigreg"]        = new TH1F(prefix+"_nTrueInteractions_sigreg", ";N(true interactions);Events", 50, 0, 100);
     (*hists)[prefix+"_KVForIVF_categories"]             = new TH1F(prefix+"_KVForIVF_categories", ";;Events", 4, 0, 4);

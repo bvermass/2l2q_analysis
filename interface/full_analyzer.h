@@ -28,6 +28,7 @@
 // helper functions
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
+#include "../helpertools/PFNEvaluation/PFNReader.h"
 
 class full_analyzer {
 public :
@@ -789,6 +790,7 @@ public :
    int i_thirdleading_jet;
    int i_closel2_jet;
 
+   double JetTagVal = -1;
    double g_mll;
    double g_dphill;
    double g_dRll;
@@ -946,6 +948,9 @@ public :
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
+
+   // in src/PFNTools.cc
+   virtual double   get_PFNprediction(PFNReader pfn, int i_jet);
 };
 
 #endif
