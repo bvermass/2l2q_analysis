@@ -1,3 +1,6 @@
 [submodule "helpertools/PFNEvaluation"]
 	path = helpertools/PFNEvaluation
 	url = https://github.com/bvermass/PFNEvaluation/
+[submodule "helpertools/jetPlotter"]
+	path = helpertools/jetPlotter
+	url = https://github.com/bvermass/jetPlotter
