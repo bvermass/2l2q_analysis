@@ -809,15 +809,6 @@ public :
    bool _1pogmediume;
    bool _1e1displedphi_novtx;
 
-   // old booleans: ee
-   bool _1e0jet;
-   bool _1e1jet;
-   bool _1e2jet;
-   bool _2e0jet;
-   bool _2e1jet;
-   bool _2e2jet;
-   bool _1e1disple2jet;
-
    // signal region booleans: mumu
    bool _trigmu;
    bool _1mu;
@@ -835,15 +826,6 @@ public :
    bool _1pogmediummu;
    bool _1mu1displmudphi_novtx;
    
-   // old booleans: mumu
-   bool _1mu0jet;
-   bool _1mu1jet;
-   bool _1mu2jet;
-   bool _2mu0jet;
-   bool _2mu1jet;
-   bool _2mu2jet;
-   bool _1mu1displmu2jet;
-
    // functions
    // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
@@ -910,9 +892,6 @@ public :
    virtual bool     dphicut(int, int, double);
    virtual double   get_dphill(int, int);
    virtual bool     relisocut(int, double);
-   virtual void     init_sigreg_fraction(std::map<TString, TH1*>*);
-   virtual void     fill_sigreg_fraction(std::map<TString, TH1*>*);
-   virtual void     reset_signal_regions();
 
    // in src/print_tables.cc
    virtual void     print_table();

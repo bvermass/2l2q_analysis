@@ -55,7 +55,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     std::map<TString, TH1*> hists;
     std::map<TString, TH2*> hists2D;
 
-    init_sigreg_fraction(&hists);//found in src/signal_region.cc, shows fractions of events in possible signal regions with leptons and jets
     init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     init_HLT_allevents_efficiency(&hists, "");
@@ -195,7 +194,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         
         // Fill histograms
         
-        //fill_sigreg_fraction(&hists);
         fill_HNL_MC_check(&hists, &hists2D);
         //fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
         //fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
