@@ -67,12 +67,12 @@ if g++ -Wall -Wno-reorder -Wextra -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/externa
                 echo "max_entries   :   "$max_entries
                 echo "partition     :   "$partition
 
-                qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
+                qsub $job -l walltime=02:00:00 > scriptlog.txt 2>> scriptlog.txt
 
                 while grep "Invalid credential" scriptlog.txt; do
                     echo "Invalid credential caught, resubmitting"
                     sleep 2 #sleep 2 seconds before attempting resubmission
-                    qsub $job -l walltime=01:00:00 > scriptlog.txt 2>> scriptlog.txt
+                    qsub $job -l walltime=02:00:00 > scriptlog.txt 2>> scriptlog.txt
                 done
 
                 cat scriptlog.txt

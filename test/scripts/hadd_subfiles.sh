@@ -31,18 +31,18 @@ function hadd_specific_backgrounds {
     fi
 }
 
-function hadd_all_backgrounds_and_signal_for_HNLtagger {
-    if [ 0 -lt $(ls ${1}${2}Background_* 2>/dev/null | wc -w) ]; then
-        echo -e "Hadd all background for HNL tagger"
-        hadd -f ${1}${2}Background.root ${1}${2}Background_*
-    fi
-
-    if [ 0 -lt $(ls ${1}${2}HeavyNeutrino_lljj_M-5_* 2>/dev/null | wc -w) ]; then
-        echo -e "Hadd 5 GeV signal e or mu for HNL tagger"
-        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_mu.root ${1}${2}HeavyNeutrino_lljj_M-5_*_mu_*
-        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_e.root ${1}${2}HeavyNeutrino_lljj_M-5_*_e_*
-    fi
-}
+#function hadd_all_backgrounds_and_signal_for_HNLtagger {
+#    if [ 0 -lt $(ls ${1}${2}Background_* 2>/dev/null | wc -w) ]; then
+#        echo -e "Hadd all background for HNL tagger"
+#        hadd -f ${1}${2}Background.root ${1}${2}Background_*
+#    fi
+#
+#    if [ 0 -lt $(ls ${1}${2}HeavyNeutrino_lljj_M-5_* 2>/dev/null | wc -w) ]; then
+#        echo -e "Hadd 5 GeV signal e or mu for HNL tagger"
+#        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_mu.root ${1}${2}HeavyNeutrino_lljj_M-5_*_mu_*
+#        hadd -f ${1}${2}HeavyNeutrino_lljj_M-5_e.root ${1}${2}HeavyNeutrino_lljj_M-5_*_e_*
+#    fi
+#}
 
 if [ $# -eq 0 ]; then
     read -p " 'all' or 'specific tag': " tag
@@ -51,14 +51,14 @@ elif [ $# -eq 1 ]; then
 fi
 if [ $tag == "all" ]; then
     echo -e "\n----------------------------------------------"
-    echo -e "Looking for standard hists_full_analyzer files\n"
+    echo -e "hadd subfiles without tag\n"
     for D in /user/bvermass/public/2l2q_analysis/histograms/full_analyzer/subfiles/*; do
         hadd_subfiles $D hists_full_analyzer_
     done
     hadd_specific_backgrounds /user/bvermass/public/2l2q_analysis/histograms/full_analyzer/ hists_full_analyzer_
     
     echo -e "\n--------------------------------------"
-    echo -e "Looking for special dilep_X.root files\n"
+    echo -e "hadd subfiles for specific tags\n"
     for IVFimp in /user/bvermass/public/2l2q_analysis/histograms/*; do
         for D in $IVFimp/full_analyzer/subfiles/*; do
             hadd_subfiles $D hists_full_analyzer_
@@ -67,25 +67,25 @@ if [ $tag == "all" ]; then
         hadd_specific_backgrounds $IVFimp_full_analyzer hists_full_analyzer_
     done
     
-    echo -e "\n---------------------------"
-    echo -e "Looking for HNLtagger files\n"
-    for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/subfiles/*; do
-        hadd_subfiles $D HNLtagger_electron_
-        hadd_subfiles $D HNLtagger_muon_
-    done
-    hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_electron_
-    hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_muon_
-    for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/*; do
-        for E in $D/full_analyzer/subfiles/*; do
-            hadd_subfiles $E HNLtagger_electron_
-            hadd_subfiles $E HNLtagger_muon_
-        done
-        hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_electron_
-        hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_muon_
-    done
+    #echo -e "\n---------------------------"
+    #echo -e "Looking for HNLtagger files\n"
+    #for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/subfiles/*; do
+    #    hadd_subfiles $D HNLtagger_electron_
+    #    hadd_subfiles $D HNLtagger_muon_
+    #done
+    #hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_electron_
+    #hadd_all_backgrounds_and_signal_for_HNLtagger /user/bvermass/public/2l2q_analysis/trees/HNLtagger/full_analyzer/ HNLtagger_muon_
+    #for D in /user/bvermass/public/2l2q_analysis/trees/HNLtagger/*; do
+    #    for E in $D/full_analyzer/subfiles/*; do
+    #        hadd_subfiles $E HNLtagger_electron_
+    #        hadd_subfiles $E HNLtagger_muon_
+    #    done
+    #    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_electron_
+    #    hadd_all_backgrounds_and_signal_for_HNLtagger $D/full_analyzer/ HNLtagger_muon_
+    #done
 else
     echo -e "\n-------------------------------------"
-    echo -e "only hadding files with the given tag:"
+    echo -e "hadd subfiles with specific tag "$tag": "
     
     tagdir=/user/bvermass/public/2l2q_analysis/histograms/${tag}
     for D in $tagdir/full_analyzer/subfiles/*; do
@@ -94,11 +94,11 @@ else
     tagdir_full_analyzer=$tagdir/full_analyzer/
     hadd_specific_backgrounds $tagdir_full_analyzer hists_full_analyzer_
     
-    treetagdir=/user/bvermass/public/2l2q_analysis/trees/HNLtagger/${tag}
-    for D in $treetagdir/full_analyzer/subfiles/*; do
-        hadd_subfiles $D HNLtagger_electron_
-        hadd_subfiles $D HNLtagger_muon_
-    done
-    hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_
-    hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_muon_
+    #treetagdir=/user/bvermass/public/2l2q_analysis/trees/HNLtagger/${tag}
+    #for D in $treetagdir/full_analyzer/subfiles/*; do
+    #    hadd_subfiles $D HNLtagger_electron_
+    #    hadd_subfiles $D HNLtagger_muon_
+    #done
+    #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_
+    #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_muon_
 fi
