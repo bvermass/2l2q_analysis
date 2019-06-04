@@ -167,8 +167,7 @@ bool full_analyzer::no_additional_leptons(){
 
 
 bool full_analyzer::mllcut(int i_lead, int i_sublead, double uppercut){
-    g_mll = get_mll(i_lead, i_sublead);
-    return g_mll < uppercut;
+    return get_mll(i_lead, i_sublead) < uppercut;
 }
 
 double full_analyzer::get_mll(int i_lead, int i_sublead){
@@ -181,8 +180,8 @@ double full_analyzer::get_mll(int i_lead, int i_sublead){
 
 
 bool full_analyzer::dRcut(int i_lead, int i_sublead, double lowercut, double uppercut){
-    g_dRll = get_dRll(i_lead, i_sublead);
-    return (g_dRll > lowercut and g_dRll < uppercut);
+    double dRll = get_dRll(i_lead, i_sublead);
+    return (dRll > lowercut and dRll < uppercut);
 }
 
 
@@ -196,8 +195,7 @@ double full_analyzer::get_dRll(int i_lead, int i_sublead){
 
 
 bool full_analyzer::dphicut(int i_lead, int i_sublead, double lowercut){
-    g_dphill = get_dphill(i_lead, i_sublead);
-    return (g_dphill > lowercut);
+    return (get_dphill(i_lead, i_sublead) > lowercut);
 }
 
 double full_analyzer::get_dphill(int i_lead, int i_sublead){
@@ -316,8 +314,4 @@ void full_analyzer::reset_signal_regions(){
    _2mu1jet = false;
    _2mu2jet = false;
    _1mu1displmu2jet = false;
-
-   g_mll = -1;
-   g_dphill = -1;
-   g_dRll = -1;
 }

@@ -272,9 +272,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
 
-    (*hists)[prefix+"_mll"]->Fill(g_mll, event_weight);
-    (*hists)[prefix+"_dphill"]->Fill(g_dphill, event_weight);
-    (*hists)[prefix+"_dRll"]->Fill(g_dRll, event_weight);
+    (*hists)[prefix+"_mll"]->Fill(get_mll(i_leading, i_subleading), event_weight);
+    (*hists)[prefix+"_dphill"]->Fill(get_dphill(i_leading, i_subleading), event_weight);
+    (*hists)[prefix+"_dRll"]->Fill(get_dRll(i_leading, i_subleading), event_weight);
     if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]),event_weight);
     if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
     if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(jets_uncl[0].DeltaR(jets_uncl[1]),event_weight);

@@ -791,9 +791,6 @@ public :
    int i_closel2_jet;
 
    double JetTagVal = -1;
-   double g_mll;
-   double g_dphill;
-   double g_dRll;
 
    // signal region booleans: ee
    bool _trige;
