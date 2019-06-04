@@ -936,6 +936,7 @@ public :
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
+   virtual void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet);
 
    // in src/HLT_eff.cc
@@ -951,6 +952,8 @@ public :
 
    // in src/PFNTools.cc
    virtual double   get_PFNprediction(PFNReader pfn, int i_jet);
+   virtual void     add_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+   virtual void     fill_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
 };
 
 #endif

@@ -10,7 +10,6 @@ using namespace std;
 
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
-    (*hists)[prefix+"_pfnevaluation"]                   = new TH1F(prefix+"_pfnevaluation", ";HNL jet tag value;Events", 20, 0, 1);
     (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
     (*hists)[prefix+"_nTrueInteractions_sigreg"]        = new TH1F(prefix+"_nTrueInteractions_sigreg", ";N(true interactions);Events", 50, 0, 100);
     (*hists)[prefix+"_KVForIVF_categories"]             = new TH1F(prefix+"_KVForIVF_categories", ";;Events", 4, 0, 4);
@@ -212,6 +211,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l2_SVgen-reco_eff_den"]           = new TH1F(prefix+"_l2_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 15, -1.5, 10);
 
     add_jet_histograms(hists, prefix);
+    add_pfn_histograms(hists, hists2D, prefix);
     
     return;
 }
@@ -297,6 +297,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     (*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
 
     fill_jet_histograms(hists, prefix, i_subleading);
+    fill_pfn_histograms(hists, hists2D, prefix);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){

@@ -62,7 +62,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_e", "_SS_e", "_OS_mu", "_SS_mu"}){
-        for(const TString &ev_region : {"", "_beforereliso", "_before1jet", "_beforevtx", "_beforedispl", "_endofselection"}){
+        for(const TString &ev_region : {"", "_beforereliso", "_before1jet", "_afterdispl", "_endofselection"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
         }
     }
@@ -82,7 +82,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
-    PFNReader pfn("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger.h5", {50,11}, 2);
+    PFNReader pfn_mu("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger.h5", {50,11}, 2);
+    PFNReader pfn_e("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger.h5", {50,11}, 2);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe = 0, SSe2 = 0, SSe3 = 0;
@@ -214,13 +215,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_lepton_eff(&hists, signs_and_flavor, i_leading_e, i_gen_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_e, i_subleading_displ_e);
-        }
-        if(_1e1displevtx){
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1e1displedispl){
             fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
@@ -229,14 +229,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_gen_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         //    fill_KVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_beforevtx", i_leading_mu, i_subleading_displ_mu);
-        }
-        if(_1mu1displmuvtx){
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_beforedispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1mu1displmudispl){
             fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
-            hists[signs_and_flavor + "_pfnevaluation"]->Fill(get_PFNprediction(pfn, i_closel2_jet), event_weight);
+            JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}

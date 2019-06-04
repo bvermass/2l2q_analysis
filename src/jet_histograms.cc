@@ -30,6 +30,21 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     (*hists)[prefix+"_jetl2_ChargedEmFraction"]     = new TH1F(prefix+"_jetl2_ChargedEmFraction", ";closestJet(l_{2}) Charged Em Fraction;Events", 30, 0, 1);
     (*hists)[prefix+"_jetl2_HFHadronFraction"]      = new TH1F(prefix+"_jetl2_HFHadronFraction", ";closestJet(l_{2}) HF Hadron Fraction;Events", 30, 0, 1);
     (*hists)[prefix+"_jetl2_HFEmFraction"]          = new TH1F(prefix+"_jetl2_HFEmFraction", ";closestJet(l_{2}) HF Em Fraction;Events", 30, 0, 1);
+
+    for(const TString &jettagvalcut : {"", "_JetTagVal0p95"}){
+        (*hists)[prefix+jettagvalcut+"_jetl2_nConstituents"]         = new TH1F(prefix+jettagvalcut+"_jetl2_nConstituents", ";N. jet Constituents;Events", 50, 0, 50);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstPt"]               = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPt", ";Jet Constituent #it{p}_{T} [GeV];Events", 30, 0, 60);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstEta"]              = new TH1F(prefix+jettagvalcut+"_jetl2_ConstEta", ";Jet Constituent #eta;Events", 30, -3, 3);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstPhi"]              = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPhi", ";Jet Constituent #phi;Events", 30, -3.14, 3.14);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstPdgId"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPdgId", ";Jet Constituent PdgId;Events", 220, -1, 220);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstCharge"]           = new TH1F(prefix+jettagvalcut+"_jetl2_ConstCharge", ";Jet Constituent Charge;Events", 3, -1, 1);
+        (*hists)[prefix+jettagvalcut+"_jetl2_Constdxy"]              = new TH1F(prefix+jettagvalcut+"_jetl2_Constdxy", ";Jet Constituent dxy;Events", 30, 0, 20);
+        (*hists)[prefix+jettagvalcut+"_jetl2_Constdz"]               = new TH1F(prefix+jettagvalcut+"_jetl2_Constdz", ";Jet Constituent dz;Events", 30, 0, 40);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstdxyErr"]           = new TH1F(prefix+jettagvalcut+"_jetl2_ConstdxyErr", ";Jet Constituent dxyError;Events", 30, 0, 5);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstdzErr"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstdzErr", ";Jet Constituent dzError;Events", 30, 0, 10);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstNHits"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstNHits", ";Jet Constituent Tracker Hits;Events", 30, 0, 30);
+        (*hists)[prefix+jettagvalcut+"_jetl2_ConstNPixHits"]         = new TH1F(prefix+jettagvalcut+"_jetl2_ConstNPixHits", ";Jet Constituent Pixel Hits;Events", 30, 0, 10);
+    }
 }
 
 void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefix, int i_subleading){
@@ -54,6 +69,27 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_ChargedEmFraction"]->Fill(_jetChargedEmFraction[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
+        fill_jet_constituent_histograms(hists, prefix);
+        if(JetTagVal > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
+    }
+}
+
+void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, TString prefix){
+    (*hists)[prefix+"_jetl2_nConstituents"]->Fill(_nJetConstituents[i_closel2_jet], event_weight);
+    for(unsigned i_const = 0; i_const < _nJetConstituents[i_closel2_jet]; ++i_const){
+        (*hists)[prefix+"_jetl2_ConstPt"]->Fill(_JetConstituentPt[i_closel2_jet][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstEta"]->Fill(_JetConstituentEta[i_closel2_jet][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstPhi"]->Fill(_JetConstituentPhi[i_closel2_jet][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstPdgId"]->Fill(_JetConstituentPdgId[i_closel2_jet][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstCharge"]->Fill(_JetConstituentCharge[i_closel2_jet][i_const], event_weight);
+        if(_JetConstituentHasTrack[i_closel2_jet][i_const]){
+            (*hists)[prefix+"_jetl2_Constdxy"]->Fill(_JetConstituentdxy[i_closel2_jet][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_Constdz"]->Fill(_JetConstituentdz[i_closel2_jet][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstdxyErr"]->Fill(_JetConstituentdxyErr[i_closel2_jet][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstdzErr"]->Fill(_JetConstituentdzErr[i_closel2_jet][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstNHits"]->Fill(_JetConstituentNumberOfHits[i_closel2_jet][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstNPixHits"]->Fill(_JetConstituentNumberOfPixelHits[i_closel2_jet][i_const], event_weight);
+        }
     }
 }
 

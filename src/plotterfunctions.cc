@@ -39,7 +39,7 @@ TString make_plotspecific_pathname(TString histname, TString pathname, TString l
         TString eormu           = (histname.Index("_e_") == -1 && histname.Index("Ele") == -1)? ((histname.Index("_mu_") == -1 && histname.Index("Mu") == -1)? "" : "mu/") : "e/";
         TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
         TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
-        TString partialcuts     = (histname.Index("before") == -1)?         "" : "partialcuts/";
+        TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1)?         "" : "partialcuts/";
         TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
         TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
         TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
