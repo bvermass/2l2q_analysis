@@ -215,13 +215,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_IVF_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
         }
         if(_1e1displedispl){
-            fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
-            JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
             if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
+        }
+        if(_1e1displedispl_Reliso){
+            fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
         }
         if(_1mu1displmu){
             fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
@@ -229,13 +231,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_IVF_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
         }
         if(_1mu1displmudispl){
-            fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
-            JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
             if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
+        }
+        if(_1mu1displmudispl_Reliso){
+            fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
+            JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
         }
 
         //if(_1e1displevtx){

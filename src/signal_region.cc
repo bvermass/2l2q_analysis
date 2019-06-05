@@ -53,6 +53,9 @@ void full_analyzer::signal_regions(){
                                   mllcut(i_leading_e, i_subleading_displ_e, 75) &&
                                   dphicut(i_leading_e, i_subleading_displ_e, 2.6);
     
+    _1e1displedispl_Reliso      = _1e1displedispl &&
+                                  relisocut(i_subleading_displ_e, 1.5);
+    
 
     ///////////////////////////////
     // Main signal region : mumu //
@@ -96,6 +99,8 @@ void full_analyzer::signal_regions(){
                                   mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
                                   dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
     
+    _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
+                                  relisocut(i_subleading_displ_mu, 1.5);
     
     ////////////////////////
     // POGMedium prompt ID//

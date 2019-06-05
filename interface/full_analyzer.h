@@ -808,6 +808,7 @@ public :
    bool _1e1displedR;
    bool _1pogmediume;
    bool _1e1displedphi_novtx;
+   bool _1e1displedispl_Reliso;
 
    // signal region booleans: mumu
    bool _trigmu;

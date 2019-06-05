@@ -94,11 +94,11 @@ else
     tagdir_full_analyzer=$tagdir/full_analyzer/
     hadd_specific_backgrounds $tagdir_full_analyzer hists_full_analyzer_
     
-    #treetagdir=/user/bvermass/public/2l2q_analysis/trees/HNLtagger/${tag}
-    #for D in $treetagdir/full_analyzer/subfiles/*; do
-    #    hadd_subfiles $D HNLtagger_electron_
-    #    hadd_subfiles $D HNLtagger_muon_
-    #done
+    treetagdir=/user/bvermass/public/2l2q_analysis/trees/HNLtagger/${tag}
+    for D in $treetagdir/full_analyzer/subfiles/*; do
+        hadd_subfiles $D HNLtagger_electron_
+        hadd_subfiles $D HNLtagger_muon_
+    done
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_muon_
 fi
