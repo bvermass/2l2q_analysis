@@ -7,7 +7,7 @@
 //move histo bin naming etc. to here!
 using namespace std;
 
-void make_logscale(double* xbins, int nbins, double xmin, double xmax)
+void make_logscale(double* xbins, unsigned nbins, double xmin, double xmax)
 {
     double logxmin = TMath::Log10(xmin);
     double logxmax = TMath::Log10(xmax);

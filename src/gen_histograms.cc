@@ -53,7 +53,6 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
         TLorentzVector l2_vector; l2_vector.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
         TLorentzVector track_vector;
-        double dR = 0;
         for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
             track_vector.SetPtEtaPhiE(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);                    
             (*hists)["gen_l2_tracks_dR"]->Fill(l2_vector.DeltaR(track_vector), event_weight);

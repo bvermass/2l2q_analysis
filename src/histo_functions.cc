@@ -211,7 +211,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l2_SVgen-reco_eff_den"]           = new TH1F(prefix+"_l2_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 15, -1.5, 10);
 
     add_jet_histograms(hists, prefix);
-    add_pfn_histograms(hists, hists2D, prefix);
+    add_pfn_histograms(hists, prefix);
     
     return;
 }
@@ -297,7 +297,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     (*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
 
     fill_jet_histograms(hists, prefix, i_subleading);
-    fill_pfn_histograms(hists, hists2D, prefix);
+    fill_pfn_histograms(hists, prefix);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
@@ -343,8 +343,6 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
      * KVF vs IVF for events
      */
     if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS and i_gen_subleading_displ_e != -1) {
-        double KVF_SVgenreco = get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e);
-
         if(_lIVF_match[i_subleading_displ_e] and get_IVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2){
             if(_lKVF_valid[i_subleading_displ_e] and get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
             else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
@@ -435,8 +433,6 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
      * KVF vs IVF for events
      */
     if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS and i_gen_subleading_displ_mu != -1) {
-        double KVF_SVgenreco = get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu);
-
         if(_lIVF_match[i_subleading_displ_mu] and get_IVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2){
             if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
             else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
@@ -484,7 +480,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
 }
 
 
-void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_subleading, int i_gen_subleading){
     if(!_lKVF_valid[i_subleading]) return;
     
     double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
@@ -508,7 +504,7 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map
     if(i_gen_subleading != -1){
         double KVF_SVgenreco    = get_KVF_SVgenreco(i_gen_subleading, i_subleading);
         double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
-        double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
+        //double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
         (*hists)[prefix+"_KVF_SVgen-reco"]->Fill(KVF_SVgenreco);
         (*hists)[prefix+"_KVF_SVgen-reco_zoom"]->Fill(KVF_SVgenreco);
         (*hists2D)[prefix+"_KVF_PV-SVdxyz_genvsreco"]->Fill(KVF_PVSVdist, gen_PVSVdist, event_weight);
@@ -548,7 +544,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
         l1vector.SetPtEtaPhiE(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
         TLorentzVector tracksum;
         TLorentzVector tmptrack;
-        for(Int_t i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
+        for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
             (*hists)[prefix+"_IVF_trackpt"]->Fill(_IVF_trackpt[i_subleading][i_track], event_weight);
             (*hists)[prefix+"_IVF_tracketa"]->Fill(_IVF_tracketa[i_subleading][i_track], event_weight);
             (*hists)[prefix+"_IVF_trackphi"]->Fill(_IVF_trackphi[i_subleading][i_track], event_weight);
@@ -581,7 +577,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 }
 
 
-void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_gen_leading, int i_subleading, int i_gen_subleading){
+void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
     (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN);
     if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
@@ -599,7 +595,7 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
 }
 
 
-void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){
+void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_subleading, int i_gen_subleading){
     if(i_gen_subleading == -1 or !(leadingIsl1 and subleadingIsl2)) return;
 
     double IVF_PVSVdist_gen_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
@@ -659,11 +655,11 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     } 
 }
 
-void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, int i_gen_subleading){   
+void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, int i_subleading, int i_gen_subleading){   
     if(i_gen_subleading == -1) return;
 
     double KVF_SVgenreco    = get_KVF_SVgenreco(i_gen_subleading, i_subleading);
-    double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
+    //double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
     double gen_PVSVdist_2D  = get_PVSVdist_gen_2D(i_gen_subleading);
     double KVF_PVSVdist     = get_KVF_PVSVdist(i_subleading);
     double KVF_PVSVdist_2D  = get_KVF_PVSVdist_2D(i_subleading);

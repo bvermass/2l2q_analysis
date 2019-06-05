@@ -67,7 +67,7 @@ public :
    Bool_t          _gen_phIsPrompt[20];   //[_gen_nPh]
    Double_t        _gen_phMinDeltaR[20];   //[_gen_nPh]
    Bool_t          _gen_phPassParentage[20];   //[_gen_nPh]
-   UChar_t         _gen_nL;
+   unsigned         _gen_nL;
    Double_t        _gen_lPt[20];   //[_gen_nL]
    Double_t        _gen_lEta[20];   //[_gen_nL]
    Double_t        _gen_lPhi[20];   //[_gen_nL]
@@ -825,17 +825,16 @@ public :
    bool _1mu1displmudR;
    bool _1pogmediummu;
    bool _1mu1displmudphi_novtx;
+   bool _1mu1displmudispl_Reliso;
    
    // functions
    // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
    virtual ~full_analyzer();
-   virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
    virtual void     Loop();
-   virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
    // in src/full_analyzer.cc, the main code body
@@ -901,11 +900,11 @@ public :
    virtual void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
-   virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
+   virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
    virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
-   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int, int, int);
-   virtual void     fill_KVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
-   virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int, int);
+   virtual void     fill_KVF_eff(std::map<TString, TH1*>*, TString, int, int);
+   virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
@@ -928,8 +927,8 @@ public :
 
    // in src/PFNTools.cc
    virtual double   get_PFNprediction(PFNReader pfn, int i_jet);
-   virtual void     add_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-   virtual void     fill_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+   virtual void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+   virtual void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 };
 
 #endif

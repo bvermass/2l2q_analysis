@@ -19,6 +19,7 @@ void mainroot(TString sample, double cross_section, int max_entries, int partiti
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
+    if(argc == 0) return 1;
     double cross_section = atof(argv[2]);
     int max_entries = atof(argv[3]);
     int partition = atof(argv[4]);

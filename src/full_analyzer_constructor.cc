@@ -52,7 +52,6 @@ Long64_t full_analyzer::LoadTree(Long64_t entry)
    if (centry < 0) return centry;
    if (fChain->GetTreeNumber() != fCurrent) {
       fCurrent = fChain->GetTreeNumber();
-      Notify();
    }
    return centry;
 }
@@ -428,18 +427,6 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_metPhiUnclDown", &_metPhiUnclDown, &b__metPhiUnclDown);
    fChain->SetBranchAddress("_metPhiUnclUp", &_metPhiUnclUp, &b__metPhiUnclUp);
    fChain->SetBranchAddress("_metSignificance", &_metSignificance, &b__metSignificance);
-   Notify();
-}
-
-Bool_t full_analyzer::Notify()
-{
-   // The Notify() function is called when a new file is opened. This
-   // can be either for a new TTree in a TChain or when when a new TTree
-   // is started when using PROOF. It is normally not necessary to make changes
-   // to the generated code, but the routine can be extended by the
-   // user if needed. The return value is currently not used.
-
-   return kTRUE;
 }
 
 void full_analyzer::Show(Long64_t entry)
@@ -448,11 +435,4 @@ void full_analyzer::Show(Long64_t entry)
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
-}
-Int_t full_analyzer::Cut(Long64_t entry)
-{
-// This function may be called from Loop.
-// returns  1 if entry is accepted.
-// returns -1 otherwise.
-   return 1;
 }

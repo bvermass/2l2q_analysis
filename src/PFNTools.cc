@@ -20,10 +20,10 @@ double full_analyzer::get_PFNprediction(PFNReader pfn, int i_jet){
     return pfn.predict( pfnInput, highlevelInput );
 }
 
-void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_JetTagVal"]       = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 40, 0, 1);
 }
 
-void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_JetTagVal"]->Fill(JetTagVal, event_weight);
 }

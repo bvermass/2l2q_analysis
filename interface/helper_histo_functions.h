@@ -10,7 +10,7 @@
 #include <TSystem.h>
 #include <TString.h>
 
-void        make_logscale(double* xbins, int nbins, double xmin, double xmax);
+void        make_logscale(double* xbins, unsigned nbins, double xmin, double xmax);
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber);
 double      calc_betagamma(int particle_mass, double particle_energy);
 double      get_dR(double eta1, double phi1, double eta2, double phi2);

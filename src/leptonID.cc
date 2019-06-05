@@ -220,8 +220,8 @@ int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int inde
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
+    for(unsigned i = 0; i < _nL; ++i){
+	    if((int)i == index_good_leading) continue;
 	    if(!*(electronID + i))      continue;
 	    if(!*(ele_clean + i))       continue;
 	    if(_lPt[i] < 7)             continue;
@@ -236,8 +236,8 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nL; ++i){
-	    if(i == index_good_leading) continue;
+    for(unsigned i = 0; i < _nL; ++i){
+	    if((int)i == index_good_leading) continue;
 	    if(!*(muonID + i))          continue;
 	    if(_lPt[i] < 5)             continue;
         if(_lPt[i] > _lPt[index_good_leading]) continue;
@@ -256,7 +256,7 @@ int full_analyzer::find_gen_lep(int i_lep)
     int i_gen = -1;
     if(i_lep != -1) {
         reco_vec.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
-        for(int i = 0; i< _gen_nL; i++){
+        for(unsigned i = 0; i< _gen_nL; i++){
             gen_vec.SetPtEtaPhiE(_gen_lPt[i], _gen_lEta[i], _gen_lPhi[i], _gen_lE[i]);
             if(_lFlavor[i_lep] == _gen_lFlavor[i] && gen_vec.DeltaR(reco_vec) < dR){
                 dR = gen_vec.DeltaR(reco_vec);
@@ -271,7 +271,7 @@ void full_analyzer::find_gen_l1_and_l2()
 {
     int fromW = 0;
     int fromN = 0;
-    for(int i = 0; i < _gen_nL; i++){
+    for(unsigned i = 0; i < _gen_nL; i++){
     	if(abs(_gen_lMomPdg[i]) == 24){ fromW++; i_gen_l1 = i; } // does not always find the lepton, sometimes its not found, very sometimes two are found
         if(fabs(_gen_lMomPdg[i]) == 9900012){ fromN++; i_gen_l2 = i; } //works perfectly
     }
@@ -283,6 +283,7 @@ void full_analyzer::find_gen_l1_and_l2()
 
 bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
 {
+    if(i_gen_lep == -1) return false;
     double dR = get_dR(_lEta[i_lep], _lPhi[i_lep], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
     double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
     if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
