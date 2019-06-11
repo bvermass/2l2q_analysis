@@ -925,6 +925,7 @@ public :
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
+   virtual int      get_lfromtau(int i_gen_l);
 
    // in src/PFNTools.cc
    virtual double   get_PFNprediction(PFNReader pfn, int i_jet);

@@ -13,7 +13,7 @@ read -p "all(1), test(2): " choice
 if [[ choice -eq 1 ]]; then
     ./test/local_submit.sh test/sampleLists/histos_all.txt
     ./test/scripts/wait_until_jobs_are_finished.sh
-    ./test/scripts/hadd_subfiles.sh
+    ./test/scripts/hadd_subfiles.sh final
     ./test/scripts/submit_plots_all.sh
     ./test/scripts/wait_until_jobs_are_finished.sh
     #cp -R ~/public/2l2q_analysis/plots/ ~/public_html/     # only uncomment if connection to tier2 is extremely slow, then access through web browser
