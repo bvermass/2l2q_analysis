@@ -6,6 +6,7 @@
 
 //Gives the corresponding HNL jet tag value for i_jet with the tagger loaded in pfn
 double full_analyzer::get_PFNprediction(PFNReader pfn, int i_jet){
+    if(i_jet == -1) return 0;
     std::vector< double > highlevelInput( { _jetPt[i_jet], _jetEta[i_jet] } );
     std::vector< std::vector< double > > pfnInput;
 

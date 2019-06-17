@@ -17,31 +17,11 @@ Long64_t get_nentries_from_file(TString filename, TString treename)
 #ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    TString filepath = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/";
+    if(argc == 0) return 1;
+    TString file = (TString) argv[1];
     TString treename = "blackJackAndHookers/blackJackAndHookersTree";
-    TString files[]  = {"DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root",
-                        "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root",
-                        "TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root",
-                        "TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root",
-                        "TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root",
-                        "WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root",
-                        "WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root",
-                        "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root",
-                        "ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root"};
-
-    //TString filepath = "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/final/full_analyzer/";
-    //TString treename = "HNLtagger_tree";
-    //TString files[]  = {"HNLtagger_muon_HeavyNeutrino_lljj_M-5_mu.root",
-    //                    "HNLtagger_muon_Background_DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root", 
-    //                    "HNLtagger_muon_Background_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
-    //                    "HNLtagger_muon_Background_TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    //                    "HNLtagger_muon_Background_TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    //                    "HNLtagger_muon_Background_TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    //                    "HNLtagger_muon_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root"};
-    for(TString filename : files){
-        Long64_t entries = get_nentries_from_file(filepath + filename, treename);
-        std::cout << entries << " entries in " << filename << ": " << std::endl;
-    }
+    Long64_t entries = get_nentries_from_file(file, treename);
+    std::cout << 1000*floor(0.001*entries) << " entries in " << file << "(" << entries << ")" << std::endl;
     return 0;
 }
 #endif
