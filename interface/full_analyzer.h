@@ -52,13 +52,13 @@ public :
    Double_t        _weight;
    Double_t        _lheHTIncoming;
    Double_t        _ctauHN;
-   UChar_t         _nLheWeights;
+   unsigned        _nLheWeights;
    Double_t        _lheWeight[110];   //[_nLheWeights]
-   UChar_t         _ttgEventType;
-   UChar_t         _zgEventType;
+   unsigned        _ttgEventType;
+   unsigned        _zgEventType;
    Double_t        _gen_met;
    Double_t        _gen_metPhi;
-   UChar_t         _gen_nPh;
+   unsigned        _gen_nPh;
    Double_t        _gen_phPt[20];   //[_gen_nPh]
    Double_t        _gen_phEta[20];   //[_gen_nPh]
    Double_t        _gen_phPhi[20];   //[_gen_nPh]
@@ -67,7 +67,7 @@ public :
    Bool_t          _gen_phIsPrompt[20];   //[_gen_nPh]
    Double_t        _gen_phMinDeltaR[20];   //[_gen_nPh]
    Bool_t          _gen_phPassParentage[20];   //[_gen_nPh]
-   unsigned         _gen_nL;
+   unsigned        _gen_nL;
    Double_t        _gen_lPt[20];   //[_gen_nL]
    Double_t        _gen_lEta[20];   //[_gen_nL]
    Double_t        _gen_lPhi[20];   //[_gen_nL]
@@ -82,7 +82,7 @@ public :
    Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
    Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
    Double_t        _gen_HT;
-   UChar_t         _gen_nN;
+   unsigned        _gen_nN;
    Double_t        _gen_NPt;
    Double_t        _gen_NEta;
    Double_t        _gen_NPhi;
@@ -90,7 +90,7 @@ public :
    Double_t        _gen_Nvertex_x;
    Double_t        _gen_Nvertex_y;
    Double_t        _gen_Nvertex_z;
-   UChar_t         _gen_nNPackedDtrs;
+   unsigned        _gen_nNPackedDtrs;
    Double_t        _gen_NPackedDtrsPt[20];
    Double_t        _gen_NPackedDtrsEta[20];
    Double_t        _gen_NPackedDtrsPhi[20];
@@ -108,33 +108,19 @@ public :
    Double_t        _gen_NPackedDtrs_matchdxy[20];
    Double_t        _gen_NPackedDtrs_matchdz[20];
    Int_t           _gen_NPackedDtrs_matchcharge[20];
-   UChar_t         _gen_nNdaughters;
+   unsigned        _gen_nNdaughters;
    UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
-   UChar_t         _gen_nstatus23;
-   UChar_t         _gen_nstatus23_fromN;
-   UChar_t         _gen_nstatus23_fromW;
-   Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
-   UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-   UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
-   UChar_t         _gen_nq;
+   //UChar_t         _gen_nstatus23;
+   //UChar_t         _gen_nstatus23_fromN;
+   //UChar_t         _gen_nstatus23_fromW;
+   //Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
+   //UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
+   //UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
+   unsigned        _gen_nq;
    Double_t        _gen_qPt[2];   //[_gen_nq23]
    Double_t        _gen_qEta[2];   //[_gen_nq23]
    Double_t        _gen_qPhi[2];   //[_gen_nq23]
    Double_t        _gen_qE[2];   //[_gen_nq23]
-   UChar_t         _gen_nq1dtr;
-   Int_t           _gen_q1dtr_status[20];   //[_gen_nq1dtr]
-   Int_t           _gen_q1dtr_pdgid[20];   //[_gen_nq1dtr]
-   Double_t        _gen_q1dtr_Pt[20];   //[_gen_nq1dtr]
-   Double_t        _gen_q1dtr_Eta[20];   //[_gen_nq1dtr]
-   Double_t        _gen_q1dtr_Phi[20];   //[_gen_nq1dtr]
-   Double_t        _gen_q1dtr_E[20];   //[_gen_nq1dtr]
-   UChar_t         _gen_nq2dtr;
-   Int_t           _gen_q2dtr_status[20];   //[_gen_nq2dtr]
-   Int_t           _gen_q2dtr_pdgid[20];   //[_gen_nq2dtr]
-   Double_t        _gen_q2dtr_Pt[20];   //[_gen_nq2dtr]
-   Double_t        _gen_q2dtr_Eta[20];   //[_gen_nq2dtr]
-   Double_t        _gen_q2dtr_Phi[20];   //[_gen_nq2dtr]
-   Double_t        _gen_q2dtr_E[20];   //[_gen_nq2dtr]
    Bool_t          _HLT_Ele27_WPTight_Gsf;
    Int_t           _HLT_Ele27_WPTight_Gsf_prescale;
    Bool_t          _HLT_IsoMu24;
@@ -227,6 +213,7 @@ public :
    Double_t        _lElehadronicOverEm[10];
    Double_t        _lEleInvMinusPInv[10];
    Double_t        _eleNumberInnerHitsMissing[10];
+   Double_t        _leptonMvatZq[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
    Double_t        _leptonMvaTTH16[10];   //[_nLight]
    Double_t        _leptonMvaSUSY17[10];   //[_nLight]
@@ -310,16 +297,16 @@ public :
    Double_t        _lGlobalTrackNormalizedChi2[10];
    Double_t        _lCQChi2Position[10];
    Double_t        _lCQTrackKink[10];
-   UChar_t         _lNumberOfMatchedStation[10];
-   UChar_t         _lNumberOfValidPixelHits[10];
-   UChar_t         _muNumberInnerHits[10];
-   UChar_t         _lTrackerLayersWithMeasurement[10];
+   unsigned        _lNumberOfMatchedStation[10];
+   unsigned        _lNumberOfValidPixelHits[10];
+   unsigned        _muNumberInnerHits[10];
+   unsigned        _lTrackerLayersWithMeasurement[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
    Bool_t          _lIsPrompt[10];   //[_nL]
    Int_t           _lMatchPdgId[10];   //[_nL]
-   UChar_t         _nPh;
+   unsigned        _nPh;
    Double_t        _phPt[10];   //[_nPh]
    Double_t        _phEta[10];   //[_nPh]
    Double_t        _phEtaSC[10];   //[_nPh]
@@ -339,7 +326,7 @@ public :
    Bool_t          _phHasPixelSeed[10];   //[_nPh]
    Bool_t          _phIsPrompt[10];   //[_nPh]
    Int_t           _phMatchPdgId[10];   //[_nPh]
-   UChar_t         _nJets;
+   unsigned        _nJets;
    Double_t        _jetPt[20];   //[_nJets]
    Double_t        _jetPt_JECUp[20];   //[_nJets]
    Double_t        _jetPt_JECDown[20];   //[_nJets]
@@ -466,31 +453,17 @@ public :
    TBranch        *b__gen_NPackedDtrs_matchcharge;
    TBranch        *b__gen_nNdaughters;   //!
    TBranch        *b__gen_Ndaughters_pdg;   //!
-   TBranch        *b__gen_nstatus23;   //!
-   TBranch        *b__gen_nstatus23_fromN;   //!
-   TBranch        *b__gen_nstatus23_fromW;   //!
-   TBranch        *b__gen_status23_pdg;   //!
-   TBranch        *b__gen_status23_fromN_pdg;   //!
-   TBranch        *b__gen_status23_fromW_pdg;   //!
+   //TBranch        *b__gen_nstatus23;   //!
+   //TBranch        *b__gen_nstatus23_fromN;   //!
+   //TBranch        *b__gen_nstatus23_fromW;   //!
+   //TBranch        *b__gen_status23_pdg;   //!
+   //TBranch        *b__gen_status23_fromN_pdg;   //!
+   //TBranch        *b__gen_status23_fromW_pdg;   //!
    TBranch        *b__gen_nq;   //!
    TBranch        *b__gen_qPt;   //!
    TBranch        *b__gen_qEta;   //!
    TBranch        *b__gen_qPhi;   //!
    TBranch        *b__gen_qE;   //!
-   TBranch        *b__gen_nq1dtr;   //!
-   TBranch        *b__gen_q1dtr_status;   //!
-   TBranch        *b__gen_q1dtr_pdgid;   //!
-   TBranch        *b__gen_q1dtr_Pt;   //!
-   TBranch        *b__gen_q1dtr_Eta;   //!
-   TBranch        *b__gen_q1dtr_Phi;   //!
-   TBranch        *b__gen_q1dtr_E;   //!
-   TBranch        *b__gen_nq2dtr;   //!
-   TBranch        *b__gen_q2dtr_status;   //!
-   TBranch        *b__gen_q2dtr_pdgid;   //!
-   TBranch        *b__gen_q2dtr_Pt;   //!
-   TBranch        *b__gen_q2dtr_Eta;   //!
-   TBranch        *b__gen_q2dtr_Phi;   //!
-   TBranch        *b__gen_q2dtr_E;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf_prescale;   //!
    TBranch        *b__HLT_IsoMu24;   //!
@@ -583,6 +556,7 @@ public :
    TBranch        *b__lElehadronicOverEm;
    TBranch        *b__lEleInvMinusPInv;
    TBranch        *b__eleNumberInnerHitsMissing;
+   TBranch        *b__leptonMvatZq;
    TBranch        *b__leptonMvaSUSY16;   //!
    TBranch        *b__leptonMvaTTH16;   //!
    TBranch        *b__leptonMvaSUSY17;   //!

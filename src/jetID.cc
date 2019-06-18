@@ -52,8 +52,8 @@ int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_g
 {
     int index_good_subleading = -1;
     if(index_good_leading == -1) return index_good_subleading;
-    for(int i = 0; i < _nJets; ++i){
-	    if(i == index_good_leading) continue;
+    for(unsigned i = 0; i < _nJets; ++i){
+	    if((int)i == index_good_leading) continue;
 	    if(!*(jetID + i))           continue;
 	    if(!*(jet_clean + i))       continue;
 	    if(index_good_subleading == -1) index_good_subleading = i;
@@ -66,8 +66,8 @@ int full_analyzer::find_thirdleading_jet(bool* jetID, bool* jet_clean, int index
 {
     int index_good_thirdleading = -1;
     if(index_good_leading == -1 or index_good_subleading == -1) return index_good_thirdleading;
-    for(int i = 0; i < _nJets; ++i){
-	    if(i == index_good_leading or i == index_good_subleading) continue;
+    for(unsigned i = 0; i < _nJets; ++i){
+	    if((int)i == index_good_leading or (int)i == index_good_subleading) continue;
 	    if(!*(jetID + i))           continue;
 	    if(!*(jet_clean + i))       continue;
 	    if(index_good_thirdleading == -1) index_good_thirdleading = i;
@@ -84,7 +84,7 @@ int full_analyzer::find_jet_closest_to_lepton(bool* jetID, int i_lep)
     double dR    = -1;
     double mindR = 10;
     
-    for(int i_jet = 0; i_jet < _nJets; i_jet++){
+    for(unsigned i_jet = 0; i_jet < _nJets; i_jet++){
         if(!*(jetID + i_jet)) continue;
         dR = get_dR_lepton_jet(i_lep, i_jet);
         if(index_jet == -1){ index_jet = i_jet;}
