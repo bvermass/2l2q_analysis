@@ -15,6 +15,7 @@ function hadd_subfiles {
 
 function hadd_specific_backgrounds {
     #ttbar
+    echo -e "----------------------------------\nCollecting similar backgrounds"
     if [ 0 -lt $(ls ${1}${2}Background_TTJets_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding ttbar files: \n"
         hadd -f ${1}${2}Background_TTJets.root ${1}${2}Background_TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${1}${2}Background_TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root ${1}${2}Background_TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root
@@ -28,6 +29,11 @@ function hadd_specific_backgrounds {
     if [ 0 -lt $(ls ${1}${2}Background_WGToLNuG_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding Diboson files: \n"
         hadd -f ${1}${2}Background_Diboson.root ${1}${2}Background_WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root #${1}${2}Background_WWTo2L2Nu_13TeV-powheg.root ${1}${2}Background_WWToLNuQQ_13TeV-powheg.root ${1}${2}Background_ZZTo4L_13TeV_powheg_pythia8.root ${1}${2}Background_WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8.root ${1}${2}Background_WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8.root
+    fi
+    #QCD
+    if [ 0 -lt $(ls ${1}${2}Background_QCD_* 2>/dev/null | wc -w) ]; then
+        echo -e "\nhadding DY files: \n"
+        hadd -f ${1}${2}Background_QCD.root ${1}${2}Background_QCD*
     fi
 }
 
