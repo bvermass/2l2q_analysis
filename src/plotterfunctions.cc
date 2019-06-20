@@ -367,16 +367,16 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
     
     // draw signal on top, scaled to integral of background
-    double stack_integral = 0;
-    TIter next(stack->GetHists());
-    TObject* hist = 0;
-    while( hist = next()){
-        stack_integral += ((TH1*)hist)->Integral();
-    }
+    //double stack_integral = 0;
+    //TIter next(stack->GetHists());
+    //TObject* hist = 0;
+    //while( hist = next()){
+    //    stack_integral += ((TH1*)hist)->Integral();
+    //}
     for( it = signals.begin(); it != signals.end(); it++){
         TH1* h = it->second;
-        double scale_factor = stack_integral / h->Integral();
-        h->Scale(scale_factor);
+        //double scale_factor = stack_integral / h->Integral();
+        //h->Scale(scale_factor);
         if(drawoptions == "hist") h->Draw("hist same");
         else if(drawoptions == "E1") h->Draw("E1 same");
     
