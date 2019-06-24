@@ -830,7 +830,8 @@ public :
    virtual int      find_subleading_e(bool*, bool*, int);
    virtual int      find_subleading_mu(bool*, int);
    virtual int      find_gen_lep(int i_lep);
-   virtual void     find_gen_l1_and_l2();
+   virtual int      find_gen_l1();
+   virtual int      find_gen_l2();
    virtual bool     leptonIsGenLepton(int, int);
    virtual double   get_IVF_SVgenreco(int, int);
    virtual double   get_IVF_SVgenreco_2D(int, int);
@@ -895,9 +896,12 @@ public :
    virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
    virtual void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
-   // in src/HNL_MC_check.cc
+   // in src/gen_histograms.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+   virtual void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+   virtual void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+   virtual void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
    virtual int      get_lfromtau(int i_gen_l);
 

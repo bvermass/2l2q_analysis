@@ -69,6 +69,7 @@ void plot_every_variable_in_root_file(TString filename)
     TString specific_sample;
     if(filename.Index("HeavyNeutrino") != -1) specific_sample = filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
     else if(filename.Index("Background") != -1) specific_sample = filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") - 11) + "/";
+    else if(filename.Index("Run") != -1) specific_sample = filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     TString specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
     TString pathname = make_general_pathname("singlehists/", specific_dir, specific_sample);
 

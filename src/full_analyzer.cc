@@ -35,6 +35,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     sampleflavor = "bkg";
     if(filename.Index("_e_") != -1) sampleflavor = "e";
     else if(filename.Index("_mu_") != -1) sampleflavor = "mu";
+    else if(filename.Index("Run2016") != -1) sampleflavor = "Run2016";
+    else if(filename.Index("Run2017") != -1) sampleflavor = "Run2017";
+    else if(filename.Index("Run2018") != -1) sampleflavor = "Run2018";
 
     TString promptordisplaced = "";
     if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
@@ -42,9 +45,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    double total_weight = (cross_section * 35900) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn
     
-    _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
+    
+    if(sampleflavor == "e" or sampleflavor == "mu") _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
 
     //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
@@ -101,7 +104,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "full_analyzer.cc file: " << filename << endl;
     //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
-    total_weight = 1.0 * nentries / max_entries * total_weight; //Correct weight for the amount of events that is actually ran (if only 20.000 of 100.000 are ran, then each event should have 5 times its original weight)
+    double total_weight = 1;
+    if(sampleflavor.Index("Run") == -1){ 
+        total_weight = (cross_section * 35900 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+    }
+    std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
@@ -120,7 +127,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        event_weight = _weight;
+        if(sampleflavor.Index("Run") == -1) event_weight = _weight;
+        else event_weight = 1;
 
         //Get ID
         get_electronID(&fullElectronID[0]);
@@ -186,7 +194,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1disple)   i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
         if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
         
-        find_gen_l1_and_l2();                                                   //finds HNL process l1 and l2 gen leptons
+        i_gen_l1 = find_gen_l1();                                                   //finds HNL process l1 gen lepton
+        i_gen_l2 = find_gen_l2();                                                   //finds HNL process l2 gen lepton
         if(_1e)          leadingIsl1 = leptonIsGenLepton(i_leading_e, i_gen_l1);
         if(_1mu)         leadingIsl1 = leptonIsGenLepton(i_leading_mu, i_gen_l1);
         if(_1e1disple)   subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_e, i_gen_l2);                
@@ -217,7 +226,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1displedispl){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
+            fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
@@ -233,7 +242,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmudispl){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(sampleflavor != "bkg") fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
+            fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
@@ -344,12 +353,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    if(sampleflavor == "bkg"){
-        hnltagger_e.write_HNLtagger_tree();
-        hnltagger_mu.write_HNLtagger_tree();
-        hnltagger_gen_e.delete_HNLtagger_tree();
-        hnltagger_gen_mu.delete_HNLtagger_tree();
-    }else if(sampleflavor == "e"){
+    if(sampleflavor == "e"){
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.delete_HNLtagger_tree();
         hnltagger_gen_e.write_HNLtagger_tree();
@@ -359,6 +363,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         hnltagger_mu.write_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();
         hnltagger_gen_mu.write_HNLtagger_tree();
+    }else {
+        hnltagger_e.write_HNLtagger_tree();
+        hnltagger_mu.write_HNLtagger_tree();
+        hnltagger_gen_e.delete_HNLtagger_tree();
+        hnltagger_gen_mu.delete_HNLtagger_tree();
     }
 
     TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
