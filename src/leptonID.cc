@@ -252,6 +252,7 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 
 int full_analyzer::find_gen_lep(int i_lep)
 {
+    if(sampleflavor.Index("Run") != -1) return -1;
     TLorentzVector reco_vec;
     TLorentzVector gen_vec;
     double dR = 0.3;
@@ -269,23 +270,39 @@ int full_analyzer::find_gen_lep(int i_lep)
     return i_gen;
 }
 
-void full_analyzer::find_gen_l1_and_l2()
+int full_analyzer::find_gen_l1()
 {
+    if(sampleflavor.Index("Run") != -1) return -1;
     int fromW = 0;
-    int fromN = 0;
+    int i_found = -1;
     for(unsigned i = 0; i < _gen_nL; i++){
-    	if(abs(_gen_lMomPdg[i]) == 24){ fromW++; i_gen_l1 = i; } // does not always find the lepton, sometimes its not found, very sometimes two are found
-        if(fabs(_gen_lMomPdg[i]) == 9900012){ fromN++; i_gen_l2 = i; } //works perfectly
+    	if(abs(_gen_lMomPdg[i]) == 24){ 
+            fromW++; 
+            i_found = i; 
+        } // does not always find the lepton, sometimes its not found, very sometimes two are found
     }
-    //if(fromW != 1) cout << "fromW: " << fromW << endl;
-    //if(fromN != 1) cout << "fromN: " << fromN << endl;
-    if(fromW != 1) i_gen_l1 = -1; 
-    if(fromN != 1) i_gen_l2 = -1;
+    if(fromW != 1) i_found = -1; 
+    return i_found;
+}
+
+int full_analyzer::find_gen_l2()
+{
+    if(sampleflavor.Index("Run") != -1) return -1;
+    int fromN = 0;
+    int i_found = -1;
+    for(unsigned i = 0; i < _gen_nL; i++){
+        if(fabs(_gen_lMomPdg[i]) == 9900012){ 
+            fromN++; 
+            i_found = i; 
+        } //works perfectly to find l2
+    }
+    if(fromN != 1) i_found = -1;
+    return i_found;
 }
 
 bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
 {
-    if(i_gen_lep == -1) return false;
+    if(i_gen_lep == -1 or i_lep == -1) return false;
     double dR = get_dR(_lEta[i_lep], _lPhi[i_lep], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
     double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
     if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;

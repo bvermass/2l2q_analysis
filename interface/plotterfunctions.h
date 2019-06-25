@@ -5,6 +5,7 @@
 #include <TH1.h>
 #include <THStack.h>
 #include <THistPainter.h>
+#include <TGraphErrors.h>
 #include <TGraphAsymmErrors.h>
 #include <TLatex.h>
 #include <TTree.h>
@@ -36,6 +37,7 @@ void draw_n_hists(TString name, TCanvas *c, std::map<TString, TH1*> hists, TStri
 void stack_draw_generalstuff(TCanvas *c, THStack* stack, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption);
 void draw_stack(TString, TCanvas *c, THStack *, TLegend *, TString, TString, int, int, double, double, double, double, TString);
 void draw_stack_with_signal(TString, TCanvas *c, THStack *, std::map<TString, TH1*>, TString, TLegend *, TString, TString, int, int, double, double, double, double, TString);
+void draw_stack_with_data(TString, TCanvas *c, THStack *, TGraphErrors*, TString, TLegend *, TString, TString, int, int, double, double, double, double, TString);
 void draw_multigraph(TString, TCanvas *c, TMultiGraph *, TLegend *, TString, TString, int, int, double, double, double, double, TString);
 
 # endif
