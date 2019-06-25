@@ -390,6 +390,15 @@ void draw_stack_with_signal(TString name, TCanvas *c, THStack* stack, std::map<T
     c->Print(name);
 }
 
+void draw_stack_with_data(TString name, TCanvas *c, THStack* stack, TGraphErrors* data, TString drawoptions, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString nostackoption)
+{
+    stack_draw_generalstuff(c, stack, Xaxis, Yaxis, ylin0log1, xlin0log1, xmin, xmax, ymin, ymax, nostackoption);
+    data->Draw(drawoptions + " same");
+    lgend->DrawClone("same");
+
+    c->Modified();
+    c->Print(name);
+}
 
 void draw_multigraph(TString name, TCanvas *c, TMultiGraph* multigraph, TLegend *lgend, TString Xaxis, TString Yaxis, int ylin0log1, int xlin0log1, double xmin, double xmax, double ymin, double ymax, TString drawoptions)
 {
