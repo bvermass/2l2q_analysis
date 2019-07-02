@@ -84,6 +84,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
+    HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
+    HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
+
     PFNReader pfn_mu("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger_reliso_fix.h5", {50,11}, 2);
     PFNReader pfn_e("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger_reliso_fix.h5", {50,11}, 2);
 
@@ -232,6 +235,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(_1e1displedispl_Reliso){
             fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
             JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_e, i_subleading_displ_e);
         }
@@ -249,6 +253,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         if(_1mu1displmudispl_Reliso){
             fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
+            fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
             JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_mu, i_subleading_displ_mu);
         }
@@ -360,16 +365,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         hnltagger_mu.delete_HNLtagger_tree();
         hnltagger_gen_e.write_HNLtagger_tree();
         hnltagger_gen_mu.delete_HNLtagger_tree();
+        hnlbdttagger_e.write_HNLBDTtagger_tree();
+        hnlbdttagger_mu.delete_HNLBDTtagger_tree();
     }else if(sampleflavor == "mu"){
         hnltagger_e.delete_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();
         hnltagger_gen_mu.write_HNLtagger_tree();
+        hnlbdttagger_e.delete_HNLBDTtagger_tree();
+        hnlbdttagger_mu.write_HNLBDTtagger_tree();
     }else {
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();
         hnltagger_gen_mu.delete_HNLtagger_tree();
+        hnlbdttagger_e.write_HNLBDTtagger_tree();
+        hnlbdttagger_mu.write_HNLBDTtagger_tree();
     }
 
     TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);

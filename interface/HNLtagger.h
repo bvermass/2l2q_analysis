@@ -43,4 +43,49 @@ class HNLtagger
         void delete_HNLtagger_tree();
 };
 
+class HNLBDTtagger
+{
+    public:
+        TString HNLBDTtagger_filename;
+        TFile* HNLBDTtagger_file;
+        TTree* HNLBDTtagger_tree;
+
+        bool     _JetIsFromHNL;
+        double   _weight;
+        double   _lPt;
+        double   _lEta;
+        double   _lPhi;
+        double   _ldxy;
+        double   _ldz;
+        double   _l3dIPSig;
+        double   _lrelIso;
+        double   _lptRatio;
+        double   _lptRel;
+        unsigned _lNumberOfPixelHits;
+
+        double   _JetPt;
+        double   _JetEta;
+        double   _JetPhi;
+        double   _JetMass;
+        unsigned _nJetConstituents;
+        double   _JetdxySum;
+        double   _JetdxySigSum;
+        double   _JetdzSum;
+        double   _JetdzSigSum;
+        int      _JetChargeSum;
+
+        unsigned _SV_ntracks;
+        double   _SV_PVSVdist_2D;
+        double   _SV_PVSVdist;
+        double   _SV_normchi2;
+        double   _SV_mass;
+        double   _SV_pt;
+        double   _SV_eta;
+        double   _SV_phi;
+
+        HNLBDTtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
+        void write_HNLBDTtagger_tree();
+        void delete_HNLBDTtagger_tree();
+};
+
 #endif

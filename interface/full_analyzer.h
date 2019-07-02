@@ -889,6 +889,7 @@ public :
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
    virtual void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet);
+   virtual void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
 
    // in src/HLT_eff.cc
    virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);

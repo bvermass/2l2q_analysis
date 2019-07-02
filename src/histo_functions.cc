@@ -97,6 +97,9 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_trackE"]                      = new TH1F(prefix+"_IVF_trackE", ";track Energy (IVF);Events", 15, 0, 40);
     (*hists)[prefix+"_IVF_trackcharge"]                 = new TH1F(prefix+"_IVF_trackcharge", ";track charge (IVF);Events", 15, -2, 2);
     (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV] (IVF);Events", 30, 0, 10);
+    (*hists)[prefix+"_IVF_pt"]                          = new TH1F(prefix+"_IVF_pt", ";SV #it{p}_{T} [GeV] (IVF);Events", 30, 0, 80);
+    (*hists)[prefix+"_IVF_eta"]                         = new TH1F(prefix+"_IVF_eta", ";SV #eta (IVF);Events", 15, -3, 3);
+    (*hists)[prefix+"_IVF_phi"]                         = new TH1F(prefix+"_IVF_phi", ";SV #phi (IVF);Events", 15, -3.14, 3.14);
     //(*hists)[prefix+"_IVF_mass_check"]                  = new TH1F(prefix+"_IVF_mass_check", ";SV Mass [GeV] (IVF);Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_ptsum"]                       = new TH1F(prefix+"_IVF_ptsum", ";SV #it{p}_{T}^{sum} [GeV] (IVF);Events", 30, 0, 80);
     (*hists)[prefix+"_IVF_l1_mass"]                     = new TH1F(prefix+"_IVF_l1_mass", ";l_{1} + SV Mass [GeV] (IVF);Events", 40, 0, 150);
@@ -446,6 +449,9 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             tracksum += tmptrack;
         }
         (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
+        (*hists)[prefix+"_IVF_pt"]->Fill(tracksum.Pt(), event_weight);
+        (*hists)[prefix+"_IVF_eta"]->Fill(tracksum.Eta(), event_weight);
+        (*hists)[prefix+"_IVF_phi"]->Fill(tracksum.Phi(), event_weight);
         //(*hists)[prefix+"_IVF_mass_check"]->Fill(_IVF_mass[i_subleading], event_weight);
         (*hists)[prefix+"_IVF_ptsum"]->Fill(tracksum.Pt(), event_weight);
         (*hists)[prefix+"_IVF_l1_mass"]->Fill((tracksum+l1vector).M(), event_weight);
