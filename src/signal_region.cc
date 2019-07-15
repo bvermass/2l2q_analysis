@@ -36,10 +36,10 @@ void full_analyzer::signal_regions(){
                                   mllcut(i_leading_e, i_subleading_displ_e, 75);
     
     _1e1displedR                = _1e1displemll &&
-                                  dRcut(i_leading_e, i_subleading_displ_e, 2.6, 4); 
+                                  dRcut(i_leading_e, i_subleading_displ_e, 1, 5.5); 
     
     _1e1displedphi              = _1e1displemll &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.6);
+                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
 
     _1e1displeReliso            = _1e1displedphi &&
                                   relisocut(i_subleading_displ_e, 1.5);
@@ -88,10 +88,10 @@ void full_analyzer::signal_regions(){
                                   mllcut(i_leading_mu, i_subleading_displ_mu, 75);
     
     _1mu1displmudR              = _1mu1displmumll &&
-                                  dRcut(i_leading_mu, i_subleading_displ_mu, 2.6, 4);    
+                                  dRcut(i_leading_mu, i_subleading_displ_mu, 1, 5.5);    
     
     _1mu1displmudphi            = _1mu1displmumll &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
+                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);
     
     _1mu1displmuReliso          = _1mu1displmudphi &&
                                   relisocut(i_subleading_displ_mu, 1.5);

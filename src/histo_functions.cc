@@ -230,7 +230,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     if(!_1e and !_1pogmediume)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
 
     /*
-     * Delta phi(ll) > 2.6 versus 2.6 < Delta R(ll) < 4
+     * Delta phi(ll) > 2.4 versus 1 < Delta R(ll) < 5.5
      */
     if(_1e1displedphi and _1e1displedR) (*hists)[prefix+"_deltaphivsR_categories"]->Fill(0., event_weight);
     if(_1e1displedphi and !_1e1displedR) (*hists)[prefix+"_deltaphivsR_categories"]->Fill(1., event_weight);
@@ -316,7 +316,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     if(!_1mu and !_1pogmediummu)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
 
     /*
-     * Delta phi(ll) > 2.6 versus 2.6 < Delta R(ll) < 4
+     * Delta phi(ll) > 2.4 versus 1 < Delta R(ll) < 5.5
      */
     if(_1mu1displmudphi and _1mu1displmudR) (*hists)[prefix+"_deltaphivsR_categories"]->Fill(0., event_weight);
     if(_1mu1displmudphi and !_1mu1displmudR) (*hists)[prefix+"_deltaphivsR_categories"]->Fill(1., event_weight);
