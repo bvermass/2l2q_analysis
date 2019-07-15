@@ -748,9 +748,9 @@ public :
    
    // gen indices corresponding to signal region leptons (geometric)
    int i_gen_leading_e;
-   int i_gen_subleading_displ_e;
+   int i_gen_subleading_e;
    int i_gen_leading_mu;
-   int i_gen_subleading_displ_mu;
+   int i_gen_subleading_mu;
    
    // extra lepton indices
    int i_subleading_e;
@@ -769,6 +769,8 @@ public :
    // signal region booleans: ee
    bool _trige;
    bool _1e;
+   bool _2e;
+
    bool _1e1disple;
    bool _1e1displevtx;
    bool _1e1displedispl;
@@ -791,6 +793,8 @@ public :
    // signal region booleans: mumu
    bool _trigmu;
    bool _1mu;
+   bool _2mu;
+
    bool _1mu1displmu;
    bool _1mu1displmuvtx;
    bool _1mu1displmudispl;
@@ -864,9 +868,13 @@ public :
    virtual double   get_dR_lepton_jet(int, int);
    virtual bool     get_JetIsFromHNL(int i_jet);
 
+   // in src/photonID.cc
+   virtual std::vector<bool> get_photonID();
+
+
    // in src/signal_regions.cc
    virtual void     signal_regions();
-   virtual bool     leadptcut(int);
+   virtual bool     lptcut(int, double);
    virtual bool     no_additional_leptons();
    virtual bool     mllcut(int, int, double);
    virtual double   get_mll(int, int);

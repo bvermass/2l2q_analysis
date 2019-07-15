@@ -17,8 +17,14 @@ void full_analyzer::signal_regions(){
     
     _1e                         = _trige &&
                                   i_leading_e != -1 && 
-                                  leadptcut(i_leading_e);
+                                  lptcut(i_leading_e, 25);
 
+    _2e                         = _1e &&
+                                  i_subleading_e != -1 &&
+                                  _lCharge[i_leading_e] == _lCharge[i_subleading_e] &&
+                                  lptcut(i_subleading_e, 20);
+
+    //HNL stuff
     _1e1disple                  = _1e &&
                                   i_subleading_displ_e != -1;
 
@@ -70,8 +76,14 @@ void full_analyzer::signal_regions(){
     
     _1mu                        = _trigmu &&
                                   i_leading_mu != -1 && 
-                                  leadptcut(i_leading_mu);
+                                  lptcut(i_leading_mu, 20);
     
+    _2mu                        = _1mu &&
+                                  i_subleading_mu != -1 &&
+                                  _lCharge[i_leading_mu] == _lCharge[i_subleading_mu] &&
+                                  lptcut(i_subleading_mu, 20);
+
+    //HNL stuff
     _1mu1displmu                = _1mu &&
                                   i_subleading_displ_mu != -1;
     
@@ -120,22 +132,16 @@ void full_analyzer::signal_regions(){
 
     _1pogmediume                = _trige &&
                                   i_leading_pogmedium_e != -1 &&
-                                  leadptcut(i_leading_pogmedium_e);
+                                  lptcut(i_leading_pogmedium_e, 20);
 
     _1pogmediummu               = _trigmu &&
                                   i_leading_pogmedium_mu != -1 &&
-                                  leadptcut(i_leading_pogmedium_mu);
+                                  lptcut(i_leading_pogmedium_mu, 20);
 }
  
-bool full_analyzer::leadptcut(int i_lep){
-    if(i_lep == -1){ cout << "giving value -1 as i_lep to full_analyzer::leadptcut" << endl; return false;}
-
-    double ptcutval;
-    if(_lFlavor[i_lep]      == 0) ptcutval = 30; //electron
-    else if(_lFlavor[i_lep] == 1) ptcutval = 25; //muon
-    
-    if(_lPt[i_lep] >= ptcutval) return true;
-    else return false;
+bool full_analyzer::lptcut(int i_lep, double ptcutvalue){
+    if(i_lep == -1){ cout << "giving value -1 as i_lep to full_analyzer::lptcut" << endl; return false;}
+    return _lPt[i_lep] >= ptcutvalue;
 }
 
 bool full_analyzer::no_additional_leptons(){
