@@ -19,8 +19,11 @@ int main(int argc, char * argv[])
 //  - define legend shape
 //  - put background files in a vector (used to be a map, but vector seems to make more sense
 //  - get data file
+
+    // make name of directory where plots will end up
     TString general_pathname = make_general_pathname("stacks_with_data/", ((TString)argv[1]) + "/", "");
 
+    // get background files and legends
     std::vector<TFile*>  bkg_files;
     std::vector<TH1*>    bkg_hists; // will be filled  each loop
     std::vector<TString> bkg_legends;
@@ -30,15 +33,19 @@ int main(int argc, char * argv[])
         bkg_legends.push_back((TString)argv[i + (argc - 6)/2]);
     }
 
+    // get the standard canvas on which plots will be drawn
     TCanvas *c = get_canvas();
     TLegend lgnd = get_legend(.67,.67,.87,.87);
 
+    // get the data file and legend
     TFile* data_file = TFile::Open((TString)argv[4]);
     TString data_legend = (TString)argv[5];
 
+    // iterator to loop over histograms
     TIter next(data_file->GetListOfKeys());
     TKey* key;
 
+    // partition if splitting into subjobs
     Int_t partition = std::atoi(argv[2]);
     Int_t partitionjobnumber = std::atoi(argv[3]);
     Int_t counter_begin = floor(1.0 * partitionjobnumber / partition * data_file->GetNkeys());
@@ -46,7 +53,7 @@ int main(int argc, char * argv[])
     Int_t counter       = 0;
 
     while(key = (TKey*)next()){
-        if(counter >= counter_begin and counter , counter_end){
+        if(counter >= counter_begin and counter < counter_end){
             bkg_hists.clear();
             lgnd.Clear();
 

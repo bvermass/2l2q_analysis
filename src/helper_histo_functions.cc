@@ -26,7 +26,7 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     if(partition != 1) {
         outputfilename += "subfiles/";
         if(filename.Index("HeavyNeutrino_lljj") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - filename.Index("HeavyNeutrino_"));
-        else if(filename.Index("SingleMuon") != -1) outputfilename += filename(filename.Index("Run20"), 8);
+        else if(filename.Index("SingleMuon") != -1) outputfilename += filename(filename.Index("Run20"), 8) + "/";
         else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
     }
     
