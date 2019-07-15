@@ -778,6 +778,10 @@ public :
    bool _1e1displeReliso;
    bool _1e1disple1jet;
 
+   // Control region booleans: ee
+   bool _CR_1e1displedphi;
+   bool _CR_1e1displemll;
+
    // extra booleans: ee
    bool _1e1displedR;
    bool _1pogmediume;
@@ -795,6 +799,10 @@ public :
    bool _1mu1displmudphi;
    bool _1mu1displmuReliso;
    bool _1mu1displmu1jet;
+
+   // control region booleans: mumu
+   bool _CR_1mu1displmudphi;
+   bool _CR_1mu1displmumll;
 
    // extra booleans: mumu
    bool _1mu1displmudR;

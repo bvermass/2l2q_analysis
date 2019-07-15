@@ -54,11 +54,12 @@ int main(int argc, char * argv[])
             TClass *cl = gROOT->GetClass(key->GetClassName());
             if (!cl->InheritsFrom("TH1") or cl->InheritsFrom("TH2")) continue; //don't plot 2d plots or TGraphAsymmErrors(efficiencies) for now ( don't know why a stack plot of this would be useful
             TH1F* data_hist = (TH1F*)key->ReadObj();
-            if(data_hist->GetMaximum() == 0) continue;
-            
-            // get histogram name (to get corresponding other histos and for other stuff
             TString histname = data_hist->GetName();
             std::cout << histname << std::endl;
+            if(data_hist->GetMaximum() == 0) continue;
+            if(histname.Index("_CR") == -1) continue;
+            
+            // get histogram name (to get corresponding other histos and for other stuff
 
             // get stack of bkg histograms
             THStack* stack = new THStack("bkg_stack", histname);

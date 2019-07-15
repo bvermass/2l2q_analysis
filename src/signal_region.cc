@@ -51,10 +51,16 @@ void full_analyzer::signal_regions(){
                                   fabs(_dxy[i_subleading_displ_e]) > 0.01 &&
                                   no_additional_leptons() &&
                                   mllcut(i_leading_e, i_subleading_displ_e, 75) &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.6);
+                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
     
     _1e1displedispl_Reliso      = _1e1displedispl &&
                                   relisocut(i_subleading_displ_e, 1.5);
+
+    _CR_1e1displedphi           = _1e1displemll &&
+                                  get_dphill(i_leading_e, i_subleading_displ_e) < 2.4;
+
+    _CR_1e1displemll            = _1e1disple0adde &&
+                                  get_mll(i_leading_e, i_subleading_displ_e) > 75;
     
 
     ///////////////////////////////
@@ -97,10 +103,16 @@ void full_analyzer::signal_regions(){
                                   fabs(_dxy[i_subleading_displ_mu]) > 0.01 &&
                                   no_additional_leptons() &&
                                   mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.6);    
+                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
     
     _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
                                   relisocut(i_subleading_displ_mu, 1.5);
+    
+    _CR_1mu1displmudphi         = _1mu1displmumll &&
+                                  get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.4;
+
+    _CR_1mu1displmumll            = _1mu1displmu0addmu &&
+                                  get_mll(i_leading_mu, i_subleading_displ_mu) > 75;
     
     ////////////////////////
     // POGMedium prompt ID//

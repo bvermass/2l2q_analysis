@@ -64,7 +64,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_e", "_SS_e", "_OS_mu", "_SS_mu"}){
-        for(const TString &ev_region : {"", "_beforereliso", "_before1jet", "_afterdispl", "_afterreliso", "_endofselection"}){
+        for(const TString &ev_region : {"", "_beforereliso", "_before1jet", "_afterdispl", "_afterreliso", "_endofselection", "_CRdphi", "_CRmll"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
         }
     }
@@ -87,18 +87,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    PFNReader pfn_mu("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger_reliso_fix.h5", {50,11}, 2);
-    PFNReader pfn_e("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/jetTagger_reliso_fix.h5", {50,11}, 2);
+    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
+    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
-    int SSe = 0, SSe2 = 0, SSe3 = 0;
-    int OSe = 0, OSe2 = 0, OSe3 = 0;
-    int SSmu = 0, SSmu2 = 0, SSmu3 = 0;
-    int OSmu = 0, OSmu2 = 0, OSmu3 = 0;
-    int SSe_weight = 0, SSe2_weight = 0, SSe3_weight = 0;
-    int OSe_weight = 0, OSe2_weight = 0, OSe3_weight = 0;
-    int SSmu_weight = 0, SSmu2_weight = 0, SSmu3_weight = 0;
-    int OSmu_weight = 0, OSmu2_weight = 0, OSmu3_weight = 0;
+    int SSe = 0, SSe2 = 0, SSe3 = 0, SSe4 = 0;
+    int OSe = 0, OSe2 = 0, OSe3 = 0, OSe4 = 0;
+    int SSmu = 0, SSmu2 = 0, SSmu3 = 0, SSmu4 = 0;
+    int OSmu = 0, OSmu2 = 0, OSmu3 = 0, OSmu4 = 0;
+    int SSe_weight = 0, SSe2_weight = 0, SSe3_weight = 0, SSe4_weight = 0;
+    int OSe_weight = 0, OSe2_weight = 0, OSe3_weight = 0, OSe4_weight = 0;
+    int SSmu_weight = 0, SSmu2_weight = 0, SSmu3_weight = 0, SSmu4_weight = 0;
+    int OSmu_weight = 0, OSmu2_weight = 0, OSmu3_weight = 0, OSmu4_weight = 0;
 
     int count = 0;
 
@@ -321,6 +321,26 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
         }
+        if(_CR_1e1displedphi){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
+        }
+        if(_CR_1mu1displmudphi){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
+            else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
+        }
+        if(_CR_1e1displemll){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        }
+        if(_CR_1mu1displmumll){
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu);
+            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        }
 
         if(_1e1displedphi_novtx){
             fill_IVF_eff(&hists, signs_and_flavor + "_endofselection", i_subleading_displ_e, i_gen_subleading_displ_e);
@@ -349,6 +369,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "SS mumu:     " << SSmu3 << "        " << SSmu3_weight << "       " << 1.0*SSmu3_weight*total_weight << endl;
     cout << "OS ee:       " << OSe3 <<  "        " << OSe3_weight <<  "       " << 1.0*OSe3_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu3 << "        " << OSmu3_weight << "       " << 1.0*OSmu3_weight*total_weight << endl;
+    cout << "---------------------------CR dphi----------------------------------" << endl;
+    cout << "SS ee:       " << SSe4 <<  "        " << SSe4_weight <<  "       " << 1.0*SSe4_weight*total_weight << endl;
+    cout << "SS mumu:     " << SSmu4 << "        " << SSmu4_weight << "       " << 1.0*SSmu4_weight*total_weight << endl;
+    cout << "OS ee:       " << OSe4 <<  "        " << OSe4_weight <<  "       " << 1.0*OSe4_weight*total_weight << endl;
+    cout << "OS mumu:     " << OSmu4 << "        " << OSmu4_weight << "       " << 1.0*OSmu4_weight*total_weight << endl;
     cout << "count:       " << count << endl;
 
 
