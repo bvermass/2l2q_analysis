@@ -769,6 +769,8 @@ public :
    // signal region booleans: ee
    bool _trige;
    bool _1e;
+   bool _2e;
+
    bool _1e1disple;
    bool _1e1displevtx;
    bool _1e1displedispl;
@@ -791,6 +793,8 @@ public :
    // signal region booleans: mumu
    bool _trigmu;
    bool _1mu;
+   bool _2mu;
+
    bool _1mu1displmu;
    bool _1mu1displmuvtx;
    bool _1mu1displmudispl;
@@ -866,7 +870,7 @@ public :
 
    // in src/signal_regions.cc
    virtual void     signal_regions();
-   virtual bool     leadptcut(int);
+   virtual bool     lptcut(int, double);
    virtual bool     no_additional_leptons();
    virtual bool     mllcut(int, int, double);
    virtual double   get_mll(int, int);
