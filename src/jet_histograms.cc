@@ -94,18 +94,33 @@ void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, T
 }
 
 // fill function is part of full_analyzer class to access the tree variables
-void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
+void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet)
 {
     if(i_jet == -1) return;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
     hnltagger._JetPt        = _jetPt[i_jet];
     hnltagger._JetEta       = _jetEta[i_jet];
+
+    hnltagger._SV_PVSVdist     = get_IVF_PVSVdist(i_lep);
+    hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_lep);
+    hnltagger._SV_ntracks      = _IVF_ntracks[i_lep];
+    hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
+    TLorentzVector tracksum, tmptrack;
+    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
+        tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
+        tracksum += tmptrack;
+    }
+    hnltagger._SV_mass               = tracksum.M();
+    hnltagger._SV_pt                 = tracksum.Pt();
+    hnltagger._SV_eta                = tracksum.Eta();
+    hnltagger._SV_phi                = tracksum.Phi();
+
     hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
     for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
         hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jet][i];
         hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jet][i];
         hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jet][i];
-        hnltagger._JetConstituentPdgId[i]              = _JetConstituentPdgId[i_jet][i];
+        hnltagger._JetConstituentPdgId[i]              = get_reducedPdgId(_JetConstituentPdgId[i_jet][i]);
         hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
         hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jet][i];
         hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jet][i];
@@ -114,6 +129,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
         hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jet][i];
         hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jet][i];
         hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jet][i];
+        hnltagger._JetConstituentInSV[i]              = (_JetConstituentCharge[i_jet][i] == 0)? -1 : is_track_in_sv(i_lep, i_jet, i);
     }
     for(unsigned i = _nJetConstituents[i_jet]; i < 50; i++){
         hnltagger._JetConstituentPt[i]                 = 0;
@@ -128,8 +144,17 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet)
         hnltagger._JetConstituentNumberOfHits[i]      = 0;
         hnltagger._JetConstituentNumberOfPixelHits[i] = 0;
         hnltagger._JetConstituentHasTrack[i]          = 0;
+        hnltagger._JetConstituentInSV[i]              = 0;
     }
     hnltagger.HNLtagger_tree->Fill();
+}
+
+int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
+{
+    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
+        if(fabs(_IVF_trackpt[i_lep][i_track] - _JetConstituentPt[i_jet][i_const]) < 0.01 and fabs(_IVF_tracketa[i_lep][i_track] - _JetConstituentEta[i_jet][i_const]) < 0.01) return 1;
+    }
+    return 0;
 }
 
 void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double weight)
@@ -177,17 +202,15 @@ void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep
     hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_lep);
     hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_lep);
     hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
-    double svptsum = 0;
     TLorentzVector tracksum, tmptrack;
     for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
-        svptsum  += _IVF_trackpt[i_lep][i_track];
         tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
         tracksum += tmptrack;
     }
     hnlbdttagger._SV_mass               = tracksum.M();
-    hnlbdttagger._SV_pt                 = svptsum;
-    hnlbdttagger._SV_eta                = _IVF_eta[i_lep];
-    hnlbdttagger._SV_phi                = _IVF_phi[i_lep];
+    hnlbdttagger._SV_pt                 = tracksum.Pt();
+    hnlbdttagger._SV_eta                = tracksum.Eta();
+    hnlbdttagger._SV_phi                = tracksum.Phi();
 
     hnlbdttagger.HNLBDTtagger_tree->Fill();
 }

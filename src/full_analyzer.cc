@@ -234,7 +234,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1e1displedispl_Reliso){
-            fill_HNLtagger_tree(hnltagger_e, i_closel2_jet);
+            fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
             JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_e, i_subleading_displ_e);
@@ -252,7 +252,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
         }
         if(_1mu1displmudispl_Reliso){
-            fill_HNLtagger_tree(hnltagger_mu, i_closel2_jet);
+            fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
             JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_mu, i_subleading_displ_mu);

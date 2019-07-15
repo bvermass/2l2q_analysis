@@ -53,3 +53,23 @@ double get_dR(double eta1, double phi1, double eta2, double phi2){
     double dphi = (fabs(phi1 - phi2) < 3.14)? fabs(phi1 - phi2) : 6.28 - fabs(phi1 - phi2);
     return sqrt(deta*deta + dphi*dphi);
 }
+
+double get_reducedPdgId(int pdgId)
+{
+    static const std::map< unsigned, double > pdgIdMap = {
+        { 0, 0.},
+        { 1, 0.125},
+        { 2, 0.25},
+        { 11, 0.375},
+        { 13, 0.5},
+        { 22, 0.625},
+        { 130, 0.75},
+        { 211, 0.875}
+    };
+    auto entry = pdgIdMap.find( fabs( pdgId ) );
+    if( entry != pdgIdMap.cend() ){
+        return entry->second;
+    } else {
+        return 1;
+    }
+}

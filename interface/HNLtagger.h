@@ -24,11 +24,21 @@ class HNLtagger
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetEta;
+        
+        double   _SV_PVSVdist;
+        double   _SV_PVSVdist_2D;
+        unsigned _SV_ntracks;
+        double   _SV_mass;
+        double   _SV_pt;
+        double   _SV_eta;
+        double   _SV_phi;
+        double   _SV_normchi2;
+
         unsigned _nJetConstituents;
         double   _JetConstituentPt[maxJetSize];
         double   _JetConstituentEta[maxJetSize];
         double   _JetConstituentPhi[maxJetSize];
-        int      _JetConstituentPdgId[maxJetSize];
+        double   _JetConstituentPdgId[maxJetSize];
         int      _JetConstituentCharge[maxJetSize];
         double   _JetConstituentdxy[maxJetSize];
         double   _JetConstituentdxyErr[maxJetSize];
@@ -37,6 +47,7 @@ class HNLtagger
         int      _JetConstituentNumberOfHits[maxJetSize];    //signed integer so particles without tracks can have negative default values
         int      _JetConstituentNumberOfPixelHits[maxJetSize];
         bool     _JetConstituentHasTrack[maxJetSize];
+        int      _JetConstituentInSV[maxJetSize];
 
         HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
         void write_HNLtagger_tree();

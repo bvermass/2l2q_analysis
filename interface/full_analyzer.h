@@ -888,7 +888,8 @@ public :
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
    virtual void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
-   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_jet);
+   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
+   virtual int      is_track_in_sv(int i_lep, int i_jet, int i_const);
    virtual void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
 
    // in src/HLT_eff.cc
