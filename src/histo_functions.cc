@@ -241,12 +241,12 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
      * KVF vs IVF for events
      */
     if(sampleflavor.Index("Run") == -1){
-        if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS and i_gen_subleading_displ_e != -1) {
-            if(_lIVF_match[i_subleading_displ_e] and get_IVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2){
-                if(_lKVF_valid[i_subleading_displ_e] and get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
+        if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_e]) == SSorOS and i_gen_subleading_e != -1) {
+            if(_lIVF_match[i_subleading_e] and get_IVF_SVgenreco(i_gen_subleading_e, i_subleading_e) < 0.2){
+                if(_lKVF_valid[i_subleading_e] and get_KVF_SVgenreco(i_gen_subleading_e, i_subleading_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
             }else {
-                if(_lKVF_valid[i_subleading_displ_e] and get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
+                if(_lKVF_valid[i_subleading_e] and get_KVF_SVgenreco(i_gen_subleading_e, i_subleading_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
             }
         }
@@ -327,12 +327,12 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
      * KVF vs IVF for events
      */
     if(sampleflavor.Index("Run") == -1){
-        if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS and i_gen_subleading_displ_mu != -1) {
-            if(_lIVF_match[i_subleading_displ_mu] and get_IVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2){
-                if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
+        if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_mu]) == SSorOS and i_gen_subleading_mu != -1) {
+            if(_lIVF_match[i_subleading_mu] and get_IVF_SVgenreco(i_gen_subleading_mu, i_subleading_mu) < 0.2){
+                if(_lKVF_valid[i_subleading_mu] and get_KVF_SVgenreco(i_gen_subleading_mu, i_subleading_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
             }else {
-                if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
+                if(_lKVF_valid[i_subleading_mu] and get_KVF_SVgenreco(i_gen_subleading_mu, i_subleading_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
             }
         }

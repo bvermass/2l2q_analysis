@@ -21,7 +21,7 @@ void full_analyzer::signal_regions(){
 
     _2e                         = _1e &&
                                   i_subleading_e != -1 &&
-                                  _lCharge[i_leading_e] == _lCharge[i_subleading_e] &&
+                                  _lCharge[i_leading_e] != _lCharge[i_subleading_e] &&
                                   lptcut(i_subleading_e, 20);
 
     //HNL stuff
@@ -80,7 +80,7 @@ void full_analyzer::signal_regions(){
     
     _2mu                        = _1mu &&
                                   i_subleading_mu != -1 &&
-                                  _lCharge[i_leading_mu] == _lCharge[i_subleading_mu] &&
+                                  _lCharge[i_leading_mu] != _lCharge[i_subleading_mu] &&
                                   lptcut(i_subleading_mu, 20);
 
     //HNL stuff

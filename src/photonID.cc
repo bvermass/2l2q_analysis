@@ -8,7 +8,7 @@ std::vector<bool> full_analyzer::get_photonID()
 {
     std::vector<bool> photonID;
     for(unsigned i = 0; i < _nPh; ++i){
-        photonID.push_back(_phCutbasedTight[i]);
+        photonID.push_back(_phCutBasedTight[i]);
     }
     return photonID;
 }

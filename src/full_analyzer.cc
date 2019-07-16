@@ -91,14 +91,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
-    int SSe = 0, SSe2 = 0, SSe3 = 0, SSe4 = 0;
-    int OSe = 0, OSe2 = 0, OSe3 = 0, OSe4 = 0;
-    int SSmu = 0, SSmu2 = 0, SSmu3 = 0, SSmu4 = 0;
-    int OSmu = 0, OSmu2 = 0, OSmu3 = 0, OSmu4 = 0;
-    int SSe_weight = 0, SSe2_weight = 0, SSe3_weight = 0, SSe4_weight = 0;
-    int OSe_weight = 0, OSe2_weight = 0, OSe3_weight = 0, OSe4_weight = 0;
-    int SSmu_weight = 0, SSmu2_weight = 0, SSmu3_weight = 0, SSmu4_weight = 0;
-    int OSmu_weight = 0, OSmu2_weight = 0, OSmu3_weight = 0, OSmu4_weight = 0;
+    //int SSe = 0;//, SSe2 = 0, SSe3 = 0, SSe4 = 0;
+    int OSe = 0;//, OSe2 = 0, OSe3 = 0, OSe4 = 0;
+    //int SSmu = 0;//, SSmu2 = 0, SSmu3 = 0, SSmu4 = 0;
+    int OSmu = 0;//, OSmu2 = 0, OSmu3 = 0, OSmu4 = 0;
+    //int SSe_weight = 0;//, SSe2_weight = 0, SSe3_weight = 0, SSe4_weight = 0;
+    int OSe_weight = 0;//, OSe2_weight = 0, OSe3_weight = 0, OSe4_weight = 0;
+    //int SSmu_weight = 0;//, SSmu2_weight = 0, SSmu3_weight = 0, SSmu4_weight = 0;
+    int OSmu_weight = 0;//, OSmu2_weight = 0, OSmu3_weight = 0, OSmu4_weight = 0;
 
     int count = 0;
 
@@ -253,7 +253,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "-------------------------2 leptons-------------------------------" << endl;
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
-    cout << "count:       " << count << endl;
+    //cout << "count:       " << count << endl;
 
 
 /*
