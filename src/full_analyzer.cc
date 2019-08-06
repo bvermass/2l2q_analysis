@@ -104,8 +104,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
-    //cout << "full_analyzer.cc file: " << filename << endl;
-    //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
     if(sampleflavor.Index("Run") == -1){ 
@@ -253,7 +251,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "-------------------------2 leptons-------------------------------" << endl;
     cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
     cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
-    //cout << "count:       " << count << endl;
+    cout << "count:       " << count << endl;
 
 
 /*

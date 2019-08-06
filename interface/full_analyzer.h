@@ -892,18 +892,13 @@ public :
    virtual void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
    virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
    virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
-   virtual void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
-   virtual void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int, int);
-   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int, int);
-   virtual void     fill_KVF_eff(std::map<TString, TH1*>*, TString, int, int);
-   virtual void     fill_IVF_eff(std::map<TString, TH1*>*, TString, int, int);
+   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int);
    //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
    virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
    // in src/jet_histograms.cc
    virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
    virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
    virtual int      is_track_in_sv(int i_lep, int i_jet, int i_const);
    virtual void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
@@ -917,9 +912,7 @@ public :
    // in src/gen_histograms.cc
    virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
    virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-   virtual void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-   virtual void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
-   virtual void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+   virtual void     add_gen_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
    virtual int      get_lfromtau(int i_gen_l);
 
