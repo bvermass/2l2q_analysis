@@ -12,7 +12,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     }
 
-    return "/user/bvermass/public/2l2q_analysis/plots/" + plottype + specific_dir;
+    return "/user/bvermass/public/MET_scale_resolution/plots/" + plottype + specific_dir;
 }
 
 
@@ -20,7 +20,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
 {
     // append directories such as SS/OS, e/mu or HLT to pathname
     TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
-    TString eormu           = (histname.Index("_e_") == -1 && histname.Index("Ele") == -1)? ((histname.Index("_mu_") == -1 && histname.Index("Mu") == -1)? "" : "mu/") : "e/";
+    TString eormu           = (histname.Index("_ee_") == -1)? ((histname.Index("_mumu_") == -1)? "" : "mu/") : "e/";
     TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
     TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
     TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";

@@ -1,3 +1,1 @@
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO.root   HNL_3GeV_45.64mm
-#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_QCD_test.root  QCD
-#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Run2016C.root data
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_TTJets_TuneCP5_13TeV-madgraphMLM-pythia8.root  Top

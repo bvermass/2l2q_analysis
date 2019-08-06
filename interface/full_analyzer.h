@@ -920,6 +920,10 @@ public :
    virtual double   get_PFNprediction(PFNReader pfn, int i_jet);
    virtual void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
    virtual void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+
+   // in src/MET_histograms.cc
+   virtual void     add_MET_histograms(std::map<TString, TH1*>* hists, TString prefix);
+   virtual void     fill_MET_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
 };
 
 #endif
