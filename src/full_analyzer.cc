@@ -47,7 +47,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
     
-    if(sampleflavor == "e" or sampleflavor == "mu") _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
+    if(sampleflavor == "e" or sampleflavor == "mu"){
+        _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
+        _gen_NV     = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
+    }else {
+        _gen_Nmass = 0;
+        _gen_NV     = 0;
+    }
+
 
     //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
