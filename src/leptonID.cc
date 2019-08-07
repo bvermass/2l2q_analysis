@@ -172,18 +172,15 @@ void full_analyzer::get_displ_muonID(bool* ID)
 void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
 {
     // The array cleaned will contain value true when the electron is not within dR < 0.05 around a muon
-    TLorentzVector muon;
-    TLorentzVector electron;
-
     for(unsigned i_el = 0; i_el < _nL; ++i_el){
 	    *(cleaned + i_el) = true;
 	    if(_lFlavor[i_el] != 0) continue;
-	    electron.SetPtEtaPhiE(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
+	    LorentzVector electron(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
 
 	    for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
 	        if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
-	    	    muon.SetPtEtaPhiE(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
-	    	    if(muon.DeltaR(electron) < 0.05) *(cleaned + i_el) = false;
+                LorentzVector muon(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
+                if(deltaR(electron, muon) < 0.05) *(cleaned + i_el) = false;
 	        }
 	    }
     }
@@ -253,16 +250,14 @@ int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
 int full_analyzer::find_gen_lep(int i_lep)
 {
     if(sampleflavor.Index("Run") != -1) return -1;
-    TLorentzVector reco_vec;
-    TLorentzVector gen_vec;
     double dR = 0.3;
     int i_gen = -1;
     if(i_lep != -1) {
-        reco_vec.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
+        LorentzVector reco_vec(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
         for(unsigned i = 0; i< _gen_nL; i++){
-            gen_vec.SetPtEtaPhiE(_gen_lPt[i], _gen_lEta[i], _gen_lPhi[i], _gen_lE[i]);
-            if(_lFlavor[i_lep] == _gen_lFlavor[i] && gen_vec.DeltaR(reco_vec) < dR){
-                dR = gen_vec.DeltaR(reco_vec);
+            LorentzVector gen_vec(_gen_lPt[i], _gen_lEta[i], _gen_lPhi[i], _gen_lE[i]);
+            if(_lFlavor[i_lep] == _gen_lFlavor[i] && deltaR(gen_vec, reco_vec) < dR){
+                dR = deltaR(gen_vec, reco_vec);
                 i_gen = i;
             }
         }

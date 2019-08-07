@@ -127,15 +127,17 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     int nJets_uncl = 0;
     int nJets_cl = 0;
-    TLorentzVector jets_uncl[4];
-    TLorentzVector jets_cl[4];
+    std::vector<LorentzVector> jets_uncl;
+    std::vector<LorentzVector> jets_cl;
     for(unsigned i = 0; i < _nJets; i++){
         if(fullJetID[i]){ 
-            jets_uncl[nJets_uncl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            LorentzVector tmp(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            jets_uncl.push_back(tmp);
             nJets_uncl++;
         }
         if(fullJetID[i] and jet_clean_full_displ[i]){
-            jets_cl[nJets_cl].SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            LorentzVector tmp(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+            jets_cl.push_back(tmp);
             nJets_cl++;
         }
     }
@@ -176,14 +178,15 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     (*hists)[prefix+"_mll"]->Fill(get_mll(i_leading, i_subleading), event_weight);
     (*hists)[prefix+"_dphill"]->Fill(get_dphill(i_leading, i_subleading), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(get_dRll(i_leading, i_subleading), event_weight);
-    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[1]),event_weight);
-    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(jets_uncl[0].DeltaR(jets_uncl[1]),event_weight);
-    if(nJets_uncl > 1) (*hists2D)[prefix+"_dRl2jet1_2_uncl"]->Fill(get_dR_lepton_jet(i_subleading, jets_uncl[0]), get_dR_lepton_jet(i_subleading, jets_uncl[1]), event_weight);
-    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]),event_weight);
-    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[1]),event_weight);
-    if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(jets_cl[0].DeltaR(jets_cl[1]),event_weight);
-    if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(get_dR_lepton_jet(i_subleading, jets_cl[0]), get_dR_lepton_jet(i_subleading, jets_cl[1]), event_weight);
+    LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+    if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[1]), event_weight);
+    if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(deltaR(jets_uncl[0], jets_uncl[1]), event_weight);
+    if(nJets_uncl > 1) (*hists2D)[prefix+"_dRl2jet1_2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), deltaR(l2_vec, jets_uncl[1]), event_weight);
+    if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), event_weight);
+    if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(deltaR(l2_vec, jets_cl[1]), event_weight);
+    if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(deltaR(jets_cl[0], jets_cl[1]), event_weight);
+    if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), deltaR(l2_vec, jets_cl[1]), event_weight);
 
     if(sampleflavor.Index("Run") == -1){
         int charged_count = 0;
@@ -432,6 +435,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_IVF_cz"]->Fill(_IVF_cz[i_subleading], event_weight);
     (*hists)[prefix+"_IVF_cxyz"]->Fill(sqrt(_IVF_cx[i_subleading]*_IVF_cx[i_subleading] + _IVF_cy[i_subleading]*_IVF_cy[i_subleading] + _IVF_cz[i_subleading]*_IVF_cz[i_subleading]), event_weight);
     
+    // not using LorentzVector here, since I need the option to set (x, y, z, t)
     TLorentzVector PVSV_vector(_IVF_x[i_subleading] - _PV_x, _IVF_y[i_subleading] - _PV_y, _IVF_z[i_subleading] - _PV_z, 0);
 
     if(_IVF_ntracks[i_subleading] > 1){

@@ -1,18 +1,6 @@
-
-//Include C++ libraries
-#include <iostream>
-#include <fstream>
-
 //Include header for this class
 #include "../interface/full_analyzer.h"
 
-
-//Include ROOT header files
-#include <TH2.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include <TLorentzVector.h>
-#include <TSystem.h>
 
 using namespace std;
 
