@@ -13,6 +13,7 @@
 #include <TFile.h>
 
 #include <iostream>
+#include <fstream>
 #include <cmath>
 
 #include <string>
@@ -29,6 +30,7 @@
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
+#include "../helpertools/LorentzVector/LorentzVector.h"
 
 class full_analyzer {
 public :
@@ -737,6 +739,7 @@ public :
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
+   double _gen_NV;
    bool leadingIsl1;
    bool subleadingIsl2; 
 
@@ -863,8 +866,6 @@ public :
    virtual int      find_subleading_jet(bool*, bool*, int);
    virtual int      find_thirdleading_jet(bool*, bool*, int, int);
    virtual int      find_jet_closest_to_lepton(bool*, int);
-   virtual double   get_dR_lepton_jet(TLorentzVector, TLorentzVector);
-   virtual double   get_dR_lepton_jet(int, TLorentzVector&);
    virtual double   get_dR_lepton_jet(int, int);
    virtual bool     get_JetIsFromHNL(int i_jet);
 

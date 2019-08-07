@@ -21,6 +21,8 @@ class HNLtagger
         TTree* HNLtagger_tree;
 
         static const unsigned maxJetSize = 50;
+        int      _gen_Nmass;
+        double   _gen_NV;
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetEta;
@@ -61,6 +63,8 @@ class HNLBDTtagger
         TFile* HNLBDTtagger_file;
         TTree* HNLBDTtagger_tree;
 
+        int      _gen_Nmass;
+        double   _gen_NV;
         bool     _JetIsFromHNL;
         double   _weight;
         double   _lPt;
