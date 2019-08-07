@@ -107,15 +107,15 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_lep);
     hnltagger._SV_ntracks      = _IVF_ntracks[i_lep];
     hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
-    TLorentzVector tracksum, tmptrack;
+    LorentzVector tracksum;
     for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
-        tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
+        LorentzVector tmptrack(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
         tracksum += tmptrack;
     }
-    hnltagger._SV_mass               = tracksum.M();
-    hnltagger._SV_pt                 = tracksum.Pt();
-    hnltagger._SV_eta                = tracksum.Eta();
-    hnltagger._SV_phi                = tracksum.Phi();
+    hnltagger._SV_mass               = tracksum.mass();
+    hnltagger._SV_pt                 = tracksum.pt();
+    hnltagger._SV_eta                = tracksum.eta();
+    hnltagger._SV_phi                = tracksum.phi();
 
     hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
     for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
@@ -184,9 +184,9 @@ void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep
     hnlbdttagger._nJetConstituents      = _nJetConstituents[i_jet];//Constituents[i_jet];
 
     double jetdxysum = 0, jetdxysigsum = 0, jetdzsum = 0, jetdzsigsum = 0, jetchargesum = 0;
-    TLorentzVector jetmassVec, constituentVec;
+    LorentzVector jetmassVec;
     for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
-        constituentVec.SetPtEtaPhiM(_JetConstituentPt[i_jet][i], _JetConstituentEta[i_jet][i], _JetConstituentPhi[i_jet][i], _JetConstituentMass[i_jet][i]);
+        LorentzVector constituentVec(_JetConstituentPt[i_jet][i], _JetConstituentEta[i_jet][i], _JetConstituentPhi[i_jet][i], sqrt( _JetConstituentMass[i_jet][i]*_JetConstituentMass[i_jet][i] + _JetConstituentPt[i_jet][i]*_JetConstituentPt[i_jet][i]));
         jetmassVec += constituentVec;
         if(_JetConstituentCharge[i] == 0) continue;
         jetdxysum    += fabs(_JetConstituentdxy[i_jet][i]);
@@ -195,7 +195,7 @@ void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep
         jetdzsigsum  += fabs(_JetConstituentdz[i_jet][i]/_JetConstituentdzErr[i_jet][i]);
         jetchargesum += _JetConstituentCharge[i_jet][i];
     }
-    hnlbdttagger._JetMass               = jetmassVec.M();
+    hnlbdttagger._JetMass               = jetmassVec.mass();
     hnlbdttagger._JetdxySum             = jetdxysum;
     hnlbdttagger._JetdxySigSum          = jetdxysigsum;
     hnlbdttagger._JetdzSum              = jetdzsum;
@@ -206,15 +206,15 @@ void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep
     hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_lep);
     hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_lep);
     hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
-    TLorentzVector tracksum, tmptrack;
+    LorentzVector tracksum;
     for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
-        tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
+        LorentzVector tmptrack(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
         tracksum += tmptrack;
     }
-    hnlbdttagger._SV_mass               = tracksum.M();
-    hnlbdttagger._SV_pt                 = tracksum.Pt();
-    hnlbdttagger._SV_eta                = tracksum.Eta();
-    hnlbdttagger._SV_phi                = tracksum.Phi();
+    hnlbdttagger._SV_mass               = tracksum.mass();
+    hnlbdttagger._SV_pt                 = tracksum.pt();
+    hnlbdttagger._SV_eta                = tracksum.eta();
+    hnlbdttagger._SV_phi                = tracksum.phi();
 
     hnlbdttagger.HNLBDTtagger_tree->Fill();
 }

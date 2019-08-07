@@ -19,17 +19,14 @@ void full_analyzer::get_jetID(bool* ID)
 void full_analyzer::get_clean_jets(bool* cleaned, bool* electronID, bool* muonID)
 {
     // jets are cleaned from leptons if dR < 0.4 
-    TLorentzVector lepton;
-    TLorentzVector jet;
-
     for(unsigned i = 0; i < _nJets; ++i){
 	    *(cleaned + i) = true;
-	    jet.SetPtEtaPhiE(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+	    LorentzVector jet(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
 
 	    for(unsigned j = 0; j < _nL; ++j){
-	        lepton.SetPtEtaPhiE(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
+	        LorentzVector lepton(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
 	        if((_lFlavor[j] == 0 && *(electronID + j)) || (_lFlavor[j] == 1 && *(muonID + j))){
-		        if(lepton.DeltaR(jet) < 0.4) *(cleaned + i) = false;
+		        if(deltaR(lepton, jet) < 0.4) *(cleaned + i) = false;
 	        }
 	    }
     }
@@ -94,22 +91,10 @@ int full_analyzer::find_jet_closest_to_lepton(bool* jetID, int i_lep)
     return index_jet;
 }
 
-double full_analyzer::get_dR_lepton_jet(TLorentzVector vec_lep, TLorentzVector vec_jet){
-    return fabs(vec_lep.DeltaR(vec_jet));
-}
-
 double full_analyzer::get_dR_lepton_jet(int i_lep, int i_jet){
-    TLorentzVector vec_lep;
-    vec_lep.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
-    TLorentzVector vec_jet;
-    vec_jet.SetPtEtaPhiE(_jetPt[i_jet], _jetEta[i_jet], _jetPhi[i_jet], _jetE[i_jet]);
-    return fabs(vec_lep.DeltaR(vec_jet));
-}
-
-double full_analyzer::get_dR_lepton_jet(int i_lep, TLorentzVector& vec_jet){
-    TLorentzVector vec_lep;
-    vec_lep.SetPtEtaPhiE(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
-    return fabs(vec_lep.DeltaR(vec_jet));
+    LorentzVector vec_lep(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);
+    LorentzVector vec_jet(_jetPt[i_jet], _jetEta[i_jet], _jetPhi[i_jet], _jetE[i_jet]);
+    return deltaR(vec_lep, vec_jet);
 }
 
 bool full_analyzer::get_JetIsFromHNL(int i_jet){

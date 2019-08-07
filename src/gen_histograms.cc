@@ -75,19 +75,16 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
         (*hists)["gen_l1_flavor"]->Fill(_gen_lFlavor[i_gen_l1], event_weight);
         (*hists)["gen_l2_flavor"]->Fill(_gen_lFlavor[i_gen_l2], event_weight);
         (*hists)["gen_N_pt"]->Fill(_gen_NPt, event_weight);
-        TLorentzVector lepton1_vec;
-        TLorentzVector HNL_vec;
-        lepton1_vec.SetPtEtaPhiE(_gen_lPt[i_gen_l1], _gen_lEta[i_gen_l1], _gen_lPhi[i_gen_l1], _gen_lE[i_gen_l1]);
-        HNL_vec.SetPtEtaPhiE(_gen_NPt, _gen_NEta, _gen_NPhi, _gen_NE);
-        (*hists)["gen_M_l1_N"]->Fill((lepton1_vec + HNL_vec).M(), event_weight);
+        LorentzVector lepton1_vec(_gen_lPt[i_gen_l1], _gen_lEta[i_gen_l1], _gen_lPhi[i_gen_l1], _gen_lE[i_gen_l1]);
+        LorentzVector HNL_vec(_gen_NPt, _gen_NEta, _gen_NPhi, _gen_NE);
+        (*hists)["gen_M_l1_N"]->Fill((lepton1_vec + HNL_vec).mass(), event_weight);
         (*hists)["gen_PV_Nvertex_dxyz"]->Fill(sqrt((_PV_x - _gen_Nvertex_x)*(_PV_x - _gen_Nvertex_x) + (_PV_y - _gen_Nvertex_y)*(_PV_y - _gen_Nvertex_y) + (_PV_z - _gen_Nvertex_z)*(_PV_z - _gen_Nvertex_z)), event_weight);
         (*hists)["gen_PV-SVdist_xlog"]->Fill(get_PVSVdist_gen(i_gen_l2), event_weight);
 
-        TLorentzVector l2_vector; l2_vector.SetPtEtaPhiE(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
-        TLorentzVector track_vector;
+        LorentzVector l2_vector(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
         for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
-            track_vector.SetPtEtaPhiE(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);                    
-            (*hists)["gen_l2_tracks_dR"]->Fill(l2_vector.DeltaR(track_vector), event_weight);
+            LorentzVector track_vector(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
+            (*hists)["gen_l2_tracks_dR"]->Fill(deltaR(l2_vector, track_vector), event_weight);
         }
 
         // lepton from tau histograms

@@ -152,11 +152,9 @@ bool full_analyzer::mllcut(int i_lead, int i_sublead, double uppercut){
 }
 
 double full_analyzer::get_mll(int i_lead, int i_sublead){
-    TLorentzVector leadingvec;
-    TLorentzVector subleadingvec;
-    leadingvec.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
-    subleadingvec.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
-    return (leadingvec + subleadingvec).M();
+    LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
+    LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
+    return (leadingvec + subleadingvec).mass();
 }
 
 
@@ -167,11 +165,9 @@ bool full_analyzer::dRcut(int i_lead, int i_sublead, double lowercut, double upp
 
 
 double full_analyzer::get_dRll(int i_lead, int i_sublead){
-    TLorentzVector leadingvec;
-    leadingvec.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
-    TLorentzVector subleadingvec;
-    subleadingvec.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
-    return fabs(leadingvec.DeltaR(subleadingvec));
+    LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
+    LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
+    return deltaR(leadingvec, subleadingvec);
 }
 
 
@@ -180,11 +176,9 @@ bool full_analyzer::dphicut(int i_lead, int i_sublead, double lowercut){
 }
 
 double full_analyzer::get_dphill(int i_lead, int i_sublead){
-    TLorentzVector leadingvec;
-    leadingvec.SetPtEtaPhiE(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
-    TLorentzVector subleadingvec;
-    subleadingvec.SetPtEtaPhiE(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
-    return fabs(leadingvec.DeltaPhi(subleadingvec));
+    LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
+    LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
+    return deltaPhi(leadingvec, subleadingvec);
 }
 
 bool full_analyzer::relisocut(int i_sublead, double uppercut){
