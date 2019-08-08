@@ -147,6 +147,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(0);
 
             hists_bkg->Draw("hist");
+            hists_bkg->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists_bkg->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             if(withdata) hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
             else hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.);
@@ -164,6 +166,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(1);
 
             hists_bkg->Draw("hist");
+            hists_bkg->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists_bkg->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             if(withdata) hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
             else hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.1);

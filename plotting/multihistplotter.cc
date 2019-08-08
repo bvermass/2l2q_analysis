@@ -92,6 +92,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(0);
 
             hists->Draw("PLC hist nostack");
+            hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
             legend.Draw("same");
             CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
@@ -105,6 +107,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(1);
 
             hists->Draw("PLC hist nostack");
+            hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(10*hists->GetMaximum("nostack"));
             legend.Draw("same");
             CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
