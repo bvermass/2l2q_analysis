@@ -40,6 +40,8 @@ int main(int argc, char * argv[])
     } else if(files_data.size() > 1){ 
         std::cout << "Error: giving more than one data file!" << std::endl; 
         return 1; 
+    } else {
+        std::cout << "Making plots without data" << std::endl;
     }
 
 
@@ -84,22 +86,14 @@ int main(int argc, char * argv[])
             if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
             
             // get data histogram and fill legend
-            std::cout << "ok1" << std::endl;
             TH1F* data_hist;
-            std::cout << "ok2" << std::endl;
             if(withdata){ 
-            std::cout << "ok3" << std::endl;
                 data_hist = (TH1F*) files_data[0]->Get(histname);
                 std::cout << data_hist << std::endl;
-            std::cout << "ok4" << std::endl;
                 legend.AddEntry(data_hist, legends_data[0], "pl");
-            std::cout << "ok5" << std::endl;
                 if(histname.Index("_CR") == -1) continue; // Only print Control region plots for data
-            std::cout << "ok6" << std::endl;
                 if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
-            std::cout << "ok7" << std::endl;
             }
-            std::cout << "ok8" << std::endl;
             
             // get background histograms and fill legend
             THStack* hists_bkg = new THStack("stack_bkg", "");
@@ -153,6 +147,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(0);
 
             hists_bkg->Draw("hist");
+            hists_bkg->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists_bkg->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             if(withdata) hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
             else hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.);
@@ -170,6 +166,8 @@ int main(int argc, char * argv[])
             pad->SetLogy(1);
 
             hists_bkg->Draw("hist");
+            hists_bkg->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+            hists_bkg->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             if(withdata) hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
             else hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.1);
