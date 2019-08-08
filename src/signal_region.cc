@@ -13,7 +13,7 @@ void full_analyzer::signal_regions(){
     /////////////////////////////
     // Main signal region : ee //
     /////////////////////////////
-    _trige                      = _HLT_Ele27_WPTight_Gsf;
+    _trige                      = true;
     
     _1e                         = _trige &&
                                   i_leading_e != -1 && 
@@ -25,54 +25,54 @@ void full_analyzer::signal_regions(){
                                   lptcut(i_subleading_e, 20);
 
     //HNL stuff
-    _1e1disple                  = _1e &&
-                                  i_subleading_displ_e != -1;
+    //_1e1disple                  = _1e &&
+    //                              i_subleading_displ_e != -1;
 
-    _1e1displevtx               = _1e1disple &&
-                                  _lIVF_match[i_subleading_displ_e];
+    //_1e1displevtx               = _1e1disple &&
+    //                              _lIVF_match[i_subleading_displ_e];
 
-    _1e1displedispl             = _1e1displevtx &&
-                                  fabs(_dxy[i_subleading_displ_e]) > 0.01;
+    //_1e1displedispl             = _1e1displevtx &&
+    //                              fabs(_dxy[i_subleading_displ_e]) > 0.01;
 
-    _1e1disple0adde             = _1e1displedispl &&
-                                  no_additional_leptons();
-    
-    
-    _1e1displemll               = _1e1disple0adde &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 75);
-    
-    _1e1displedR                = _1e1displemll &&
-                                  dRcut(i_leading_e, i_subleading_displ_e, 1, 5.5); 
-    
-    _1e1displedphi              = _1e1displemll &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
+    //_1e1disple0adde             = _1e1displedispl &&
+    //                              no_additional_leptons();
+    //
+    //
+    //_1e1displemll               = _1e1disple0adde &&
+    //                              mllcut(i_leading_e, i_subleading_displ_e, 75);
+    //
+    //_1e1displedR                = _1e1displemll &&
+    //                              dRcut(i_leading_e, i_subleading_displ_e, 1, 5.5); 
+    //
+    //_1e1displedphi              = _1e1displemll &&
+    //                              dphicut(i_leading_e, i_subleading_displ_e, 2.4);
 
-    _1e1displeReliso            = _1e1displedphi &&
-                                  relisocut(i_subleading_displ_e, 1.5);
-    
-    _1e1disple1jet              = _1e1displeReliso &&
-                                  i_subleading_jet == -1;
+    //_1e1displeReliso            = _1e1displedphi &&
+    //                              relisocut(i_subleading_displ_e, 1.5);
+    //
+    //_1e1disple1jet              = _1e1displeReliso &&
+    //                              i_subleading_jet == -1;
 
-    _1e1displedphi_novtx        = _1e1disple &&
-                                  fabs(_dxy[i_subleading_displ_e]) > 0.01 &&
-                                  no_additional_leptons() &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 75) &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
-    
-    _1e1displedispl_Reliso      = _1e1displedispl &&
-                                  relisocut(i_subleading_displ_e, 1.5);
+    //_1e1displedphi_novtx        = _1e1disple &&
+    //                              fabs(_dxy[i_subleading_displ_e]) > 0.01 &&
+    //                              no_additional_leptons() &&
+    //                              mllcut(i_leading_e, i_subleading_displ_e, 75) &&
+    //                              dphicut(i_leading_e, i_subleading_displ_e, 2.4);
+    //
+    //_1e1displedispl_Reliso      = _1e1displedispl &&
+    //                              relisocut(i_subleading_displ_e, 1.5);
 
-    _CR_1e1displedphi           = _1e1displemll &&
-                                  get_dphill(i_leading_e, i_subleading_displ_e) < 2.4;
+    //_CR_1e1displedphi           = _1e1displemll &&
+    //                              get_dphill(i_leading_e, i_subleading_displ_e) < 2.4;
 
-    _CR_1e1displemll            = _1e1disple0adde &&
-                                  get_mll(i_leading_e, i_subleading_displ_e) > 75;
-    
+    //_CR_1e1displemll            = _1e1disple0adde &&
+    //                              get_mll(i_leading_e, i_subleading_displ_e) > 75;
+    //
 
     ///////////////////////////////
     // Main signal region : mumu //
     ///////////////////////////////
-    _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
+    _trigmu                     = true;
     
     _1mu                        = _trigmu &&
                                   i_leading_mu != -1 && 
@@ -84,59 +84,59 @@ void full_analyzer::signal_regions(){
                                   lptcut(i_subleading_mu, 20);
 
     //HNL stuff
-    _1mu1displmu                = _1mu &&
-                                  i_subleading_displ_mu != -1;
-    
-    _1mu1displmuvtx             = _1mu1displmu &&
-                                  _lIVF_match[i_subleading_displ_mu];
-    
-    _1mu1displmudispl           = _1mu1displmuvtx &&
-                                  fabs(_dxy[i_subleading_displ_mu]) > 0.01;
+    //_1mu1displmu                = _1mu &&
+    //                              i_subleading_displ_mu != -1;
+    //
+    //_1mu1displmuvtx             = _1mu1displmu &&
+    //                              _lIVF_match[i_subleading_displ_mu];
+    //
+    //_1mu1displmudispl           = _1mu1displmuvtx &&
+    //                              fabs(_dxy[i_subleading_displ_mu]) > 0.01;
 
-    _1mu1displmu0addmu          = _1mu1displmudispl &&
-                                  no_additional_leptons();
-    
-    _1mu1displmumll             = _1mu1displmu0addmu &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 75);
-    
-    _1mu1displmudR              = _1mu1displmumll &&
-                                  dRcut(i_leading_mu, i_subleading_displ_mu, 1, 5.5);    
-    
-    _1mu1displmudphi            = _1mu1displmumll &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);
-    
-    _1mu1displmuReliso          = _1mu1displmudphi &&
-                                  relisocut(i_subleading_displ_mu, 1.5);
-    
-    _1mu1displmu1jet            = _1mu1displmuReliso &&
-                                  i_subleading_jet == -1;
+    //_1mu1displmu0addmu          = _1mu1displmudispl &&
+    //                              no_additional_leptons();
+    //
+    //_1mu1displmumll             = _1mu1displmu0addmu &&
+    //                              mllcut(i_leading_mu, i_subleading_displ_mu, 75);
+    //
+    //_1mu1displmudR              = _1mu1displmumll &&
+    //                              dRcut(i_leading_mu, i_subleading_displ_mu, 1, 5.5);    
+    //
+    //_1mu1displmudphi            = _1mu1displmumll &&
+    //                              dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);
+    //
+    //_1mu1displmuReliso          = _1mu1displmudphi &&
+    //                              relisocut(i_subleading_displ_mu, 1.5);
+    //
+    //_1mu1displmu1jet            = _1mu1displmuReliso &&
+    //                              i_subleading_jet == -1;
 
-    _1mu1displmudphi_novtx      = _1mu1displmu &&
-                                  fabs(_dxy[i_subleading_displ_mu]) > 0.01 &&
-                                  no_additional_leptons() &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
-    
-    _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
-                                  relisocut(i_subleading_displ_mu, 1.5);
-    
-    _CR_1mu1displmudphi         = _1mu1displmumll &&
-                                  get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.4;
+    //_1mu1displmudphi_novtx      = _1mu1displmu &&
+    //                              fabs(_dxy[i_subleading_displ_mu]) > 0.01 &&
+    //                              no_additional_leptons() &&
+    //                              mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
+    //                              dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
+    //
+    //_1mu1displmudispl_Reliso    = _1mu1displmudispl &&
+    //                              relisocut(i_subleading_displ_mu, 1.5);
+    //
+    //_CR_1mu1displmudphi         = _1mu1displmumll &&
+    //                              get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.4;
 
-    _CR_1mu1displmumll            = _1mu1displmu0addmu &&
-                                  get_mll(i_leading_mu, i_subleading_displ_mu) > 75;
+    //_CR_1mu1displmumll            = _1mu1displmu0addmu &&
+    //                              get_mll(i_leading_mu, i_subleading_displ_mu) > 75;
     
     ////////////////////////
     // POGMedium prompt ID//
     ////////////////////////
 
-    _1pogmediume                = _trige &&
-                                  i_leading_pogmedium_e != -1 &&
-                                  lptcut(i_leading_pogmedium_e, 20);
+    //_1pogmediume                = _trige &&
+    //                              i_leading_pogmedium_e != -1 &&
+    //                              lptcut(i_leading_pogmedium_e, 20);
 
-    _1pogmediummu               = _trigmu &&
-                                  i_leading_pogmedium_mu != -1 &&
-                                  lptcut(i_leading_pogmedium_mu, 20);
+    //_1pogmediummu               = _trigmu &&
+    //                              i_leading_pogmedium_mu != -1 &&
+    //                              lptcut(i_leading_pogmedium_mu, 20);
 }
  
 bool full_analyzer::lptcut(int i_lep, double ptcutvalue){

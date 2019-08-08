@@ -16,7 +16,8 @@ void full_analyzer::get_electronID(bool* ID)
 			            fabs(_dz[i])  < 0.1 &&
 			            _3dIPSig[i]   < 4 &&
 			            _relIso[i]    < 0.1 &&
-                        (_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8) && // HACK to work with samples that have currently 2 names for the same variable
+                        _lPOGTight[i] &&
+                        //(_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8) && // HACK to work with samples that have currently 2 names for the same variable
                         //_leptonMvatZq[i] > 0.8 &&
 			            //_lPOGMedium[i] && old ID, move to MVAtZqTTV16
 			            _lElectronPassConvVeto[i] &&
@@ -100,7 +101,8 @@ void full_analyzer::get_muonID(bool* ID)
 			            fabs(_dz[i])  < 0.1 &&
 			            _3dIPSig[i]   < 4 &&
 			            _relIso[i]    < 0.1 &&
-			            (_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8); // HACK for 2 names for same variable
+                        _lPOGTight[i];
+			            //(_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8); // HACK for 2 names for same variable
                         //_leptonMvatZq[i] > 0.8;
                         //_lPOGMedium[i]; old ID, move to MVAtZqTTV16
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored

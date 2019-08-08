@@ -19,7 +19,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 
-
     sampleflavor = "bkg";
     if(filename.Index("_e_") != -1) sampleflavor = "e";
     else if(filename.Index("_mu_") != -1) sampleflavor = "mu";
@@ -102,7 +101,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
     if(sampleflavor.Index("Run") == -1){ 
-        total_weight = (cross_section * 35900 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+        total_weight = (cross_section * 21100 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);

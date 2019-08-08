@@ -40,11 +40,14 @@ int main(int argc, char * argv[])
     } else if(files_data.size() > 1){ 
         std::cout << "Error: giving more than one data file!" << std::endl; 
         return 1; 
+    } else {
+        std::cout << "Making plots without data" << std::endl;
     }
 
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
+    std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("stacks/", specific_dir + "/");
 
     TCanvas* c = new TCanvas("c","",700,700);
@@ -59,7 +62,7 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
+    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
@@ -84,22 +87,13 @@ int main(int argc, char * argv[])
             if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
             
             // get data histogram and fill legend
-            std::cout << "ok1" << std::endl;
             TH1F* data_hist;
-            std::cout << "ok2" << std::endl;
             if(withdata){ 
-            std::cout << "ok3" << std::endl;
                 data_hist = (TH1F*) files_data[0]->Get(histname);
-                std::cout << data_hist << std::endl;
-            std::cout << "ok4" << std::endl;
                 legend.AddEntry(data_hist, legends_data[0], "pl");
-            std::cout << "ok5" << std::endl;
-                if(histname.Index("_CR") == -1) continue; // Only print Control region plots for data
-            std::cout << "ok6" << std::endl;
+                //if(histname.Index("_CR") == -1) continue; // Only print Control region plots for data
                 if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
-            std::cout << "ok7" << std::endl;
             }
-            std::cout << "ok8" << std::endl;
             
             // get background histograms and fill legend
             THStack* hists_bkg = new THStack("stack_bkg", "");
