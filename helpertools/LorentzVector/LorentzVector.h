@@ -16,6 +16,7 @@ class LorentzVector{
     public:
         LorentzVector() = default;
         LorentzVector( const double pt, const double eta, const double phi, const double energy );
+        void setCartesianCoords( const double px, const double py, const double pz, const double energy ); // alternative method to make vector using cartesian coordinates.
         
         double pt() const { return transverseMomentum; }
         double eta() const { return pseudoRapidity; }
