@@ -4,6 +4,8 @@
 
 using namespace std;
 
+TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
+
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
 //  'cross_section' is the cross section of the process
@@ -73,6 +75,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D->second;
         h->Sumw2();
     }
+
+    // Load Lepton Scale Factors (these are for 2018 METResolution task, don't have them yet for HNL analysis)
+    //TString filename_LSF_e = local_dir + "data/LeptonScaleFactors/2018_ElectronTight.root";
+    //TString histname_LSF_e = "EGamma_SF2D";
+    //LSFReader lsfreader_e(filename_LSF_e, histname_LSF_e, "e");
+    //TString filename_LSF_mu = local_dir + "data/LeptonScaleFactors/RunABCD_SF_ID.root";
+    //TString histname_LSF_mu = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
+    //LSFReader lsfreader_mu(filename_LSF_mu, histname_LSF_mu, "mu");
    
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);

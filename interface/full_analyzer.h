@@ -31,6 +31,7 @@
 #include "../interface/HNLtagger.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
 #include "../helpertools/LorentzVector/LorentzVector.h"
+#include "../helpertools/LSFReader/LSFReader.h"
 
 class full_analyzer {
 public :
