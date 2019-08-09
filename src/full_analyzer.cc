@@ -76,6 +76,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         h->Sumw2();
     }
 
+    // Load PU weights
+    TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    TString histname_PUWeights = "PUWeights";
+    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
+
     // Load Lepton Scale Factors (these are for 2018 METResolution task, don't have them yet for HNL analysis)
     //TString filename_LSF_e = local_dir + "data/LeptonScaleFactors/2018_ElectronTight.root";
     //TString histname_LSF_e = "EGamma_SF2D";
@@ -135,7 +142,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) event_weight = _weight;
+        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
         else event_weight = 1;
 
         //Get ID
