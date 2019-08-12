@@ -55,8 +55,9 @@ int main(int argc, char * argv[])
     c->cd();
 
     // Make the pad that will contain the plot
-    double ymin = (withdata)? 0.3 : 0.;
+    double ymin = 0.33 * withdata;
     TPad* pad_histo  = new TPad("pad_histo", "", 0., ymin, 1., 1.);
+    if(withdata) pad_histo->SetBottomMargin(0.);
     pad_histo->Draw();
     pad_histo->cd();
 
@@ -73,8 +74,9 @@ int main(int argc, char * argv[])
 
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
-    TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0.05, 1.,std::max(0.05, ymin));
+    TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0., 1.,std::max(0.05, ymin));
     if(withdata){
+        pad_ratio->SetBottomMargin(0.3);
         pad_ratio->Draw();
         pad_ratio->cd();
     }
