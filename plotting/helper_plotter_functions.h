@@ -27,6 +27,7 @@ TLegend     get_legend(double xmin, double ymin, double xmax, double ymax, int N
 TString     adjust_legend(TString legend);
 TLatex      get_latex(double textsize, int textalign, int textfont);
 int         get_color(TString legend);
+TH1F        get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle);
 void        divide_by_binwidth(TH1F* h);
 
 // 2D histograms
