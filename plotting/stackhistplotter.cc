@@ -57,11 +57,14 @@ int main(int argc, char * argv[])
     // Make the pad that will contain the plot
     double ymin = 0.33 * withdata;
     TPad* pad_histo  = new TPad("pad_histo", "", 0., ymin, 1., 1.);
-    if(withdata) pad_histo->SetBottomMargin(0.);
+    if(withdata){ 
+        pad_histo->SetTopMargin(0.07);
+        pad_histo->SetBottomMargin(0.);
+    }
     pad_histo->Draw();
     pad_histo->cd();
 
-    TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
+    TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
@@ -171,8 +174,8 @@ int main(int argc, char * argv[])
             pad_histo->SetLogy(0);
 
             hists_bkg->Draw("hist");
-            if(withdata) hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
-            else hists_bkg->SetMaximum(1.25*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+            if(withdata) hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
+            else hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.);
             if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
             if(withdata) data_hist->Draw("E0 X0 P same");
@@ -188,6 +191,7 @@ int main(int argc, char * argv[])
                 pad_ratio->Clear();
             
                 histo_ratio.Draw("E0 X0 P");
+                draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
 
                 pad_ratio->Modified();
             }
@@ -203,8 +207,8 @@ int main(int argc, char * argv[])
             pad_histo->SetLogy(1);
 
             hists_bkg->Draw("hist");
-            if(withdata) hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
-            else hists_bkg->SetMaximum(10*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+            if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
+            else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
             hists_bkg->SetMinimum(0.1);
             if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
             if(withdata) data_hist->Draw("E0 X0 P same");
@@ -220,6 +224,7 @@ int main(int argc, char * argv[])
                 pad_ratio->Clear();
 
                 histo_ratio.Draw("E0 X0 P");
+                draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
 
                 pad_ratio->Modified();
             }

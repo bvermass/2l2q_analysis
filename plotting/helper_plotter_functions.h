@@ -16,6 +16,7 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <TGraphAsymmErrors.h>
+#include <TLine.h>
 #include <TLatex.h>
 
 // other header files
@@ -28,6 +29,7 @@ TString     adjust_legend(TString legend);
 TLatex      get_latex(double textsize, int textalign, int textfont);
 int         get_color(TString legend);
 TH1F        get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle);
+void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 
 // 2D histograms

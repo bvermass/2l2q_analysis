@@ -101,6 +101,14 @@ TH1F get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle)
 }
 
 
+void draw_line_at_1(double xmin, double xmax)
+{
+    TLine line;
+    line.SetLineStyle(2);
+    line.DrawLine(xmin, 1., xmax, 1.);
+}
+
+
 void divide_by_binwidth(TH1F* h)
 {
     for(int i = 1; i <= h->GetNbinsX(); i++){
