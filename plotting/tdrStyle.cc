@@ -112,9 +112,9 @@ void setTDRStyle() {
   tdrStyle->SetTitleSize(0.05, "XYZ");
   // tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
   // tdrStyle->SetTitleYSize(Float_t size = 0.02);
-  tdrStyle->SetTitleXOffset(1.);
+  tdrStyle->SetTitleXOffset(1.1);
   //tdrStyle->SetTitleYOffset(1.25);
-  tdrStyle->SetTitleYOffset(1.25);    //0.9
+  tdrStyle->SetTitleYOffset(1.3);    //0.9
   // tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 // For the axis labels:
@@ -159,7 +159,7 @@ void setTDRStyle() {
   //tdrStyle->SetHatchesSpacing(0.05);
 
   tdrStyle->SetLegendBorderSize(0);
-  tdrStyle->SetLegendTextSize(0.022);
+  tdrStyle->SetLegendTextSize(0.03);
 
 	
 

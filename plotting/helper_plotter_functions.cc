@@ -84,6 +84,31 @@ int get_color(TString legend)
 }
 
 
+TH1F get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle)
+{
+    TH1F histo_ratio("data/MC", ";" + xaxistitle + ";data/MC", data->GetNbinsX(), data->GetXaxis()->GetXmin(), data->GetXaxis()->GetXmax());
+    histo_ratio.Divide(data, MC);
+
+    histo_ratio.GetXaxis()->SetLabelSize(0.09);
+    histo_ratio.GetYaxis()->SetLabelSize(0.09);
+    histo_ratio.GetXaxis()->SetTitleSize(0.09);
+    histo_ratio.GetYaxis()->SetTitleSize(0.09);
+    histo_ratio.GetYaxis()->SetTitleOffset(0.7);
+    histo_ratio.SetMinimum(0);
+    histo_ratio.SetMaximum(2);
+
+    return histo_ratio;
+}
+
+
+void draw_line_at_1(double xmin, double xmax)
+{
+    TLine line;
+    line.SetLineStyle(2);
+    line.DrawLine(xmin, 1., xmax, 1.);
+}
+
+
 void divide_by_binwidth(TH1F* h)
 {
     for(int i = 1; i <= h->GetNbinsX(); i++){
