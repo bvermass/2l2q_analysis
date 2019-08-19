@@ -45,6 +45,20 @@ LorentzVector::LorentzVector(const double pt, const double eta, const double phi
 }
 
 
+void LorentzVector::setCartesianCoords(const double px, const double py, const double pz, const double energy){
+    transverseMomentum = std::sqrt( px*px + py*py );
+    pseudoRapidity = std::atanh( pz/std::sqrt(px*px + py*py + pz*pz) );
+    azimuthalAngle = ((py > 0) ? 1. : ((py < 0) ? -1. : 0.)) * std::acos( px/transverseMomentum );
+    energyValue = energy ;
+    xMomentum = px ;
+    yMomentum = py ;
+    zMomentum = pz ;
+
+    setZeroValues();    
+    normalizePhi();
+}
+
+
 double LorentzVector::mass() const{
     double m2 = energyValue*energyValue - transverseMomentum*transverseMomentum - zMomentum*zMomentum;
     if( m2 >= 0 ){
