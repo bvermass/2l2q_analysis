@@ -4,6 +4,8 @@
 
 using namespace std;
 
+TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
+
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
 //  'cross_section' is the cross section of the process
@@ -72,6 +74,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D->second;
         h->Sumw2();
     }
+
+    // Load PU weights
+    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+    TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    TString histname_PUWeights = "PUWeights";
+    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
+
+    // Load Lepton Scale Factors (these are for 2018 METResolution task, don't have them yet for HNL analysis)
+    TString filename_LSF_e = local_dir + "data/LeptonScaleFactors/2018_ElectronTight.root";
+    TString histname_LSF_e = "EGamma_SF2D";
+    LSFReader lsfreader_e(filename_LSF_e, histname_LSF_e, "e");
+    TString filename_LSF_mu = local_dir + "data/LeptonScaleFactors/RunABCD_SF_ID.root";
+    TString histname_LSF_mu = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
+    LSFReader lsfreader_mu(filename_LSF_mu, histname_LSF_mu, "mu");
    
     //HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
@@ -122,7 +139,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) event_weight = _weight;
+        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
         else event_weight = 1;
 
         //Get ID
@@ -209,9 +226,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //fill_cutflow_mu(&hists, "_OS_mu");
 
 
+        // Determine signs and flavor and apply lepton scale factors
         TString signs_and_flavor = "";
-        if(_2e) signs_and_flavor = "_ee";
-        else if(_2mu) signs_and_flavor = "_mumu";
+        if(_2e){ 
+            signs_and_flavor = "_ee";
+            event_weight *= lsfreader_e.get_LSF(_lPt[i_leading_e], _lEta[i_leading_e]) * lsfreader_e.get_LSF(_lPt[i_subleading_e], _lEta[i_subleading_e]);
+        }
+        else if(_2mu){ 
+            signs_and_flavor = "_mumu";
+            event_weight *= lsfreader_mu.get_LSF(_lPt[i_leading_mu], _lEta[i_leading_mu]) * lsfreader_mu.get_LSF(_lPt[i_subleading_mu], _lEta[i_subleading_mu]);
+        }
         //if(_1e1disple) signs_and_flavor = (_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e])? "_SS_e" : "_OS_e";
         //else if(_1mu1displmu) signs_and_flavor = (_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu])? "_SS_mu" : "_OS_mu"; 
         

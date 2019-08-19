@@ -27,9 +27,9 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
         outputfilename += "subfiles/";
         if(filename.Index("HeavyNeutrino_lljj") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - filename.Index("HeavyNeutrino_"));
         else if(filename.Index("Run20") != -1){
-           TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
-           tmpname.ReplaceAll("/", "_");
-           outputfilename += tmpname + "/";
+            TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
+            tmpname.ReplaceAll("/", "_");
+            outputfilename += tmpname + "/";
         }
         else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
     }

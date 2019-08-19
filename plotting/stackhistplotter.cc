@@ -90,6 +90,7 @@ int main(int argc, char * argv[])
             TH1F* data_hist;
             if(withdata){ 
                 data_hist = (TH1F*) files_data[0]->Get(histname);
+                std::cout << data_hist << std::endl;
                 legend.AddEntry(data_hist, legends_data[0], "pl");
                 //if(histname.Index("_CR") == -1) continue; // Only print Control region plots for data
                 if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
