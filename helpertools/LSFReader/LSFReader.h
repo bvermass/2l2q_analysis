@@ -3,6 +3,7 @@
 
 //include c++ library classes 
 #include <iostream>
+#include <algorithm>
 
 //include ROOT library classes
 #include <TROOT.h>
