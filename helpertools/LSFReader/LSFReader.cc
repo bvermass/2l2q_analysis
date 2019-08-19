@@ -17,8 +17,9 @@ LSFReader::~LSFReader(){
 }
 
 double LSFReader::get_LSF(const double pt, const double eta){
-    if(lepton_flavor == "e") return histo_LSF->GetBinContent(histo_LSF->FindBin(eta, pt));
-    else if(lepton_flavor == "mu") return histo_LSF->GetBinContent(histo_LSF->FindBin(pt, fabs(eta)));
+    // if pt of lepton is out of bounds, use last bin instead (std::min)
+    if(lepton_flavor == "e") return histo_LSF->GetBinContent(histo_LSF->FindBin(eta, std::min(pt, 499.)));
+    else if(lepton_flavor == "mu") return histo_LSF->GetBinContent(histo_LSF->FindBin(std::min(pt, 119.), fabs(eta)));
     std::cout << "Error in LSFReader: unable to get a scale factor" << std::endl;
     std::cout << "lepton flavor: " << lepton_flavor << std::endl;
     std::cout << "file and histo addresses: " << file_LSF << " " << histo_LSF << std::endl;
