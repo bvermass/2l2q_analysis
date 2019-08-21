@@ -15,6 +15,16 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     HNLtagger_tree->Branch("_JetEta",                           &_JetEta,                           "_JetEta/D");
+    HNLtagger_tree->Branch("_lPt",                              &_lPt,                              "_lPt/D");
+    HNLtagger_tree->Branch("_lEta",                             &_lEta,                             "_lEta/D");
+    HNLtagger_tree->Branch("_lPhi",                             &_lPhi,                             "_lPhi/D");
+    HNLtagger_tree->Branch("_ldxy",                             &_ldxy,                             "_ldxy/D");
+    HNLtagger_tree->Branch("_ldz",                              &_ldz,                              "_ldz/D");
+    HNLtagger_tree->Branch("_l3dIPSig",                         &_l3dIPSig,                         "_l3dIPSig/D");
+    HNLtagger_tree->Branch("_lrelIso",                          &_lrelIso,                          "_lrelIso/D");
+    HNLtagger_tree->Branch("_lptRel",                           &_lptRel,                           "_lptRel/D");
+    HNLtagger_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
+    HNLtagger_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
 
     HNLtagger_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
     HNLtagger_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");

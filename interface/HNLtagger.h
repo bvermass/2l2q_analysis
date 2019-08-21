@@ -26,6 +26,16 @@ class HNLtagger
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetEta;
+        double   _lPt;
+        double   _lEta;
+        double   _lPhi;
+        double   _ldxy;
+        double   _ldz;
+        double   _l3dIPSig;
+        double   _lrelIso;
+        double   _lptRatio;
+        double   _lptRel;
+        unsigned _lNumberOfPixelHits;
         
         double   _SV_PVSVdist;
         double   _SV_PVSVdist_2D;
