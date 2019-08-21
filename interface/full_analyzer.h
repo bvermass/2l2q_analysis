@@ -822,111 +822,110 @@ public :
    // functions
    // in src/full_analyzer_constructor.cc
    full_analyzer(TTree *tree=0);
-   virtual ~full_analyzer();
-   virtual Int_t    GetEntry(Long64_t entry);
-   virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
-   virtual void     Loop();
-   virtual void     Show(Long64_t entry = -1);
+    ~full_analyzer();
+    Int_t    GetEntry(Long64_t entry);
+    Long64_t LoadTree(Long64_t entry);
+    void     Init(TTree *tree);
+    void     Loop();
+    void     Show(Long64_t entry = -1);
 
-   // in src/full_analyzer.cc, the main code body
-   virtual void     run_over_file(TString, double, int, int, int);
+    // in src/full_analyzer.cc, the main code body
+    void     run_over_file(TString, double, int, int, int);
 
-   // in src/leptonID.cc
-   virtual void     get_electronID(bool*);
-   virtual void     get_pogmedium_electronID(bool*);
-   virtual void     get_displ_electronID(bool*);
-   virtual void     get_loose_electronID(bool*);
-   virtual void     get_muonID(bool*);
-   virtual void     get_pogmedium_muonID(bool*);
-   virtual void     get_displ_muonID(bool*);
-   virtual void     get_loose_muonID(bool*);
-   virtual void     get_clean_ele(bool*, bool*);
-   virtual int      find_leading_e(bool*, bool*);
-   virtual int      find_leading_mu(bool*);
-   virtual int      find_subleading_e(bool*, bool*, int);
-   virtual int      find_subleading_mu(bool*, int);
-   virtual int      find_gen_lep(int i_lep);
-   virtual int      find_gen_l1();
-   virtual int      find_gen_l2();
-   virtual bool     leptonIsGenLepton(int, int);
-   virtual double   get_IVF_SVgenreco(int, int);
-   virtual double   get_IVF_SVgenreco_2D(int, int);
-   virtual double   get_IVF_PVSVdist(int);
-   virtual double   get_IVF_PVSVdist_2D(int);
-   virtual double   get_KVF_SVgenreco(int, int);
-   virtual double   get_KVF_SVgenreco_2D(int, int);
-   virtual double   get_KVF_PVSVdist(int);
-   virtual double   get_KVF_PVSVdist_2D(int);
-   virtual double   get_PVSVdist_gen(int);
-   virtual double   get_PVSVdist_gen_2D(int);
+    // in src/leptonID.cc
+    void     get_electronID(bool*);
+    void     get_pogmedium_electronID(bool*);
+    void     get_displ_electronID(bool*);
+    void     get_loose_electronID(bool*);
+    void     get_muonID(bool*);
+    void     get_pogmedium_muonID(bool*);
+    void     get_displ_muonID(bool*);
+    void     get_loose_muonID(bool*);
+    void     get_clean_ele(bool*, bool*);
+    int      find_leading_e(bool*, bool*);
+    int      find_leading_mu(bool*);
+    int      find_subleading_e(bool*, bool*, int);
+    int      find_subleading_mu(bool*, int);
+    int      find_gen_lep(int i_lep);
+    int      find_gen_l1();
+    int      find_gen_l2();
+    bool     leptonIsGenLepton(int, int);
+    double   get_IVF_SVgenreco(int, int);
+    double   get_IVF_SVgenreco_2D(int, int);
+    double   get_IVF_PVSVdist(int);
+    double   get_IVF_PVSVdist_2D(int);
+    double   get_KVF_SVgenreco(int, int);
+    double   get_KVF_SVgenreco_2D(int, int);
+    double   get_KVF_PVSVdist(int);
+    double   get_KVF_PVSVdist_2D(int);
+    double   get_PVSVdist_gen(int);
+    double   get_PVSVdist_gen_2D(int);
 
-   // in src/jetID.cc
-   virtual void     get_jetID(bool*);
-   virtual void     get_clean_jets(bool*, bool*, bool*);
-   virtual int      find_leading_jet(bool*, bool*);
-   virtual int      find_subleading_jet(bool*, bool*, int);
-   virtual int      find_thirdleading_jet(bool*, bool*, int, int);
-   virtual int      find_jet_closest_to_lepton(bool*, int);
-   virtual double   get_dR_lepton_jet(int, int);
-   virtual bool     get_JetIsFromHNL(int i_jet);
+    // in src/jetID.cc
+    void     get_jetID(bool*);
+    void     get_clean_jets(bool*, bool*, bool*);
+    int      find_leading_jet(bool*, bool*);
+    int      find_subleading_jet(bool*, bool*, int);
+    int      find_thirdleading_jet(bool*, bool*, int, int);
+    int      find_jet_closest_to_lepton(bool*, int);
+    double   get_dR_lepton_jet(int, int);
+    bool     get_JetIsFromHNL(int i_jet);
 
-   // in src/photonID.cc
-   virtual std::vector<bool> get_photonID();
+    // in src/photonID.cc
+    std::vector<bool> get_photonID();
 
 
-   // in src/signal_regions.cc
-   virtual void     signal_regions();
-   virtual bool     lptcut(int, double);
-   virtual bool     no_additional_leptons();
-   virtual bool     mllcut(int, int, double);
-   virtual double   get_mll(int, int);
-   virtual bool     dRcut(int, int, double, double);
-   virtual double   get_dRll(int, int);
-   virtual bool     dphicut(int, int, double);
-   virtual double   get_dphill(int, int);
-   virtual bool     relisocut(int, double);
+    // in src/signal_regions.cc
+    void     signal_regions();
+    bool     lptcut(int, double);
+    bool     no_additional_leptons();
+    bool     mllcut(int, int, double);
+    double   get_mll(int, int);
+    bool     dRcut(int, int, double, double);
+    double   get_dRll(int, int);
+    bool     dphicut(int, int, double);
+    double   get_dphill(int, int);
+    bool     relisocut(int, double);
 
-   // in src/print_tables.cc
-   virtual void     print_table();
+    // in src/print_tables.cc
+    void     print_table();
    
-   // in src/histo_functions.cc
-   virtual void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-   virtual void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
-   virtual void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
-   virtual void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
-   virtual void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int);
-   //virtual void     fill_ID_histos(std::map<TString, TH1*>*, TString);
-   virtual void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
+    // in src/histo_functions.cc
+    void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
+    void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
+    void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
+    void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int);
+    // void     fill_ID_histos(std::map<TString, TH1*>*, TString);
+    void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
-   // in src/jet_histograms.cc
-   virtual void     add_jet_histograms(std::map<TString, TH1*>*, TString);
-   virtual void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
-   virtual void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
-   virtual int      is_track_in_sv(int i_lep, int i_jet, int i_const);
-   virtual void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
+    // in src/jet_histograms.cc
+    void     add_jet_histograms(std::map<TString, TH1*>*, TString);
+    void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
+    void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
+    int      is_track_in_sv(int i_lep, int i_jet, int i_const);
+    void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
 
-   // in src/HLT_eff.cc
-   virtual void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
-   virtual void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
-   virtual void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
-   virtual void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
+    // in src/HLT_eff.cc
+    void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
+    void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
+    void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
+    void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
-   // in src/gen_histograms.cc
-   virtual void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-   virtual void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-   virtual void     add_gen_histograms(std::map<TString, TH1*>* hists, TString prefix);
-   virtual void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
-   virtual int      get_lfromtau(int i_gen_l);
+    // in src/gen_histograms.cc
+    void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+    void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+    void     add_gen_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
+    int      get_lfromtau(int i_gen_l);
 
-   // in src/PFNTools.cc
-   virtual double   get_PFNprediction(PFNReader pfn, int i_jet);
-   virtual void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-   virtual void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    // in src/PFNTools.cc
+    void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 
-   // in src/MET_histograms.cc
-   virtual void     add_MET_histograms(std::map<TString, TH1*>* hists, TString prefix);
-   virtual void     fill_MET_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
+    // in src/MET_histograms.cc
+    void     add_MET_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_MET_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
 };
 
 #endif
