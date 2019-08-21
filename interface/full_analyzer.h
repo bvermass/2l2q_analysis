@@ -919,7 +919,6 @@ public :
     int      get_lfromtau(int i_gen_l);
 
    // in src/PFNTools.cc
-    double   get_PFNprediction(PFNReader pfn, int i_jet);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 };

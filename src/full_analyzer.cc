@@ -99,8 +99,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
-    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
+    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/jetTagger_best_of_PFN_v1.h5", 10, {50, 12});
+    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_best_of_PFN_v1.h5", 10, {50,12});
+    PFNReader bdt_mu( "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/bestModels_xgboost_HNLtagger_v2/model_rank_1/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961.bin", 28 );
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     int SSe = 0, SSe2 = 0, SSe3 = 0, SSe4 = 0;
@@ -248,7 +249,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1displedispl_Reliso){
             fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = get_PFNprediction(pfn_e, i_closel2_jet);
+            JetTagVal = hnltagger_e.predict(pfn_e);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmu){
@@ -266,7 +267,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1mu1displmudispl_Reliso){
             fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = get_PFNprediction(pfn_mu, i_closel2_jet);
+            JetTagVal = hnltagger_mu.predict(pfn_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_mu, i_subleading_displ_mu);
         }
 

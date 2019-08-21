@@ -5,13 +5,17 @@
 #ifndef HNLtagger_h
 #define HNLtagger_h
 
+#include <iostream>
+#include <vector>
+
 #include <TROOT.h>
 #include <TFile.h>
-#include <iostream>
 #include <TTree.h>
+#include <TBranch.h>
 
 // other headers to communicate with
 #include "../interface/helper_histo_functions.h"
+#include "../helpertools/PFNEvaluation/PFNReader.h"
 
 class HNLtagger
 {
@@ -62,6 +66,7 @@ class HNLtagger
         int      _JetConstituentInSV[maxJetSize];
 
         HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
+        double predict(PFNReader& pfn);
         void write_HNLtagger_tree();
         void delete_HNLtagger_tree();
 };
@@ -109,6 +114,7 @@ class HNLBDTtagger
         double   _SV_phi;
 
         HNLBDTtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
+        double predict(PFNReader& bdt);
         void write_HNLBDTtagger_tree();
         void delete_HNLBDTtagger_tree();
 };

@@ -51,6 +51,24 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetConstituentInSV",               &_JetConstituentInSV,               "_JetConstituentInSV[50]/I");
 }
 
+
+double HNLtagger::predict(PFNReader& pfn)
+{
+    std::vector< double > highlevelInput( { _JetPt, _JetEta, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2 } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt[p], _JetConstituentEta[p], _JetConstituentPhi[p], _JetConstituentdxy[p], _JetConstituentdz[p], _JetConstituentdxyErr[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentCharge[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
+
 void HNLtagger::write_HNLtagger_tree()
 {
     //HNLtagger_tree->Print();
@@ -104,6 +122,15 @@ HNLBDTtagger::HNLBDTtagger(TString filename, TString type_and_flavor, int partit
     HNLBDTtagger_tree->Branch("_SV_pt",                &_SV_pt,                            "_SV_pt/D");
     HNLBDTtagger_tree->Branch("_SV_eta",               &_SV_eta,                           "_SV_eta/D");
     HNLBDTtagger_tree->Branch("_SV_phi",               &_SV_phi,                           "_SV_phi/D");
+}
+
+double HNLBDTtagger::predict(PFNReader& bdt)
+{
+    std::vector< double > highlevelInput( { _lPt, _lEta, _lPhi, _ldxy, _ldz, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits,
+                                            _JetPt, _JetEta, _JetPhi, _JetMass, (double)_nJetConstituents, _JetdxySum, _JetdxySigSum, _JetdzSum, _JetdzSigSum, (double)_JetChargeSum,
+                                            (double)_SV_ntracks, _SV_PVSVdist_2D, _SV_PVSVdist, _SV_normchi2, _SV_mass, _SV_pt, _SV_eta, _SV_phi } );
+
+    return bdt.predict( highlevelInput );
 }
 
 void HNLBDTtagger::write_HNLBDTtagger_tree()
