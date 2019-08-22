@@ -50,6 +50,12 @@ function hadd_specific_backgrounds {
         echo -e "\nhadding data files: \n"
         hadd -f ${1}${2}DoubleMuon_Run2018.root ${1}${2}DoubleMuon_Run2018*
     fi
+    #Data EGamma
+    if [ 0 -lt $(ls ${1}${2}EGamma_Run2018* 2>/dev/null | wc -w) ]; then
+        echo -e "\nhadding data files: \n"
+        hadd -f ${1}${2}EGamma_Run2018.root ${1}${2}EGamma_Run2018*
+    fi
+
 
 }
 

@@ -15,6 +15,8 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_l1_flavor"]                       = new TH1F("gen_l1_flavor", ";l_{1}^{gen} flavor; Events", 32, -16, 16);
     (*hists)["gen_l2_flavor"]                       = new TH1F("gen_l2_flavor", ";l_{2}^{gen} flavor; Events", 32, -16, 16);
     (*hists)["gen_nTrueInteractions"]               = new TH1F("gen_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
+    (*hists2D)["gen_nTrueInt_vs_nPV"]               = new TH2F("gen_nTrueInt_vs_nPV", ";N(true interactions); nPV", 50, 0, 100, 50, 0, 100);
+
 
     //log scale
     double xmin = 0.8;
@@ -30,6 +32,7 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     // stuff related to gen Packed Candidates
     // jets containing any particles from HNL
     (*hists)["gen_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
+    (*hists2D)["gen_nTrueInt_vs_nPV"]->Fill(_nTrueInt, _nVertex, event_weight);
 
     if(i_gen_l1 != -1 && i_gen_l2 != -1){
         (*hists2D)["MC_check_gen_l1_l2_charge"]->Fill(_gen_lCharge[i_gen_l1], _gen_lCharge[i_gen_l2], event_weight);

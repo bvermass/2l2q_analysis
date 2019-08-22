@@ -69,6 +69,16 @@ TLatex get_latex(double textsize, int textalign, int textfont)
 }
 
 
+TString get_correct_lumitext(TString RunId, TString lumitext)
+{
+    if(RunId == "Run2018A") return "13.98 fb^{-1} (13 TeV)";
+    else if(RunId == "Run2018B") return "7.064 fb^{-1} (13 TeV)";
+    else if(RunId == "Run2018C") return "6.899 fb^{-1} (13 TeV)";
+    else if(RunId == "Run2018D") return "31.75 fb^{-1} (13 TeV)";
+    else return lumitext;
+}
+
+
 int get_color(TString legend)
 {
     if(legend.Index("W+Jets")        != -1) return kRed+3;
@@ -117,6 +127,16 @@ void divide_by_binwidth(TH1F* h)
         h->SetBinContent(i, bincontent/binwidth);
     }
     if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
+}
+
+
+double get_scale(TString RunId)
+{
+    if(RunId == "Run2018A") return 13.98/59.69;
+    else if(RunId == "Run2018B") return 7.064/59.69;
+    else if(RunId == "Run2018C") return 6.899/59.69;
+    else if(RunId == "Run2018D") return 31.75/59.69;
+    else return 1.;
 }
 
 

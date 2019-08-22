@@ -118,7 +118,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
     if(sampleflavor.Index("Run") == -1){ 
-        total_weight = (cross_section * 21100 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+        total_weight = (cross_section * 59690 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
@@ -139,16 +139,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
+        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);
         else event_weight = 1;
 
         //Get ID
         get_electronID(&fullElectronID[0]);
-        //get_loose_electronID(&looseElectronID[0]);
+        get_loose_electronID(&looseElectronID[0]);
         //get_pogmedium_electronID(&pogmediumElectronID[0]);
         //get_displ_electronID(&displElectronID[0]);
         get_muonID(&fullMuonID[0]);
-        //get_loose_muonID(&looseMuonID[0]);
+        get_loose_muonID(&looseMuonID[0]);
         //get_pogmedium_muonID(&pogmediumMuonID[0]);
         //get_displ_muonID(&displMuonID[0]);
         get_jetID(&fullJetID[0]);
@@ -166,7 +166,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
 	    //get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
-        //get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
+        get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
 	    //for(unsigned i = 0; i < 10; ++i){
 	    //    ele_clean_full_displ[i] = ele_clean_full[i] && ele_clean_displ[i];
 	    //}
@@ -227,7 +227,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         // Determine signs and flavor and apply lepton scale factors
-        TString signs_and_flavor = "";
+        TString signs_and_flavor;
         if(_2e){ 
             signs_and_flavor = "_ee";
             event_weight *= lsfreader_e.get_LSF(_lPt[i_leading_e], _lEta[i_leading_e]) * lsfreader_e.get_LSF(_lPt[i_subleading_e], _lEta[i_subleading_e]);
@@ -240,11 +240,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //else if(_1mu1displmu) signs_and_flavor = (_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu])? "_SS_mu" : "_OS_mu"; 
         
 
-        if(_2e){
+        if(_2e_full){
             fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_e);
             OSe++; OSe_weight += event_weight;
         }
-        if(_2mu){
+        if(_2mu_full){
             fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_mu);
             OSmu++; OSmu_weight += event_weight;
         }

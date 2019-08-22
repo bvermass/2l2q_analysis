@@ -16,11 +16,19 @@ int main(int argc, char * argv[])
     std::vector<TFile*>  files_signal;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
+    TString RunId;
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
         if(filename.Index("_HeavyNeutrino_lljj_") != -1) files_signal.push_back(TFile::Open(filename));
         else if(filename.Index("_Background_") != -1) files_bkg.push_back(TFile::Open(filename));
-        else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
+        else if(filename.Index("_Run201") != -1){ 
+            files_data.push_back(TFile::Open(filename));
+            if(filename.Index("_Run2018A") != -1) RunId = "Run2018A";
+            else if(filename.Index("_Run2018B") != -1) RunId = "Run2018B";
+            else if(filename.Index("_Run2018C") != -1) RunId = "Run2018C";
+            else if(filename.Index("_Run2018D") != -1) RunId = "Run2018D";
+            else if(filename.Index("_Run2018") != -1)  RunId = "Run2018";
+        }
     }
     std::vector<TString> legends_signal;
     std::vector<TString> legends_bkg;
@@ -68,7 +76,8 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
+    TString lumitext  = "59.69 fb^{-1} (13 TeV)";
+    lumitext = get_correct_lumitext(RunId, lumitext);
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
     float rightmargin = pad_histo->GetRightMargin();
@@ -119,6 +128,7 @@ int main(int argc, char * argv[])
             for(int i = 0; i < files_bkg.size(); i++){
                 TH1* hist = (TH1*)files_bkg[i]->Get(histname);
                 if(hist->GetMaximum() > 0){
+                    if(withdata) hist->Scale(get_scale(RunId));
                     int color = get_color(legends_bkg[i]);
                     hist->SetFillStyle(1001);
                     hist->SetFillColor(color);
@@ -133,6 +143,7 @@ int main(int argc, char * argv[])
             for(int i = 0; i < files_signal.size(); i++){
                 TH1* hist = (TH1*)files_signal[i]->Get(histname);
                 if(hist->GetMaximum() > 0){
+                    if(withdata) hist->Scale(get_scale(RunId));
                     int color = get_color(legends_signal[i]);
                     hist->SetLineColor(color);
                     hists_signal->Add(hist);
@@ -209,7 +220,7 @@ int main(int argc, char * argv[])
             hists_bkg->Draw("hist");
             if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
             else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
-            hists_bkg->SetMinimum(0.1);
+            hists_bkg->SetMinimum(0.5);
             if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
             if(withdata) data_hist->Draw("E0 X0 P same");
             legend.Draw("same");

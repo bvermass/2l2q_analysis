@@ -11,7 +11,7 @@ void full_analyzer::get_electronID(bool* ID)
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID =   _lFlavor[i] == 0 &&
 			            fabs(_lEta[i]) < 2.5 &&
-			            _lPt[i] > 7 &&
+			            _lPt[i] > 20 &&
 			            fabs(_dxy[i]) < 0.05 &&
 			            fabs(_dz[i])  < 0.1 &&
 			            _3dIPSig[i]   < 4 &&
@@ -32,13 +32,12 @@ void full_analyzer::get_loose_electronID(bool* ID)
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID =   _lFlavor[i] == 0 &&
                         fabs(_lEta[i]) < 2.5 &&
-                        _lPt[i] > 7 &&
+                        _lPt[i] > 20 &&
                         //fabs(_dxy[i]) < 0.05 &&
                         //fabs(_dz[i])  < 0.1 &&
                         //_3dIPSig[i]   < 4 &&
                         //_relIso[i]    < 0.1 &&
-                        _lPOGLoose[i] &&
-                        _lElectronPassConvVeto[i];
+                        _lPOGVeto[i];
                         //_lElectronMissingHits[i] < 1;
 	    if(fullID) *(ID + i) = true;
 	    else *(ID + i) = false;
@@ -96,7 +95,7 @@ void full_analyzer::get_muonID(bool* ID)
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID = 	_lFlavor[i] == 1 &&
 			            fabs(_lEta[i]) < 2.4 &&
-			            _lPt[i] > 5 &&
+			            _lPt[i] > 20 &&
 			            fabs(_dxy[i]) < 0.05 &&
 			            fabs(_dz[i])  < 0.1 &&
 			            _3dIPSig[i]   < 4 &&
@@ -116,7 +115,7 @@ void full_analyzer::get_loose_muonID(bool* ID)
     for(unsigned i = 0; i < _nL; ++i){
 	    bool fullID = 	_lFlavor[i] == 1 &&
                         fabs(_lEta[i]) < 2.4 &&
-                        _lPt[i] > 5 &&
+                        _lPt[i] > 20 &&
                         //fabs(_dxy[i]) < 0.05 &&
                         //fabs(_dz[i])  < 0.1 &&
                         //_3dIPSig[i]   < 4 &&

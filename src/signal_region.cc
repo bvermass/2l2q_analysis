@@ -13,7 +13,7 @@ void full_analyzer::signal_regions(){
     /////////////////////////////
     // Main signal region : ee //
     /////////////////////////////
-    _trige                      = true;
+    _trige                      = _passTrigger_ee or _passTrigger_e;
     
     _1e                         = _trige &&
                                   i_leading_e != -1 && 
@@ -23,6 +23,11 @@ void full_analyzer::signal_regions(){
                                   i_subleading_e != -1 &&
                                   _lCharge[i_leading_e] != _lCharge[i_subleading_e] &&
                                   lptcut(i_subleading_e, 20);
+
+    _2e_full                    = _2e &&
+                                  (get_mll(i_leading_e, i_subleading_e) > 80) &&
+                                  (get_mll(i_leading_e, i_subleading_e) < 100) &&
+                                  no_additional_leptons();
 
     //HNL stuff
     //_1e1disple                  = _1e &&
@@ -72,7 +77,7 @@ void full_analyzer::signal_regions(){
     ///////////////////////////////
     // Main signal region : mumu //
     ///////////////////////////////
-    _trigmu                     = true;
+    _trigmu                     = _passTrigger_mm or _passTrigger_m;
     
     _1mu                        = _trigmu &&
                                   i_leading_mu != -1 && 
@@ -82,6 +87,11 @@ void full_analyzer::signal_regions(){
                                   i_subleading_mu != -1 &&
                                   _lCharge[i_leading_mu] != _lCharge[i_subleading_mu] &&
                                   lptcut(i_subleading_mu, 20);
+
+    _2mu_full                   = _2mu &&
+                                  (get_mll(i_leading_mu, i_subleading_mu) > 80) &&
+                                  (get_mll(i_leading_mu, i_subleading_mu) < 100) &&
+                                  no_additional_leptons();
 
     //HNL stuff
     //_1mu1displmu                = _1mu &&
@@ -147,7 +157,7 @@ bool full_analyzer::lptcut(int i_lep, double ptcutvalue){
 bool full_analyzer::no_additional_leptons(){
     int loose_leptons = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if((displElectronID[i] and ele_clean_full_displ[i]) or looseMuonID[i]) loose_leptons++;
+        if((looseElectronID[i] and ele_clean_loose[i]) or looseMuonID[i]) loose_leptons++;
     }
     return (loose_leptons == 2);
 }

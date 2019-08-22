@@ -38,10 +38,16 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, TString 
     LorentzVector uT_vec = -(q_vec + met_vec);  // Hadronic recoil u_T is defined as the sum of all PF particles momenta except for the Z boson. Therefore uT + q + met = 0
 
     double q_norm = sqrt(q_vec.px()*q_vec.px() + q_vec.py()*q_vec.py() + q_vec.pz()*q_vec.pz());
-    LorentzVector q_unitvec( q_vec.px()/q_norm, q_vec.py()/q_norm, q_vec.pz()/q_norm, q_vec.energy() );
+    LorentzVector q_unitvec;
+    q_unitvec.setCartesianCoords( q_vec.px()/q_norm, q_vec.py()/q_norm, q_vec.pz()/q_norm, q_vec.energy()/q_norm );
+
+    double uT_dot_q_unit = q_unitvec.px()*uT_vec.px() + q_unitvec.py()*uT_vec.py() + q_unitvec.pz()*uT_vec.pz();
+    LorentzVector uT_para_vec;
+    uT_para_vec.setCartesianCoords(uT_dot_q_unit*q_unitvec.px(), uT_dot_q_unit*q_unitvec.py(), uT_dot_q_unit*q_unitvec.pz(), uT_dot_q_unit*q_unitvec.energy());
+    LorentzVector uT_perp_vec = uT_vec - uT_para_vec;
 
     (*hists)[prefix+"_q_pt"]->Fill(q_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt"]->Fill(uT_vec.pt(), event_weight);
-    (*hists)[prefix+"_upara"]->Fill(q_vec.pt(), event_weight);
-    (*hists)[prefix+"_uperp"]->Fill(q_vec.pt(), event_weight);
+    (*hists)[prefix+"_upara"]->Fill((uT_para_vec + q_vec).pt(), event_weight);
+    (*hists)[prefix+"_uperp"]->Fill(uT_perp_vec.pt(), event_weight);
 }

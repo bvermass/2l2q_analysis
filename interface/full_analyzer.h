@@ -131,6 +131,10 @@ public :
    Int_t           _HLT_IsoMu24_prescale;
    Bool_t          _HLT_IsoTkMu24;
    Int_t           _HLT_IsoTkMu24_prescale;
+   Bool_t          _passTrigger_m;
+   Bool_t          _passTrigger_e;
+   Bool_t          _passTrigger_mm;
+   Bool_t          _passTrigger_ee;
    //Bool_t          _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
    //Int_t           _HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
    //Bool_t          _HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
@@ -474,6 +478,10 @@ public :
    TBranch        *b__HLT_IsoMu24_prescale;   //!
    TBranch        *b__HLT_IsoTkMu24;   //!
    TBranch        *b__HLT_IsoTkMu24_prescale;   //!
+   TBranch        *b__passTrigger_m;
+   TBranch        *b__passTrigger_e;
+   TBranch        *b__passTrigger_mm;
+   TBranch        *b__passTrigger_ee;
    //TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
    //TBranch        *b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
    //TBranch        *b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
@@ -775,6 +783,7 @@ public :
    bool _trige;
    bool _1e;
    bool _2e;
+   bool _2e_full;
 
    bool _1e1disple;
    bool _1e1displevtx;
@@ -799,6 +808,7 @@ public :
    bool _trigmu;
    bool _1mu;
    bool _2mu;
+   bool _2mu_full;
 
    bool _1mu1displmu;
    bool _1mu1displmuvtx;
