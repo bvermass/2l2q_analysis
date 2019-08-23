@@ -70,7 +70,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i] and ele_clean_full_displ[i]) nEle++;
+        if(looseElectronID[i] and ele_clean_loose[i]) nEle++;
         if(looseMuonID[i]) nMu++;
     }
 
@@ -84,7 +84,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
             jets_uncl.push_back(tmp);
             nJets_uncl++;
         }
-        if(fullJetID[i] and jet_clean_full_displ[i]){
+        if(fullJetID[i] and jet_clean_full[i]){
             LorentzVector tmp(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
             jets_cl.push_back(tmp);
             nJets_cl++;
