@@ -120,6 +120,35 @@ void divide_by_binwidth(TH1F* h)
 }
 
 
+std::vector< double > computeEfficiencyForROC(TH1F* hist)
+{
+    // first check that underflow and overflow are empty
+    if(hist->GetBinContent(0) != 0) std::cout << "underflow not empty! " << hist->GetBinContent(0) << std::endl;
+    if(hist->GetBinContent(1001) != 0) std::cout << "overflow not empty! " << hist->GetBinContent(1001) << std::endl;
+    std::vector< double > effs;
+    double pass = 0;
+    double total = hist->Integral();
+    for(int i = 0; i <= 1000; i++){
+        pass += hist->GetBinContent(i);
+        effs.push_back(pass/total);
+    }
+    return effs;
+}
+
+
+double computeAUC(TGraph* roc)
+{
+    double area = 0.;
+    double x1, x2, y1, y2;
+    for(int i = 0; i < roc->GetN() - 1; i++){
+        roc->GetPoint(i, x1, y1);
+        roc->GetPoint(i+1, x2, y2);
+        area += (x2 - x1)*(y1 + y2)/2;
+    }
+    return round(area*10000)/100;
+}
+
+
 // 2D histograms
 TString get_2D_draw_options(TH2F* h)
 {

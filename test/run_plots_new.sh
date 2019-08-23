@@ -7,10 +7,10 @@ headdir=$(pwd)
 
 if [ $# -eq 1 ] ; then
     exec_name=a_plots.out
-    read -p "separate plots(1), multihists(2), stack plots(3), stacks with data(4), analyze_cuts(5): " choice
+    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4): " choice
 elif [ $# -eq 2 ] ; then
     exec_name=$2
-    read -p "separate plots(1), multihists(2), stack plots(3), stacks with data(4), analyze_cuts(5): " choice
+    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4): " choice
 else
     exec_name=$2
     choice=$3
@@ -84,9 +84,9 @@ if [[ choice -eq 2 ]]; then
 fi
 if [[ choice -eq 3 ]]; then
     if g++ -std=c++0x -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////////////////////"
-        echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////////////////////\n"
+        echo -e "\n//////////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "//////////////////////////////////////\n"
         
         firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
@@ -112,8 +112,46 @@ if [[ choice -eq 3 ]]; then
         echo
         rm $exec_name
     else
-        echo -e "\n//////////////////////////////////////"
-        echo -e "//MULTIHIST PLOTS COMPILATION FAILED//"
-        echo -e "//////////////////////////////////////\n"
+        echo -e "\n//////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION FAILED//"
+        echo -e "//////////////////////////////////\n"
+    fi
+fi
+if [[ choice -eq 4 ]]; then
+    if g++ -std=c++0x -o $exec_name "plotting/roccurveplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+        echo -e "\n////////////////////////////////////"
+        echo -e "//ROC PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "////////////////////////////////////\n"
+
+        firstline=0
+        while IFS='' read -r line || [[ -n "$line" ]]; do
+            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+                echo ""
+            else
+                counter=0
+                for val in $line; do
+                    if [ $firstline -eq 0 ]; then
+                        subdirectory_name=($val)
+                        firstline=1
+                    elif [ $counter -eq 0 ]; then
+                        legends+=($val)
+                        counter=1
+                    elif [ $counter -eq 1 ]; then
+                        signals+=($val)
+                        counter=2
+                    elif [ $counter -eq 2 ]; then
+                        bkgs+=($val)
+                        counter=0
+                    fi
+                done
+            fi
+        done < "$1"
+        ./$exec_name $subdirectory_name ${legends[@]} ${signals[@]} ${bkgs[@]}
+        echo
+        rm $exec_name
+    else
+        echo -e "\n////////////////////////////////"
+        echo -e "//ROC PLOTS COMPILATION FAILED//"
+        echo -e "////////////////////////////////\n"
     fi
 fi

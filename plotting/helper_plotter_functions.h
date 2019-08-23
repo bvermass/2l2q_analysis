@@ -31,6 +31,8 @@ int         get_color(TString legend);
 TH1F        get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle);
 void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
+std::vector< double > computeEfficiencyForROC(TH1F* hist);
+double      computeAUC(TGraph* roc);
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
