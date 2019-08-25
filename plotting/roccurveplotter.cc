@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
             // Get a reference histogram for the name, then get all histograms in  a vector
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
-            if(histname.Index("JetTagVal_detail") == -1) continue;
+            if(histname.Index("_ROC") == -1) continue;
             
             // get plot specific pathnames
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
