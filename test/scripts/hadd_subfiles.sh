@@ -23,7 +23,7 @@ function hadd_specific_backgrounds {
     #DY
     if [ 0 -lt $(ls ${1}${2}Background_DYJetsToLL_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding DY files: \n"
-        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_* ${1}${2}Background_DYJetsToLL_M-50_*
+        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_* ${1}${2}Background_.root
     fi
     #diboson 
     if [ 0 -lt $(ls ${1}${2}Background_WZ* 2>/dev/null | wc -w) ]; then
