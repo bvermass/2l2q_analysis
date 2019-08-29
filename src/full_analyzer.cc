@@ -250,6 +250,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
             JetTagVal = hnltagger_e.predict(pfn_e);
+            JetTagVal_BDT = hnlbdttagger_e.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmu){
@@ -268,6 +269,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet);
             fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
             JetTagVal = hnltagger_mu.predict(pfn_mu);
+            JetTagVal_BDT = hnlbdttagger_mu.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterreliso", i_leading_mu, i_subleading_displ_mu);
         }
 

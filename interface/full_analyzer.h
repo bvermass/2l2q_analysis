@@ -770,6 +770,7 @@ public :
    int i_closel2_jet;
 
    double JetTagVal = -1;
+   double JetTagVal_BDT = -1;
 
    // signal region booleans: ee
    bool _trige;

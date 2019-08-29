@@ -24,6 +24,8 @@
 #include "tdrStyle.h"
 #include "helper_plotter_functions.h"
 
+TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg);
+void plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends);
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif

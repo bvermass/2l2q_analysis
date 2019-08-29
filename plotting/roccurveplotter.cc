@@ -1,5 +1,39 @@
 #include "roccurveplotter.h"
 
+TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg, TString legend)
+{
+    TGraph* roc = new TGraph(eff_signal.size(), &(eff_bkg[0]), &(eff_signal[0]));
+    roc->SetLineColor(get_color(legend));
+    roc->SetLineWidth(2);
+    return roc;
+}
+
+
+void plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends)
+{
+    // This function adds the corresponding BDT roc curve to the existing multigraph that has the PFN version already
+    c->Clear();
+    histname.ReplaceAll("PFN", "BDT");
+
+    std::vector< double > auc;
+    for(int i = 0; i < files_signal.size(); i++){
+        TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
+        TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
+
+        std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
+        std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
+        TGraph* roc = get_roc(eff_signal, eff_bkg, "3GeV");
+        multigraph->Add(roc);
+        auc.push_back(computeAUC(roc));
+        TString auc_str = std::to_string(auc[i]).substr(0, std::to_string(auc[i]).find(".") + 3);
+        legend->AddEntry(roc, legends[i] + "(BDT): " + auc_str, "l");
+    }
+
+    multigraph->Draw("AL");
+    legend->Draw("same");
+}
+
+
 #ifndef __CINT__
 int main(int argc, char * argv[])
 {
@@ -32,8 +66,7 @@ int main(int argc, char * argv[])
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
-    TLegend legend = get_legend(0.7, 0.15, 1, 0.35, 1);
-    TLegend legend_log = get_legend(0.4, 0.05, 0.2, 0.91, 3);
+    TLegend legend = get_legend(0.6, 0.15, 1, 0.3, 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
@@ -44,11 +77,13 @@ int main(int argc, char * argv[])
     TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
     TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
+    // calculate cutting point for which we have x% signal efficiency
+    double required_signal_eff = 0.75;
+
     TIter next(files_bkg.front()->GetListOfKeys()); //doesn't really matter if we take bkg or signal
     TKey* key;
     while(key = (TKey*)next()){
         legend.Clear();
-        legend_log.Clear();
         TClass *cl = gROOT->GetClass(key->GetClassName());
 
         // -- TH1 --
@@ -64,39 +99,30 @@ int main(int argc, char * argv[])
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
 
             TMultiGraph* multigraph = new TMultiGraph();
-            TMultiGraph* multigraph_log = new TMultiGraph();
             std::vector< double > auc;
-            multigraph->SetTitle((TString)";Signal Eff.;Bkg Eff.");
+            multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");
             for(int i = 0; i < files_signal.size(); i++){
+                //auc.push_back(get_roc_and_auc(multigraph, histname, files_signal[i], files_bkg[i]);
                 TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
                 TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
+                if(hist_signal->GetMaximum() <= 0 or hist_bkg->GetMaximum() <= 0) continue;
 
                 
                 std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
-                std::vector< double > eff_signal_log;
-                std::vector< double > eff_bkg_log;
-                for(int j = 0; j < eff_signal.size(); j++){
-                    if(eff_signal[j] > 0.01 and eff_bkg[j] > 0.01){
-                        eff_signal_log.push_back(eff_signal[j]);
-                        eff_bkg_log.push_back(eff_bkg[j]);
+                for(int j = eff_signal.size() -1;  j >= 0; j--){
+                    if(eff_signal[j] > required_signal_eff){
+                        std::cout << "Sig eff = " << eff_signal[j] << ", Bkg eff = " << eff_bkg[j] << ", cutting point = " << hist_signal->GetXaxis()->GetBinCenter(j) << std::endl;
+                        break;
                     }
                 }
 
-                TGraph* roc = new TGraph(eff_signal.size(), &(eff_signal[0]), &(eff_bkg[0]));
-                roc->SetLineColor(get_color(legends[i]));
-                roc->SetLineWidth(2);
+                TGraph* roc = get_roc(eff_signal, eff_bkg, legends[i]);
                 multigraph->Add(roc);
                 auc.push_back(computeAUC(roc));
                 TString auc_str = std::to_string(auc[i]).substr(0, std::to_string(auc[i]).find(".") + 3);
                 legend.AddEntry(roc, legends[i] + ": " + auc_str, "l");
-
-                TGraph* roc_log = new TGraph(eff_signal_log.size(), &(eff_signal_log[0]), &(eff_bkg_log[0]));
-                roc_log->SetLineColor(get_color(legends[i]));
-                roc_log->SetLineWidth(2);
-                multigraph_log->Add(roc_log);
-                legend_log.AddEntry(roc_log, legends[i], "l");
             }
 
             c->Clear();
@@ -109,16 +135,24 @@ int main(int argc, char * argv[])
             c->Modified();
             c->Print(pathname_lin + histname + ".pdf");
 
-            // log version
-            //c->Clear();
-            //c->SetLogx(1);
-            //c->SetLogy(1);
-            //multigraph_log->Draw("AL");
-            //legend_log.Draw("same");
-            //CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+            if(histname.Index("PFN") != -1){ 
+                plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends);
+                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
-            //c->Modified();
-            //c->Print(pathname_log + histname + ".pdf");
+                c->Modified();
+                c->Print(pathname_lin + histname.ReplaceAll("PFN", "PFNvsBDT") + ".pdf");
+
+                multigraph->GetXaxis()->SetRangeUser(0., 0.1);
+                multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
+
+                c->Modified();
+                c->Print(pathname_lin + histname.ReplaceAll("PFN", "PFNvsBDT") + "_zoom.pdf");
+
+                c->SetLogx(1);
+                c->Modified();
+                c->Print(pathname_log + histname.ReplaceAll("PFN", "PFNvsBDT") + "_zoom.pdf");
+
+            }
         }
     }
 }

@@ -71,7 +71,8 @@ TLatex get_latex(double textsize, int textalign, int textfont)
 
 int get_color(TString legend)
 {
-    if(legend.Index("W+Jets")        != -1) return kRed+3;
+    if(legend.Index("Bkg")           != -1) return kOrange+4;
+    else if(legend.Index("W+Jets")   != -1) return kRed+3;
     else if(legend.Index("DY")       != -1) return kOrange-1;
     else if(legend.Index("t#bar{t}") != -1) return kCyan-3;
     else if(legend.Index("Diboson")  != -1) return kBlue+2;
@@ -122,15 +123,16 @@ void divide_by_binwidth(TH1F* h)
 
 std::vector< double > computeEfficiencyForROC(TH1F* hist)
 {
+    int nbins = hist->GetXaxis()->GetNbins();
     // first check that underflow and overflow are empty
     if(hist->GetBinContent(0) != 0) std::cout << "underflow not empty! " << hist->GetBinContent(0) << std::endl;
-    if(hist->GetBinContent(1001) != 0) std::cout << "overflow not empty! " << hist->GetBinContent(1001) << std::endl;
+    if(hist->GetBinContent(nbins+1) != 0) std::cout << "overflow not empty! " << hist->GetBinContent(nbins+1) << std::endl;
     std::vector< double > effs;
-    double pass = 0;
+    double passed = 0;
     double total = hist->Integral();
-    for(int i = 0; i <= 1000; i++){
-        pass += hist->GetBinContent(i);
-        effs.push_back(pass/total);
+    for(int i = 0; i <= nbins; i++){
+        passed += hist->GetBinContent(i);
+        effs.push_back(1-passed/total);
     }
     return effs;
 }
@@ -145,7 +147,7 @@ double computeAUC(TGraph* roc)
         roc->GetPoint(i+1, x2, y2);
         area += (x2 - x1)*(y1 + y2)/2;
     }
-    return round(area*10000)/100;
+    return  fabs(round(area*10000)/100);
 }
 
 
