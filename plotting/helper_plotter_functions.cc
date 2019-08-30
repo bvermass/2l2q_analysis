@@ -24,7 +24,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
     TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
     TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";
-    TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1)?         "" : "partialcuts/";
+    TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1 && histname.Index("_Training") == -1)?         "" : "partialcuts/";
     TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
     TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
     TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
