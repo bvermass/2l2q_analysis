@@ -93,6 +93,7 @@ int main(int argc, char * argv[])
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
             if(histname.Index("_ROC") == -1) continue;
+            std::cout << histname << std::endl;
             
             // get plot specific pathnames
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -139,18 +140,19 @@ int main(int argc, char * argv[])
                 plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends);
                 CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
+                histname.ReplaceAll("PFN", "PFNvsBDT");
                 c->Modified();
-                c->Print(pathname_lin + histname.ReplaceAll("PFN", "PFNvsBDT") + ".pdf");
+                c->Print(pathname_lin + histname + ".pdf");
 
                 multigraph->GetXaxis()->SetRangeUser(0., 0.1);
                 multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
                 c->Modified();
-                c->Print(pathname_lin + histname.ReplaceAll("PFN", "PFNvsBDT") + "_zoom.pdf");
+                c->Print(pathname_lin + histname + "_zoom.pdf");
 
                 c->SetLogx(1);
                 c->Modified();
-                c->Print(pathname_log + histname.ReplaceAll("PFN", "PFNvsBDT") + "_zoom.pdf");
+                c->Print(pathname_log + histname + "_zoom.pdf");
 
             }
         }
