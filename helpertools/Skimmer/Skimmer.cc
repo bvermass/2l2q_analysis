@@ -765,14 +765,11 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
 
 void Skimmer::Skim(TString skimcondition)
 {
-    
-
     Long64_t nentries = inputtree->GetEntries();
     for(Long64_t jentry = 0; jentry < nentries; ++jentry){
         inputtree->GetEntry(jentry);
 
-        o_nL = 0;
-        if(skimcondition == "test"){
+        if(Check_SkimCondition(skimcondition)){
             o_runNb = i_runNb;
             o_lumiBlock = i_lumiBlock;
             o_eventNb = i_eventNb;
@@ -1049,8 +1046,8 @@ void Skimmer::Skim(TString skimcondition)
             o_metPhiUnclDown = i_metPhiUnclDown;
             o_metPhiUnclUp = i_metPhiUnclUp;
             o_metSignificance = i_metSignificance;
+            outputtree->Fill();
         }
-        outputtree->Fill();
     }
 }
 

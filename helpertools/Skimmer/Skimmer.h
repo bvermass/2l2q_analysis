@@ -19,6 +19,7 @@
 #include <TSystem.h>
 
 #include "../../interface/full_analyzer.h"
+#include "../LorentzVector/LorentzVector.h"
 
 class Skimmer {
     public :
@@ -1046,5 +1047,19 @@ class Skimmer {
         void Init_input_branches(TTree* tree);
         void Add_branches(TTree* tree);
         void Skim(TString skimcondition);
+
+        //Skim conditions related stuff
+        void get_TightelectronID(bool* ID);
+        void get_DisplelectronID(bool* ID);
+        void get_TightmuonID(bool* ID);
+        void get_DisplmuonID(bool* ID);
+        void get_clean_ele(bool* cleaned, bool* muonID);
+        bool ElectronTriggerSkim();
+        bool MuonTriggerSkim();
+        bool dileptonSkim();
+        bool Check_SkimCondition(TString Condition);
+
+        bool TightmuonID[10], DisplmuonID[10], TightelectronID[10], DisplelectronID[10];
+        bool ele_cleaned_tight[10], ele_cleaned_displ[10], ele_cleaned_both[10];
 };
 #endif
