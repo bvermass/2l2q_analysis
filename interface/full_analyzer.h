@@ -783,6 +783,10 @@ public :
    bool _1e1displedphi;
    bool _1e1displeReliso;
    bool _1e1disple1jet;
+   bool _1e1disple_PFN;
+   bool _1e1disple_BDT;
+   bool _1e1disple_TrainingPFN;
+   bool _1e1disple_TrainingBDT;
 
    // Control region booleans: ee
    bool _CR_1e1displedphi;
@@ -805,6 +809,10 @@ public :
    bool _1mu1displmudphi;
    bool _1mu1displmuReliso;
    bool _1mu1displmu1jet;
+   bool _1mu1displmu_PFN;
+   bool _1mu1displmu_BDT;
+   bool _1mu1displmu_TrainingPFN;
+   bool _1mu1displmu_TrainingBDT;
 
    // control region booleans: mumu
    bool _CR_1mu1displmudphi;
@@ -870,6 +878,7 @@ public :
 
    // in src/signal_regions.cc
     void     signal_regions();
+    void     additional_signal_regions();
     bool     leadptcut(int);
     bool     no_additional_leptons();
     bool     mllcut(int, int, double);

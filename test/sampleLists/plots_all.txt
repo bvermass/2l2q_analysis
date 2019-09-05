@@ -1,4 +1,4 @@
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root                W+Jets
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                           DY
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root      DY_10-50
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root          DY_50

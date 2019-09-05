@@ -126,6 +126,34 @@ void full_analyzer::signal_regions(){
                                   i_leading_pogmedium_mu != -1 &&
                                   leadptcut(i_leading_pogmedium_mu);
 }
+
+
+void full_analyzer::additional_signal_regions(){
+    _1mu1displmu_PFN            = _1mu1displmu1jet &&
+                                  (JetTagVal > 0.90);
+
+    _1mu1displmu_BDT            = _1mu1displmu1jet &&
+                                  (JetTagVal_BDT > 0.20);
+
+    _1mu1displmu_TrainingPFN    = _1mu1displmudispl_Reliso &&
+                                  (JetTagVal > 0.90);
+
+    _1mu1displmu_TrainingBDT    = _1mu1displmudispl_Reliso &&
+                                  (JetTagVal_BDT > 0.20);
+
+    _1e1disple_PFN              = _1e1disple1jet &&
+                                  (JetTagVal > 0.90);
+
+    _1e1disple_BDT              = _1e1disple1jet &&
+                                  (JetTagVal_BDT > 0.20);
+
+    _1e1disple_TrainingPFN      = _1e1displedispl_Reliso &&
+                                  (JetTagVal > 0.90);
+
+    _1e1disple_TrainingBDT      = _1e1displedispl_Reliso &&
+                                  (JetTagVal_BDT > 0.20);
+}
+
  
 bool full_analyzer::leadptcut(int i_lep){
     if(i_lep == -1){ cout << "giving value -1 as i_lep to full_analyzer::leadptcut" << endl; return false;}
