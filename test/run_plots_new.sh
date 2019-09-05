@@ -7,10 +7,10 @@ headdir=$(pwd)
 
 if [ $# -eq 1 ] ; then
     exec_name=a_plots.out
-    read -p "separate plots(1), multihists(2), stack plots(3), stacks with data(4), analyze_cuts(5): " choice
+    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4): " choice
 elif [ $# -eq 2 ] ; then
     exec_name=$2
-    read -p "separate plots(1), multihists(2), stack plots(3), stacks with data(4), analyze_cuts(5): " choice
+    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4): " choice
 else
     exec_name=$2
     choice=$3
@@ -84,9 +84,9 @@ if [[ choice -eq 2 ]]; then
 fi
 if [[ choice -eq 3 ]]; then
     if g++ -std=c++0x -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////////////////////"
-        echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////////////////////\n"
+        echo -e "\n//////////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "//////////////////////////////////////\n"
         
         firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do

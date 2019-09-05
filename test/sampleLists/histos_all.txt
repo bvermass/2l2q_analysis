@@ -2,7 +2,7 @@
 #DATA
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/crab_Run2016C-17Jul2018-v1_2016LeptonicDataList_v27/dilep_final.root                    -1          -1      10
 #Wjets
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                                 61334.9     -1      6
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                61334.9     -1      28
 #DY
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                       18610       -1      11
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                           6020.85     -1      80
