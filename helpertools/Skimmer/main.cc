@@ -14,6 +14,6 @@ int main(int argc, char * argv[]){
     }
 
     Skimmer skimmer(argv[1], argv[2]);
-    skimmer.Skim("2l2qSkim");
+    skimmer.Skim("dileptonSkim");
 }
 #endif
