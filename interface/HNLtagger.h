@@ -20,6 +20,7 @@
 class HNLtagger
 {
     public:
+        bool isValid = false;
         TString HNLtagger_filename;
         TFile* HNLtagger_file;
         TTree* HNLtagger_tree;
@@ -74,6 +75,7 @@ class HNLtagger
 class HNLBDTtagger
 {
     public:
+        bool isValid = true;
         TString HNLBDTtagger_filename;
         TFile* HNLBDTtagger_file;
         TTree* HNLBDTtagger_tree;

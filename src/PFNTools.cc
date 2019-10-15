@@ -16,11 +16,15 @@ void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString p
 
 
 void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
-    (*hists)[prefix+"_JetTagVal"]->Fill(JetTagVal, event_weight);
-    (*hists)[prefix+"_JetTagVal_BDT"]->Fill(JetTagVal_BDT, event_weight);
-    (*hists)[prefix+"_PFN_ROC"]->Fill(JetTagVal, event_weight);
-    (*hists)[prefix+"_BDT_ROC"]->Fill(JetTagVal_BDT, event_weight);
-    if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"]->Fill(JetTagVal, event_weight);
-    if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_BDT_JetIsFromHNL_ROC"]->Fill(JetTagVal_BDT, event_weight);
-    (*hists)[prefix+"_JetTagValzm"]->Fill(JetTagVal, event_weight);
+    if(JetTagVal != -1){
+        (*hists)[prefix+"_JetTagVal"]->Fill(JetTagVal, event_weight);
+        (*hists)[prefix+"_JetTagValzm"]->Fill(JetTagVal, event_weight);
+        (*hists)[prefix+"_PFN_ROC"]->Fill(JetTagVal, event_weight);
+        if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"]->Fill(JetTagVal, event_weight);
+    }
+    if(JetTagVal_BDT != -1){
+        (*hists)[prefix+"_JetTagVal_BDT"]->Fill(JetTagVal_BDT, event_weight);
+        (*hists)[prefix+"_BDT_ROC"]->Fill(JetTagVal_BDT, event_weight);
+        if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_BDT_JetIsFromHNL_ROC"]->Fill(JetTagVal_BDT, event_weight);
+    }
 }

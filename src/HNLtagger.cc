@@ -54,6 +54,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
 
 double HNLtagger::predict(PFNReader& pfn)
 {
+    if(!isValid) return -1;
     std::vector< double > highlevelInput( { _JetPt, _JetEta, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2 } );
     std::vector< std::vector< double > > pfnInput;
 
@@ -126,6 +127,7 @@ HNLBDTtagger::HNLBDTtagger(TString filename, TString type_and_flavor, int partit
 
 double HNLBDTtagger::predict(PFNReader& bdt)
 {
+    if(!isValid) return -1;
     std::vector< double > highlevelInput( { _lPt, _lEta, _lPhi, _ldxy, _ldz, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits,
                                             _JetPt, _JetEta, _JetPhi, _JetMass, (double)_nJetConstituents, _JetdxySum, _JetdxySigSum, _JetdzSum, _JetdzSigSum, (double)_JetChargeSum,
                                             (double)_SV_ntracks, _SV_PVSVdist_2D, _SV_PVSVdist, _SV_normchi2, _SV_mass, _SV_pt, _SV_eta, _SV_phi } );

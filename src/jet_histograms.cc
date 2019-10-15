@@ -96,7 +96,12 @@ void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, T
 // fill function is part of full_analyzer class to access the tree variables
 void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet)
 {
-    if(i_jet == -1) return;
+    if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]){
+        hnltagger.isValid = false;
+        return;
+    }else {
+        hnltagger.isValid = true;
+    }
     hnltagger._gen_Nmass    = _gen_Nmass;
     hnltagger._gen_NV       = _gen_NV;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
@@ -159,7 +164,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
         hnltagger._JetConstituentHasTrack[i]          = 0;
         hnltagger._JetConstituentInSV[i]              = 0;
     }
-    hnltagger.HNLtagger_tree->Fill();
+    if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
 }
 
 int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
@@ -172,7 +177,12 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 
 void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double weight)
 {
-    if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]) return;
+    if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]){
+        hnlbdttagger.isValid = false;
+        return;
+    }else {
+        hnlbdttagger.isValid = true;
+    }
     hnlbdttagger._gen_Nmass             = _gen_Nmass;
     hnlbdttagger._gen_NV                = _gen_NV;
     hnlbdttagger._JetIsFromHNL          = get_JetIsFromHNL(i_jet);
@@ -227,5 +237,5 @@ void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep
     hnlbdttagger._SV_eta                = tracksum.eta();
     hnlbdttagger._SV_phi                = tracksum.phi();
 
-    hnlbdttagger.HNLBDTtagger_tree->Fill();
+    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
 }
