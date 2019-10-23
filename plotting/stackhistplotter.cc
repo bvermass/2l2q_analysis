@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
+    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
     float rightmargin = pad_histo->GetRightMargin();

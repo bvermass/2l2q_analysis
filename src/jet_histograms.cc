@@ -10,6 +10,9 @@ using namespace std;
 
 void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_jet1_pt"]                     = new TH1F(prefix+"_jet1_pt", ";jet_{1} #it{p}_{T};Events", 20, 0, 100); 
+    (*hists)[prefix+"_jetl2_mass"]                  = new TH1F(prefix+"_jetl2_mass", ";M(l_{2},jet) [GeV];Events", 10, 0, 20);
+    (*hists)[prefix+"_jetl2_mass_20b"]              = new TH1F(prefix+"_jetl2_mass_20b", ";M(l_{2},jet) [GeV];Events", 20, 0, 20);
+    (*hists)[prefix+"_jetl2_mass_40b"]              = new TH1F(prefix+"_jetl2_mass_40b", ";M(l_{2},jet) [GeV];Events", 40, 0, 20);
     
     (*hists)[prefix+"_jetl2_index"]                 = new TH1F(prefix+"_jetl2_index", ";closestJet(l_{2}) Index;Events", 15, -1, 14);
     (*hists)[prefix+"_jetl2_pt"]                    = new TH1F(prefix+"_jetl2_pt", ";closestJet(l_{2}) #it{p}_{T} [GeV];Events", 30, 0, 140);
@@ -55,7 +58,19 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_pt"]->Fill(_jetPt[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_eta"]->Fill(_jetEta[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_phi"]->Fill(_jetPhi[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_l2dR"]->Fill(get_dR_lepton_jet(i_subleading, i_closel2_jet), event_weight);
+        double jetl2dR = get_dR_lepton_jet(i_subleading, i_closel2_jet);
+        (*hists)[prefix+"_jetl2_l2dR"]->Fill(jetl2dR, event_weight);
+        LorentzVector jet(_jetPt[i_closel2_jet], _jetEta[i_closel2_jet], _jetPhi[i_closel2_jet], _jetE[i_closel2_jet]);
+        LorentzVector lep(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+        if(jetl2dR < 0.4){
+            (*hists)[prefix+"_jetl2_mass"]->Fill(jet.mass(), event_weight);
+            (*hists)[prefix+"_jetl2_mass_20b"]->Fill(jet.mass(), event_weight);
+            (*hists)[prefix+"_jetl2_mass_40b"]->Fill(jet.mass(), event_weight);
+        }else {
+            (*hists)[prefix+"_jetl2_mass"]->Fill((jet+lep).mass(), event_weight);
+            (*hists)[prefix+"_jetl2_mass_20b"]->Fill((jet+lep).mass(), event_weight);
+            (*hists)[prefix+"_jetl2_mass_40b"]->Fill((jet+lep).mass(), event_weight);
+        }
         (*hists)[prefix+"_jetl2_IsTightLepVeto"]->Fill(_jetIsTightLepVeto[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_CsvV2"]->Fill(_jetCsvV2[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_DeepCsv_udsg"]->Fill(_jetDeepCsv_udsg[i_closel2_jet], event_weight);

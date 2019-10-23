@@ -380,29 +380,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_e, i_subleading_displ_e);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
         }
         if(_1mu1displmu_TrainingPFN){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_mu, i_subleading_displ_mu);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
         }
         if(_1e1disple_TrainingBDT){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_e, i_subleading_displ_e);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_subleading_displ_e, i_gen_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
         }
         if(_1mu1displmu_TrainingBDT){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_mu, i_subleading_displ_mu);
         //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_subleading_displ_mu, i_gen_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
         }
 
 
