@@ -30,12 +30,20 @@ class Skimmer {
         ULong64_t       i_lumiBlock;
         ULong64_t       i_eventNb;
         UChar_t         i_nVertex;
+        Bool_t          i_is2017;
+        Bool_t          i_is2018;
         Double_t        i_BS_x;
         Double_t        i_BS_y;
         Double_t        i_BS_z;
+        Double_t        i_BS_xErr;
+        Double_t        i_BS_yErr;
+        Double_t        i_BS_zErr;
         Double_t        i_PV_x;
         Double_t        i_PV_y;
         Double_t        i_PV_z;
+        Double_t        i_PV_xErr;
+        Double_t        i_PV_yErr;
+        Double_t        i_PV_zErr;
         Float_t         i_prefireWeight;
         Float_t         i_prefireWeightUp;
         Float_t         i_prefireWeightDown;
@@ -46,11 +54,14 @@ class Skimmer {
         unsigned        i_nLheTau;
         unsigned        i_nLheWeights;
         Double_t        i_lheWeight[110];   //[_nLheWeights]
+        unsigned        i_nPsWeights;
+        Double_t        i_psWeight[110];   //[_nLheWeights]
         unsigned        i_ttgEventType;
         unsigned        i_zgEventType;
         Double_t        i_gen_met;
         Double_t        i_gen_metPhi;
         unsigned        i_gen_nPh;
+        unsigned        i_gen_phStatus[20];
         Double_t        i_gen_phPt[20];   //[_gen_nPh]
         Double_t        i_gen_phEta[20];   //[_gen_nPh]
         Double_t        i_gen_phPhi[20];   //[_gen_nPh]
@@ -71,9 +82,9 @@ class Skimmer {
         Double_t        i_gen_vertex_y[20];
         Double_t        i_gen_vertex_z[20];
         Bool_t          i_gen_lIsPrompt[20];   //[_gen_nL]
+        Bool_t          i_gen_lDecayedHadr[20];
         Double_t        i_gen_lMinDeltaR[20];   //[_gen_nL]
         Bool_t          i_gen_lPassParentage[20];   //[_gen_nL]
-        Double_t        i_gen_HT;
         unsigned        i_gen_nN;
         Double_t        i_gen_NPt;
         Double_t        i_gen_NEta;
@@ -91,6 +102,11 @@ class Skimmer {
         Int_t           i_gen_NPackedDtrsCharge[20];
         unsigned        i_gen_nNdaughters;
         UInt_t          i_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+        Double_t        i_gen_Ndaughters_Pt[30];
+        Double_t        i_gen_Ndaughters_Eta[30];
+        Double_t        i_gen_Ndaughters_Phi[30];
+        Double_t        i_gen_Ndaughters_E[30];
+        Int_t           i_gen_Ndaughters_Charge[30];
         //UChar_t         i_gen_nstatus23;
         //UChar_t         i_gen_nstatus23_fromN;
         //UChar_t         i_gen_nstatus23_fromW;
@@ -102,6 +118,14 @@ class Skimmer {
         Double_t        i_gen_qEta[2];   //[_gen_nq23]
         Double_t        i_gen_qPhi[2];   //[_gen_nq23]
         Double_t        i_gen_qE[2];   //[_gen_nq23]
+        Bool_t          i_passMETFilters;
+        Bool_t          i_Flag_goodVertices;
+        Bool_t          i_Flag_HBHENoiseFilter;
+        Bool_t          i_Flag_HBHENoiseIsoFilter;
+        Bool_t          i_Flag_EcalDeadCellTriggerPrimitiveFilter;
+        Bool_t          i_Flag_BadPFMuonFilter;
+        Bool_t          i_Flag_BadChargedCandidateFilter;
+        Bool_t          i_Flag_globalSuperTightHalo2016Filter;
         Bool_t          i_HLT_Ele27_WPTight_Gsf;
         Int_t           i_HLT_Ele27_WPTight_Gsf_prescale;
         Bool_t          i_HLT_IsoMu24;
@@ -180,6 +204,11 @@ class Skimmer {
         Double_t        i_dz[10];   //[_nL]
         Double_t        i_3dIP[10];   //[_nL]
         Double_t        i_3dIPSig[10];   //[_nL]
+        Double_t        i_lElectronSummer16MvaGP[10];
+        Double_t        i_lElectronSummer16MvaHZZ[10];
+        Double_t        i_lElectronMvaFall17v1NoIso[10];
+        Double_t        i_lElectronMvaFall17Iso[10];
+        Double_t        i_lElectronMvaFall17NoIso[10];
         Bool_t          i_lElectronPassEmu[10];   //[_nLight]
         Bool_t          i_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          i_lElectronChargeConst[10];   //[_nLight]
@@ -194,32 +223,22 @@ class Skimmer {
         Double_t        i_lElehadronicOverEm[10];
         Double_t        i_lEleInvMinusPInv[10];
         Double_t        i_eleNumberInnerHitsMissing[10];
+        Double_t        i_leptonMvaTTH[10];
         Double_t        i_leptonMvatZq[10];
-        Double_t        i_leptonMvaSUSY16[10];   //[_nLight]
-        Double_t        i_leptonMvaTTH16[10];   //[_nLight]
-        Double_t        i_leptonMvaSUSY17[10];   //[_nLight]
-        Double_t        i_leptonMvaTTH17[10];   //[_nLight]
-        Double_t        i_leptonMvatZqTTV16[10];   //[_nLight]
-        Double_t        i_leptonMvatZqTTV17[10];   //[_nLight]
-        Bool_t          i_lHNLoose[10];   //[_nLight]
-        Bool_t          i_lHNFO[10];   //[_nLight]
-        Bool_t          i_lHNTight[10];   //[_nLight]
-        Bool_t          i_lEwkLoose[10];   //[_nL]
-        Bool_t          i_lEwkFO[10];   //[_nL]
-        Bool_t          i_lEwkTight[10];   //[_nL]
         Bool_t          i_lPOGVeto[10];   //[_nL]
         Bool_t          i_lPOGLoose[10];   //[_nL]
         Bool_t          i_lPOGMedium[10];   //[_nL]
         Bool_t          i_lPOGTight[10];   //[_nL]
-        Bool_t          i_tauMuonVeto[10];   //[_nL]
-        Bool_t          i_tauEleVeto[10];   //[_nL]
-        Bool_t          i_decayModeFindingNew[10];   //[_nL]
-        Bool_t          i_tauVLooseMvaNew[10];   //[_nL]
-        Bool_t          i_tauLooseMvaNew[10];   //[_nL]
-        Bool_t          i_tauMediumMvaNew[10];   //[_nL]
-        Bool_t          i_tauTightMvaNew[10];   //[_nL]
-        Bool_t          i_tauVTightMvaNew[10];   //[_nL]
-        Bool_t          i_tauVTightMvaOld[10];   //[_nL]
+        Bool_t          i_tauMuonVetoLoose[10];   //[_nL]
+        Bool_t          i_tauEleVetoLoose[10];   //[_nL]
+        Bool_t          i_decayModeFinding[10];   //[_nL]
+        Double_t        i_tauAgainstElectronMVA6Raw[10];
+        Double_t        i_tauCombinedIsoDBRaw3Hits[10];
+        Double_t        i_tauIsoMVAPWdR03oldDMwLT[10];
+        Double_t        i_tauIsoMVADBdR03oldDMwLT[10];
+        Double_t        i_tauIsoMVADBdR03newDMwLT[10];
+        Double_t        i_tauIsoMVAPWnewDMwLT[10];
+        Double_t        i_tauIsoMVAPWoldDMwLT[10];
         Double_t        i_relIso[10];   //[_nLight]
         Double_t        i_relIso0p4[10];   //[_nMu]
         Double_t        i_relIso0p4MuDeltaBeta[10];   //[_nMu]
@@ -231,28 +250,32 @@ class Skimmer {
         Double_t        i_closestJetDeepCsv_b[10];   //[_nLight]
         Double_t        i_closestJetDeepCsv_bb[10];   //[_nLight]
         Double_t        i_closestJetDeepCsv[10];   //[_nLight]
+        Double_t        i_closestJetDeepFlavor_b[10];
+        Double_t        i_closestJetDeepFlavor_bb[10];
+        Double_t        i_closestJetDeepFlavor_lepb[10];
+        Double_t        i_closestJetDeepFlavor[10];
         UInt_t          i_selectedTrackMult[10];   //[_nLight]
-        Bool_t          i_lKVF_valid[10];
-        Double_t	    i_lKVF_x[10];
-        Double_t	    i_lKVF_y[10];
-        Double_t	    i_lKVF_z[10];
-        Double_t	    i_lKVF_cxx[10];
-        Double_t	    i_lKVF_cyy[10];
-        Double_t	    i_lKVF_czz[10];
-        Double_t	    i_lKVF_cyx[10];
-        Double_t	    i_lKVF_czy[10];
-        Double_t	    i_lKVF_czx[10];
-        Double_t	    i_lKVF_df[10];
-        Double_t	    i_lKVF_chi2[10];
-        UInt_t	        i_lKVF_ntracks[10];
-        Double_t        i_lKVF_dRcut[10];
-        Double_t        i_lKVF_trackPt[10][15];
-        Double_t        i_lKVF_trackEta[10][15];
-        Double_t        i_lKVF_trackPhi[10][15];
-        Double_t        i_lKVF_trackE[10][15];
-        Double_t        i_lKVF_trackdR[10][15];
-        Double_t        i_lKVF_trackdxy[10][15];
-        Double_t        i_lKVF_trackdz[10][15];
+        //Bool_t          i_lKVF_valid[10];
+        //Double_t	    i_lKVF_x[10];
+        //Double_t	    i_lKVF_y[10];
+        //Double_t	    i_lKVF_z[10];
+        //Double_t	    i_lKVF_cxx[10];
+        //Double_t	    i_lKVF_cyy[10];
+        //Double_t	    i_lKVF_czz[10];
+        //Double_t	    i_lKVF_cyx[10];
+        //Double_t	    i_lKVF_czy[10];
+        //Double_t	    i_lKVF_czx[10];
+        //Double_t	    i_lKVF_df[10];
+        //Double_t	    i_lKVF_chi2[10];
+        //UInt_t	        i_lKVF_ntracks[10];
+        //Double_t        i_lKVF_dRcut[10];
+        //Double_t        i_lKVF_trackPt[10][15];
+        //Double_t        i_lKVF_trackEta[10][15];
+        //Double_t        i_lKVF_trackPhi[10][15];
+        //Double_t        i_lKVF_trackE[10][15];
+        //Double_t        i_lKVF_trackdR[10][15];
+        //Double_t        i_lKVF_trackdxy[10][15];
+        //Double_t        i_lKVF_trackdz[10][15];
         Double_t        i_IVF_x[10];
         Double_t        i_IVF_y[10];
         Double_t        i_IVF_z[10];
@@ -281,6 +304,7 @@ class Skimmer {
         Double_t        i_lCQTrackKink[10];
         unsigned        i_lNumberOfMatchedStation[10];
         unsigned        i_lNumberOfValidPixelHits[10];
+        unsigned        i_lNumberOfValidTrackerHits[10];
         unsigned        i_muNumberInnerHits[10];
         unsigned        i_lTrackerLayersWithMeasurement[10];
         Double_t        i_lMuonSegComp[10];   //[_nMu]
@@ -288,6 +312,17 @@ class Skimmer {
         Double_t        i_lMuonTrackPtErr[10];   //[_nMu]
         Bool_t          i_lIsPrompt[10];   //[_nL]
         Int_t           i_lMatchPdgId[10];   //[_nL]
+        Int_t           i_lMatchCharge[10];   //[_nL]
+        Int_t           i_tauGenStatus[10];   //[_nL]
+        Int_t           i_lMomPdgId[10];
+        unsigned        i_lProvenance[10];
+        unsigned        i_lProvenanceCompressed[10];
+        unsigned        i_lProvenanceConversion[10];
+        Double_t        i_lPtCorr[10];
+        Double_t        i_lPtScaleUp[10];
+        Double_t        i_lPtScaleDown[10];
+        Double_t        i_lPtResUp[10];
+        Double_t        i_lPtResDown[10];//ECorr, EScaleUp can be calculated with ECorr/E = PtCorr/Pt and analogue for the others
         unsigned        i_nPh;
         Double_t        i_phPt[10];   //[_nPh]
         Double_t        i_phEta[10];   //[_nPh]
@@ -304,10 +339,16 @@ class Skimmer {
         Double_t        i_phPhotonIsolation[10];   //[_nPh]
         Double_t        i_phSigmaIetaIeta[10];   //[_nPh]
         Double_t        i_phHadronicOverEm[10];   //[_nPh]
+        Double_t        i_phHadTowOverEm[10];
         Bool_t          i_phPassElectronVeto[10];   //[_nPh]
         Bool_t          i_phHasPixelSeed[10];   //[_nPh]
         Bool_t          i_phIsPrompt[10];   //[_nPh]
         Int_t           i_phMatchPdgId[10];   //[_nPh]
+        Double_t        i_phPtCorr[10];
+        Double_t        i_phPtScaleUp[10];
+        Double_t        i_phPtScaleDown[10];
+        Double_t        i_phPtResUp[10];
+        Double_t        i_phPtResDown[10];//ECorr,... same as for electrons
         unsigned        i_nJets;
         Double_t        i_jetPt[20];   //[_nJets]
         Double_t        i_jetPt_JECUp[20];   //[_nJets]
@@ -316,6 +357,11 @@ class Skimmer {
         Double_t        i_jetPt_L1[20];   //[_nJets]
         Double_t        i_jetPt_L2[20];   //[_nJets]
         Double_t        i_jetPt_L3[20];   //[_nJets]
+        Double_t        i_jetSmearedPt[20];
+        Double_t        i_jetSmearedPt_JECDown[20];
+        Double_t        i_jetSmearedPt_JECUp[20];
+        Double_t        i_jetSmearedPt_JERDown[20];
+        Double_t        i_jetSmearedPt_JERUp[20];
         Double_t        i_jetEta[20];   //[_nJets]
         Double_t        i_jetPhi[20];   //[_nJets]
         Double_t        i_jetE[20];   //[_nJets]
@@ -325,8 +371,15 @@ class Skimmer {
         Double_t        i_jetDeepCsv_c[20];   //[_nJets]
         Double_t        i_jetDeepCsv_bb[20];   //[_nJets]
         Double_t        i_jetDeepCsv[20];   //[_nJets]
+        Double_t        i_jetDeepFlavor_b[20];
+        Double_t        i_jetDeepFlavor_bb[20];
+        Double_t        i_jetDeepFlavor_lepb[20];
+        Double_t        i_jetDeepFlavor[20];
+        Double_t        i_jetDeepFlavor_c[20];
+        Double_t        i_jetDeepFlavor_uds[20];
+        Double_t        i_jetDeepFlavor_g[20];
         UInt_t          i_jetHadronFlavor[20];   //[_nJets]
-        Bool_t          i_jetIsLoose[20];   //[_nJets]
+        //Bool_t          i_jetIsLoose[20];   //[_nJets]
         Bool_t          i_jetIsTight[20];   //[_nJets]
         Bool_t          i_jetIsTightLepVeto[20];   //[_nJets]
         Double_t        i_jetNeutralHadronFraction[20];
@@ -370,12 +423,20 @@ class Skimmer {
         ULong64_t       o_lumiBlock;
         ULong64_t       o_eventNb;
         UChar_t         o_nVertex;
+        Bool_t          o_is2017;
+        Bool_t          o_is2018;
         Double_t        o_BS_x;
         Double_t        o_BS_y;
         Double_t        o_BS_z;
+        Double_t        o_BS_xErr;
+        Double_t        o_BS_yErr;
+        Double_t        o_BS_zErr;
         Double_t        o_PV_x;
         Double_t        o_PV_y;
         Double_t        o_PV_z;
+        Double_t        o_PV_xErr;
+        Double_t        o_PV_yErr;
+        Double_t        o_PV_zErr;
         Float_t         o_prefireWeight;
         Float_t         o_prefireWeightUp;
         Float_t         o_prefireWeightDown;
@@ -386,11 +447,14 @@ class Skimmer {
         unsigned        o_nLheTau;
         unsigned        o_nLheWeights;
         Double_t        o_lheWeight[110];   //[_nLheWeights]
+        unsigned        o_nPsWeights;
+        Double_t        o_psWeight[110];   //[_nLheWeights]
         unsigned        o_ttgEventType;
         unsigned        o_zgEventType;
         Double_t        o_gen_met;
         Double_t        o_gen_metPhi;
         unsigned        o_gen_nPh;
+        unsigned        o_gen_phStatus[20];
         Double_t        o_gen_phPt[20];   //[_gen_nPh]
         Double_t        o_gen_phEta[20];   //[_gen_nPh]
         Double_t        o_gen_phPhi[20];   //[_gen_nPh]
@@ -411,9 +475,9 @@ class Skimmer {
         Double_t        o_gen_vertex_y[20];
         Double_t        o_gen_vertex_z[20];
         Bool_t          o_gen_lIsPrompt[20];   //[_gen_nL]
+        Bool_t          o_gen_lDecayedHadr[20];
         Double_t        o_gen_lMinDeltaR[20];   //[_gen_nL]
         Bool_t          o_gen_lPassParentage[20];   //[_gen_nL]
-        Double_t        o_gen_HT;
         unsigned        o_gen_nN;
         Double_t        o_gen_NPt;
         Double_t        o_gen_NEta;
@@ -431,6 +495,11 @@ class Skimmer {
         Int_t           o_gen_NPackedDtrsCharge[20];
         unsigned        o_gen_nNdaughters;
         UInt_t          o_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+        Double_t        o_gen_Ndaughters_Pt[30];
+        Double_t        o_gen_Ndaughters_Eta[30];
+        Double_t        o_gen_Ndaughters_Phi[30];
+        Double_t        o_gen_Ndaughters_E[30];
+        Int_t           o_gen_Ndaughters_Charge[30];
         //UChar_t         o_gen_nstatus23;
         //UChar_t         o_gen_nstatus23_fromN;
         //UChar_t         o_gen_nstatus23_fromW;
@@ -442,6 +511,14 @@ class Skimmer {
         Double_t        o_gen_qEta[2];   //[_gen_nq23]
         Double_t        o_gen_qPhi[2];   //[_gen_nq23]
         Double_t        o_gen_qE[2];   //[_gen_nq23]
+        Bool_t          o_passMETFilters;
+        Bool_t          o_Flag_goodVertices;
+        Bool_t          o_Flag_HBHENoiseFilter;
+        Bool_t          o_Flag_HBHENoiseIsoFilter;
+        Bool_t          o_Flag_EcalDeadCellTriggerPrimitiveFilter;
+        Bool_t          o_Flag_BadPFMuonFilter;
+        Bool_t          o_Flag_BadChargedCandidateFilter;
+        Bool_t          o_Flag_globalSuperTightHalo2016Filter;
         Bool_t          o_HLT_Ele27_WPTight_Gsf;
         Int_t           o_HLT_Ele27_WPTight_Gsf_prescale;
         Bool_t          o_HLT_IsoMu24;
@@ -520,6 +597,11 @@ class Skimmer {
         Double_t        o_dz[10];   //[_nL]
         Double_t        o_3dIP[10];   //[_nL]
         Double_t        o_3dIPSig[10];   //[_nL]
+        Double_t        o_lElectronSummer16MvaGP[10];
+        Double_t        o_lElectronSummer16MvaHZZ[10];
+        Double_t        o_lElectronMvaFall17v1NoIso[10];
+        Double_t        o_lElectronMvaFall17Iso[10];
+        Double_t        o_lElectronMvaFall17NoIso[10];
         Bool_t          o_lElectronPassEmu[10];   //[_nLight]
         Bool_t          o_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          o_lElectronChargeConst[10];   //[_nLight]
@@ -534,32 +616,22 @@ class Skimmer {
         Double_t        o_lElehadronicOverEm[10];
         Double_t        o_lEleInvMinusPInv[10];
         Double_t        o_eleNumberInnerHitsMissing[10];
+        Double_t        o_leptonMvaTTH[10];
         Double_t        o_leptonMvatZq[10];
-        Double_t        o_leptonMvaSUSY16[10];   //[_nLight]
-        Double_t        o_leptonMvaTTH16[10];   //[_nLight]
-        Double_t        o_leptonMvaSUSY17[10];   //[_nLight]
-        Double_t        o_leptonMvaTTH17[10];   //[_nLight]
-        Double_t        o_leptonMvatZqTTV16[10];   //[_nLight]
-        Double_t        o_leptonMvatZqTTV17[10];   //[_nLight]
-        Bool_t          o_lHNLoose[10];   //[_nLight]
-        Bool_t          o_lHNFO[10];   //[_nLight]
-        Bool_t          o_lHNTight[10];   //[_nLight]
-        Bool_t          o_lEwkLoose[10];   //[_nL]
-        Bool_t          o_lEwkFO[10];   //[_nL]
-        Bool_t          o_lEwkTight[10];   //[_nL]
         Bool_t          o_lPOGVeto[10];   //[_nL]
         Bool_t          o_lPOGLoose[10];   //[_nL]
         Bool_t          o_lPOGMedium[10];   //[_nL]
         Bool_t          o_lPOGTight[10];   //[_nL]
-        Bool_t          o_tauMuonVeto[10];   //[_nL]
-        Bool_t          o_tauEleVeto[10];   //[_nL]
-        Bool_t          o_decayModeFindingNew[10];   //[_nL]
-        Bool_t          o_tauVLooseMvaNew[10];   //[_nL]
-        Bool_t          o_tauLooseMvaNew[10];   //[_nL]
-        Bool_t          o_tauMediumMvaNew[10];   //[_nL]
-        Bool_t          o_tauTightMvaNew[10];   //[_nL]
-        Bool_t          o_tauVTightMvaNew[10];   //[_nL]
-        Bool_t          o_tauVTightMvaOld[10];   //[_nL]
+        Bool_t          o_tauMuonVetoLoose[10];   //[_nL]
+        Bool_t          o_tauEleVetoLoose[10];   //[_nL]
+        Bool_t          o_decayModeFinding[10];   //[_nL]
+        Double_t        o_tauAgainstElectronMVA6Raw[10];
+        Double_t        o_tauCombinedIsoDBRaw3Hits[10];
+        Double_t        o_tauIsoMVAPWdR03oldDMwLT[10];
+        Double_t        o_tauIsoMVADBdR03oldDMwLT[10];
+        Double_t        o_tauIsoMVADBdR03newDMwLT[10];
+        Double_t        o_tauIsoMVAPWnewDMwLT[10];
+        Double_t        o_tauIsoMVAPWoldDMwLT[10];
         Double_t        o_relIso[10];   //[_nLight]
         Double_t        o_relIso0p4[10];   //[_nMu]
         Double_t        o_relIso0p4MuDeltaBeta[10];   //[_nMu]
@@ -571,28 +643,32 @@ class Skimmer {
         Double_t        o_closestJetDeepCsv_b[10];   //[_nLight]
         Double_t        o_closestJetDeepCsv_bb[10];   //[_nLight]
         Double_t        o_closestJetDeepCsv[10];
+        Double_t        o_closestJetDeepFlavor_b[10];
+        Double_t        o_closestJetDeepFlavor_bb[10];
+        Double_t        o_closestJetDeepFlavor_lepb[10];
+        Double_t        o_closestJetDeepFlavor[10];
         UInt_t          o_selectedTrackMult[10];   //[_nLight]
-        Bool_t          o_lKVF_valid[10];
-        Double_t	    o_lKVF_x[10];
-        Double_t	    o_lKVF_y[10];
-        Double_t	    o_lKVF_z[10];
-        Double_t	    o_lKVF_cxx[10];
-        Double_t	    o_lKVF_cyy[10];
-        Double_t	    o_lKVF_czz[10];
-        Double_t	    o_lKVF_cyx[10];
-        Double_t	    o_lKVF_czy[10];
-        Double_t	    o_lKVF_czx[10];
-        Double_t	    o_lKVF_df[10];
-        Double_t	    o_lKVF_chi2[10];
-        UInt_t	        o_lKVF_ntracks[10];
-        Double_t        o_lKVF_dRcut[10];
-        Double_t        o_lKVF_trackPt[10][15];
-        Double_t        o_lKVF_trackEta[10][15];
-        Double_t        o_lKVF_trackPhi[10][15];
-        Double_t        o_lKVF_trackE[10][15];
-        Double_t        o_lKVF_trackdR[10][15];
-        Double_t        o_lKVF_trackdxy[10][15];
-        Double_t        o_lKVF_trackdz[10][15];
+        //Bool_t          o_lKVF_valid[10];
+        //Double_t	    o_lKVF_x[10];
+        //Double_t	    o_lKVF_y[10];
+        //Double_t	    o_lKVF_z[10];
+        //Double_t	    o_lKVF_cxx[10];
+        //Double_t	    o_lKVF_cyy[10];
+        //Double_t	    o_lKVF_czz[10];
+        //Double_t	    o_lKVF_cyx[10];
+        //Double_t	    o_lKVF_czy[10];
+        //Double_t	    o_lKVF_czx[10];
+        //Double_t	    o_lKVF_df[10];
+        //Double_t	    o_lKVF_chi2[10];
+        //UInt_t	        o_lKVF_ntracks[10];
+        //Double_t        o_lKVF_dRcut[10];
+        //Double_t        o_lKVF_trackPt[10][15];
+        //Double_t        o_lKVF_trackEta[10][15];
+        //Double_t        o_lKVF_trackPhi[10][15];
+        //Double_t        o_lKVF_trackE[10][15];
+        //Double_t        o_lKVF_trackdR[10][15];
+        //Double_t        o_lKVF_trackdxy[10][15];
+        //Double_t        o_lKVF_trackdz[10][15];
         Double_t        o_IVF_x[10];
         Double_t        o_IVF_y[10];
         Double_t        o_IVF_z[10];
@@ -621,6 +697,7 @@ class Skimmer {
         Double_t        o_lCQTrackKink[10];
         unsigned        o_lNumberOfMatchedStation[10];
         unsigned        o_lNumberOfValidPixelHits[10];
+        unsigned        o_lNumberOfValidTrackerHits[10];
         unsigned        o_muNumberInnerHits[10];
         unsigned        o_lTrackerLayersWithMeasurement[10];
         Double_t        o_lMuonSegComp[10];   //[_nMu]
@@ -628,6 +705,17 @@ class Skimmer {
         Double_t        o_lMuonTrackPtErr[10];   //[_nMu]
         Bool_t          o_lIsPrompt[10];   //[_nL]
         Int_t           o_lMatchPdgId[10];   //[_nL]
+        Int_t           o_lMatchCharge[10];   //[_nL]
+        Int_t           o_tauGenStatus[10];   //[_nL]
+        Int_t           o_lMomPdgId[10];
+        unsigned        o_lProvenance[10];
+        unsigned        o_lProvenanceCompressed[10];
+        unsigned        o_lProvenanceConversion[10];
+        Double_t        o_lPtCorr[10];
+        Double_t        o_lPtScaleUp[10];
+        Double_t        o_lPtScaleDown[10];
+        Double_t        o_lPtResUp[10];
+        Double_t        o_lPtResDown[10];//ECorr, EScaleUp can be calculated with ECorr/E = PtCorr/Pt and analogue for the others
         unsigned        o_nPh;
         Double_t        o_phPt[10];   //[_nPh]
         Double_t        o_phEta[10];   //[_nPh]
@@ -644,10 +732,16 @@ class Skimmer {
         Double_t        o_phPhotonIsolation[10];   //[_nPh]
         Double_t        o_phSigmaIetaIeta[10];   //[_nPh]
         Double_t        o_phHadronicOverEm[10];   //[_nPh]
+        Double_t        o_phHadTowOverEm[10];
         Bool_t          o_phPassElectronVeto[10];   //[_nPh]
         Bool_t          o_phHasPixelSeed[10];   //[_nPh]
         Bool_t          o_phIsPrompt[10];   //[_nPh]
         Int_t           o_phMatchPdgId[10];   //[_nPh]
+        Double_t        o_phPtCorr[10];
+        Double_t        o_phPtScaleUp[10];
+        Double_t        o_phPtScaleDown[10];
+        Double_t        o_phPtResUp[10];
+        Double_t        o_phPtResDown[10];//ECorr,... same as for electrons
         unsigned        o_nJets;
         Double_t        o_jetPt[20];   //[_nJets]
         Double_t        o_jetPt_JECUp[20];   //[_nJets]
@@ -656,6 +750,11 @@ class Skimmer {
         Double_t        o_jetPt_L1[20];   //[_nJets]
         Double_t        o_jetPt_L2[20];   //[_nJets]
         Double_t        o_jetPt_L3[20];   //[_nJets]
+        Double_t        o_jetSmearedPt[20];
+        Double_t        o_jetSmearedPt_JECDown[20];
+        Double_t        o_jetSmearedPt_JECUp[20];
+        Double_t        o_jetSmearedPt_JERDown[20];
+        Double_t        o_jetSmearedPt_JERUp[20];
         Double_t        o_jetEta[20];   //[_nJets]
         Double_t        o_jetPhi[20];   //[_nJets]
         Double_t        o_jetE[20];   //[_nJets]
@@ -665,8 +764,15 @@ class Skimmer {
         Double_t        o_jetDeepCsv_c[20];   //[_nJets]
         Double_t        o_jetDeepCsv_bb[20];   //[_nJets]
         Double_t        o_jetDeepCsv[20];   //[_nJets]
+        Double_t        o_jetDeepFlavor_b[20];
+        Double_t        o_jetDeepFlavor_bb[20];
+        Double_t        o_jetDeepFlavor_lepb[20];
+        Double_t        o_jetDeepFlavor[20];
+        Double_t        o_jetDeepFlavor_c[20];
+        Double_t        o_jetDeepFlavor_uds[20];
+        Double_t        o_jetDeepFlavor_g[20];
         UInt_t          o_jetHadronFlavor[20];   //[_nJets]
-        Bool_t          o_jetIsLoose[20];   //[_nJets]
+        //Bool_t          o_jetIsLoose[20];   //[_nJets]
         Bool_t          o_jetIsTight[20];   //[_nJets]
         Bool_t          o_jetIsTightLepVeto[20];   //[_nJets]
         Double_t        o_jetNeutralHadronFraction[20];
@@ -708,12 +814,20 @@ class Skimmer {
         TBranch        *bi__lumiBlock;   //!
         TBranch        *bi__eventNb;   //!
         TBranch        *bi__nVertex;   //!
+        TBranch        *bi__is2017;   //!
+        TBranch        *bi__is2018;   //!
         TBranch        *bi__BS_x;
         TBranch        *bi__BS_y;
         TBranch        *bi__BS_z;
+        TBranch        *bi__BS_xErr;
+        TBranch        *bi__BS_yErr;
+        TBranch        *bi__BS_zErr;
         TBranch        *bi__PV_x;
         TBranch        *bi__PV_y;
         TBranch        *bi__PV_z;
+        TBranch        *bi__PV_xErr;
+        TBranch        *bi__PV_yErr;
+        TBranch        *bi__PV_zErr;
         TBranch        *bi__prefireWeight;
         TBranch        *bi__prefireWeightUp;
         TBranch        *bi__prefireWeightDown;
@@ -724,11 +838,14 @@ class Skimmer {
         TBranch        *bi__nLheTau;
         TBranch        *bi__nLheWeights;   //!
         TBranch        *bi__lheWeight;   //!
+        TBranch        *bi__nPsWeights;   //!
+        TBranch        *bi__psWeight;   //!
         TBranch        *bi__ttgEventType;   //!
         TBranch        *bi__zgEventType;   //!
         TBranch        *bi__gen_met;   //!
         TBranch        *bi__gen_metPhi;   //!
         TBranch        *bi__gen_nPh;   //!
+        TBranch        *bi__gen_phStatus;   //!
         TBranch        *bi__gen_phPt;   //!
         TBranch        *bi__gen_phEta;   //!
         TBranch        *bi__gen_phPhi;   //!
@@ -749,9 +866,9 @@ class Skimmer {
         TBranch        *bi__gen_vertex_y;  //!
         TBranch        *bi__gen_vertex_z;  //!
         TBranch        *bi__gen_lIsPrompt;   //!
+        TBranch        *bi__gen_lDecayedHadr;   //!
         TBranch        *bi__gen_lMinDeltaR;   //!
         TBranch        *bi__gen_lPassParentage;   //!
-        TBranch        *bi__gen_HT;   //!
         TBranch        *bi__gen_nN;   //!
         TBranch        *bi__gen_NPt;
         TBranch        *bi__gen_NEta;
@@ -769,6 +886,11 @@ class Skimmer {
         TBranch        *bi__gen_NPackedDtrsCharge;
         TBranch        *bi__gen_nNdaughters;   //!
         TBranch        *bi__gen_Ndaughters_pdg;   //!
+        TBranch        *bi__gen_Ndaughters_Pt;   //!
+        TBranch        *bi__gen_Ndaughters_Eta;   //!
+        TBranch        *bi__gen_Ndaughters_Phi;   //!
+        TBranch        *bi__gen_Ndaughters_E;   //!
+        TBranch        *bi__gen_Ndaughters_Charge;   //!
         //TBranch        *bi__gen_nstatus23;   //!
         //TBranch        *bi__gen_nstatus23_fromN;   //!
         //TBranch        *bi__gen_nstatus23_fromW;   //!
@@ -780,6 +902,14 @@ class Skimmer {
         TBranch        *bi__gen_qEta;   //!
         TBranch        *bi__gen_qPhi;   //!
         TBranch        *bi__gen_qE;   //!
+        TBranch        *bi__passMETFilters;   //!
+        TBranch        *bi__Flag_goodVertices;   //!
+        TBranch        *bi__Flag_HBHENoiseFilter;   //!
+        TBranch        *bi__Flag_HBHENoiseIsoFilter;   //!
+        TBranch        *bi__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
+        TBranch        *bi__Flag_BadPFMuonFilter;   //!
+        TBranch        *bi__Flag_BadChargedCandidateFilter;   //!
+        TBranch        *bi__Flag_globalSuperTightHalo2016Filter;   //!
         TBranch        *bi__HLT_Ele27_WPTight_Gsf;   //!
         TBranch        *bi__HLT_Ele27_WPTight_Gsf_prescale;   //!
         TBranch        *bi__HLT_IsoMu24;   //!
@@ -858,6 +988,11 @@ class Skimmer {
         TBranch        *bi__dz;   //!
         TBranch        *bi__3dIP;   //!
         TBranch        *bi__3dIPSig;   //!
+        TBranch        *bi__lElectronSummer16MvaGP;
+        TBranch        *bi__lElectronSummer16MvaHZZ;
+        TBranch        *bi__lElectronMvaFall17v1NoIso;
+        TBranch        *bi__lElectronMvaFall17Iso;
+        TBranch        *bi__lElectronMvaFall17NoIso;
         TBranch        *bi__lElectronPassEmu;   //!
         TBranch        *bi__lElectronPassConvVeto;   //!
         TBranch        *bi__lElectronChargeConst;   //!
@@ -872,32 +1007,22 @@ class Skimmer {
         TBranch        *bi__lElehadronicOverEm;
         TBranch        *bi__lEleInvMinusPInv;
         TBranch        *bi__eleNumberInnerHitsMissing;
+        TBranch        *bi__leptonMvaTTH;
         TBranch        *bi__leptonMvatZq;
-        TBranch        *bi__leptonMvaSUSY16;   //!
-        TBranch        *bi__leptonMvaTTH16;   //!
-        TBranch        *bi__leptonMvaSUSY17;   //!
-        TBranch        *bi__leptonMvaTTH17;   //!
-        TBranch        *bi__leptonMvatZqTTV16;   //!
-        TBranch        *bi__leptonMvatZqTTV17;   //!
-        TBranch        *bi__lHNLoose;   //!
-        TBranch        *bi__lHNFO;   //!
-        TBranch        *bi__lHNTight;   //!
-        TBranch        *bi__lEwkLoose;   //!
-        TBranch        *bi__lEwkFO;   //!
-        TBranch        *bi__lEwkTight;   //!
         TBranch        *bi__lPOGVeto;   //!
         TBranch        *bi__lPOGLoose;   //!
         TBranch        *bi__lPOGMedium;   //!
         TBranch        *bi__lPOGTight;   //!
-        TBranch        *bi__tauMuonVeto;   //!
-        TBranch        *bi__tauEleVeto;   //!
-        TBranch        *bi__decayModeFindingNew;   //!
-        TBranch        *bi__tauVLooseMvaNew;   //!
-        TBranch        *bi__tauLooseMvaNew;   //!
-        TBranch        *bi__tauMediumMvaNew;   //!
-        TBranch        *bi__tauTightMvaNew;   //!
-        TBranch        *bi__tauVTightMvaNew;   //!
-        TBranch        *bi__tauVTightMvaOld;   //!
+        TBranch        *bi__tauMuonVetoLoose;   //[_nL]
+        TBranch        *bi__tauEleVetoLoose;   //[_nL]
+        TBranch        *bi__decayModeFinding;   //[_nL]
+        TBranch        *bi__tauAgainstElectronMVA6Raw;
+        TBranch        *bi__tauCombinedIsoDBRaw3Hits;
+        TBranch        *bi__tauIsoMVAPWdR03oldDMwLT;
+        TBranch        *bi__tauIsoMVADBdR03oldDMwLT;
+        TBranch        *bi__tauIsoMVADBdR03newDMwLT;
+        TBranch        *bi__tauIsoMVAPWnewDMwLT;
+        TBranch        *bi__tauIsoMVAPWoldDMwLT;
         TBranch        *bi__relIso;   //!
         TBranch        *bi__relIso0p4;   //!
         TBranch        *bi__relIso0p4MuDeltaBeta;   //!
@@ -909,6 +1034,10 @@ class Skimmer {
         TBranch        *bi__closestJetDeepCsv_b;   //!
         TBranch        *bi__closestJetDeepCsv_bb;   //!
         TBranch        *bi__closestJetDeepCsv;   //!
+        TBranch        *bi__closestJetDeepFlavor_b;   //!
+        TBranch        *bi__closestJetDeepFlavor_bb;   //!
+        TBranch        *bi__closestJetDeepFlavor_lepb;   //!
+        TBranch        *bi__closestJetDeepFlavor;   //!
         TBranch        *bi__selectedTrackMult;   //!
         //TBranch        *bi__lKVF_valid;
         //TBranch	      *bi__lKVF_x;
@@ -959,6 +1088,7 @@ class Skimmer {
         TBranch        *bi__lCQTrackKink;
         TBranch        *bi__lNumberOfMatchedStation;
         TBranch        *bi__lNumberOfValidPixelHits;
+        TBranch        *bi__lNumberOfValidTrackerHits;
         TBranch        *bi__muNumberInnerHits;
         TBranch        *bi__lTrackerLayersWithMeasurement;
         TBranch        *bi__lMuonSegComp;   //!
@@ -966,6 +1096,17 @@ class Skimmer {
         TBranch        *bi__lMuonTrackPtErr;   //!
         TBranch        *bi__lIsPrompt;   //!
         TBranch        *bi__lMatchPdgId;   //!
+        TBranch        *bi__lMatchCharge;   //[_nL]
+        TBranch        *bi__tauGenStatus;   //[_nL]
+        TBranch        *bi__lMomPdgId;
+        TBranch        *bi__lProvenance;
+        TBranch        *bi__lProvenanceCompressed;
+        TBranch        *bi__lProvenanceConversion;
+        TBranch        *bi__lPtCorr;
+        TBranch        *bi__lPtScaleUp;
+        TBranch        *bi__lPtScaleDown;
+        TBranch        *bi__lPtResUp;
+        TBranch        *bi__lPtResDown;
         TBranch        *bi__nPh;   //!
         TBranch        *bi__phPt;   //!
         TBranch        *bi__phEta;   //!
@@ -982,10 +1123,16 @@ class Skimmer {
         TBranch        *bi__phPhotonIsolation;   //!
         TBranch        *bi__phSigmaIetaIeta;   //!
         TBranch        *bi__phHadronicOverEm;   //!
+        TBranch        *bi__phHadTowOverEm;
         TBranch        *bi__phPassElectronVeto;   //!
         TBranch        *bi__phHasPixelSeed;   //!
         TBranch        *bi__phIsPrompt;   //!
         TBranch        *bi__phMatchPdgId;   //!
+        TBranch        *bi__phPtCorr;
+        TBranch        *bi__phPtScaleUp;
+        TBranch        *bi__phPtScaleDown;
+        TBranch        *bi__phPtResUp;
+        TBranch        *bi__phPtResDown;
         TBranch        *bi__nJets;   //!
         TBranch        *bi__jetPt;   //!
         TBranch        *bi__jetPt_JECUp;   //!
@@ -994,6 +1141,11 @@ class Skimmer {
         TBranch        *bi__jetPt_L1;
         TBranch        *bi__jetPt_L2;
         TBranch        *bi__jetPt_L3;
+        TBranch        *bi__jetSmearedPt;
+        TBranch        *bi__jetSmearedPt_JECDown;
+        TBranch        *bi__jetSmearedPt_JECUp;
+        TBranch        *bi__jetSmearedPt_JERDown;
+        TBranch        *bi__jetSmearedPt_JERUp;
         TBranch        *bi__jetEta;   //!
         TBranch        *bi__jetPhi;   //!
         TBranch        *bi__jetE;   //!
@@ -1003,8 +1155,15 @@ class Skimmer {
         TBranch        *bi__jetDeepCsv_c;   //!
         TBranch        *bi__jetDeepCsv_bb;   //!
         TBranch        *bi__jetDeepCsv;   //!
+        TBranch        *bi__jetDeepFlavor_b;   //!
+        TBranch        *bi__jetDeepFlavor_bb;   //!
+        TBranch        *bi__jetDeepFlavor_lepb;   //!
+        TBranch        *bi__jetDeepFlavor;   //!
+        TBranch        *bi__jetDeepFlavor_c;   //!
+        TBranch        *bi__jetDeepFlavor_uds;   //!
+        TBranch        *bi__jetDeepFlavor_g;   //!
         TBranch        *bi__jetHadronFlavor;   //!
-        TBranch        *bi__jetIsLoose;   //!
+        //TBranch        *bi__jetIsLoose;   //!
         TBranch        *bi__jetIsTight;   //!
         TBranch        *bi__jetIsTightLepVeto;   //!
         TBranch        *bi__jetNeutralHadronFraction;   //!
