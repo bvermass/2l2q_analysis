@@ -84,7 +84,7 @@
 
 # Background
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                   18610       -1      11
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                       6020.85     -1      80
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                       5765.4      -1      80
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                          87.315      -1      9
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                 182.175     -1      9
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root              182.175     -1      14
