@@ -4,7 +4,6 @@ if len(sys.argv) != 3:
     print('wrong number of arguments, input should be: python skim_and_hadd_tuples.py [production_version] [dilep_tag]')
     sys.exit()
 
-#os.system('voms-proxy-init --voms cms')
 os.system('make -f makeSkimmer')
 print('cleaned finished_samples.txt?')
 
@@ -18,14 +17,14 @@ dilep_tag = sys.argv[2]
 
 
 for sampledir in os.listdir(pnfs_base_path):
+    hasproduction = False
     pnfs_sample_path = pnfs_base_path + sampledir + "/"
     if sampledir in open('finished_samples.txt').read():
         print('already finished {}'.format(sampledir))
     else:
-        isproduction = False
         for crabdir in os.listdir(pnfs_sample_path):
             if production_version in crabdir:
-                isproduction = True
+                hasproduction = True
 
                 pnfs_crab_path = pnfs_sample_path + crabdir + "/"
                 print 
@@ -39,7 +38,7 @@ for sampledir in os.listdir(pnfs_base_path):
                                 print full_path
                                 os.system('./test {} ~/public/heavyNeutrino/skim/{}'.format(full_path, f))
 
-        if isproduction:
+        if hasproduction:
             if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/dilep_*') == 0:
                 print 'successfully hadded dilep files into dilep_skim.root'
                 os.system('rm ~/public/heavyNeutrino/skim/dilep_*')

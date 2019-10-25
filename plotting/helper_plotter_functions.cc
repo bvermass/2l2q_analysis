@@ -80,7 +80,7 @@ int get_color(TString legend)
     else if(legend.Index("Top")      != -1) return kCyan-3;
     else if(legend.Index("3GeV")    != -1) return kRed-9;
     else if(legend.Index("5GeV")    != -1) return kGreen-9;
-    else if(legend.Index("8GeV")    != -1) return kCyan-9;
+    else if(legend.Index("8GeV")    != -1) return kMagenta-7;
     else return kBlack;
 }
 
@@ -150,12 +150,32 @@ double computeAUC(TGraph* roc)
     return  fabs(round(area*10000)/100);
 }
 
+void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff)
+{
+    double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;
+    for(int j = eff_signal.size() -1;  j >= 0; j--){
+        if(eff_signal[j] > required_signal_eff){
+            cp = hist_signal->GetXaxis()->GetBinCenter(j);
+            cp_eff_signal = eff_signal[j];
+            cp_eff_bkg = eff_bkg[j];
+            for(int junc = j; junc < hist_signal->GetNbinsX(); junc++){
+                cp_eff_signal_unc += hist_signal->GetBinContent(junc);
+                cp_eff_bkg_unc    += hist_bkg->GetBinContent(junc);
+            }
+            break;
+        }
+    }
+    std::cout << "Sig eff. " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)" << std::endl;
+    std::cout << "Bkg eff. " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)" << std::endl;
+    std::cout << "Cutting point : " << cp << std::endl;
+}
+
 
 // 2D histograms
 TString get_2D_draw_options(TH2F* h)
 {
     int nbinsx = h->GetNbinsX();
     int nbinsy = h->GetNbinsY();
-    if(nbinsx > 10 or nbinsy > 10) return "colz";
+    if(nbinsx > 30 or nbinsy > 30) return "colz";
     else return "colz text";
 }

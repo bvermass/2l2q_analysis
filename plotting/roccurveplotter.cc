@@ -77,9 +77,6 @@ int main(int argc, char * argv[])
     TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
     TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
-    // calculate cutting point for which we have x% signal efficiency
-    double required_signal_eff = 0.75;
-
     TIter next(files_bkg.front()->GetListOfKeys()); //doesn't really matter if we take bkg or signal
     TKey* key;
     while(key = (TKey*)next()){
@@ -112,12 +109,8 @@ int main(int argc, char * argv[])
                 std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
-                for(int j = eff_signal.size() -1;  j >= 0; j--){
-                    if(eff_signal[j] > required_signal_eff){
-                        std::cout << "Sig eff = " << eff_signal[j] << ", Bkg eff = " << eff_bkg[j] << ", cutting point = " << hist_signal->GetXaxis()->GetBinCenter(j) << std::endl;
-                        break;
-                    }
-                }
+                // calculate cutting point to get 75% signal efficiency for PFN or BDT
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75);
 
                 TGraph* roc = get_roc(eff_signal, eff_bkg, legends[i]);
                 multigraph->Add(roc);

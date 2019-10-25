@@ -33,6 +33,7 @@ void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 std::vector< double > computeEfficiencyForROC(TH1F* hist);
 double      computeAUC(TGraph* roc);
+void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff);
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
