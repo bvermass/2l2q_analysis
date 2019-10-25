@@ -50,6 +50,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_l2_3dIPSig"]                      = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 30, 0, 40);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 30, 0, 150);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 30, 0, 200);
+    (*hists)[prefix+"_Zpeak"]                           = new TH1F(prefix+"_Zpeak", ";On-Z;Events", 1, 0, 1);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 30, 0, 3.14);
     (*hists)[prefix+"_dRll"]                            = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 30, 0, 6);
     (*hists)[prefix+"_dRl2jet1_cl"]                     = new TH1F(prefix+"_dRl2jet1_cl", ";#it{#Delta R}(l_{2},jet_{1}^{cl});Events", 30, 0, 6);
@@ -114,6 +115,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     add_gen_histograms(hists, hists2D, prefix);
     add_KVF_eff_histograms(hists, prefix);
     add_IVF_eff_histograms(hists, prefix);
+    add_chargeflip_histograms(hists2D, prefix);
 }
 
 
@@ -175,7 +177,9 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
     (*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
 
-    (*hists)[prefix+"_mll"]->Fill(get_mll(i_leading, i_subleading), event_weight);
+    double dileptonmass = get_mll(i_leading, i_subleading);
+    (*hists)[prefix+"_mll"]->Fill(dileptonmass, event_weight);
+    if(dileptonmass > 80 and dileptonmass < 100) (*hists)[prefix+"_Zpeak"]->Fill(1, event_weight);
     (*hists)[prefix+"_dphill"]->Fill(get_dphill(i_leading, i_subleading), event_weight);
     (*hists)[prefix+"_dRll"]->Fill(get_dRll(i_leading, i_subleading), event_weight);
     LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
@@ -204,6 +208,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     fill_jet_histograms(hists, prefix, i_subleading);
     fill_pfn_histograms(hists, prefix);
+    fill_chargeflip_histograms(hists2D, prefix, i_leading, i_subleading);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){

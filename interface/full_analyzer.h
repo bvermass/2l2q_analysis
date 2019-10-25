@@ -925,6 +925,8 @@ public :
     void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_chargeflip_histograms(std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_chargeflip_histograms(std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading);
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
     int      get_lfromtau(int i_gen_l);
 
