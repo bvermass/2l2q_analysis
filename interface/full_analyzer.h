@@ -933,6 +933,10 @@ public :
    // in src/PFNTools.cc
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+
+   // in src/SelectionOptimization.cc
+    void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
+    void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
 };
 
 #endif

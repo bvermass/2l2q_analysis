@@ -33,8 +33,9 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
     TString invIVFSVgenreco = (histname.Index("_invIVFSVgenreco") == -1)? "" : "invIVFSVgenreco/";
     TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
+    TString Bool            = (histname.Index("_Bool_") == -1)? "" : "Bool/";
 
-    TString fullname = pathname + linorlog + gen + HLT + eormu + SSorOS + control_region + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
+    TString fullname = pathname + linorlog + gen + HLT + eormu + SSorOS + Bool + control_region + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
     gSystem->Exec("mkdir -p " + fullname);
     return fullname;
 }
