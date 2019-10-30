@@ -23,18 +23,24 @@ function hadd_specific_backgrounds {
     #DY
     if [ 0 -lt $(ls ${1}${2}Background_DYJetsToLL_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding DY files: \n"
-        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8* ${1}${2}Background_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8*
+        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
     fi
     #diboson 
     if [ 0 -lt $(ls ${1}${2}Background_WGToLNuG_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding Diboson files: \n"
-        hadd -f ${1}${2}Background_Diboson.root ${1}${2}Background_WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root #${1}${2}Background_WWTo2L2Nu_13TeV-powheg.root ${1}${2}Background_WWToLNuQQ_13TeV-powheg.root ${1}${2}Background_ZZTo4L_13TeV_powheg_pythia8.root ${1}${2}Background_WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8.root ${1}${2}Background_WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8.root
+        hadd -f ${1}${2}Background_Diboson.root ${1}${2}Background_WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_WWTo2L2Nu_13TeV-powheg.root ${1}${2}Background_WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8.root ${1}${2}Background_ZZTo4L_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_ZZTo2L2Q_13TeV_powheg_pythia8.root ${1}${2}Background_ZZTo2L2Nu_13TeV_powheg_pythia8.root ${1}${2}Background_WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_WZToLNu2Q_13TeV_powheg_pythia8.root ${1}${2}Background_WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8.root
     fi
     #QCD
     if [ 0 -lt $(ls ${1}${2}Background_QCD_* 2>/dev/null | wc -w) ]; then
-        echo -e "\nhadding DY files: \n"
+        echo -e "\nhadding QCD files: \n"
         hadd -f ${1}${2}Background_QCD.root ${1}${2}Background_QCD*
     fi
+    #single top
+    if [ 0 -lt $(ls ${1}${2}Background_ST_* 2>/dev/null | wc -w) ]; then
+        echo -e "\nhadding Single top files: \n"
+        hadd -f ${1}${2}Background_ST.root ${1}${2}Background_ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8.root ${1}${2}Background_ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1.root ${1}${2}Background_ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1.root ${1}${2}Background_ST_tW_antitop_5f_NoFullyHadronicDecays_13TeV-powheg_TuneCUETP8M1.root ${1}${2}Background_ST_tW_top_5f_NoFullyHadronicDecays_13TeV-powheg_TuneCUETP8M1.root
+    fi
+
 
     #all backgrounds together
     hadd -f ${1}${2}Background.root ${1}${2}Background_DYJets.root ${1}${2}Background_Diboson.root ${1}${2}Background_TTJets.root ${1}${2}Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
