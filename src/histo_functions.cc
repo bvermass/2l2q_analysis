@@ -115,7 +115,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     add_gen_histograms(hists, hists2D, prefix);
     add_KVF_eff_histograms(hists, prefix);
     add_IVF_eff_histograms(hists, prefix);
-    add_chargeflip_histograms(hists2D, prefix);
+    add_chargeflip_histograms(hists, hists2D, prefix);
 }
 
 
@@ -208,7 +208,8 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     fill_jet_histograms(hists, prefix, i_subleading);
     fill_pfn_histograms(hists, prefix);
-    fill_chargeflip_histograms(hists2D, prefix, i_leading, i_subleading);
+    if(_lFlavor[i_leading] == 0) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_e, i_gen_subleading_displ_e);
+    if(_lFlavor[i_leading] == 1) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_mu, i_gen_subleading_displ_mu);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){

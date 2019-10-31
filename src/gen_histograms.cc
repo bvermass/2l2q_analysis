@@ -265,7 +265,7 @@ void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
 }
 
 
-void full_analyzer::add_chargeflip_histograms(std::map<TString, TH2*>* hists2D, TString prefix){
+void full_analyzer::add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     (*hists2D)[prefix+"_gen_l1_chargeflip"]                 = new TH2F(prefix+"_gen_l1_chargeflip", ";Gen Charge;Charge", 2, -2, 2, 2, -2, 2);
     (*hists2D)[prefix+"_gen_l2_chargeflip"]                 = new TH2F(prefix+"_gen_l2_chargeflip", ";Gen Charge;Charge", 2, -2, 2, 2, -2, 2);
     (*hists2D)[prefix+"_gen_l2_flipvsdxy_0p1cm"]            = new TH2F(prefix+"_gen_l2_flipvsdxy_0p1cm", ";;|dxy| [cm]", 2, -2, 2, 10, 0, 0.1);
@@ -289,20 +289,28 @@ void full_analyzer::add_chargeflip_histograms(std::map<TString, TH2*>* hists2D, 
     (*hists2D)[prefix+"_gen_l1_flipvschargeconst"]->GetXaxis()->SetBinLabel(2, "no Ch. flip");
     (*hists2D)[prefix+"_gen_l2_flipvschargeconst"]->GetXaxis()->SetBinLabel(1, "Ch. flip");
     (*hists2D)[prefix+"_gen_l2_flipvschargeconst"]->GetXaxis()->SetBinLabel(2, "no Ch. flip");
+    (*hists)[prefix+"_gen_l1_chargeflipvsPt_eff_den"]                 = new TH1F(prefix+"_gen_l1_chargeflipvsPt_eff_den", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 100);
+    (*hists)[prefix+"_gen_l1_chargeflipvsPt_eff_num"]                 = new TH1F(prefix+"_gen_l1_chargeflipvsPt_eff_num", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 100);
+    (*hists)[prefix+"_gen_l2_chargeflipvsPt_eff_den"]                 = new TH1F(prefix+"_gen_l2_chargeflipvsPt_eff_den", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 100);
+    (*hists)[prefix+"_gen_l2_chargeflipvsPt_eff_num"]                 = new TH1F(prefix+"_gen_l2_chargeflipvsPt_eff_num", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 100);
+    (*hists)[prefix+"_gen_l1_chargeflipvsdxy_eff_den"]                 = new TH1F(prefix+"_gen_l1_chargeflipvsdxy_eff_den", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 1);
+    (*hists)[prefix+"_gen_l1_chargeflipvsdxy_eff_num"]                 = new TH1F(prefix+"_gen_l1_chargeflipvsdxy_eff_num", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 1);
+    (*hists)[prefix+"_gen_l2_chargeflipvsdxy_eff_den"]                 = new TH1F(prefix+"_gen_l2_chargeflipvsdxy_eff_den", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 1);
+    (*hists)[prefix+"_gen_l2_chargeflipvsdxy_eff_num"]                 = new TH1F(prefix+"_gen_l2_chargeflipvsdxy_eff_num", ";#it{p}_{T} [GeV];Charge flip Rate", 20, 0, 1);
 }
 
-void full_analyzer::fill_chargeflip_histograms(std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
+void full_analyzer::fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading, int i_gen_leading, int i_gen_subleading){
+    (*hists2D)[prefix+"_gen_l1_chargeflip"]->Fill(_gen_lCharge[i_gen_leading], _lCharge[i_leading], event_weight);
+    (*hists2D)[prefix+"_gen_l2_chargeflip"]->Fill(_gen_lCharge[i_gen_subleading], _lCharge[i_subleading], event_weight);
+    (*hists2D)[prefix+"_gen_l2_flipvsdxy_0p1cm"]->Fill(_gen_lCharge[i_gen_subleading]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
+    (*hists2D)[prefix+"_gen_l2_flipvsdxy_1cm"]->Fill(_gen_lCharge[i_gen_subleading]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
+    (*hists2D)[prefix+"_gen_l2_flipvsdxy_10cm"]->Fill(_gen_lCharge[i_gen_subleading]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
     if(_lFlavor[i_leading] == 0){
-        (*hists2D)[prefix+"_gen_l1_chargeflip"]->Fill(_gen_lCharge[i_gen_leading_e], _lCharge[i_leading], event_weight);
-        (*hists2D)[prefix+"_gen_l1_flipvschargeconst"]->Fill(_gen_lCharge[i_gen_leading_e]*_lCharge[i_leading], _lElectronChargeConst[i_leading], event_weight);
+        (*hists2D)[prefix+"_gen_l1_flipvschargeconst"]->Fill(_gen_lCharge[i_gen_leading]*_lCharge[i_leading], _lElectronChargeConst[i_leading], event_weight);
     }
     if(_lFlavor[i_subleading] == 0){
-        (*hists2D)[prefix+"_gen_l2_chargeflip"]->Fill(_gen_lCharge[i_gen_subleading_displ_e], _lCharge[i_subleading], event_weight);
-        (*hists2D)[prefix+"_gen_l2_flipvsdxy_0p1cm"]->Fill(_gen_lCharge[i_gen_subleading_displ_e]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
-        (*hists2D)[prefix+"_gen_l2_flipvsdxy_1cm"]->Fill(_gen_lCharge[i_gen_subleading_displ_e]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
-        (*hists2D)[prefix+"_gen_l2_flipvsdxy_10cm"]->Fill(_gen_lCharge[i_gen_subleading_displ_e]*_lCharge[i_subleading], fabs(_dxy[i_subleading]), event_weight);
-        (*hists2D)[prefix+"_gen_l2_flipvschargeconst"]->Fill(_gen_lCharge[i_gen_subleading_displ_e]*_lCharge[i_subleading], _lElectronChargeConst[i_subleading], event_weight);
-        if(_lCharge[i_subleading] == _gen_lCharge[i_gen_subleading_displ_e]){
+        (*hists2D)[prefix+"_gen_l2_flipvschargeconst"]->Fill(_gen_lCharge[i_gen_subleading]*_lCharge[i_subleading], _lElectronChargeConst[i_subleading], event_weight);
+        if(_lCharge[i_subleading] == _gen_lCharge[i_gen_subleading]){
             (*hists2D)[prefix+"_gen_l2_noflip_chargeconstvsdxy_0p1cm"]->Fill(_lElectronChargeConst[i_subleading], fabs(_dxy[i_subleading]), event_weight);
             (*hists2D)[prefix+"_gen_l2_noflip_chargeconstvsdxy_1cm"]->Fill(_lElectronChargeConst[i_subleading], fabs(_dxy[i_subleading]), event_weight);
             (*hists2D)[prefix+"_gen_l2_noflip_chargeconstvsdxy_10cm"]->Fill(_lElectronChargeConst[i_subleading], fabs(_dxy[i_subleading]), event_weight);
@@ -311,6 +319,20 @@ void full_analyzer::fill_chargeflip_histograms(std::map<TString, TH2*>* hists2D,
             (*hists2D)[prefix+"_gen_l2_flip_chargeconstvsdxy_1cm"]->Fill(_lElectronChargeConst[i_subleading], fabs(_dxy[i_subleading]), event_weight);
             (*hists2D)[prefix+"_gen_l2_flip_chargeconstvsdxy_10cm"]->Fill(_lElectronChargeConst[i_subleading], fabs(_dxy[i_subleading]), event_weight);
         }
+    }
+
+    // Charge flip rate vs pt and vs dxy
+    (*hists)[prefix+"_gen_l1_chargeflipvsPt_eff_den"]->Fill(_lPt[i_leading], event_weight);
+    (*hists)[prefix+"_gen_l2_chargeflipvsPt_eff_den"]->Fill(_lPt[i_subleading], event_weight);
+    (*hists)[prefix+"_gen_l1_chargeflipvsdxy_eff_den"]->Fill(fabs(_dxy[i_leading]), event_weight);
+    (*hists)[prefix+"_gen_l2_chargeflipvsdxy_eff_den"]->Fill(fabs(_dxy[i_subleading]), event_weight);
+    if(_lCharge[i_leading] != _gen_lCharge[i_gen_leading]){
+        (*hists)[prefix+"_gen_l1_chargeflipvsPt_eff_num"]->Fill(_lPt[i_leading], event_weight);
+        (*hists)[prefix+"_gen_l1_chargeflipvsdxy_eff_num"]->Fill(fabs(_dxy[i_leading]), event_weight);
+    }
+    if(_lCharge[i_subleading] != _gen_lCharge[i_gen_subleading]){
+        (*hists)[prefix+"_gen_l2_chargeflipvsPt_eff_num"]->Fill(_lPt[i_subleading], event_weight);
+        (*hists)[prefix+"_gen_l2_chargeflipvsdxy_eff_num"]->Fill(fabs(_dxy[i_subleading]), event_weight);
     }
 }
 
