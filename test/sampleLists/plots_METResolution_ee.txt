@@ -1,6 +1,6 @@
-METResolution_Run2018C
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018C.root  Run2018C
+METResolution_ee
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_EGamma_Run2018.root      Data
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Triboson.root Triboson
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Diboson.root  Diboson
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Top.root      Top
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Diboson.root  Diboson
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_DYJets.root   DY
