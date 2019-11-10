@@ -735,7 +735,7 @@ public :
    // lepton and jet ID and cleaning bool arrays
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
    bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
-   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10], pogmediumElectronID[10], pogmediumMuonID[10];
+   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10];
 
    // gen variables related to truth of event
    int i_gen_l1;
@@ -759,9 +759,7 @@ public :
    
    // extra lepton indices
    int i_subleading_e;
-   int i_leading_pogmedium_e;
    int i_subleading_mu;
-   int i_leading_pogmedium_mu;
    
    // jet indices
    int i_leading_jet;
@@ -794,7 +792,6 @@ public :
 
    // extra booleans: ee
    bool _1e1displedR;
-   bool _1pogmediume;
    bool _1e1displedphi_novtx;
    bool _1e1displedispl_Reliso;
 
@@ -820,7 +817,6 @@ public :
 
    // extra booleans: mumu
    bool _1mu1displmudR;
-   bool _1pogmediummu;
    bool _1mu1displmudphi_novtx;
    bool _1mu1displmudispl_Reliso;
    
@@ -839,11 +835,9 @@ public :
 
    // in src/leptonID.cc
     void     get_electronID(bool*);
-    void     get_pogmedium_electronID(bool*);
     void     get_displ_electronID(bool*);
     void     get_loose_electronID(bool*);
     void     get_muonID(bool*);
-    void     get_pogmedium_muonID(bool*);
     void     get_displ_muonID(bool*);
     void     get_loose_muonID(bool*);
     void     get_clean_ele(bool*, bool*);
@@ -935,8 +929,9 @@ public :
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 
    // in src/SelectionOptimization.cc
+    bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double mll, bool applyLepVeto, bool applyOneJet, double jettagval);
     void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
-    void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
+    void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
 };
 
 #endif

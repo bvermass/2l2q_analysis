@@ -43,7 +43,7 @@ function hadd_specific_backgrounds {
 
 
     #all backgrounds together
-    hadd -f ${1}${2}Background.root ${1}${2}Background_DYJets.root ${1}${2}Background_Diboson.root ${1}${2}Background_TTJets.root ${1}${2}Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
+    hadd -f ${1}${2}Background.root ${1}${2}Background_DYJets.root ${1}${2}Background_Diboson.root ${1}${2}Background_TTJets.root ${1}${2}Background_ST.root ${1}${2}Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
     hadd -f ${1}${2}Background_allWJets.root ${1}${2}Background_DYJets.root ${1}${2}Background_Diboson.root ${1}${2}Background_TTJets.root ${1}${2}Background_WJetsToLNu_*
 }
 

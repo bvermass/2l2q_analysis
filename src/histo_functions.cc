@@ -15,7 +15,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
-    (*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
+    //(*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
 
@@ -233,10 +233,10 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     /*
      * MVA ID versus cutbased medium prompt ID
      */
-    if(_1e and _1pogmediume)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
-    if(_1e and !_1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
-    if(!_1e and _1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
-    if(!_1e and !_1pogmediume)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
+    //if(_1e and _1pogmediume)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
+    //if(_1e and !_1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
+    //if(!_1e and _1pogmediume)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
+    //if(!_1e and !_1pogmediume)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
 
     /*
      * Delta phi(ll) > 2.4 versus 1 < Delta R(ll) < 5.5
@@ -319,10 +319,10 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     /*
      * MVA ID versus cutbased medium prompt ID
      */
-    if(_1mu and _1pogmediummu)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
-    if(_1mu and !_1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
-    if(!_1mu and _1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
-    if(!_1mu and !_1pogmediummu)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
+    //if(_1mu and _1pogmediummu)    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(0., event_weight);
+    //if(_1mu and !_1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(1., event_weight);
+    //if(!_1mu and _1pogmediummu)   (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(2., event_weight);
+    //if(!_1mu and !_1pogmediummu)  (*hists)[prefix+"_MVAvsPOGMedium_categories"]->Fill(3., event_weight);
 
     /*
      * Delta phi(ll) > 2.4 versus 1 < Delta R(ll) < 5.5
@@ -620,11 +620,11 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     TString SSorOS = (prefix.Index("SS") == -1)? "OS" : "SS";
     TString l = (prefix.Index("_e") == -1)? "mu" : "e";
 
-    int nx_MVAvsPOGMedium = 4;
-    const char *MVAvsPOGMedium_labels[nx_MVAvsPOGMedium] = {"MVA, POGMedium", "MVA, no POGMedium", "no MVA, POGMedium", "no MVA, no POGMedium"};
-    for(int i = 0; i < nx_MVAvsPOGMedium; i++){ 
-        (*hists)[prefix+"_MVAvsPOGMedium_categories"]->GetXaxis()->SetBinLabel(i+1,MVAvsPOGMedium_labels[i]);
-    }
+    //int nx_MVAvsPOGMedium = 4;
+    //const char *MVAvsPOGMedium_labels[nx_MVAvsPOGMedium] = {"MVA, POGMedium", "MVA, no POGMedium", "no MVA, POGMedium", "no MVA, no POGMedium"};
+    //for(int i = 0; i < nx_MVAvsPOGMedium; i++){
+    //    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->GetXaxis()->SetBinLabel(i+1,MVAvsPOGMedium_labels[i]);
+    //}
     if(sampleflavor.Index("Run") == -1){
         int nx_KVForIVF = 4;
         const char *KVForIVF_labels[nx_KVForIVF] = {"IVF, KVF", "IVF, no KVF", "no IVF, KVF", "no IVF, no KVF"};

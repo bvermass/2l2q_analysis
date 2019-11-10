@@ -150,11 +150,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Get ID
         get_electronID(&fullElectronID[0]);
         get_loose_electronID(&looseElectronID[0]);
-        get_pogmedium_electronID(&pogmediumElectronID[0]);
         get_displ_electronID(&displElectronID[0]);
         get_muonID(&fullMuonID[0]);
         get_loose_muonID(&looseMuonID[0]);
-        get_pogmedium_muonID(&pogmediumMuonID[0]);
         get_displ_muonID(&displMuonID[0]);
         get_jetID(&fullJetID[0]);
 
@@ -179,11 +177,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
 	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading_e);
 	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
-        i_leading_pogmedium_e       = find_leading_e(&pogmediumElectronID[0], &ele_clean_full_displ[0]);
 	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
 	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
-        i_leading_pogmedium_mu      = find_leading_mu(&pogmediumMuonID[0]);
 	    
 	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
 	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
@@ -261,8 +257,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
 
         additional_signal_regions();
-        if(_1e1disple) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e);
-        if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
+        if(_1e1disple) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, _1e1disple);
+        if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, _1mu1displmu);
 
         if(_1e1displedispl){
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
