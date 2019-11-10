@@ -9,7 +9,7 @@ TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg,
 }
 
 
-void plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends)
+bool plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends)
 {
     // This function adds the corresponding BDT roc curve to the existing multigraph that has the PFN version already
     c->Clear();
@@ -19,6 +19,7 @@ void plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString
     for(int i = 0; i < files_signal.size(); i++){
         TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
         TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
+        if(!hist_signal or !hist_bkg) return false;
 
         std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
         std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
@@ -31,6 +32,8 @@ void plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString
 
     multigraph->Draw("AL");
     legend->Draw("same");
+
+    return true;
 }
 
 
@@ -130,23 +133,23 @@ int main(int argc, char * argv[])
             c->Print(pathname_lin + histname + ".pdf");
 
             if(histname.Index("PFN") != -1){ 
-                plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends);
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){
+                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
-                histname.ReplaceAll("PFN", "PFNvsBDT");
-                c->Modified();
-                c->Print(pathname_lin + histname + ".pdf");
+                    histname.ReplaceAll("PFN", "PFNvsBDT");
+                    c->Modified();
+                    c->Print(pathname_lin + histname + ".pdf");
 
-                multigraph->GetXaxis()->SetRangeUser(0., 0.1);
-                multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
+                    multigraph->GetXaxis()->SetRangeUser(0., 0.1);
+                    multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
-                c->Modified();
-                c->Print(pathname_lin + histname + "_zoom.pdf");
+                    c->Modified();
+                    c->Print(pathname_lin + histname + "_zoom.pdf");
 
-                c->SetLogx(1);
-                c->Modified();
-                c->Print(pathname_log + histname + "_zoom.pdf");
-
+                    c->SetLogx(1);
+                    c->Modified();
+                    c->Print(pathname_log + histname + "_zoom.pdf");
+                }
             }
         }
     }
