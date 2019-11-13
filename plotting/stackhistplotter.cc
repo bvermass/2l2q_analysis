@@ -103,6 +103,7 @@ int main(int argc, char * argv[])
             TString yaxistitle = sample_hist_ref->GetYaxis()->GetTitle();
             std::cout << histname << std::endl;
             
+            if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
             
             // get data histogram and fill legend

@@ -113,18 +113,6 @@ void full_analyzer::signal_regions(){
 
     _CR_1mu1displmumll            = _1mu1displmu0addmu &&
                                   get_mll(i_leading_mu, i_subleading_displ_mu) > 75;
-    
-    ////////////////////////
-    // POGMedium prompt ID//
-    ////////////////////////
-
-    _1pogmediume                = _trige &&
-                                  i_leading_pogmedium_e != -1 &&
-                                  leadptcut(i_leading_pogmedium_e);
-
-    _1pogmediummu               = _trigmu &&
-                                  i_leading_pogmedium_mu != -1 &&
-                                  leadptcut(i_leading_pogmedium_mu);
 }
 
 

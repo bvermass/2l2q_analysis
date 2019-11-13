@@ -929,7 +929,7 @@ public :
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 
    // in src/SelectionOptimization.cc
-    bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double mll, bool applyLepVeto, bool applyOneJet, double jettagval);
+    bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
     void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
     void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
 };
