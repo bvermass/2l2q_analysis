@@ -15,6 +15,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     HNLtagger_tree->Branch("_JetEta",                           &_JetEta,                           "_JetEta/D");
+    HNLtagger_tree->Branch("_JetPhi",                           &_JetPhi,                           "_JetPhi/D");
     HNLtagger_tree->Branch("_lPt",                              &_lPt,                              "_lPt/D");
     HNLtagger_tree->Branch("_lEta",                             &_lEta,                             "_lEta/D");
     HNLtagger_tree->Branch("_lPhi",                             &_lPhi,                             "_lPhi/D");
@@ -24,6 +25,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_lrelIso",                          &_lrelIso,                          "_lrelIso/D");
     HNLtagger_tree->Branch("_lptRel",                           &_lptRel,                           "_lptRel/D");
     HNLtagger_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
+    HNLtagger_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
     HNLtagger_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
 
     HNLtagger_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
@@ -102,6 +104,7 @@ HNLBDTtagger::HNLBDTtagger(TString filename, TString type_and_flavor, int partit
     HNLBDTtagger_tree->Branch("_lrelIso",              &_lrelIso,                          "_lrelIso/D");
     HNLBDTtagger_tree->Branch("_lptRel",               &_lptRel,                           "_lptRel/D");
     HNLBDTtagger_tree->Branch("_lptRatio",             &_lptRatio,                         "_lptRatio/D");
+    HNLBDTtagger_tree->Branch("_lNumberOfHits",        &_lNumberOfHits,                    "_lNumberOfHits/i");
     HNLBDTtagger_tree->Branch("_lNumberOfPixelHits",   &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
 
     HNLBDTtagger_tree->Branch("_JetPt",                &_JetPt,                            "_JetPt/D");

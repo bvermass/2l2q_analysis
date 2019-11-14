@@ -31,6 +31,7 @@ class HNLtagger
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetEta;
+        double   _JetPhi;
         double   _lPt;
         double   _lEta;
         double   _lPhi;
@@ -40,6 +41,7 @@ class HNLtagger
         double   _lrelIso;
         double   _lptRatio;
         double   _lptRel;
+        unsigned _lNumberOfHits;
         unsigned _lNumberOfPixelHits;
         
         double   _SV_PVSVdist;
@@ -93,6 +95,7 @@ class HNLBDTtagger
         double   _lrelIso;
         double   _lptRatio;
         double   _lptRel;
+        unsigned _lNumberOfHits;
         unsigned _lNumberOfPixelHits;
 
         double   _JetPt;

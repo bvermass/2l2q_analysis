@@ -303,6 +303,7 @@ public :
    Double_t        _lCQTrackKink[10];
    unsigned        _lNumberOfMatchedStation[10];
    unsigned        _lNumberOfValidPixelHits[10];
+   unsigned        _lNumberOfValidTrackerHits[10];
    unsigned        _muNumberInnerHits[10];
    unsigned        _lTrackerLayersWithMeasurement[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
@@ -646,6 +647,7 @@ public :
    TBranch        *b__lCQTrackKink;
    TBranch        *b__lNumberOfMatchedStation;
    TBranch        *b__lNumberOfValidPixelHits;
+   TBranch        *b__lNumberOfValidTrackerHits;
    TBranch        *b__muNumberInnerHits;
    TBranch        *b__lTrackerLayersWithMeasurement;
    TBranch        *b__lMuonSegComp;   //!
