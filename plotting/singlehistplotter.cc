@@ -44,6 +44,7 @@ int main(int argc, char * argv[])
             TH1F*   sample_hist = (TH1F*)key->ReadObj();
             TString histname   = sample_hist->GetName();
 
+            if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist->GetMaximum() == 0) continue;
 
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -74,7 +75,7 @@ int main(int argc, char * argv[])
                 efficiency_graph->SetLineWidth(2);
                 efficiency_graph->GetYaxis()->SetTitle("Eff.");
                 efficiency_graph->GetHistogram()->SetMinimum(0.);
-                efficiency_graph->GetHistogram()->SetMaximum(1.25);
+                efficiency_graph->GetHistogram()->SetMaximum((efficiency_graph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                 pad->Clear();
                 legend.Clear();

@@ -61,6 +61,7 @@ int main(int argc, char * argv[])
             TString histname   = sample_hist_ref->GetName();
             std::cout << histname << std::endl;
             
+            if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist_ref->GetMaximum() == 0) continue;
             
             THStack* hists = new THStack("stack", "");
@@ -136,7 +137,7 @@ int main(int argc, char * argv[])
 
                 multigraph->Draw("AP pmc plc");
                 multigraph->SetMinimum(0.);
-                multigraph->SetMaximum(1.25);
+                multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                 legend.Draw("same");
                 CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
