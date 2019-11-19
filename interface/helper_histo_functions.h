@@ -15,5 +15,6 @@ TString     make_outputfilename(TString filename, TString base_directory, TStrin
 double      calc_betagamma(int particle_mass, double particle_energy);
 double      get_dR(double eta1, double phi1, double eta2, double phi2);
 double      get_reducedPdgId(int pdgId);
+double      get_signedLog(double var);
 
 #endif

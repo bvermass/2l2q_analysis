@@ -81,3 +81,8 @@ double get_reducedPdgId(int pdgId)
         return 1;
     }
 }
+
+double get_signedLog(double var)
+{
+    return (var >= 0)? log(var + 1) : - log(fabs(var - 1));
+}

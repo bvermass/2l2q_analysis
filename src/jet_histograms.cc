@@ -121,16 +121,24 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     hnltagger._gen_NV       = _gen_NV;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
     hnltagger._JetPt        = _jetPt[i_jet];
+    hnltagger._JetPt_log    = log(_jetPt[i_jet]);
     hnltagger._JetEta       = _jetEta[i_jet];
     hnltagger._JetPhi       = _jetPhi[i_jet];
     hnltagger._lPt                   = _lPt[i_lep];
+    hnltagger._lPt_log               = log(_lPt[i_lep]);
     hnltagger._lEta                  = _lEta[i_lep];
     hnltagger._lPhi                  = _lPhi[i_lep];
     hnltagger._ldxy                  = _dxy[i_lep];
+    hnltagger._ldxy_log              = log(fabs(_dxy[i_lep]));
+    hnltagger._ldxy_sgnlog           = get_signedLog(_dxy[i_lep]);
     hnltagger._ldz                   = _dz[i_lep];
+    hnltagger._ldz_log               = log(fabs(_dz[i_lep]));
+    hnltagger._ldz_sgnlog            = get_signedLog(_dz[i_lep]);
     hnltagger._l3dIPSig              = _3dIPSig[i_lep];
+    hnltagger._l3dIPSig_log          = log(_3dIPSig[i_lep]);
     hnltagger._lrelIso               = _relIso[i_lep];
     hnltagger._lptRel                = _ptRel[i_lep];
+    hnltagger._lptRel_log            = log(_ptRel[i_lep]);
     hnltagger._lptRatio              = _ptRatio[i_lep];
     hnltagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_lep];
     hnltagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_lep];
@@ -146,18 +154,24 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     }
     hnltagger._SV_mass               = tracksum.mass();
     hnltagger._SV_pt                 = tracksum.pt();
+    hnltagger._SV_pt_log             = log(tracksum.pt());
     hnltagger._SV_eta                = tracksum.eta();
     hnltagger._SV_phi                = tracksum.phi();
 
     hnltagger._nJetConstituents                    = _nJetConstituents[i_jet];//Constituents[i_jet];
     for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
         hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jet][i];
+        hnltagger._JetConstituentPt_log[i]             = log(_JetConstituentPt[i_jet][i]);
         hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jet][i];
         hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jet][i];
         hnltagger._JetConstituentPdgId[i]              = get_reducedPdgId(_JetConstituentPdgId[i_jet][i]);
         hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jet][i];
         hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jet][i];
+        hnltagger._JetConstituentdxy_log[i]            = log(fabs(_JetConstituentdxy[i_jet][i]));
+        hnltagger._JetConstituentdxy_sgnlog[i]         = get_signedLog(_JetConstituentdxy[i_jet][i]);
         hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jet][i];
+        hnltagger._JetConstituentdz_log[i]             = log(fabs(_JetConstituentdz[i_jet][i]));
+        hnltagger._JetConstituentdz_sgnlog[i]          = get_signedLog(_JetConstituentdz[i_jet][i]);
         hnltagger._JetConstituentdxyErr[i]             = (std::isinf(_JetConstituentdxyErr[i_jet][i]))? -1 : _JetConstituentdxyErr[i_jet][i];  //Rarely, dxy(z)Err were infinite, keras didn't like this
         hnltagger._JetConstituentdzErr[i]              = (std::isinf(_JetConstituentdzErr[i_jet][i]))? -1 : _JetConstituentdzErr[i_jet][i];
         hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jet][i];
@@ -167,12 +181,17 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     }
     for(unsigned i = _nJetConstituents[i_jet]; i < 50; i++){
         hnltagger._JetConstituentPt[i]                 = 0;
+        hnltagger._JetConstituentPt_log[i]             = 0;
         hnltagger._JetConstituentEta[i]                = 0;
         hnltagger._JetConstituentPhi[i]                = 0;
         hnltagger._JetConstituentPdgId[i]              = 0;
         hnltagger._JetConstituentCharge[i]             = 0;
         hnltagger._JetConstituentdxy[i]                = 0;
+        hnltagger._JetConstituentdxy_log[i]            = 0;
+        hnltagger._JetConstituentdxy_sgnlog[i]         = 0;
         hnltagger._JetConstituentdz[i]                 = 0;
+        hnltagger._JetConstituentdz_log[i]             = 0;
+        hnltagger._JetConstituentdz_sgnlog[i]          = 0;
         hnltagger._JetConstituentdxyErr[i]             = 0;
         hnltagger._JetConstituentdzErr[i]              = 0;
         hnltagger._JetConstituentNumberOfHits[i]      = 0;

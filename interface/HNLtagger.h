@@ -30,17 +30,25 @@ class HNLtagger
         double   _gen_NV;
         bool     _JetIsFromHNL;
         double   _JetPt;
+        double   _JetPt_log;
         double   _JetEta;
         double   _JetPhi;
         double   _lPt;
+        double   _lPt_log;
         double   _lEta;
         double   _lPhi;
         double   _ldxy;
+        double   _ldxy_log;
+        double   _ldxy_sgnlog;
         double   _ldz;
+        double   _ldz_log;
+        double   _ldz_sgnlog;
         double   _l3dIPSig;
+        double   _l3dIPSig_log;
         double   _lrelIso;
         double   _lptRatio;
         double   _lptRel;
+        double   _lptRel_log;
         unsigned _lNumberOfHits;
         unsigned _lNumberOfPixelHits;
         
@@ -49,19 +57,25 @@ class HNLtagger
         unsigned _SV_ntracks;
         double   _SV_mass;
         double   _SV_pt;
+        double   _SV_pt_log;
         double   _SV_eta;
         double   _SV_phi;
         double   _SV_normchi2;
 
         unsigned _nJetConstituents;
         double   _JetConstituentPt[maxJetSize];
+        double   _JetConstituentPt_log[maxJetSize];
         double   _JetConstituentEta[maxJetSize];
         double   _JetConstituentPhi[maxJetSize];
         double   _JetConstituentPdgId[maxJetSize];
         int      _JetConstituentCharge[maxJetSize];
         double   _JetConstituentdxy[maxJetSize];
+        double   _JetConstituentdxy_log[maxJetSize];
+        double   _JetConstituentdxy_sgnlog[maxJetSize];
         double   _JetConstituentdxyErr[maxJetSize];
         double   _JetConstituentdz[maxJetSize];
+        double   _JetConstituentdz_log[maxJetSize];
+        double   _JetConstituentdz_sgnlog[maxJetSize];
         double   _JetConstituentdzErr[maxJetSize];
         int      _JetConstituentNumberOfHits[maxJetSize];    //signed integer so particles without tracks can have negative default values
         int      _JetConstituentNumberOfPixelHits[maxJetSize];
