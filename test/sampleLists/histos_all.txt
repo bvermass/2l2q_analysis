@@ -12,7 +12,7 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                  182.175     -1      18
 #Diboson
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                  585.8       -1      1
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                   123.9       -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                   123.9       -1      14
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep_final.root                                    49.997      -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWTo2L2Nu_13TeV-powheg/dilep_final.root                                                            12.178      -1      2
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep_final.root                                       5.60        -1      12
