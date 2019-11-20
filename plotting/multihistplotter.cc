@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
+    TString lumitext  = "59.69 fb^{-1} (13 TeV)";
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
                 legend.Clear();
-                
+
                 TMultiGraph* multigraph = new TMultiGraph();
                 multigraph->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";Eff.");
                 for(int i = 0; i < files.size(); i++){
@@ -144,6 +144,76 @@ int main(int argc, char * argv[])
 
                 pad->Modified();
                 c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
+            }
+        }
+        else if(cl->InheritsFrom("TH2")){
+            // Get a reference histogram for the name, then get all histograms in  a vector later
+            TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
+            TString histname   = sample_hist_ref->GetName();
+            std::cout << histname << std::endl;
+
+            if(sample_hist_ref->GetMaximum() == 0) continue;
+
+            //Make Scale and Resolution plots based on AbsScale histogram
+            if(histname.Index("AbsScale") != -1){
+                pad->Clear();
+                pad->SetLogy(0);
+                legend.Clear();
+
+                TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
+
+                //1) make profile of the histogram for the scale
+                std::vector<TH2*> hists;
+                std::vector<TProfile*> profiles;
+                for(int i = 0; i < files.size(); i++){
+                    hists.push_back((TH2*)files[i]->Get(histname));
+                    profiles.push_back(hists[i]->ProfileX(legends[i]));
+                    legend.AddEntry(profiles[i], legends[i], "pl");
+                }
+
+                profiles[0]->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";<u_{#parallel}>");
+                profiles[0]->Draw("pmc plc");//"AP pmc plc");
+                for(int i = 1; i < profiles.size(); i++){
+                    profiles[i]->Draw("same pmc plc");
+                }
+                legend.Draw("same");
+                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+
+                pad->Modified();
+                c->Print(pathname_lin + histname + ".pdf");
+
+                // Draw -<upara>/<qT> as a function of qT (<upara> has been calculated by the profileX, <qT> is simply the bin center)
+                if(histname.Index("_vsqT_") == -1) continue;
+                pad->Clear();
+                pad->SetLogy(0);
+                legend.Clear();
+
+                TMultiGraph* multigraph = new TMultiGraph();
+                multigraph->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";-<u_{#parallel}>/<q_{T}>");
+                for(int i = 0; i < files.size(); i++){
+                    int nbins = hists[i]->GetNbinsX();
+                    double x[nbins], y[nbins], ex[nbins], ey[nbins];
+                    for(int i_bin = 1; i_bin <= nbins; i_bin++){
+                        x[i_bin-1] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                        y[i_bin-1] = - profiles[i]->GetBinContent(i_bin) / hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                        ex[i_bin-1] = hists[i]->GetXaxis()->GetBinLowEdge(i_bin) - hists[i]->GetXaxis()->GetBinUpEdge(i_bin);
+                        ey[i_bin-1] = profiles[i]->GetBinError(i_bin) / hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                    }
+                    TGraphErrors* graph = new TGraphErrors(nbins, x, y, ex, ey);
+                    multigraph->Add(graph);
+                    legend.AddEntry(graph, legends[i], "pl");
+                }
+
+                multigraph->Draw("AP pmc plc");
+                multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
+                multigraph->SetMinimum(0.6);
+                legend.Draw("same");
+                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+
+                pad->Modified();
+                c->Print(pathname_lin + histname + "_response.pdf");
             }
         }
     }

@@ -16,8 +16,10 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <THStack.h>
+#include <TGraphErrors.h>
 #include <TGraphAsymmErrors.h>
 #include <TMultiGraph.h>
+#include <TProfile.h>
 #include <TLatex.h>
 
 // other header files

@@ -934,8 +934,8 @@ public :
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 
     // in src/MET_histograms.cc
-    void     add_MET_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_MET_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading);
+    void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading);
 };
 
 #endif

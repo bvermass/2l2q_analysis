@@ -59,13 +59,13 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists2D)[prefix+"_dRl2jet1_2_uncl"]               = new TH2F(prefix+"_dRl2jet1_2_uncl", ";#it{#Delta R}(l_{2}, jet_{1}^{uncl});#it{#Delta R}(l_{2}, jet_{2}^{uncl})", 30, 0, 6, 30, 0, 6);
 
     add_gen_histograms(hists, prefix);
-    add_MET_histograms(hists, prefix);
+    add_MET_histograms(hists, hists2D, prefix);
 }
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
 
-    fill_MET_histograms(hists, prefix, i_leading, i_subleading);
+    fill_MET_histograms(hists, hists2D, prefix, i_leading, i_subleading);
 
     int nEle    = 0;
     int nMu     = 0;

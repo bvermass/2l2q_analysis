@@ -4,7 +4,7 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, TString prefix){
+void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     (*hists)[prefix+"_met"]                     = new TH1F(prefix+"_met", ";Type 1 E_{T}^{miss} [GeV];Events", 50, 0, 300); 
     (*hists)[prefix+"_metSM"]                   = new TH1F(prefix+"_metSM", ";Smeared E_{T}^{miss} [GeV];Events", 50, 0, 300); 
     (*hists)[prefix+"_metRaw"]                  = new TH1F(prefix+"_metRaw", ";Raw E_{T}^{miss} [GeV];Events", 50, 0, 300); 
@@ -21,10 +21,15 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_upara_frommetRaw"]        = new TH1F(prefix+"_upara_frommetRaw", ";u_{#parallel} + q_{T} [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_frommetRaw"]        = new TH1F(prefix+"_uperp_frommetRaw", ";u_{#perp}  [GeV] (Raw MET);Events", 100, -200, 200);
 
-    (*hists)[prefix+"_AbsScale"]                = new TH1F(prefix+"_AbsScale", ";-<u_{#parallel}> / <q_{T}>;Events", 100, -200, 200);
+    (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", 200, 10, 500, 200, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_lessbins"]    = new TH2F(prefix+"_AbsScale_vsqT_lessbins", ";q_{T};u_{#parallel}", 20, 10, 500, 200, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", 100, 0, 100, 200, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]             = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", 200, 10, 500, 200, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw_lessbins"]    = new TH2F(prefix+"_AbsScale_vsqT_metRaw_lessbins", ";q_{T};u_{#parallel}", 20, 10, 500, 200, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]            = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", 100, 0, 100, 200, -500, 500);
 }
 
-void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading){
+void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
     (*hists)[prefix+"_metSM"]->Fill(_met, event_weight); //FIX
     (*hists)[prefix+"_metRaw"]->Fill(_metRaw, event_weight);
@@ -55,5 +60,10 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, TString 
     (*hists)[prefix+"_uperp"]->Fill(uperp, event_weight);
     (*hists)[prefix+"_upara_frommetRaw"]->Fill(upara_frommetRaw, event_weight);
     (*hists)[prefix+"_uperp_frommetRaw"]->Fill(uperp_frommetRaw, event_weight);
-    (*hists)[prefix+"_AbsScale"]->Fill(-upara/q_vec.pt(), event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT"]->Fill(q_vec.pt(), upara, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_lessbins"]->Fill(q_vec.pt(), upara, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV"]->Fill(_nVertex, upara, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw_lessbins"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]->Fill(_nVertex, upara_frommetRaw, event_weight);
 }
