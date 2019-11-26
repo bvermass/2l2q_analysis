@@ -152,7 +152,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //get_pogmedium_muonID(&pogmediumMuonID[0]);
         //get_displ_muonID(&displMuonID[0]);
         get_jetID(&fullJetID[0]);
-        std::vector fullPhotonID = get_photonID();
 
 
         //Get Cleaning for jets

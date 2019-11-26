@@ -881,10 +881,6 @@ public :
     double   get_dR_lepton_jet(int, int);
     bool     get_JetIsFromHNL(int i_jet);
 
-    // in src/photonID.cc
-    std::vector<bool> get_photonID();
-
-
     // in src/signal_regions.cc
     void     signal_regions();
     bool     lptcut(int, double);
