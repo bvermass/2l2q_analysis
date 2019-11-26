@@ -310,6 +310,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
     for( it = hists.begin(); it != hists.end(); it++){
         TH1* h = it->second;
+        if(((TString)h->GetName()).Index("_AbsScale") != -1 or ((TString)h->GetName()).Index("_meanqT") != -1) continue;
         int nb = h->GetNbinsX();
         double b0  = h->GetBinContent( 0  );
         double e0  = h->GetBinError  ( 0  );

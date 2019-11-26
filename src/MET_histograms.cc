@@ -21,12 +21,18 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_upara_frommetRaw"]        = new TH1F(prefix+"_upara_frommetRaw", ";u_{#parallel} + q_{T} [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_frommetRaw"]        = new TH1F(prefix+"_uperp_frommetRaw", ";u_{#perp}  [GeV] (Raw MET);Events", 100, -200, 200);
 
-    (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", 200, 10, 500, 200, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_lessbins"]    = new TH2F(prefix+"_AbsScale_vsqT_lessbins", ";q_{T};u_{#parallel}", 20, 10, 500, 200, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", 100, 0, 100, 200, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]             = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", 200, 10, 500, 200, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw_lessbins"]    = new TH2F(prefix+"_AbsScale_vsqT_metRaw_lessbins", ";q_{T};u_{#parallel}", 20, 10, 500, 200, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]            = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", 100, 0, 100, 200, -500, 500);
+    int nbins = 15;
+    double xbins_vsqT[nbins] = {10, 20, 30, 40, 50, 70, 90, 110, 130, 150, 170, 200, 240, 320, 400, 500};
+    double xbins_vsnPV[nbins] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60};
+
+    (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]       = new TH2F(prefix+"_AbsScale_vsqT_uperp", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]= new TH2F(prefix+"_AbsScale_vsqT_uperp_metRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 500, -500, 500);
+    (*hists)[prefix+"_meanqT_vsqT_num"]             = new TH1F(prefix+"_meanqT_vsqT_num", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
+    (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
 }
 
 void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
@@ -61,9 +67,11 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_upara_frommetRaw"]->Fill(upara_frommetRaw, event_weight);
     (*hists)[prefix+"_uperp_frommetRaw"]->Fill(uperp_frommetRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT"]->Fill(q_vec.pt(), upara, event_weight);
-    (*hists2D)[prefix+"_AbsScale_vsqT_lessbins"]->Fill(q_vec.pt(), upara, event_weight);
-    (*hists2D)[prefix+"_AbsScale_vsnPV"]->Fill(_nVertex, upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
-    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw_lessbins"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]->Fill(q_vec.pt(), uperp, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]->Fill(q_vec.pt(), uperp_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV"]->Fill(_nVertex, upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]->Fill(_nVertex, upara_frommetRaw, event_weight);
+    (*hists)[prefix+"_meanqT_vsqT_num"]->Fill(q_vec.pt(), q_vec.pt()*event_weight);
+    (*hists)[prefix+"_meanqT_vsqT_den"]->Fill(q_vec.pt(), event_weight);
 }

@@ -8,6 +8,7 @@
 // root libraries
 #include <TROOT.h>
 #include <TSystem.h>
+#include <TMath.h>
 #include <TKey.h>
 #include <TFile.h>
 #include <TCanvas.h>

@@ -1,5 +1,27 @@
 #include "helper_plotter_functions.h"
 
+
+// CMSandluminosity class functions
+CMSandLuminosity::CMSandLuminosity(TPad* pad):
+    CMStext( "#bf{CMS} #scale[0.8]{#it{Preliminary}}" )
+    , lumitext( "59.69 fb^{-1} (13 TeV)" )
+    , leftmargin( pad->GetLeftMargin() )
+    , topmargin( pad->GetTopMargin() )
+    , rightmargin( pad->GetRightMargin() )
+    , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
+    , lumilatex( get_latex(0.6*topmargin, 31, 42) )
+{}
+
+CMSandLuminosity::~CMSandLuminosity(){}
+
+void CMSandLuminosity::Draw()
+{
+    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+}
+
+
+// functions for all use
 TString make_general_pathname(const TString& plottype, TString specific_dir)
 {
     // pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow
@@ -137,6 +159,37 @@ double get_scale(TString RunId)
     else if(RunId == "Run2018C") return 6.899/59.69;
     else if(RunId == "Run2018D") return 31.75/59.69;
     else return 1.;
+}
+
+
+double get_FWHM(TF1* function)
+{
+    double max = function->GetMaximum();
+    double Xmax = function->GetMaximumX();
+    double HM_left  = function->GetX(max/2, function->GetXmin(), Xmax);
+    double HM_right = function->GetX(max/2, Xmax, function->GetXmax());
+
+    return (HM_right - HM_left);
+}
+
+
+void draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi)
+{
+    profiles[0]->SetTitle((TString)";" + xaxistitle + ";" + yaxistitle);
+    profiles[0]->Draw("pmc plc");
+    for(int i = 1; i < profiles.size(); i++){
+        profiles[i]->Draw("same pmc plc");
+    }
+    legend->Draw("same");
+    CMSandLumi->Draw();
+
+    pad->Modified();
+    c->Print(plottitle);
+
+    // clean up pad
+    pad->Clear();
+    pad->SetLogy(0);
+    legend->Clear();
 }
 
 

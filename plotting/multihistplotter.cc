@@ -38,13 +38,13 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "59.69 fb^{-1} (13 TeV)";
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad);
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+
+    TLatex chi2latex = get_latex(0.8*topmargin, 31, 42);
+    TLatex FWHMlatex = get_latex(0.8*topmargin, 31, 42);
 
     TIter next(files.front()->GetListOfKeys());
     TKey* key;
@@ -96,8 +96,7 @@ int main(int argc, char * argv[])
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
             legend.Draw("same");
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-            lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+            CMSandLumi->Draw();
             
             pad->Modified();
             c->Print(pathname_lin + histname + ".pdf");
@@ -111,8 +110,7 @@ int main(int argc, char * argv[])
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(10*hists->GetMaximum("nostack"));
             legend.Draw("same");
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-            lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+            CMSandLumi->Draw();
             
             pad->Modified();
             c->Print(pathname_log + histname + ".pdf");
@@ -139,8 +137,7 @@ int main(int argc, char * argv[])
                 multigraph->SetMaximum(1.25);
 
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
                 pad->Modified();
                 c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
@@ -150,6 +147,8 @@ int main(int argc, char * argv[])
             // Get a reference histogram for the name, then get all histograms in  a vector later
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
+            TString xaxistitle = sample_hist_ref->GetXaxis()->GetTitle();
+            TString yaxistitle = sample_hist_ref->GetYaxis()->GetTitle();
             std::cout << histname << std::endl;
 
             if(sample_hist_ref->GetMaximum() == 0) continue;
@@ -161,59 +160,134 @@ int main(int argc, char * argv[])
                 legend.Clear();
 
                 TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
+                gSystem->Exec("mkdir -p " + pathname_lin + "resolution/");
 
-                //1) make profile of the histogram for the scale
+
+                //1) make profile of the histogram to get <u_para> vs qT
                 std::vector<TH2*> hists;
                 std::vector<TProfile*> profiles;
                 for(int i = 0; i < files.size(); i++){
+                    // profile is <u_para> vs qT
                     hists.push_back((TH2*)files[i]->Get(histname));
-                    profiles.push_back(hists[i]->ProfileX(legends[i]));
+                    profiles.push_back(hists[i]->ProfileX(histname + "_" + legends[i] + "_profile"));
                     legend.AddEntry(profiles[i], legends[i], "pl");
                 }
+                draw_profiles(c, pad, profiles, pathname_lin + histname + "_profile.pdf", &legend, xaxistitle, "<" + yaxistitle + ">", CMSandLumi);
 
-                profiles[0]->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";<u_{#parallel}>");
-                profiles[0]->Draw("pmc plc");//"AP pmc plc");
-                for(int i = 1; i < profiles.size(); i++){
-                    profiles[i]->Draw("same pmc plc");
-                }
-                legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
-
-                pad->Modified();
-                c->Print(pathname_lin + histname + ".pdf");
 
                 // Draw -<upara>/<qT> as a function of qT (<upara> has been calculated by the profileX, <qT> is simply the bin center)
-                if(histname.Index("_vsqT_") == -1) continue;
-                pad->Clear();
-                pad->SetLogy(0);
-                legend.Clear();
+                if(histname.Index("_vsqT") != -1){
+                    pad->Clear();
+                    pad->SetLogy(0);
+                    legend.Clear();
 
-                TMultiGraph* multigraph = new TMultiGraph();
-                multigraph->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";-<u_{#parallel}>/<q_{T}>");
-                for(int i = 0; i < files.size(); i++){
-                    int nbins = hists[i]->GetNbinsX();
-                    double x[nbins], y[nbins], ex[nbins], ey[nbins];
-                    for(int i_bin = 1; i_bin <= nbins; i_bin++){
-                        x[i_bin-1] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
-                        y[i_bin-1] = - profiles[i]->GetBinContent(i_bin) / hists[i]->GetXaxis()->GetBinCenter(i_bin);
-                        ex[i_bin-1] = hists[i]->GetXaxis()->GetBinLowEdge(i_bin) - hists[i]->GetXaxis()->GetBinUpEdge(i_bin);
-                        ey[i_bin-1] = profiles[i]->GetBinError(i_bin) / hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                    // calculate <qT> vs qT, then calculate -<upara>/<qT> in the profiles
+                    std::vector<TH1*> hists_meanqT;
+                    for(int i = 0; i < files.size(); i++){
+                        TString meanqT_histname = histname;
+                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "");
+                        hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname));
+                        hists_meanqT[i]->Divide(hists_meanqT[i], (TH1*)files[i]->Get(meanqT_histname.ReplaceAll("vsqT_num", "vsqT_den")), 1, 1, "b");
+                        legend.AddEntry(hists_meanqT[i], legends[i], "pl");
+                        for(int i_bin = 1; i_bin <= hists_meanqT[i]->GetNbinsX(); i_bin++) hists_meanqT[i]->SetBinError(i_bin, 0.);
+                        profiles[i]->Divide(hists_meanqT[i]);
                     }
-                    TGraphErrors* graph = new TGraphErrors(nbins, x, y, ex, ey);
+
+                    hists_meanqT[0]->Draw("pmc plc");
+                    for(int i = 1; i < hists_meanqT.size(); i++) hists_meanqT[i]->Draw("same pmc plc");
+                    legend.Draw("same");
+                    CMSandLumi->Draw();
+
+                    pad->Modified();
+                    c->Print(pathname_lin + histname + "_meanqT.pdf");
+                    pad->Clear();
+                    legend.Clear();
+
+                    TMultiGraph* multigraph = new TMultiGraph();
+                    multigraph->SetTitle((TString)";" + xaxistitle + ";-<" + yaxistitle + ">/<q_{T}>");
+                    for(int i = 0; i < files.size(); i++){
+                        int nbins = hists[i]->GetNbinsX();
+                        double x[nbins], y[nbins], ex[nbins], ey[nbins];
+                        for(int i_bin = 1; i_bin <= nbins; i_bin++){
+                            x[i_bin-1] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                            y[i_bin-1] = - profiles[i]->GetBinContent(i_bin);
+                            ex[i_bin-1] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
+                            ey[i_bin-1] = profiles[i]->GetBinError(i_bin);
+                        }
+                        TGraphErrors* graph = new TGraphErrors(nbins, x, y, ex, ey);
+                        multigraph->Add(graph);
+                        legend.AddEntry(graph, legends[i], "pl");
+                    }
+
+                    multigraph->Draw("AP pmc plc");
+                    multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
+                    legend.Draw("same");
+                    CMSandLumi->Draw();
+
+                    pad->Modified();
+                    c->Print(pathname_lin + histname + "_response.pdf");
+                    pad->Clear();
+                    pad->SetLogy(0);
+                    legend.Clear();
+                }
+
+                // Draw Resolution of upara and uperp using fit to a voigtian function
+                TMultiGraph* multigraph = new TMultiGraph();
+                multigraph->SetTitle((TString)";" + xaxistitle + ";#sigma(" + yaxistitle + ")");
+                for(int i = 0; i < hists.size(); i++){
+                    int nbins = hists[i]->GetNbinsX();
+                    double x[nbins], FWHM[nbins], ex[nbins], eFWHM[nbins];
+
+                    for(int i_bin = 1; i_bin <= nbins; i_bin++){
+                        pad->Clear();
+                        pad->SetLogy(0);
+                        legend.Clear();
+
+                        TH1D* projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_projection_" + std::to_string(i_bin), i_bin, i_bin, "e");
+                        legend.AddEntry(projection, legends[i]);
+                        TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]*x + [5]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
+                        voigt->SetLineColor(kGreen+3);
+                        voigt->SetLineWidth(2);
+
+                        if(projection->GetMaximum() > 0){
+                            // perform fit
+                            voigt->SetParameters(projection->Integral(), projection->GetMean(), projection->GetRMS(), 1, 0, 0);
+                            projection->Fit(voigt, "0");
+                            x[i_bin] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
+                            ex[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
+                            FWHM[i_bin] = get_FWHM(voigt);
+                            eFWHM[i_bin] = 0;
+
+                            projection->Draw();
+                            legend.Draw("same");
+                            voigt->Draw("C same");
+                            CMSandLumi->Draw();
+                            chi2latex.DrawLatex(1 - rightmargin*1.8, 1 - 2.2*topmargin, (TString)"#chi^{2}_{norm}: " + std::to_string((int)round(voigt->GetChisquare()/voigt->GetNDF())));
+                            FWHMlatex.DrawLatex(1 - rightmargin*1.8, 1 - 3.3*topmargin, (TString)"FWHM: " + std::to_string((int)FWHM[i_bin]));
+
+                            pad->Modified();
+                            c->Print(pathname_lin + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".pdf");
+                        } else {
+                            x[i_bin] = 0;
+                            ex[i_bin] = 0;
+                            FWHM[i_bin] = 0;
+                            eFWHM[i_bin] = 0;
+                        }
+                    }
+
+                    // Draw FWHM graph as a function of x
+                    TGraphErrors* graph = new TGraphErrors(nbins, x, FWHM, ex, eFWHM);
                     multigraph->Add(graph);
                     legend.AddEntry(graph, legends[i], "pl");
                 }
 
                 multigraph->Draw("AP pmc plc");
-                multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
-                multigraph->SetMinimum(0.6);
+                multigraph->SetMaximum(1.15*multigraph->GetHistogram()->GetMaximum());
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
                 pad->Modified();
-                c->Print(pathname_lin + histname + "_response.pdf");
+                c->Print(pathname_lin + histname + "_resolution.pdf");
             }
         }
     }

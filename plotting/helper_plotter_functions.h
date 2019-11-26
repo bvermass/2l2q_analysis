@@ -16,10 +16,26 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <TGraphAsymmErrors.h>
+#include <TProfile.h>
 #include <TLine.h>
 #include <TLatex.h>
+#include <TF1.h>
 
 // other header files
+
+// class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
+class CMSandLuminosity{
+    public:
+        CMSandLuminosity(TPad* pad);
+        ~CMSandLuminosity();
+        void Draw();
+    private:
+        TString CMStext;
+        TString lumitext;
+        float leftmargin, rightmargin, topmargin;
+        TLatex CMSlatex;
+        TLatex lumilatex;
+};
 
 // Helper functions
 TString     make_general_pathname(const TString& plottype, TString specific_dir);
@@ -33,6 +49,8 @@ TH1F        get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle);
 void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 double      get_scale(TString RunId);
+double      get_FWHM(TF1* function);
+void        draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi);
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
