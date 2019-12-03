@@ -218,6 +218,7 @@ public :
    Double_t        _lEleInvMinusPInv[10];
    Double_t        _eleNumberInnerHitsMissing[10];
    Double_t        _leptonMvatZq[10];
+   Double_t        _leptonMvaTTH[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
    Double_t        _leptonMvaTTH16[10];   //[_nLight]
    Double_t        _leptonMvaSUSY17[10];   //[_nLight]
@@ -562,6 +563,7 @@ public :
    TBranch        *b__lEleInvMinusPInv;
    TBranch        *b__eleNumberInnerHitsMissing;
    TBranch        *b__leptonMvatZq;
+   TBranch        *b__leptonMvaTTH;
    TBranch        *b__leptonMvaSUSY16;   //!
    TBranch        *b__leptonMvaTTH16;   //!
    TBranch        *b__leptonMvaSUSY17;   //!
