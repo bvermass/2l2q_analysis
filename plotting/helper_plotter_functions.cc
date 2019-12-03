@@ -79,9 +79,11 @@ int get_color(TString legend)
     else if(legend.Index("Diboson")  != -1) return kGreen+3;
     else if(legend.Index("Triboson") != -1) return kRed+3;
     else if(legend.Index("Top")      != -1) return kBlue+2;
+    else if(legend.Index("15GeV")   != -1) return kBlack;
     else if(legend.Index("3GeV")    != -1) return kRed-9;
     else if(legend.Index("5GeV")    != -1) return kGreen-9;
     else if(legend.Index("8GeV")    != -1) return kMagenta-7;
+    else if(legend.Index("10GeV")   != -1) return kCyan-2;
     else return kBlack;
 }
 
