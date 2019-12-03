@@ -797,8 +797,7 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     inputtree = (TTree*)input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init_input_branches(inputtree);
     isData = (inputfilename.Index("Run20") != -1);
-    if(isData) std::cout << "Data!" << std::endl;
-    else std::cout << "MC!" << std::endl;
+    std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
     std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( "blackJackAndHookers/nVertices" ) );
     std::shared_ptr< TH1D > hCounter;
@@ -831,7 +830,9 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
 void Skimmer::Skim(TString skimcondition)
 {
     Long64_t nentries = inputtree->GetEntries();
+    unsigned notice = ceil(0.01 * nentries / 20) * 100;
     for(Long64_t jentry = 0; jentry < nentries; ++jentry){
+        if(jentry%notice == 0) std::cout << jentry << " of " << nentries << std::endl;
         inputtree->GetEntry(jentry);
 
         if(Check_SkimCondition(skimcondition)){
@@ -1169,11 +1170,14 @@ void Skimmer::Skim(TString skimcondition)
             outputtree->Fill();
         }
     }
+    std::cout << "--------------------------------" << std::endl;
 }
 
 
 Skimmer::~Skimmer()
 {
+    std::cout << "Writing and closing skimmed file" << std::endl;
+    std::cout << "--------------------------------" << std::endl;
     output->Write();
     output->Close();
 }
