@@ -778,7 +778,8 @@ public :
    bool _1e1disple;
    bool _1e1displevtx;
    bool _1e1displedispl;
-   bool _1e1disple0adde;
+   //bool _1e1disple0adde;
+   bool _1e1displejetl2;
    bool _1e1displemll;
    bool _1e1displedphi;
    bool _1e1displeReliso;
@@ -803,7 +804,8 @@ public :
    bool _1mu1displmu;
    bool _1mu1displmuvtx;
    bool _1mu1displmudispl;
-   bool _1mu1displmu0addmu;
+   //bool _1mu1displmu0addmu;
+   bool _1mu1displmujetl2;
    bool _1mu1displmumll;
    bool _1mu1displmudphi;
    bool _1mu1displmuReliso;

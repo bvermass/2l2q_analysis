@@ -223,7 +223,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
                                         (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
         if(_1e1displevtx)               (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
         if(_1e1displedispl)             (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
-        if(_1e1disple0adde)             (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
+        if(_1e1displejetl2)             (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
         if(_1e1displemll)               (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
         if(_1e1displedphi)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
         if(_1e1displeReliso)            (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
@@ -309,7 +309,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
                                           (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
         if(_1mu1displmuvtx)               (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
         if(_1mu1displmudispl)             (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
-        if(_1mu1displmu0addmu)            (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
+        if(_1mu1displmujetl2)            (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
         if(_1mu1displmumll)               (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
         if(_1mu1displmudphi)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
         if(_1mu1displmuReliso)            (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
@@ -648,7 +648,7 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
         (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     }
     int nx_cutflow = 8;
-    const char *cutflow_labels[nx_cutflow] = {"good l2", "Vertex", "dxy(l2) > 0.01cm", "lepton veto", "M_{ll}", "#Delta #phi", "I_{rel}", "#leq 1jet"};
+    const char *cutflow_labels[nx_cutflow] = {"good l2", "Vertex", "dxy(l2) > 0.02cm", "jetl2", "M_{ll}", "#Delta #phi", "I_{rel}", "#leq 1jet"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }

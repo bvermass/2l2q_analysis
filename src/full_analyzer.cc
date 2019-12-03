@@ -194,6 +194,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             else i_leading_e = -1;
         }
 
+        // Find jet closest to l2, this jet can contain l2
+        i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
+        i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
+        points.push_back(std::chrono::high_resolution_clock::now());
+
         //get signal region booleans
         signal_regions();
         
@@ -202,10 +207,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);
         i_gen_leading_mu            = find_gen_lep(i_leading_mu);
         i_gen_subleading_displ_mu   = find_gen_lep(i_subleading_displ_mu);
-        
-        // Find jet closest to l2, this jet can contain l2
-        if(_1e1disple)   i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
-        if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
         
         i_gen_l1 = find_gen_l1();                                                   //finds HNL process l1 gen lepton
         i_gen_l2 = find_gen_l2();                                                   //finds HNL process l2 gen lepton
