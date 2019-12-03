@@ -17,7 +17,7 @@ def submit_script( script, scriptname ):
         time.sleep(2)
 
 def merge_skimmed_files( pnfs_sample_path, pnfs_crab_paths ):
-    if os.system('hadd ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/dilep_*') == 0:
+    if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/dilep_*') == 0:
         print 'successfully hadded dilep files into dilep_skim.root'
         os.system('rm ~/public/heavyNeutrino/skim/dilep_*')
         for pnfs_crab_path in pnfs_crab_paths:
