@@ -1,5 +1,44 @@
 #include "helper_plotter_functions.h"
 
+std::vector<std::vector<TString>> get_identifiers(TString identifier_filename, const char* delim)
+{
+    std::string line;
+    std::ifstream identifier_file (identifier_filename);
+    std::vector<std::vector<TString>> identifiers; // 2D vector, vector of vectors where inner vectors are to be used in AND mode (outer in OR mode)
+    if(identifier_file.is_open()){
+        while(std::getline(identifier_file, line)){
+            std::vector<TString> AND_identifiers;
+            size_t start, end = 0;
+            while((start = line.find_first_not_of(delim, end)) != std::string::npos){
+                end = line.find(delim, start);
+                AND_identifiers.push_back(line.substr(start, end - start));
+            }
+            identifiers.push_back(AND_identifiers);
+        }
+        identifier_file.close();
+    }
+    return identifiers;
+}
+
+
+bool check_identifiers(TString histname, std::vector<std::vector<TString>> identifiers)
+{
+    // Inner vector of strings are parts of the histname that have to match altogether, e.g. _OS_e AND _mll have to be in the name (put as _OS_e,_mll in identifier.txt)
+    // Outer vector is in OR mode for the tags (different lines in identifier.txt)
+    bool check = true;
+    for(auto& stringvector : identifiers){
+        check = true;
+        for(TString id : stringvector){
+            if(histname.Index(id) != -1) continue;
+            check = false;
+            break;
+        }
+        if(check) break;
+    }
+    return check;
+}
+
+
 TString make_general_pathname(const TString& plottype, TString specific_dir)
 {
     // pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow

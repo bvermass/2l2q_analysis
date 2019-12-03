@@ -27,6 +27,9 @@ int main(int argc, char * argv[])
     TString specific_dir = (TString)argv[1];
     TString general_pathname = make_general_pathname("multihists/", specific_dir + "/");
 
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
+
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
@@ -63,7 +66,8 @@ int main(int argc, char * argv[])
             
             if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist_ref->GetMaximum() == 0) continue;
-            
+            if(!check_identifiers(histname, identifiers)) continue;
+
             THStack* hists = new THStack("stack", "");
             for(int i = 0; i < files.size(); i++){
                 TH1* hist = (TH1*)files[i]->Get(histname);

@@ -16,6 +16,9 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString general_pathname = make_general_pathname("singlehists/", inputfilename);
 
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
+
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
@@ -46,6 +49,7 @@ int main(int argc, char * argv[])
 
             if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist->GetMaximum() == 0) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
 
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
@@ -95,6 +99,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist->GetName();
             
             if(sample_hist->GetMaximum() == 0) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
 
             TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 

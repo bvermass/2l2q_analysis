@@ -3,7 +3,9 @@
 
 // c++ libraries
 #include <iostream>
+#include <fstream>
 #include <cmath>
+#include <string>
 
 // root libraries
 #include <TROOT.h>
@@ -22,6 +24,8 @@
 // other header files
 
 // Helper functions
+std::vector<std::vector<TString>> get_identifiers(const TString identifier_filename, const char* delim);
+bool        check_identifiers(TString histname, std::vector<std::vector<TString>> identifiers);
 TString     make_general_pathname(const TString& plottype, TString specific_dir);
 TString     make_plotspecific_pathname(const TString& histname, const TString& pathname, const TString& linorlog);
 TLegend     get_legend(double xmin, double ymin, double xmax, double ymax, int Ncolumns);

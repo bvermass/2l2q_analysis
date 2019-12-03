@@ -51,6 +51,9 @@ int main(int argc, char * argv[])
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("stacks/", specific_dir + "/");
 
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
+
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
@@ -105,7 +108,8 @@ int main(int argc, char * argv[])
             
             if(histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
-            
+            if(!check_identifiers(histname, identifiers)) continue;
+
             // get data histogram and fill legend
             TH1F* data_hist;
             if(withdata){ 
