@@ -197,7 +197,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Find jet closest to l2, this jet can contain l2
         i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
         i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
-        points.push_back(std::chrono::high_resolution_clock::now());
 
         //get signal region booleans
         signal_regions();
