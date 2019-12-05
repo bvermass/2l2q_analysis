@@ -106,5 +106,18 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_Wpt-200toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                6133.4       -1      5
 #Diboson
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                  585.8       -1      2
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/dilep_final.root                                   585.8       -1      2
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                   123.9       -1      15
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep_final.root                                    49.997      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WWTo2L2Nu_13TeV-powheg/dilep_final.root                                                            12.178      -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/dilep_final.root                                       5.60        -1      12
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                  4.4297      -1      10
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZToLNu2Q_13TeV_powheg_pythia8/dilep_final.root                                                    10.71       -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo2L2Nu_13TeV_powheg_pythia8/dilep_final.root                                                    1.256       -1      9
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo2L2Q_13TeV_powheg_pythia8/dilep_final.root                                                     3.28        -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV-amcatnloFXFX-pythia8/dilep_final.root                                                 1.256       -1      9
+#single top
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8/dilep_final.root                                   3.68    -1      2
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/dilep_final.root   80.95   -1      4
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/dilep_final.root       136.02  -1      9
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_tW_antitop_5f_NoFullyHadronicDecays_13TeV-powheg_TuneCUETP8M1/dilep_final.root                      35.85   -1      4
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_tW_top_5f_NoFullyHadronicDecays_13TeV-powheg_TuneCUETP8M1/dilep_final.root                          35.85   -1      4
