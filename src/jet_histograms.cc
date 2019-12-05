@@ -109,7 +109,7 @@ void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, T
 }
 
 // fill function is part of full_analyzer class to access the tree variables
-void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet)
+void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet, int i_l1)
 {
     if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]){
         hnltagger.isValid = false;
@@ -143,16 +143,25 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     hnltagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_lep];
     hnltagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_lep];
 
+    hnltagger._l1Pt            = _lPt[i_l1];
+    hnltagger._l1Pt_log        = log(_lPt[i_l1]);
+    hnltagger._l1Eta           = _lEta[i_l1];
+    hnltagger._mll             = get_mll(i_l1, i_lep);
+    hnltagger._mlljet          = 0;//maybe add it?
+    hnltagger._dRll            = get_dRll(i_l1, i_lep);
+
     hnltagger._SV_PVSVdist     = get_IVF_PVSVdist(i_lep);
     hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_lep);
     hnltagger._SV_ntracks      = _IVF_ntracks[i_lep];
     hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
     LorentzVector tracksum;
+    LorentzVector l1_vec(_lPt[i_l1], _lEta[i_l1], _lPhi[i_l1], _lE[i_l1]);
     for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
         LorentzVector tmptrack(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
         tracksum += tmptrack;
     }
     hnltagger._SV_mass               = tracksum.mass();
+    hnltagger._SV_l1mass             = (tracksum + l1_vec).mass();
     hnltagger._SV_pt                 = tracksum.pt();
     hnltagger._SV_pt_log             = log(tracksum.pt());
     hnltagger._SV_eta                = tracksum.eta();

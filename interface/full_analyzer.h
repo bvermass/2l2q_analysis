@@ -909,7 +909,7 @@ public :
     void     add_jet_histograms(std::map<TString, TH1*>*, TString);
     void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
     void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
+    void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet, int i_l1);
     int      is_track_in_sv(int i_lep, int i_jet, int i_const);
     //void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
 

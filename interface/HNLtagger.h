@@ -52,10 +52,18 @@ class HNLtagger
         unsigned _lNumberOfHits;
         unsigned _lNumberOfPixelHits;
         
+        double   _l1Pt;
+        double   _l1Pt_log;
+        double   _l1Eta;
+        double   _mll;
+        double   _mlljet;
+        double   _dRll;
+
         double   _SV_PVSVdist;
         double   _SV_PVSVdist_2D;
         unsigned _SV_ntracks;
         double   _SV_mass;
+        double   _SV_l1mass;
         double   _SV_pt;
         double   _SV_pt_log;
         double   _SV_eta;

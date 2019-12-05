@@ -36,10 +36,18 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
     HNLtagger_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
 
+    HNLtagger_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
+    HNLtagger_tree->Branch("_l1Pt_log",                         &_l1Pt_log,                         "_l1Pt_log/D");
+    HNLtagger_tree->Branch("_l1Eta",                            &_l1Eta,                            "_l1Eta/D");
+    HNLtagger_tree->Branch("_mll",                              &_mll,                              "_mll/D");
+    HNLtagger_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
+    HNLtagger_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");
+
     HNLtagger_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
     HNLtagger_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");
     HNLtagger_tree->Branch("_SV_ntracks",                       &_SV_ntracks,                       "_SV_ntracks/i");
     HNLtagger_tree->Branch("_SV_mass",                          &_SV_mass,                          "_SV_mass/D");
+    HNLtagger_tree->Branch("_SV_l1mass",                        &_SV_l1mass,                        "_SV_l1mass/D");
     HNLtagger_tree->Branch("_SV_pt",                            &_SV_pt,                            "_SV_pt/D");
     HNLtagger_tree->Branch("_SV_pt_log",                        &_SV_pt_log,                        "_SV_pt_log/D");
     HNLtagger_tree->Branch("_SV_eta",                           &_SV_eta,                           "_SV_eta/D");
