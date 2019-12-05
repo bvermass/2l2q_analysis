@@ -772,7 +772,7 @@ public :
    int i_closel2_jet;
 
    double JetTagVal = -1;
-   double JetTagVal_BDT = -1;
+   //double JetTagVal_BDT = -1;
 
    // signal region booleans: ee
    bool _trige;
@@ -787,9 +787,9 @@ public :
    bool _1e1displeReliso;
    bool _1e1disple1jet;
    bool _1e1disple_PFN;
-   bool _1e1disple_BDT;
+   //bool _1e1disple_BDT;
    bool _1e1disple_TrainingPFN;
-   bool _1e1disple_TrainingBDT;
+   //bool _1e1disple_TrainingBDT;
 
    // Control region booleans: ee
    bool _CR_1e1displedphi;
@@ -813,9 +813,9 @@ public :
    bool _1mu1displmuReliso;
    bool _1mu1displmu1jet;
    bool _1mu1displmu_PFN;
-   bool _1mu1displmu_BDT;
+   //bool _1mu1displmu_BDT;
    bool _1mu1displmu_TrainingPFN;
-   bool _1mu1displmu_TrainingBDT;
+   //bool _1mu1displmu_TrainingBDT;
 
    // control region booleans: mumu
    bool _CR_1mu1displmudphi;
@@ -911,7 +911,7 @@ public :
     void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
     int      is_track_in_sv(int i_lep, int i_jet, int i_const);
-    void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
+    //void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
 
    // in src/HLT_eff.cc
     void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);

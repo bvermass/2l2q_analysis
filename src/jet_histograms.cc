@@ -210,67 +210,67 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
     return 0;
 }
 
-void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double weight)
-{
-    if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]){
-        hnlbdttagger.isValid = false;
-        return;
-    }else {
-        hnlbdttagger.isValid = true;
-    }
-    hnlbdttagger._gen_Nmass             = _gen_Nmass;
-    hnlbdttagger._gen_NV                = _gen_NV;
-    hnlbdttagger._JetIsFromHNL          = get_JetIsFromHNL(i_jet);
-    hnlbdttagger._weight                = weight;
-    hnlbdttagger._lPt                   = _lPt[i_lep];
-    hnlbdttagger._lEta                  = _lEta[i_lep];
-    hnlbdttagger._lPhi                  = _lPhi[i_lep];
-    hnlbdttagger._ldxy                  = _dxy[i_lep];
-    hnlbdttagger._ldz                   = _dz[i_lep];
-    hnlbdttagger._l3dIPSig              = _3dIPSig[i_lep];
-    hnlbdttagger._lrelIso               = _relIso[i_lep];
-    hnlbdttagger._lptRel                = _ptRel[i_lep];
-    hnlbdttagger._lptRatio              = _ptRatio[i_lep];
-    hnlbdttagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_lep];
-    hnlbdttagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_lep];
-
-    hnlbdttagger._JetPt                 = _jetPt[i_jet];
-    hnlbdttagger._JetEta                = _jetEta[i_jet];
-    hnlbdttagger._JetPhi                = _jetPhi[i_jet];
-    hnlbdttagger._nJetConstituents      = _nJetConstituents[i_jet];//Constituents[i_jet];
-
-    double jetdxysum = 0, jetdxysigsum = 0, jetdzsum = 0, jetdzsigsum = 0, jetchargesum = 0;
-    LorentzVector jetmassVec;
-    for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
-        LorentzVector constituentVec(_JetConstituentPt[i_jet][i], _JetConstituentEta[i_jet][i], _JetConstituentPhi[i_jet][i], sqrt( _JetConstituentMass[i_jet][i]*_JetConstituentMass[i_jet][i] + _JetConstituentPt[i_jet][i]*_JetConstituentPt[i_jet][i]));
-        jetmassVec += constituentVec;
-        if(_JetConstituentCharge[i] == 0) continue;
-        jetdxysum    += fabs(_JetConstituentdxy[i_jet][i]);
-        jetdxysigsum += fabs(_JetConstituentdxy[i_jet][i]/_JetConstituentdxyErr[i_jet][i]);
-        jetdzsum     += fabs(_JetConstituentdz[i_jet][i]);
-        jetdzsigsum  += fabs(_JetConstituentdz[i_jet][i]/_JetConstituentdzErr[i_jet][i]);
-        jetchargesum += _JetConstituentCharge[i_jet][i];
-    }
-    hnlbdttagger._JetMass               = jetmassVec.mass();
-    hnlbdttagger._JetdxySum             = jetdxysum;
-    hnlbdttagger._JetdxySigSum          = jetdxysigsum;
-    hnlbdttagger._JetdzSum              = jetdzsum;
-    hnlbdttagger._JetdzSigSum           = jetdzsigsum;
-    hnlbdttagger._JetChargeSum          = jetchargesum;
-
-    hnlbdttagger._SV_ntracks            = _IVF_ntracks[i_lep];
-    hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_lep);
-    hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_lep);
-    hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
-    LorentzVector tracksum;
-    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
-        LorentzVector tmptrack(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
-        tracksum += tmptrack;
-    }
-    hnlbdttagger._SV_mass               = tracksum.mass();
-    hnlbdttagger._SV_pt                 = tracksum.pt();
-    hnlbdttagger._SV_eta                = tracksum.eta();
-    hnlbdttagger._SV_phi                = tracksum.phi();
-
-    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
-}
+//void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double weight)
+//{
+//    if(i_jet == -1 or i_lep == -1 or !_lIVF_match[i_lep]){
+//        hnlbdttagger.isValid = false;
+//        return;
+//    }else {
+//        hnlbdttagger.isValid = true;
+//    }
+//    hnlbdttagger._gen_Nmass             = _gen_Nmass;
+//    hnlbdttagger._gen_NV                = _gen_NV;
+//    hnlbdttagger._JetIsFromHNL          = get_JetIsFromHNL(i_jet);
+//    hnlbdttagger._weight                = weight;
+//    hnlbdttagger._lPt                   = _lPt[i_lep];
+//    hnlbdttagger._lEta                  = _lEta[i_lep];
+//    hnlbdttagger._lPhi                  = _lPhi[i_lep];
+//    hnlbdttagger._ldxy                  = _dxy[i_lep];
+//    hnlbdttagger._ldz                   = _dz[i_lep];
+//    hnlbdttagger._l3dIPSig              = _3dIPSig[i_lep];
+//    hnlbdttagger._lrelIso               = _relIso[i_lep];
+//    hnlbdttagger._lptRel                = _ptRel[i_lep];
+//    hnlbdttagger._lptRatio              = _ptRatio[i_lep];
+//    hnlbdttagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_lep];
+//    hnlbdttagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_lep];
+//
+//    hnlbdttagger._JetPt                 = _jetPt[i_jet];
+//    hnlbdttagger._JetEta                = _jetEta[i_jet];
+//    hnlbdttagger._JetPhi                = _jetPhi[i_jet];
+//    hnlbdttagger._nJetConstituents      = _nJetConstituents[i_jet];//Constituents[i_jet];
+//
+//    double jetdxysum = 0, jetdxysigsum = 0, jetdzsum = 0, jetdzsigsum = 0, jetchargesum = 0;
+//    LorentzVector jetmassVec;
+//    for(unsigned i = 0; i < _nJetConstituents[i_jet]; i++){
+//        LorentzVector constituentVec(_JetConstituentPt[i_jet][i], _JetConstituentEta[i_jet][i], _JetConstituentPhi[i_jet][i], sqrt( _JetConstituentMass[i_jet][i]*_JetConstituentMass[i_jet][i] + _JetConstituentPt[i_jet][i]*_JetConstituentPt[i_jet][i]));
+//        jetmassVec += constituentVec;
+//        if(_JetConstituentCharge[i] == 0) continue;
+//        jetdxysum    += fabs(_JetConstituentdxy[i_jet][i]);
+//        jetdxysigsum += fabs(_JetConstituentdxy[i_jet][i]/_JetConstituentdxyErr[i_jet][i]);
+//        jetdzsum     += fabs(_JetConstituentdz[i_jet][i]);
+//        jetdzsigsum  += fabs(_JetConstituentdz[i_jet][i]/_JetConstituentdzErr[i_jet][i]);
+//        jetchargesum += _JetConstituentCharge[i_jet][i];
+//    }
+//    hnlbdttagger._JetMass               = jetmassVec.mass();
+//    hnlbdttagger._JetdxySum             = jetdxysum;
+//    hnlbdttagger._JetdxySigSum          = jetdxysigsum;
+//    hnlbdttagger._JetdzSum              = jetdzsum;
+//    hnlbdttagger._JetdzSigSum           = jetdzsigsum;
+//    hnlbdttagger._JetChargeSum          = jetchargesum;
+//
+//    hnlbdttagger._SV_ntracks            = _IVF_ntracks[i_lep];
+//    hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_lep);
+//    hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_lep);
+//    hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_lep]/_IVF_df[i_lep]);
+//    LorentzVector tracksum;
+//    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
+//        LorentzVector tmptrack(_IVF_trackpt[i_lep][i_track], _IVF_tracketa[i_lep][i_track], _IVF_trackphi[i_lep][i_track], _IVF_trackE[i_lep][i_track]);
+//        tracksum += tmptrack;
+//    }
+//    hnlbdttagger._SV_mass               = tracksum.mass();
+//    hnlbdttagger._SV_pt                 = tracksum.pt();
+//    hnlbdttagger._SV_eta                = tracksum.eta();
+//    hnlbdttagger._SV_phi                = tracksum.phi();
+//
+//    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
+//}

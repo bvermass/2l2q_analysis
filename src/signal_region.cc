@@ -125,26 +125,26 @@ void full_analyzer::additional_signal_regions(){
     _1mu1displmu_PFN            = _1mu1displmu1jet &&
                                   (JetTagVal > 0.90);
 
-    _1mu1displmu_BDT            = _1mu1displmu1jet &&
-                                  (JetTagVal_BDT > 0.20);
-
     _1mu1displmu_TrainingPFN    = _1mu1displmudispl_Reliso &&
                                   (JetTagVal > 0.90);
-
-    _1mu1displmu_TrainingBDT    = _1mu1displmudispl_Reliso &&
-                                  (JetTagVal_BDT > 0.20);
 
     _1e1disple_PFN              = _1e1disple1jet &&
                                   (JetTagVal > 0.90);
 
-    _1e1disple_BDT              = _1e1disple1jet &&
-                                  (JetTagVal_BDT > 0.20);
-
     _1e1disple_TrainingPFN      = _1e1displedispl_Reliso &&
                                   (JetTagVal > 0.90);
 
-    _1e1disple_TrainingBDT      = _1e1displedispl_Reliso &&
-                                  (JetTagVal_BDT > 0.20);
+    //_1mu1displmu_BDT            = _1mu1displmu1jet &&
+    //                              (JetTagVal_BDT > 0.20);
+
+    //_1mu1displmu_TrainingBDT    = _1mu1displmudispl_Reliso &&
+    //                              (JetTagVal_BDT > 0.20);
+
+    //_1e1disple_BDT              = _1e1disple1jet &&
+    //                              (JetTagVal_BDT > 0.20);
+
+    //_1e1disple_TrainingBDT      = _1e1displedispl_Reliso &&
+    //                              (JetTagVal_BDT > 0.20);
 }
 
  

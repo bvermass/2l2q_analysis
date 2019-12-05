@@ -132,25 +132,26 @@ int main(int argc, char * argv[])
             c->Modified();
             c->Print(pathname_lin + histname + ".pdf");
 
-            if(histname.Index("PFN") != -1){ 
-                if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+            // Plot PFN vs BDT
+            //if(histname.Index("PFN") != -1){ 
+            //    if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){
+            //        CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
-                    histname.ReplaceAll("PFN", "PFNvsBDT");
-                    c->Modified();
-                    c->Print(pathname_lin + histname + ".pdf");
+            //        histname.ReplaceAll("PFN", "PFNvsBDT");
+            //        c->Modified();
+            //        c->Print(pathname_lin + histname + ".pdf");
 
-                    multigraph->GetXaxis()->SetRangeUser(0., 0.1);
-                    multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
+            //        multigraph->GetXaxis()->SetRangeUser(0., 0.1);
+            //        multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
-                    c->Modified();
-                    c->Print(pathname_lin + histname + "_zoom.pdf");
+            //        c->Modified();
+            //        c->Print(pathname_lin + histname + "_zoom.pdf");
 
-                    c->SetLogx(1);
-                    c->Modified();
-                    c->Print(pathname_log + histname + "_zoom.pdf");
-                }
-            }
+            //        c->SetLogx(1);
+            //        c->Modified();
+            //        c->Print(pathname_log + histname + "_zoom.pdf");
+            //    }
+            //}
         }
     }
 }
