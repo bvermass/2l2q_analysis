@@ -64,7 +64,8 @@ for sampledir in os.listdir(pnfs_base_path):
 
     for crabdir in os.listdir(pnfs_sample_path):
         print '    {}'.format( crabdir )
-        if production_version in crabdir and not (sampledir in open('finished_samples.txt').read() and crabdir in open('finished_samples.txt').read()):
+        pnfs_crab_path = pnfs_sample_path + crabdir + "/"
+        if production_version in crabdir and not pnfs_crab_path in open('finished_samples.txt').read():
             hasproduction = True
 
             startindex = crabdir.find('Run201')
@@ -73,7 +74,6 @@ for sampledir in os.listdir(pnfs_base_path):
             else:
                 RunEra = ''
 
-            pnfs_crab_path = pnfs_sample_path + crabdir + "/"
             pnfs_crab_paths.append( pnfs_crab_path )
 
             for root, dirs, files in os.walk(pnfs_crab_path):
