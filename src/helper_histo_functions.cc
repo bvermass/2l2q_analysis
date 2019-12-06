@@ -5,7 +5,6 @@
 #include "../interface/helper_histo_functions.h"
 
 //move histo bin naming etc. to here!
-using namespace std;
 
 void make_logscale(double* xbins, unsigned nbins, double xmin, double xmax)
 {
@@ -44,7 +43,7 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     }
     else outputfilename += base_filename + "_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15);
     
-    if(partition != 1) outputfilename += "_job_" + to_string(static_cast<long long>(partitionjobnumber)) + ".root";
+    if(partition != 1) outputfilename += "_job_" + std::to_string(static_cast<long long>(partitionjobnumber)) + ".root";
     else outputfilename += ".root";
 
     return outputfilename;
@@ -85,4 +84,36 @@ double get_reducedPdgId(int pdgId)
 double get_signedLog(double var)
 {
     return (var >= 0)? log(var + 1) : - log(fabs(var - 1));
+}
+
+//Reweighting stuff
+double get_mean_ctau(TString sampleflavor, int _gen_Nmass, double _gen_NV)
+{
+    if(sampleflavor == "mu"){
+        if(_gen_Nmass == 5){
+            if(_gen_NV == 0.00547722557505){
+                return 4.92;
+            }else if(_gen_NV == 0.00316227766017){
+                return 14.77;
+            }
+        }
+    }
+    std::cout << "Did not find a matching HNL sample for " << sampleflavor << " M-" << _gen_Nmass << " V-" << _gen_NV << std::endl;
+    return -1;
+}
+
+double get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct)
+{
+    return get_xsec_reweighting_weight(V2_old, V2_new)*get_ctprofile_reweighting_weight(V2_old, V2_new, ctau_old, ct);
+}
+
+double get_xsec_reweighting_weight(double V2_old, double V2_new)
+{
+    return V2_new/V2_old;
+}
+
+double get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct)
+{
+    double ctau_new = ctau_old * V2_old / V2_new;
+    return (ctau_old/ctau_new)*exp((1./ctau_old - 1./ctau_new)*ct);
 }

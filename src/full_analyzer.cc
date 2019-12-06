@@ -39,10 +39,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     
     if(sampleflavor == "e" or sampleflavor == "mu"){
         _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
-        _gen_NV     = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
+        _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
+        _gen_ctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
+        std::cout << _gen_NV*_gen_NV << " "  << _gen_NV << std::endl;
+        std::cout << _gen_ctau << std::endl;
     }else {
         _gen_Nmass = 0;
-        _gen_NV     = 0;
+        _gen_NV    = 0;
+        _gen_ctau  = 0;
     }
 
 
@@ -146,6 +150,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Calculate Event weight
         if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
         else event_weight = 1;
+
+        //Extra weights for other HNL couplings, map: <V2, weight>
+        if(sampleflavor == "e" or sampleflavor == "mu"){
+            reweighting_weights[1e-5] = get_reweighting_weight(_gen_NV*_gen_NV, 1e-5, _gen_ctau, _ctauHN);
+            if(printevent) std::cout << "for 1e-5, we get: " << reweighting_weights[1e-5] << std::endl;
+        }
 
         //Get ID
         get_electronID(&fullElectronID[0]);

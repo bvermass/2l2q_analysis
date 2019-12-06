@@ -735,6 +735,7 @@ public :
    std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
    TString sampleflavor;
+   std::map<double, double> reweighting_weights;
    
    // lepton and jet ID and cleaning bool arrays
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
@@ -746,6 +747,7 @@ public :
    int i_gen_l2;
    int _gen_Nmass;
    double _gen_NV;
+   double _gen_ctau;
    bool leadingIsl1;
    bool subleadingIsl2; 
 

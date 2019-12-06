@@ -10,6 +10,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 {
     if(sampleflavor.Index("Run") != -1) return;
     (*hists2D)["MC_check_gen_l1_l2_charge"]         = new TH2F("MC_check_gen_l1_l2_charge", ";l_{1} Charge; l_{2} Charge", 2, -2, 2, 2, -2, 2);
+    (*hists)["gen_ctauHN"]                          = new TH1F("gen_ctauHN", ";c#tau [mm];Events", 40, 0, 100);
     (*hists)["gen_l1_pt"]                           = new TH1F("gen_l1_pt", ";l_{1}^{gen} #it{p}_{T} [GeV]; Events", 40, 0, 80);
     (*hists)["gen_l2_pt"]                           = new TH1F("gen_l2_pt", ";l_{2}^{gen} #it{p}_{T} [GeV]; Events", 40, 0, 80);
     (*hists)["gen_l1_flavor"]                       = new TH1F("gen_l1_flavor", ";l_{1}^{gen} flavor; Events", 32, -16, 16);
@@ -66,6 +67,7 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_NPackedDtrs_njets"]->Fill(njets, event_weight);
     (*hists)["gen_NPackedDtrs_ch_njets"]->Fill(njets, event_weight);
 
+    (*hists)["gen_ctauHN"]->Fill(_ctauHN, event_weight*reweighting_weights[1e-5]);
     (*hists)["gen_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
 
     if(i_gen_l1 != -1 && i_gen_l2 != -1){

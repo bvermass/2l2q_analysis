@@ -202,7 +202,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     
         (*hists)[prefix+"_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
         (*hists)[prefix+"_ngentr"]->Fill(charged_count, event_weight);
-        (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
+        (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight*reweighting_weights[1e-5]);
         (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
     }
 
