@@ -10,6 +10,20 @@ using namespace std;
 
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+    // Combine Signal Region histograms
+    (*hists)[prefix]                                    = new TH1F(prefix, ";"+prefix+";Events", 1, 0, 1);
+    for(double coupling : reweighting_couplings){
+        std::ostringstream V2stream;
+        V2stream << coupling;
+        TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+        TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+        (*hists)[histname_withMV2]                      = new TH1F(histname_withMV2, ";"+histname_withMV2+";Events", 1, 0, 1);
+        if(sampleflavor.Index("Run201") == -1){
+            (*hists)[histname_ctau_withMV2]             = new TH1F(histname_ctau_withMV2, ";"+histname_ctau_withMV2+";Events", 40, 0, 100);
+        }
+    }
+
+    // Plotting histograms
     (*hists)[prefix+"_l2_jets_categories"]              = new TH1F(prefix+"_l2_jets_categories", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_jets_categories"]                 = new TH1F(prefix+"_jets_categories", ";;Events", 4, 0, 4);
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
@@ -120,6 +134,21 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
+    // Combine Signal Region histograms
+    (*hists)[prefix]->Fill(0.5, event_weight);
+    for(double coupling : reweighting_couplings){
+    //for(std::map<double, double>::iterator RW = reweighting_weights.begin(); RW != reweighting_weights.end(); RW++){
+        std::ostringstream V2stream;
+        V2stream << coupling;
+        TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+        TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+        (*hists)[histname_withMV2]->Fill(0.5, event_weight*reweighting_weights[coupling]);
+        if(sampleflavor.Index("Run201") == -1){
+            (*hists)[histname_ctau_withMV2]->Fill(_ctauHN, event_weight*reweighting_weights[coupling]);
+        }
+    }
+
+    // Plotting histograms
     int nEle    = 0;
     int nMu     = 0;
     for(unsigned i = 0; i < _nL; i++){
@@ -202,7 +231,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     
         (*hists)[prefix+"_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
         (*hists)[prefix+"_ngentr"]->Fill(charged_count, event_weight);
-        (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight*reweighting_weights[1e-5]);
+        (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
     }
 

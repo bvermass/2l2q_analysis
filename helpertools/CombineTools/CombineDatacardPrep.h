@@ -3,8 +3,8 @@
 /////////////////////////////////////////////////////////
 
 
-#ifndef full_analyzer_h
-#define full_analyzer_h
+#ifndef CombineDatacardPrep_h
+#define CombineDatacardPrep_h
 
 #include <TROOT.h>
 #include <TChain.h>

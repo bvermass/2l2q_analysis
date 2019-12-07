@@ -41,6 +41,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
         _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
         _gen_ctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
+        reweighting_couplings = {1e-7, 2e-7, 3e-7, 4e-7, 5e-7, 6e-7, 7e-7, 8e-7, 9e-7, 1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5, 9e-5};//these are the V2 to which the current sample will be reweighted
         std::cout << _gen_NV*_gen_NV << " "  << _gen_NV << std::endl;
         std::cout << _gen_ctau << std::endl;
     }else {
@@ -153,8 +154,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //Extra weights for other HNL couplings, map: <V2, weight>
         if(sampleflavor == "e" or sampleflavor == "mu"){
-            reweighting_weights[1e-5] = get_reweighting_weight(_gen_NV*_gen_NV, 1e-5, _gen_ctau, _ctauHN);
-            if(printevent) std::cout << "for 1e-5, we get: " << reweighting_weights[1e-5] << std::endl;
+            for(double coupling : reweighting_couplings){
+                reweighting_weights[coupling] = get_reweighting_weight(_gen_NV*_gen_NV, coupling, _gen_ctau, _ctauHN);
+                if(printevent) std::cout << "for " << coupling << ", we get: " << reweighting_weights[coupling] << std::endl;
+            }
         }
 
         //Get ID

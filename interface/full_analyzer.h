@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cmath>
 
 #include <string>
@@ -735,7 +736,8 @@ public :
    std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
    TString sampleflavor;
-   std::map<double, double> reweighting_weights;
+   std::map<double, double> reweighting_weights = {};
+   std::vector<double> reweighting_couplings = {};
    
    // lepton and jet ID and cleaning bool arrays
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];

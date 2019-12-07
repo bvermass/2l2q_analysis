@@ -1,4 +1,4 @@
-#include "CombinePrep.h"
+#include "CombineDatacardPrep.h"
 
 # ifndef __CINT__
 int main(int argc, char * argv[])
@@ -12,62 +12,79 @@ int main(int argc, char * argv[])
     std::vector<TFile*>  files_signal;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
+    std::cout << "-----Files-----" << std::endl;
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
-        if(filename.Index("_HeavyNeutrino_lljj_") != -1){ std::cout << "signal: " << filename << std::endl; files_signal.push_back(TFile::Open(filename)); }
+        if(filename.Index("_HeavyNeutrino_lljj_") != -1){ std::cout << "sig: " << filename << std::endl; files_signal.push_back(TFile::Open(filename)); }
         else if(filename.Index("_Background_") != -1){ std::cout << "bkg: " << filename << std::endl; files_bkg.push_back(TFile::Open(filename)); }
-        else if(i == (argc + 1)/2){ std::cout << "obs.: " << filename << std::endl; files_data.push_back(TFile::Open(filename)); }
+        else if(i == (argc + 1)/2){ std::cout << "obs: " << filename << std::endl; files_data.push_back(TFile::Open(filename)); }
         //else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
     }
     std::vector<std::string> legends_signal;
     std::vector<std::string> legends_bkg;
     std::vector<std::string> legends_data;
+    std::cout << "-----Names-----" << std::endl;
     for(int i = i_legends; i < argc; i++){
         std::string legendname = (std::string)argv[i];
-        if(legendname.find("HNL") != std::string::npos){ std::cout << "signal: " << legendname << std::endl; legends_signal.push_back(legendname); }
-        else if(i == argc){ std::cout << "data: " << legendname << std::endl; legends_data.push_back(legendname); }
+        if(legendname.find("HNL") != std::string::npos){ std::cout << "sig: " << legendname << std::endl; legends_signal.push_back(legendname); }
+        else if(i == argc){ std::cout << "obs: " << legendname << std::endl; legends_data.push_back(legendname); }
         //else if(legendname.Index("201") != -1 or legendname.Index("Data") != -1 or legendname.Index("data") != -1) legends_data.push_back(adjust_legend(legendname));
         else{ std::cout << "bkg: " << legendname << std::endl; legends_bkg.push_back(legendname); }
     }
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
-    std::cout << specific_dir << std::endl;
+    std::cout << "specific directory: " << specific_dir << std::endl;
     std::string general_pathname = (std::string)make_general_pathname("datacards/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
 
-    TString histname = "_OS_mu_afterPFN_IVF_PV-SVdxy";
+    TIter next(files_signal[0]->GetListOfKeys());
+    TKey* key;
+    while(key = (TKey*)next()){
 
-    // get signal histograms
-    TH1F* hist_signal = (TH1F*) files_signal[0]->Get(histname);
-    double sigYield = hist_signal->Integral();
+        TClass *cl = gROOT->GetClass(key->GetClassName());
 
-    // get data histogram
-    TH1F* hist_data = (TH1F*) files_data[0]->Get(histname);
-    double obsYield = hist_data->Integral();
+        // -- TH1 --
+        if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
+            TH1F* sample_hist_ref = (TH1F*)key->ReadObj();
+            TString histname = sample_hist_ref->GetName();
+            if(histname.Index("_M-") and histname.Index("_V2-") != -1 and histname.Index("_afterPFN") != -1 and histname.Index("_ctau") == -1){
+            //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
-    // get background histograms
-    std::vector<TH1F*> hists_bkg;
-    std::vector<double> bkgYield;
-    for(int i = 0; i < files_bkg.size(); i++){
-        hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname));
-        bkgYield.push_back(hists_bkg[i]->Integral());
+                // get signal histograms
+                TH1F* hist_signal = (TH1F*) files_signal[0]->Get(histname);
+                double sigYield = hist_signal->Integral();
+
+                TString histname_bkg(histname(0, histname.Index("_M-")));
+
+                // get data histogram
+                TH1F* hist_data = (TH1F*) files_data[0]->Get(histname_bkg);
+                double obsYield = hist_data->Integral();
+
+                // get background histograms
+                std::vector<TH1F*> hists_bkg;
+                std::vector<double> bkgYield;
+                for(int i = 0; i < files_bkg.size(); i++){
+                    hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname_bkg));
+                    bkgYield.push_back(hists_bkg[i]->Integral());
+                }
+
+                //Systematic Uncertainty stuff
+                //std::vector<std::vector<double>> systUnc;
+                //unsigned nSyst;
+                //std::vector<std::string> systNames;
+                //std::vector<std::string> systDist;
+                //
+                ////Shape analysis stuff
+                //bool shapeCard = false;
+                //std::string shapeFilename = "";
+
+                //bool autoMCStats = false;
+
+                printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0]);
+            }
+        }
     }
-
-    //Systematic Uncertainty stuff
-    //std::vector<std::vector<double>> systUnc;
-    //unsigned nSyst;
-    //std::vector<std::string> systNames;
-    //std::vector<std::string> systDist;
-    //
-    ////Shape analysis stuff
-    //bool shapeCard = false;
-    //std::string shapeFilename = "";
-
-    //bool autoMCStats = false;
-
-    printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0]);
-
 }
 #endif
 
