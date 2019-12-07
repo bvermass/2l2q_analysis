@@ -95,6 +95,8 @@ double get_mean_ctau(TString sampleflavor, int _gen_Nmass, double _gen_NV)
                 return 4.92;
             }else if(_gen_NV == 0.00316227766017){
                 return 14.77;
+            }else if(_gen_NV == 0.00282842712475){
+                return 18.46;
             }
         }
     }

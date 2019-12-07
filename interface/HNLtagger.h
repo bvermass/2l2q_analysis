@@ -91,7 +91,9 @@ class HNLtagger
         int      _JetConstituentInSV[maxJetSize];
 
         HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
-        double predict(PFNReader& pfn);
+        double predict(PFNReader& pfn, int pfn_version, double M = 0, double V = 0);
+        double predict_PFN_v1(PFNReader& pfn);
+        double predict_PFN_v4(PFNReader& pfn, double M, double V);
         void write_HNLtagger_tree();
         void delete_HNLtagger_tree();
 };

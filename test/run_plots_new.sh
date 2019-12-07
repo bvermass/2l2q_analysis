@@ -191,7 +191,7 @@ if [[ choice -eq 5 ]]; then
     fi
 fi
 if [[ choice -eq 6 ]]; then
-    if g++ -std=c++0x -o $exec_name "helpertools/CombinePrep/CombinePrep.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++0x -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n/////////////////////////////////////////////////"
         echo -e "//Combine Datacards Prep COMPILATION SUCCESSFUL//"
         echo -e "/////////////////////////////////////////////////\n"

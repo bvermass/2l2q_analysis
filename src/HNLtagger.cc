@@ -76,7 +76,16 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
 }
 
 
-double HNLtagger::predict(PFNReader& pfn)
+double HNLtagger::predict(PFNReader& pfn, int pfn_version, double M, double V)
+{
+    if(pfn_version == 1) return predict_PFN_v1(pfn);
+    if(pfn_version == 4) return predict_PFN_v4(pfn, M, V);
+    std::cout << "wrong PFN version input: " << pfn_version << std::endl;
+    return -1;
+}
+
+
+double HNLtagger::predict_PFN_v1(PFNReader& pfn)
 {
     if(!isValid) return -1;
     std::vector< double > highlevelInput( { _JetPt, _JetEta, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2 } );
@@ -88,6 +97,24 @@ double HNLtagger::predict(PFNReader& pfn)
 
     for( unsigned i = _nJetConstituents; i < 50; ++i){
         pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
+
+double HNLtagger::predict_PFN_v4(PFNReader& pfn, double M, double V)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt, _JetEta, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _l1Pt, _l1Eta, _mll, _dRll, M, V } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
     }
 
     return pfn.predict( highlevelInput, pfnInput );

@@ -105,8 +105,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/jetTagger_best_of_PFN_v1.h5", 10, {50, 12});
-    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_best_of_PFN_v1.h5", 10, {50,12});
+    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/PFN_v4/HNL_Tagger_local.h5", 27, {50, 13});
+    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/PFN_v4/HNL_Tagger_local.h5", 27, {50,13});
     PFNReader bdt_mu( "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/bestModels_xgboost_HNLtagger_v2/model_rank_1/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961.bin", 28 );
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
@@ -208,8 +208,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
 
         // Find jet closest to l2, this jet can contain l2
-        i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
-        i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
+        if(i_leading_e != -1) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
+        if(i_leading_mu != -1) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
 
         //get signal region booleans
         signal_regions();
@@ -257,14 +257,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1displedispl_Reliso){
             fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet, i_leading_e);
             //fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = hnltagger_e.predict(pfn_e);
+            JetTagVal = hnltagger_e.predict(pfn_e, 4, 5., 3e-5);
             //JetTagVal_BDT = hnlbdttagger_e.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmudispl_Reliso){
             fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet, i_leading_mu);
             //fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = hnltagger_mu.predict(pfn_mu);
+            JetTagVal = hnltagger_mu.predict(pfn_mu, 4, 5., 3e-5);
             //JetTagVal_BDT = hnlbdttagger_mu.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_mu, i_subleading_displ_mu);
         }
