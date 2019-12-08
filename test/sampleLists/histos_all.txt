@@ -36,8 +36,10 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_massiveAndCKM_LO/dilep_final.root                     0.6085      -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO/dilep_final.root                     0.07340     -1      1 
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO/dilep_final.root                     0.07215     -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000793725393319_mu_massiveAndCKM_LO/dilep_final.root                   0.005727    -1      1
 
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.0141421356237_e_massiveAndCKM_LO/dilep_final.root                       1.592       -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00836660026534_e_massiveAndCKM_LO/dilep_final.root                      0.6102      -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO/dilep_final.root                      0.07340     -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00282842712475_e_massiveAndCKM_LO/dilep_final.root                      0.07341     -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000793725393319_e_massiveAndCKM_LO/dilep_final.root                    0.005719    -1      1

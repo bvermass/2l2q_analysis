@@ -90,14 +90,29 @@ double get_signedLog(double var)
 double get_mean_ctau(TString sampleflavor, int _gen_Nmass, double _gen_NV)
 {
     if(sampleflavor == "mu"){
-        if(_gen_Nmass == 5){
-            if(_gen_NV == 0.00547722557505){
-                return 4.92;
-            }else if(_gen_NV == 0.00316227766017){
-                return 14.77;
-            }else if(_gen_NV == 0.00282842712475){
-                return 18.46;
-            }
+        if(_gen_Nmass == 3){
+            if(_gen_NV == 0.00836660026534) return 32.60;
+        }else if(_gen_Nmass == 5){
+            if(_gen_NV == 0.00547722557505) return 4.92;
+            else if(_gen_NV == 0.00316227766017) return 14.77;
+            else if(_gen_NV == 0.00282842712475) return 18.46;
+        }else if(_gen_Nmass == 8){
+            if(_gen_NV == 0.00282842712475) return 1.56;
+        }else if(_gen_Nmass == 10){
+            if(_gen_NV == 0.000793725393319) return 6.28;
+        }
+    }
+    if(sampleflavor == "e"){
+        if(_gen_Nmass == 3){
+            if(_gen_NV == 0.00836660026534) return 32.43;
+        }else if(_gen_Nmass == 5){
+            if(_gen_NV == 0.00547722557505) return 4.90;
+            else if(_gen_NV == 0.00316227766017) return 14.69;
+            else if(_gen_NV == 0.00282842712475) return 18.37;
+        }else if(_gen_Nmass == 8){
+            if(_gen_NV == 0.00282842712475) return 1.56;
+        }else if(_gen_Nmass == 10){
+            if(_gen_NV == 0.000793725393319) return 6.27;
         }
     }
     std::cout << "Did not find a matching HNL sample for " << sampleflavor << " M-" << _gen_Nmass << " V-" << _gen_NV << std::endl;

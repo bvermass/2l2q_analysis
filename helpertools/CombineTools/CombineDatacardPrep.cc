@@ -12,10 +12,11 @@ int main(int argc, char * argv[])
     std::vector<TFile*>  files_signal;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
+    TString flavor;
     std::cout << "-----Files-----" << std::endl;
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
-        if(filename.Index("_HeavyNeutrino_lljj_") != -1){ std::cout << "sig: " << filename << std::endl; files_signal.push_back(TFile::Open(filename)); }
+        if(filename.Index("_HeavyNeutrino_lljj_") != -1){ std::cout << "sig: " << filename << std::endl; flavor = (filename.Index("_mu_") != -1? "mu" : "e"); files_signal.push_back(TFile::Open(filename)); }
         else if(filename.Index("_Background_") != -1){ std::cout << "bkg: " << filename << std::endl; files_bkg.push_back(TFile::Open(filename)); }
         else if(i == (argc + 1)/2){ std::cout << "obs: " << filename << std::endl; files_data.push_back(TFile::Open(filename)); }
         //else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
@@ -48,25 +49,25 @@ int main(int argc, char * argv[])
         if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
             TH1F* sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname = sample_hist_ref->GetName();
-            if(histname.Index("_M-") and histname.Index("_V2-") != -1 and histname.Index("_afterPFN") != -1 and histname.Index("_ctau") == -1){
+            if(histname.Index(flavor) != -1 and histname.Index("_M-") != -1 and histname.Index("_V2-") != -1 and histname.Index("_afterPFN") != -1 and histname.Index("_ctau") == -1){
             //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
                 // get signal histograms
                 TH1F* hist_signal = (TH1F*) files_signal[0]->Get(histname);
-                double sigYield = hist_signal->Integral();
+                double sigYield = hist_signal->GetBinContent(1);
 
                 TString histname_bkg(histname(0, histname.Index("_M-")));
 
                 // get data histogram
                 TH1F* hist_data = (TH1F*) files_data[0]->Get(histname_bkg);
-                double obsYield = hist_data->Integral();
+                double obsYield = hist_data->GetBinContent(1);
 
                 // get background histograms
                 std::vector<TH1F*> hists_bkg;
                 std::vector<double> bkgYield;
                 for(int i = 0; i < files_bkg.size(); i++){
                     hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname_bkg));
-                    bkgYield.push_back(hists_bkg[i]->Integral());
+                    bkgYield.push_back(hists_bkg[i]->GetBinContent(1));
                 }
 
                 //Systematic Uncertainty stuff

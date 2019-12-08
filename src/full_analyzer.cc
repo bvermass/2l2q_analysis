@@ -152,7 +152,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
         else event_weight = 1;
 
-        //Extra weights for other HNL couplings, map: <V2, weight>
+        //Reweighting weights for HNL couplings, map: <V2, weight>
         if(sampleflavor == "e" or sampleflavor == "mu"){
             for(double coupling : reweighting_couplings){
                 reweighting_weights[coupling] = get_reweighting_weight(_gen_NV*_gen_NV, coupling, _gen_ctau, _ctauHN);
