@@ -10,6 +10,7 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <TH1.h>
+#include <TGraphAsymmErrors.h>
 
 #include <iostream>
 #include <fstream>
@@ -19,9 +20,13 @@
 #include <utility>
 #include <TSystem.h>
 
+#include "../../plotting/tdrStyle.h"
+#include "../../plotting/helper_plotter_functions.h"
+
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif
+void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir);
 
 class CombineOutput
 {
@@ -30,9 +35,11 @@ class CombineOutput
         TFile* combine_file;
         TTree* combine_tree;
 
+        double V2;
+
         CombineOutput(TString filename);
         ~CombineOutput();
-        void Loop();
+        std::map<float, double> GetSignalStrengths();
         void Init(TTree* tree);
 
         // tree variables and branches
