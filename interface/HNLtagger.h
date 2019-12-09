@@ -28,6 +28,7 @@ class HNLtagger
         static const unsigned maxJetSize = 50;
         int      _gen_Nmass;
         double   _gen_NV;
+        double   _gen_Nctau;
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetPt_log;
@@ -89,6 +90,9 @@ class HNLtagger
         int      _JetConstituentNumberOfPixelHits[maxJetSize];
         bool     _JetConstituentHasTrack[maxJetSize];
         int      _JetConstituentInSV[maxJetSize];
+        double   _JetConstituentNmass[maxJetSize];
+        double   _JetConstituentNV[maxJetSize];
+        double   _JetConstituentNctau[maxJetSize];
 
         HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
         double predict(PFNReader& pfn, int pfn_version, double M = 0, double V = 0);

@@ -749,7 +749,7 @@ public :
    int i_gen_l2;
    int _gen_Nmass;
    double _gen_NV;
-   double _gen_ctau;
+   double _gen_Nctau;
    bool leadingIsl1;
    bool subleadingIsl2; 
 

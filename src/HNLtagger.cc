@@ -12,6 +12,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     HNLtagger_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
+    HNLtagger_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     HNLtagger_tree->Branch("_JetPt_log",                        &_JetPt_log,                        "_JetPt_log/D");
@@ -73,6 +74,9 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetConstituentNumberOfPixelHits",  &_JetConstituentNumberOfPixelHits,  "_JetConstituentNumberOfPixelHits[50]/I");
     HNLtagger_tree->Branch("_JetConstituentHasTrack",           &_JetConstituentHasTrack,           "_JetConstituentHasTrack[50]/O");
     HNLtagger_tree->Branch("_JetConstituentInSV",               &_JetConstituentInSV,               "_JetConstituentInSV[50]/I");
+    HNLtagger_tree->Branch("_JetConstituentNmass",              &_JetConstituentNmass,              "_JetConstituentNmass[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentNV",                 &_JetConstituentNV,                 "_JetConstituentNV[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentNctau",              &_JetConstituentNctau,              "_JetConstituentNctau[50]/D");
 }
 
 

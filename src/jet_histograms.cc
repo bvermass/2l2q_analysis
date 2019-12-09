@@ -119,6 +119,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
     }
     hnltagger._gen_Nmass    = _gen_Nmass;
     hnltagger._gen_NV       = _gen_NV;
+    hnltagger._gen_Nctau     = _gen_Nctau;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jet);
     hnltagger._JetPt        = _jetPt[i_jet];
     hnltagger._JetPt_log    = log(_jetPt[i_jet]);
@@ -187,6 +188,9 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
         hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jet][i];
         hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jet][i];
         hnltagger._JetConstituentInSV[i]              = (_JetConstituentCharge[i_jet][i] == 0)? -1 : is_track_in_sv(i_lep, i_jet, i);
+        hnltagger._JetConstituentNmass[i]              = _gen_Nmass;
+        hnltagger._JetConstituentNV[i]                 = _gen_NV;
+        hnltagger._JetConstituentNctau[i]              = _gen_Nctau;
     }
     for(unsigned i = _nJetConstituents[i_jet]; i < 50; i++){
         hnltagger._JetConstituentPt[i]                 = 0;
@@ -207,6 +211,9 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_j
         hnltagger._JetConstituentNumberOfPixelHits[i] = 0;
         hnltagger._JetConstituentHasTrack[i]          = 0;
         hnltagger._JetConstituentInSV[i]              = 0;
+        hnltagger._JetConstituentNmass[i]             = 0;
+        hnltagger._JetConstituentNV[i]                = 0;
+        hnltagger._JetConstituentNctau[i]             = 0;
     }
     if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
 }
