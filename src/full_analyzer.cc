@@ -257,14 +257,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_1e1displedispl_Reliso){
             fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet, i_leading_e);
             //fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = hnltagger_e.predict(pfn_e, 4, 5., 3e-5);
+            if(sampleflavor == "e" or sampleflavor == "mu") JetTagVal = hnltagger_e.predict(pfn_e, 4, _gen_Nmass, _gen_NV);
+            else JetTagVal = hnltagger_e.predict(pfn_e, 4, 5., 3e-5);
             //JetTagVal_BDT = hnlbdttagger_e.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_e, i_subleading_displ_e);
         }
         if(_1mu1displmudispl_Reliso){
             fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet, i_leading_mu);
             //fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
-            JetTagVal = hnltagger_mu.predict(pfn_mu, 4, 5., 3e-5);
+            if(sampleflavor == "e" or sampleflavor == "mu") JetTagVal = hnltagger_mu.predict(pfn_mu, 4, _gen_Nmass, _gen_NV);
+            else JetTagVal = hnltagger_mu.predict(pfn_mu, 4, 5., 3e-5);
             //JetTagVal_BDT = hnlbdttagger_mu.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_mu, i_subleading_displ_mu);
         }
