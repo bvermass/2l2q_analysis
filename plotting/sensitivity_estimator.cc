@@ -49,7 +49,7 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
-    TString general_pathname = make_general_pathname("stacks/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots/stacks/", specific_dir + "/");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();

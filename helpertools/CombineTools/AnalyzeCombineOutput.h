@@ -26,7 +26,9 @@
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif
-void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir);
+double GetLowerExclusionLimit(std::map<double, std::map<float, double>> signal_strengths, float quantile);
+bool CheckGoesBelow1(std::map<double, std::map<float, double>> signal_strengths);
+void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 
 class CombineOutput
 {
@@ -35,6 +37,7 @@ class CombineOutput
         TFile* combine_file;
         TTree* combine_tree;
 
+        double M;
         double V2;
 
         CombineOutput(TString filename);

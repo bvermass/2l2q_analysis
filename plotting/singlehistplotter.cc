@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
     TString sample_legend = adjust_legend((TString)argv[2]);
 
     // Name of directory where plots will end up
-    TString general_pathname = make_general_pathname("singlehists/", inputfilename);
+    TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");

@@ -3,6 +3,10 @@
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
+    //Requirements for datacard to be made:
+    // - Signal Yield > 0.1
+    // - only histograms with correct flavor in their name, 'SS', '_M-', '_V-', 'afterPFN' and not '_ctau'
+    //
     //Argument 1: specific directory for Combine datacards
     //Argument 2 - (n+1)/2: name of root input files (first one has to be signal)
     //Argument (n+3)/2 - n: sig or bkg names
@@ -36,7 +40,7 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
-    std::string general_pathname = (std::string)make_general_pathname("datacards/", specific_dir + "/");
+    std::string general_pathname = (std::string)make_general_pathname("combine/datacards/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
 
     TIter next(files_signal[0]->GetListOfKeys());
@@ -49,7 +53,7 @@ int main(int argc, char * argv[])
         if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
             TH1F* sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname = sample_hist_ref->GetName();
-            if(histname.Index(flavor) != -1 and histname.Index("_M-") != -1 and histname.Index("_V2-") != -1 and histname.Index("_afterPFN") != -1 and histname.Index("_ctau") == -1){
+            if(histname.Index(flavor) != -1 and histname.Index("SS") != -1 and histname.Index("_M-") != -1 and histname.Index("_V2-") != -1 and histname.Index("_afterPFN") != -1 and histname.Index("_ctau") == -1){
             //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
                 // get signal histograms
@@ -82,7 +86,7 @@ int main(int argc, char * argv[])
 
                 //bool autoMCStats = false;
 
-                printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0]);
+                if(sigYield > 0.1) printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0]);
             }
         }
     }

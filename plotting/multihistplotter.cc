@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
-    TString general_pathname = make_general_pathname("multihists/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots/multihists/", specific_dir + "/");
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");

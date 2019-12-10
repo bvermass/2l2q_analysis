@@ -43,7 +43,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
 {
     // pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow
     // or plots/singlehists/final/WJets/ and then plotspecific stuff
-    if(plottype == "singlehists/"){
+    if(plottype == "plots/singlehists/"){
         TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
         specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
         if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
@@ -51,7 +51,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     }
 
-    return "/user/bvermass/public/2l2q_analysis/plots/" + plottype + specific_dir;
+    return "/user/bvermass/public/2l2q_analysis/" + plottype + specific_dir;
 }
 
 
@@ -118,11 +118,11 @@ int get_color(TString legend)
     else if(legend.Index("Diboson")  != -1) return kGreen+3;
     else if(legend.Index("Triboson") != -1) return kRed+3;
     else if(legend.Index("Top")      != -1) return kBlue+2;
-    else if(legend.Index("15GeV")   != -1) return kBlack;
-    else if(legend.Index("3GeV")    != -1) return kRed-9;
-    else if(legend.Index("5GeV")    != -1) return kGreen-9;
-    else if(legend.Index("8GeV")    != -1) return kMagenta-7;
-    else if(legend.Index("10GeV")   != -1) return kCyan-2;
+    else if(legend.Index("M-15")   != -1) return kBlack;
+    else if(legend.Index("M-3")    != -1) return kRed-9;
+    else if(legend.Index("M-5")    != -1) return kGreen-9;
+    else if(legend.Index("M-8")    != -1) return kMagenta-7;
+    else if(legend.Index("M-10")   != -1) return kCyan-2;
     else return kBlack;
 }
 
