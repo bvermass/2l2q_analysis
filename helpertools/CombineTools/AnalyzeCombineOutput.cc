@@ -139,6 +139,8 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     sr_2s_graph->SetFillStyle(1001);
     sr_2s_graph->GetXaxis()->SetTitle(Xaxistitle);
     sr_2s_graph->GetYaxis()->SetTitle(Yaxistitle);
+    sr_2s_graph->GetXaxis()->SetMoreLogLabels();
+    sr_2s_graph->GetYaxis()->SetMoreLogLabels();
 
     TGraphAsymmErrors* sr_1s_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &sr_1s_down[0], &sr_1s_up[0]);
     sr_1s_graph->SetFillColor(kGreen+1);
