@@ -29,7 +29,7 @@ bool full_analyzer::create_sigreg_bool(int i_leading, int i_subleading, bool bas
         (!applyLepVeto or no_additional_leptons()) &&
         (!applyOneJet or i_subleading_jet == -1) &&
         _lIVF_match[i_subleading] &&
-        (jettagval == -1 or JetTagVal > jettagval);
+        (jettagval == -1 or JetTagVal[5][1e-6] > jettagval);
 }
 
 void full_analyzer::add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix)

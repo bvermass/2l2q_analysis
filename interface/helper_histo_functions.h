@@ -21,5 +21,7 @@ double      get_mean_ctau(TString sampleflavor, int _gen_Nmass, double _gen_NV);
 double      get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);
 double      get_xsec_reweighting_weight(double V2_old, double V2_new);
 double      get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);
+double      get_evaluating_ctau(double mass, double V2_new);//for evaluating PFN on bkg (when parametrized in ctau)
+std::vector<double> get_evaluating_couplings(double mass);
 
 #endif

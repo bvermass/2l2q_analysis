@@ -85,7 +85,7 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
         fill_jet_constituent_histograms(hists, prefix);
-        if(JetTagVal > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
+        if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
     }
 }
 

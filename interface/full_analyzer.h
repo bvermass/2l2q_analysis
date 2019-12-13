@@ -738,6 +738,11 @@ public :
    TString sampleflavor;
    std::map<double, double> reweighting_weights = {};
    std::vector<double> reweighting_couplings = {};
+   std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+   std::map<int, std::vector<double>> evaluating_couplings;//<M, V2's>
+   std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
+   std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
+   //double JetTagVal_BDT = -1;
    
    // lepton and jet ID and cleaning bool arrays
    bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
@@ -774,9 +779,6 @@ public :
    int i_subleading_jet;
    int i_thirdleading_jet;
    int i_closel2_jet;
-
-   double JetTagVal = -1;
-   //double JetTagVal_BDT = -1;
 
    // signal region booleans: ee
    bool _trige;
@@ -935,6 +937,7 @@ public :
     int      get_lfromtau(int i_gen_l);
 
    // in src/PFNTools.cc
+    std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
 
