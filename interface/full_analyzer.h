@@ -738,7 +738,7 @@ public :
    TString sampleflavor;
    std::map<double, double> reweighting_weights = {};
    std::vector<double> reweighting_couplings = {};
-   std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+   std::vector<int> evaluating_masses = {5};//{2, 3, 4, 5, 6, 8, 10, 15};
    std::map<int, std::vector<double>> evaluating_couplings;//<M, V2's>
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
    std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>

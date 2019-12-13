@@ -165,7 +165,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(sampleflavor == "e" or sampleflavor == "mu"){
             for(double coupling : reweighting_couplings){
                 reweighting_weights[coupling] = get_reweighting_weight(_gen_NV*_gen_NV, coupling, _gen_Nctau, _ctauHN);
-                if(printevent) std::cout << "for " << coupling << ", we get: " << reweighting_weights[coupling] << std::endl;
             }
         }
 

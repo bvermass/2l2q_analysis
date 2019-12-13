@@ -215,6 +215,7 @@ std::vector<double> get_evaluating_couplings(double mass)
     if(mass == 2) return {6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5, 9e-5, 1e-4};
     if(mass == 3) return {4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5};
     if(mass == 4) return {1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5};
+    if(mass == 5) return {1e-6};
     if(mass == 5 or mass == 6 or mass == 8 or mass == 10 or mass == 15) return {5e-7, 6e-7, 7e-7, 8e-7, 9e-7, 1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5};
     std::cout << "Warning: reached end of get_evaluating_couplings without a correct ctau value, returning {}" << std::endl;
     return {};

@@ -21,7 +21,6 @@ void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString p
             std::ostringstream V2stream;
             V2stream << CouplingMap.first;
             TString param = "_M-" + std::to_string(MassMap.first) + "_V2-" + V2stream.str();
-            std::cout << "adding: " << param << std::endl;
             (*hists)[prefix+"_JetTagVal"+param]             = new TH1F(prefix+"_JetTagVal"+param, ";Jet Tag Value; Events", 40, 0, 1);
             (*hists)[prefix+"_PFN_ROC"+param]               = new TH1F(prefix+"_PFN_ROC"+param, ";Jet Tag Value; Events", 1000, 0, 1);
             (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"+param]  = new TH1F(prefix+"_PFN_JetIsFromHNL_ROC"+param, ";Jet Tag Value (Jet from HNL); Events", 1000, 0, 1);
@@ -48,7 +47,6 @@ void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString 
             std::ostringstream V2stream;
             V2stream << CouplingMap.first;
             TString param = "_M-" + std::to_string(MassMap.first) + "_V2-" + V2stream.str();
-            //std::cout << "tag value: " << param << std::endl;
             if(CouplingMap.second != -1){
                 (*hists)[prefix+"_JetTagVal"+param]->Fill(CouplingMap.second, event_weight);
                 (*hists)[prefix+"_JetTagValzm"+param]->Fill(CouplingMap.second, event_weight);
