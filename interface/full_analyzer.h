@@ -732,8 +732,6 @@ public :
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
    
-   std::map<TString, TH1*>::iterator it;
-   std::map<TString, TH2*>::iterator it2D;
    Double_t event_weight;
    TString sampleflavor;
    std::map<double, double> reweighting_weights = {};

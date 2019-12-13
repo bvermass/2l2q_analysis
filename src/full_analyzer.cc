@@ -82,12 +82,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     //assures statistical errors are dealt with correctly
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
+    for(auto const& it : hists){
+        TH1* h = it.second;
         h->Sumw2();
     }
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
+    for(auto const& it2D : hists2D){
+        TH2* h = it2D.second;
         h->Sumw2();
     }
 
@@ -466,8 +466,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TFile *output = new TFile(outputfilename, "recreate");
 
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
+    for(auto const& it : hists){
+        TH1* h = it.second;
         int nb = h->GetNbinsX();
         double b0  = h->GetBinContent( 0  );
         double e0  = h->GetBinError  ( 0  );
@@ -494,8 +494,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
     }
     // Normalize 2D histograms to correct total weight
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
+    for(auto const& it2D : hists2D){
+        TH2* h = it2D.second;
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
     }
 
@@ -507,14 +507,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
     // Write 1D histograms to outputfile
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
+    for(auto const& it : hists){
+        TH1* h = it.second;
 	    h->Write();
     }
 
     // Write 2D histograms to outputfile
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
+    for(auto const& it2D : hists2D){
+        TH2* h = it2D.second;
         h->Write();
     }
  

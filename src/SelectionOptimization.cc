@@ -74,9 +74,9 @@ void full_analyzer::add_Bool_hists(std::map<TString, TH1*>* hists, TString prefi
     }
 
     // give the bin the name of the boolean it represents
-    for( it = hists->begin(); it != hists->end(); it++){
-        if(it->first.Index("_Bool_") != -1){
-            TH1* h = it->second;
+    for(auto const& it : *hists){
+        if(it.first.Index("_Bool_") != -1){
+            TH1* h = it.second;
             h->GetXaxis()->SetBinLabel(1, h->GetName());
         }
     }
