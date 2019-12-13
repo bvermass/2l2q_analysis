@@ -35,13 +35,13 @@ void full_analyzer::signal_regions(){
                                   i_closel2_jet != -1;
     
     _1e1displemll               = _1e1displejetl2 &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 75);
+                                  mllcut(i_leading_e, i_subleading_displ_e, 80);
     
     _1e1displedR                = _1e1displemll &&
                                   dRcut(i_leading_e, i_subleading_displ_e, 1, 5.5); 
     
     _1e1displedphi              = _1e1displemll &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
+                                  dphicut(i_leading_e, i_subleading_displ_e, 2.3);
 
     _1e1displeReliso            = _1e1displedphi &&
                                   relisocut(i_subleading_displ_e, 1.5);
@@ -52,17 +52,17 @@ void full_analyzer::signal_regions(){
     _1e1displedphi_novtx        = _1e1disple &&
                                   fabs(_dxy[i_subleading_displ_e]) > 0.02 &&
                                   //no_additional_leptons() &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 75) &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.4);
+                                  mllcut(i_leading_e, i_subleading_displ_e, 80) &&
+                                  dphicut(i_leading_e, i_subleading_displ_e, 2.3);
     
     _1e1displedispl_Reliso      = _1e1displedispl &&
                                   relisocut(i_subleading_displ_e, 1.5);
 
     _CR_1e1displedphi           = _1e1displemll &&
-                                  get_dphill(i_leading_e, i_subleading_displ_e) < 2.4;
+                                  get_dphill(i_leading_e, i_subleading_displ_e) < 2.3;
 
     _CR_1e1displemll            = _1e1displejetl2 &&
-                                  get_mll(i_leading_e, i_subleading_displ_e) > 75;
+                                  get_mll(i_leading_e, i_subleading_displ_e) > 80;
     
 
     ///////////////////////////////
@@ -90,13 +90,13 @@ void full_analyzer::signal_regions(){
                                   i_closel2_jet != -1;
 
     _1mu1displmumll             = _1mu1displmujetl2 &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 75);
+                                  mllcut(i_leading_mu, i_subleading_displ_mu, 80);
     
     _1mu1displmudR              = _1mu1displmumll &&
                                   dRcut(i_leading_mu, i_subleading_displ_mu, 1, 5.5);    
     
     _1mu1displmudphi            = _1mu1displmumll &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);
+                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.3);
     
     _1mu1displmuReliso          = _1mu1displmudphi &&
                                   relisocut(i_subleading_displ_mu, 1.5);
@@ -107,17 +107,17 @@ void full_analyzer::signal_regions(){
     _1mu1displmudphi_novtx      = _1mu1displmu &&
                                   fabs(_dxy[i_subleading_displ_mu]) > 0.02 &&
                                   //no_additional_leptons() &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 75) &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.4);    
+                                  mllcut(i_leading_mu, i_subleading_displ_mu, 80) &&
+                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.3);    
     
     _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
                                   relisocut(i_subleading_displ_mu, 1.5);
     
     _CR_1mu1displmudphi         = _1mu1displmumll &&
-                                  get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.4;
+                                  get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.3;
 
     _CR_1mu1displmumll            = _1mu1displmujetl2 &&
-                                  get_mll(i_leading_mu, i_subleading_displ_mu) > 75;
+                                  get_mll(i_leading_mu, i_subleading_displ_mu) > 80;
 }
 
 

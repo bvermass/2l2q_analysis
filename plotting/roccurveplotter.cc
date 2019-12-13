@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
             // Get a reference histogram for the name, then get all histograms in  a vector
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
-            if(histname.Index("_ROC") == -1) continue;
+            if(histname.Index("_ROC") == -1 or histname.Index("_M-") == -1 or histname.Index("_V2-") == -1) continue;
             std::cout << histname << std::endl;
             
             // get plot specific pathnames
@@ -113,7 +113,10 @@ int main(int argc, char * argv[])
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
                 // calculate cutting point to get 75% signal efficiency for PFN or BDT
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95);
 
                 TGraph* roc = get_roc(eff_signal, eff_bkg, legends[i]);
                 multigraph->Add(roc);

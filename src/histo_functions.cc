@@ -11,17 +11,17 @@ using namespace std;
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     // Combine Signal Region histograms
-    (*hists)[prefix]                                    = new TH1F(prefix, ";"+prefix+";Events", 1, 0, 1);
-    for(double coupling : reweighting_couplings){
-        std::ostringstream V2stream;
-        V2stream << coupling;
-        TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
-        TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
-        (*hists)[histname_withMV2]                      = new TH1F(histname_withMV2, ";"+histname_withMV2+";Events", 1, 0, 1);
-        if(sampleflavor.Index("Run201") == -1){
-            (*hists)[histname_ctau_withMV2]             = new TH1F(histname_ctau_withMV2, ";"+histname_ctau_withMV2+";Events", 40, 0, 100);
-        }
-    }
+    //(*hists)[prefix]                                    = new TH1F(prefix, ";"+prefix+";Events", 1, 0, 1);
+    //for(double coupling : reweighting_couplings){
+    //    std::ostringstream V2stream;
+    //    V2stream << coupling;
+    //    TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+    //    TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+    //    (*hists)[histname_withMV2]                      = new TH1F(histname_withMV2, ";"+histname_withMV2+";Events", 1, 0, 1);
+    //    if(sampleflavor.Index("Run201") == -1){
+    //        (*hists)[histname_ctau_withMV2]             = new TH1F(histname_ctau_withMV2, ";"+histname_ctau_withMV2+";Events", 40, 0, 100);
+    //    }
+    //}
 
     // Plotting histograms
     (*hists)[prefix+"_l2_jets_categories"]              = new TH1F(prefix+"_l2_jets_categories", ";;Events", 8, 0, 8);
@@ -135,18 +135,18 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
     // Combine Signal Region histograms
-    (*hists)[prefix]->Fill(0.5, event_weight);
-    for(double coupling : reweighting_couplings){
-    //for(std::map<double, double>::iterator RW = reweighting_weights.begin(); RW != reweighting_weights.end(); RW++){
-        std::ostringstream V2stream;
-        V2stream << coupling;
-        TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
-        TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
-        (*hists)[histname_withMV2]->Fill(0.5, event_weight*reweighting_weights[coupling]);
-        if(sampleflavor.Index("Run201") == -1){
-            (*hists)[histname_ctau_withMV2]->Fill(_ctauHN, event_weight*reweighting_weights[coupling]);
-        }
-    }
+    //(*hists)[prefix]->Fill(0.5, event_weight);
+    //for(double coupling : reweighting_couplings){
+    ////for(std::map<double, double>::iterator RW = reweighting_weights.begin(); RW != reweighting_weights.end(); RW++){
+    //    std::ostringstream V2stream;
+    //    V2stream << coupling;
+    //    TString histname_withMV2 = prefix+"_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+    //    TString histname_ctau_withMV2 = prefix+"_ctau_M-"+std::to_string(_gen_Nmass)+"_V2-"+V2stream.str();
+    //    (*hists)[histname_withMV2]->Fill(0.5, event_weight*reweighting_weights[coupling]);
+    //    if(sampleflavor.Index("Run201") == -1){
+    //        (*hists)[histname_ctau_withMV2]->Fill(_ctauHN, event_weight*reweighting_weights[coupling]);
+    //    }
+    //}
 
     // Plotting histograms
     int nEle    = 0;
@@ -236,7 +236,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     }
 
     fill_jet_histograms(hists, prefix, i_subleading);
-    fill_pfn_histograms(hists, prefix);
+    fill_pfn_histograms(hists, prefix, i_subleading);
     if(_lFlavor[i_leading] == 0) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_e, i_gen_subleading_displ_e);
     if(_lFlavor[i_leading] == 1) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_mu, i_gen_subleading_displ_mu);
 }
@@ -488,6 +488,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             tracksum += tmptrack;
         }
         (*hists)[prefix+"_IVF_mass"]->Fill(tracksum.M(), event_weight);
+        stored_SVmass = tracksum.M();
         (*hists)[prefix+"_IVF_pt"]->Fill(tracksum.Pt(), event_weight);
         (*hists)[prefix+"_IVF_eta"]->Fill(tracksum.Eta(), event_weight);
         (*hists)[prefix+"_IVF_phi"]->Fill(tracksum.Phi(), event_weight);

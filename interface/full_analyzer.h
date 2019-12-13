@@ -831,6 +831,9 @@ public :
    bool _1mu1displmudR;
    bool _1mu1displmudphi_novtx;
    bool _1mu1displmudispl_Reliso;
+
+   // SV stuff
+   double stored_SVmass;
    
    // functions
    // in src/full_analyzer_constructor.cc
@@ -939,7 +942,7 @@ public :
    // in src/PFNTools.cc
     std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double i_subleading);
 
    // in src/SelectionOptimization.cc
     bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);

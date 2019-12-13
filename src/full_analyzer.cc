@@ -75,7 +75,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_e", "_SS_e", "_OS_mu", "_SS_mu"}){
-        for(const TString &ev_region : {"", "_afterdispl", "_Training", "_TrainingHighPFN", "_afterPFN", "_CRdphi", "_CRmll"}){
+        for(const TString &ev_region : {"", "_afterdispl", "_Training", "_TrainingHighPFN", "_afterPFN"}){//, "_CRdphi", "_CRmll"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
         }
         //add_Bool_hists(&hists, lep_region);
@@ -283,15 +283,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, _1mu1displmu);
 
         if(_1e1displedispl){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
             fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
             if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
             else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmudispl){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
             fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
             fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
             if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
             else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
@@ -378,30 +378,30 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         ///////////////////////////////////////////////
         // Control regions: Inverted dphi or mll cut //
         ///////////////////////////////////////////////
-        if(_CR_1e1displedphi){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
-        }
-        if(_CR_1mu1displmudphi){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
-        }
-        if(_CR_1e1displemll){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            //if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
-            //else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
-        }
-        if(_CR_1mu1displmumll){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            //if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
-            //else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
-        }
+        //if(_CR_1e1displedphi){
+        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e);
+        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        //    if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
+        //    else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
+        //}
+        //if(_CR_1mu1displmudphi){
+        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu);
+        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        //    if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
+        //    else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
+        //}
+        //if(_CR_1e1displemll){
+        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e);
+        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        //    //if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
+        //    //else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
+        //}
+        //if(_CR_1mu1displmumll){
+        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu);
+        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        //    //if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
+        //    //else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
+        //}
     }
 /*
  * Small summary to write to terminal in order to quickly check state of results
