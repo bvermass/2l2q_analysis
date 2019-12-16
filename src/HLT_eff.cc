@@ -33,26 +33,26 @@ void full_analyzer::init_HLT_allevents_efficiency(std::map<TString, TH1*>* hists
 
 void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString prefix, bool _1Ele, bool _1Mu){
         if(_1Ele){
-            (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_den"]->Fill(_lPt[i_leading_e]);
-            if(fabs(_lEta[i_leading_e]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]->Fill(_lPt[i_leading_e]);
-            else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_den"]->Fill(_lPt[i_leading_e]);
+            (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_den"]->Fill(_lPt[i_leading]);
+            if(fabs(_lEta[i_leading]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_den"]->Fill(_lPt[i_leading]);
+            else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_den"]->Fill(_lPt[i_leading]);
             
             if(_HLT_Ele27_WPTight_Gsf){ 
-                (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_num"]->Fill(_lPt[i_leading_e]);
-                if(fabs(_lEta[i_leading_e]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->Fill(_lPt[i_leading_e]);
-                else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_num"]->Fill(_lPt[i_leading_e]);
+                (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_pt_eff_num"]->Fill(_lPt[i_leading]);
+                if(fabs(_lEta[i_leading]) < 1.2) (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_barrel_pt_eff_num"]->Fill(_lPt[i_leading]);
+                else (*hists)[prefix+"_HLT_Ele27_WPTight_Gsf_endcap_pt_eff_num"]->Fill(_lPt[i_leading]);
             }
 
         }
         if(_1Mu){
-            (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_den"]->Fill(_lPt[i_leading_mu]);
-            if(fabs(_lEta[i_leading_mu]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_den"]->Fill(_lPt[i_leading_mu]);
-            else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_den"]->Fill(_lPt[i_leading_mu]);
+            (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_den"]->Fill(_lPt[i_leading]);
+            if(fabs(_lEta[i_leading]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_den"]->Fill(_lPt[i_leading]);
+            else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_den"]->Fill(_lPt[i_leading]);
             
             if(_HLT_IsoMu24 or _HLT_IsoTkMu24){ 
-                (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
-                if(fabs(_lEta[i_leading_mu]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
-                else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_num"]->Fill(_lPt[i_leading_mu]);
+                (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_pt_eff_num"]->Fill(_lPt[i_leading]);
+                if(fabs(_lEta[i_leading]) < 1.2) (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_barrel_pt_eff_num"]->Fill(_lPt[i_leading]);
+                else (*hists)[prefix+"_HLT_IsoMu24_IsoTkMu24_endcap_pt_eff_num"]->Fill(_lPt[i_leading]);
             }
         }
 }

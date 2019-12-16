@@ -74,9 +74,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);
 
-    for(const TString &lep_region : {"_OS_e", "_SS_e", "_OS_mu", "_SS_mu"}){
+    for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
         for(const TString &ev_region : {"", "_afterdispl", "_Training", "_TrainingHighPFN", "_afterPFN"}){//, "_CRdphi", "_CRmll"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
+            give_alphanumeric_labels(&hists, lep_region);
         }
         //add_Bool_hists(&hists, lep_region);
     }
@@ -195,45 +196,37 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
         //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading_e);
-	    i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
-	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
-	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
-	    
-	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
-	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
-        i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet, i_subleading_jet);
+	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
+	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading_e);
+	    int i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
+	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
+	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
+	    int i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
+
+	    i_leading_jet                   = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
+	    i_subleading_jet	            = find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
+        i_thirdleading_jet              = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet, i_subleading_jet);
 
         // Trigger efficiency of all events (before selection matches 
         //fill_HLT_allevents_efficiency(&hists, "");
 
         //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.
-        if(i_leading_e != -1 and i_leading_mu != -1){
-            if(_lPt[i_leading_e] > _lPt[i_leading_mu]) i_leading_mu = -1;
-            else i_leading_e = -1;
-        }
+        set_leptons(i_leading_e, i_leading_mu, i_subleading_displ_e, i_subleading_displ_mu);
 
         // Find jet closest to l2, this jet can contain l2
-        if(i_leading_e != -1) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
-        if(i_leading_mu != -1) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
+        i_jetl2 = find_jet_closest_to_lepton(&fullJetID[0], i_subleading);
 
         //get signal region booleans
         signal_regions();
         
         // Find gen level leptons matching to the leading and subleading lepton (geometrically when its background or data, pgdID when its signal
-        i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
-        i_gen_subleading_displ_e    = find_gen_lep(i_subleading_displ_e);
-        i_gen_leading_mu            = find_gen_lep(i_leading_mu);
-        i_gen_subleading_displ_mu   = find_gen_lep(i_subleading_displ_mu);
+        i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
+        i_gen_subleading    = find_gen_lep(i_subleading);
         
         i_gen_l1 = find_gen_l1();                                                   //finds HNL process l1 gen lepton
         i_gen_l2 = find_gen_l2();                                                   //finds HNL process l2 gen lepton
-        if(_1e)          leadingIsl1 = leptonIsGenLepton(i_leading_e, i_gen_l1);
-        if(_1mu)         leadingIsl1 = leptonIsGenLepton(i_leading_mu, i_gen_l1);
-        if(_1e1disple)   subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_e, i_gen_l2);                
-        if(_1mu1displmu) subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_mu, i_gen_l2);
+        leadingIsl1 = leptonIsGenLepton(i_leading, i_gen_l1);
+        subleadingIsl2 = leptonIsGenLepton(i_subleading, i_gen_l2);
         
         // Fill histograms
         
@@ -241,59 +234,54 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
         //fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
-        fill_cutflow_e(&hists, "_SS_e");
-        fill_cutflow_e(&hists, "_OS_e");
-        fill_cutflow_mu(&hists, "_SS_mu");
-        fill_cutflow_mu(&hists, "_OS_mu");
+        fill_cutflow_e(&hists, "_SS_ee");
+        fill_cutflow_e(&hists, "_OS_ee");
+        fill_cutflow_mu(&hists, "_SS_mm");
+        fill_cutflow_mu(&hists, "_OS_mm");
 
-
-        TString signs_and_flavor = "";
-        if(_1e1disple) signs_and_flavor = (_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e])? "_SS_e" : "_OS_e";
-        else if(_1mu1displmu) signs_and_flavor = (_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu])? "_SS_mu" : "_OS_mu"; 
-        
 
         if(_1e1disple){
-            fill_lepton_eff(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    fill_KVF_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_IVF_eff(&hists, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_lepton_eff(&hists, sr_flavor, i_leading, i_subleading, i_gen_subleading);
+        //    fill_KVF_eff(&hists, sr_flavor, i_subleading, i_gen_subleading);
+            fill_IVF_eff(&hists, sr_flavor, i_subleading, i_gen_subleading);
         }
         if(_1mu1displmu){
-            fill_lepton_eff(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    fill_KVF_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_IVF_eff(&hists, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_lepton_eff(&hists, sr_flavor, i_leading, i_subleading, i_gen_subleading);
+        //    fill_KVF_eff(&hists, sr_flavor, i_subleading, i_gen_subleading);
+            fill_IVF_eff(&hists, sr_flavor, i_subleading, i_gen_subleading);
         }
         if(_1e1displedispl_Reliso){
-            fill_HNLtagger_tree(hnltagger_e, i_subleading_displ_e, i_closel2_jet, i_leading_e);
-            //fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading_displ_e, i_closel2_jet, event_weight*total_weight);
+            fill_HNLtagger_tree(hnltagger_e, i_subleading, i_jetl2, i_leading);
+            //fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading, i_jetl2, event_weight*total_weight);
             JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 5);
             //JetTagVal_BDT = hnlbdttagger_e.predict(bdt_mu);
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_e, i_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_Training", i_leading, i_subleading);
         }
         if(_1mu1displmudispl_Reliso){
-            fill_HNLtagger_tree(hnltagger_mu, i_subleading_displ_mu, i_closel2_jet, i_leading_mu);
-            //fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading_displ_mu, i_closel2_jet, event_weight*total_weight);
+            fill_HNLtagger_tree(hnltagger_mu, i_subleading, i_jetl2, i_leading);
+            //fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading, i_jetl2, event_weight*total_weight);
             JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 5);
             //JetTagVal_BDT = hnlbdttagger_mu.predict(bdt_mu);
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_Training", i_leading_mu, i_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_Training", i_leading, i_subleading);
         }
 
         additional_signal_regions();
-        //if(_1e1disple) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_e, i_subleading_displ_e, _1e1disple);
-        //if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, _1mu1displmu);
+        //if(_1e1disple) create_Bools_and_fill_Bool_hists(&hists, sr_flavor, i_leading, i_subleading, _1e1disple);
+        //if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, sr_flavor, i_leading, i_subleading, _1mu1displmu);
 
         if(_1e1displedispl){
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_e, i_subleading_displ_e);
-            fill_gen_HNLtagger_tree(hnltagger_gen_e, i_closel2_jet);
-            if(signs_and_flavor == "_SS_e"){ SSe++; SSe_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe++; OSe_weight += event_weight;}
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterdispl", i_leading, i_subleading, i_gen_subleading);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_afterdispl", i_leading, i_subleading);
+            fill_gen_HNLtagger_tree(hnltagger_gen_e, i_jetl2);
+            if(sr_flavor == "_SS_ee"){ SSe++; SSe_weight += event_weight;}
+            else if(sr_flavor == "_OS_ee"){ OSe++; OSe_weight += event_weight;}
         }
         if(_1mu1displmudispl){
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterdispl", i_leading_mu, i_subleading_displ_mu);
-            fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_closel2_jet);
-            if(signs_and_flavor == "_SS_mu"){ SSmu++; SSmu_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu++; OSmu_weight += event_weight;}
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterdispl", i_leading, i_subleading, i_gen_subleading);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_afterdispl", i_leading, i_subleading);
+            fill_gen_HNLtagger_tree(hnltagger_gen_mu, i_jetl2);
+            if(sr_flavor == "_SS_mm"){ SSmu++; SSmu_weight += event_weight;}
+            else if(sr_flavor == "_OS_mm"){ OSmu++; OSmu_weight += event_weight;}
         }
 
 
@@ -301,18 +289,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Full signal region, no Jet tagger cut //
         ///////////////////////////////////////////
         if(_1e1disple1jet){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(signs_and_flavor == "_SS_e"){ SSe2++; SSe2_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe2++; OSe2_weight += event_weight;}
+            fill_histograms(&hists, &hists2D, sr_flavor, i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor, i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor, i_leading, i_subleading, i_gen_subleading);
+            if(sr_flavor == "_SS_ee"){ SSe2++; SSe2_weight += event_weight;}
+            else if(sr_flavor == "_OS_ee"){ OSe2++; OSe2_weight += event_weight;}
         }
         if(_1mu1displmu1jet){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(signs_and_flavor == "_SS_mu"){ SSmu2++; SSmu2_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu2++; OSmu2_weight += event_weight;}
+            fill_histograms(&hists, &hists2D, sr_flavor, i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor, i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor, i_leading, i_subleading, i_gen_subleading);
+            if(sr_flavor == "_SS_mm"){ SSmu2++; SSmu2_weight += event_weight;}
+            else if(sr_flavor == "_OS_mm"){ OSmu2++; OSmu2_weight += event_weight;}
         }
 
 
@@ -320,32 +308,32 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Full signal region with PFN or BDT cut //
         ////////////////////////////////////////////
         if(_1e1disple_PFN){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_leading_e, i_subleading_displ_e);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-            if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
+            fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading, i_gen_subleading);
+            if(sr_flavor == "_SS_ee"){ SSe3++; SSe3_weight += event_weight;}
+            else if(sr_flavor == "_OS_ee"){ OSe3++; OSe3_weight += event_weight;}
         }
         if(_1mu1displmu_PFN){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_leading_mu, i_subleading_displ_mu);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterPFN", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
-            else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
+            fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading, i_gen_subleading);
+            if(sr_flavor == "_SS_mm"){ SSmu3++; SSmu3_weight += event_weight;}
+            else if(sr_flavor == "_OS_mm"){ OSmu3++; OSmu3_weight += event_weight;}
         }
         //if(_1e1disple_BDT){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_leading_e, i_subleading_displ_e);
-        ////    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_leading, i_subleading);
+        ////    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_subleading, i_gen_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_leading, i_subleading, i_gen_subleading);
+        //    if(sr_flavor == "_SS_ee"){ SSe4++; SSe4_weight += event_weight;}
+        //    else if(sr_flavor == "_OS_ee"){ OSe4++; OSe4_weight += event_weight;}
         //}
         //if(_1mu1displmu_BDT){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_leading_mu, i_subleading_displ_mu);
-        ////    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_afterBDT", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_leading, i_subleading);
+        ////    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_subleading, i_gen_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_leading, i_subleading, i_gen_subleading);
+        //    if(sr_flavor == "_SS_mm"){ SSmu4++; SSmu4_weight += event_weight;}
+        //    else if(sr_flavor == "_OS_mm"){ OSmu4++; OSmu4_weight += event_weight;}
         //}
 
 
@@ -353,24 +341,24 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Training selection with PFN or BDT cut //
         ////////////////////////////////////////////
         if(_1e1disple_TrainingPFN){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_e, i_subleading_displ_e);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_subleading_displ_e, i_gen_subleading_displ_e);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading, i_gen_subleading);
         }
         if(_1mu1displmu_TrainingPFN){
-            fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_mu, i_subleading_displ_mu);
-        //    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_subleading_displ_mu, i_gen_subleading_displ_mu);
-            fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighPFN", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+            fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading);
+        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
+            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading, i_gen_subleading);
         }
         //if(_1e1disple_TrainingBDT){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_e, i_subleading_displ_e);
-        ////    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_leading, i_subleading);
+        ////    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_subleading, i_gen_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_leading, i_subleading, i_gen_subleading);
         //}
         //if(_1mu1displmu_TrainingBDT){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_mu, i_subleading_displ_mu);
-        ////    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_TrainingHighBDT", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_leading, i_subleading);
+        ////    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_subleading, i_gen_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_leading, i_subleading, i_gen_subleading);
         //}
 
 
@@ -378,28 +366,28 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         // Control regions: Inverted dphi or mll cut //
         ///////////////////////////////////////////////
         //if(_CR_1e1displedphi){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    if(signs_and_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_CRdphi", i_leading, i_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_CRdphi", i_leading, i_subleading, i_gen_subleading);
+        //    if(sr_flavor == "_SS_e"){ SSe4++; SSe4_weight += event_weight;}
+        //    else if(sr_flavor == "_OS_e"){ OSe4++; OSe4_weight += event_weight;}
         //}
         //if(_CR_1mu1displmudphi){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRdphi", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    if(signs_and_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_CRdphi", i_leading, i_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_CRdphi", i_leading, i_subleading, i_gen_subleading);
+        //    if(sr_flavor == "_SS_mu"){ SSmu4++; SSmu4_weight += event_weight;}
+        //    else if(sr_flavor == "_OS_mu"){ OSmu4++; OSmu4_weight += event_weight;}
         //}
         //if(_CR_1e1displemll){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    //if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
-        //    //else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_CRmll", i_leading, i_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_CRmll", i_leading, i_subleading, i_gen_subleading);
+        //    //if(sr_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
+        //    //else if(sr_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
         //}
         //if(_CR_1mu1displmumll){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor + "_CRmll", i_leading_mu, i_subleading_displ_mu, i_gen_subleading_displ_mu);
-        //    //if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
-        //    //else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
+        //    fill_histograms(&hists, &hists2D, sr_flavor + "_CRmll", i_leading, i_subleading);
+        //    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_CRmll", i_leading, i_subleading, i_gen_subleading);
+        //    //if(sr_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
+        //    //else if(sr_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
         //}
     }
 /*
@@ -498,12 +486,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D.second;
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
     }
-
-    // Give histograms that need it the correct text bin labels
-    give_alphanumeric_labels(&hists, "_SS_e");
-    give_alphanumeric_labels(&hists, "_OS_e");
-    give_alphanumeric_labels(&hists, "_SS_mu");
-    give_alphanumeric_labels(&hists, "_OS_mu");
 
 
     // Write 1D histograms to outputfile

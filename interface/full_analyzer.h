@@ -757,26 +757,19 @@ public :
    bool subleadingIsl2; 
 
    // signal region lepton indices 
-   int i_leading_e;
-   int i_subleading_displ_e;
-   int i_leading_mu;
-   int i_subleading_displ_mu;
+   int i_leading;
+   int i_subleading;
+   TString sr_flavor;
    
    // gen indices corresponding to signal region leptons (geometric)
-   int i_gen_leading_e;
-   int i_gen_subleading_displ_e;
-   int i_gen_leading_mu;
-   int i_gen_subleading_displ_mu;
-   
-   // extra lepton indices
-   int i_subleading_e;
-   int i_subleading_mu;
+   int i_gen_leading;
+   int i_gen_subleading;
    
    // jet indices
    int i_leading_jet;
    int i_subleading_jet;
    int i_thirdleading_jet;
-   int i_closel2_jet;
+   int i_jetl2;
 
    // signal region booleans: ee
    bool _trige;
@@ -884,6 +877,10 @@ public :
     bool     get_JetIsFromHNL(int i_jet);
 
    // in src/signal_regions.cc
+    void     set_leptons(int i_leading_e, int i_leading_mu, int i_subleading_displ_e, int i_subleading_displ_mu);
+    TString  get_signal_region_flavor();
+    int      select_subleading_lepton(int i_subleading_e, int i_subleading_mu);
+    int      select_leading_lepton(int i_leading_e, int i_leading_mu);
     void     signal_regions();
     void     additional_signal_regions();
     bool     leadptcut(int);
@@ -901,7 +898,9 @@ public :
    
    // in src/histo_functions.cc
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
+    void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
     void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
     void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
     void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);

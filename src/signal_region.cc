@@ -6,6 +6,57 @@
 
 using namespace std;
 
+void full_analyzer::set_leptons(int i_leading_e, int i_leading_mu, int i_subleading_e, int i_subleading_mu){
+    i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
+    i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
+    sr_flavor = get_signal_region_flavor();
+}
+
+TString full_analyzer::get_signal_region_flavor(){
+    TString signal_region_flavor = "";
+    
+    if(i_leading == -1 or i_subleading == -1) return signal_region_flavor;
+
+    if(_lCharge[i_leading] == _lCharge[i_subleading]) signal_region_flavor += "_SS";
+    else signal_region_flavor += "_OS";
+
+    if(_lFlavor[i_leading] == 0) signal_region_flavor += "_e";
+    else if(_lFlavor[i_leading] == 1) signal_region_flavor += "_m";
+
+    if(_lFlavor[i_subleading] == 0) signal_region_flavor += "e";
+    else if(_lFlavor[i_subleading] == 1) signal_region_flavor += "m";
+
+    return signal_region_flavor;
+}
+
+int full_analyzer::select_subleading_lepton(int i_subleading_e, int i_subleading_mu){
+    if(i_subleading_mu == -1){
+        return i_subleading_e;
+    }else if(i_subleading_e == -1){
+        return i_subleading_mu;
+    }else if(i_subleading_e != -1 and i_subleading_mu != -1){
+        if(_lPt[i_subleading_e] > _lPt[i_subleading_mu]) return i_subleading_e;
+        else return i_subleading_mu;
+    }else {
+        return -1;
+    }
+}
+
+
+int full_analyzer::select_leading_lepton(int i_leading_e, int i_leading_mu){
+    if(i_leading_mu == -1){
+        return i_leading_e;
+    }else if(i_leading_e == -1){
+        return i_leading_mu;
+    }else if(i_leading_e != -1 and i_leading_mu != -1){
+        if(_lPt[i_leading_e] > _lPt[i_leading_mu]) return i_leading_e;
+        else return i_leading_mu;
+    }else {
+        return -1;
+    }
+}
+
+
 void full_analyzer::signal_regions(){
 
     // NEW signal region method, sequential so that I can make histograms between each step if I want
@@ -16,53 +67,55 @@ void full_analyzer::signal_regions(){
     _trige                      = _HLT_Ele27_WPTight_Gsf;
     
     _1e                         = _trige &&
-                                  i_leading_e != -1 && 
-                                  leadptcut(i_leading_e);
+                                  i_leading != -1 &&
+                                  _lFlavor[i_leading] == 0 &&
+                                  leadptcut(i_leading);
 
     _1e1disple                  = _1e &&
-                                  i_subleading_displ_e != -1;
+                                  i_subleading != -1 &&
+                                  _lFlavor[i_subleading] == 0;
 
     _1e1displevtx               = _1e1disple &&
-                                  _lIVF_match[i_subleading_displ_e];
+                                  _lIVF_match[i_subleading];
 
     _1e1displedispl             = _1e1displevtx &&
-                                  fabs(_dxy[i_subleading_displ_e]) > 0.02;
+                                  fabs(_dxy[i_subleading]) > 0.02;
 
     //_1e1disple0adde             = _1e1displedispl &&
     //                              no_additional_leptons();
     
     _1e1displejetl2             = _1e1displedispl &&
-                                  i_closel2_jet != -1;
+                                  i_jetl2 != -1;
     
     _1e1displemll               = _1e1displejetl2 &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 80);
+                                  mllcut(i_leading, i_subleading, 80);
     
     _1e1displedR                = _1e1displemll &&
-                                  dRcut(i_leading_e, i_subleading_displ_e, 1, 5.5); 
+                                  dRcut(i_leading, i_subleading, 1, 5.5);
     
     _1e1displedphi              = _1e1displemll &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.3);
+                                  dphicut(i_leading, i_subleading, 2.3);
 
     _1e1displeReliso            = _1e1displedphi &&
-                                  relisocut(i_subleading_displ_e, 1.5);
+                                  relisocut(i_subleading, 1.5);
     
     _1e1disple1jet              = _1e1displeReliso &&
                                   i_subleading_jet == -1;
 
     _1e1displedphi_novtx        = _1e1disple &&
-                                  fabs(_dxy[i_subleading_displ_e]) > 0.02 &&
+                                  fabs(_dxy[i_subleading]) > 0.02 &&
                                   //no_additional_leptons() &&
-                                  mllcut(i_leading_e, i_subleading_displ_e, 80) &&
-                                  dphicut(i_leading_e, i_subleading_displ_e, 2.3);
+                                  mllcut(i_leading, i_subleading, 80) &&
+                                  dphicut(i_leading, i_subleading, 2.3);
     
     _1e1displedispl_Reliso      = _1e1displedispl &&
-                                  relisocut(i_subleading_displ_e, 1.5);
+                                  relisocut(i_subleading, 1.5);
 
     _CR_1e1displedphi           = _1e1displemll &&
-                                  get_dphill(i_leading_e, i_subleading_displ_e) < 2.3;
+                                  get_dphill(i_leading, i_subleading) < 2.3;
 
     _CR_1e1displemll            = _1e1displejetl2 &&
-                                  get_mll(i_leading_e, i_subleading_displ_e) > 80;
+                                  get_mll(i_leading, i_subleading) > 80;
     
 
     ///////////////////////////////
@@ -71,53 +124,55 @@ void full_analyzer::signal_regions(){
     _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
     
     _1mu                        = _trigmu &&
-                                  i_leading_mu != -1 && 
-                                  leadptcut(i_leading_mu);
+                                  i_leading != -1 &&
+                                  _lFlavor[i_leading] == 1 &&
+                                  leadptcut(i_leading);
     
     _1mu1displmu                = _1mu &&
-                                  i_subleading_displ_mu != -1;
+                                  i_subleading != -1 &&
+                                  _lFlavor[i_subleading] == 1;
     
     _1mu1displmuvtx             = _1mu1displmu &&
-                                  _lIVF_match[i_subleading_displ_mu];
+                                  _lIVF_match[i_subleading];
     
     _1mu1displmudispl           = _1mu1displmuvtx &&
-                                  fabs(_dxy[i_subleading_displ_mu]) > 0.02;
+                                  fabs(_dxy[i_subleading]) > 0.02;
 
     //_1mu1displmu0addmu          = _1mu1displmudispl &&
     //                              no_additional_leptons();
     
     _1mu1displmujetl2           = _1mu1displmudispl &&
-                                  i_closel2_jet != -1;
+                                  i_jetl2 != -1;
 
     _1mu1displmumll             = _1mu1displmujetl2 &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 80);
+                                  mllcut(i_leading, i_subleading, 80);
     
     _1mu1displmudR              = _1mu1displmumll &&
-                                  dRcut(i_leading_mu, i_subleading_displ_mu, 1, 5.5);    
+                                  dRcut(i_leading, i_subleading, 1, 5.5);
     
     _1mu1displmudphi            = _1mu1displmumll &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.3);
+                                  dphicut(i_leading, i_subleading, 2.3);
     
     _1mu1displmuReliso          = _1mu1displmudphi &&
-                                  relisocut(i_subleading_displ_mu, 1.5);
+                                  relisocut(i_subleading, 1.5);
     
     _1mu1displmu1jet            = _1mu1displmuReliso &&
                                   i_subleading_jet == -1;
 
     _1mu1displmudphi_novtx      = _1mu1displmu &&
-                                  fabs(_dxy[i_subleading_displ_mu]) > 0.02 &&
+                                  fabs(_dxy[i_subleading]) > 0.02 &&
                                   //no_additional_leptons() &&
-                                  mllcut(i_leading_mu, i_subleading_displ_mu, 80) &&
-                                  dphicut(i_leading_mu, i_subleading_displ_mu, 2.3);    
+                                  mllcut(i_leading, i_subleading, 80) &&
+                                  dphicut(i_leading, i_subleading, 2.3);
     
     _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
-                                  relisocut(i_subleading_displ_mu, 1.5);
+                                  relisocut(i_subleading, 1.5);
     
     _CR_1mu1displmudphi         = _1mu1displmumll &&
-                                  get_dphill(i_leading_mu, i_subleading_displ_mu) < 2.3;
+                                  get_dphill(i_leading, i_subleading) < 2.3;
 
     _CR_1mu1displmumll            = _1mu1displmujetl2 &&
-                                  get_mll(i_leading_mu, i_subleading_displ_mu) > 80;
+                                  get_mll(i_leading, i_subleading) > 80;
 }
 
 

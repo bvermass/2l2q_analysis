@@ -53,14 +53,14 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
 void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefix, int i_subleading){
     if(i_leading_jet != -1) (*hists)[prefix+"_jet1_pt"]->Fill(_jetPt[i_leading_jet], event_weight);
 
-    (*hists)[prefix+"_jetl2_index"]->Fill(i_closel2_jet, event_weight);
-    if(i_closel2_jet != -1){ 
-        (*hists)[prefix+"_jetl2_pt"]->Fill(_jetPt[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_eta"]->Fill(_jetEta[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_phi"]->Fill(_jetPhi[i_closel2_jet], event_weight);
-        double jetl2dR = get_dR_lepton_jet(i_subleading, i_closel2_jet);
+    (*hists)[prefix+"_jetl2_index"]->Fill(i_jetl2, event_weight);
+    if(i_jetl2 != -1){ 
+        (*hists)[prefix+"_jetl2_pt"]->Fill(_jetPt[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_eta"]->Fill(_jetEta[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_phi"]->Fill(_jetPhi[i_jetl2], event_weight);
+        double jetl2dR = get_dR_lepton_jet(i_subleading, i_jetl2);
         (*hists)[prefix+"_jetl2_l2dR"]->Fill(jetl2dR, event_weight);
-        LorentzVector jet(_jetPt[i_closel2_jet], _jetEta[i_closel2_jet], _jetPhi[i_closel2_jet], _jetE[i_closel2_jet]);
+        LorentzVector jet(_jetPt[i_jetl2], _jetEta[i_jetl2], _jetPhi[i_jetl2], _jetE[i_jetl2]);
         LorentzVector lep(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
         if(jetl2dR < 0.4){
             (*hists)[prefix+"_jetl2_mass"]->Fill(jet.mass(), event_weight);
@@ -71,39 +71,39 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
             (*hists)[prefix+"_jetl2_mass_20b"]->Fill((jet+lep).mass(), event_weight);
             (*hists)[prefix+"_jetl2_mass_40b"]->Fill((jet+lep).mass(), event_weight);
         }
-        (*hists)[prefix+"_jetl2_IsTightLepVeto"]->Fill(_jetIsTightLepVeto[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_CsvV2"]->Fill(_jetCsvV2[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_DeepCsv_udsg"]->Fill(_jetDeepCsv_udsg[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_DeepCsv_b"]->Fill(_jetDeepCsv_b[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_DeepCsv_c"]->Fill(_jetDeepCsv_c[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_DeepCsv_bb"]->Fill(_jetDeepCsv_bb[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_HadronFlavor"]->Fill(_jetHadronFlavor[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_NeutralHadronFraction"]->Fill(_jetNeutralHadronFraction[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_NeutralEmFraction"]->Fill(_jetNeutralEmFraction[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_ChargedHadronFraction"]->Fill(_jetChargedHadronFraction[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_ChargedEmFraction"]->Fill(_jetChargedEmFraction[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_closel2_jet], event_weight);
-        (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
+        (*hists)[prefix+"_jetl2_IsTightLepVeto"]->Fill(_jetIsTightLepVeto[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_CsvV2"]->Fill(_jetCsvV2[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_udsg"]->Fill(_jetDeepCsv_udsg[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_b"]->Fill(_jetDeepCsv_b[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_c"]->Fill(_jetDeepCsv_c[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_bb"]->Fill(_jetDeepCsv_bb[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_HadronFlavor"]->Fill(_jetHadronFlavor[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_NeutralHadronFraction"]->Fill(_jetNeutralHadronFraction[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_NeutralEmFraction"]->Fill(_jetNeutralEmFraction[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_ChargedHadronFraction"]->Fill(_jetChargedHadronFraction[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_ChargedEmFraction"]->Fill(_jetChargedEmFraction[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_jetl2], event_weight);
         fill_jet_constituent_histograms(hists, prefix);
         if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
     }
 }
 
 void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, TString prefix){
-    (*hists)[prefix+"_jetl2_nConstituents"]->Fill(_nJetConstituents[i_closel2_jet], event_weight);
-    for(unsigned i_const = 0; i_const < _nJetConstituents[i_closel2_jet]; ++i_const){
-        (*hists)[prefix+"_jetl2_ConstPt"]->Fill(_JetConstituentPt[i_closel2_jet][i_const], event_weight);
-        (*hists)[prefix+"_jetl2_ConstEta"]->Fill(_JetConstituentEta[i_closel2_jet][i_const], event_weight);
-        (*hists)[prefix+"_jetl2_ConstPhi"]->Fill(_JetConstituentPhi[i_closel2_jet][i_const], event_weight);
-        (*hists)[prefix+"_jetl2_ConstPdgId"]->Fill(_JetConstituentPdgId[i_closel2_jet][i_const], event_weight);
-        (*hists)[prefix+"_jetl2_ConstCharge"]->Fill(_JetConstituentCharge[i_closel2_jet][i_const], event_weight);
-        if(_JetConstituentHasTrack[i_closel2_jet][i_const]){
-            (*hists)[prefix+"_jetl2_Constdxy"]->Fill(_JetConstituentdxy[i_closel2_jet][i_const], event_weight);
-            (*hists)[prefix+"_jetl2_Constdz"]->Fill(_JetConstituentdz[i_closel2_jet][i_const], event_weight);
-            (*hists)[prefix+"_jetl2_ConstdxyErr"]->Fill(_JetConstituentdxyErr[i_closel2_jet][i_const], event_weight);
-            (*hists)[prefix+"_jetl2_ConstdzErr"]->Fill(_JetConstituentdzErr[i_closel2_jet][i_const], event_weight);
-            (*hists)[prefix+"_jetl2_ConstNHits"]->Fill(_JetConstituentNumberOfHits[i_closel2_jet][i_const], event_weight);
-            (*hists)[prefix+"_jetl2_ConstNPixHits"]->Fill(_JetConstituentNumberOfPixelHits[i_closel2_jet][i_const], event_weight);
+    (*hists)[prefix+"_jetl2_nConstituents"]->Fill(_nJetConstituents[i_jetl2], event_weight);
+    for(unsigned i_const = 0; i_const < _nJetConstituents[i_jetl2]; ++i_const){
+        (*hists)[prefix+"_jetl2_ConstPt"]->Fill(_JetConstituentPt[i_jetl2][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstEta"]->Fill(_JetConstituentEta[i_jetl2][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstPhi"]->Fill(_JetConstituentPhi[i_jetl2][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstPdgId"]->Fill(_JetConstituentPdgId[i_jetl2][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstCharge"]->Fill(_JetConstituentCharge[i_jetl2][i_const], event_weight);
+        if(_JetConstituentHasTrack[i_jetl2][i_const]){
+            (*hists)[prefix+"_jetl2_Constdxy"]->Fill(_JetConstituentdxy[i_jetl2][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_Constdz"]->Fill(_JetConstituentdz[i_jetl2][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstdxyErr"]->Fill(_JetConstituentdxyErr[i_jetl2][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstdzErr"]->Fill(_JetConstituentdzErr[i_jetl2][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstNHits"]->Fill(_JetConstituentNumberOfHits[i_jetl2][i_const], event_weight);
+            (*hists)[prefix+"_jetl2_ConstNPixHits"]->Fill(_JetConstituentNumberOfPixelHits[i_jetl2][i_const], event_weight);
         }
     }
 }

@@ -52,7 +52,7 @@ void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString 
                 (*hists)[prefix+"_JetTagValzm"+param]->Fill(CouplingMap.second, event_weight);
                 (*hists)[prefix+"_JetTagValzm_10b"+param]->Fill(CouplingMap.second, event_weight);
                 (*hists)[prefix+"_PFN_ROC"+param]->Fill(CouplingMap.second, event_weight);
-                if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"+param]->Fill(CouplingMap.second, event_weight);
+                if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_jetl2)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"+param]->Fill(CouplingMap.second, event_weight);
 
                 // Signal region stuff, not reweighted
                 if(CouplingMap.second > 0.96){
@@ -70,6 +70,6 @@ void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString 
     //if(JetTagVal_BDT != -1){
     //    (*hists)[prefix+"_JetTagVal_BDT"]->Fill(JetTagVal_BDT, event_weight);
     //    (*hists)[prefix+"_BDT_ROC"]->Fill(JetTagVal_BDT, event_weight);
-    //    if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_BDT_JetIsFromHNL_ROC"]->Fill(JetTagVal_BDT, event_weight);
+    //    if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_jetl2)) (*hists)[prefix+"_BDT_JetIsFromHNL_ROC"]->Fill(JetTagVal_BDT, event_weight);
     //}
 }

@@ -10,6 +10,17 @@ using namespace std;
 
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+    add_general_histograms(hists, hists2D, prefix);
+    add_jet_histograms(hists, prefix);
+    add_pfn_histograms(hists, prefix);
+    add_gen_histograms(hists, hists2D, prefix);
+    add_KVF_eff_histograms(hists, prefix);
+    add_IVF_eff_histograms(hists, prefix);
+    add_chargeflip_histograms(hists, hists2D, prefix);
+}
+
+
+void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     // Combine Signal Region histograms
     //(*hists)[prefix]                                    = new TH1F(prefix, ";"+prefix+";Events", 1, 0, 1);
     //for(double coupling : reweighting_couplings){
@@ -123,17 +134,18 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR: HNL flight - IVF track sum;Events", 30, 0, 0.3);
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";cos #theta: HNL flight - IVF track sum;Events", 30, 0.9, 1);
     (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";sin #theta: HNL flight - IVF track sum;Events", 30, 0, 0.15);
-
-    add_jet_histograms(hists, prefix);
-    add_pfn_histograms(hists, prefix);
-    add_gen_histograms(hists, hists2D, prefix);
-    add_KVF_eff_histograms(hists, prefix);
-    add_IVF_eff_histograms(hists, prefix);
-    add_chargeflip_histograms(hists, hists2D, prefix);
 }
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
+    fill_general_histograms(hists, hists2D, prefix, i_leading, i_subleading);
+    fill_jet_histograms(hists, prefix, i_subleading);
+    fill_pfn_histograms(hists, prefix, i_subleading);
+    fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading, i_gen_subleading);
+}
+
+
+void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
     // Combine Signal Region histograms
     //(*hists)[prefix]->Fill(0.5, event_weight);
     //for(double coupling : reweighting_couplings){
@@ -234,11 +246,6 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
         (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
         (*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
     }
-
-    fill_jet_histograms(hists, prefix, i_subleading);
-    fill_pfn_histograms(hists, prefix, i_subleading);
-    if(_lFlavor[i_leading] == 0) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_e, i_gen_subleading_displ_e);
-    if(_lFlavor[i_leading] == 1) fill_chargeflip_histograms(hists, hists2D, prefix, i_leading, i_subleading, i_gen_leading_mu, i_gen_subleading_displ_mu);
 }
 
 void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefix){
@@ -248,7 +255,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     /*
      * Cutflow
      */
-    if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){ 
+    if(_1e1disple and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){ 
                                         (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
         if(_1e1displevtx)               (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
         if(_1e1displedispl)             (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
@@ -279,12 +286,12 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
      * KVF vs IVF for events
      */
     if(sampleflavor.Index("Run") == -1){
-        if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS and i_gen_subleading_displ_e != -1) {
-            if(_lIVF_match[i_subleading_displ_e] and get_IVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2){
-                if(_lKVF_valid[i_subleading_displ_e] and get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
+        if(_1e1disple and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS and i_gen_subleading != -1) {
+            if(_lIVF_match[i_subleading] and get_IVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2){
+                if(_lKVF_valid[i_subleading] and get_KVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
             }else {
-                if(_lKVF_valid[i_subleading_displ_e] and get_KVF_SVgenreco(i_gen_subleading_displ_e, i_subleading_displ_e) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
+                if(_lKVF_valid[i_subleading] and get_KVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
             }
         }
@@ -294,7 +301,7 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
      * l2 identification and jets(cleaned)
      */
     if(_1e){
-        if(_1e1disple and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
+        if(_1e1disple and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){
             if(i_leading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
             else if(i_leading_jet != -1 and i_subleading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(5., event_weight);
             else if(i_leading_jet != -1 and i_subleading_jet != -1 and i_thirdleading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(6., event_weight);
@@ -314,17 +321,17 @@ void full_analyzer::fill_cutflow_e(std::map<TString, TH1*>* hists, TString prefi
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1e1displevtx and fabs(_lCharge[i_leading_e] + _lCharge[i_subleading_displ_e]) == SSorOS){
+    if(_1e1displevtx and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){
         (*hists)[prefix+"_dxy_cutflow"]->Fill(0., event_weight);
-        if(fabs(_dxy[i_subleading_displ_e]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
-        if(fabs(_dxy[i_subleading_displ_e]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
+        if(fabs(_dxy[i_subleading]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
+        if(fabs(_dxy[i_subleading]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
     }
     
     /*
      * Is l1 or l2 matched to a vertex?
      */
-    (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading_e], event_weight);
-    (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading_displ_e], event_weight);
+    (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
+    (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
 }
 
 
@@ -334,7 +341,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     /*
      * Cutflow
      */
-    if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){ 
+    if(_1mu1displmu and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){ 
                                           (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
         if(_1mu1displmuvtx)               (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
         if(_1mu1displmudispl)             (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
@@ -365,12 +372,12 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
      * KVF vs IVF for events
      */
     if(sampleflavor.Index("Run") == -1){
-        if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS and i_gen_subleading_displ_mu != -1) {
-            if(_lIVF_match[i_subleading_displ_mu] and get_IVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2){
-                if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
+        if(_1mu1displmu and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS and i_gen_subleading != -1) {
+            if(_lIVF_match[i_subleading] and get_IVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2){
+                if(_lKVF_valid[i_subleading] and get_KVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(1., event_weight);
             }else {
-                if(_lKVF_valid[i_subleading_displ_mu] and get_KVF_SVgenreco(i_gen_subleading_displ_mu, i_subleading_displ_mu) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
+                if(_lKVF_valid[i_subleading] and get_KVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(2., event_weight);
                 else (*hists)[prefix+"_KVForIVF_categories"]->Fill(3., event_weight);
             }
         }
@@ -380,7 +387,7 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
      * l2 identification and jets(cleaned)
      */
     if(_1mu){
-        if(_1mu1displmu and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
+        if(_1mu1displmu and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){
             if(i_leading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(4., event_weight);
             else if(i_leading_jet != -1 and i_subleading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(5., event_weight);
             else if(i_leading_jet != -1 and i_subleading_jet != -1 and i_thirdleading_jet == -1) (*hists)[prefix+"_l2_jets_categories"]->Fill(6., event_weight);
@@ -400,17 +407,17 @@ void full_analyzer::fill_cutflow_mu(std::map<TString, TH1*>* hists, TString pref
     /*
      * dxy > 0.01cm and 0.05cm
      */
-    if(_1mu1displmuvtx and fabs(_lCharge[i_leading_mu] + _lCharge[i_subleading_displ_mu]) == SSorOS){
+    if(_1mu1displmuvtx and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS){
         (*hists)[prefix+"_dxy_cutflow"]->Fill(0., event_weight);
-        if(fabs(_dxy[i_subleading_displ_mu]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
-        if(fabs(_dxy[i_subleading_displ_mu]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
+        if(fabs(_dxy[i_subleading]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
+        if(fabs(_dxy[i_subleading]) > 0.05) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
     }
     
     /*
      * Is l1 or l2 matched to a vertex?
      */
-    (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading_mu], event_weight);
-    (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading_displ_mu], event_weight);
+    (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
+    (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
 }
 
 
