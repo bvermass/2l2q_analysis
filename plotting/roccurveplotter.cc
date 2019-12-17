@@ -80,7 +80,7 @@ int main(int argc, char * argv[])
     TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
     TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
-    TIter next(files_bkg.front()->GetListOfKeys()); //doesn't really matter if we take bkg or signal
+    TIter next(files_signal.front()->GetListOfKeys()); //doesn't really matter if we take bkg or signal
     TKey* key;
     while(key = (TKey*)next()){
         legend.Clear();
