@@ -34,7 +34,7 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     (*hists)[prefix+"_jetl2_HFHadronFraction"]      = new TH1F(prefix+"_jetl2_HFHadronFraction", ";closestJet(l_{2}) HF Hadron Fraction;Events", 30, 0, 1);
     (*hists)[prefix+"_jetl2_HFEmFraction"]          = new TH1F(prefix+"_jetl2_HFEmFraction", ";closestJet(l_{2}) HF Em Fraction;Events", 30, 0, 1);
 
-    for(const TString &jettagvalcut : {"", "_JetTagVal0p95"}){
+    for(const TString &jettagvalcut : {""}){//, "_JetTagVal0p95"}){
         (*hists)[prefix+jettagvalcut+"_jetl2_nConstituents"]         = new TH1F(prefix+jettagvalcut+"_jetl2_nConstituents", ";N. jet Constituents;Events", 50, 0, 50);
         (*hists)[prefix+jettagvalcut+"_jetl2_ConstPt"]               = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPt", ";Jet Constituent #it{p}_{T} [GeV];Events", 30, 0, 60);
         (*hists)[prefix+jettagvalcut+"_jetl2_ConstEta"]              = new TH1F(prefix+jettagvalcut+"_jetl2_ConstEta", ";Jet Constituent #eta;Events", 30, -3, 3);
@@ -85,7 +85,7 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_closel2_jet], event_weight);
         (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_closel2_jet], event_weight);
         fill_jet_constituent_histograms(hists, prefix);
-        if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
+        //if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
     }
 }
 
