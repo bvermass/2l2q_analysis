@@ -737,11 +737,12 @@ public :
    Double_t event_weight;
    TString sampleflavor;
    std::map<double, double> reweighting_weights = {};
-   std::vector<double> reweighting_couplings = {};
+   std::vector<double> reweighting_V2s = {};
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
-   std::map<int, std::vector<double>> evaluating_couplings;//<M, V2's>
+   std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
    std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
+   std::map<int, std::map<double, TString>> MV2name;
    //double JetTagVal_BDT = -1;
    
    // lepton and jet ID and cleaning bool arrays
@@ -792,9 +793,9 @@ public :
    bool _1e1displedphi;
    bool _1e1displeReliso;
    bool _1e1disple1jet;
-   bool _1e1disple_PFN;
+   std::map<int, std::map<double, bool>> _1e1disple_PFN;
    //bool _1e1disple_BDT;
-   bool _1e1disple_TrainingPFN;
+   std::map<int, std::map<double, bool>> _1e1disple_TrainingPFN;
    //bool _1e1disple_TrainingBDT;
 
    // Control region booleans: ee
@@ -818,9 +819,9 @@ public :
    bool _1mu1displmudphi;
    bool _1mu1displmuReliso;
    bool _1mu1displmu1jet;
-   bool _1mu1displmu_PFN;
+   std::map<int, std::map<double, bool>> _1mu1displmu_PFN;
    //bool _1mu1displmu_BDT;
-   bool _1mu1displmu_TrainingPFN;
+   std::map<int, std::map<double, bool>> _1mu1displmu_TrainingPFN;
    //bool _1mu1displmu_TrainingBDT;
 
    // control region booleans: mumu
