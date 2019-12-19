@@ -49,7 +49,7 @@ void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString 
                 (*hists)[prefix+"_JetTagValzm"+MV2name[MassMap.first][V2Map.first]]->Fill(V2Map.second, event_weight);
                 (*hists)[prefix+"_JetTagValzm_10b"+MV2name[MassMap.first][V2Map.first]]->Fill(V2Map.second, event_weight);
                 (*hists)[prefix+"_PFN_ROC"+MV2name[MassMap.first][V2Map.first]]->Fill(V2Map.second, event_weight);
-                if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_closel2_jet)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"+MV2name[MassMap.first][V2Map.first]]->Fill(V2Map.second, event_weight);
+                if(sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1 or get_JetIsFromHNL(i_jetl2)) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"+MV2name[MassMap.first][V2Map.first]]->Fill(V2Map.second, event_weight);
 
                 // Signal region stuff, not reweighted
                 if(V2Map.second > 0.96){
