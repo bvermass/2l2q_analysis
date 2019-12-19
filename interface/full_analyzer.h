@@ -735,11 +735,12 @@ public :
    Double_t event_weight;
    TString sampleflavor;
    std::map<double, double> reweighting_weights = {};
-   std::vector<double> reweighting_couplings = {};
-   std::vector<int> evaluating_masses = {5};//{2, 3, 4, 5, 6, 8, 10, 15};
-   std::map<int, std::vector<double>> evaluating_couplings;//<M, V2's>
+   std::vector<double> reweighting_V2s = {};
+   std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+   std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
    std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
+   std::map<int, std::map<double, TString>> MV2name;
    //double JetTagVal_BDT = -1;
    
    // lepton and jet ID and cleaning bool arrays
@@ -783,9 +784,9 @@ public :
    bool _1e1displedphi;
    bool _1e1displeReliso;
    bool _1e1disple1jet;
-   bool _1e1disple_PFN;
+   std::map<int, std::map<double, bool>> _1e1disple_PFN;
    //bool _1e1disple_BDT;
-   bool _1e1disple_TrainingPFN;
+   std::map<int, std::map<double, bool>> _1e1disple_TrainingPFN;
    //bool _1e1disple_TrainingBDT;
 
    // Control region booleans: ee
@@ -809,9 +810,9 @@ public :
    bool _1mu1displmudphi;
    bool _1mu1displmuReliso;
    bool _1mu1displmu1jet;
-   bool _1mu1displmu_PFN;
+   std::map<int, std::map<double, bool>> _1mu1displmu_PFN;
    //bool _1mu1displmu_BDT;
-   bool _1mu1displmu_TrainingPFN;
+   std::map<int, std::map<double, bool>> _1mu1displmu_TrainingPFN;
    //bool _1mu1displmu_TrainingBDT;
 
    // control region booleans: mumu
@@ -942,9 +943,9 @@ public :
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double i_subleading);
 
    // in src/SelectionOptimization.cc
-    bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
-    void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
-    void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
+   // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
+   // void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
+   // void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
 };
 
 #endif

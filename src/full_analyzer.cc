@@ -22,12 +22,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - functions for every signal region event selection
 
 
-    sampleflavor = "bkg";
     if(filename.Index("_e_") != -1) sampleflavor = "e";
     else if(filename.Index("_mu_") != -1) sampleflavor = "mu";
     else if(filename.Index("Run2016") != -1) sampleflavor = "Run2016";
     else if(filename.Index("Run2017") != -1) sampleflavor = "Run2017";
     else if(filename.Index("Run2018") != -1) sampleflavor = "Run2018";
+    else sampleflavor = "bkg";
 
     TString promptordisplaced = "";
     if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
@@ -41,21 +41,22 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
         _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
         _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
-        reweighting_couplings = get_evaluating_couplings(_gen_Nmass);//these are the V2 to which the current sample will be reweighted
-        //evaluating_masses = {_gen_Nmass};
+        reweighting_V2s = get_evaluating_V2s(_gen_Nmass);//these are the V2 to which the current sample will be reweighted
+        evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
     }else {
         _gen_Nmass = 0;
         _gen_NV    = 0;
         _gen_Nctau  = 0;
-        reweighting_couplings = {};//no reweighting for background
+        reweighting_V2s = {};//no reweighting for background
         evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
     }
 
-    // Determine couplings and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
+    // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
     for(const int& mass : evaluating_masses){
-        evaluating_couplings[mass] = get_evaluating_couplings(mass);
-        for(const double& coupling : evaluating_couplings[mass]){
-            evaluating_ctaus[mass][coupling] = get_evaluating_ctau(mass, coupling);
+        evaluating_V2s[mass] = get_evaluating_V2s(mass);
+        for(const double& V2 : evaluating_V2s[mass]){
+            evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2);
+            MV2name[mass][V2] = get_MV2name(mass, V2);
         }
     }
 
@@ -75,9 +76,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_afterdispl", "_Training", "_TrainingHighPFN", "_afterPFN"}){//, "_CRdphi", "_CRmll"}){
+        for(const TString &ev_region : {"", "_afterdispl", "_Training"}){//, "_CRdphi", "_CRmll"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
+        }
+        for(auto& MassMap : evaluating_ctaus){
+            for(auto& V2Map : MassMap.second){
+                for(const TString &ev_region : {"_TrainingHighPFN", "_afterPFN"}){
+                    add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
+                }
+            }
         }
         //add_Bool_hists(&hists, lep_region);
     }
@@ -162,10 +170,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
         else event_weight = 1;
 
-        //Reweighting weights for HNL couplings, map: <V2, weight>
+        //Reweighting weights for HNL V2s, map: <V2, weight>
         if(sampleflavor == "e" or sampleflavor == "mu"){
-            for(double coupling : reweighting_couplings){
-                reweighting_weights[coupling] = get_reweighting_weight(_gen_NV*_gen_NV, coupling, _gen_Nctau, _ctauHN);
+            for(double V2 : reweighting_V2s){
+                reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
             }
         }
 
@@ -254,18 +262,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_HNLtagger_tree(hnltagger_e, i_subleading, i_jetl2, i_leading);
             //fill_HNLBDTtagger_tree(hnlbdttagger_e, i_subleading, i_jetl2, event_weight*total_weight);
             JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 5);
+            additional_signal_regions();
             //JetTagVal_BDT = hnlbdttagger_e.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, sr_flavor + "_Training", i_leading, i_subleading);
-        }
-        if(_1mu1displmudispl_Reliso){
+        }else if(_1mu1displmudispl_Reliso){
             fill_HNLtagger_tree(hnltagger_mu, i_subleading, i_jetl2, i_leading);
             //fill_HNLBDTtagger_tree(hnlbdttagger_mu, i_subleading, i_jetl2, event_weight*total_weight);
             JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 5);
+            additional_signal_regions();
             //JetTagVal_BDT = hnlbdttagger_mu.predict(bdt_mu);
             fill_histograms(&hists, &hists2D, sr_flavor + "_Training", i_leading, i_subleading);
+        }else {
+            JetTagVal.clear();
         }
 
-        additional_signal_regions();
         //if(_1e1disple) create_Bools_and_fill_Bool_hists(&hists, sr_flavor, i_leading, i_subleading, _1e1disple);
         //if(_1mu1displmu) create_Bools_and_fill_Bool_hists(&hists, sr_flavor, i_leading, i_subleading, _1mu1displmu);
 
@@ -304,22 +314,39 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
 
 
-        ////////////////////////////////////////////
-        // Full signal region with PFN or BDT cut //
-        ////////////////////////////////////////////
-        if(_1e1disple_PFN){
-            fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading);
-        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
-            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading, i_gen_subleading);
-            if(sr_flavor == "_SS_ee"){ SSe3++; SSe3_weight += event_weight;}
-            else if(sr_flavor == "_OS_ee"){ OSe3++; OSe3_weight += event_weight;}
-        }
-        if(_1mu1displmu_PFN){
-            fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading);
-        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
-            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_leading, i_subleading, i_gen_subleading);
-            if(sr_flavor == "_SS_mm"){ SSmu3++; SSmu3_weight += event_weight;}
-            else if(sr_flavor == "_OS_mm"){ OSmu3++; OSmu3_weight += event_weight;}
+        for(auto& MassMap : JetTagVal){
+            for(auto& V2Map : MassMap.second){
+                ////////////////////////////////////////////
+                // Full signal region with PFN or BDT cut //
+                ////////////////////////////////////////////
+                if(_1e1disple_PFN[MassMap.first][V2Map.first]){
+                    fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading);
+                //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
+                    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading, i_gen_subleading);
+                    if(sr_flavor == "_SS_ee"){ SSe3++; SSe3_weight += event_weight;}
+                    else if(sr_flavor == "_OS_ee"){ OSe3++; OSe3_weight += event_weight;}
+                }
+                if(_1mu1displmu_PFN[MassMap.first][V2Map.first]){
+                    fill_histograms(&hists, &hists2D, sr_flavor + "_afterPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading);
+                //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN", i_subleading, i_gen_subleading);
+                    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_afterPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading, i_gen_subleading);
+                    if(sr_flavor == "_SS_mm"){ SSmu3++; SSmu3_weight += event_weight;}
+                    else if(sr_flavor == "_OS_mm"){ OSmu3++; OSmu3_weight += event_weight;}
+                }
+                ////////////////////////////////////////////
+                // Training selection with PFN or BDT cut //
+                ////////////////////////////////////////////
+                if(_1e1disple_TrainingPFN[MassMap.first][V2Map.first]){
+                    fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading);
+                //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
+                    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading, i_gen_subleading);
+                }
+                if(_1mu1displmu_TrainingPFN[MassMap.first][V2Map.first]){
+                    fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading);
+                //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
+                    fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], i_leading, i_subleading, i_gen_subleading);
+                }
+            }
         }
         //if(_1e1disple_BDT){
         //    fill_histograms(&hists, &hists2D, sr_flavor + "_afterBDT", i_leading, i_subleading);
@@ -337,19 +364,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //}
 
 
-        ////////////////////////////////////////////
-        // Training selection with PFN or BDT cut //
-        ////////////////////////////////////////////
-        if(_1e1disple_TrainingPFN){
-            fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading);
-        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
-            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading, i_gen_subleading);
-        }
-        if(_1mu1displmu_TrainingPFN){
-            fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading);
-        //    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_subleading, i_gen_subleading);
-            fill_IVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighPFN", i_leading, i_subleading, i_gen_subleading);
-        }
         //if(_1e1disple_TrainingBDT){
         //    fill_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_leading, i_subleading);
         ////    fill_KVF_histograms(&hists, &hists2D, sr_flavor + "_TrainingHighBDT", i_subleading, i_gen_subleading);

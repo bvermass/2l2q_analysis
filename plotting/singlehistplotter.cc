@@ -6,6 +6,7 @@ int main(int argc, char * argv[])
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
+    int color = TColor::GetColor(66, 129, 174);
 
     // Argument 1: name of root input file
     // Argument 2: legend associated to sample
@@ -63,6 +64,8 @@ int main(int argc, char * argv[])
             TLegend legend = get_legend(0.2, 0.88, 0.95, 0.93, 4);
             legend.AddEntry(sample_hist, sample_legend);
     
+            sample_hist->SetMarkerColor(color);
+            sample_hist->SetLineColor(color);
             sample_hist->Draw("E0 X0 P");
             legend.Draw("same");
             CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);

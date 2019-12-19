@@ -177,17 +177,21 @@ void full_analyzer::signal_regions(){
 
 
 void full_analyzer::additional_signal_regions(){
-    _1mu1displmu_PFN            = _1mu1displmu1jet &&
-                                  (JetTagVal[5][1e-6] > 0.96);
+    for(auto& MassMap : JetTagVal){
+        for(auto& V2Map : MassMap.second){
+            _1mu1displmu_PFN[MassMap.first][V2Map.first]            = _1mu1displmu1jet &&
+                                                                      (V2Map.second > 0.98);
 
-    _1mu1displmu_TrainingPFN    = _1mu1displmudispl_Reliso &&
-                                  (JetTagVal[5][1e-6] > 0.96);
+            _1mu1displmu_TrainingPFN[MassMap.first][V2Map.first]    = _1mu1displmudispl_Reliso &&
+                                                                      (V2Map.second > 0.98);
 
-    _1e1disple_PFN              = _1e1disple1jet &&
-                                  (JetTagVal[5][1e-6] > 0.96);
+            _1e1disple_PFN[MassMap.first][V2Map.first]              = _1e1disple1jet &&
+                                                                      (V2Map.second > 0.98);
 
-    _1e1disple_TrainingPFN      = _1e1displedispl_Reliso &&
-                                  (JetTagVal[5][1e-6] > 0.96);
+            _1e1disple_TrainingPFN[MassMap.first][V2Map.first]      = _1e1displedispl_Reliso &&
+                                                                      (V2Map.second > 0.98);
+        }
+    }
 
     //_1mu1displmu_BDT            = _1mu1displmu1jet &&
     //                              (JetTagVal_BDT > 0.20);

@@ -197,19 +197,19 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
     double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;
     for(int j = eff_signal.size() -1;  j >= 0; j--){
         if(eff_signal[j] > required_signal_eff){
-            cp = hist_signal->GetXaxis()->GetBinCenter(j);
+            cp = hist_signal->GetXaxis()->GetBinLowEdge(j+1);
             cp_eff_signal = eff_signal[j];
             cp_eff_bkg = eff_bkg[j];
-            for(int junc = j; junc < hist_signal->GetNbinsX(); junc++){
+            for(int junc = j + 1; junc <= hist_signal->GetNbinsX(); junc++){
                 cp_eff_signal_unc += hist_signal->GetBinContent(junc);
                 cp_eff_bkg_unc    += hist_bkg->GetBinContent(junc);
             }
             break;
         }
     }
-    std::cout << "Sig eff. " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)" << std::endl;
-    std::cout << "Bkg eff. " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)" << std::endl;
-    std::cout << "Cutting point : " << cp << std::endl;
+    std::cout << " \\item Sig " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
+    std::cout << "Bkg " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
+    std::cout << "PFN output > " << cp << std::endl;
 }
 
 

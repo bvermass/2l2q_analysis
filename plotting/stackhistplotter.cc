@@ -136,12 +136,14 @@ int main(int argc, char * argv[])
             // get signal histograms and fill legend
             THStack* hists_signal = new THStack("stack_signal", "");
             for(int i = 0; i < files_signal.size(); i++){
-                TH1* hist = (TH1*)files_signal[i]->Get(histname);
-                if(hist->GetMaximum() > 0){
-                    int color = get_color(legends_signal[i]);
-                    hist->SetLineColor(color);
-                    hists_signal->Add(hist);
-                    legend.AddEntry(hist, legends_signal[i], "l");
+                if(files_signal[i]->GetListOfKeys()->Contains(histname)){
+                    TH1* hist = (TH1*)files_signal[i]->Get(histname);
+                    if(hist->GetMaximum() > 0){
+                        int color = get_color(legends_signal[i]);
+                        hist->SetLineColor(color);
+                        hists_signal->Add(hist);
+                        legend.AddEntry(hist, legends_signal[i], "l");
+                    }
                 }
             }
 
