@@ -1,6 +1,39 @@
 //basic constructor and initializer functions
 #include "../interface/full_analyzer.h"
 
+void full_analyzer::SetSampleTypes(TString filename)
+{
+    if(filename.Index("_e_") != -1){
+        sampleflavor = "e";
+        isSignal = true;
+    }
+    else if(filename.Index("_mu_") != -1){
+        sampleflavor = "mu";
+        isSignal = true;
+    }
+    else if(filename.Index("Run2016") != -1){
+        sampleflavor = "Run2016";
+        isData = true;
+        is2016 = true;
+    }
+    else if(filename.Index("Run2017") != -1){
+        sampleflavor = "Run2017";
+        isData = true;
+        is2017 = true;
+    }
+    else if(filename.Index("Run2018") != -1){
+        sampleflavor = "Run2018";
+        isData = true;
+        is2018 = true;
+    }
+    else{
+        sampleflavor = "bkg";
+        isBackground = true;
+        // figure out which year of background it is
+    }
+}
+
+
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file

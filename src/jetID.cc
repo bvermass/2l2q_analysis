@@ -4,14 +4,12 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::get_jetID(bool* ID)
+void full_analyzer::get_jetID()
 {
     for(unsigned i = 0; i < _nJets; ++i){
-	    bool fullID = 	fabs(_jetEta[i]) < 2.4 &&
-			            _jetPt[i] > 20 &&
-			            _jetIsTight[i];
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
+	    fullJetID[i] = fabs(_jetEta[i]) < 2.4 &&
+                       _jetPt[i] > 20 &&
+                       _jetIsTight[i];
     }
 }
 

@@ -59,7 +59,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
 {
     // append directories such as SS/OS, e/mu or HLT to pathname
     TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
-    TString eormu           = (histname.Index("_ee_") == -1 && histname.Index("Ele") == -1 && histname.Index("_e.") == -1)? ((histname.Index("_mm") == -1 && histname.Index("Mu") == -1 && histname.Index("_mu.") == -1)? "" : "mu/") : "e/";
+    TString eormu           = (histname.Index("_ee_") == -1 && histname.Index("Ele") == -1 && histname.Index("_e.") == -1)? ((histname.Index("_mm_") == -1 && histname.Index("Mu") == -1 && histname.Index("_mu.") == -1)? "" : "mu/") : "e/";
     TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
     TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
     TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";

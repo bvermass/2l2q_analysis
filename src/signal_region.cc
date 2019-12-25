@@ -9,8 +9,48 @@ using namespace std;
 void full_analyzer::set_leptons(int i_leading_e, int i_leading_mu, int i_subleading_e, int i_subleading_mu){
     i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
     i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
+
     sr_flavor = get_signal_region_flavor();
+
+    set_relevant_lepton_variables();
 }
+
+
+void full_analyzer::set_relevant_lepton_variables(){
+
+    i_jetl2 = find_jet_closest_to_lepton(&fullJetID[0], i_subleading); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
+    i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
+    i_gen_subleading    = find_gen_lep(i_subleading);
+    i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton
+    i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
+    leadingIsl1         = leptonIsGenLepton(i_leading, i_gen_l1);
+    subleadingIsl2      = leptonIsGenLepton(i_subleading, i_gen_l2);
+
+
+    if(i_leading != -1 and i_subleading != -1){
+        mll = get_mll(i_leading, i_subleading);
+        dRll = get_dRll(i_leading, i_subleading);
+        dphill = get_dphill(i_leading, i_subleading);
+        if(_lIVF_match[i_subleading]){
+            LorentzVector tracksum(0,0,0,0);
+            if(_IVF_ntracks[i_subleading] > 1){
+                for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
+                    LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
+                    tracksum += tmptrack;
+                }
+            }
+            SVmass = tracksum.mass();
+            IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_subleading);
+            IVF_PVSVdist    = get_IVF_PVSVdist(i_subleading);
+            if(!isData){
+                IVF_SVgenreco   = get_IVF_SVgenreco(i_gen_subleading, i_subleading);
+                gen_PVSVdist_2D = get_PVSVdist_gen_2D(i_gen_subleading);
+                gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
+            }
+        }
+    }
+}
+
 
 TString full_analyzer::get_signal_region_flavor(){
     TString signal_region_flavor = "";
@@ -59,151 +99,68 @@ int full_analyzer::select_leading_lepton(int i_leading_e, int i_leading_mu){
 
 void full_analyzer::signal_regions(){
 
-    // NEW signal region method, sequential so that I can make histograms between each step if I want
-    
-    /////////////////////////////
-    // Main signal region : ee //
-    /////////////////////////////
+    //signal region method: sequential booleans so that I can make histograms between each step if I want
     _trige                      = _HLT_Ele27_WPTight_Gsf;
-    
-    _1e                         = _trige &&
-                                  i_leading != -1 &&
-                                  _lFlavor[i_leading] == 0 &&
-                                  leadptcut(i_leading);
-
-    _1e1disple                  = _1e &&
-                                  i_subleading != -1 &&
-                                  _lFlavor[i_subleading] == 0;
-
-    _1e1displevtx               = _1e1disple &&
-                                  _lIVF_match[i_subleading];
-
-    _1e1displedispl             = _1e1displevtx &&
-                                  fabs(_dxy[i_subleading]) > 0.02;
-
-    //_1e1disple0adde             = _1e1displedispl &&
-    //                              no_additional_leptons();
-    
-    _1e1displejetl2             = _1e1displedispl &&
-                                  i_jetl2 != -1;
-    
-    _1e1displemll               = _1e1displejetl2 &&
-                                  mllcut(i_leading, i_subleading, 80);
-    
-    _1e1displedR                = _1e1displemll &&
-                                  dRcut(i_leading, i_subleading, 1, 5.5);
-    
-    _1e1displedphi              = _1e1displemll &&
-                                  dphicut(i_leading, i_subleading, 2.3);
-
-    _1e1displeReliso            = _1e1displedphi &&
-                                  relisocut(i_subleading, 1.5);
-    
-    _1e1disple1jet              = _1e1displeReliso &&
-                                  i_subleading_jet == -1;
-
-    _1e1displedphi_novtx        = _1e1disple &&
-                                  fabs(_dxy[i_subleading]) > 0.02 &&
-                                  //no_additional_leptons() &&
-                                  mllcut(i_leading, i_subleading, 80) &&
-                                  dphicut(i_leading, i_subleading, 2.3);
-    
-    _1e1displedispl_Reliso      = _1e1displedispl &&
-                                  relisocut(i_subleading, 1.5);
-
-    _CR_1e1displedphi           = _1e1displemll &&
-                                  get_dphill(i_leading, i_subleading) < 2.3;
-
-    _CR_1e1displemll            = _1e1displejetl2 &&
-                                  get_mll(i_leading, i_subleading) > 80;
-    
-
-    ///////////////////////////////
-    // Main signal region : mumu //
-    ///////////////////////////////
     _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
     
-    _1mu                        = _trigmu &&
-                                  i_leading != -1 &&
-                                  _lFlavor[i_leading] == 1 &&
+     _l1                        = i_leading != -1 &&
+                                  ((_trige && _lFlavor[i_leading] == 0) || (_trigmu && _lFlavor[i_leading] == 1)) &&
                                   leadptcut(i_leading);
-    
-    _1mu1displmu                = _1mu &&
+
+     _l1l2                      = _l1 &&
                                   i_subleading != -1 &&
-                                  _lFlavor[i_subleading] == 1;
-    
-    _1mu1displmuvtx             = _1mu1displmu &&
-                                  _lIVF_match[i_subleading];
-    
-    _1mu1displmudispl           = _1mu1displmuvtx &&
                                   fabs(_dxy[i_subleading]) > 0.02;
 
-    //_1mu1displmu0addmu          = _1mu1displmudispl &&
-    //                              no_additional_leptons();
-    
-    _1mu1displmujetl2           = _1mu1displmudispl &&
-                                  i_jetl2 != -1;
+     _l1l2SV                    = _l1l2 &&
+                                  _lIVF_match[i_subleading];
 
-    _1mu1displmumll             = _1mu1displmujetl2 &&
-                                  mllcut(i_leading, i_subleading, 80);
-    
-    _1mu1displmudR              = _1mu1displmumll &&
-                                  dRcut(i_leading, i_subleading, 1, 5.5);
-    
-    _1mu1displmudphi            = _1mu1displmumll &&
-                                  dphicut(i_leading, i_subleading, 2.3);
-    
-    _1mu1displmuReliso          = _1mu1displmudphi &&
-                                  relisocut(i_subleading, 1.5);
-    
-    _1mu1displmu1jet            = _1mu1displmuReliso &&
+     _Training                  = _l1l2SV &&
+                                  i_jetl2 != -1 &&
+                                  _relIso[i_subleading] < 1.5;//to remove?
+
+     _FullNoPFN                 = _Training &&
+                                  mll < 80 &&
+                                  dphill > 2.3 &&
                                   i_subleading_jet == -1;
 
-    _1mu1displmudphi_novtx      = _1mu1displmu &&
-                                  fabs(_dxy[i_subleading]) > 0.02 &&
-                                  //no_additional_leptons() &&
-                                  mllcut(i_leading, i_subleading, 80) &&
-                                  dphicut(i_leading, i_subleading, 2.3);
-    
-    _1mu1displmudispl_Reliso    = _1mu1displmudispl &&
-                                  relisocut(i_subleading, 1.5);
-    
-    _CR_1mu1displmudphi         = _1mu1displmumll &&
-                                  get_dphill(i_leading, i_subleading) < 2.3;
+     _CR_FullNoPFN_invdphi      = _Training &&
+                                  mll < 80 &&
+                                  dphill < 2.3 &&
+                                  i_subleading_jet == -1;
 
-    _CR_1mu1displmumll            = _1mu1displmujetl2 &&
-                                  get_mll(i_leading, i_subleading) > 80;
+     _CR_FullNoPFN_invmll       = _Training &&
+                                  mll > 80 &&
+                                  dphill > 2.3 &&
+                                  i_subleading_jet == -1;
+
+     //questions: no additional leptons?
+     //mll?
+     //dR (dphi)?
 }
 
 
 void full_analyzer::additional_signal_regions(){
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
-            _1mu1displmu_PFN[MassMap.first][V2Map.first]            = _1mu1displmu1jet &&
-                                                                      (V2Map.second > 0.98);
+            _TrainingHighPFN[MassMap.first][V2Map.first]            = _Training &&
+                                                               (V2Map.second > 0.98);
 
-            _1mu1displmu_TrainingPFN[MassMap.first][V2Map.first]    = _1mu1displmudispl_Reliso &&
-                                                                      (V2Map.second > 0.98);
+            _Full[MassMap.first][V2Map.first]                = _FullNoPFN &&
+                                                               (V2Map.second > 0.98);
 
-            _1e1disple_PFN[MassMap.first][V2Map.first]              = _1e1disple1jet &&
-                                                                      (V2Map.second > 0.98);
+            _CR_Full_invdphi[MassMap.first][V2Map.first]     = _CR_FullNoPFN_invdphi &&
+                                                               (V2Map.second > 0.98);
 
-            _1e1disple_TrainingPFN[MassMap.first][V2Map.first]      = _1e1displedispl_Reliso &&
-                                                                      (V2Map.second > 0.98);
+            _CR_Full_invmll[MassMap.first][V2Map.first]      = _CR_FullNoPFN_invmll &&
+                                                               (V2Map.second > 0.98);
         }
     }
 
-    //_1mu1displmu_BDT            = _1mu1displmu1jet &&
-    //                              (JetTagVal_BDT > 0.20);
+    //_afterBDT             = _Training &&
+    //                        (JetTagVal_BDT > 0.20);
 
-    //_1mu1displmu_TrainingBDT    = _1mu1displmudispl_Reliso &&
-    //                              (JetTagVal_BDT > 0.20);
-
-    //_1e1disple_BDT              = _1e1disple1jet &&
-    //                              (JetTagVal_BDT > 0.20);
-
-    //_1e1disple_TrainingBDT      = _1e1displedispl_Reliso &&
-    //                              (JetTagVal_BDT > 0.20);
+    //_FullBDT              = _FullNoPFN &&
+    //                        (JetTagVal_BDT > 0.20);
 }
 
  
@@ -229,20 +186,10 @@ bool full_analyzer::no_additional_leptons(){
 }
 
 
-bool full_analyzer::mllcut(int i_lead, int i_sublead, double uppercut){
-    return get_mll(i_lead, i_sublead) < uppercut;
-}
-
 double full_analyzer::get_mll(int i_lead, int i_sublead){
     LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
     return (leadingvec + subleadingvec).mass();
-}
-
-
-bool full_analyzer::dRcut(int i_lead, int i_sublead, double lowercut, double uppercut){
-    double dRll = get_dRll(i_lead, i_sublead);
-    return (dRll > lowercut and dRll < uppercut);
 }
 
 
@@ -253,18 +200,8 @@ double full_analyzer::get_dRll(int i_lead, int i_sublead){
 }
 
 
-bool full_analyzer::dphicut(int i_lead, int i_sublead, double lowercut){
-    return (get_dphill(i_lead, i_sublead) > lowercut);
-}
-
 double full_analyzer::get_dphill(int i_lead, int i_sublead){
     LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
     return deltaPhi(leadingvec, subleadingvec);
 }
-
-bool full_analyzer::relisocut(int i_sublead, double uppercut){
-    return (_relIso[i_sublead] < uppercut);
-}
-
-

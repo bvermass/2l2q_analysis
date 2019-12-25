@@ -49,6 +49,31 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     return outputfilename;
 }
 
+
+std::map<TString, double> add_SR_counters()
+{
+    std::map<TString, double> sr;
+    for(const TString &lep_region : {"", "_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
+        for(const TString &weight : {"", "_weighted"}){
+            sr[lep_region + weight] = 0;
+        }
+    }
+    return sr;
+}
+
+
+void print_SR_counters(std::map<TString, double> sr, double total_weight)
+{
+    std::cout << "----------------------------------------" << std::endl;
+    std::cout << "Channel    #events     #events(weighted)" << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+    for(auto& srel : sr){
+        if(srel.first.Index("weighted") == -1 and srel.first != "") std::cout << srel.first << "      " << srel.second << "      " << sr[srel.first+"_weighted"]*total_weight << std::endl;
+        else if(srel.first == "") std::cout << "=/=l1l2" << "      " << srel.second << "      " << sr["_weighted"]*total_weight << std::endl;
+    }
+}
+
+
 double calc_betagamma(int particle_mass, double particle_energy)
 {
     double particle_betagamma = sqrt(particle_energy*particle_energy - particle_mass*particle_mass)/particle_mass;
@@ -212,11 +237,10 @@ double get_evaluating_ctau(double mass, double V2_new)
 
 std::vector<double> get_evaluating_V2s(double mass)
 {
-    if(mass == 2) return {6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5, 9e-5, 1e-4};
-    if(mass == 3) return {4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5, 6e-5, 7e-5, 8e-5};
-    if(mass == 4) return {1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5};
-    if(mass == 5) return {1e-6};
-    if(mass == 5 or mass == 6 or mass == 8 or mass == 10 or mass == 15) return {5e-7, 6e-7, 7e-7, 8e-7, 9e-7, 1e-6, 2e-6, 3e-6, 4e-6, 5e-6, 6e-6, 7e-6, 8e-6, 9e-6, 1e-5, 2e-5, 3e-5, 4e-5, 5e-5};
+    if(mass == 2) return {6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4};
+    if(mass == 3) return {4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5};
+    if(mass == 4) return {9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
+    if(mass == 5 or mass == 6 or mass == 8 or mass == 10 or mass == 15) return {5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
     std::cout << "Warning: reached end of get_evaluating_V2s without a correct ctau value, returning {}" << std::endl;
     return {};
 }
