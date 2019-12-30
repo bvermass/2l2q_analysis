@@ -288,6 +288,28 @@ bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
     else return false;
 }
 
+double full_analyzer::get_lsource(int i_gen_lep)
+{
+    if(i_gen_lep == -1) return -1;
+    double mompdg = abs(_gen_lMomPdg[i_gen_lep])%10000;
+    if(mompdg == 23) return 0;//Z
+    else if(mompdg == 24) return 1;//W
+    else if((mompdg >= 500 and mompdg < 600) or (mompdg >= 5000 and mompdg < 6000) or mompdg == 5) return 2;//b
+    else if((mompdg >= 400 and mompdg < 500) or (mompdg >= 4000 and mompdg < 5000) or mompdg == 4) return 3;//c
+    else if((mompdg >= 100 and mompdg < 400) or (mompdg >= 1000 and mompdg < 4000) or mompdg == 1 or mompdg == 2 or mompdg == 3) return 4;//uds
+    else if(mompdg == 21) return 5;//gluon
+    else if(mompdg == 22) return 6;//photon
+    else if(mompdg == 15) return 7;//tau
+    else if(mompdg == 13) return 8;//mu
+    else if(mompdg == 11) return 9;//e
+    else if(mompdg == 12) return 10;//HNL
+    else if(mompdg == 0) return -1;
+    else {
+        std::cout << "no category for lepton with mother: " << mompdg << std::endl;
+        return -1;
+    }
+}
+
 double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){
     if(i_gen_l == -1 or i_lepton == -1) return -1; 
     return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])); 

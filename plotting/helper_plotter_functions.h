@@ -41,5 +41,6 @@ void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<doub
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
+void        alphanumeric_labels(TH2F* hist);
 
 #endif

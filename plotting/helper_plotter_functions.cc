@@ -221,3 +221,15 @@ TString get_2D_draw_options(TH2F* h)
     if(nbinsx > 30 or nbinsy > 30) return "colz";
     else return "colz text";
 }
+
+void alphanumeric_labels(TH2F* hist)
+{
+    TString histname = hist->GetName();
+    if(histname.Index("lsources") != -1){
+        const char* labels[12] = {"und.", "Z", "W", "b", "c", "uds", "g", "phot", "tau", "mu", "e", "HNL"};
+        for(int i = 1; i <= 12; i++){
+            hist->GetXaxis()->SetBinLabel(i, labels[i-1]);
+            hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
+        }
+    }
+}
