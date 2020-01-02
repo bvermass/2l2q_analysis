@@ -16,22 +16,22 @@ def submit_script( script, scriptname ):
         print 'qsub error caught, resubmitting'
         time.sleep(2)
 
-def merge_skimmed_files( pnfs_sample_path, pnfs_crab_paths ):
+def merge_skimmed_files( input_crab_paths ):
     if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/dilep_*') == 0:
         print 'successfully hadded dilep files into dilep_skim.root'
         os.system('rm ~/public/heavyNeutrino/skim/dilep_*')
-        for pnfs_crab_path in pnfs_crab_paths:
-            os.system('echo {} >> hadded_samples.txt'.format(pnfs_crab_path))
+        for input_crab_path in input_crab_paths:
+            os.system('echo {} >> hadded_samples.txt'.format(input_crab_path))
     else:
         print 'hadd dilep files into dilep_skim failed, exiting...'
         sys.exit()
 
-def copy_dilepskim_to_pnfs( pnfs_sample_path, RunEra, dilep_tag, pnfs_crab_paths ):
-    if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}/{}{}.root'.format(pnfs_sample_path, RunEra, dilep_tag)) == 0:
+def copy_dilepskim_to_pnfs( output_sample_path, RunEra, dilep_tag, input_crab_paths ):
+    if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}/{}{}.root'.format(output_sample_path, RunEra, dilep_tag)) == 0:
         print 'successfully copied dilep_skim to pnfs to {}{}'.format(RunEra, dilep_tag)
         os.system('rm ~/public/heavyNeutrino/dilep_skim.root')
-        for pnfs_crab_path in pnfs_crab_paths:
-            os.system('echo {} >> finished_samples.txt'.format(pnfs_crab_path))
+        for input_crab_path in input_crab_paths:
+            os.system('echo {} >> finished_samples.txt'.format(input_crab_path))
     else:
         print 'copy dilep_skim to pnfs failed, exiting...'
         sys.exit()
@@ -44,28 +44,32 @@ if len(sys.argv) != 4:
 os.system('make -f makeSkimmer')
 print 'cleaned finished_samples.txt?'
 
-pnfs_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
-pnfs_sample_path = pnfs_base_path
-pnfs_crab_path = pnfs_base_path
+output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
+input_base_path = output_base_path
+output_sample_path = output_base_path
+input_crab_path = output_base_path
 
 production_version = sys.argv[1]
 dilep_tag = sys.argv[2]
 n_hadds = int(sys.argv[3])
 print 'production_version: {}, dilep_tag: {}, n_hadds: {}'.format(production_version, dilep_tag, n_hadds)
 
-for sampledir in os.listdir(pnfs_base_path):
+for sampledir in os.listdir(input_base_path):
     print sampledir
     hasproduction = False
-    pnfs_sample_path = pnfs_base_path + sampledir + "/" #The final dilep_tag.root file will end up here
+    output_sample_path = output_base_path + sampledir + "/" #The final dilep_tag.root file will end up here
+    input_sample_path = input_base_path + sampledir + "/"
+    if not os.path.isdir(input_sample_path):
+        continue
 
     script_counter = 0
     hadd_counter = 0
-    pnfs_crab_paths = [] #this one will keep track of all crab paths that were hadded and finished
+    input_crab_paths = [] #this one will keep track of all crab paths that were hadded and finished
 
-    for crabdir in os.listdir(pnfs_sample_path):
+    for crabdir in os.listdir(input_sample_path):
         print '    {}'.format( crabdir )
-        pnfs_crab_path = pnfs_sample_path + crabdir + "/"
-        if production_version in crabdir and not pnfs_crab_path in open('finished_samples.txt').read():
+        input_crab_path = input_sample_path + crabdir + "/"
+        if production_version in crabdir and not input_crab_path in open('finished_samples.txt').read():
             hasproduction = True
 
             startindex = crabdir.find('Run201')
@@ -74,9 +78,9 @@ for sampledir in os.listdir(pnfs_base_path):
             else:
                 RunEra = ''
 
-            pnfs_crab_paths.append( pnfs_crab_path )
+            input_crab_paths.append( input_crab_path )
 
-            for root, dirs, files in os.walk(pnfs_crab_path):
+            for root, dirs, files in os.walk(input_crab_path):
                 for f in files:
                     if 'dilep' in f and '.root' in f:
                         if hadd_counter == 0:
@@ -99,5 +103,5 @@ for sampledir in os.listdir(pnfs_base_path):
             hadd_counter = 0
         
         os.system( './../../test/scripts/wait_until_jobs_are_finished.sh' )
-        merge_skimmed_files( pnfs_sample_path, pnfs_crab_paths )
-        copy_dilepskim_to_pnfs( pnfs_sample_path, RunEra, dilep_tag, pnfs_crab_paths )
+        merge_skimmed_files( input_crab_paths )
+        copy_dilepskim_to_pnfs( output_sample_path, RunEra, dilep_tag, input_crab_paths )
