@@ -732,7 +732,7 @@ public :
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
    
-   Double_t event_weight;
+   Double_t ev_weight;
    TString sampleflavor;
    bool isSignal = false, isBackground = false, isData = false, is2016 = false, is2017 = false, is2018 = false;
    bool extensive_plots = false;
@@ -856,21 +856,21 @@ public :
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-    void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-    void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-    void     fill_cutflow(std::map<TString, TH1*>*, TString);
-    void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-    void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_cutflow(std::map<TString, TH1*>*, TString, double);
+    void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
     void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
+    void     fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
    // void     fill_ID_histos(std::map<TString, TH1*>*, TString);
     void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
    // in src/jet_histograms.cc
     void     add_jet_histograms(std::map<TString, TH1*>*, TString);
-    void     fill_jet_histograms(std::map<TString, TH1*>*, TString);
-    void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_jet_histograms(std::map<TString, TH1*>*, TString, double);
+    void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
     void     fill_HNLtagger_tree(HNLtagger& hnltagger);
     int      is_track_in_sv(int i_lep, int i_jet, int i_const);
     //void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, double _weight);
@@ -883,19 +883,19 @@ public :
 
    // in src/gen_histograms.cc
     void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-    void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+    void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*, double);
     void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-    void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
     int      get_lfromtau(int i_gen_l);
 
    // in src/PFNTools.cc
     std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2);
+    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
 
    // in src/SelectionOptimization.cc
    // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);

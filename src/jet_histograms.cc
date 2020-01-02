@@ -52,7 +52,7 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     }
 }
 
-void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefix){
+void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefix, double event_weight){
     if(i_leading_jet != -1) (*hists)[prefix+"_jet1_pt"]->Fill(_jetPt[i_leading_jet], event_weight);
     if(i_jetl2 != -1){
         (*hists)[prefix+"_jetl2_pt"]->Fill(_jetPt[i_jetl2], event_weight);
@@ -89,13 +89,13 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
             (*hists)[prefix+"_jetl2_ChargedEmFraction"]->Fill(_jetChargedEmFraction[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_HFHadronFraction"]->Fill(_jetHFHadronFraction[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_HFEmFraction"]->Fill(_jetHFEmFraction[i_jetl2], event_weight);
-            fill_jet_constituent_histograms(hists, prefix);
-            //if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95");
+            fill_jet_constituent_histograms(hists, prefix, event_weight);
+            //if(JetTagVal[5][1e-6] > 0.95) fill_jet_constituent_histograms(hists, prefix + "_JetTagVal0p95", event_weight);
         }
     }
 }
 
-void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, TString prefix){
+void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, TString prefix, double event_weight){
     if(i_jetl2 == -1) return;
     (*hists)[prefix+"_jetl2_nConstituents"]->Fill(_nJetConstituents[i_jetl2], event_weight);
     for(unsigned i_const = 0; i_const < _nJetConstituents[i_jetl2]; ++i_const){

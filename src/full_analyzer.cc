@@ -155,13 +155,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nVertex);
-        else event_weight = 1;
+        if(sampleflavor.Index("Run") == -1) ev_weight = _weight * puweightreader.get_PUWeight(_nVertex);
+        else ev_weight = 1;
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
-        if(sampleflavor == "e" or sampleflavor == "mu"){
-            for(double V2 : evaluating_V2s[_gen_Nmass]){
+        for(double V2 : evaluating_V2s[_gen_Nmass]){
+            if(sampleflavor == "e" or sampleflavor == "mu"){
                 reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
+            }else {
+                reweighting_weights[V2] = 1;
             }
         }
 
@@ -211,11 +213,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if(_Training){
             if(_lFlavor[i_subleading] == 0){
                 fill_HNLtagger_tree(hnltagger_e);
-                //fill_HNLBDTtagger_tree(hnlbdttagger_e, event_weight*total_weight);
+                //fill_HNLBDTtagger_tree(hnlbdttagger_e, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 5);
             }else if(_lFlavor[i_subleading] == 1){
                 fill_HNLtagger_tree(hnltagger_mu);
-                //fill_HNLBDTtagger_tree(hnlbdttagger_mu, event_weight*total_weight);
+                //fill_HNLBDTtagger_tree(hnlbdttagger_mu, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 5);
             }
             additional_signal_regions();
@@ -226,7 +228,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         fill_histograms(&hists, &hists2D);
         SR_counters[sr_flavor]++;
-        SR_counters[sr_flavor+"_weighted"] += event_weight;
+        SR_counters[sr_flavor+"_weighted"] += ev_weight;
     }
     //Small summary to write to terminal in order to quickly check state of results
     print_SR_counters(SR_counters, total_weight);
@@ -241,7 +243,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(sampleflavor == "e"){
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.delete_HNLtagger_tree();
-        hnltagger_gen_e.write_HNLtagger_tree();
+        hnltagger_gen_e.delete_HNLtagger_tree();
         hnltagger_gen_mu.delete_HNLtagger_tree();
         //hnlbdttagger_e.write_HNLBDTtagger_tree();
         //hnlbdttagger_mu.delete_HNLBDTtagger_tree();
@@ -249,7 +251,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         hnltagger_e.delete_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();
-        hnltagger_gen_mu.write_HNLtagger_tree();
+        hnltagger_gen_mu.delete_HNLtagger_tree();
         //hnlbdttagger_e.delete_HNLBDTtagger_tree();
         //hnlbdttagger_mu.write_HNLBDTtagger_tree();
     }else {

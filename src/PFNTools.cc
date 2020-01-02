@@ -28,7 +28,7 @@ void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString p
 }
 
 
-void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2){
+void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight){
     (*hists)[prefix+"_JetTagVal"]->Fill(JetTagVal[mass][V2], event_weight);
     (*hists)[prefix+"_JetTagValzm"]->Fill(JetTagVal[mass][V2], event_weight);
     (*hists)[prefix+"_JetTagValzm2"]->Fill(JetTagVal[mass][V2], event_weight);

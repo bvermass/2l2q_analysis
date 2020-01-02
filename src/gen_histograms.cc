@@ -39,7 +39,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_PV-SVdist_xlog"]   = new TH1F("gen_PV-SVdist_xlog", ";#Delta_{xyz} (PV_{gen}, SV_{gen}) [cm]; Events", nbins, xbins);
 }
 
-void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D)
+void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, double event_weight)
 {
     if(sampleflavor.Index("Run") != -1) return;
     // stuff related to gen Packed Candidates
@@ -323,7 +323,7 @@ void full_analyzer::add_chargeflip_histograms(std::map<TString, TH1*>* hists, st
     }
 }
 
-void full_analyzer::fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+void full_analyzer::fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
     if(extensive_plots){
         (*hists2D)[prefix+"_gen_l1_chargeflip"]->Fill(_gen_lCharge[i_gen_leading], _lCharge[i_leading], event_weight);
         (*hists2D)[prefix+"_gen_l2_chargeflip"]->Fill(_gen_lCharge[i_gen_subleading], _lCharge[i_subleading], event_weight);
