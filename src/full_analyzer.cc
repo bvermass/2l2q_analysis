@@ -195,18 +195,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //Find leptons and jets with leading pt
 	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
-	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading_e);
-	    int i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
 	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
-	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    int i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
+
+        i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
+
+	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading);
+	    int i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading);
+	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading);
+	    int i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading);
 
 	    i_leading_jet                   = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
 	    i_subleading_jet	            = find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
         i_thirdleading_jet              = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet, i_subleading_jet);
 
 
-        set_leptons(i_leading_e, i_leading_mu, i_subleading_displ_e, i_subleading_displ_mu);
+        set_leptons(i_subleading_displ_e, i_subleading_displ_mu);
         signal_regions();
         
         

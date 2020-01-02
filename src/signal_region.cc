@@ -6,8 +6,7 @@
 
 using namespace std;
 
-void full_analyzer::set_leptons(int i_leading_e, int i_leading_mu, int i_subleading_e, int i_subleading_mu){
-    i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
+void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu){
     i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
 
     sr_flavor = get_signal_region_flavor();

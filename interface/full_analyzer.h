@@ -836,7 +836,7 @@ public :
     bool     get_JetIsFromHNL(int i_jet);
 
    // in src/signal_regions.cc
-    void     set_leptons(int i_leading_e, int i_leading_mu, int i_subleading_displ_e, int i_subleading_displ_mu);
+    void     set_leptons(int i_subleading_displ_e, int i_subleading_displ_mu);
     void     set_relevant_lepton_variables();
     TString  get_signal_region_flavor();
     int      select_subleading_lepton(int i_subleading_e, int i_subleading_mu);
