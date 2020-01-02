@@ -64,12 +64,12 @@ std::map<TString, double> add_SR_counters()
 
 void print_SR_counters(std::map<TString, double> sr, double total_weight)
 {
-    std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Channel    #events     #events(weighted)" << std::endl;
-    std::cout << "----------------------------------------" << std::endl;
+    std::cout << "-------------------------------------------" << std::endl;
+    std::cout << "Channel\t\t#events\t\t#events(weighted)" << std::endl;
+    std::cout << "-------------------------------------------" << std::endl;
     for(auto& srel : sr){
-        if(srel.first.Index("weighted") == -1 and srel.first != "") std::cout << srel.first << "      " << srel.second << "      " << sr[srel.first+"_weighted"]*total_weight << std::endl;
-        else if(srel.first == "") std::cout << "=/=l1l2" << "      " << srel.second << "      " << sr["_weighted"]*total_weight << std::endl;
+        if(srel.first.Index("weighted") == -1 and srel.first != "") std::cout << srel.first << "\t\t" << srel.second << "\t\t" << sr[srel.first+"_weighted"]*total_weight << std::endl;
+        else if(srel.first == "") std::cout << "=/=l1l2" << "\t\t" << srel.second << "\t\t" << sr["_weighted"]*total_weight << std::endl;
     }
 }
 

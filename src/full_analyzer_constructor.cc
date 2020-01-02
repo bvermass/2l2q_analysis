@@ -38,6 +38,9 @@ full_analyzer::full_analyzer(TTree *tree) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
+
+   TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
+
    if (tree == 0) {
       TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO/dilep.root");
       if (!f || !f->IsOpen()) {

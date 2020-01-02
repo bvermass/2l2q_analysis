@@ -270,7 +270,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
-    // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
+    std::cout << "Scale histograms to total_weight and add under- and overflow to last bins" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
         int nb = h->GetNbinsX();
@@ -305,16 +305,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
 
-    // Write 1D histograms to outputfile
+    std::cout << "write 1D histograms to output" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
-	    if(h->GetEntries() != 0) h->Write();
+	    if(h->GetEntries() != 0) h->Write(h->GetName(), TObject::kOverwrite);
     }
 
-    // Write 2D histograms to outputfile
+    std::cout << "write 2D histograms to output" << std::endl;
     for(auto const& it2D : hists2D){
         TH2* h = it2D.second;
-        if(h->GetEntries() != 0) h->Write();
+        if(h->GetEntries() != 0) h->Write(h->GetName(), TObject::kOverwrite);
     }
  
     // This is a histogram with 1 bin that is filled with value 1.
@@ -325,6 +325,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hadd_counter->Write();
 
     //hweight->Write();
+    std::cout << "close file" << std::endl;
     output->Close();
 }
 
