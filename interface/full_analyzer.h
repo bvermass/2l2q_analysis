@@ -774,7 +774,7 @@ public :
    int i_jetl2;
 
    //Signal region booleans
-   bool _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll;
+   bool _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _Training, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll;
    std::map<int, std::map<double, bool>> _TrainingHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
 
    // relevant lepton variables

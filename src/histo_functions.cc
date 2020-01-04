@@ -141,6 +141,10 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
         fill_IVF_eff(hists, sr_flavor, ev_weight);
     }
 
+    if(_Training_noRelIso){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training_nRIso", ev_weight);
+    }
+
     if(_Training){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);

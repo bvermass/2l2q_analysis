@@ -107,11 +107,14 @@ void full_analyzer::signal_regions(){
                                   leadptcut(i_leading);
 
      _l1l2                      = _l1 &&
-                                  i_subleading != -1 &&
-                                  fabs(_dxy[i_subleading]) > 0.02;
+                                  i_subleading != -1;
+                                  //fabs(_dxy[i_subleading]) > 0.02;
 
      _l1l2SV                    = _l1l2 &&
                                   _lIVF_match[i_subleading];
+
+     _Training_noRelIso         = _l1l2SV &&
+                                  i_jetl2 != -1;
 
      _Training                  = _l1l2SV &&
                                   i_jetl2 != -1 &&
