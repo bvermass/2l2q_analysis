@@ -177,7 +177,8 @@ int main(int argc, char * argv[])
                     CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
                     histname.ReplaceAll("_V2-3e-05", "_vsV2");
-                    pathname_lin.ReplaceAll("_V2-3e-05" "_vsV2");
+                    pathname_lin.ReplaceAll("_V2-3e-05", "_vsV2");
+                    gSystem->Exec("mkdir -p " + pathname_lin);
 
                     c->Modified();
                     c->Print(pathname_lin + histname + ".pdf");

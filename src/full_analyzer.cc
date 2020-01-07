@@ -161,11 +161,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         else ev_weight = 1;
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
-        for(double V2 : evaluating_V2s[_gen_Nmass]){
-            if(sampleflavor == "e" or sampleflavor == "mu"){
-                reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
-            }else {
-                reweighting_weights[V2] = 1;
+        for(auto& MassMap : evaluating_V2s){
+            for(double V2 : MassMap.second){
+                if(sampleflavor == "e" or sampleflavor == "mu"){
+                    reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
+                }else {
+                    reweighting_weights[V2] = 1.;
+                }
             }
         }
 
@@ -272,7 +274,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
-    std::cout << "Scale histograms to total_weight and add under- and overflow to last bins" << std::endl;
+    std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
         int nb = h->GetNbinsX();
@@ -299,26 +301,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
         }
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
+	    h->Write(h->GetName(), TObject::kOverwrite);
     }
-    // Normalize 2D histograms to correct total weight
+    // Normalize 2D histograms to correct total weight and write them
     for(auto const& it2D : hists2D){
         TH2* h = it2D.second;
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
+        h->Write(h->GetName(), TObject::kOverwrite);
     }
 
-
-    std::cout << "write 1D histograms to output" << std::endl;
-    for(auto const& it : hists){
-        TH1* h = it.second;
-	    if(h->GetEntries() != 0) h->Write(h->GetName(), TObject::kOverwrite);
-    }
-
-    std::cout << "write 2D histograms to output" << std::endl;
-    for(auto const& it2D : hists2D){
-        TH2* h = it2D.second;
-        if(h->GetEntries() != 0) h->Write(h->GetName(), TObject::kOverwrite);
-    }
- 
     // This is a histogram with 1 bin that is filled with value 1.
     // After hadding files together, this allows to see how many were hadded together.
     // This was used for efficiency histograms that were elevated by number of hadded files. at the moment it is not used anymore (efficiencies are calculated after hadding, in plotting step)

@@ -736,7 +736,7 @@ public :
    TString sampleflavor;
    bool isSignal = false, isBackground = false, isData = false, is2016 = false, is2017 = false, is2018 = false;
    bool extensive_plots = false;
-   std::map<double, double> reweighting_weights = {};//<V2, weight>
+   std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
    std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
