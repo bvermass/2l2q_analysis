@@ -22,6 +22,8 @@ if len(sys.argv) != 3:
     sys.exit()
 
 scriptname = sys.argv[1].replace('.txt', '.sh')
+execname = sys.argv[1].replace('.txt', '.out')
+
 script_bkg_mu = init_script(scriptname)
-script_bkg_mu.write('./test/run_plots.sh test/sampleLists/{} submit_plots.out {}'.format(sys.argv[1], sys.argv[2]))
+script_bkg_mu.write('./test/run_plots.sh {} {} {}'.format(sys.argv[1], execname, sys.argv[2]))
 submit_script(script_bkg_mu, scriptname)

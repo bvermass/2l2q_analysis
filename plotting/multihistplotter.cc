@@ -22,12 +22,12 @@ int main(int argc, char * argv[])
         legends.push_back(adjust_legend((TString)argv[i]));
     }
 
-    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a4650-4b4237-d4b483-c1666b
+    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> hex = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 70, 80}, {75, 66, 65}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
     std::vector<int> colors;
-    for(int i = 0; i < files.size(); i++){
-        colors.push_back(TColor::GetColor(hex[i][0], hex[i][1], hex[i][2]));
+    for(int i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
 
     // Name of directory where plots will end up

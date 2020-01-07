@@ -28,6 +28,7 @@ std::vector<std::vector<TString>> get_identifiers(const TString identifier_filen
 bool        check_identifiers(TString histname, std::vector<std::vector<TString>> identifiers);
 TString     make_general_pathname(const TString& plottype, TString specific_dir);
 TString     make_plotspecific_pathname(const TString& histname, const TString& pathname, const TString& linorlog);
+TString     get_lflavor(const TString& histname);
 TLegend     get_legend(double xmin, double ymin, double xmax, double ymax, int Ncolumns);
 TString     adjust_legend(TString legend);
 TLatex      get_latex(double textsize, int textalign, int textfont);

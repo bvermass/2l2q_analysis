@@ -24,8 +24,9 @@
 #include "tdrStyle.h"
 #include "helper_plotter_functions.h"
 
+std::vector<TString> get_V2s(double mass);
 TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg);
-bool plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends);
+bool plot_extra_hists_with_different_names(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends, std::vector<TString> histnames, std::vector<int> colors);
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif

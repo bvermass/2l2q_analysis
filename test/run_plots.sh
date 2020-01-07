@@ -96,8 +96,14 @@ if [[ choice -eq 3 ]]; then
                 counter=0
                 for val in $line; do
                     if [ $firstline -eq 0 ]; then
-                        subdirectory_name=($val)
-                        firstline=1
+                        if [ $counter -eq 0 ]; then
+                            subdirectory_name=($val)
+                            counter=1
+                        elif [ $counter -eq 1 ]; then
+                            partition=($val)
+                            counter=0
+                            firstline=1
+                        fi
                     elif [ $counter -eq 0 ]; then
                         samples+=($val)
                         counter=1
@@ -108,9 +114,9 @@ if [[ choice -eq 3 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
+        python test/submit_plots_tmp.py $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
         echo
-        rm $exec_name
+        #rm $exec_name
     else
         echo -e "\n//////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION FAILED//"

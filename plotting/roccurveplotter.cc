@@ -1,36 +1,50 @@
 #include "roccurveplotter.h"
 
-TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg, TString legend)
+std::vector<TString> get_V2s(double mass)
+{
+    if(mass >= 5) return {"5e-07", "9e-07", "4e-06", "8e-06", "3e-05"};
+    else if(mass == 4) return {"9e-07", "4e-06", "8e-06", "3e-05"};
+    else if(mass == 3) return {"4e-06", "8e-06", "3e-05", "7e-05"};
+    else if(mass == 2) return {"8e-06", "3e-05", "7e-05", "9e-05"};
+    else{
+        std::cout << "Warning: if you want plot vs V2 for mass " << mass << " then include it in the code" << std::endl;
+        return {};
+    }
+}
+
+
+TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg)
 {
     TGraph* roc = new TGraph(eff_signal.size(), &(eff_bkg[0]), &(eff_signal[0]));
-    roc->SetLineColor(get_color(legend));
     roc->SetLineWidth(2);
     return roc;
 }
 
 
-bool plot_PFNvsBDT(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, TString histname, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends)
+bool plot_extra_hists_with_different_names(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends, std::vector<TString> histnames, std::vector<int> colors)
 {
-    // This function adds the corresponding BDT roc curve to the existing multigraph that has the PFN version already
+    // To plot multiple roc curves in 1 plot, if the histograms have different names
     c->Clear();
-    histname.ReplaceAll("PFN", "BDT");
+    multigraph->Clear();
 
-    std::vector< double > auc;
-    for(int i = 0; i < files_signal.size(); i++){
-        TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
-        TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
-        if(!hist_signal or !hist_bkg) return false;
+    for(int i_hist = 0; i_hist < histnames.size(); i_hist++){
+        for(int i = 0; i < files_signal.size(); i++){
+            TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histnames[i_hist]);
+            TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histnames[i_hist]);
+            if(!hist_signal or !hist_bkg) return false;
 
-        std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
-        std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
-        TGraph* roc = get_roc(eff_signal, eff_bkg, "3GeV");
-        multigraph->Add(roc);
-        auc.push_back(computeAUC(roc));
-        TString auc_str = std::to_string(auc[i]).substr(0, std::to_string(auc[i]).find(".") + 3);
-        legend->AddEntry(roc, legends[i] + "(BDT): " + auc_str, "l");
+            std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
+            std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
+            TGraph* roc = get_roc(eff_signal, eff_bkg);
+            roc->SetLineColor(colors[i_hist]);
+            multigraph->Add(roc);
+            double auc = computeAUC(roc);
+            TString auc_str = std::to_string(auc).substr(0, std::to_string(auc).find(".") + 3);
+            legend->AddEntry(roc, legends[i_hist] + ": " + auc_str, "l");
+        }
     }
 
-    multigraph->Draw("AL");
+    multigraph->Draw("AC");
     legend->Draw("same");
 
     return true;
@@ -45,7 +59,7 @@ int main(int argc, char * argv[])
     gROOT->ForceStyle();
     
     // Argument 1: specific directory for plots
-    // Argument 2: legend of first
+    // Argument 2: legend of first roc curve
     // Argement 2: name of signal input file  
     // Argument 3: name of bkg input file
     // Argument 4, 5, 6 onwards, do same again
@@ -59,6 +73,14 @@ int main(int argc, char * argv[])
         if(i%3 == 2) legends.push_back(argument);
         else if(i%3 == 0) files_signal.push_back(TFile::Open(argument));
         else if(i%3 == 1) files_bkg.push_back(TFile::Open(argument));
+    }
+
+    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
+    //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<int> colors;
+    for(int i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
 
     // Name of directory where plots will end up
@@ -80,7 +102,7 @@ int main(int argc, char * argv[])
     TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
     TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
-    TIter next(files_signal.front()->GetListOfKeys()); //doesn't really matter if we take bkg or signal
+    TIter next(files_signal.front()->GetListOfKeys()); //Take signal to get relevant roc curves of that mass
     TKey* key;
     while(key = (TKey*)next()){
         legend.Clear();
@@ -118,7 +140,8 @@ int main(int argc, char * argv[])
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90);
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95);
 
-                TGraph* roc = get_roc(eff_signal, eff_bkg, legends[i]);
+                TGraph* roc = get_roc(eff_signal, eff_bkg);
+                roc->SetLineColor(colors[i]);
                 multigraph->Add(roc);
                 auc.push_back(computeAUC(roc));
                 TString auc_str = std::to_string(auc[i]).substr(0, std::to_string(auc[i]).find(".") + 3);
@@ -135,6 +158,41 @@ int main(int argc, char * argv[])
             c->Modified();
             c->Print(pathname_lin + histname + ".pdf");
 
+            // Plot ROC for several V2 (only for plots with 1 sig-bkg combo):
+            if(histname.Index("_V2-3e-05") != -1 and files_signal.size() == 1 and histname.Index("_M-") != -1){
+                legend.Clear();
+
+                TString mass = histname(histname.Index("_M-") + 3, histname.Index("_V2-") - histname.Index("_M-") - 3);
+                std::vector<TString> newV2s = get_V2s(mass.Atof());
+
+                std::vector<TString> histnamesV2;
+                std::vector<TString> legendsV2;
+                for(const TString& newV2 : newV2s){
+                    TString tmpname = histname;
+                    histnamesV2.push_back(tmpname.ReplaceAll("3e-05", newV2));
+                    legendsV2.push_back("M-" + mass + "V2-" + newV2);
+                }
+
+                if(plot_extra_hists_with_different_names(c, multigraph, &legend, files_signal, files_bkg, legendsV2, histnamesV2, colors)){
+                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+
+                    histname.ReplaceAll("_V2-3e-05", "_vsV2");
+                    pathname_lin.ReplaceAll("_V2-3e-05" "_vsV2");
+
+                    c->Modified();
+                    c->Print(pathname_lin + histname + ".pdf");
+
+                    multigraph->GetXaxis()->SetRangeUser(0., 0.1);
+                    multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
+
+                    c->Modified();
+                    c->Print(pathname_lin + histname + "_zoom.pdf");
+
+                    //c->SetLogx(1);
+                    //c->Modified();
+                    //c->Print(pathname_log + histname + "_zoom.pdf");
+                }
+            }
             // Plot PFN vs BDT
             //if(histname.Index("PFN") != -1){ 
             //    if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){

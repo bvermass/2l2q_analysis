@@ -59,11 +59,13 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
 {
     // append directories such as SS/OS, e/mu or HLT to pathname
     TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
-    TString eormu           = (histname.Index("_ee_") == -1 && histname.Index("Ele") == -1 && histname.Index("_e.") == -1)? ((histname.Index("_mm_") == -1 && histname.Index("Mu") == -1 && histname.Index("_mu.") == -1)? "" : "mu/") : "e/";
+    TString lflavor         = get_lflavor(histname);
     TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
     TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
     TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";
+    TString signal_region   = (histname.Index("_SR") == -1)?            "" : "SR/";
     TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1 && histname.Index("_Training") == -1)?         "" : "partialcuts/";
+    TString MV2             = (histname.Index("_M-") != -1 and histname.Index("_V2-") != -1)? (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/" : "";
     TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
     TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
     TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
@@ -74,9 +76,18 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
     TString Bool            = (histname.Index("_Bool_") == -1)? "" : "Bool/";
 
-    TString fullname = pathname + linorlog + gen + HLT + eormu + SSorOS + Bool + control_region + partialcuts + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
+    TString fullname = pathname + linorlog + gen + HLT + lflavor + SSorOS + Bool + control_region + signal_region + partialcuts + MV2 + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
     gSystem->Exec("mkdir -p " + fullname);
     return fullname;
+}
+
+
+TString get_lflavor(const TString& histname){
+    if(histname.Index("_ee_") != -1) return "ee/";
+    else if(histname.Index("_mm_") != -1) return "mm/";
+    else if(histname.Index("_em_") != -1) return "em/";
+    else if(histname.Index("_me_") != -1) return "me/";
+    else return "";
 }
 
 
