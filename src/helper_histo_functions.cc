@@ -74,6 +74,19 @@ void print_SR_counters(std::map<TString, double> sr, double total_weight)
 }
 
 
+void print_evaluating_points(const std::map<int, std::map<double, double>>& evaluating_ctaus)
+{
+    std::cout << "Evaluating points for PFN:" << std::endl;
+    for(auto& MassMap : evaluating_ctaus){
+        std::cout << "M-" << MassMap.first << ": ";
+        for(auto& V2Map : MassMap.second){
+            std::cout << V2Map.first << " - ";
+        }std::cout << std::endl;
+    }
+    std::cout << "-------------------------------------------" << std::endl;
+}
+
+
 double calc_betagamma(int particle_mass, double particle_energy)
 {
     double particle_betagamma = sqrt(particle_energy*particle_energy - particle_mass*particle_mass)/particle_mass;
@@ -235,9 +248,24 @@ double get_evaluating_ctau(double mass, double V2_new)
     return 0;
 }
 
+double get_truncated_ctau(double mass, double ctau_true)
+{
+    // hardcoded minimum and maximum values on which the PFN is trained. Extrapolation of PFN outside of trained V2 region does not work, therefore truncate ctau for evaluation at max or min trained value instead of true value.
+    if(mass == 2) return (ctau_true > 97.)? 97. : (ctau_true < 31.)? 31. : ctau_true;
+    if(mass == 3) return (ctau_true > 32.43)? 32.43 : (ctau_true < 7.6)? 7.6 : ctau_true;
+    if(mass == 4) return (ctau_true > 24.)? 24. : (ctau_true < 6.9)? 6.9 : ctau_true;
+    if(mass == 5) return (ctau_true > 18.4)? 18.4 : (ctau_true < 4.9)? 4.9 : ctau_true;
+    if(mass == 6) return (ctau_true > 109)? 109 : (ctau_true < 12.)? 12. : ctau_true;
+    if(mass == 8) return (ctau_true > 5.5)? 5.5 : (ctau_true < 1.6)? 1.6 : ctau_true;
+    if(mass == 10) return (ctau_true > 6.9)? 6.9 : (ctau_true < 0.66)? 0.66 : ctau_true;
+    if(mass == 15) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
+    std::cout << "Warning: reached end of get_truncated_ctau without returning a correct ctau value, returning ctau_true" << std::endl;
+    return ctau_true;
+}
+
 std::vector<double> get_evaluating_V2s(double mass)
 {
-    if(mass == 2) return {6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4};
+    if(mass == 2) return {6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5};
     if(mass == 3) return {4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5};
     if(mass == 4) return {9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
     if(mass == 5 or mass == 6 or mass == 8 or mass == 10 or mass == 15) return {5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
@@ -250,4 +278,13 @@ TString get_MV2name(int mass, double V2)
     std::ostringstream V2stream;
     V2stream << V2;
     return "_M-" + std::to_string(mass) + "_V2-" + V2stream.str();
+}
+
+// Usage example: filePutContents("./yourfile.txt", "content", true);
+void filePutContents(const std::string& name, const std::string& content, bool append)
+{
+    std::ofstream outfile;
+    if (append) outfile.open(name, std::ios_base::app);
+    else outfile.open(name);
+    outfile << content;
 }

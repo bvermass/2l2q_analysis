@@ -38,6 +38,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
         _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
         evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(_gen_Nmass, _gen_NV*_gen_NV) + "\n", true);
     }else {
         _gen_Nmass = 0;
         _gen_NV    = 0;
@@ -137,6 +138,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         total_weight = (cross_section * 35900 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
+    print_evaluating_points(evaluating_ctaus);
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);

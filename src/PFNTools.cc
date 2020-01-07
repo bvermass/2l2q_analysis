@@ -9,7 +9,7 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals(HNLtagger& 
 
     for(auto& MassMap : evaluating_ctaus){
         for(auto& V2Map : MassMap.second){
-            values[MassMap.first][V2Map.first] = hnltagger.predict(pfn, pfn_version, MassMap.first, V2Map.second);
+            values[MassMap.first][V2Map.first] = hnltagger.predict(pfn, pfn_version, MassMap.first, get_truncated_ctau(MassMap.first, V2Map.second));
         }
     }
     return values;

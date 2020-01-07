@@ -62,7 +62,7 @@ void full_analyzer::get_displ_electronID()  //basically medium POG cut-based ID 
         displElectronID[i] = _lFlavor[i] == 0 &&
                              fabs(_lEta[i]) < 2.5 &&
                              _lPt[i] > 7 &&
-                             //fabs(_dxy[i]) > 0.01 && for now, require this as a separate condition
+                             fabs(_dxy[i]) > 0.02 &&
                              _lElectronPassConvVeto[i] &&
                              (   (_lEleIsEB[i] &&
                                   _lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
@@ -139,7 +139,7 @@ void full_analyzer::get_displ_muonID()
 	    displMuonID[i] = _lFlavor[i] == 1 &&
 			             fabs(_lEta[i]) < 2.4 &&
 			             _lPt[i] > 5 &&
-			             //fabs(_dxy[i]) > 0.01 && for now, require this as a separate condition
+			             fabs(_dxy[i]) > 0.02 &&
                          _lPOGLoose[i] &&
                          (   (goodglobalmuon &&
                               _lMuonSegComp[i] > 0.303
