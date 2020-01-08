@@ -256,7 +256,7 @@ double get_truncated_ctau(double mass, double ctau_true)
     if(mass == 4) return (ctau_true > 24.)? 24. : (ctau_true < 6.9)? 6.9 : ctau_true;
     if(mass == 5) return (ctau_true > 18.4)? 18.4 : (ctau_true < 4.9)? 4.9 : ctau_true;
     if(mass == 6) return (ctau_true > 109)? 109 : (ctau_true < 12.)? 12. : ctau_true;
-    if(mass == 8) return (ctau_true > 5.5)? 5.5 : (ctau_true < 1.6)? 1.6 : ctau_true;
+    if(mass == 8) return (ctau_true > 108.8)? 108.8 : (ctau_true < 1.6)? 1.6 : ctau_true;
     if(mass == 10) return (ctau_true > 6.9)? 6.9 : (ctau_true < 0.66)? 0.66 : ctau_true;
     if(mass == 15) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
     std::cout << "Warning: reached end of get_truncated_ctau without returning a correct ctau value, returning ctau_true" << std::endl;
