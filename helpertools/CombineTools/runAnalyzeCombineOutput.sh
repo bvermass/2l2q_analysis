@@ -1,8 +1,8 @@
 #!/bin/bash
 make -f makeAnalyzeOutput
 
-./test ~/public/2l2q_analysis/combine/combine_output/_mu_.txt mu_
-./test ~/public/2l2q_analysis/combine/combine_output/_e_.txt e_
+./test ~/public/2l2q_analysis/combine/combine_output/_mm_.txt mm_
+./test ~/public/2l2q_analysis/combine/combine_output/_ee_.txt ee_
 #./test ~/public/2l2q_analysis/combine/combine_output/mu_M-2/_mu_.txt mu_M-2
 #./test ~/public/2l2q_analysis/combine/combine_output/mu_M-3/_mu_.txt mu_M-3
 #./test ~/public/2l2q_analysis/combine/combine_output/mu_M-4/_mu_.txt mu_M-4

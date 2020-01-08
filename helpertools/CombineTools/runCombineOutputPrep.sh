@@ -1,7 +1,7 @@
 #!/bin/bash
 
-python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/ _mu_
-python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/ _e_
+python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/ _mm_
+python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/ _ee_
 #python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/mu_M-2/  _mu_
 #python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/mu_M-3/  _mu_
 #python CombineOutputPrep.py ~/public/2l2q_analysis/combine/combine_output/mu_M-4/   _mu_
