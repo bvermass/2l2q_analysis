@@ -87,6 +87,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
         //add_Bool_hists(&hists, lep_region);
     }
+    for(const TString &lep_region : {"_mm", "_ee", "_me", "_em"}){
+        for(auto& MassMap : evaluating_ctaus){
+            for(auto& V2Map : MassMap.second){
+                add_Shape_SR_histograms(&hists, lep_region + MV2name[MassMap.first][V2Map.first]);
+            }
+        }
+    }
 
     //assures statistical errors are dealt with correctly
     for(auto const& it : hists){

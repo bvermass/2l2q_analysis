@@ -10,6 +10,8 @@ void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu){
     i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
 
     sr_flavor = get_signal_region_flavor();
+    sr_charge = sr_flavor(0,3);
+    sr_lflavor = sr_flavor(3,3);
 
     set_relevant_lepton_variables();
 }

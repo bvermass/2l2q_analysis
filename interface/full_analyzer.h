@@ -761,7 +761,7 @@ public :
    // signal region lepton indices 
    int i_leading;
    int i_subleading;
-   TString sr_flavor;
+   TString sr_flavor, sr_charge, sr_lflavor;
    
    // gen indices corresponding to signal region leptons (geometric)
    int i_gen_leading;
@@ -855,6 +855,8 @@ public :
    // in src/histo_functions.cc
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     add_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString MV2, double event_weight);
     void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
     void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
     void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);

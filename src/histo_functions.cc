@@ -129,6 +129,27 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
 }
 
 
+void full_analyzer::add_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString prefix)
+{
+    (*hists)[prefix+"_Shape_SR"]    = new TH1F(prefix+"_Shape_SR", ";SR bins;Events", 12, 0, 12);
+}
+
+
+void full_analyzer::fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString MV2, double event_weight)
+{
+    unsigned bin = -20;
+    if(IVF_PVSVdist_2D > 0 and IVF_PVSVdist_2D < 1) bin = 0;
+    else if(IVF_PVSVdist_2D > 1 and IVF_PVSVdist_2D < 5) bin = 1;
+    else if(IVF_PVSVdist_2D > 5 and IVF_PVSVdist_2D < 60) bin = 2;
+
+    if(SVmass > 5) bin += 3;
+
+    if(sr_flavor.Index("OS") != -1) bin += 6;
+
+    (*hists)[sr_lflavor + MV2 + "_Shape_SR"]->Fill(bin, event_weight);
+}
+
+
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D){
     fill_HNL_MC_check(hists, hists2D, ev_weight);
     //fill_HLT_efficiency(hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
@@ -160,7 +181,10 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
             if(_FullNoPFN) fill_pfn_histograms(hists, sr_flavor + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
             if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
             if(_TrainingHighPFN[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
-            if(_Full[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+            if(_Full[MassMap.first][V2Map.first]){
+                fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+                fill_Shape_SR_histograms(hists, MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+            }
             if(_CR_Full_invdphi[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRdphi" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
             if(_CR_Full_invmll[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRmll" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
         }
