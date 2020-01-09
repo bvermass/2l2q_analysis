@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
     for(int i = i_legends; i < argc; i++){
         std::string legendname = (std::string)argv[i];
         if(legendname.find("HNL") != std::string::npos){ std::cout << "sig: " << legendname << std::endl; legends_signal.push_back(legendname); }
-        else if(i == argc){ std::cout << "obs: " << legendname << std::endl; legends_data.push_back(legendname); }
+        else if(i == argc - 1){ std::cout << "obs: " << legendname << std::endl; legends_data.push_back(legendname); }
         //else if(legendname.Index("201") != -1 or legendname.Index("Data") != -1 or legendname.Index("data") != -1) legends_data.push_back(adjust_legend(legendname));
         else{ std::cout << "bkg: " << legendname << std::endl; legends_bkg.push_back(legendname); }
     }
@@ -41,7 +41,9 @@ int main(int argc, char * argv[])
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
     std::string general_pathname = (std::string)make_general_pathname("combine/datacards/", specific_dir + "/");
+    std::string shapeSR_pathname = (std::string)make_general_pathname("combine/Shapefiles/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
+    gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
 
     TIter next(files_signal[0]->GetListOfKeys());
     TKey* key;
@@ -53,7 +55,7 @@ int main(int argc, char * argv[])
         if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
             TH1F* sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname = sample_hist_ref->GetName();
-            if(histname.Index(flavor) != -1 and histname.Index("SS") != -1 and histname.Index("_M-") != -1 and histname.Index("_V2-") != -1 and histname.Index("_SR") != -1 and histname.Index("_IVF_mass") != -1){
+            if(histname.Index(flavor) != -1 and histname.Index("Shape_SR") != -1){
             std::cout << histname << std::endl;
             //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -74,18 +76,21 @@ int main(int argc, char * argv[])
                 }
 
                 //Systematic Uncertainty stuff
-                //std::vector<std::vector<double>> systUnc;
-                //unsigned nSyst;
-                //std::vector<std::string> systNames;
-                //std::vector<std::string> systDist;
-                //
-                ////Shape analysis stuff
-                //bool shapeCard = false;
-                //std::string shapeFilename = "";
+                std::vector<std::vector<double>> systUnc;
+                unsigned nSyst = 0;
+                std::vector<std::string> systNames;
+                std::vector<std::string> systDist;
 
-                //bool autoMCStats = false;
+                //Shape analysis stuff
+                bool shapeCard = true;
+                std::string shapeFileName = shapeSR_pathname + (std::string)histname + ".root";
+                makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg);
 
-                if(sigYield > 0.1) printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0]);
+                bool autoMCStats = true;
+
+                if(sigYield > 0.1){
+                    printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, 0, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
+                }
             }
         }
     }
@@ -93,8 +98,24 @@ int main(int argc, char * argv[])
 #endif
 
 
+bool makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames)
+{
+    std::cout << "Shape histograms in " << shapeSR_filename << std::endl;
+    TFile *shapeSR_file = new TFile(shapeSR_filename, "recreate");
+
+    hist_signal->Write(sigName.c_str());
+    hist_data->Write("data_obs");
+    for(int i = 0; i < hists_bkg.size(); i++){
+        hists_bkg[i]->Write(bkgNames[i].c_str());
+    }
+
+    shapeSR_file->Close();
+}
+
+
 //Function to print dataCard to be analysed by CMS combination tool
 void printDataCard(const std::string& cardName, const double obsYield, const double sigYield, const std::string& sigName, const double* bkgYield, const unsigned nBkg, const std::string* bkgNames, const std::vector<std::vector<double> >& systUnc, const unsigned nSyst, const std::string* systNames, const std::string* systDist, const bool shapeCard, const std::string& shapeFileName, const bool autoMCStats ){
+    std::cout << "Datacard in " << cardName << std::endl;
 
     //stream for writing card
     std::ofstream card;
@@ -115,7 +136,7 @@ void printDataCard(const std::string& cardName, const double obsYield, const dou
     //define all backgrounds and their yields
     card << "---------------------------------------------------------------------------------------- \n";
     if(shapeCard){
-        card << "shapes * * " << shapeFileName + ".root  $PROCESS $PROCESS_$SYSTEMATIC\n";
+        card << "shapes * * " << shapeFileName + " $PROCESS $PROCESS_$SYSTEMATIC\n";
         card << "---------------------------------------------------------------------------------------- \n";
     }
     card << "bin    ";
