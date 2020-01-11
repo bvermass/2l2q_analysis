@@ -43,7 +43,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         _gen_Nmass = 0;
         _gen_NV    = 0;
         _gen_Nctau  = 0;
-        evaluating_masses = {2, 3, 5, 6, 8, 10};
+        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
@@ -243,6 +243,23 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         fill_histograms(&hists, &hists2D);
         SR_counters[sr_flavor]++;
         SR_counters[sr_flavor+"_weighted"] += ev_weight;
+        if(sr_flavor == ""){
+            if(i_leading == -1){
+                SR_counters["no_l1"]++;
+                SR_counters["no_l1_weighted"] += ev_weight;
+            }else if(i_subleading == -1){
+                if(gen_PVSVdist_2D > 30){
+                    SR_counters["no_l2_far"]++;
+                    SR_counters["no_l2_far_weighted"] += ev_weight;
+                }else if(gen_PVSVdist_2D < 0.1) {
+                    SR_counters["no_l2_cl"]++;
+                    SR_counters["no_l2_cl_weighted"]++;
+                }else {
+                    SR_counters["no_l2_ot"]++;
+                    SR_counters["no_l2_ot_weighted"]++;
+                }
+            }
+        }
     }
     //Small summary to write to terminal in order to quickly check state of results
     print_SR_counters(SR_counters, total_weight);

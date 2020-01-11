@@ -7,6 +7,8 @@ function hadd_subfiles {
             echo -e "\n\nhadding subfiles:        "$1
             if hadd -f ${1%%subfiles*}${2}${1#*subfiles/}.root $1/$2*_job_* ; then
                 rm $1/$2*_job_*
+            else
+                exit 1
             fi
             echo -e "\n"
         fi
@@ -84,6 +86,7 @@ if [ $tag == "all" ]; then
         IVFimp_full_analyzer=$IVFimp/full_analyzer/
         hadd_specific_backgrounds $IVFimp_full_analyzer hists_full_analyzer_
     done
+    echo 'successfully done!'
     
     #echo -e "\n---------------------------"
     #echo -e "Looking for HNLtagger files\n"
@@ -122,6 +125,7 @@ else
         hadd_subfiles $D HNLBDTtagger_electron_
         hadd_subfiles $D HNLBDTtagger_muon_
     done
+    echo 'successfully done!'
 
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_muon_
