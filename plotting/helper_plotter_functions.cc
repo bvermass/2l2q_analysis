@@ -218,9 +218,12 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
             break;
         }
     }
-    std::cout << " \\item Sig " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
-    std::cout << "Bkg " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
+    std::cout << " \\item Sig " << cp_eff_signal*100 << "\\% (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
+    std::cout << "Bkg " << cp_eff_bkg*100 << "\\% (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
     std::cout << "PFN output > " << cp << std::endl;
+    //std::cout << " \\item Sig " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
+    //std::cout << "Bkg " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
+    //std::cout << "PFN output > " << cp << std::endl;
 }
 
 
