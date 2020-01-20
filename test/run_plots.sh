@@ -124,7 +124,7 @@ if [[ choice -eq 3 ]]; then
     fi
 fi
 if [[ choice -eq 4 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/roccurveplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/roccurveplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n////////////////////////////////////"
         echo -e "//ROC PLOTS COMPILATION SUCCESSFUL//"
         echo -e "////////////////////////////////////\n"

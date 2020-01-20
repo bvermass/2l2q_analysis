@@ -23,6 +23,7 @@
 // other header files
 #include "tdrStyle.h"
 #include "helper_plotter_functions.h"
+#include "../interface/helper_histo_functions.h"
 
 std::vector<TString> get_V2s(double mass);
 TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg);

@@ -102,6 +102,9 @@ int main(int argc, char * argv[])
     TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
     TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
+    std::vector< std::map< TString, double > > auc; // Vector for different files, map <V2, auc>
+    for(int i = 0; i < files_signal.size(); i++) auc.push_back(std::map<TString, double>());
+
     TIter next(files_signal.front()->GetListOfKeys()); //Take signal to get relevant roc curves of that mass
     TKey* key;
     while(key = (TKey*)next()){
@@ -122,7 +125,6 @@ int main(int argc, char * argv[])
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
 
             TMultiGraph* multigraph = new TMultiGraph();
-            std::vector< double > auc;
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");
             for(int i = 0; i < files_signal.size(); i++){
                 //auc.push_back(get_roc_and_auc(multigraph, histname, files_signal[i], files_bkg[i]);
@@ -145,8 +147,8 @@ int main(int argc, char * argv[])
                 TGraph* roc = get_roc(eff_signal, eff_bkg);
                 roc->SetLineColor(colors[i]);
                 multigraph->Add(roc);
-                auc.push_back(computeAUC(roc));
-                TString auc_str = std::to_string(auc[i]).substr(0, std::to_string(auc[i]).find(".") + 3);
+                auc[i][histname] = computeAUC(roc);
+                TString auc_str = std::to_string(auc[i][histname]).substr(0, std::to_string(auc[i][histname]).find(".") + 3);
                 legend.AddEntry(roc, legends[i] + ": " + auc_str, "l");
             }
 
@@ -216,6 +218,50 @@ int main(int argc, char * argv[])
             //        c->Print(pathname_log + histname + "_zoom.pdf");
             //    }
             //}
+        }
+    }
+
+
+    // Use stored auc values to make plots vs V2
+    //TMultiGraph* multigraph = new TMultiGraph();
+    //multigraph->SetTitle((TString)";|V|^{2};auc");
+    c->SetLogx(1);
+    for(int i = 0; i < auc.size(); i++){
+
+        for(auto& auc_withname : auc[i]){
+            TString histname = auc_withname.first;
+            if(histname.Contains("V2-3e-05")){
+                legend.Clear();
+
+                TString mass = histname(histname.Index("_M-") + 3, histname.Index("_V2-") - histname.Index("_M-") - 3);
+
+                std::vector<double> auc_for_graph;
+                std::vector<double> V2s = get_evaluating_V2s(mass.Atof());
+                for(double V2 : V2s){
+                    TString MV2name = get_MV2name(mass.Atof(), V2);
+                    TString histname_new = histname(0, histname.Index("_M-")) + MV2name + "_PFN_ROC";
+                    auc_for_graph.push_back(auc[i][histname_new]);
+                }
+
+                TGraph* auc_graph = new TGraph(V2s.size(), &V2s[0], &auc_for_graph[0]);
+                auc_graph->SetTitle((TString)";|V|^{2};auc");
+                auc_graph->SetLineColor(colors[0]);
+                auc_graph->SetMarkerColor(colors[0]);
+                legend.AddEntry(auc_graph, "M-"+mass);
+                TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
+                histname.ReplaceAll("V2-3e-05", "vsV2_AUC");
+                pathname_lin.ReplaceAll("_V2-3e-05", "_vsV2");
+                gSystem->Exec("mkdir -p " + pathname_lin);
+
+                auc_graph->Draw("AP");
+                auc_graph->SetMaximum(100);
+                legend.Draw("same");
+                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+
+                c->Modified();
+                c->Print(pathname_lin + histname + ".pdf");
+            }
         }
     }
 }
