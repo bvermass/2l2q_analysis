@@ -157,6 +157,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
     hnltagger._mll             = get_mll(i_leading, i_subleading);
     hnltagger._mlljet          = 0;//maybe add it?
     hnltagger._dRll            = get_dRll(i_leading, i_subleading);
+    hnltagger._dRljet          = get_dR_lepton_jet(i_subleading, i_jetl2);
 
     hnltagger._SV_PVSVdist     = get_IVF_PVSVdist(i_subleading);
     hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_subleading);

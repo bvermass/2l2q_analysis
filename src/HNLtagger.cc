@@ -43,6 +43,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_mll",                              &_mll,                              "_mll/D");
     HNLtagger_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
     HNLtagger_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");
+    HNLtagger_tree->Branch("_dRljet",                           &_dRljet,                           "_dRljet/D");
 
     HNLtagger_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
     HNLtagger_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");

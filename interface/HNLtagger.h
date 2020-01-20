@@ -59,6 +59,7 @@ class HNLtagger
         double   _mll;
         double   _mlljet;
         double   _dRll;
+        double   _dRljet;
 
         double   _SV_PVSVdist;
         double   _SV_PVSVdist_2D;
