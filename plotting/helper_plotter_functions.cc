@@ -240,8 +240,8 @@ void alphanumeric_labels(TH2F* hist)
 {
     TString histname = hist->GetName();
     if(histname.Index("lsources") != -1){
-        const char* labels[12] = {"und.", "Z", "W", "b", "c", "uds", "g", "phot", "tau", "mu", "e", "HNL"};
-        for(int i = 1; i <= 12; i++){
+        const char* labels[13] = {"und.", "Z", "W", "t", "b", "c", "uds", "g", "phot", "tau", "mu", "e", "HNL"};
+        for(int i = 1; i <= 13; i++){
             hist->GetXaxis()->SetBinLabel(i, labels[i-1]);
             hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
         }

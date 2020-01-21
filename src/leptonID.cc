@@ -294,16 +294,17 @@ double full_analyzer::get_lsource(int i_gen_lep)
     double mompdg = abs(_gen_lMomPdg[i_gen_lep])%10000;
     if(mompdg == 23) return 0;//Z
     else if(mompdg == 24) return 1;//W
-    else if((mompdg >= 500 and mompdg < 600) or (mompdg >= 5000 and mompdg < 6000) or mompdg == 5) return 2;//b
-    else if((mompdg >= 400 and mompdg < 500) or (mompdg >= 4000 and mompdg < 5000) or mompdg == 4) return 3;//c
-    else if((mompdg >= 100 and mompdg < 400) or (mompdg >= 1000 and mompdg < 4000) or mompdg == 1 or mompdg == 2 or mompdg == 3) return 4;//uds
-    else if(mompdg == 21) return 5;//gluon
-    else if(mompdg == 22) return 6;//photon
-    else if(mompdg == 15) return 7;//tau
-    else if(mompdg == 13) return 8;//mu
-    else if(mompdg == 11) return 9;//e
-    else if(mompdg == 12) return 10;//HNL
-    else if(mompdg == 0) return -1;
+    else if(mompdg == 6) return 2;//t
+    else if((mompdg >= 500 and mompdg < 600) or (mompdg >= 5000 and mompdg < 6000) or mompdg == 5) return 3;//b
+    else if((mompdg >= 400 and mompdg < 500) or (mompdg >= 4000 and mompdg < 5000) or mompdg == 4) return 4;//c
+    else if((mompdg >= 100 and mompdg < 400) or (mompdg >= 1000 and mompdg < 4000) or mompdg == 1 or mompdg == 2 or mompdg == 3) return 5;//uds
+    else if(mompdg == 21) return 6;//gluon
+    else if(mompdg == 22) return 7;//photon
+    else if(mompdg == 15) return 8;//tau
+    else if(mompdg == 13) return 9;//mu
+    else if(mompdg == 11) return 10;//e
+    else if(mompdg == 12) return 11;//HNL
+    else if(mompdg == 0) return -1;//unknown
     else {
         std::cout << "no category for lepton with mother: " << mompdg << std::endl;
         return -1;
