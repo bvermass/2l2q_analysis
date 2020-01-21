@@ -313,6 +313,12 @@ public :
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
    Bool_t          _lIsPrompt[10];   //[_nL]
    Int_t           _lMatchPdgId[10];   //[_nL]
+   Int_t           _lMatchCharge[10];
+   unsigned        _tauGenStatus[10];
+   Int_t           _lMomPdgId[10];
+   unsigned        _lProvenance[10];
+   unsigned        _lProvenanceCompressed[10];
+   unsigned        _lProvenanceConversion[10];
    unsigned        _nPh;
    Double_t        _phPt[10];   //[_nPh]
    Double_t        _phEta[10];   //[_nPh]
@@ -658,6 +664,12 @@ public :
    TBranch        *b__lMuonTrackPtErr;   //!
    TBranch        *b__lIsPrompt;   //!
    TBranch        *b__lMatchPdgId;   //!
+   TBranch        *b__lMatchCharge;
+   TBranch        *b__tauGenStatus;
+   TBranch        *b__lMomPdgId;
+   TBranch        *b__lProvenance;
+   TBranch        *b__lProvenanceCompressed;
+   TBranch        *b__lProvenanceConversion;
    TBranch        *b__nPh;   //!
    TBranch        *b__phPt;   //!
    TBranch        *b__phEta;   //!

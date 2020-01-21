@@ -304,10 +304,10 @@ double full_analyzer::get_lsource(int i_gen_lep)
     else if(mompdg == 13) return 9;//mu
     else if(mompdg == 11) return 10;//e
     else if(mompdg == 12) return 11;//HNL
-    else if(mompdg == 0) return -1;//unknown
+    else if(mompdg == 0) return -2;//unknown
     else {
         std::cout << "no category for lepton with mother: " << mompdg << std::endl;
-        return -1;
+        return -2;
     }
 }
 

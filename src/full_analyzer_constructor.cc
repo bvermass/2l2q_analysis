@@ -365,6 +365,12 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lMuonTrackPtErr", _lMuonTrackPtErr, &b__lMuonTrackPtErr);
    fChain->SetBranchAddress("_lIsPrompt", _lIsPrompt, &b__lIsPrompt);
    fChain->SetBranchAddress("_lMatchPdgId", _lMatchPdgId, &b__lMatchPdgId);
+   fChain->SetBranchAddress("_lMatchCharge", _lMatchCharge, &b__lMatchCharge);
+   fChain->SetBranchAddress("_tauGenStatus", _tauGenStatus, &b__tauGenStatus);
+   fChain->SetBranchAddress("_lMomPdgId", _lMomPdgId, &b__lMomPdgId);
+   fChain->SetBranchAddress("_lProvenance", _lProvenance, &b__lProvenance);
+   fChain->SetBranchAddress("_lProvenanceCompressed", _lProvenanceCompressed, &b__lProvenanceCompressed);
+   fChain->SetBranchAddress("_lProvenanceConversion", _lProvenanceConversion, &b__lProvenanceConversion);
    //fChain->SetBranchAddress("_nPh", &_nPh, &b__nPh);
    //fChain->SetBranchAddress("_phPt", _phPt, &b__phPt);
    //fChain->SetBranchAddress("_phEta", _phEta, &b__phEta);
