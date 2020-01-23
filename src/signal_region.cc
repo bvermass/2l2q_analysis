@@ -50,6 +50,17 @@ void full_analyzer::set_relevant_lepton_variables(){
             }
         }
     }
+
+    nTightEle = 0;
+    nTightMu  = 0;
+    nDisplEle = 0;
+    nDisplMu  = 0;
+    for(unsigned i = 0; i < _nL; i++){
+        if(fullElectronID[i] and ele_clean_full_displ[i]) nTightEle++;
+        else if(fullMuonID[i]) nTightMu++;
+        else if(displElectronID[i] and ele_clean_full_displ[i]) nDisplEle++;
+        else if(displMuonID[i]) nDisplMu++;
+    }
 }
 
 

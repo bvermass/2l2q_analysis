@@ -30,9 +30,13 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
     //(*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
 
-    (*hists)[prefix+"_nEle"]                            = new TH1F(prefix+"_nEle", ";N_{electron};Events", 10, 0, 10);
-    (*hists)[prefix+"_nMu"]                             = new TH1F(prefix+"_nMu", ";N_{muon};Events", 10, 0, 10);
-    (*hists)[prefix+"_nLight"]                          = new TH1F(prefix+"_nLight", ";N_{lepton};Events", 10, 0, 10);
+    (*hists)[prefix+"_nTightEle"]                       = new TH1F(prefix+"_nTightEle", ";N_{prompt electron};Events", 10, 0, 10);
+    (*hists)[prefix+"_nTightMu"]                        = new TH1F(prefix+"_nTightMu", ";N_{prompt muon};Events", 10, 0, 10);
+    (*hists)[prefix+"_nTight"]                          = new TH1F(prefix+"_nTight", ";N_{prompt e,mu};Events", 10, 0, 10);
+    (*hists)[prefix+"_nDisplEle"]                       = new TH1F(prefix+"_nDisplEle", ";N_{displ electron};Events", 10, 0, 10);
+    (*hists)[prefix+"_nDisplMu"]                        = new TH1F(prefix+"_nDisplMu", ";N_{displ muon};Events", 10, 0, 10);
+    (*hists)[prefix+"_nDispl"]                          = new TH1F(prefix+"_nDispl", ";N_{displ e,mu};Events", 10, 0, 10);
+    (*hists)[prefix+"_nTightDispl"]                     = new TH1F(prefix+"_nTightDispl", ";N_{e,mu};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_uncl"]                      = new TH1F(prefix+"_nJets_uncl", ";N_{jets(uncl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_cl"]                        = new TH1F(prefix+"_nJets_cl", ";N_{jets(cl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_l1_pt"]                           = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 30, 0, 100);
@@ -202,13 +206,6 @@ void full_analyzer::fill_relevant_histograms(std::map<TString, TH1*>* hists, std
 
 void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
     // Plotting histograms
-    int nEle    = 0;
-    int nMu     = 0;
-    for(unsigned i = 0; i < _nL; i++){
-        if(displElectronID[i] and ele_clean_full_displ[i]) nEle++;
-        if(looseMuonID[i]) nMu++;
-    }
-
     int nJets_uncl = 0;
     int nJets_cl = 0;
     std::vector<LorentzVector> jets_uncl;
@@ -226,9 +223,13 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
         }
     }
 
-    (*hists)[prefix+"_nEle"]->Fill(nEle, event_weight);
-    (*hists)[prefix+"_nMu"]->Fill(nMu, event_weight);
-    (*hists)[prefix+"_nLight"]->Fill(nEle + nMu, event_weight);
+    (*hists)[prefix+"_nTightEle"]->Fill(nTightEle, event_weight);
+    (*hists)[prefix+"_nTightMu"]->Fill(nTightMu, event_weight);
+    (*hists)[prefix+"_nTight"]->Fill(nTightEle + nTightMu, event_weight);
+    (*hists)[prefix+"_nDisplEle"]->Fill(nDisplEle, event_weight);
+    (*hists)[prefix+"_nDisplMu"]->Fill(nDisplMu, event_weight);
+    (*hists)[prefix+"_nDispl"]->Fill(nDisplEle + nDisplMu, event_weight);
+    (*hists)[prefix+"_nTightDispl"]->Fill(nTightEle + nDisplEle + nTightMu + nDisplMu, event_weight);
     (*hists)[prefix+"_nJets_uncl"]->Fill(nJets_uncl, event_weight);
     (*hists)[prefix+"_nJets_cl"]->Fill(nJets_cl, event_weight);
 

@@ -785,6 +785,9 @@ public :
    int i_thirdleading_jet;
    int i_jetl2;
 
+   // numbers of leptons
+   int nTightEle, nTightMu, nDisplEle, nDisplMu;
+
    //Signal region booleans
    bool _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _Training, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
    std::map<int, std::map<double, bool>> _TrainingHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
