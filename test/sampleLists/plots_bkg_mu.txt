@@ -3,8 +3,7 @@ final_mu 50
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO.root               HNL_M-5_18mm
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO.root               HNL_M-8_2mm
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000793725393319_mu_massiveAndCKM_LO.root             HNL_M-10_6mm
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_ST.root                                                               Top
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Diboson.root                                                          Diboson
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_TTJets.root                                                           t#bar{t}
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Top.root                                                              Top
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                           DY
 /user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
