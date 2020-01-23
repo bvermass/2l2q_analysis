@@ -29,6 +29,7 @@ double      get_ctprofile_reweighting_weight(double V2_old, double V2_new, doubl
 double      get_evaluating_ctau(double mass, double V2_new);//for evaluating PFN on bkg (when parametrized in ctau)
 double      get_truncated_ctau(double mass, double ctau_true);
 std::vector<double> get_evaluating_V2s(double mass);
+std::vector<double> get_evaluating_V2s_short(double mass);
 TString     get_MV2name(int mass, double V2);
 void        filePutContents(const std::string& name, const std::string& content, bool append = false);
 

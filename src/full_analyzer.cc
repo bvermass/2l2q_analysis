@@ -48,7 +48,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
     for(const int& mass : evaluating_masses){
-        evaluating_V2s[mass] = get_evaluating_V2s(mass);
+        evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
         for(const double& V2 : evaluating_V2s[mass]){
             evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2);
             MV2name[mass][V2] = get_MV2name(mass, V2);
