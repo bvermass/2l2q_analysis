@@ -103,7 +103,7 @@ int main(int argc, char * argv[])
             
             if(sample_hist->GetMaximum() == 0) continue;
             if(!check_identifiers(histname, identifiers)) continue;
-            if(histname.Index("lsources") != -1) alphanumeric_labels(sample_hist);
+            alphanumeric_labels(sample_hist);
 
             TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 

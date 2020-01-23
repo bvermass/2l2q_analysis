@@ -246,4 +246,18 @@ void alphanumeric_labels(TH2F* hist)
             hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
         }
     }
+    if(histname.Index("lprovenance") != -1 and histname.Index("Compressed") == -1){
+        const char* labels[19] = {"W_L", "W_T_L", "W_B_L", "W_B_C_L", "W_B_C_T_L", "W_B_T_L", "W_C_L", "W_C_T_L", "B_L", "B_C_L", "B_C_T_L", "B_T_L", "C_L", "C_T_L", "B_Baryon", "C_Baryon", "pi_0", "photon", "F_L"};
+        for(int i = 1; i <= 19; i++){
+            hist->GetXaxis()->SetBinLabel(i, labels[i-1]);
+            hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
+        }
+    }
+    if(histname.Index("lprovenanceCompressed") != -1){
+        const char* labels[5] = {"prompt", "b", "c", "fake", "unknown"};
+        for(int i = 1; i <= 5; i++){
+            hist->GetXaxis()->SetBinLabel(i, labels[i-1]);
+            hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
+        }
+    }
 }

@@ -9,11 +9,11 @@ if [ $# -eq 1 ] ; then
     exec_name=a_plots.out
     read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4), SelectionOptimization(5), CombineDatacards(6): " choice
 elif [ $# -eq 2 ] ; then
-    exec_name=$2
-    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4), SelectionOptimization(5), CombineDatacards(6): " choice
+    exec_name=a_plots.out
+    choice=$2
 else
-    exec_name=$2
-    choice=$3
+    exec_name=$3
+    choice=$2
 fi
 
 if [[ choice -eq 1 ]]; then

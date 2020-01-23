@@ -164,10 +164,6 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
         fill_IVF_eff(hists, sr_flavor, ev_weight);
     }
 
-    if(_Training_noRelIso){
-        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training_nRIso", ev_weight);
-    }
-
     if(_Training){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
@@ -176,19 +172,22 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     if(_FullNoPFN){
         fill_relevant_histograms(hists, hists2D, sr_flavor, ev_weight);
     }
+    if(_FullNoPFN_toofar){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_TooFar", ev_weight);
+    }
 
 
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
             if(_FullNoPFN) fill_pfn_histograms(hists, sr_flavor + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
             if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
-            if(_TrainingHighPFN[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+            //if(_TrainingHighPFN[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
             if(_Full[MassMap.first][V2Map.first]){
                 fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
                 fill_Shape_SR_histograms(hists, MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
             }
-            if(_CR_Full_invdphi[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRdphi" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
-            if(_CR_Full_invmll[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRmll" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+            //if(_CR_Full_invdphi[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRdphi" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
+            //if(_CR_Full_invmll[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRmll" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
         }
     }
 }

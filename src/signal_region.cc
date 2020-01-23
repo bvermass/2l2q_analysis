@@ -115,17 +115,17 @@ void full_analyzer::signal_regions(){
      _l1l2SV                    = _l1l2 &&
                                   _lIVF_match[i_subleading];
 
-     _Training_noRelIso         = _l1l2SV &&
-                                  i_jetl2 != -1;
-
      _Training                  = _l1l2SV &&
-                                  i_jetl2 != -1 &&
-                                  _relIso[i_subleading] < 1.5;//to remove?
+                                  i_jetl2 != -1;
+                                  //_relIso[i_subleading] < 1.5;//to remove?
 
      _FullNoPFN                 = _Training &&
                                   mll < 80 &&
                                   dphill > 2.3 &&
                                   i_subleading_jet == -1;
+
+     _FullNoPFN_toofar          = _FullNoPFN &&
+                                  IVF_PVSVdist_2D > 60;
 
      _CR_FullNoPFN_invdphi      = _Training &&
                                   mll < 80 &&

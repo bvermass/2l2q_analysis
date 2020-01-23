@@ -44,7 +44,7 @@ bool plot_extra_hists_with_different_names(TCanvas* c, TMultiGraph* multigraph, 
         }
     }
 
-    multigraph->Draw("AC");
+    multigraph->Draw("AL");
     legend->Draw("same");
 
     return true;

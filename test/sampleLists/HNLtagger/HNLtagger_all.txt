@@ -31,7 +31,7 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00257293606605_mu_massiveAndCKM_LO/dilep_final.root       0.06080 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO/dilep_final.root       0.07215 -1 1
 # 10Gev
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000169410743461_mu_massiveAndCKM_LO/dilep_final.root     0.0002605 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000169410743461_mu_massiveAndCKM_LO/dilep_final.root     0.0002605 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000756967634711_mu_massiveAndCKM_LO/dilep_final.root     0.005207 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000793725393319_mu_massiveAndCKM_LO/dilep_final.root     0.005727 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.00244948974278_mu_massiveAndCKM_LO/dilep_final.root      0.05425 -1 1
@@ -73,7 +73,7 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00257293606605_e_massiveAndCKM_LO/dilep_final.root       0.06071 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00282842712475_e_massiveAndCKM_LO/dilep_final.root       0.07341 -1 1
 # 10Gev
-#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000169410743461_e_massiveAndCKM_LO/dilep_final.root     0.0002606 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000169410743461_e_massiveAndCKM_LO/dilep_final.root     0.0002606 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000756967634711_e_massiveAndCKM_LO/dilep_final.root     0.005208 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000793725393319_e_massiveAndCKM_LO/dilep_final.root     0.005719 -1 1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.00244948974278_e_massiveAndCKM_LO/dilep_final.root      0.05413 -1 1

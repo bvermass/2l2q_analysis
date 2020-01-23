@@ -71,13 +71,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_Training", "_Training_nRIso"}){
+        for(const TString &ev_region : {"", "_Training", "_Training_nRIso", "_TooFar"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
         for(auto& MassMap : evaluating_ctaus){
             for(auto& V2Map : MassMap.second){
-                for(const TString &ev_region : {"_SR", "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
+                for(const TString &ev_region : {"_SR"}){//, "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
                     add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
                 }
                 for(const TString &ev_region : {"", "_Training"}){
