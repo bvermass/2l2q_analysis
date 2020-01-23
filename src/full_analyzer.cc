@@ -128,8 +128,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/PFN_v5/HNL_Tagger_job_7.h5", 28, {50, 13});
-    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/PFNe_v5/jetTagger_PFNe_v5.h5", 28, {50,13});
+    PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/PFNmu_v6/jetTagger.h5", 30, {50, 13});
+    PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/PFNe_v6/jetTagger.h5", 30, {50,13});
     PFNReader bdt_mu( "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/bestModels_xgboost_HNLtagger_v2/model_rank_1/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961.bin", 28 );
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
@@ -228,11 +228,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(_lFlavor[i_subleading] == 0){
                 fill_HNLtagger_tree(hnltagger_e);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_e, ev_weight*total_weight);
-                JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 5);
+                JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 6);
             }else if(_lFlavor[i_subleading] == 1){
                 fill_HNLtagger_tree(hnltagger_mu);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_mu, ev_weight*total_weight);
-                JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 5);
+                JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 6);
             }
             additional_signal_regions();
         }else {
