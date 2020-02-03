@@ -7,6 +7,8 @@ function hadd_subfiles {
             echo -e "\n\nhadding subfiles:        "$1
             if hadd -f ${1%%subfiles*}${2}${1#*subfiles/}.root $1/$2*_job_* ; then
                 rm $1/$2*_job_*
+            else
+                exit 1
             fi
             echo -e "\n"
         fi
@@ -23,7 +25,7 @@ function hadd_specific_backgrounds {
     #DY
     if [ 0 -lt $(ls ${1}${2}Background_DYJetsToLL_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding DY files: \n"
-        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_* ${1}${2}Background_DYJetsToLL_M-50_*
+        hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root ${1}${2}Background_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root
     fi
     #diboson 
     if [ 0 -lt $(ls ${1}${2}Background_WZ* 2>/dev/null | wc -w) ]; then
@@ -55,8 +57,6 @@ function hadd_specific_backgrounds {
         echo -e "\nhadding data files: \n"
         hadd -f ${1}${2}EGamma_Run2018.root ${1}${2}EGamma_Run2018*
     fi
-
-
 }
 
 #function hadd_all_backgrounds_and_signal_for_HNLtagger {
@@ -94,6 +94,7 @@ if [ $tag == "all" ]; then
         IVFimp_full_analyzer=$IVFimp/full_analyzer/
         hadd_specific_backgrounds $IVFimp_full_analyzer hists_full_analyzer_
     done
+    echo 'successfully done!'
     
     #echo -e "\n---------------------------"
     #echo -e "Looking for HNLtagger files\n"
@@ -132,6 +133,7 @@ else
         hadd_subfiles $D HNLBDTtagger_electron_
         hadd_subfiles $D HNLBDTtagger_muon_
     done
+    echo 'successfully done!'
 
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_muon_

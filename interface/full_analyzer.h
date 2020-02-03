@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cmath>
 
 #include <string>
@@ -222,6 +223,7 @@ public :
    Double_t        _lEleInvMinusPInv[10];
    Double_t        _eleNumberInnerHitsMissing[10];
    Double_t        _leptonMvatZq[10];
+   Double_t        _leptonMvaTTH[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
    Double_t        _leptonMvaTTH16[10];   //[_nLight]
    Double_t        _leptonMvaSUSY17[10];   //[_nLight]
@@ -307,6 +309,7 @@ public :
    Double_t        _lCQTrackKink[10];
    unsigned        _lNumberOfMatchedStation[10];
    unsigned        _lNumberOfValidPixelHits[10];
+   unsigned        _lNumberOfValidTrackerHits[10];
    unsigned        _muNumberInnerHits[10];
    unsigned        _lTrackerLayersWithMeasurement[10];
    Double_t        _lMuonSegComp[10];   //[_nMu]
@@ -314,6 +317,12 @@ public :
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
    Bool_t          _lIsPrompt[10];   //[_nL]
    Int_t           _lMatchPdgId[10];   //[_nL]
+   Int_t           _lMatchCharge[10];
+   unsigned        _tauGenStatus[10];
+   Int_t           _lMomPdgId[10];
+   unsigned        _lProvenance[10];
+   unsigned        _lProvenanceCompressed[10];
+   unsigned        _lProvenanceConversion[10];
    unsigned        _nPh;
    Double_t        _phPt[10];   //[_nPh]
    Double_t        _phEta[10];   //[_nPh]
@@ -569,6 +578,7 @@ public :
    TBranch        *b__lEleInvMinusPInv;
    TBranch        *b__eleNumberInnerHitsMissing;
    TBranch        *b__leptonMvatZq;
+   TBranch        *b__leptonMvaTTH;
    TBranch        *b__leptonMvaSUSY16;   //!
    TBranch        *b__leptonMvaTTH16;   //!
    TBranch        *b__leptonMvaSUSY17;   //!
@@ -654,6 +664,7 @@ public :
    TBranch        *b__lCQTrackKink;
    TBranch        *b__lNumberOfMatchedStation;
    TBranch        *b__lNumberOfValidPixelHits;
+   TBranch        *b__lNumberOfValidTrackerHits;
    TBranch        *b__muNumberInnerHits;
    TBranch        *b__lTrackerLayersWithMeasurement;
    TBranch        *b__lMuonSegComp;   //!
@@ -661,6 +672,12 @@ public :
    TBranch        *b__lMuonTrackPtErr;   //!
    TBranch        *b__lIsPrompt;   //!
    TBranch        *b__lMatchPdgId;   //!
+   TBranch        *b__lMatchCharge;
+   TBranch        *b__tauGenStatus;
+   TBranch        *b__lMomPdgId;
+   TBranch        *b__lProvenance;
+   TBranch        *b__lProvenanceCompressed;
+   TBranch        *b__lProvenanceConversion;
    TBranch        *b__nPh;   //!
    TBranch        *b__phPt;   //!
    TBranch        *b__phEta;   //!
@@ -735,102 +752,62 @@ public :
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
    
-   std::map<TString, TH1*>::iterator it;
-   std::map<TString, TH2*>::iterator it2D;
-   Double_t event_weight;
+   Double_t ev_weight;
    TString sampleflavor;
+   bool isSignal = false, isBackground = false, isData = false, is2016 = false, is2017 = false, is2018 = false;
+   bool extensive_plots = false;
+   std::map<double, double> reweighting_weights;//<V2, weight>
+   std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+   std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
+   std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
+   std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
+   std::map<int, std::map<double, TString>> MV2name;
+   //double JetTagVal_BDT = -1;
    
    // lepton and jet ID and cleaning bool arrays
-   bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
-   bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
-   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10], pogmediumElectronID[10], pogmediumMuonID[10];
+   bool jet_clean_loose[20], jet_clean_full[20];
+   bool ele_clean_loose[10], ele_clean_full[10];
+   bool fullElectronID[10], looseElectronID[10], fullMuonID[10], looseMuonID[10], fullJetID[10];
 
    // gen variables related to truth of event
    int i_gen_l1;
    int i_gen_l2;
    int _gen_Nmass;
    double _gen_NV;
+   double _gen_Nctau;
    bool leadingIsl1;
    bool subleadingIsl2; 
 
    // signal region lepton indices 
-   int i_leading_e;
-   int i_subleading_displ_e;
-   int i_leading_mu;
-   int i_subleading_displ_mu;
+   int i_leading;
+   int i_subleading;
+   TString sr_flavor, sr_charge, sr_lflavor;
    
    // gen indices corresponding to signal region leptons (geometric)
-   int i_gen_leading_e;
-   int i_gen_subleading_e;
-   int i_gen_leading_mu;
-   int i_gen_subleading_mu;
-   
-   // extra lepton indices
-   int i_subleading_e;
-   int i_leading_pogmedium_e;
-   int i_subleading_mu;
-   int i_leading_pogmedium_mu;
+   int i_gen_leading;
+   int i_gen_subleading;
    
    // jet indices
    int i_leading_jet;
    int i_subleading_jet;
    int i_thirdleading_jet;
-   int i_closel2_jet;
+   int i_jetl2;
 
-   double JetTagVal = -1;
+   // numbers of leptons
+   int nTightEle, nTightMu;
 
-   // signal region booleans: ee
-   bool _trige;
-   bool _1e;
-   bool _2e;
-   bool _2e_full;
+   //Signal region booleans
+   bool _trige, _trigmu, _l1, _l1l2, _l1l2_Full;
 
-   bool _1e1disple;
-   bool _1e1displevtx;
-   bool _1e1displedispl;
-   bool _1e1disple0adde;
-   bool _1e1displemll;
-   bool _1e1displedphi;
-   bool _1e1displeReliso;
-   bool _1e1disple1jet;
+   // relevant lepton variables
+   double mll, dRll, dphill;
 
-   // Control region booleans: ee
-   bool _CR_1e1displedphi;
-   bool _CR_1e1displemll;
-
-   // extra booleans: ee
-   bool _1e1displedR;
-   bool _1pogmediume;
-   bool _1e1displedphi_novtx;
-   bool _1e1displedispl_Reliso;
-
-   // signal region booleans: mumu
-   bool _trigmu;
-   bool _1mu;
-   bool _2mu;
-   bool _2mu_full;
-
-   bool _1mu1displmu;
-   bool _1mu1displmuvtx;
-   bool _1mu1displmudispl;
-   bool _1mu1displmu0addmu;
-   bool _1mu1displmumll;
-   bool _1mu1displmudphi;
-   bool _1mu1displmuReliso;
-   bool _1mu1displmu1jet;
-
-   // control region booleans: mumu
-   bool _CR_1mu1displmudphi;
-   bool _CR_1mu1displmumll;
-
-   // extra booleans: mumu
-   bool _1mu1displmudR;
-   bool _1pogmediummu;
-   bool _1mu1displmudphi_novtx;
-   bool _1mu1displmudispl_Reliso;
+   // SV stuff
+   double SVmass, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
    
    // functions
    // in src/full_analyzer_constructor.cc
+   void SetSampleTypes(TString filename);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
@@ -842,15 +819,11 @@ public :
     // in src/full_analyzer.cc, the main code body
     void     run_over_file(TString, double, int, int, int);
 
-    // in src/leptonID.cc
-    void     get_electronID(bool*);
-    void     get_pogmedium_electronID(bool*);
-    void     get_displ_electronID(bool*);
-    void     get_loose_electronID(bool*);
-    void     get_muonID(bool*);
-    void     get_pogmedium_muonID(bool*);
-    void     get_displ_muonID(bool*);
-    void     get_loose_muonID(bool*);
+   // in src/leptonID.cc
+    void     get_electronID();
+    void     get_loose_electronID();
+    void     get_muonID();
+    void     get_loose_muonID();
     void     get_clean_ele(bool*, bool*);
     int      find_leading_e(bool*, bool*);
     int      find_leading_mu(bool*);
@@ -860,6 +833,7 @@ public :
     int      find_gen_l1();
     int      find_gen_l2();
     bool     leptonIsGenLepton(int, int);
+    double   get_lsource(int);
     double   get_IVF_SVgenreco(int, int);
     double   get_IVF_SVgenreco_2D(int, int);
     double   get_IVF_PVSVdist(int);
@@ -871,8 +845,8 @@ public :
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
 
-    // in src/jetID.cc
-    void     get_jetID(bool*);
+   // in src/jetID.cc
+    void     get_jetID();
     void     get_clean_jets(bool*, bool*, bool*);
     int      find_leading_jet(bool*, bool*);
     int      find_subleading_jet(bool*, bool*, int);
@@ -881,36 +855,43 @@ public :
     double   get_dR_lepton_jet(int, int);
     bool     get_JetIsFromHNL(int i_jet);
 
-    // in src/signal_regions.cc
+   // in src/signal_regions.cc
+    void     set_leptons(int i_subleading_e, int i_subleading_mu);
+    void     set_relevant_lepton_variables();
+    TString  get_signal_region_flavor();
+    int      select_subleading_lepton(int i_subleading_e, int i_subleading_mu);
+    int      select_leading_lepton(int i_leading_e, int i_leading_mu);
     void     signal_regions();
-    bool     lptcut(int, double);
+    void     additional_signal_regions();
+    bool     leadptcut(int);
+    bool     subleadptcut(int);
     bool     no_additional_leptons();
-    bool     mllcut(int, int, double);
     double   get_mll(int, int);
-    bool     dRcut(int, int, double, double);
     double   get_dRll(int, int);
-    bool     dphicut(int, int, double);
     double   get_dphill(int, int);
-    bool     relisocut(int, double);
 
     // in src/print_tables.cc
     void     print_table();
    
     // in src/histo_functions.cc
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-    void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, int, int);
-    void     fill_cutflow_e(std::map<TString, TH1*>*, TString);
-    void     fill_cutflow_mu(std::map<TString, TH1*>*, TString);
-    void     fill_lepton_eff(std::map<TString, TH1*>*, TString, int, int);
-    // void     fill_ID_histos(std::map<TString, TH1*>*, TString);
+    void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     add_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString MV2, double event_weight);
+    void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+    void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_cutflow(std::map<TString, TH1*>*, TString, double);
+    void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
     void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
     // in src/jet_histograms.cc
     void     add_jet_histograms(std::map<TString, TH1*>*, TString);
-    void     fill_jet_histograms(std::map<TString, TH1*>*, TString, int);
-    void     fill_HNLtagger_tree(HNLtagger& hnltagger, int i_lep, int i_jet);
+    void     fill_jet_histograms(std::map<TString, TH1*>*, TString, double);
+    void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
+    void     fill_HNLtagger_tree(HNLtagger& hnltagger);
     int      is_track_in_sv(int i_lep, int i_jet, int i_const);
-    void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, int i_lep, int i_jet, double _weight);
+    //void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, double _weight);
 
     // in src/HLT_eff.cc
     void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
@@ -918,20 +899,25 @@ public :
     void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
     void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
+    // in src/MET_histograms.cc
+    void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
+    
     // in src/gen_histograms.cc
     void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-    void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
+    void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*, double);
     void     add_gen_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
     int      get_lfromtau(int i_gen_l);
 
-    // in src/PFNTools.cc
-    void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-
-    // in src/MET_histograms.cc
-    void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-    void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading);
+   // in src/SelectionOptimization.cc
+   // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
+   // void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
+   // void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
 };
 
 #endif

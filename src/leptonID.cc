@@ -6,94 +6,60 @@
 
 using namespace std;
 
-void full_analyzer::get_electronID(bool* ID)
+void full_analyzer::get_electronID()
 {
     for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID =   _lFlavor[i] == 0 &&
-			            fabs(_lEta[i]) < 2.5 &&
-			            _lPt[i] > 20 &&
-			            fabs(_dxy[i]) < 0.05 &&
-			            fabs(_dz[i])  < 0.1 &&
-			            _3dIPSig[i]   < 4 &&
-			            _relIso[i]    < 0.1 &&
-                        _lPOGTight[i] &&
-                        //(_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8) && // HACK to work with samples that have currently 2 names for the same variable
-                        //_leptonMvatZq[i] > 0.8 &&
-			            //_lPOGMedium[i] && old ID, move to MVAtZqTTV16
-			            _lElectronPassConvVeto[i] &&
-			            _lElectronMissingHits[i] < 1;
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
+	    fullElectronID[i] =  _lFlavor[i] == 0 &&
+			                fabs(_lEta[i]) < 2.5 &&
+			                _lPt[i] > 20 &&
+			                fabs(_dxy[i]) < 0.05 &&
+			                fabs(_dz[i])  < 0.1 &&
+			                _3dIPSig[i]   < 4 &&
+			                _relIso[i]    < 0.1 &&
+                            _lPOGTight[i] &&
+			                _lElectronPassConvVeto[i] &&
+			                _lElectronMissingHits[i] < 1;
     }
 }
 
-void full_analyzer::get_loose_electronID(bool* ID)
+//void full_analyzer::get_electronID(bool* ID)
+//{
+//    for(unsigned i = 0; i < _nL; ++i){
+//	    bool fullID =   _lFlavor[i] == 0 &&
+//			            fabs(_lEta[i]) < 2.5 &&
+//			            _lPt[i] > 7 &&
+//			            fabs(_dxy[i]) < 0.05 &&
+//			            fabs(_dz[i])  < 0.1 &&
+//			            _3dIPSig[i]   < 4 &&
+//			            _relIso[i]    < 0.1 &&
+//			            _lPOGTight[i] && //move to MVA of TTH as soon as others caught up
+//			            _lElectronPassConvVeto[i] &&
+//			            _lElectronMissingHits[i] < 1;
+//	    if(fullID) *(ID + i) = true;
+//	    else *(ID + i) = false;
+//    }
+//}
+
+void full_analyzer::get_loose_electronID()
 {
     for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID =   _lFlavor[i] == 0 &&
-                        fabs(_lEta[i]) < 2.5 &&
-                        _lPt[i] > 20 &&
-                        //fabs(_dxy[i]) < 0.05 &&
-                        //fabs(_dz[i])  < 0.1 &&
-                        //_3dIPSig[i]   < 4 &&
-                        //_relIso[i]    < 0.1 &&
-                        _lPOGVeto[i];
-                        //_lElectronMissingHits[i] < 1;
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
+	    looseElectronID[i] = _lFlavor[i] == 0 &&
+                             fabs(_lEta[i]) < 2.5 &&
+                             _lPt[i] > 7 &&
+                             //fabs(_dxy[i]) < 0.05 &&
+                             //fabs(_dz[i])  < 0.1 &&
+                             //_3dIPSig[i]   < 4 &&
+                             //_relIso[i]    < 0.1 &&
+                             _lElectronPassConvVeto[i] &&
+                             _lPOGVeto[i];
+                             //_lElectronMissingHits[i] < 1;
     }
 }
 
-void full_analyzer::get_pogmedium_electronID(bool* ID)
+void full_analyzer::get_muonID()
 {
     for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID = 	_lFlavor[i] == 0 &&
-                        fabs(_lEta[i]) < 2.5 &&
-                        _lPt[i] > 7 &&
-                        fabs(_dxy[i]) < 0.05 &&
-                        fabs(_dz[i])  < 0.1 &&
-                        _3dIPSig[i]   < 4 &&
-                        _relIso[i]    < 0.1 &&
-                        _lPOGMedium[i] && 
-                        _lElectronPassConvVeto[i] &&
-                        _lElectronMissingHits[i] < 1;
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_displ_electronID(bool* ID)  //basically medium POG cut-based ID without displacement interfering requirements
-{
-    for(unsigned i = 0; i < _nL; i++){
-        bool fullID =   _lFlavor[i] == 0 &&
-                        fabs(_lEta[i]) < 2.5 &&
-                        _lPt[i] > 7 &&
-                        //fabs(_dxy[i]) > 0.01 && for now, require this as a separate condition
-                        _lElectronPassConvVeto[i] &&
-                        (   (_lEleIsEB[i] &&
-                             _lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
-                             _lEleDEtaInSeed[i] <= 0.00477 &&
-                             _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.222 &&
-                             _lElehadronicOverEm[i] <= 0.298 &&
-                             _lEleInvMinusPInv[i] <= 0.241) 
-                            || 
-                            (_lEleIsEE[i] &&
-                             _lElefull5x5SigmaIetaIeta[i] <= 0.0314 &&
-                             _lEleDEtaInSeed[i] <= 0.00868 &&
-                             _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.213 &&
-                             _lElehadronicOverEm[i] <= 0.101 &&
-                             _lEleInvMinusPInv[i] <= 0.14
-                            )
-                        );
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID = 	_lFlavor[i] == 1 &&
+	    fullMuonID[i] = _lFlavor[i] == 1 &&
 			            fabs(_lEta[i]) < 2.4 &&
 			            _lPt[i] > 20 &&
 			            fabs(_dxy[i]) < 0.05 &&
@@ -105,70 +71,40 @@ void full_analyzer::get_muonID(bool* ID)
                         //_leptonMvatZq[i] > 0.8;
                         //_lPOGMedium[i]; old ID, move to MVAtZqTTV16
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
     }
 }
 
-void full_analyzer::get_loose_muonID(bool* ID)
+void full_analyzer::get_loose_muonID()
 {
     for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID = 	_lFlavor[i] == 1 &&
-                        fabs(_lEta[i]) < 2.4 &&
-                        _lPt[i] > 20 &&
-                        //fabs(_dxy[i]) < 0.05 &&
-                        //fabs(_dz[i])  < 0.1 &&
-                        //_3dIPSig[i]   < 4 &&
-                        //_relIso[i]    < 0.1 &&
-                        _lPOGLoose[i];
-                        // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
+	    looseMuonID[i] = _lFlavor[i] == 1 &&
+                         fabs(_lEta[i]) < 2.4 &&
+                         _lPt[i] > 20 &&
+                         //fabs(_dxy[i]) < 0.05 &&
+                         //fabs(_dz[i])  < 0.1 &&
+                         //_3dIPSig[i]   < 4 &&
+                         //_relIso[i]    < 0.1 &&
+                         _lPOGLoose[i];
+                         // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
     }
 }
 
-void full_analyzer::get_pogmedium_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	    bool fullID = 	_lFlavor[i] == 1 &&
-                        fabs(_lEta[i]) < 2.4 &&
-                        _lPt[i] > 5 &&
-                        fabs(_dxy[i]) < 0.05 &&
-                        fabs(_dz[i])  < 0.1 &&
-                        _3dIPSig[i]   < 4 &&
-                        _relIso[i]    < 0.1 &&
-                        _lPOGMedium[i];
-                        // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
-    }
-}
-
-void full_analyzer::get_displ_muonID(bool* ID)
-{
-    for(unsigned i = 0; i < _nL; ++i){
-        bool goodglobalmuon =   _lGlobalMuon[i] &&
-                                _lGlobalTrackNormalizedChi2[i] < 3 &&
-                                _lCQChi2Position[i] < 12 &&
-                                _lCQTrackKink[i] < 20;
-	    bool fullID = 	_lFlavor[i] == 1 &&
-			            fabs(_lEta[i]) < 2.4 &&
-			            _lPt[i] > 5 &&
-			            //fabs(_dxy[i]) > 0.01 && for now, require this as a separate condition
-                        _lPOGLoose[i] &&
-                        (   (goodglobalmuon &&
-                             _lMuonSegComp[i] > 0.303
-                            )
-                            ||
-                            _lMuonSegComp[i] > 0.451
-                        );
-        if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
-    }
-}
-
-
-
+//void full_analyzer::get_muonID(bool* ID)
+//{
+//    for(unsigned i = 0; i < _nL; ++i){
+//	    bool fullID = 	_lFlavor[i] == 1 &&
+//			            fabs(_lEta[i]) < 2.4 &&
+//			            _lPt[i] > 5 &&
+//			            fabs(_dxy[i]) < 0.05 &&
+//			            fabs(_dz[i])  < 0.1 &&
+//			            _3dIPSig[i]   < 4 &&
+//			            _relIso[i]    < 0.1 &&
+//                        _lPOGTight[i]; //move to MVA of TTH as soon as others caught up
+//			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
+//	    if(fullID) *(ID + i) = true;
+//	    else *(ID + i) = false;
+//    }
+//}
 
 void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
 {
@@ -303,6 +239,29 @@ bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
     double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
     if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
     else return false;
+}
+
+double full_analyzer::get_lsource(int i_gen_lep)
+{
+    if(i_gen_lep == -1) return -1;
+    double mompdg = abs(_gen_lMomPdg[i_gen_lep])%10000;
+    if(mompdg == 23) return 0;//Z
+    else if(mompdg == 24) return 1;//W
+    else if(mompdg == 6) return 2;//t
+    else if((mompdg >= 500 and mompdg < 600) or (mompdg >= 5000 and mompdg < 6000) or mompdg == 5) return 3;//b
+    else if((mompdg >= 400 and mompdg < 500) or (mompdg >= 4000 and mompdg < 5000) or mompdg == 4) return 4;//c
+    else if((mompdg >= 100 and mompdg < 400) or (mompdg >= 1000 and mompdg < 4000) or mompdg == 1 or mompdg == 2 or mompdg == 3) return 5;//uds
+    else if(mompdg == 21) return 6;//gluon
+    else if(mompdg == 22) return 7;//photon
+    else if(mompdg == 15) return 8;//tau
+    else if(mompdg == 13) return 9;//mu
+    else if(mompdg == 11) return 10;//e
+    else if(mompdg == 12) return 11;//HNL
+    else if(mompdg == 0) return -2;//unknown
+    else {
+        std::cout << "no category for lepton with mother: " << mompdg << std::endl;
+        return -2;
+    }
 }
 
 double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){

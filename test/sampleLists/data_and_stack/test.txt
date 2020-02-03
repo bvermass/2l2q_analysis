@@ -1,6 +1,0 @@
-final_data
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Run2016C.root                                                                       2016C
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Diboson.root                                                          Diboson
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_TTJets.root                                                           t#bar{t}
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                           DY
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root                W+Jets

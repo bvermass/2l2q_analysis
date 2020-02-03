@@ -7,210 +7,227 @@ headdir=$(pwd)
 
 if [ $# -eq 1 ] ; then
     exec_name=a_plots.out
-    read -p "separate plots(1), stack plots(2), multihists(3), stacks with data(4), analyze_cuts(5): " choice
+    read -p "separate plots(1), multihists(2), stack plots(3), roc curves(4), SelectionOptimization(5), CombineDatacards(6): " choice
 elif [ $# -eq 2 ] ; then
-    exec_name=$2
-    read -p "separate plots(1), stack plots(2), multihists(3), stacks with data(4), analyze_cuts(5): " choice
+    exec_name=a_plots.out
+    choice=$2
 else
-    exec_name=$2
-    choice=$3
+    exec_name=$3
+    choice=$2
 fi
 
 if [[ choice -eq 1 ]]; then
-    #Make plots for every file separately
-    if g++ -std=c++0x -o $exec_name "src/plotterfunctions.cc" "src/testplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////////////\n"
         
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo "white line or comment found!"
+                echo ""
             else
-                ./$exec_name $line
+                counter=0
+                for val in $line; do
+                    if [ $counter -eq 0 ]; then
+                        sample=($val)
+                        counter=1
+                    elif [ $counter -eq 1 ]; then
+                        legend=($val)
+                        counter=0
+                    fi
+                done
+                ./$exec_name $sample $legend
                 echo
             fi
         done < "$1"
-    rm $exec_name
+        rm $exec_name
     else
-        echo -e "\n//////////////////////"
+        echo -e "\n///////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION FAILED//"
-        echo -e "//////////////////////\n"
+        echo -e "///////////////////////////////////////////\n"
     fi
 fi
 if [[ choice -eq 2 ]]; then
-    #run stack plots
-    if g++ -std=c++0x -o $exec_name "src/plotterfunctions.cc" "src/stackplotterfunctions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////////////////"
-        echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////////////////\n"
-    
-        #if no partition info is given to this script, then assume no partition is necessary.
-        if [ $# -eq 5 ] ; then
-            partition=$4
-            partitionjobnumber=$5
-        else
-            partition=1
-            partitionjobnumber=0
-        fi
-
-        firstline=0
-        while IFS='' read -r line || [[ -n "$line" ]]; do
-            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo "white line or comment found!"
-            else
-                counter=0
-                for val in $line; do
-                    if [ $firstline -eq 0 ]; then
-                        subdirectory_name=($val)
-                        firstline=1
-                    elif [ $counter -eq 0 ]; then
-                        samples+=($val)
-                        counter=1
-                    else 
-                        legend+=($val)
-                        counter=0
-                    fi
-                done
-            fi
-        done < "$1"
-        #IFS=$'\n' read -d '' -r -a samples < $1
-        #IFS=$'\n' read -d '' -r -a legend < $exec_name
-        ./$exec_name $subdirectory_name $partition $partitionjobnumber ${samples[@]} ${legend[@]} 
-        echo
-    rm $exec_name
-    else
-        echo -e "\n//////////////////////////////////"
-        echo -e "//STACK PLOTS COMPILATION FAILED//"
-        echo -e "//////////////////////////////////\n"
-    fi
-fi
-if [[ choice -eq 3 ]]; then
-    #run multi hist plots
-    if g++ -std=c++0x -o $exec_name "src/plotterfunctions.cc" "src/multihistplotterfunctions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/multihistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////////\n"
-    
+        
         firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo "white line or comment found!"
+                echo ""
             else
                 counter=0
                 for val in $line; do
                     if [ $firstline -eq 0 ]; then
                         subdirectory_name=($val)
                         firstline=1
-                    elif [ $firstline -eq 1 ]; then
-                        flavor=($val)
-                        firstline=2
                     elif [ $counter -eq 0 ]; then
                         samples+=($val)
                         counter=1
-                    else 
-                        legend+=($val)
+                    elif [ $counter -eq 1 ]; then
+                        legends+=($val)
                         counter=0
                     fi
                 done
             fi
         done < "$1"
-        #IFS=$'\n' read -d '' -r -a samples < $1
-        #IFS=$'\n' read -d '' -r -a legend < $2
-        ./$exec_name ${subdirectory_name} ${flavor} ${samples[@]} ${legend[@]}
+        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
         echo
-    rm $exec_name
+        rm $exec_name
     else
         echo -e "\n//////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION FAILED//"
         echo -e "//////////////////////////////////////\n"
     fi
 fi
-if [[ choice -eq 4 ]]; then
-    #run stack plots
-    if g++ -std=c++0x -o $exec_name "src/plotterfunctions.cc" "src/helper_plotter_functions.cc" "src/data_and_stack_plotter.cc" `root-config --cflags --glibs`; then
-        echo -e "\n//////////////////////////////////////////////"
-        echo -e "//STACK WITH DATA PLOTS COMPILATION SUCCESSFUL//"
-        echo -e "//////////////////////////////////////////////\n"
-    
-        #if no partition info is given to this script, then assume no partition is necessary.
-        if [ $# -eq 5 ] ; then
-            partition=$4
-            partitionjobnumber=$5
-        else
-            partition=1
-            partitionjobnumber=0
-        fi
-
+if [[ choice -eq 3 ]]; then
+    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+        echo -e "\n//////////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "//////////////////////////////////////\n"
+        
         firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo "white line or comment found!"
+                echo ""
             else
                 counter=0
                 for val in $line; do
                     if [ $firstline -eq 0 ]; then
-                        subdirectory_name=($val)
-                        firstline=1
-                    elif [ $firstline -eq 1 ] && [ $counter -eq 0 ]; then
-                        data_sample=($val)
-                        counter=1
-                    elif [ $firstline -eq 1 ] && [ $counter -eq 1 ]; then
-                        data_legend=($val)
-                        counter=0
-                        firstline=2
+                        if [ $counter -eq 0 ]; then
+                            subdirectory_name=($val)
+                            counter=1
+                        elif [ $counter -eq 1 ]; then
+                            partition=($val)
+                            counter=0
+                            firstline=1
+                        fi
                     elif [ $counter -eq 0 ]; then
                         samples+=($val)
                         counter=1
-                    else 
-                        legend+=($val)
+                    elif [ $counter -eq 1 ]; then
+                        legends+=($val)
                         counter=0
                     fi
                 done
             fi
         done < "$1"
-        #IFS=$'\n' read -d '' -r -a samples < $1
-        #IFS=$'\n' read -d '' -r -a legend < $exec_name
-        ./$exec_name $subdirectory_name $partition $partitionjobnumber $data_sample $data_legend ${samples[@]} ${legend[@]} 
+        python test/submit_plots_tmp.py $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
         echo
-    rm $exec_name
+        #rm $exec_name
     else
         echo -e "\n//////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION FAILED//"
         echo -e "//////////////////////////////////\n"
     fi
 fi
-if [[ choice -eq 5 ]]; then
-    #run analyze_cuts
-    if g++ -std=c++0x -o $exec_name "src/analyze_cuts.cc" `root-config --cflags --glibs`; then
-        echo -e "\n///////////////////////////////////////"
-        echo -e "//ANALYZE CUTS COMPILATION SUCCESSFUL//"
-        echo -e "///////////////////////////////////////\n"
-    
+if [[ choice -eq 4 ]]; then
+    if g++ -std=c++11 -o $exec_name "plotting/roccurveplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+        echo -e "\n////////////////////////////////////"
+        echo -e "//ROC PLOTS COMPILATION SUCCESSFUL//"
+        echo -e "////////////////////////////////////\n"
+
+        firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo "white line or comment found!"
+                echo ""
             else
                 counter=0
                 for val in $line; do
-                    if [ $counter -eq 0 ]; then
-                        samples+=($val)
+                    if [ $firstline -eq 0 ]; then
+                        subdirectory_name=($val)
+                        firstline=1
+                    elif [ $counter -eq 0 ]; then
+                        legends+=($val)
                         counter=1
-                    else 
-                        legend+=($val)
+                    elif [ $counter -eq 1 ]; then
+                        signals+=($val)
+                        counter=2
+                    elif [ $counter -eq 2 ]; then
+                        bkgs+=($val)
                         counter=0
                     fi
                 done
             fi
         done < "$1"
-        #IFS=$'\n' read -d '' -r -a samples < $1
-        #IFS=$'\n' read -d '' -r -a legend < $2
-        ./$exec_name ${samples[@]} ${legend[@]}
+        ./$exec_name $subdirectory_name ${legends[@]} ${signals[@]} ${bkgs[@]}
         echo
-    rm $exec_name
+        rm $exec_name
     else
-        echo -e "\n///////////////////////////////////"
-        echo -e "//ANALYZE CUTS COMPILATION FAILED//"
-        echo -e "///////////////////////////////////\n"
+        echo -e "\n////////////////////////////////"
+        echo -e "//ROC PLOTS COMPILATION FAILED//"
+        echo -e "////////////////////////////////\n"
+    fi
+fi
+if [[ choice -eq 5 ]]; then
+    if g++ -std=c++11 -o $exec_name "plotting/sensitivity_estimator.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+        echo -e "\n////////////////////////////////////////////////"
+        echo -e "//SENSITIVITY ESTIMATOR COMPILATION SUCCESSFUL//"
+        echo -e "////////////////////////////////////////////////\n"
+
+        firstline=0
+        while IFS='' read -r line || [[ -n "$line" ]]; do
+            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+                echo ""
+            else
+                counter=0
+                for val in $line; do
+                    if [ $firstline -eq 0 ]; then
+                        subdirectory_name=($val)
+                        firstline=1
+                    elif [ $counter -eq 0 ]; then
+                        samples+=($val)
+                        counter=1
+                    elif [ $counter -eq 1 ]; then
+                        legends+=($val)
+                        counter=0
+                    fi
+                done
+            fi
+        done < "$1"
+        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
+        echo
+        rm $exec_name
+    else
+        echo -e "\n//////////////////////////////////"
+        echo -e "//STACK PLOTS COMPILATION FAILED//"
+        echo -e "//////////////////////////////////\n"
+    fi
+fi
+if [[ choice -eq 6 ]]; then
+    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+        echo -e "\n/////////////////////////////////////////////////"
+        echo -e "//Combine Datacards Prep COMPILATION SUCCESSFUL//"
+        echo -e "/////////////////////////////////////////////////\n"
+
+        firstline=0
+        while IFS='' read -r line || [[ -n "$line" ]]; do
+            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+                echo ""
+            else
+                counter=0
+                for val in $line; do
+                    if [ $firstline -eq 0 ]; then
+                        subdirectory_name=($val)
+                        firstline=1
+                    elif [ $counter -eq 0 ]; then
+                        samples+=($val)
+                        counter=1
+                    elif [ $counter -eq 1 ]; then
+                        legends+=($val)
+                        counter=0
+                    fi
+                done
+            fi
+        done < "$1"
+        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
+        echo
+        rm $exec_name
+    else
+        echo -e "\n/////////////////////////////////////////////"
+        echo -e "//Combine Datacards Prep COMPILATION FAILED//"
+        echo -e "/////////////////////////////////////////////\n"
     fi
 fi

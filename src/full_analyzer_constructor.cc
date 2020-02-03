@@ -1,10 +1,47 @@
 //basic constructor and initializer functions
 #include "../interface/full_analyzer.h"
 
+void full_analyzer::SetSampleTypes(TString filename)
+{
+    if(filename.Index("_e_") != -1){
+        sampleflavor = "e";
+        isSignal = true;
+    }
+    else if(filename.Index("_mu_") != -1){
+        sampleflavor = "mu";
+        isSignal = true;
+    }
+    else if(filename.Index("Run2016") != -1){
+        sampleflavor = "Run2016";
+        isData = true;
+        is2016 = true;
+    }
+    else if(filename.Index("Run2017") != -1){
+        sampleflavor = "Run2017";
+        isData = true;
+        is2017 = true;
+    }
+    else if(filename.Index("Run2018") != -1){
+        sampleflavor = "Run2018";
+        isData = true;
+        is2018 = true;
+    }
+    else{
+        sampleflavor = "bkg";
+        is2018 = true;
+        isBackground = true;
+        // figure out which year of background it is
+    }
+}
+
+
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
+
+   TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
+
    if (tree == 0) {
       TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/displaced/HeavyNeutrino_lljj_M-5_V-0.00707106781187_e_massiveAndCKM_LO/dilep.root");
       if (!f || !f->IsOpen()) {
@@ -149,7 +186,9 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_HLT_IsoTkMu24", &_HLT_IsoTkMu24, &b__HLT_IsoTkMu24);
    fChain->SetBranchAddress("_HLT_IsoTkMu24_prescale", &_HLT_IsoTkMu24_prescale, &b__HLT_IsoTkMu24_prescale);
    fChain->SetBranchAddress("_passTrigger_m", &_passTrigger_m, &b__passTrigger_m);
+   fChain->SetBranchAddress("_passTrigger_mm", &_passTrigger_mm, &b__passTrigger_mm);
    fChain->SetBranchAddress("_passTrigger_e", &_passTrigger_e, &b__passTrigger_e);
+   fChain->SetBranchAddress("_passTrigger_ee", &_passTrigger_ee, &b__passTrigger_ee);
    //fChain->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL", &_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL, &b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL);
    //fChain->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale", &_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale, &b__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale);
    //fChain->SetBranchAddress("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, &b__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
@@ -237,6 +276,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lEleInvMinusPInv", _lEleInvMinusPInv, &b__lEleInvMinusPInv);
    fChain->SetBranchAddress("_eleNumberInnerHitsMissing", _eleNumberInnerHitsMissing, &b__eleNumberInnerHitsMissing);
    fChain->SetBranchAddress("_leptonMvatZq", _leptonMvatZq, &b__leptonMvatZq);
+   fChain->SetBranchAddress("_leptonMvaTTH", _leptonMvaTTH, &b__leptonMvaTTH);
    fChain->SetBranchAddress("_leptonMvaSUSY16", _leptonMvaSUSY16, &b__leptonMvaSUSY16);
    fChain->SetBranchAddress("_leptonMvaTTH16", _leptonMvaTTH16, &b__leptonMvaTTH16);
    fChain->SetBranchAddress("_leptonMvaSUSY17", _leptonMvaSUSY17, &b__leptonMvaSUSY17);
@@ -322,6 +362,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lCQTrackKink", _lCQTrackKink, &b__lCQTrackKink);
    fChain->SetBranchAddress("_lNumberOfMatchedStation", _lNumberOfMatchedStation, &b__lNumberOfMatchedStation);
    fChain->SetBranchAddress("_lNumberOfValidPixelHits", _lNumberOfValidPixelHits, &b__lNumberOfValidPixelHits);
+   fChain->SetBranchAddress("_lNumberOfValidTrackerHits", _lNumberOfValidTrackerHits, &b__lNumberOfValidTrackerHits);
    fChain->SetBranchAddress("_muNumberInnerHits", _muNumberInnerHits, &b__muNumberInnerHits);
    fChain->SetBranchAddress("_lTrackerLayersWithMeasurement", _lTrackerLayersWithMeasurement, &b__lTrackerLayersWithMeasurement);
    fChain->SetBranchAddress("_lMuonSegComp", _lMuonSegComp, &b__lMuonSegComp);
@@ -329,26 +370,32 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lMuonTrackPtErr", _lMuonTrackPtErr, &b__lMuonTrackPtErr);
    fChain->SetBranchAddress("_lIsPrompt", _lIsPrompt, &b__lIsPrompt);
    fChain->SetBranchAddress("_lMatchPdgId", _lMatchPdgId, &b__lMatchPdgId);
-   fChain->SetBranchAddress("_nPh", &_nPh, &b__nPh);
-   fChain->SetBranchAddress("_phPt", _phPt, &b__phPt);
-   fChain->SetBranchAddress("_phEta", _phEta, &b__phEta);
-   fChain->SetBranchAddress("_phEtaSC", _phEtaSC, &b__phEtaSC);
-   fChain->SetBranchAddress("_phPhi", _phPhi, &b__phPhi);
-   fChain->SetBranchAddress("_phE", _phE, &b__phE);
-   fChain->SetBranchAddress("_phCutBasedLoose", _phCutBasedLoose, &b__phCutBasedLoose);
-   fChain->SetBranchAddress("_phCutBasedMedium", _phCutBasedMedium, &b__phCutBasedMedium);
-   fChain->SetBranchAddress("_phCutBasedTight", _phCutBasedTight, &b__phCutBasedTight);
-   fChain->SetBranchAddress("_phMva", _phMva, &b__phMva);
-   fChain->SetBranchAddress("_phRandomConeChargedIsolation", _phRandomConeChargedIsolation, &b__phRandomConeChargedIsolation);
-   fChain->SetBranchAddress("_phChargedIsolation", _phChargedIsolation, &b__phChargedIsolation);
-   fChain->SetBranchAddress("_phNeutralHadronIsolation", _phNeutralHadronIsolation, &b__phNeutralHadronIsolation);
-   fChain->SetBranchAddress("_phPhotonIsolation", _phPhotonIsolation, &b__phPhotonIsolation);
-   fChain->SetBranchAddress("_phSigmaIetaIeta", _phSigmaIetaIeta, &b__phSigmaIetaIeta);
-   fChain->SetBranchAddress("_phHadronicOverEm", _phHadronicOverEm, &b__phHadronicOverEm);
-   fChain->SetBranchAddress("_phPassElectronVeto", _phPassElectronVeto, &b__phPassElectronVeto);
-   fChain->SetBranchAddress("_phHasPixelSeed", _phHasPixelSeed, &b__phHasPixelSeed);
-   fChain->SetBranchAddress("_phIsPrompt", _phIsPrompt, &b__phIsPrompt);
-   fChain->SetBranchAddress("_phMatchPdgId", _phMatchPdgId, &b__phMatchPdgId);
+   fChain->SetBranchAddress("_lMatchCharge", _lMatchCharge, &b__lMatchCharge);
+   fChain->SetBranchAddress("_tauGenStatus", _tauGenStatus, &b__tauGenStatus);
+   fChain->SetBranchAddress("_lMomPdgId", _lMomPdgId, &b__lMomPdgId);
+   fChain->SetBranchAddress("_lProvenance", _lProvenance, &b__lProvenance);
+   fChain->SetBranchAddress("_lProvenanceCompressed", _lProvenanceCompressed, &b__lProvenanceCompressed);
+   fChain->SetBranchAddress("_lProvenanceConversion", _lProvenanceConversion, &b__lProvenanceConversion);
+   //fChain->SetBranchAddress("_nPh", &_nPh, &b__nPh);
+   //fChain->SetBranchAddress("_phPt", _phPt, &b__phPt);
+   //fChain->SetBranchAddress("_phEta", _phEta, &b__phEta);
+   //fChain->SetBranchAddress("_phEtaSC", _phEtaSC, &b__phEtaSC);
+   //fChain->SetBranchAddress("_phPhi", _phPhi, &b__phPhi);
+   //fChain->SetBranchAddress("_phE", _phE, &b__phE);
+   //fChain->SetBranchAddress("_phCutBasedLoose", _phCutBasedLoose, &b__phCutBasedLoose);
+   //fChain->SetBranchAddress("_phCutBasedMedium", _phCutBasedMedium, &b__phCutBasedMedium);
+   //fChain->SetBranchAddress("_phCutBasedTight", _phCutBasedTight, &b__phCutBasedTight);
+   //fChain->SetBranchAddress("_phMva", _phMva, &b__phMva);
+   //fChain->SetBranchAddress("_phRandomConeChargedIsolation", _phRandomConeChargedIsolation, &b__phRandomConeChargedIsolation);
+   //fChain->SetBranchAddress("_phChargedIsolation", _phChargedIsolation, &b__phChargedIsolation);
+   //fChain->SetBranchAddress("_phNeutralHadronIsolation", _phNeutralHadronIsolation, &b__phNeutralHadronIsolation);
+   //fChain->SetBranchAddress("_phPhotonIsolation", _phPhotonIsolation, &b__phPhotonIsolation);
+   //fChain->SetBranchAddress("_phSigmaIetaIeta", _phSigmaIetaIeta, &b__phSigmaIetaIeta);
+   //fChain->SetBranchAddress("_phHadronicOverEm", _phHadronicOverEm, &b__phHadronicOverEm);
+   //fChain->SetBranchAddress("_phPassElectronVeto", _phPassElectronVeto, &b__phPassElectronVeto);
+   //fChain->SetBranchAddress("_phHasPixelSeed", _phHasPixelSeed, &b__phHasPixelSeed);
+   //fChain->SetBranchAddress("_phIsPrompt", _phIsPrompt, &b__phIsPrompt);
+   //fChain->SetBranchAddress("_phMatchPdgId", _phMatchPdgId, &b__phMatchPdgId);
    fChain->SetBranchAddress("_nJets", &_nJets, &b__nJets);
    fChain->SetBranchAddress("_jetPt", _jetPt, &b__jetPt);
    fChain->SetBranchAddress("_jetPt_JECUp", _jetPt_JECUp, &b__jetPt_JECUp);

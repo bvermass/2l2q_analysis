@@ -21,12 +21,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 
-    sampleflavor = "bkg";
-    if(filename.Index("_e_") != -1) sampleflavor = "e";
-    else if(filename.Index("_mu_") != -1) sampleflavor = "mu";
-    else if(filename.Index("Run2016") != -1) sampleflavor = "Run2016";
-    else if(filename.Index("Run2017") != -1) sampleflavor = "Run2017";
-    else if(filename.Index("Run2018") != -1) sampleflavor = "Run2018";
+    extensive_plots = false;
+
+    SetSampleTypes(filename);
 
     //TString promptordisplaced = "";
     //if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
@@ -38,10 +35,24 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     
     if(sampleflavor == "e" or sampleflavor == "mu"){
         _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
-        _gen_NV     = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
+        _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
+        _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
+        evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(_gen_Nmass, _gen_NV*_gen_NV) + "\n", true);
     }else {
         _gen_Nmass = 0;
-        _gen_NV     = 0;
+        _gen_NV    = 0;
+        _gen_Nctau  = 0;
+        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+    }
+
+    // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
+    for(const int& mass : evaluating_masses){
+        evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
+        for(const double& V2 : evaluating_V2s[mass]){
+            evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2);
+            MV2name[mass][V2] = get_MV2name(mass, V2);
+        }
     }
 
 
@@ -57,21 +68,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     //init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     //init_HLT_allevents_efficiency(&hists, "");
-    //init_HNL_MC_check(&hists, &hists2D);
 
-    for(const TString &lep_region : {"_mumu", "_ee"}){
+    for(const TString &lep_region : {"_mm", "_ee"}){
         for(const TString &ev_region : {""}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
+            give_alphanumeric_labels(&hists, lep_region);
         }
     }
 
     //assures statistical errors are dealt with correctly
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
+    for(auto const& it : hists){
+        TH1* h = it.second;
         h->Sumw2();
     }
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
+    for(auto const& it2D : hists2D){
+        TH2* h = it2D.second;
         h->Sumw2();
     }
 
@@ -98,20 +109,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    //PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
-    //PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/jetTagger_reliso_novtx.h5", {50,11}, 2);
-
-    //these were meant to test cut flow selection, maybe should make these into histograms eventually
-    //int SSe = 0;//, SSe2 = 0, SSe3 = 0, SSe4 = 0;
-    int OSe = 0;//, OSe2 = 0, OSe3 = 0, OSe4 = 0;
-    //int SSmu = 0;//, SSmu2 = 0, SSmu3 = 0, SSmu4 = 0;
-    int OSmu = 0;//, OSmu2 = 0, OSmu3 = 0, OSmu4 = 0;
-    //double SSe_weight = 0;//, SSe2_weight = 0, SSe3_weight = 0, SSe4_weight = 0;
-    double OSe_weight = 0;//, OSe2_weight = 0, OSe3_weight = 0, OSe4_weight = 0;
-    //double SSmu_weight = 0;//, SSmu2_weight = 0, SSmu3_weight = 0, SSmu4_weight = 0;
-    double OSmu_weight = 0;//, OSmu2_weight = 0, OSmu3_weight = 0, OSmu4_weight = 0;
-
-    int count = 0;
+    std::map<TString, double> SR_counters = add_SR_counters();
 
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
@@ -121,6 +119,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         total_weight = (cross_section * 59690 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
+    print_evaluating_points(evaluating_ctaus);
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
@@ -139,138 +138,44 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) event_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);
-        else event_weight = 1;
+        if(sampleflavor.Index("Run") == -1) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);
+        else ev_weight = 1;
 
         //Get ID
-        get_electronID(&fullElectronID[0]);
-        get_loose_electronID(&looseElectronID[0]);
-        //get_pogmedium_electronID(&pogmediumElectronID[0]);
-        //get_displ_electronID(&displElectronID[0]);
-        get_muonID(&fullMuonID[0]);
-        get_loose_muonID(&looseMuonID[0]);
-        //get_pogmedium_muonID(&pogmediumMuonID[0]);
-        //get_displ_muonID(&displMuonID[0]);
-        get_jetID(&fullJetID[0]);
+        get_electronID();
+        get_loose_electronID();
+        get_muonID();
+        get_loose_muonID();
+        get_jetID();
 
 
         //Get Cleaning for jets
 	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
-	    //get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
-        //get_clean_jets(&jet_clean_loose[0],  &looseElectronID[0], &looseMuonID[0]);
-	    //for(unsigned i = 0; i < 20; ++i){
-	    //    jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
-	    //}
-	    
-        //Get cleaning for electrons
 	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
-	    //get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
         get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
-	    //for(unsigned i = 0; i < 10; ++i){
-	    //    ele_clean_full_displ[i] = ele_clean_full[i] && ele_clean_displ[i];
-	    //}
 
-        //Find leptons and jets with leading pt
-	    i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full[0]);
-	    i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full[0], i_leading_e);
-	    //i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading_e);
-        //i_leading_pogmedium_e       = find_leading_e(&pogmediumElectronID[0], &ele_clean_full_displ[0]);
-	    i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
-	    i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading_mu);
-	    //i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading_mu);
-        //i_leading_pogmedium_mu      = find_leading_mu(&pogmediumMuonID[0]);
-	    
-	    i_leading_jet	    = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
-	    i_subleading_jet	= find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet);
-        i_thirdleading_jet  = find_thirdleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet, i_subleading_jet);
+	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full[0]);
+	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
 
-        // Trigger efficiency of all events (before selection matches 
-        //fill_HLT_allevents_efficiency(&hists, "");
+        i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
 
-        //make sure we are either in e or mu signal region. Based on leading lepton with highest pt.
-        if(i_leading_e != -1 and i_leading_mu != -1){
-            if(_lPt[i_leading_e] > _lPt[i_leading_mu]) i_leading_mu = -1;
-            else i_leading_e = -1;
-        }
+	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full[0], i_leading);
+	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading);
 
-        //get signal region booleans
+	    i_leading_jet                   = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
+	    i_subleading_jet	            = find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet);
+        i_thirdleading_jet              = find_thirdleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet, i_subleading_jet);
+
+
+        set_leptons(i_subleading_e, i_subleading_mu);
         signal_regions();
         
-        // Find gen level leptons matching to the leading and subleading lepton (geometrically when its background or data, pgdID when its signal
-        i_gen_leading_e             = find_gen_lep(i_leading_e);                //finds closest dR match
-        i_gen_subleading_e          = find_gen_lep(i_subleading_e);
-        i_gen_leading_mu            = find_gen_lep(i_leading_mu);
-        i_gen_subleading_mu         = find_gen_lep(i_subleading_mu);
-        
-        // Find jet closest to l2, this jet can contain l2
-        //if(_1e1disple)   i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_e);
-        //if(_1mu1displmu) i_closel2_jet = find_jet_closest_to_lepton(&fullJetID[0], i_subleading_displ_mu);
-        
-        //i_gen_l1 = find_gen_l1();                                                   //finds HNL process l1 gen lepton
-        //i_gen_l2 = find_gen_l2();                                                   //finds HNL process l2 gen lepton
-        //if(_1e)          leadingIsl1 = leptonIsGenLepton(i_leading_e, i_gen_l1);
-        //if(_1mu)         leadingIsl1 = leptonIsGenLepton(i_leading_mu, i_gen_l1);
-        //if(_1e1disple)   subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_e, i_gen_l2);                
-        //if(_1mu1displmu) subleadingIsl2 = leptonIsGenLepton(i_subleading_displ_mu, i_gen_l2);
-        
-        // Fill histograms
-        
-        //fill_HNL_MC_check(&hists, &hists2D);
-        //fill_HLT_efficiency(&hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
-        //fill_HLT_efficiency(&hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
-
-        //fill_cutflow_e(&hists, "_SS_e");
-        //fill_cutflow_e(&hists, "_OS_e");
-        //fill_cutflow_mu(&hists, "_SS_mu");
-        //fill_cutflow_mu(&hists, "_OS_mu");
-
-
-        // Determine signs and flavor and apply lepton scale factors
-        TString signs_and_flavor;
-        if(_2e){ 
-            signs_and_flavor = "_ee";
-            event_weight *= lsfreader_e.get_LSF(_lPt[i_leading_e], _lEta[i_leading_e]) * lsfreader_e.get_LSF(_lPt[i_subleading_e], _lEta[i_subleading_e]);
-        }
-        else if(_2mu){ 
-            signs_and_flavor = "_mumu";
-            event_weight *= lsfreader_mu.get_LSF(_lPt[i_leading_mu], _lEta[i_leading_mu]) * lsfreader_mu.get_LSF(_lPt[i_subleading_mu], _lEta[i_subleading_mu]);
-        }
-        //if(_1e1disple) signs_and_flavor = (_lCharge[i_leading_e] == _lCharge[i_subleading_displ_e])? "_SS_e" : "_OS_e";
-        //else if(_1mu1displmu) signs_and_flavor = (_lCharge[i_leading_mu] == _lCharge[i_subleading_displ_mu])? "_SS_mu" : "_OS_mu"; 
-        
-
-        if(_2e_full){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_e);
-            OSe++; OSe_weight += event_weight;
-        }
-        if(_2mu_full){
-            fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_mu);
-            OSmu++; OSmu_weight += event_weight;
-        }
-        //if(_1e1disple1jet){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e);
-        ////    fill_KVF_histograms(&hists, &hists2D, signs_and_flavor, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    fill_IVF_histograms(&hists, &hists2D, signs_and_flavor, i_leading_e, i_subleading_displ_e, i_gen_subleading_displ_e);
-        //    if(signs_and_flavor == "_SS_e"){ SSe3++; SSe3_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_e"){ OSe3++; OSe3_weight += event_weight;}
-        //}
-        //if(_1mu1displmu1jet){
-        //    fill_histograms(&hists, &hists2D, signs_and_flavor, i_leading_mu, i_subleading_displ_mu);
-        //    if(signs_and_flavor == "_SS_mu"){ SSmu3++; SSmu3_weight += event_weight;}
-        //    else if(signs_and_flavor == "_OS_mu"){ OSmu3++; OSmu3_weight += event_weight;}
-        //}
+        fill_histograms(&hists, &hists2D);
+        SR_counters[sr_flavor]++;
+        SR_counters[sr_flavor+"_weighted"] += ev_weight;
     }
-/*
- * Small summary to write to terminal in order to quickly check state of results
- */
-    cout << "-----------------------------------------------------------------------------" << endl;
-    cout << "Channel    #events     #events(with ind. weight)    #events(with tot. weight)" << endl;
-    cout << "-------------------------2 leptons-------------------------------" << endl;
-    cout << "OS ee:       " << OSe <<  "        " << OSe_weight <<  "       " << 1.0*OSe_weight*total_weight << endl;
-    cout << "OS mumu:     " << OSmu << "        " << OSmu_weight << "       " << 1.0*OSmu_weight*total_weight << endl;
-    cout << "count:       " << count << endl;
-
-
+    //Small summary to write to terminal in order to quickly check state of results
+    print_SR_counters(SR_counters, total_weight);
 /*
  * Write everything to output:
  * 1. find output name based on input sample name
@@ -307,8 +212,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TFile *output = new TFile(outputfilename, "recreate");
 
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
+    for(auto const& it : hists){
+        TH1* h = it.second;
         if(((TString)h->GetName()).Index("_AbsScale") != -1 or ((TString)h->GetName()).Index("_meanqT") != -1) continue;
         int nb = h->GetNbinsX();
         double b0  = h->GetBinContent( 0  );
@@ -334,30 +239,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
         }
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
+	    h->Write(h->GetName(), TObject::kOverwrite);
     }
-    // Normalize 2D histograms to correct total weight
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
+    // Normalize 2D histograms to correct total weight and write them
+    for(auto const& it2D : hists2D){
+        TH2* h = it2D.second;
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
+        h->Write(h->GetName(), TObject::kOverwrite);
     }
 
-    // Give histograms that need it the correct text bin labels
-    //give_alphanumeric_labels(&hists, "_ee");
-    //give_alphanumeric_labels(&hists, "_mu");
-
-
-    // Write 1D histograms to outputfile
-    for( it = hists.begin(); it != hists.end(); it++){
-        TH1* h = it->second;
-	    h->Write();
-    }
-
-    // Write 2D histograms to outputfile
-    for( it2D = hists2D.begin(); it2D != hists2D.end(); it2D++){
-        TH2* h = it2D->second;
-        h->Write();
-    }
- 
     // This is a histogram with 1 bin that is filled with value 1.
     // After hadding files together, this allows to see how many were hadded together.
     // This was used for efficiency histograms that were elevated by number of hadded files. at the moment it is not used anymore (efficiencies are calculated after hadding, in plotting step)
@@ -366,6 +256,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     hadd_counter->Write();
 
     //hweight->Write();
+    std::cout << "close file" << std::endl;
     output->Close();
 }
 

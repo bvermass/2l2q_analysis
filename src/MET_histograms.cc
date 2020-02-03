@@ -35,7 +35,7 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
 }
 
-void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, int i_leading, int i_subleading){
+void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
     (*hists)[prefix+"_metSM"]->Fill(_met, event_weight); //FIX
     (*hists)[prefix+"_metRaw"]->Fill(_metRaw, event_weight);

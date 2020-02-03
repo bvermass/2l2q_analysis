@@ -4,14 +4,12 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::get_jetID(bool* ID)
+void full_analyzer::get_jetID()
 {
     for(unsigned i = 0; i < _nJets; ++i){
-	    bool fullID = 	fabs(_jetEta[i]) < 2.4 &&
-			            _jetPt[i] > 20 &&
-			            _jetIsTight[i];
-	    if(fullID) *(ID + i) = true;
-	    else *(ID + i) = false;
+	    fullJetID[i] = fabs(_jetEta[i]) < 2.4 &&
+                       _jetPt[i] > 20 &&
+                       _jetIsTight[i];
     }
 }
 
@@ -79,12 +77,11 @@ int full_analyzer::find_jet_closest_to_lepton(bool* jetID, int i_lep)
     if(i_lep == -1) return index_jet;
     
     double dR    = -1;
-    double mindR = 10;
+    double mindR = 0.7;
     
     for(unsigned i_jet = 0; i_jet < _nJets; i_jet++){
         if(!*(jetID + i_jet)) continue;
         dR = get_dR_lepton_jet(i_lep, i_jet);
-        if(index_jet == -1){ index_jet = i_jet;}
         if(dR < mindR){ index_jet = i_jet; mindR = dR;}
     }
 

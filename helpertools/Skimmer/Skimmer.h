@@ -30,9 +30,23 @@ class Skimmer {
         ULong64_t       i_lumiBlock;
         ULong64_t       i_eventNb;
         UChar_t         i_nVertex;
-        //Float_t         i_prefireWeight;
-        //Float_t         i_prefireWeightUp;
-        //Float_t         i_prefireWeightDown;
+        Bool_t          i_is2017;
+        Bool_t          i_is2018;
+        Double_t        i_BS_x;
+        Double_t        i_BS_y;
+        Double_t        i_BS_z;
+        Double_t        i_BS_xErr;
+        Double_t        i_BS_yErr;
+        Double_t        i_BS_zErr;
+        Double_t        i_PV_x;
+        Double_t        i_PV_y;
+        Double_t        i_PV_z;
+        Double_t        i_PV_xErr;
+        Double_t        i_PV_yErr;
+        Double_t        i_PV_zErr;
+        Float_t         i_prefireWeight;
+        Float_t         i_prefireWeightUp;
+        Float_t         i_prefireWeightDown;
         Float_t         i_nTrueInt;
         Double_t        i_weight;
         Double_t        i_lheHTIncoming;
@@ -41,7 +55,7 @@ class Skimmer {
         unsigned        i_nLheWeights;
         Double_t        i_lheWeight[110];   //[_nLheWeights]
         unsigned        i_nPsWeights;
-        Double_t        i_psWeight[110];
+        Double_t        i_psWeight[110];   //[_nLheWeights]
         unsigned        i_ttgEventType;
         unsigned        i_zgEventType;
         Double_t        i_gen_met;
@@ -64,6 +78,9 @@ class Skimmer {
         UInt_t          i_gen_lFlavor[20];   //[_gen_nL]
         Int_t           i_gen_lCharge[20];   //[_gen_nL]
         Int_t           i_gen_lMomPdg[20];   //[_gen_nL]
+        Double_t        i_gen_vertex_x[20];
+        Double_t        i_gen_vertex_y[20];
+        Double_t        i_gen_vertex_z[20];
         Bool_t          i_gen_lIsPrompt[20];   //[_gen_nL]
         Bool_t          i_gen_lDecayedHadr[20];
         Double_t        i_gen_lMinDeltaR[20];   //[_gen_nL]
@@ -90,6 +107,62 @@ class Skimmer {
         Bool_t          i_passTrigger_mmm;
         Bool_t          i_passTrigger_mt;
         Bool_t          i_passTrigger_ref;
+        //Bool_t          i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
+        //Int_t           i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
+        //Bool_t          i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          i_HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
+        //Int_t           i_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
+        //Bool_t          i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
+        //Int_t           i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
+        //Bool_t          i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
+        //Int_t           i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
+        //Bool_t          i_HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
+        //Int_t           i_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
+        //Bool_t          i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
+        //Int_t           i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+        //Int_t           i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+        //Int_t           i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
+        //Int_t           i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
+        //Bool_t          i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+        //Int_t           i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+        //Bool_t          i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+        //Int_t           i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+        //Bool_t          i_HLT_TripleMu_12_10_5;
+        //Int_t           i_HLT_TripleMu_12_10_5_prescale;
+        //Bool_t          i_passMETFilters;
+        //Bool_t          i_Flag_HBHENoiseFilter;
+        //Bool_t          i_Flag_HBHENoiseIsoFilter;
+        //Bool_t          i_Flag_EcalDeadCellTriggerPrimitiveFilter;
+        //Bool_t          i_Flag_goodVertices;
+        //Bool_t          i_Flag_BadPFMuonFilter;
+        //Bool_t          i_Flag_BadChargedCandidateFilter;
+        //Bool_t          i_Flag_globalTightHalo2016Filter;
+        //Bool_t          i_HLT_Ele105_CaloIdVT_GsfTrkIdT;
+        //Int_t           i_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
+        //Bool_t          i_HLT_Ele115_CaloIdVT_GsfTrkIdT;
+        //Int_t           i_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
+        //Bool_t          i_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           i_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          i_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
+        //Int_t           i_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
+        //Bool_t          i_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
+        //Int_t           i_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
+        //Bool_t          i_HLT_Mu50;
+        //Int_t           i_HLT_Mu50_prescale;
+        //Bool_t          i_HLT_TkMu50;
+        //Int_t           i_HLT_TkMu50_prescale;
+        //Bool_t          i_HLT_Mu45_eta2p1;
+        //Int_t           i_HLT_Mu45_eta2p1_prescale;
+        //Bool_t          i_HLT_Mu30_TkMu11;
+        //Int_t           i_HLT_Mu30_TkMu11_prescale;
         unsigned        i_nL;
         unsigned        i_nMu;
         unsigned        i_nEle;
@@ -211,7 +284,15 @@ class Skimmer {
         Double_t        i_jetDeepCsv_c[20];   //[_nJets]
         Double_t        i_jetDeepCsv_bb[20];   //[_nJets]
         Double_t        i_jetDeepCsv[20];   //[_nJets]
+        Double_t        i_jetDeepFlavor_b[20];
+        Double_t        i_jetDeepFlavor_bb[20];
+        Double_t        i_jetDeepFlavor_lepb[20];
+        Double_t        i_jetDeepFlavor[20];
+        Double_t        i_jetDeepFlavor_c[20];
+        Double_t        i_jetDeepFlavor_uds[20];
+        Double_t        i_jetDeepFlavor_g[20];
         UInt_t          i_jetHadronFlavor[20];   //[_nJets]
+        //Bool_t          i_jetIsLoose[20];   //[_nJets]
         Bool_t          i_jetIsTight[20];   //[_nJets]
         Bool_t          i_jetIsTightLepVeto[20];   //[_nJets]
         Double_t        i_jetNeutralHadronFraction[20];
@@ -240,9 +321,23 @@ class Skimmer {
         ULong64_t       o_lumiBlock;
         ULong64_t       o_eventNb;
         UChar_t         o_nVertex;
-        //Float_t         o_prefireWeight;
-        //Float_t         o_prefireWeightUp;
-        //Float_t         o_prefireWeightDown;
+        Bool_t          o_is2017;
+        Bool_t          o_is2018;
+        Double_t        o_BS_x;
+        Double_t        o_BS_y;
+        Double_t        o_BS_z;
+        Double_t        o_BS_xErr;
+        Double_t        o_BS_yErr;
+        Double_t        o_BS_zErr;
+        Double_t        o_PV_x;
+        Double_t        o_PV_y;
+        Double_t        o_PV_z;
+        Double_t        o_PV_xErr;
+        Double_t        o_PV_yErr;
+        Double_t        o_PV_zErr;
+        Float_t         o_prefireWeight;
+        Float_t         o_prefireWeightUp;
+        Float_t         o_prefireWeightDown;
         Float_t         o_nTrueInt;
         Double_t        o_weight;
         Double_t        o_lheHTIncoming;
@@ -251,7 +346,7 @@ class Skimmer {
         unsigned        o_nLheWeights;
         Double_t        o_lheWeight[110];   //[_nLheWeights]
         unsigned        o_nPsWeights;
-        Double_t        o_psWeight[110];
+        Double_t        o_psWeight[110];   //[_nLheWeights]
         unsigned        o_ttgEventType;
         unsigned        o_zgEventType;
         Double_t        o_gen_met;
@@ -274,6 +369,9 @@ class Skimmer {
         UInt_t          o_gen_lFlavor[20];   //[_gen_nL]
         Int_t           o_gen_lCharge[20];   //[_gen_nL]
         Int_t           o_gen_lMomPdg[20];   //[_gen_nL]
+        Double_t        o_gen_vertex_x[20];
+        Double_t        o_gen_vertex_y[20];
+        Double_t        o_gen_vertex_z[20];
         Bool_t          o_gen_lIsPrompt[20];   //[_gen_nL]
         Bool_t          o_gen_lDecayedHadr[20];
         Double_t        o_gen_lMinDeltaR[20];   //[_gen_nL]
@@ -300,6 +398,62 @@ class Skimmer {
         Bool_t          o_passTrigger_mmm;
         Bool_t          o_passTrigger_mt;
         Bool_t          o_passTrigger_ref;
+        //Bool_t          o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
+        //Int_t           o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
+        //Bool_t          o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          o_HLT_Mu8_DiEle12_CaloIdL_TrackIdL;
+        //Int_t           o_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;
+        //Bool_t          o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;
+        //Int_t           o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;
+        //Bool_t          o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;
+        //Int_t           o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;
+        //Bool_t          o_HLT_DiMu9_Ele9_CaloIdL_TrackIdL;
+        //Int_t           o_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;
+        //Bool_t          o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
+        //Int_t           o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+        //Int_t           o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+        //Int_t           o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;
+        //Bool_t          o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;
+        //Int_t           o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;
+        //Bool_t          o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+        //Int_t           o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+        //Bool_t          o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
+        //Int_t           o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
+        //Bool_t          o_HLT_TripleMu_12_10_5;
+        //Int_t           o_HLT_TripleMu_12_10_5_prescale;
+        //Bool_t          o_passMETFilters;
+        //Bool_t          o_Flag_HBHENoiseFilter;
+        //Bool_t          o_Flag_HBHENoiseIsoFilter;
+        //Bool_t          o_Flag_EcalDeadCellTriggerPrimitiveFilter;
+        //Bool_t          o_Flag_goodVertices;
+        //Bool_t          o_Flag_BadPFMuonFilter;
+        //Bool_t          o_Flag_BadChargedCandidateFilter;
+        //Bool_t          o_Flag_globalTightHalo2016Filter;
+        //Bool_t          o_HLT_Ele105_CaloIdVT_GsfTrkIdT;
+        //Int_t           o_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
+        //Bool_t          o_HLT_Ele115_CaloIdVT_GsfTrkIdT;
+        //Int_t           o_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;
+        //Bool_t          o_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+        //Int_t           o_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;
+        //Bool_t          o_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
+        //Int_t           o_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;
+        //Bool_t          o_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
+        //Int_t           o_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;
+        //Bool_t          o_HLT_Mu50;
+        //Int_t           o_HLT_Mu50_prescale;
+        //Bool_t          o_HLT_TkMu50;
+        //Int_t           o_HLT_TkMu50_prescale;
+        //Bool_t          o_HLT_Mu45_eta2p1;
+        //Int_t           o_HLT_Mu45_eta2p1_prescale;
+        //Bool_t          o_HLT_Mu30_TkMu11;
+        //Int_t           o_HLT_Mu30_TkMu11_prescale;
         unsigned        o_nL;
         unsigned        o_nMu;
         unsigned        o_nEle;
@@ -421,7 +575,15 @@ class Skimmer {
         Double_t        o_jetDeepCsv_c[20];   //[_nJets]
         Double_t        o_jetDeepCsv_bb[20];   //[_nJets]
         Double_t        o_jetDeepCsv[20];   //[_nJets]
+        Double_t        o_jetDeepFlavor_b[20];
+        Double_t        o_jetDeepFlavor_bb[20];
+        Double_t        o_jetDeepFlavor_lepb[20];
+        Double_t        o_jetDeepFlavor[20];
+        Double_t        o_jetDeepFlavor_c[20];
+        Double_t        o_jetDeepFlavor_uds[20];
+        Double_t        o_jetDeepFlavor_g[20];
         UInt_t          o_jetHadronFlavor[20];   //[_nJets]
+        //Bool_t          o_jetIsLoose[20];   //[_nJets]
         Bool_t          o_jetIsTight[20];   //[_nJets]
         Bool_t          o_jetIsTightLepVeto[20];   //[_nJets]
         Double_t        o_jetNeutralHadronFraction[20];
@@ -448,9 +610,23 @@ class Skimmer {
         TBranch        *bi__lumiBlock;   //!
         TBranch        *bi__eventNb;   //!
         TBranch        *bi__nVertex;   //!
-        //TBranch        *bi__prefireWeight;
-        //TBranch        *bi__prefireWeightUp;
-        //TBranch        *bi__prefireWeightDown;
+        TBranch        *bi__is2017;   //!
+        TBranch        *bi__is2018;   //!
+        TBranch        *bi__BS_x;
+        TBranch        *bi__BS_y;
+        TBranch        *bi__BS_z;
+        TBranch        *bi__BS_xErr;
+        TBranch        *bi__BS_yErr;
+        TBranch        *bi__BS_zErr;
+        TBranch        *bi__PV_x;
+        TBranch        *bi__PV_y;
+        TBranch        *bi__PV_z;
+        TBranch        *bi__PV_xErr;
+        TBranch        *bi__PV_yErr;
+        TBranch        *bi__PV_zErr;
+        TBranch        *bi__prefireWeight;
+        TBranch        *bi__prefireWeightUp;
+        TBranch        *bi__prefireWeightDown;
         TBranch        *bi__nTrueInt;   //!
         TBranch        *bi__weight;   //!
         TBranch        *bi__lheHTIncoming;   //!
@@ -465,7 +641,7 @@ class Skimmer {
         TBranch        *bi__gen_met;   //!
         TBranch        *bi__gen_metPhi;   //!
         TBranch        *bi__gen_nPh;   //!
-        TBranch        *bi__gen_phStatus;
+        TBranch        *bi__gen_phStatus;   //!
         TBranch        *bi__gen_phPt;   //!
         TBranch        *bi__gen_phEta;   //!
         TBranch        *bi__gen_phPhi;   //!
@@ -482,8 +658,11 @@ class Skimmer {
         TBranch        *bi__gen_lFlavor;   //!
         TBranch        *bi__gen_lCharge;   //!
         TBranch        *bi__gen_lMomPdg;   //!
+        TBranch        *bi__gen_vertex_x;  //!
+        TBranch        *bi__gen_vertex_y;  //!
+        TBranch        *bi__gen_vertex_z;  //!
         TBranch        *bi__gen_lIsPrompt;   //!
-        TBranch        *bi__gen_lDecayedHadr;
+        TBranch        *bi__gen_lDecayedHadr;   //!
         TBranch        *bi__gen_lMinDeltaR;   //!
         TBranch        *bi__gen_lPassParentage;   //!
         TBranch        *bi__passMETFilters;   //!
@@ -508,6 +687,62 @@ class Skimmer {
         TBranch        *bi__passTrigger_mmm;
         TBranch        *bi__passTrigger_mt;
         TBranch        *bi__passTrigger_ref;
+        //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
+        //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
+        //TBranch        *bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+        //TBranch        *bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_Mu8_DiEle12_CaloIdL_TrackIdL;   //!
+        //TBranch        *bi__HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale;   //!
+        //TBranch        *bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+        //TBranch        *bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL;   //!
+        //TBranch        *bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale;   //!
+        //TBranch        *bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+        //TBranch        *bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL;   //!
+        //TBranch        *bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale;   //!
+        //TBranch        *bi__HLT_DiMu9_Ele9_CaloIdL_TrackIdL;   //!
+        //TBranch        *bi__HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;   //!
+        //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
+        //TBranch        *bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
+        //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL;   //!
+        //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
+        //TBranch        *bi__HLT_TripleMu_12_10_5;   //!
+        //TBranch        *bi__HLT_TripleMu_12_10_5_prescale;   //!
+        //TBranch        *bi__passMETFilters;   //!
+        //TBranch        *bi__Flag_HBHENoiseFilter;   //!
+        //TBranch        *bi__Flag_HBHENoiseIsoFilter;   //!
+        //TBranch        *bi__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
+        //TBranch        *bi__Flag_goodVertices;   //!
+        //TBranch        *bi__Flag_globalTightHalo2016Filter;   //!
+        //TBranch        *bi__Flag_BadPFMuonFilter;   //!
+        //TBranch        *bi__Flag_BadChargedCandidateFilter;   //!
+        //TBranch        *bi__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
+        //TBranch        *bi__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
+        //TBranch        *bi__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!
+        //TBranch        *bi__HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale;   //!
+        //TBranch        *bi__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
+        //TBranch        *bi__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale;   //!
+        //TBranch        *bi__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;   //!
+        //TBranch        *bi__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale;   //!
+        //TBranch        *bi__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;   //!
+        //TBranch        *bi__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale;   //!
+        //TBranch        *bi__HLT_Mu50;   //!
+        //TBranch        *bi__HLT_Mu50_prescale;   //!
+        //TBranch        *bi__HLT_TkMu50;   //!
+        //TBranch        *bi__HLT_TkMu50_prescale;   //!
+        //TBranch        *bi__HLT_Mu45_eta2p1;   //!
+        //TBranch        *bi__HLT_Mu45_eta2p1_prescale;   //!
+        //TBranch        *bi__HLT_Mu30_TkMu11;   //!
+        //TBranch        *bi__HLT_Mu30_TkMu11_prescale;   //!
         TBranch        *bi__nL;   //!
         TBranch        *bi__nMu;   //!
         TBranch        *bi__nEle;   //!
@@ -564,7 +799,7 @@ class Skimmer {
         TBranch        *bi__closestJetDeepCsv_b;   //!
         TBranch        *bi__closestJetDeepCsv_bb;   //!
         TBranch        *bi__closestJetDeepCsv;   //!
-        TBranch        *bi__selectedTrackMult;   //!
+        TBranch        *bi__selectedTrackMult;
         TBranch        *bi__lMuonSegComp;   //!
         TBranch        *bi__lMuonTrackPt;   //!
         TBranch        *bi__lMuonTrackPtErr;   //!
@@ -580,7 +815,7 @@ class Skimmer {
         TBranch        *bi__lPtScaleUp;
         TBranch        *bi__lPtScaleDown;
         TBranch        *bi__lPtResUp;
-        TBranch        *bi__lPtResDown;//ECorr, EScaleUp can be calculated with ECorr/E = PtCorr/Pt and analogue for the others
+        TBranch        *bi__lPtResDown;
         TBranch        *bi__nPh;   //!
         TBranch        *bi__phPt;   //!
         TBranch        *bi__phEta;   //!
@@ -606,7 +841,7 @@ class Skimmer {
         TBranch        *bi__phPtScaleUp;
         TBranch        *bi__phPtScaleDown;
         TBranch        *bi__phPtResUp;
-        TBranch        *bi__phPtResDown;//ECorr,... same as for electrons
+        TBranch        *bi__phPtResDown;
         TBranch        *bi__nJets;   //!
         TBranch        *bi__jetPt;   //!
         TBranch        *bi__jetPt_JECUp;   //!
@@ -629,7 +864,15 @@ class Skimmer {
         TBranch        *bi__jetDeepCsv_c;   //!
         TBranch        *bi__jetDeepCsv_bb;   //!
         TBranch        *bi__jetDeepCsv;   //!
+        TBranch        *bi__jetDeepFlavor_b;   //!
+        TBranch        *bi__jetDeepFlavor_bb;   //!
+        TBranch        *bi__jetDeepFlavor_lepb;   //!
+        TBranch        *bi__jetDeepFlavor;   //!
+        TBranch        *bi__jetDeepFlavor_c;   //!
+        TBranch        *bi__jetDeepFlavor_uds;   //!
+        TBranch        *bi__jetDeepFlavor_g;   //!
         TBranch        *bi__jetHadronFlavor;   //!
+        //TBranch        *bi__jetIsLoose;   //!
         TBranch        *bi__jetIsTight;   //!
         TBranch        *bi__jetIsTightLepVeto;   //!
         TBranch        *bi__jetNeutralHadronFraction;   //!

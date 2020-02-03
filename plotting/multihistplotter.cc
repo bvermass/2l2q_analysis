@@ -22,10 +22,20 @@ int main(int argc, char * argv[])
         legends.push_back(adjust_legend((TString)argv[i]));
     }
 
+    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
+    //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<int> colors;
+    for(int i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
+    }
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
-    TString general_pathname = make_general_pathname("multihists/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots/multihists/", specific_dir + "/");
+
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -59,16 +69,22 @@ int main(int argc, char * argv[])
             // Get a reference histogram for the name, then get all histograms in  a vector
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
-            std::cout << histname << std::endl;
+            //std::cout << histname << std::endl;
             
+            if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist_ref->GetMaximum() == 0) continue;
-            
+            if(!check_identifiers(histname, identifiers)) continue;
+
             THStack* hists = new THStack("stack", "");
             for(int i = 0; i < files.size(); i++){
-                TH1* hist = (TH1*)files[i]->Get(histname);
-                if(hist->GetMaximum() > 0){
-                    hists->Add(hist);
-                    legend.AddEntry(hist, legends[i], "l");
+                if(files[i]->GetListOfKeys()->Contains(histname)){
+                    TH1* hist = (TH1*)files[i]->Get(histname);
+                    if(hist->GetMaximum() > 0){
+                        hists->Add(hist);
+                        hist->SetMarkerColor(colors[i]);
+                        hist->SetLineColor(colors[i]);
+                        legend.AddEntry(hist, legends[i], "l");
+                    }
                 }
             }
 
@@ -91,7 +107,7 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(0);
 
-            hists->Draw("PLC hist nostack");
+            hists->Draw("hist nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -105,7 +121,7 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(1);
 
-            hists->Draw("PLC hist nostack");
+            hists->Draw("hist nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(10*hists->GetMaximum("nostack"));
@@ -127,14 +143,18 @@ int main(int argc, char * argv[])
                 TMultiGraph* multigraph = new TMultiGraph();
                 multigraph->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";Eff.");
                 for(int i = 0; i < files.size(); i++){
-                    TGraphAsymmErrors* graph = new TGraphAsymmErrors((TH1F*) files[i]->Get(histname), (TH1F*) files[i]->Get(histname(0, histname.Index("eff_num")+4) + "den"), "cp");
-                    multigraph->Add(graph);
-                    legend.AddEntry(graph, legends[i], "pl");
+                    if(files[i]->GetListOfKeys()->Contains(histname) and files[i]->GetListOfKeys()->Contains(histname(0, histname.Index("eff_num")+4) + "den")){
+                        TGraphAsymmErrors* graph = new TGraphAsymmErrors((TH1F*) files[i]->Get(histname), (TH1F*) files[i]->Get(histname(0, histname.Index("eff_num")+4) + "den"), "cp");
+                        multigraph->Add(graph);
+                        graph->SetMarkerColor(colors[i]);
+                        graph->SetLineColor(colors[i]);
+                        legend.AddEntry(graph, legends[i], "pl");
+                    }
                 }
 
-                multigraph->Draw("AP pmc plc");
+                multigraph->Draw("AP");
                 multigraph->SetMinimum(0.);
-                multigraph->SetMaximum(1.25);
+                multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                 legend.Draw("same");
                 CMSandLumi->Draw();

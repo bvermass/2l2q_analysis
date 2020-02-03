@@ -12,10 +12,24 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lumiBlock", &i_lumiBlock, &bi__lumiBlock);
     tree->SetBranchAddress("_eventNb", &i_eventNb, &bi__eventNb);
     tree->SetBranchAddress("_nVertex", &i_nVertex, &bi__nVertex);
+    tree->SetBranchAddress("_is2017", &i_is2017, &bi__is2017);
+    tree->SetBranchAddress("_is2018", &i_is2018, &bi__is2018);
+    tree->SetBranchAddress("_BS_x", &i_BS_x, &bi__BS_x);
+    tree->SetBranchAddress("_BS_y", &i_BS_y, &bi__BS_y);
+    tree->SetBranchAddress("_BS_z", &i_BS_z, &bi__BS_z);
+    tree->SetBranchAddress("_BS_xErr", &i_BS_xErr, &bi__BS_xErr);
+    tree->SetBranchAddress("_BS_yErr", &i_BS_yErr, &bi__BS_yErr);
+    tree->SetBranchAddress("_BS_zErr", &i_BS_zErr, &bi__BS_zErr);
+    tree->SetBranchAddress("_PV_x", &i_PV_x, &bi__PV_x);
+    tree->SetBranchAddress("_PV_y", &i_PV_y, &bi__PV_y);
+    tree->SetBranchAddress("_PV_z", &i_PV_z, &bi__PV_z);
+    tree->SetBranchAddress("_PV_xErr", &i_PV_xErr, &bi__PV_xErr);
+    tree->SetBranchAddress("_PV_yErr", &i_PV_yErr, &bi__PV_yErr);
+    tree->SetBranchAddress("_PV_zErr", &i_PV_zErr, &bi__PV_zErr);
     if(!isData){
-         //tree->SetBranchAddress("_prefireWeight", &i_prefireWeight, &bi__prefireWeight);
-         //tree->SetBranchAddress("_prefireWeightUp", &i_prefireWeightUp, &bi__prefireWeightUp);
-         //tree->SetBranchAddress("_prefireWeightDown", &i_prefireWeightDown, &bi__prefireWeightDown);
+         tree->SetBranchAddress("_prefireWeight", &i_prefireWeight, &bi__prefireWeight);
+         tree->SetBranchAddress("_prefireWeightUp", &i_prefireWeightUp, &bi__prefireWeightUp);
+         tree->SetBranchAddress("_prefireWeightDown", &i_prefireWeightDown, &bi__prefireWeightDown);
          tree->SetBranchAddress("_nTrueInt", &i_nTrueInt, &bi__nTrueInt);
          tree->SetBranchAddress("_weight", &i_weight, &bi__weight);
          tree->SetBranchAddress("_lheHTIncoming", &i_lheHTIncoming, &bi__lheHTIncoming);
@@ -47,6 +61,9 @@ void Skimmer::Init_input_branches(TTree* tree)
          tree->SetBranchAddress("_gen_lFlavor", i_gen_lFlavor, &bi__gen_lFlavor);
          tree->SetBranchAddress("_gen_lCharge", i_gen_lCharge, &bi__gen_lCharge);
          tree->SetBranchAddress("_gen_lMomPdg", i_gen_lMomPdg, &bi__gen_lMomPdg);
+         tree->SetBranchAddress("_gen_vertex_x", i_gen_vertex_x, &bi__gen_vertex_x);
+         tree->SetBranchAddress("_gen_vertex_y", i_gen_vertex_y, &bi__gen_vertex_y);
+         tree->SetBranchAddress("_gen_vertex_z", i_gen_vertex_z, &bi__gen_vertex_z);
          tree->SetBranchAddress("_gen_lIsPrompt", i_gen_lIsPrompt, &bi__gen_lIsPrompt);
          tree->SetBranchAddress("_gen_lDecayedHadr", i_gen_lDecayedHadr, &bi__gen_lDecayedHadr);
          tree->SetBranchAddress("_gen_lMinDeltaR", i_gen_lMinDeltaR, &bi__gen_lMinDeltaR);
@@ -74,6 +91,62 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_passTrigger_mmm", &i_passTrigger_mmm, &bi__passTrigger_mmm);
     tree->SetBranchAddress("_passTrigger_mt", &i_passTrigger_mt, &bi__passTrigger_mt);
     tree->SetBranchAddress("_passTrigger_ref", &i_passTrigger_ref, &bi__passTrigger_ref);
+    //tree->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL", &i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL, &bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL);
+    //tree->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale", &i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale, &bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale);
+    //tree->SetBranchAddress("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, &bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
+    //tree->SetBranchAddress("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale, &bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_Mu8_DiEle12_CaloIdL_TrackIdL", &i_HLT_Mu8_DiEle12_CaloIdL_TrackIdL, &bi__HLT_Mu8_DiEle12_CaloIdL_TrackIdL);
+    //tree->SetBranchAddress("_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale", &i_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale, &bi__HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ", &i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ, &bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ);
+    //tree->SetBranchAddress("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale, &bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", &i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL, &bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL);
+    //tree->SetBranchAddress("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale", &i_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale, &bi__HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ", &i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ, &bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ);
+    //tree->SetBranchAddress("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale, &bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL", &i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL, &bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL);
+    //tree->SetBranchAddress("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale", &i_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale, &bi__HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale);
+    //tree->SetBranchAddress("_HLT_DiMu9_Ele9_CaloIdL_TrackIdL", &i_HLT_DiMu9_Ele9_CaloIdL_TrackIdL, &bi__HLT_DiMu9_Ele9_CaloIdL_TrackIdL);
+    //tree->SetBranchAddress("_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale", &i_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale, &bi__HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ", &i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ, &bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale", &i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale, &bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale", &i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale, &bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
+    //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", &i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL, &bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale", &i_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale, &bi__HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL", &i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL, &bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL);
+    //tree->SetBranchAddress("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &i_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, &bi__HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale);
+    //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL);
+    //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale);
+    //tree->SetBranchAddress("_HLT_TripleMu_12_10_5", &i_HLT_TripleMu_12_10_5, &bi__HLT_TripleMu_12_10_5);
+    //tree->SetBranchAddress("_HLT_TripleMu_12_10_5_prescale", &i_HLT_TripleMu_12_10_5_prescale, &bi__HLT_TripleMu_12_10_5_prescale);
+    //tree->SetBranchAddress("_passMETFilters", &i_passMETFilters, &bi__passMETFilters);
+    //tree->SetBranchAddress("_Flag_HBHENoiseFilter", &i_Flag_HBHENoiseFilter, &bi__Flag_HBHENoiseFilter);
+    //tree->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &i_Flag_HBHENoiseIsoFilter, &bi__Flag_HBHENoiseIsoFilter);
+    //tree->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &i_Flag_EcalDeadCellTriggerPrimitiveFilter, &bi__Flag_EcalDeadCellTriggerPrimitiveFilter);
+    //tree->SetBranchAddress("_Flag_goodVertices", &i_Flag_goodVertices, &bi__Flag_goodVertices);
+    //tree->SetBranchAddress("_Flag_globalTightHalo2016Filter", &i_Flag_globalTightHalo2016Filter, &bi__Flag_globalTightHalo2016Filter);
+    //tree->SetBranchAddress("_Flag_BadPFMuonFilter", &i_Flag_BadPFMuonFilter, &bi__Flag_BadPFMuonFilter);
+    //tree->SetBranchAddress("_Flag_BadChargedCandidateFilter", &i_Flag_BadChargedCandidateFilter, &bi__Flag_BadChargedCandidateFilter);
+    //tree->SetBranchAddress("_HLT_Ele105_CaloIdVT_GsfTrkIdT", &i_HLT_Ele105_CaloIdVT_GsfTrkIdT, &bi__HLT_Ele105_CaloIdVT_GsfTrkIdT);
+    //tree->SetBranchAddress("_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale", &i_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale, &bi__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale);
+    //tree->SetBranchAddress("_HLT_Ele115_CaloIdVT_GsfTrkIdT", &i_HLT_Ele115_CaloIdVT_GsfTrkIdT, &bi__HLT_Ele115_CaloIdVT_GsfTrkIdT);
+    //tree->SetBranchAddress("_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale", &i_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale, &bi__HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale);
+    //tree->SetBranchAddress("_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &i_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, &bi__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
+    //tree->SetBranchAddress("_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &i_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale, &bi__HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale);
+    //tree->SetBranchAddress("_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL", &i_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL, &bi__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL);
+    //tree->SetBranchAddress("_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale", &i_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale, &bi__HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL", &i_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL, &bi__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL);
+    //tree->SetBranchAddress("_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale", &i_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale, &bi__HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale);
+    //tree->SetBranchAddress("_HLT_Mu50", &i_HLT_Mu50, &bi__HLT_Mu50);
+    //tree->SetBranchAddress("_HLT_Mu50_prescale", &i_HLT_Mu50_prescale, &bi__HLT_Mu50_prescale);
+    //tree->SetBranchAddress("_HLT_TkMu50", &i_HLT_TkMu50, &bi__HLT_TkMu50);
+    //tree->SetBranchAddress("_HLT_TkMu50_prescale", &i_HLT_TkMu50_prescale, &bi__HLT_TkMu50_prescale);
+    //tree->SetBranchAddress("_HLT_Mu45_eta2p1", &i_HLT_Mu45_eta2p1, &bi__HLT_Mu45_eta2p1);
+    //tree->SetBranchAddress("_HLT_Mu45_eta2p1_prescale", &i_HLT_Mu45_eta2p1_prescale, &bi__HLT_Mu45_eta2p1_prescale);
+    //tree->SetBranchAddress("_HLT_Mu30_TkMu11", &i_HLT_Mu30_TkMu11, &bi__HLT_Mu30_TkMu11);
+    //tree->SetBranchAddress("_HLT_Mu30_TkMu11_prescale", &i_HLT_Mu30_TkMu11_prescale, &bi__HLT_Mu30_TkMu11_prescale);
     tree->SetBranchAddress("_nL", &i_nL, &bi__nL);
     tree->SetBranchAddress("_nMu", &i_nMu, &bi__nMu);
     tree->SetBranchAddress("_nEle", &i_nEle, &bi__nEle);
@@ -195,7 +268,15 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_jetDeepCsv_c", i_jetDeepCsv_c, &bi__jetDeepCsv_c);
     tree->SetBranchAddress("_jetDeepCsv_bb", i_jetDeepCsv_bb, &bi__jetDeepCsv_bb);
     tree->SetBranchAddress("_jetDeepCsv", &i_jetDeepCsv, &bi__jetDeepCsv);
+    tree->SetBranchAddress("_jetDeepFlavor_b", &i_jetDeepFlavor_b, &bi__jetDeepFlavor_b);
+    tree->SetBranchAddress("_jetDeepFlavor_bb", &i_jetDeepFlavor_bb, &bi__jetDeepFlavor_bb);
+    tree->SetBranchAddress("_jetDeepFlavor_lepb", &i_jetDeepFlavor_lepb, &bi__jetDeepFlavor_lepb);
+    tree->SetBranchAddress("_jetDeepFlavor", &i_jetDeepFlavor, &bi__jetDeepFlavor);
+    tree->SetBranchAddress("_jetDeepFlavor_c", &i_jetDeepFlavor_c, &bi__jetDeepFlavor_c);
+    tree->SetBranchAddress("_jetDeepFlavor_uds", &i_jetDeepFlavor_uds, &bi__jetDeepFlavor_uds);
+    tree->SetBranchAddress("_jetDeepFlavor_g", &i_jetDeepFlavor_g, &bi__jetDeepFlavor_g);
     tree->SetBranchAddress("_jetHadronFlavor", i_jetHadronFlavor, &bi__jetHadronFlavor);
+    //tree->SetBranchAddress("_jetIsLoose", i_jetIsLoose, &bi__jetIsLoose);
     tree->SetBranchAddress("_jetIsTight", i_jetIsTight, &bi__jetIsTight);
     tree->SetBranchAddress("_jetIsTightLepVeto", i_jetIsTightLepVeto, &bi__jetIsTightLepVeto);
     tree->SetBranchAddress("_jetNeutralHadronFraction", i_jetNeutralHadronFraction, &bi__jetNeutralHadronFraction);
@@ -226,10 +307,24 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lumiBlock",                      &o_lumiBlock,                    "_lumiBlock/l");
     tree->Branch("_eventNb",                        &o_eventNb,                      "_eventNb/l");
     tree->Branch("_nVertex",                        &o_nVertex,                      "_nVertex/b");
+    tree->Branch("_is2017",                         &o_is2017,                       "_is2017/O");
+    tree->Branch("_is2018",                         &o_is2018,                       "_is2018/O");
+    tree->Branch("_BS_x",                           &o_BS_x,                         "_BS_x/D");
+    tree->Branch("_BS_y",                           &o_BS_y,                         "_BS_y/D");
+    tree->Branch("_BS_z",                           &o_BS_z,                         "_BS_z/D");
+    tree->Branch("_BS_xErr",                        &o_BS_xErr,                      "_BS_xErr/D");
+    tree->Branch("_BS_yErr",                        &o_BS_yErr,                      "_BS_yErr/D");
+    tree->Branch("_BS_zErr",                        &o_BS_zErr,                      "_BS_zErr/D");
+    tree->Branch("_PV_x",                           &o_PV_x,                         "_PV_x/D");
+    tree->Branch("_PV_y",                           &o_PV_y,                         "_PV_y/D");
+    tree->Branch("_PV_z",                           &o_PV_z,                         "_PV_z/D");
+    tree->Branch("_PV_xErr",                        &o_PV_xErr,                      "_PV_xErr/D");
+    tree->Branch("_PV_yErr",                        &o_PV_yErr,                      "_PV_yErr/D");
+    tree->Branch("_PV_zErr",                        &o_PV_zErr,                      "_PV_zErr/D");
     if(!isData){
-        //tree->Branch("_prefireWeight",              &o_prefireWeight,                "_prefireWeight/F");
-        //tree->Branch("_prefireWeightUp",            &o_prefireWeightUp,              "_prefireWeightUp/F");
-        //tree->Branch("_prefireWeightDown",          &o_prefireWeightDown,            "_prefireWeightDown/F");
+        tree->Branch("_prefireWeight",              &o_prefireWeight,                "_prefireWeight/F");
+        tree->Branch("_prefireWeightUp",            &o_prefireWeightUp,              "_prefireWeightUp/F");
+        tree->Branch("_prefireWeightDown",          &o_prefireWeightDown,            "_prefireWeightDown/F");
 
         tree->Branch("_nTrueInt",                       &o_nTrueInt,                     "_nTrueInt/F");
         tree->Branch("_weight",                         &o_weight,                       "_weight/D");
@@ -263,12 +358,14 @@ void Skimmer::Add_branches(TTree* tree)
         tree->Branch("_gen_lFlavor",                    &o_gen_lFlavor,                  "_gen_lFlavor[_gen_nL]/i");
         tree->Branch("_gen_lCharge",                    &o_gen_lCharge,                  "_gen_lCharge[_gen_nL]/I");
         tree->Branch("_gen_lMomPdg",                    &o_gen_lMomPdg,                  "_gen_lMomPdg[_gen_nL]/I");
+        tree->Branch("_gen_vertex_x",                   &o_gen_vertex_x,                 "_gen_vertex_x[_gen_nL]/D");
+        tree->Branch("_gen_vertex_y",                   &o_gen_vertex_y,                 "_gen_vertex_y[_gen_nL]/D");
+        tree->Branch("_gen_vertex_z",                   &o_gen_vertex_z,                 "_gen_vertex_z[_gen_nL]/D");
         tree->Branch("_gen_lIsPrompt",                  &o_gen_lIsPrompt,                "_gen_lIsPrompt[_gen_nL]/O");
         tree->Branch("_gen_lDecayedHadr",               &o_gen_lDecayedHadr,             "_gen_lDecayedHadr[_gen_nL]/O");
         tree->Branch("_gen_lMinDeltaR",                 &o_gen_lMinDeltaR,               "_gen_lMinDeltaR[_gen_nL]/D");
         tree->Branch("_gen_lPassParentage",             &o_gen_lPassParentage,           "_gen_lPassParentage[_gen_nL]/O");
     }
-
 
     tree->Branch("_passMETFilters", &o_passMETFilters, "_passMETFilters/O");
     tree->Branch("_Flag_goodVertices", &o_Flag_goodVertices, "_Flag_goodVertices/O");
@@ -292,6 +389,63 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_passTrigger_mmm", &o_passTrigger_mmm, "_passTrigger_mmm/O");
     tree->Branch("_passTrigger_mt", &o_passTrigger_mt, "_passTrigger_mt/O");
     tree->Branch("_passTrigger_ref", &o_passTrigger_ref, "_passTrigger_ref/O");
+    //tree->Branch("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL", &o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL, "_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL/O");
+    //tree->Branch("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale", &o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale, "_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale/I");
+    //tree->Branch("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, "_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ/O");
+    //tree->Branch("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale, "_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale/I");
+    //tree->Branch("_HLT_Mu8_DiEle12_CaloIdL_TrackIdL", &o_HLT_Mu8_DiEle12_CaloIdL_TrackIdL, "_HLT_Mu8_DiEle12_CaloIdL_TrackIdL/O");
+    //tree->Branch("_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale", &o_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale, "_HLT_Mu8_DiEle12_CaloIdL_TrackIdL_prescale/I");
+    //tree->Branch("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ", &o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ, "_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ/O");
+    //tree->Branch("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale, "_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_prescale/I");
+    //tree->Branch("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", &o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL, "_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL/O");
+    //tree->Branch("_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale", &o_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale, "_HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_prescale/I");
+    //tree->Branch("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ", &o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ, "_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ/O");
+    //tree->Branch("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale, "_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_prescale/I");
+    //tree->Branch("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL", &o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL, "_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL/O");
+    //tree->Branch("_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale", &o_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale, "_HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_prescale/I");
+    //tree->Branch("_HLT_DiMu9_Ele9_CaloIdL_TrackIdL", &o_HLT_DiMu9_Ele9_CaloIdL_TrackIdL, "_HLT_DiMu9_Ele9_CaloIdL_TrackIdL/O");
+    //tree->Branch("_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale", &o_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale, "_HLT_DiMu9_Ele9_CaloIdL_TrackIdL_prescale/I");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ", &o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ, "_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ/O");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale", &o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale, "_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_prescale/I");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, "_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ/O");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale", &o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale, "_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale/I");
+    //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ/O");
+    //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_prescale/I");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", &o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL, "_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL/O");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale", &o_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale, "_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_prescale/I");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL", &o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL, "_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL/O");
+    //tree->Branch("_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &o_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, "_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale/I");
+    //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL/O");
+    //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale/I");
+    //tree->Branch("_HLT_TripleMu_12_10_5", &o_HLT_TripleMu_12_10_5, "_HLT_TripleMu_12_10_5/O");
+    //tree->Branch("_HLT_TripleMu_12_10_5_prescale", &o_HLT_TripleMu_12_10_5_prescale, "_HLT_TripleMu_12_10_5_prescale/I");
+    //tree->Branch("_passMETFilters", &o_passMETFilters, "_passMETFilters/O");
+    //tree->Branch("_Flag_HBHENoiseFilter", &o_Flag_HBHENoiseFilter, "_Flag_HBHENoiseFilter/O");
+    //tree->Branch("_Flag_HBHENoiseIsoFilter", &o_Flag_HBHENoiseIsoFilter, "_Flag_HBHENoiseIsoFilter/O");
+    //tree->Branch("_Flag_EcalDeadCellTriggerPrimitiveFilter", &o_Flag_EcalDeadCellTriggerPrimitiveFilter, "_Flag_EcalDeadCellTriggerPrimitiveFilter/O");
+    //tree->Branch("_Flag_goodVertices", &o_Flag_goodVertices, "_Flag_goodVertices/O");
+    //tree->Branch("_Flag_globalTightHalo2016Filter", &o_Flag_globalTightHalo2016Filter, "_Flag_globalTightHalo2016Filter/O");
+    //tree->Branch("_Flag_BadPFMuonFilter", &o_Flag_BadPFMuonFilter, "_Flag_BadPFMuonFilter/O");
+    //tree->Branch("_Flag_BadChargedCandidateFilter", &o_Flag_BadChargedCandidateFilter, "_Flag_BadChargedCandidateFilter/O");
+    //tree->Branch("_HLT_Ele105_CaloIdVT_GsfTrkIdT", &o_HLT_Ele105_CaloIdVT_GsfTrkIdT, "_HLT_Ele105_CaloIdVT_GsfTrkIdT/O");
+    //tree->Branch("_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale", &o_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale, "_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale/I");
+    //tree->Branch("_HLT_Ele115_CaloIdVT_GsfTrkIdT", &o_HLT_Ele115_CaloIdVT_GsfTrkIdT, "_HLT_Ele115_CaloIdVT_GsfTrkIdT/O");
+    //tree->Branch("_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale", &o_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale, "_HLT_Ele115_CaloIdVT_GsfTrkIdT_prescale/I");
+    //tree->Branch("_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &o_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, "_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ/O");
+    //tree->Branch("_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale", &o_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale, "_HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_prescale/I");
+    //tree->Branch("_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL", &o_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL, "_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL/O");
+    //tree->Branch("_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale", &o_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale, "_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_prescale/I");
+    //tree->Branch("_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL", &o_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL, "_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL/O");
+    //tree->Branch("_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale", &o_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale, "_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_prescale/I");
+    //tree->Branch("_HLT_Mu50", &o_HLT_Mu50, "_HLT_Mu50/O");
+    //tree->Branch("_HLT_Mu50_prescale", &o_HLT_Mu50_prescale, "_HLT_Mu50_prescale/I");
+    //tree->Branch("_HLT_TkMu50", &o_HLT_TkMu50, "_HLT_TkMu50/O");
+    //tree->Branch("_HLT_TkMu50_prescale", &o_HLT_TkMu50_prescale, "_HLT_TkMu50_prescale/I");
+    //tree->Branch("_HLT_Mu45_eta2p1", &o_HLT_Mu45_eta2p1, "_HLT_Mu45_eta2p1/O");
+    //tree->Branch("_HLT_Mu45_eta2p1_prescale", &o_HLT_Mu45_eta2p1_prescale, "_HLT_Mu45_eta2p1_prescale/I");
+    //tree->Branch("_HLT_Mu30_TkMu11", &o_HLT_Mu30_TkMu11, "_HLT_Mu30_TkMu11/O");
+    //tree->Branch("_HLT_Mu30_TkMu11_prescale", &o_HLT_Mu30_TkMu11_prescale, "_HLT_Mu30_TkMu11_prescale/I");
+
     tree->Branch("_nL",                                 &o_nL,                                   "_nL/i");
     tree->Branch("_nMu",                                &o_nMu,                                  "_nMu/i");
     tree->Branch("_nEle",                               &o_nEle,                                 "_nEle/i");
@@ -367,6 +521,11 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lPtScaleDown",                       &o_lPtScaleDown,                         "_lPtScaleDown[_nLight]/D");
     tree->Branch("_lPtResUp",                           &o_lPtResUp,                             "_lPtResUp[_nLight]/D");
     tree->Branch("_lPtResDown",                         &o_lPtResDown,                           "_lPtResDown[_nLight]/D");
+    //tree->Branch("_lECorr",                             &o_lECorr,                               "_lECorr[_nLight]/D");
+    //tree->Branch("_lEScaleUp",                          &o_lEScaleUp,                            "_lEScaleUp[_nLight]/D");
+    //tree->Branch("_lEScaleDown",                        &o_lEScaleDown,                          "_lEScaleDown[_nLight]/D");
+    //tree->Branch("_lEResUp",                            &o_lEResUp,                              "_lEResUp[_nLight]/D");
+    //tree->Branch("_lEResDown",                          &o_lEResDown,                            "_lEResDown[_nLight]/D");
 
     tree->Branch("_nJets",                              &o_nJets,                                "_nJets/i");
     tree->Branch("_jetPt",                              &o_jetPt,                                "_jetPt[_nJets]/D");
@@ -391,6 +550,13 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_jetDeepCsv_c",                       &o_jetDeepCsv_c,                         "_jetDeepCsv_c[_nJets]/D");
     tree->Branch("_jetDeepCsv_bb",                      &o_jetDeepCsv_bb,                        "_jetDeepCsv_bb[_nJets]/D");
     tree->Branch("_jetDeepCsv",                         &o_jetDeepCsv,                           "_jetDeepCsv[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_b",                         &o_jetDeepFlavor_b,                           "_jetDeepFlavor_b[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_bb",                         &o_jetDeepFlavor_bb,                           "_jetDeepFlavor_bb[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_lepb",                         &o_jetDeepFlavor_lepb,                           "_jetDeepFlavor_lepb[_nJets]/D");
+    tree->Branch("_jetDeepFlavor",                         &o_jetDeepFlavor,                           "_jetDeepFlavor[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_c",                         &o_jetDeepFlavor_c,                           "_jetDeepFlavor_c[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_uds",                         &o_jetDeepFlavor_uds,                           "_jetDeepFlavor_uds[_nJets]/D");
+    tree->Branch("_jetDeepFlavor_g",                         &o_jetDeepFlavor_g,                           "_jetDeepFlavor_g[_nJets]/D");
     tree->Branch("_jetHadronFlavor",                    &o_jetHadronFlavor,                      "_jetHadronFlavor[_nJets]/i");
     tree->Branch("_jetIsTight",                         &o_jetIsTight,                           "_jetIsTight[_nJets]/O");
     tree->Branch("_jetIsTightLepVeto",                  &o_jetIsTightLepVeto,                    "_jetIsTightLepVeto[_nJets]/O");
@@ -425,8 +591,7 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     inputtree = (TTree*)input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init_input_branches(inputtree);
     isData = (inputfilename.Index("Run20") != -1);
-    if(isData) std::cout << "Data!" << std::endl;
-    else std::cout << "MC!" << std::endl;
+    std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
     std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( "blackJackAndHookers/nVertices" ) );
     std::shared_ptr< TH1D > hCounter;
@@ -462,7 +627,9 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
 void Skimmer::Skim(TString skimcondition)
 {
     Long64_t nentries = inputtree->GetEntries();
+    unsigned notice = ceil(0.01 * nentries / 20) * 100;
     for(Long64_t jentry = 0; jentry < nentries; ++jentry){
+        if(jentry%notice == 0) std::cout << jentry << " of " << nentries << std::endl;
         inputtree->GetEntry(jentry);
 
         if(Check_SkimCondition(skimcondition)){
@@ -470,9 +637,23 @@ void Skimmer::Skim(TString skimcondition)
             o_lumiBlock = i_lumiBlock;
             o_eventNb = i_eventNb;
             o_nVertex = i_nVertex;
-            //o_prefireWeight = i_prefireWeight;
-            //o_prefireWeightUp = i_prefireWeightUp;
-            //o_prefireWeightDown = i_prefireWeightDown;
+            o_is2017  = i_is2017;
+            o_is2018  = i_is2018;
+            o_BS_x    = i_BS_x;
+            o_BS_y    = i_BS_y;
+            o_BS_z    = i_BS_z;
+            o_BS_xErr = i_BS_xErr;
+            o_BS_yErr = i_BS_yErr;
+            o_BS_zErr = i_BS_zErr;
+            o_PV_x    = i_PV_x;
+            o_PV_y    = i_PV_y;
+            o_PV_z    = i_PV_z;
+            o_PV_xErr = i_PV_xErr;
+            o_PV_yErr = i_PV_yErr;
+            o_PV_zErr = i_PV_zErr;
+            o_prefireWeight = i_prefireWeight;
+            o_prefireWeightUp = i_prefireWeightUp;
+            o_prefireWeightDown = i_prefireWeightDown;
             o_nTrueInt = i_nTrueInt;
             o_weight   = i_weight;
             o_lheHTIncoming = i_lheHTIncoming;
@@ -507,6 +688,9 @@ void Skimmer::Skim(TString skimcondition)
                 o_gen_lFlavor[i] = i_gen_lFlavor[i];   
                 o_gen_lCharge[i] = i_gen_lCharge[i];   
                 o_gen_lMomPdg[i] = i_gen_lMomPdg[i];   
+                o_gen_vertex_x[i] = i_gen_vertex_x[i];
+                o_gen_vertex_y[i] = i_gen_vertex_y[i];
+                o_gen_vertex_z[i] = i_gen_vertex_z[i];
                 o_gen_lIsPrompt[i] = i_gen_lIsPrompt[i];   
                 o_gen_lDecayedHadr[i] = i_gen_lDecayedHadr[i];
                 o_gen_lMinDeltaR[i] = i_gen_lMinDeltaR[i];   
@@ -654,6 +838,11 @@ void Skimmer::Skim(TString skimcondition)
                 o_jetPt_L1[i] = i_jetPt_L1[i];   
                 o_jetPt_L2[i] = i_jetPt_L2[i];   
                 o_jetPt_L3[i] = i_jetPt_L3[i];   
+                o_jetSmearedPt[i] = i_jetSmearedPt[i];
+                o_jetSmearedPt_JECDown[i] = i_jetSmearedPt_JECDown[i];
+                o_jetSmearedPt_JECUp[i] = i_jetSmearedPt_JECUp[i];
+                o_jetSmearedPt_JERDown[i] = i_jetSmearedPt_JERDown[i];
+                o_jetSmearedPt_JERUp[i] = i_jetSmearedPt_JERUp[i];
                 o_jetEta[i] = i_jetEta[i];   
                 o_jetPhi[i] = i_jetPhi[i];   
                 o_jetE[i] = i_jetE[i];   
@@ -663,7 +852,15 @@ void Skimmer::Skim(TString skimcondition)
                 o_jetDeepCsv_c[i] = i_jetDeepCsv_c[i];   
                 o_jetDeepCsv_bb[i] = i_jetDeepCsv_bb[i];   
                 o_jetDeepCsv[i] = i_jetDeepCsv[i];   
+                o_jetDeepFlavor_b[i] = i_jetDeepFlavor_b[i];   
+                o_jetDeepFlavor_bb[i] = i_jetDeepFlavor_bb[i];   
+                o_jetDeepFlavor_lepb[i] = i_jetDeepFlavor_lepb[i];   
+                o_jetDeepFlavor[i] = i_jetDeepFlavor[i];   
+                o_jetDeepFlavor_g[i] = i_jetDeepFlavor_g[i];   
+                o_jetDeepFlavor_uds[i] = i_jetDeepFlavor_uds[i];   
+                o_jetDeepFlavor_g[i] = i_jetDeepFlavor_g[i];   
                 o_jetHadronFlavor[i] = i_jetHadronFlavor[i];   
+                //o_jetIsLoose[i] = i_jetIsLoose[i];   
                 o_jetIsTight[i] = i_jetIsTight[i];   
                 o_jetIsTightLepVeto[i] = i_jetIsTightLepVeto[i];   
                 o_jetNeutralHadronFraction[i] = i_jetNeutralHadronFraction[i];
@@ -689,11 +886,14 @@ void Skimmer::Skim(TString skimcondition)
             outputtree->Fill();
         }
     }
+    std::cout << "--------------------------------" << std::endl;
 }
 
 
 Skimmer::~Skimmer()
 {
+    std::cout << "Writing and closing skimmed file" << std::endl;
+    std::cout << "--------------------------------" << std::endl;
     output->Write();
     output->Close();
 }

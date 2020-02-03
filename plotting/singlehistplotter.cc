@@ -6,6 +6,7 @@ int main(int argc, char * argv[])
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
+    int color = TColor::GetColor(66, 129, 174);
 
     // Argument 1: name of root input file
     // Argument 2: legend associated to sample
@@ -14,7 +15,10 @@ int main(int argc, char * argv[])
     TString sample_legend = adjust_legend((TString)argv[2]);
 
     // Name of directory where plots will end up
-    TString general_pathname = make_general_pathname("singlehists/", inputfilename);
+    TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
+
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -44,7 +48,9 @@ int main(int argc, char * argv[])
             TH1F*   sample_hist = (TH1F*)key->ReadObj();
             TString histname   = sample_hist->GetName();
 
+            if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist->GetMaximum() == 0) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
 
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
@@ -58,6 +64,8 @@ int main(int argc, char * argv[])
             TLegend legend = get_legend(0.2, 0.88, 0.95, 0.93, 4);
             legend.AddEntry(sample_hist, sample_legend);
     
+            sample_hist->SetMarkerColor(color);
+            sample_hist->SetLineColor(color);
             sample_hist->Draw("E0 X0 P");
             legend.Draw("same");
             CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
@@ -74,7 +82,7 @@ int main(int argc, char * argv[])
                 efficiency_graph->SetLineWidth(2);
                 efficiency_graph->GetYaxis()->SetTitle("Eff.");
                 efficiency_graph->GetHistogram()->SetMinimum(0.);
-                efficiency_graph->GetHistogram()->SetMaximum(1.25);
+                efficiency_graph->GetHistogram()->SetMaximum((efficiency_graph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                 pad->Clear();
                 legend.Clear();
@@ -94,6 +102,8 @@ int main(int argc, char * argv[])
             TString histname = sample_hist->GetName();
             
             if(sample_hist->GetMaximum() == 0) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
+            alphanumeric_labels(sample_hist);
 
             TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 
