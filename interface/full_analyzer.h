@@ -166,7 +166,7 @@ public :
    //Int_t           _HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
    //Bool_t          _HLT_TripleMu_12_10_5;
    //Int_t           _HLT_TripleMu_12_10_5_prescale;
-   //Bool_t          _passMETFilters;
+   Bool_t          _passMETFilters;
    //Bool_t          _Flag_HBHENoiseFilter;
    //Bool_t          _Flag_HBHENoiseIsoFilter;
    //Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
@@ -521,7 +521,7 @@ public :
    //TBranch        *b__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
    //TBranch        *b__HLT_TripleMu_12_10_5;   //!
    //TBranch        *b__HLT_TripleMu_12_10_5_prescale;   //!
-   //TBranch        *b__passMETFilters;   //!
+   TBranch        *b__passMETFilters;   //!
    //TBranch        *b__Flag_HBHENoiseFilter;   //!
    //TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
    //TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!

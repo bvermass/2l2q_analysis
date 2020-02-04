@@ -137,7 +137,6 @@ class Skimmer {
         //Int_t           i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
         //Bool_t          i_HLT_TripleMu_12_10_5;
         //Int_t           i_HLT_TripleMu_12_10_5_prescale;
-        //Bool_t          i_passMETFilters;
         //Bool_t          i_Flag_HBHENoiseFilter;
         //Bool_t          i_Flag_HBHENoiseIsoFilter;
         //Bool_t          i_Flag_EcalDeadCellTriggerPrimitiveFilter;
@@ -428,7 +427,6 @@ class Skimmer {
         //Int_t           o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
         //Bool_t          o_HLT_TripleMu_12_10_5;
         //Int_t           o_HLT_TripleMu_12_10_5_prescale;
-        //Bool_t          o_passMETFilters;
         //Bool_t          o_Flag_HBHENoiseFilter;
         //Bool_t          o_Flag_HBHENoiseIsoFilter;
         //Bool_t          o_Flag_EcalDeadCellTriggerPrimitiveFilter;
@@ -717,7 +715,6 @@ class Skimmer {
         //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
         //TBranch        *bi__HLT_TripleMu_12_10_5;   //!
         //TBranch        *bi__HLT_TripleMu_12_10_5_prescale;   //!
-        //TBranch        *bi__passMETFilters;   //!
         //TBranch        *bi__Flag_HBHENoiseFilter;   //!
         //TBranch        *bi__Flag_HBHENoiseIsoFilter;   //!
         //TBranch        *bi__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!

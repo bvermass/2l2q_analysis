@@ -121,7 +121,6 @@ void Skimmer::Init_input_branches(TTree* tree)
     //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale);
     //tree->SetBranchAddress("_HLT_TripleMu_12_10_5", &i_HLT_TripleMu_12_10_5, &bi__HLT_TripleMu_12_10_5);
     //tree->SetBranchAddress("_HLT_TripleMu_12_10_5_prescale", &i_HLT_TripleMu_12_10_5_prescale, &bi__HLT_TripleMu_12_10_5_prescale);
-    //tree->SetBranchAddress("_passMETFilters", &i_passMETFilters, &bi__passMETFilters);
     //tree->SetBranchAddress("_Flag_HBHENoiseFilter", &i_Flag_HBHENoiseFilter, &bi__Flag_HBHENoiseFilter);
     //tree->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &i_Flag_HBHENoiseIsoFilter, &bi__Flag_HBHENoiseIsoFilter);
     //tree->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &i_Flag_EcalDeadCellTriggerPrimitiveFilter, &bi__Flag_EcalDeadCellTriggerPrimitiveFilter);
@@ -419,7 +418,6 @@ void Skimmer::Add_branches(TTree* tree)
     //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale/I");
     //tree->Branch("_HLT_TripleMu_12_10_5", &o_HLT_TripleMu_12_10_5, "_HLT_TripleMu_12_10_5/O");
     //tree->Branch("_HLT_TripleMu_12_10_5_prescale", &o_HLT_TripleMu_12_10_5_prescale, "_HLT_TripleMu_12_10_5_prescale/I");
-    //tree->Branch("_passMETFilters", &o_passMETFilters, "_passMETFilters/O");
     //tree->Branch("_Flag_HBHENoiseFilter", &o_Flag_HBHENoiseFilter, "_Flag_HBHENoiseFilter/O");
     //tree->Branch("_Flag_HBHENoiseIsoFilter", &o_Flag_HBHENoiseIsoFilter, "_Flag_HBHENoiseIsoFilter/O");
     //tree->Branch("_Flag_EcalDeadCellTriggerPrimitiveFilter", &o_Flag_EcalDeadCellTriggerPrimitiveFilter, "_Flag_EcalDeadCellTriggerPrimitiveFilter/O");

@@ -106,7 +106,8 @@ void full_analyzer::signal_regions(){
     _l1l2_Full                    = _l1l2 &&
                                     mll > 80 &&
                                     mll < 100 &&
-                                    no_additional_leptons();
+                                    no_additional_leptons() &&
+                                    _passMETFilters;
 }
 
 
