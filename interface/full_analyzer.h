@@ -383,19 +383,47 @@ public :
    Int_t           _JetConstituentNumberOfHits[20][50];
    Int_t           _JetConstituentNumberOfPixelHits[20][50];
    Bool_t          _JetConstituentHasTrack[20][50];
+   unsigned        _nJetsPuppi;
+   Double_t        _jetPuppiPt[20];   //[_nJetsPuppi]
+   Double_t        _jetPuppiEta[20];   //[_nJetsPuppi]
+   Double_t        _jetPuppiPhi[20];   //[_nJetsPuppi]
+   Double_t        _jetPuppiPt_JECUp[20];   //[_nJetsPuppi]
+   Double_t        _jetPuppiPt_JECDown[20];   //[_nJetsPuppi]
    Double_t        _met;
+   Double_t        _metType1;
    Double_t        _metRaw;
    Double_t        _metJECDown;
    Double_t        _metJECUp;
    Double_t        _metUnclDown;
    Double_t        _metUnclUp;
+   Double_t        _metResDown;
+   Double_t        _metResUp;
    Double_t        _metPhi;
+   Double_t        _metType1Phi;
    Double_t        _metRawPhi;
    Double_t        _metPhiJECDown;
    Double_t        _metPhiJECUp;
    Double_t        _metPhiUnclDown;
    Double_t        _metPhiUnclUp;
+   Double_t        _metPhiResDown;
+   Double_t        _metPhiResUp;
    Double_t        _metSignificance;
+   Double_t        _metPuppi;
+   Double_t        _metPuppiRaw;
+   Double_t        _metPuppiJECDown;
+   Double_t        _metPuppiJECUp;
+   Double_t        _metPuppiUnclDown;
+   Double_t        _metPuppiUnclUp;
+   Double_t        _metPuppiResDown;
+   Double_t        _metPuppiResUp;
+   Double_t        _metPuppiPhi;
+   Double_t        _metPuppiRawPhi;
+   Double_t        _metPuppiPhiJECDown;
+   Double_t        _metPuppiPhiJECUp;
+   Double_t        _metPuppiPhiUnclDown;
+   Double_t        _metPuppiPhiUnclUp;
+   Double_t        _metPuppiPhiResDown;
+   Double_t        _metPuppiPhiResUp;
 
    // List of branches
    TBranch        *b__runNb;   //!
@@ -738,19 +766,47 @@ public :
    TBranch        *b__JetConstituentNumberOfHits;
    TBranch        *b__JetConstituentNumberOfPixelHits;
    TBranch        *b__JetConstituentHasTrack;
-   TBranch        *b__met;   //!
+   TBranch        *b__nJetsPuppi;
+   TBranch        *b__jetPuppiPt;   //
+   TBranch        *b__jetPuppiEta;   //
+   TBranch        *b__jetPuppiPhi;   //
+   TBranch        *b__jetPuppiPt_JECUp;   //
+   TBranch        *b__jetPuppiPt_JECDown;   //
+   TBranch        *b__met;
+   TBranch        *b__metType1;
    TBranch        *b__metRaw;
-   TBranch        *b__metJECDown;   //!
-   TBranch        *b__metJECUp;   //!
-   TBranch        *b__metUnclDown;   //!
-   TBranch        *b__metUnclUp;   //!
-   TBranch        *b__metPhi;   //!
-   TBranch        *b__metRawPhi;   //!
-   TBranch        *b__metPhiJECDown;   //!
-   TBranch        *b__metPhiJECUp;   //!
-   TBranch        *b__metPhiUnclDown;   //!
-   TBranch        *b__metPhiUnclUp;   //!
-   TBranch        *b__metSignificance;   //!
+   TBranch        *b__metJECDown;
+   TBranch        *b__metJECUp;
+   TBranch        *b__metUnclDown;
+   TBranch        *b__metUnclUp;
+   TBranch        *b__metResDown;
+   TBranch        *b__metResUp;
+   TBranch        *b__metPhi;
+   TBranch        *b__metType1Phi;
+   TBranch        *b__metRawPhi;
+   TBranch        *b__metPhiJECDown;
+   TBranch        *b__metPhiJECUp;
+   TBranch        *b__metPhiUnclDown;
+   TBranch        *b__metPhiUnclUp;
+   TBranch        *b__metPhiResDown;
+   TBranch        *b__metPhiResUp;
+   TBranch        *b__metSignificance;
+   TBranch        *b__metPuppi;
+   TBranch        *b__metPuppiRaw;
+   TBranch        *b__metPuppiJECDown;
+   TBranch        *b__metPuppiJECUp;
+   TBranch        *b__metPuppiUnclDown;
+   TBranch        *b__metPuppiUnclUp;
+   TBranch        *b__metPuppiResDown;
+   TBranch        *b__metPuppiResUp;
+   TBranch        *b__metPuppiPhi;
+   TBranch        *b__metPuppiRawPhi;
+   TBranch        *b__metPuppiPhiJECDown;
+   TBranch        *b__metPuppiPhiJECUp;
+   TBranch        *b__metPuppiPhiUnclDown;
+   TBranch        *b__metPuppiPhiUnclUp;
+   TBranch        *b__metPuppiPhiResDown;
+   TBranch        *b__metPuppiPhiResUp;
    
    Double_t ev_weight;
    TString sampleflavor;

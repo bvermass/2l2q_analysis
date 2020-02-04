@@ -436,19 +436,47 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_JetConstituentNumberOfHits", _JetConstituentNumberOfHits, &b__JetConstituentNumberOfHits);
    fChain->SetBranchAddress("_JetConstituentNumberOfPixelHits", _JetConstituentNumberOfPixelHits, &b__JetConstituentNumberOfPixelHits);
    fChain->SetBranchAddress("_JetConstituentHasTrack", _JetConstituentHasTrack, &b__JetConstituentHasTrack);
+   fChain->SetBranchAddress("_nJetsPuppi", &_nJetsPuppi, &b__nJetsPuppi);
+   fChain->SetBranchAddress("_jetPuppiPt", _jetPuppiPt, &b__jetPuppiPt);
+   fChain->SetBranchAddress("_jetPuppiEta", _jetPuppiEta, &b__jetPuppiEta);
+   fChain->SetBranchAddress("_jetPuppiPhi", _jetPuppiPhi, &b__jetPuppiPhi);
+   fChain->SetBranchAddress("_jetPuppiPt_JECUp", _jetPuppiPt_JECUp, &b__jetPuppiPt_JECUp);
+   fChain->SetBranchAddress("_jetPuppiPt_JECDown", _jetPuppiPt_JECDown, &b__jetPuppiPt_JECDown);
    fChain->SetBranchAddress("_met", &_met, &b__met);
+   fChain->SetBranchAddress("_metType1", &_metType1, &b__metType1);
    fChain->SetBranchAddress("_metRaw", &_metRaw, &b__metRaw);
    fChain->SetBranchAddress("_metJECDown", &_metJECDown, &b__metJECDown);
    fChain->SetBranchAddress("_metJECUp", &_metJECUp, &b__metJECUp);
    fChain->SetBranchAddress("_metUnclDown", &_metUnclDown, &b__metUnclDown);
    fChain->SetBranchAddress("_metUnclUp", &_metUnclUp, &b__metUnclUp);
+   fChain->SetBranchAddress("_metResDown", &_metResDown, &b__metResDown);
+   fChain->SetBranchAddress("_metResUp", &_metResUp, &b__metResUp);
    fChain->SetBranchAddress("_metPhi", &_metPhi, &b__metPhi);
+   fChain->SetBranchAddress("_metType1Phi", &_metType1Phi, &b__metType1Phi);
    fChain->SetBranchAddress("_metRawPhi", &_metRawPhi, &b__metRawPhi);
    fChain->SetBranchAddress("_metPhiJECDown", &_metPhiJECDown, &b__metPhiJECDown);
    fChain->SetBranchAddress("_metPhiJECUp", &_metPhiJECUp, &b__metPhiJECUp);
    fChain->SetBranchAddress("_metPhiUnclDown", &_metPhiUnclDown, &b__metPhiUnclDown);
    fChain->SetBranchAddress("_metPhiUnclUp", &_metPhiUnclUp, &b__metPhiUnclUp);
+   fChain->SetBranchAddress("_metPhiResDown", &_metPhiResDown, &b__metPhiResDown);
+   fChain->SetBranchAddress("_metPhiResUp", &_metPhiResUp, &b__metPhiResUp);
    fChain->SetBranchAddress("_metSignificance", &_metSignificance, &b__metSignificance);
+   fChain->SetBranchAddress("_metPuppi", &_metPuppi, &b__metPuppi);
+   fChain->SetBranchAddress("_metPuppiRaw", &_metPuppiRaw, &b__metPuppiRaw);
+   fChain->SetBranchAddress("_metPuppiJECDown", &_metPuppiJECDown, &b__metPuppiJECDown);
+   fChain->SetBranchAddress("_metPuppiJECUp", &_metPuppiJECUp, &b__metPuppiJECUp);
+   fChain->SetBranchAddress("_metPuppiUnclDown", &_metPuppiUnclDown, &b__metPuppiUnclDown);
+   fChain->SetBranchAddress("_metPuppiUnclUp", &_metPuppiUnclUp, &b__metPuppiUnclUp);
+   fChain->SetBranchAddress("_metPuppiResDown", &_metPuppiResDown, &b__metPuppiResDown);
+   fChain->SetBranchAddress("_metPuppiResUp", &_metPuppiResUp, &b__metPuppiResUp);
+   fChain->SetBranchAddress("_metPuppiPhi", &_metPuppiPhi, &b__metPuppiPhi);
+   fChain->SetBranchAddress("_metPuppiRawPhi", &_metPuppiRawPhi, &b__metPuppiRawPhi);
+   fChain->SetBranchAddress("_metPuppiPhiJECDown", &_metPuppiPhiJECDown, &b__metPuppiPhiJECDown);
+   fChain->SetBranchAddress("_metPuppiPhiJECUp", &_metPuppiPhiJECUp, &b__metPuppiPhiJECUp);
+   fChain->SetBranchAddress("_metPuppiPhiUnclDown", &_metPuppiPhiUnclDown, &b__metPuppiPhiUnclDown);
+   fChain->SetBranchAddress("_metPuppiPhiUnclUp", &_metPuppiPhiUnclUp, &b__metPuppiPhiUnclUp);
+   fChain->SetBranchAddress("_metPuppiPhiResDown", &_metPuppiPhiResDown, &b__metPuppiPhiResDown);
+   fChain->SetBranchAddress("_metPuppiPhiResUp", &_metPuppiPhiResUp, &b__metPuppiPhiResUp);
 }
 
 void full_analyzer::Show(Long64_t entry)

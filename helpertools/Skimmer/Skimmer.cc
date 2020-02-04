@@ -284,19 +284,47 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_jetChargedEmFraction", i_jetChargedEmFraction, &bi__jetChargedEmFraction);
     tree->SetBranchAddress("_jetHFHadronFraction", i_jetHFHadronFraction, &bi__jetHFHadronFraction);
     tree->SetBranchAddress("_jetHFEmFraction", i_jetHFEmFraction, &bi__jetHFEmFraction);
+    tree->SetBranchAddress("_nJetsPuppi", &i_nJetsPuppi, &bi__nJetsPuppi);
+    tree->SetBranchAddress("_jetPuppiPt", i_jetPuppiPt, &bi__jetPuppiPt);
+    tree->SetBranchAddress("_jetPuppiEta", i_jetPuppiEta, &bi__jetPuppiEta);
+    tree->SetBranchAddress("_jetPuppiPhi", i_jetPuppiPhi, &bi__jetPuppiPhi);
+    tree->SetBranchAddress("_jetPuppiPt_JECUp", i_jetPuppiPt_JECUp, &bi__jetPuppiPt_JECUp);
+    tree->SetBranchAddress("_jetPuppiPt_JECDown", i_jetPuppiPt_JECDown, &bi__jetPuppiPt_JECDown);
     tree->SetBranchAddress("_met", &i_met, &bi__met);
+    tree->SetBranchAddress("_metType1", &i_metType1, &bi__metType1);
     tree->SetBranchAddress("_metRaw", &i_metRaw, &bi__metRaw);
     tree->SetBranchAddress("_metJECDown", &i_metJECDown, &bi__metJECDown);
     tree->SetBranchAddress("_metJECUp", &i_metJECUp, &bi__metJECUp);
     tree->SetBranchAddress("_metUnclDown", &i_metUnclDown, &bi__metUnclDown);
     tree->SetBranchAddress("_metUnclUp", &i_metUnclUp, &bi__metUnclUp);
+    tree->SetBranchAddress("_metResDown", &i_metResDown, &bi__metResDown);
+    tree->SetBranchAddress("_metResUp", &i_metResUp, &bi__metResUp);
     tree->SetBranchAddress("_metPhi", &i_metPhi, &bi__metPhi);
+    tree->SetBranchAddress("_metType1Phi", &i_metType1Phi, &bi__metType1Phi);
     tree->SetBranchAddress("_metRawPhi", &i_metRawPhi, &bi__metRawPhi);
     tree->SetBranchAddress("_metPhiJECDown", &i_metPhiJECDown, &bi__metPhiJECDown);
     tree->SetBranchAddress("_metPhiJECUp", &i_metPhiJECUp, &bi__metPhiJECUp);
     tree->SetBranchAddress("_metPhiUnclDown", &i_metPhiUnclDown, &bi__metPhiUnclDown);
     tree->SetBranchAddress("_metPhiUnclUp", &i_metPhiUnclUp, &bi__metPhiUnclUp);
+    tree->SetBranchAddress("_metPhiResDown", &i_metPhiResDown, &bi__metPhiResDown);
+    tree->SetBranchAddress("_metPhiResUp", &i_metPhiResUp, &bi__metPhiResUp);
     tree->SetBranchAddress("_metSignificance", &i_metSignificance, &bi__metSignificance);
+    tree->SetBranchAddress("_metPuppi", &i_metPuppi, &bi__metPuppi);
+    tree->SetBranchAddress("_metPuppiRaw", &i_metPuppiRaw, &bi__metPuppiRaw);
+    tree->SetBranchAddress("_metPuppiJECDown", &i_metPuppiJECDown, &bi__metPuppiJECDown);
+    tree->SetBranchAddress("_metPuppiJECUp", &i_metPuppiJECUp, &bi__metPuppiJECUp);
+    tree->SetBranchAddress("_metPuppiUnclDown", &i_metPuppiUnclDown, &bi__metPuppiUnclDown);
+    tree->SetBranchAddress("_metPuppiUnclUp", &i_metPuppiUnclUp, &bi__metPuppiUnclUp);
+    tree->SetBranchAddress("_metPuppiResDown", &i_metPuppiResDown, &bi__metPuppiResDown);
+    tree->SetBranchAddress("_metPuppiResUp", &i_metPuppiResUp, &bi__metPuppiResUp);
+    tree->SetBranchAddress("_metPuppiPhi", &i_metPuppiPhi, &bi__metPuppiPhi);
+    tree->SetBranchAddress("_metPuppiRawPhi", &i_metPuppiRawPhi, &bi__metPuppiRawPhi);
+    tree->SetBranchAddress("_metPuppiPhiJECDown", &i_metPuppiPhiJECDown, &bi__metPuppiPhiJECDown);
+    tree->SetBranchAddress("_metPuppiPhiJECUp", &i_metPuppiPhiJECUp, &bi__metPuppiPhiJECUp);
+    tree->SetBranchAddress("_metPuppiPhiUnclDown", &i_metPuppiPhiUnclDown, &bi__metPuppiPhiUnclDown);
+    tree->SetBranchAddress("_metPuppiPhiUnclUp", &i_metPuppiPhiUnclUp, &bi__metPuppiPhiUnclUp);
+    tree->SetBranchAddress("_metPuppiPhiResDown", &i_metPuppiPhiResDown, &bi__metPuppiPhiResDown);
+    tree->SetBranchAddress("_metPuppiPhiResUp", &i_metPuppiPhiResUp, &bi__metPuppiPhiResUp);
 }
 
 
@@ -566,20 +594,51 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_jetHFHadronFraction",                &o_jetHFHadronFraction,                  "_jetHFHadronFraction[_nJets]/D");
     tree->Branch("_jetHFEmFraction",                    &o_jetHFEmFraction,                      "_jetHFEmFraction[_nJets]/D");
 
-    tree->Branch("_met",                                &o_met,                                  "_met/D");
-    tree->Branch("_metRaw",                             &o_metRaw,                               "_metRaw/D");
-    tree->Branch("_metJECDown",                         &o_metJECDown,                           "_metJECDown/D");
-    tree->Branch("_metJECUp",                           &o_metJECUp,                             "_metJECUp/D");
-    tree->Branch("_metUnclDown",                        &o_metUnclDown,                          "_metUnclDown/D");
-    tree->Branch("_metUnclUp",                          &o_metUnclUp,                            "_metUnclUp/D");
+    outputTree->Branch("_nJetsPuppi",                &o_nJetsPuppi,               "_nJetsPuppi/i");
+    outputTree->Branch("_jetPuppiPt",                &o_jetPuppiPt,               "_jetPuppiPt[_nJetsPuppi]/D");
+    outputTree->Branch("_jetPuppiEta",               &o_jetPuppiEta,              "_jetPuppiEta[_nJetsPuppi]/D");
+    outputTree->Branch("_jetPuppiPhi",               &o_jetPuppiPhi,              "_jetPuppiPhi[_nJetsPuppi]/D");
+    outputTree->Branch("_jetPuppiPt_JECDown",        &o_jetPuppiPt_JECDown,       "_jetPuppiPt_JECDown[_nJetsPuppi]/D");
+    outputTree->Branch("_jetPuppiPt_JECUp",          &o_jetPuppiPt_JECUp,         "_jetPuppiPt_JECUp[_nJetsPuppi]/D");
 
-    tree->Branch("_metPhi",                             &o_metPhi,                               "_metPhi/D");
-    tree->Branch("_metRawPhi",                          &o_metRawPhi,                            "_metRawPhi/D");
-    tree->Branch("_metPhiJECDown",                      &o_metPhiJECDown,                        "_metPhiJECDown/D");
-    tree->Branch("_metPhiJECUp",                        &o_metPhiJECUp,                          "_metPhiJECUp/D");
-    tree->Branch("_metPhiUnclDown",                     &o_metPhiUnclDown,                       "_metPhiUnclDown/D");
-    tree->Branch("_metPhiUnclUp",                       &o_metPhiUnclUp,                         "_metPhiUnclUp/D");
-    tree->Branch("_metSignificance",                    &o_metSignificance,                      "_metSignificance/D");
+    outputTree->Branch("_met",                          &o_met,                          "_met/D");
+    outputTree->Branch("_metType1",                     &o_metType1,                     "_metType1/D");
+    outputTree->Branch("_metRaw",                       &o_metRaw,                       "_metRaw/D");
+    outputTree->Branch("_metJECDown",                   &o_metJECDown,                   "_metJECDown/D");
+    outputTree->Branch("_metJECUp",                     &o_metJECUp,                     "_metJECUp/D");
+    outputTree->Branch("_metUnclDown",                  &o_metUnclDown,                  "_metUnclDown/D");
+    outputTree->Branch("_metUnclUp",                    &o_metUnclUp,                    "_metUnclUp/D");
+    outputTree->Branch("_metResDown",                   &o_metResDown,                   "_metResDown/D");
+    outputTree->Branch("_metResUp",                     &o_metResUp,                     "_metResUp/D");
+
+    outputTree->Branch("_metPhi",                       &o_metPhi,                       "_metPhi/D");
+    outputTree->Branch("_metType1Phi",                  &o_metType1Phi,                  "_metType1Phi/D");
+    outputTree->Branch("_metRawPhi",                    &o_metRawPhi,                    "_metRawPhi/D");
+    outputTree->Branch("_metPhiJECDown",                &o_metPhiJECDown,                "_metPhiJECDown/D");
+    outputTree->Branch("_metPhiJECUp",                  &o_metPhiJECUp,                  "_metPhiJECUp/D");
+    outputTree->Branch("_metPhiUnclDown",               &o_metPhiUnclDown,               "_metPhiUnclDown/D");
+    outputTree->Branch("_metPhiUnclUp",                 &o_metPhiUnclUp,                 "_metPhiUnclUp/D");
+    outputTree->Branch("_metPhiResDown",                &o_metPhiResDown,                "_metPhiResDown/D");
+    outputTree->Branch("_metPhiResUp",                  &o_metPhiResUp,                  "_metPhiResUp/D");
+    outputTree->Branch("_metSignificance",              &o_metSignificance,              "_metSignificance/D");
+
+    outputTree->Branch("_metPuppi",                          &o_metPuppi,                          "_metPuppi/D");
+    outputTree->Branch("_metPuppiRaw",                       &o_metPuppiRaw,                       "_metPuppiRaw/D");
+    outputTree->Branch("_metPuppiJECDown",                   &o_metPuppiJECDown,                   "_metPuppiJECDown/D");
+    outputTree->Branch("_metPuppiJECUp",                     &o_metPuppiJECUp,                     "_metPuppiJECUp/D");
+    outputTree->Branch("_metPuppiUnclDown",                  &o_metPuppiUnclDown,                  "_metPuppiUnclDown/D");
+    outputTree->Branch("_metPuppiUnclUp",                    &o_metPuppiUnclUp,                    "_metPuppiUnclUp/D");
+    outputTree->Branch("_metPuppiResDown",                   &o_metPuppiResDown,                   "_metPuppiResDown/D");
+    outputTree->Branch("_metPuppiResUp",                     &o_metPuppiResUp,                     "_metPuppiResUp/D");
+
+    outputTree->Branch("_metPuppiPhi",                       &o_metPuppiPhi,                       "_metPuppiPhi/D");
+    outputTree->Branch("_metPuppiRawPhi",                    &o_metPuppiRawPhi,                    "_metPuppiRawPhi/D");
+    outputTree->Branch("_metPuppiPhiJECDown",                &o_metPuppiPhiJECDown,                "_metPuppiPhiJECDown/D");
+    outputTree->Branch("_metPuppiPhiJECUp",                  &o_metPuppiPhiJECUp,                  "_metPuppiPhiJECUp/D");
+    outputTree->Branch("_metPuppiPhiUnclDown",               &o_metPuppiPhiUnclDown,               "_metPuppiPhiUnclDown/D");
+    outputTree->Branch("_metPuppiPhiUnclUp",                 &o_metPuppiPhiUnclUp,                 "_metPuppiPhiUnclUp/D");
+    outputTree->Branch("_metPuppiPhiResDown",                &o_metPuppiPhiResDown,                "_metPuppiPhiResDown/D");
+    outputTree->Branch("_metPuppiPhiResUp",                  &o_metPuppiPhiResUp,                  "_metPuppiPhiResUp/D");
 }
 
 
@@ -868,19 +927,49 @@ void Skimmer::Skim(TString skimcondition)
                 o_jetHFHadronFraction[i] = i_jetHFHadronFraction[i];
                 o_jetHFEmFraction[i] = i_jetHFEmFraction[i];
             }
+            o_nJetsPuppi = i_nJetsPuppi;
+            for(unsigned i = 0; i < i_nJetsPuppi; i++){
+                o_jetPuppiPt[i] = i_jetPuppiPt[i];
+                o_jetPuppiEta[i] = i_jetPuppiEta[i];
+                o_jetPuppiPhi[i] = i_jetPuppiPhi[i];
+                o_jetPuppiPt_JECUp[i] = i_jetPuppiPt_JECUp[i];
+                o_jetPuppiPt_JECDown[i] = i_jetPuppiPt_JECDown[i];
+            }
             o_met = i_met;
+            o_metType1 = i_metType1;
             o_metRaw = i_metRaw;
             o_metJECDown = i_metJECDown;
             o_metJECUp = i_metJECUp;
             o_metUnclDown = i_metUnclDown;
             o_metUnclUp = i_metUnclUp;
+            o_metResDown = i_metResDown;
+            o_metResUp = i_metResUp;
             o_metPhi = i_metPhi;
+            o_metType1Phi = i_metType1Phi;
             o_metRawPhi = i_metRawPhi;
             o_metPhiJECDown = i_metPhiJECDown;
             o_metPhiJECUp = i_metPhiJECUp;
             o_metPhiUnclDown = i_metPhiUnclDown;
             o_metPhiUnclUp = i_metPhiUnclUp;
+            o_metPhiResDown = i_metPhiResDown;
+            o_metPhiResUp = i_metPhiResUp;
             o_metSignificance = i_metSignificance;
+            o_metPuppi = i_metPuppi;
+            o_metPuppiRaw = i_metPuppiRaw;
+            o_metPuppiJECDown = i_metPuppiJECDown;
+            o_metPuppiJECUp = i_metPuppiJECUp;
+            o_metPuppiUnclDown = i_metPuppiUnclDown;
+            o_metPuppiUnclUp = i_metPuppiUnclUp;
+            o_metPuppiResDown = i_metPuppiResDown;
+            o_metPuppiResUp = i_metPuppiResUp;
+            o_metPuppiPhi = i_metPuppiPhi;
+            o_metPuppiRawPhi = i_metPuppiRawPhi;
+            o_metPuppiPhiJECDown = i_metPuppiPhiJECDown;
+            o_metPuppiPhiJECUp = i_metPuppiPhiJECUp;
+            o_metPuppiPhiUnclDown = i_metPuppiPhiUnclDown;
+            o_metPuppiPhiUnclUp = i_metPuppiPhiUnclUp;
+            o_metPuppiPhiResDown = i_metPuppiPhiResDown;
+            o_metPuppiPhiResUp = i_metPuppiPhiResUp;
             outputtree->Fill();
         }
     }

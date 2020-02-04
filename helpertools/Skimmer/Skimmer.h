@@ -300,19 +300,48 @@ class Skimmer {
         Double_t        i_jetChargedEmFraction[20];
         Double_t        i_jetHFHadronFraction[20];
         Double_t        i_jetHFEmFraction[20];
+        unsigned        i_nJetsPuppi;
+        Double_t        i_jetPuppiPt[20];   //[_nJetsPuppi]
+        Double_t        i_jetPuppiEta[20];   //[_nJetsPuppi]
+        Double_t        i_jetPuppiPhi[20];   //[_nJetsPuppi]
+        Double_t        i_jetPuppiPt_JECUp[20];   //[_nJetsPuppi]
+        Double_t        i_jetPuppiPt_JECDown[20];   //[_nJetsPuppi]
         Double_t        i_met;
+        Double_t        i_metType1;
         Double_t        i_metRaw;
         Double_t        i_metJECDown;
         Double_t        i_metJECUp;
         Double_t        i_metUnclDown;
         Double_t        i_metUnclUp;
+        Double_t        i_metResDown;
+        Double_t        i_metResUp;
         Double_t        i_metPhi;
+        Double_t        i_metType1Phi;
         Double_t        i_metRawPhi;
         Double_t        i_metPhiJECDown;
         Double_t        i_metPhiJECUp;
         Double_t        i_metPhiUnclDown;
         Double_t        i_metPhiUnclUp;
-        Double_t        i_metSignificance;                                                              
+        Double_t        i_metPhiResDown;
+        Double_t        i_metPhiResUp;
+        Double_t        i_metSignificance;
+        Double_t        i_metPuppi;
+        Double_t        i_metPuppiRaw;
+        Double_t        i_metPuppiJECDown;
+        Double_t        i_metPuppiJECUp;
+        Double_t        i_metPuppiUnclDown;
+        Double_t        i_metPuppiUnclUp;
+        Double_t        i_metPuppiResDown;
+        Double_t        i_metPuppiResUp;
+        Double_t        i_metPuppiPhi;
+        Double_t        i_metPuppiRawPhi;
+        Double_t        i_metPuppiPhiJECDown;
+        Double_t        i_metPuppiPhiJECUp;
+        Double_t        i_metPuppiPhiUnclDown;
+        Double_t        i_metPuppiPhiUnclUp;
+        Double_t        i_metPuppiPhiResDown;
+        Double_t        i_metPuppiPhiResUp;
+
 
         TFile* output;
         TTree* outputtree;
@@ -590,19 +619,47 @@ class Skimmer {
         Double_t        o_jetChargedEmFraction[20];
         Double_t        o_jetHFHadronFraction[20];
         Double_t        o_jetHFEmFraction[20];
+        unsigned        o_nJetsPuppi;
+        Double_t        o_jetPuppiPt[20];   //[_nJetsPuppi]
+        Double_t        o_jetPuppiEta[20];   //[_nJetsPuppi]
+        Double_t        o_jetPuppiPhi[20];   //[_nJetsPuppi]
+        Double_t        o_jetPuppiPt_JECUp[20];   //[_nJetsPuppi]
+        Double_t        o_jetPuppiPt_JECDown[20];   //[_nJetsPuppi]
         Double_t        o_met;
+        Double_t        o_metType1;
         Double_t        o_metRaw;
         Double_t        o_metJECDown;
         Double_t        o_metJECUp;
         Double_t        o_metUnclDown;
         Double_t        o_metUnclUp;
+        Double_t        o_metResDown;
+        Double_t        o_metResUp;
         Double_t        o_metPhi;
+        Double_t        o_metType1Phi;
         Double_t        o_metRawPhi;
         Double_t        o_metPhiJECDown;
         Double_t        o_metPhiJECUp;
         Double_t        o_metPhiUnclDown;
         Double_t        o_metPhiUnclUp;
-        Double_t        o_metSignificance;                                              
+        Double_t        o_metPhiResDown;
+        Double_t        o_metPhiResUp;
+        Double_t        o_metSignificance;
+        Double_t        o_metPuppi;
+        Double_t        o_metPuppiRaw;
+        Double_t        o_metPuppiJECDown;
+        Double_t        o_metPuppiJECUp;
+        Double_t        o_metPuppiUnclDown;
+        Double_t        o_metPuppiUnclUp;
+        Double_t        o_metPuppiResDown;
+        Double_t        o_metPuppiResUp;
+        Double_t        o_metPuppiPhi;
+        Double_t        o_metPuppiRawPhi;
+        Double_t        o_metPuppiPhiJECDown;
+        Double_t        o_metPuppiPhiJECUp;
+        Double_t        o_metPuppiPhiUnclDown;
+        Double_t        o_metPuppiPhiUnclUp;
+        Double_t        o_metPuppiPhiResDown;
+        Double_t        o_metPuppiPhiResUp;
 
         TBranch        *bi__runNb;   //!
         TBranch        *bi__lumiBlock;   //!
@@ -878,19 +935,47 @@ class Skimmer {
         TBranch        *bi__jetChargedEmFraction;   //!
         TBranch        *bi__jetHFHadronFraction;   //!
         TBranch        *bi__jetHFEmFraction;   //!
-        TBranch        *bi__met;   //!
+        TBranch        *bi__nJetsPuppi;
+        TBranch        *bi__jetPuppiPt;   //
+        TBranch        *bi__jetPuppiEta;   //
+        TBranch        *bi__jetPuppiPhi;   //
+        TBranch        *bi__jetPuppiPt_JECUp;   //
+        TBranch        *bi__jetPuppiPt_JECDown;   //
+        TBranch        *bi__met;
+        TBranch        *bi__metType1;
         TBranch        *bi__metRaw;
-        TBranch        *bi__metJECDown;   //!
-        TBranch        *bi__metJECUp;   //!
-        TBranch        *bi__metUnclDown;   //!
-        TBranch        *bi__metUnclUp;   //!
-        TBranch        *bi__metPhi;   //!
-        TBranch        *bi__metRawPhi;   //!
-        TBranch        *bi__metPhiJECDown;   //!
-        TBranch        *bi__metPhiJECUp;   //!
-        TBranch        *bi__metPhiUnclDown;   //!
-        TBranch        *bi__metPhiUnclUp;   //!
-        TBranch        *bi__metSignificance;   //!
+        TBranch        *bi__metJECDown;
+        TBranch        *bi__metJECUp;
+        TBranch        *bi__metUnclDown;
+        TBranch        *bi__metUnclUp;
+        TBranch        *bi__metResDown;
+        TBranch        *bi__metResUp;
+        TBranch        *bi__metPhi;
+        TBranch        *bi__metType1Phi;
+        TBranch        *bi__metRawPhi;
+        TBranch        *bi__metPhiJECDown;
+        TBranch        *bi__metPhiJECUp;
+        TBranch        *bi__metPhiUnclDown;
+        TBranch        *bi__metPhiUnclUp;
+        TBranch        *bi__metPhiResDown;
+        TBranch        *bi__metPhiResUp;
+        TBranch        *bi__metSignificance;
+        TBranch        *bi__metPuppi;
+        TBranch        *bi__metPuppiRaw;
+        TBranch        *bi__metPuppiJECDown;
+        TBranch        *bi__metPuppiJECUp;
+        TBranch        *bi__metPuppiUnclDown;
+        TBranch        *bi__metPuppiUnclUp;
+        TBranch        *bi__metPuppiResDown;
+        TBranch        *bi__metPuppiResUp;
+        TBranch        *bi__metPuppiPhi;
+        TBranch        *bi__metPuppiRawPhi;
+        TBranch        *bi__metPuppiPhiJECDown;
+        TBranch        *bi__metPuppiPhiJECUp;
+        TBranch        *bi__metPuppiPhiUnclDown;
+        TBranch        *bi__metPuppiPhiUnclUp;
+        TBranch        *bi__metPuppiPhiResDown;
+        TBranch        *bi__metPuppiPhiResUp;
 
         Skimmer(TString inputfilename, TString outputfilename);
         ~Skimmer();
