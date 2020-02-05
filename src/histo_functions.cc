@@ -17,6 +17,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     //add_IVF_eff_histograms(hists, prefix);
     //add_chargeflip_histograms(hists, hists2D, prefix);
     add_MET_histograms(hists, hists2D, prefix);
+    init_HLT_efficiency(hists, prefix);
 }
 
 
@@ -153,6 +154,10 @@ void full_analyzer::fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TSt
 
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D){
+    if(_l1l2_Full_noTrigger){
+        fill_HLT_efficiency(hists, sr_flavor);
+    }
+
     if(_l1l2_Full){
         fill_relevant_histograms(hists, hists2D, sr_flavor, ev_weight);
         fill_MET_histograms(hists, hists2D, sr_flavor, ev_weight);

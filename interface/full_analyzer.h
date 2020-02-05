@@ -853,7 +853,7 @@ public :
    int nTightEle, nTightMu;
 
    //Signal region booleans
-   bool _trige, _trigmu, _l1, _l1l2, _l1l2_Full;
+   bool _trige, _trigmu, _l1, _l1l2, _l1l2_Full, _l1l2_Full_noTrigger;
 
    // relevant lepton variables
    double mll, dRll, dphill;
@@ -952,7 +952,7 @@ public :
     // in src/HLT_eff.cc
     void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
     void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
-    void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
+    void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString);
     void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
     // in src/MET_histograms.cc

@@ -108,6 +108,17 @@ void full_analyzer::signal_regions(){
                                     mll < 100 &&
                                     no_additional_leptons() &&
                                     _passMETFilters;
+
+    _l1l2_Full_noTrigger        = i_leading != -1 &&
+                                  leadptcut(i_leading) &&
+                                  i_subleading != -1 &&
+                                  subleadptcut(i_subleading) &&
+                                  _lFlavor[i_leading] == _lFlavor[i_subleading] &&
+                                  _lCharge[i_leading] != _lCharge[i_subleading] &&
+                                  mll > 80 &&
+                                  mll < 100 &&
+                                  no_additional_leptons() &&
+                                  _passMETFilters;
 }
 
 
