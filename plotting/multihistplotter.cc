@@ -196,7 +196,7 @@ int main(int argc, char * argv[])
 
 
                 // Draw -<upara>/<qT> as a function of qT (<upara> has been calculated by the profileX, <qT> is simply the bin center)
-                if(histname.Index("_vsqT") != -1){
+                if(histname.Index("_metXY") != -1 and histname.Index("_vsqT") != -1){
                     pad->Clear();
                     pad->SetLogy(0);
                     legend.Clear();
@@ -205,7 +205,7 @@ int main(int argc, char * argv[])
                     std::vector<TH1*> hists_meanqT;
                     for(int i = 0; i < files.size(); i++){
                         TString meanqT_histname = histname;
-                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "");
+                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "").ReplaceAll("_metXY", "");
                         hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname));
                         hists_meanqT[i]->Divide(hists_meanqT[i], (TH1*)files[i]->Get(meanqT_histname.ReplaceAll("vsqT_num", "vsqT_den")), 1, 1, "b");
                         legend.AddEntry(hists_meanqT[i], legends[i], "pl");
@@ -275,7 +275,7 @@ int main(int argc, char * argv[])
                             projection->Fit(voigt, "0");
                             x[i_bin] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
                             ex[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
-                            FWHM[i_bin] = get_FWHM(voigt);
+                            FWHM[i_bin] = get_FWHM(voigt)/(2*sqrt(2*log(2)));
                             eFWHM[i_bin] = 0;
 
                             projection->Draw();

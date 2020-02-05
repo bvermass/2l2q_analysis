@@ -955,10 +955,6 @@ public :
     void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString);
     void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
-    // in src/MET_histograms.cc
-    void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-    void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
-    
     // in src/gen_histograms.cc
     void     init_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
     void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*, double);
@@ -970,10 +966,13 @@ public :
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
     int      get_lfromtau(int i_gen_l);
 
-   // in src/SelectionOptimization.cc
-   // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
-   // void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
-   // void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
+    // in src/MET_histograms.cc
+    TString  runera;
+    bool     usemetv2 = false;
+    void     setRunEra(const unsigned long runnb);
+    std::pair<double, double> METXYCorr_Met_MetPhi(double uncormet, double uncormet_phi, int npv);
+    void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
 };
 
 #endif
