@@ -114,7 +114,7 @@ if [[ choice -eq 3 ]]; then
                 done
             fi
         done < "$1"
-        python test/submit_plots_tmp.py $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
+        ./$exec_name $subdirectory_name 0 $partition ${samples[@]} ${legends[@]}
         echo
         #rm $exec_name
     else

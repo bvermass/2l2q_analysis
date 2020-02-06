@@ -1,4 +1,4 @@
-METResolution_Run2018D_mm
+METResolution_Run2018D_mm 1
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018D.root Run2018D
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Triboson.root Triboson
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Top.root      Top
