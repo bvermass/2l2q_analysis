@@ -214,31 +214,32 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
     for(auto const& it : hists){
         TH1* h = it.second;
-        if(((TString)h->GetName()).Index("_AbsScale") != -1 or ((TString)h->GetName()).Index("_meanqT") != -1) continue;
-        int nb = h->GetNbinsX();
-        double b0  = h->GetBinContent( 0  );
-        double e0  = h->GetBinError  ( 0  );
-        double b1  = h->GetBinContent( 1  );
-        double e1  = h->GetBinError  ( 1  );
-        double bn  = h->GetBinContent(nb  );
-        double en  = h->GetBinError  (nb  );
-        double bn1 = h->GetBinContent(nb+1);
-        double en1 = h->GetBinError  (nb+1);
-    
-        h->SetBinContent(0   , 0.);
-        h->SetBinError  (0   , 0.);
-        h->SetBinContent(1   , b0+b1);
-        h->SetBinError  (1   , std::sqrt(e0*e0 + e1*e1  ));
-        h->SetBinContent(nb  , bn+bn1);
-        h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
-        h->SetBinContent(nb+1, 0.);
-        h->SetBinError  (nb+1, 0.);
-        
-        //if bin content is below zero, set it to 0 (dealing with negative weights)
-        for(int i = 0; i < nb+1; i++){
-            if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
+        if(((TString)h->GetName()).Index("_meanqT") == -1){
+            int nb = h->GetNbinsX();
+            double b0  = h->GetBinContent( 0  );
+            double e0  = h->GetBinError  ( 0  );
+            double b1  = h->GetBinContent( 1  );
+            double e1  = h->GetBinError  ( 1  );
+            double bn  = h->GetBinContent(nb  );
+            double en  = h->GetBinError  (nb  );
+            double bn1 = h->GetBinContent(nb+1);
+            double en1 = h->GetBinError  (nb+1);
+
+            h->SetBinContent(0   , 0.);
+            h->SetBinError  (0   , 0.);
+            h->SetBinContent(1   , b0+b1);
+            h->SetBinError  (1   , std::sqrt(e0*e0 + e1*e1  ));
+            h->SetBinContent(nb  , bn+bn1);
+            h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
+            h->SetBinContent(nb+1, 0.);
+            h->SetBinError  (nb+1, 0.);
+
+            //if bin content is below zero, set it to 0 (dealing with negative weights)
+            for(int i = 0; i < nb+1; i++){
+                if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
+            }
+            if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
         }
-        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
     // Normalize 2D histograms to correct total weight and write them

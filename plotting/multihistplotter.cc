@@ -172,6 +172,8 @@ int main(int argc, char * argv[])
             std::cout << histname << std::endl;
 
             if(sample_hist_ref->GetMaximum() == 0) continue;
+            if(general_pathname.Index("_ee") != -1 and histname.Index("_mm") != -1) continue;
+            if(general_pathname.Index("_mm") != -1 and histname.Index("_ee") != -1) continue;
 
             //Make Scale and Resolution plots based on AbsScale histogram
             if(histname.Index("AbsScale") != -1){
@@ -204,10 +206,14 @@ int main(int argc, char * argv[])
                     // calculate <qT> vs qT, then calculate -<upara>/<qT> in the profiles
                     std::vector<TH1*> hists_meanqT;
                     for(int i = 0; i < files.size(); i++){
+                        //find corresponding meanqT histname by adapting absScale histname
                         TString meanqT_histname = histname;
                         meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "");
-                        hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname));
+                        //make a copy of the numerator histogram, then divide it by the denominator histogram
+                        hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone());
+                        if(hists_meanqT[i] == 0 or hists_meanqT[i]->GetMaximum() == 0) continue;
                         hists_meanqT[i]->Divide(hists_meanqT[i], (TH1*)files[i]->Get(meanqT_histname.ReplaceAll("vsqT_num", "vsqT_den")), 1, 1, "b");
+
                         legend.AddEntry(hists_meanqT[i], legends[i], "pl");
                         for(int i_bin = 1; i_bin <= hists_meanqT[i]->GetNbinsX(); i_bin++) hists_meanqT[i]->SetBinError(i_bin, 0.);
                         profiles[i]->Divide(hists_meanqT[i]);
