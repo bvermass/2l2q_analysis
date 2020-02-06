@@ -40,19 +40,27 @@ void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString 
     (*hists)[prefix+"_Trigger_ee_pt_eff_den"]->Fill(_lPt[i_leading]);
     (*hists)[prefix+"_Trigger_m_mm_pt_eff_den"]->Fill(_lPt[i_leading]);
     (*hists)[prefix+"_Trigger_mm_pt_eff_den"]->Fill(_lPt[i_leading]);
+    (*hists)[prefix+"_Trigger_e_ee_pt2_eff_den"]->Fill(_lPt[i_leading]);
+    (*hists)[prefix+"_Trigger_ee_pt2_eff_den"]->Fill(_lPt[i_leading]);
+    (*hists)[prefix+"_Trigger_m_mm_pt2_eff_den"]->Fill(_lPt[i_leading]);
+    (*hists)[prefix+"_Trigger_mm_pt2_eff_den"]->Fill(_lPt[i_leading]);
 
     if(_passTrigger_ee){
         (*hists)[prefix+"_Trigger_ee_pt_eff_num"]->Fill(_lPt[i_leading]);
+        (*hists)[prefix+"_Trigger_ee_pt2_eff_num"]->Fill(_lPt[i_subleading]);
     }
     if(_passTrigger_ee or _passTrigger_e){
         (*hists)[prefix+"_Trigger_e_ee_pt_eff_num"]->Fill(_lPt[i_leading]);
+        (*hists)[prefix+"_Trigger_e_ee_pt2_eff_num"]->Fill(_lPt[i_subleading]);
     }
 
     if(_passTrigger_mm){
         (*hists)[prefix+"_Trigger_mm_pt_eff_num"]->Fill(_lPt[i_leading]);
+        (*hists)[prefix+"_Trigger_mm_pt2_eff_num"]->Fill(_lPt[i_subleading]);
     }
     if(_passTrigger_mm or _passTrigger_m){
         (*hists)[prefix+"_Trigger_m_mm_pt_eff_num"]->Fill(_lPt[i_leading]);
+        (*hists)[prefix+"_Trigger_m_mm_pt2_eff_num"]->Fill(_lPt[i_subleading]);
     }
 }
 
