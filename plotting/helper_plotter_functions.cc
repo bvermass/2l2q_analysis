@@ -73,7 +73,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     }
 
-    return "/user/bvermass/public/MET_scale_resolution/plots/" + plottype + specific_dir;
+    return "/user/bvermass/public/MET_scale_resolution/" + plottype + specific_dir;
 }
 
 
