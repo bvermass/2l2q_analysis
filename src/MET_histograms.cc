@@ -45,7 +45,7 @@ std::pair<double,double> full_analyzer::METXYCorr_Met_MetPhi(double uncormet, do
 
     if(npv>100) npv=100;
 
-    if(runera == -1) return TheXYCorr_Met_MetPhi;//return uncorrected if runera was not correctly initialized
+    if(runera == -1){ std::cout << "runera incorrectly initialized!" << std::endl; return TheXYCorr_Met_MetPhi;}
 
     double METxcorr(0.),METycorr(0.);
 
@@ -194,6 +194,7 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     // do xy corrections
     setRunEra(_runNb);
     std::pair<double, double > _metAndPhi_XYCorr = METXYCorr_Met_MetPhi(_met, _metPhi, _nVertex);
+    if(_metAndPhi_XYCorr.first == 0 and _metAndPhi_XYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
 
 
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);

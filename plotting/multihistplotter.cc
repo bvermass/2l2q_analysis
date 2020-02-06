@@ -198,7 +198,7 @@ int main(int argc, char * argv[])
 
 
                 // Draw -<upara>/<qT> as a function of qT (<upara> has been calculated by the profileX, <qT> is simply the bin center)
-                if(histname.Index("_metXY") != -1 and histname.Index("_vsqT") != -1){
+                if(histname.Index("_vsqT") != -1){
                     pad->Clear();
                     pad->SetLogy(0);
                     legend.Clear();
