@@ -3,15 +3,7 @@
 
 void full_analyzer::SetSampleTypes(TString filename)
 {
-    if(filename.Index("_e_") != -1){
-        sampleflavor = "e";
-        isSignal = true;
-    }
-    else if(filename.Index("_mu_") != -1){
-        sampleflavor = "mu";
-        isSignal = true;
-    }
-    else if(filename.Index("Run2016") != -1){
+    if(filename.Index("Run2016") != -1){
         sampleflavor = "Run2016";
         isData = true;
         is2016 = true;
