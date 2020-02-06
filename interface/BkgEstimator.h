@@ -24,6 +24,7 @@ class BkgEstimator
         TFile* BkgEstimator_file;
         TTree* BkgEstimator_tree;
 
+        double   _weight;
         int      _gen_Nmass;
         double   _gen_NV;
         double   _gen_Nctau;
@@ -68,8 +69,15 @@ class BkgEstimator
         double   _SV_phi;
         double   _SV_normchi2;
 
+        unsigned _nMV2;
+        static const unsigned nMV2_max = 100;
+        int      _evaluating_mass[nMV2_max];
+        double   _evaluating_V2[nMV2_max];
+        double   _JetTagVal[nMV2_max];
+        double   _reweighting_weight[nMV2_max];
 
         //Branches for reading variables from an existing tree (produced with this class)
+        TBranch     *b__weight;
         TBranch     *b__gen_Nmass;
         TBranch     *b__gen_NV;
         TBranch     *b__gen_Nctau;
@@ -113,6 +121,12 @@ class BkgEstimator
         TBranch     *b__SV_eta;
         TBranch     *b__SV_phi;
         TBranch     *b__SV_normchi2;
+
+        TBranch     *b__nMV2;
+        TBranch     *b__evaluating_mass;
+        TBranch     *b__evaluating_V2;
+        TBranch     *b__JetTagVal;
+        TBranch     *b__reweighting_weight;
 
         //Functions
         BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber);//Constructor meant to create file and write events

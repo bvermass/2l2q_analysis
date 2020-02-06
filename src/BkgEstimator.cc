@@ -10,6 +10,7 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/", type_and_flavor, partition, partitionjobnumber);
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
     BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
+    BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
     BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
@@ -53,6 +54,12 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_SV_eta",                           &_SV_eta,                           "_SV_eta/D");
     BkgEstimator_tree->Branch("_SV_phi",                           &_SV_phi,                           "_SV_phi/D");
     BkgEstimator_tree->Branch("_SV_normchi2",                      &_SV_normchi2,                      "_SV_normchi2/D");
+
+    BkgEstimator_tree->Branch("_nMV2",                             &_nMV2,                             "_nMV2/i");
+    BkgEstimator_tree->Branch("_evaluating_mass",                  &_evaluating_mass,                  "_evaluating_mass[_nMV2]/I");
+    BkgEstimator_tree->Branch("_evaluating_V2",                    &_evaluating_V2,                    "_evaluating_V2[_nMV2]/D");
+    BkgEstimator_tree->Branch("_JetTagVal",                        &_JetTagVal,                        "_JetTagVal[_nMV2]/D");
+    BkgEstimator_tree->Branch("_reweighting_weight",               &_reweighting_weight,               "_reweighting_weight[_nMV2]/D");
 }
 
 
@@ -74,6 +81,7 @@ void BkgEstimator::open_file_and_tree(TString filename)
 
 void BkgEstimator::set_branch_adresses()
 {
+    BkgEstimator_tree->SetBranchAddress("_weight", &_weight, &b__weight);
     BkgEstimator_tree->SetBranchAddress("_gen_Nmass", &_gen_Nmass, &b__gen_Nmass);
     BkgEstimator_tree->SetBranchAddress("_gen_NV", &_gen_NV, &b__gen_NV);
     BkgEstimator_tree->SetBranchAddress("_gen_Nctau", &_gen_Nctau, &b__gen_Nctau);
@@ -116,6 +124,12 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_SV_eta", &_SV_eta, &b__SV_eta);
     BkgEstimator_tree->SetBranchAddress("_SV_phi", &_SV_phi, &b__SV_phi);
     BkgEstimator_tree->SetBranchAddress("_SV_normchi2", &_SV_normchi2, &b__SV_normchi2);
+
+    BkgEstimator_tree->SetBranchAddress("_nMV2", &_nMV2, &b__nMV2);
+    BkgEstimator_tree->SetBranchAddress("_evaluating_mass", _evaluating_mass, &b__evaluating_mass);
+    BkgEstimator_tree->SetBranchAddress("_evaluating_V2", _evaluating_V2, &b__evaluating_V2);
+    BkgEstimator_tree->SetBranchAddress("_JetTagVal", _JetTagVal, &b__JetTagVal);
+    BkgEstimator_tree->SetBranchAddress("_reweighting_weight", _reweighting_weight, &b__reweighting_weight);
 }
 
 

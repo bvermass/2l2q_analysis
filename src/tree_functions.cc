@@ -8,6 +8,7 @@
 
 void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
 {
+    bkgestimator._weight       = ev_weight;
     bkgestimator._gen_Nmass    = _gen_Nmass;
     bkgestimator._gen_NV       = _gen_NV;
     bkgestimator._gen_Nctau     = _gen_Nctau;
@@ -51,6 +52,21 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
     bkgestimator._SV_pt           = SVpt;
     bkgestimator._SV_eta          = SVeta;
     bkgestimator._SV_phi          = SVphi;
+
+    bkgestimator._nMV2            = 0;
+    for(auto& MassMap : JetTagVal){
+        for(auto& V2Map : MassMap.second){
+            if(bkgestimator._nMV2 >= 100){
+                std::cout << "error: more than 100 MV2 points, increase size of nMV2_max in BkgEstimator arrays" << std::endl;
+                break;
+            }
+            bkgestimator._evaluating_mass[bkgestimator._nMV2]       = MassMap.first;
+            bkgestimator._evaluating_V2[bkgestimator._nMV2]         = V2Map.first;
+            bkgestimator._JetTagVal[bkgestimator._nMV2]             = V2Map.second;
+            bkgestimator._reweighting_weight[bkgestimator._nMV2]    = reweighting_weights[V2Map.first];
+            bkgestimator._nMV2++;
+        }
+    }
 
     bkgestimator.fill_tree();
 }
