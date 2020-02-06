@@ -126,6 +126,11 @@ else
         hadd_subfiles $D HNLBDTtagger_electron_
         hadd_subfiles $D HNLBDTtagger_muon_
     done
+    bkgestimatordir=/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/${tag}
+    for D in $HNLtreetagdir/full_analyzer/subfiles/*; do
+        hadd_subfiles $D BkgEstimator_
+    done
+    hadd_specific_backgrounds $bkgestimatordir BkgEstimator_
     echo 'successfully done!'
 
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_

@@ -125,6 +125,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
+    // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
+    BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber);
+
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
@@ -235,6 +238,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 6);
             }
             additional_signal_regions();
+            fill_BkgEstimator_tree(bkgestimator);
         }else {
             JetTagVal.clear();
         }
@@ -293,6 +297,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //hnlbdttagger_e.write_HNLBDTtagger_tree();
         //hnlbdttagger_mu.write_HNLBDTtagger_tree();
     }
+    bkgestimator.write_tree();
 
     TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
     cout << "output to: " << outputfilename << endl;

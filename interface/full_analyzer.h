@@ -30,6 +30,7 @@
 // helper functions
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
+#include "../interface/BkgEstimator.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
 #include "../helpertools/LorentzVector/LorentzVector.h"
 #include "../helpertools/PUWeightReader/PUWeightReader.h"
@@ -913,6 +914,9 @@ public :
     std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
+
+    // in src/tree_functions.cc
+    void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator);
 
    // in src/SelectionOptimization.cc
    // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
