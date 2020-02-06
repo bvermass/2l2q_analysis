@@ -133,7 +133,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     PFNReader pfn_mu("/user/bvermass/public/PFN/JetTagger/PFNmu_v6/jetTagger.h5", 30, {50, 13});
     PFNReader pfn_e("/user/bvermass/public/PFN/JetTagger/PFNe_v6/jetTagger.h5", 30, {50,13});
-    PFNReader bdt_mu( "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/deepLearning/bestModels_xgboost_HNLtagger_v2/model_rank_1/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961.bin", 28 );
+    PFNReader bdt_mu( "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_20/src/deepLearning/bestModels_xgboost_HNLtagger_v2/model_rank_1/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961/alpha=0p633294851941_colsampleBytree=0p79485523663_gamma=0p307334894388_learningRate=0p0868032444329_maxDepth=10_minChildWeight=6p66227737302_numberOfTrees=1416_subsample=0p992526187961.bin", 28 );
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     std::map<TString, double> SR_counters = add_SR_counters();
