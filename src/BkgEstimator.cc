@@ -9,7 +9,7 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
 {
     BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/", type_and_flavor, partition, partitionjobnumber);
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
-    BkgEstimator_tree = new TTree("BkgEstimator_tree", "Jetl2 constituent information for HNL tagger");
+    BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
     BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
@@ -53,6 +53,89 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_SV_eta",                           &_SV_eta,                           "_SV_eta/D");
     BkgEstimator_tree->Branch("_SV_phi",                           &_SV_phi,                           "_SV_phi/D");
     BkgEstimator_tree->Branch("_SV_normchi2",                      &_SV_normchi2,                      "_SV_normchi2/D");
+}
+
+
+// Constructor where BkgEstimator variables are read from an existing file that was produced USING THIS CLASS.
+BkgEstimator::BkgEstimator(TString filename)
+{
+    BkgEstimator_filename = filename;
+    open_file_and_tree(filename);
+    set_branch_adresses();
+}
+
+
+void BkgEstimator::open_file_and_tree(TString filename)
+{
+    BkgEstimator_file = new TFile(filename, "open");
+    BkgEstimator_tree = (TTree*) BkgEstimator_file->Get("BkgEstimator_tree");
+}
+
+
+void BkgEstimator::set_branch_adresses()
+{
+    BkgEstimator_tree->SetBranchAddress("_gen_Nmass", &_gen_Nmass, &b__gen_Nmass);
+    BkgEstimator_tree->SetBranchAddress("_gen_NV", &_gen_NV, &b__gen_NV);
+    BkgEstimator_tree->SetBranchAddress("_gen_Nctau", &_gen_Nctau, &b__gen_Nctau);
+    BkgEstimator_tree->SetBranchAddress("_JetIsFromHNL", &_JetIsFromHNL, &b__JetIsFromHNL);
+    BkgEstimator_tree->SetBranchAddress("_nTightJet", &_nTightJet, &b__nTightJet);
+    BkgEstimator_tree->SetBranchAddress("_JetPt", &_JetPt, &b__JetPt);
+    BkgEstimator_tree->SetBranchAddress("_JetEta", &_JetEta, &b__JetEta);
+    BkgEstimator_tree->SetBranchAddress("_JetPhi", &_JetPhi, &b__JetPhi);
+    BkgEstimator_tree->SetBranchAddress("_nTightLep", &_nTightLep, &b__nTightLep);
+    BkgEstimator_tree->SetBranchAddress("_lPt", &_lPt, &b__lPt);
+    BkgEstimator_tree->SetBranchAddress("_lEta", &_lEta, &b__lEta);
+    BkgEstimator_tree->SetBranchAddress("_lPhi", &_lPhi, &b__lPhi);
+    BkgEstimator_tree->SetBranchAddress("_ldxy", &_ldxy, &b__ldxy);
+    BkgEstimator_tree->SetBranchAddress("_ldz", &_ldz, &b__ldz);
+    BkgEstimator_tree->SetBranchAddress("_l3dIPSig", &_l3dIPSig, &b__l3dIPSig);
+    BkgEstimator_tree->SetBranchAddress("_lrelIso", &_lrelIso, &b__lrelIso);
+    BkgEstimator_tree->SetBranchAddress("_lptRel", &_lptRel, &b__lptRel);
+    BkgEstimator_tree->SetBranchAddress("_lptRatio", &_lptRatio, &b__lptRatio);
+    BkgEstimator_tree->SetBranchAddress("_lNumberOfHits", &_lNumberOfHits, &b__lNumberOfHits);
+    BkgEstimator_tree->SetBranchAddress("_lNumberOfPixelHits", &_lNumberOfPixelHits, &b__lNumberOfPixelHits);
+    BkgEstimator_tree->SetBranchAddress("_lFlavor", &_lFlavor, &b__lFlavor);
+    BkgEstimator_tree->SetBranchAddress("_lCharge", &_lCharge, &b__lCharge);
+
+    BkgEstimator_tree->SetBranchAddress("_l1Pt", &_l1Pt, &b__l1Pt);
+    BkgEstimator_tree->SetBranchAddress("_l1Eta", &_l1Eta, &b__l1Eta);
+    BkgEstimator_tree->SetBranchAddress("_l1Phi", &_l1Phi, &b__l1Phi);
+    BkgEstimator_tree->SetBranchAddress("_l1Flavor", &_l1Flavor, &b__l1Flavor);
+    BkgEstimator_tree->SetBranchAddress("_l1Charge", &_l1Charge, &b__l1Charge);
+    BkgEstimator_tree->SetBranchAddress("_mll", &_mll, &b__mll);
+    BkgEstimator_tree->SetBranchAddress("_mlljet", &_mlljet, &b__mlljet);
+    BkgEstimator_tree->SetBranchAddress("_dRll", &_dRll, &b__dRll);
+    BkgEstimator_tree->SetBranchAddress("_dphill", &_dphill, &b__dphill);
+    BkgEstimator_tree->SetBranchAddress("_dRljet", &_dRljet, &b__dRljet);
+    BkgEstimator_tree->SetBranchAddress("_SV_PVSVdist", &_SV_PVSVdist, &b__SV_PVSVdist);
+    BkgEstimator_tree->SetBranchAddress("_SV_PVSVdist_2D", &_SV_PVSVdist_2D, &b__SV_PVSVdist_2D);
+    BkgEstimator_tree->SetBranchAddress("_SV_ntracks", &_SV_ntracks, &b__SV_ntracks);
+    BkgEstimator_tree->SetBranchAddress("_SV_mass", &_SV_mass, &b__SV_mass);
+    BkgEstimator_tree->SetBranchAddress("_SV_l1mass", &_SV_l1mass, &b__SV_l1mass);
+    BkgEstimator_tree->SetBranchAddress("_SV_pt", &_SV_pt, &b__SV_pt);
+    BkgEstimator_tree->SetBranchAddress("_SV_eta", &_SV_eta, &b__SV_eta);
+    BkgEstimator_tree->SetBranchAddress("_SV_phi", &_SV_phi, &b__SV_phi);
+    BkgEstimator_tree->SetBranchAddress("_SV_normchi2", &_SV_normchi2, &b__SV_normchi2);
+}
+
+
+void BkgEstimator::analyze(int max_entries, int partition, int partitionjobnumber)
+{
+    // Determine range of events to loop over
+    Long64_t nentries = BkgEstimator_tree->GetEntries();
+    if(max_entries == -1 or max_entries > nentries) max_entries = nentries;
+    Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
+    Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
+    unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
+
+    //main loop
+    for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
+	    BkgEstimator_tree->GetEntry(jentry);
+	    bool printevent = ((jentry -j_begin)%notice == 0);
+	    if(printevent){
+            std::cout << jentry - j_begin << " of " << j_end - j_begin << std::endl;
+	    }
+    }
 }
 
 

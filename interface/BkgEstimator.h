@@ -46,7 +46,7 @@ class BkgEstimator
         unsigned _lNumberOfPixelHits;
         unsigned _lFlavor;
         int      _lCharge;
-        
+
         double   _l1Pt;
         double   _l1Eta;
         double   _l1Phi;
@@ -68,9 +68,61 @@ class BkgEstimator
         double   _SV_phi;
         double   _SV_normchi2;
 
-        BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber);
+
+        //Branches for reading variables from an existing tree (produced with this class)
+        TBranch     *b__gen_Nmass;
+        TBranch     *b__gen_NV;
+        TBranch     *b__gen_Nctau;
+        TBranch     *b__JetIsFromHNL;
+        TBranch     *b__nTightJet;
+        TBranch     *b__JetPt;
+        TBranch     *b__JetEta;
+        TBranch     *b__JetPhi;
+        TBranch     *b__nTightLep;
+        TBranch     *b__lPt;
+        TBranch     *b__lEta;
+        TBranch     *b__lPhi;
+        TBranch     *b__ldxy;
+        TBranch     *b__ldz;
+        TBranch     *b__l3dIPSig;
+        TBranch     *b__lrelIso;
+        TBranch     *b__lptRatio;
+        TBranch     *b__lptRel;
+        TBranch     *b__lNumberOfHits;
+        TBranch     *b__lNumberOfPixelHits;
+        TBranch     *b__lFlavor;
+        TBranch     *b__lCharge;
+
+        TBranch     *b__l1Pt;
+        TBranch     *b__l1Eta;
+        TBranch     *b__l1Phi;
+        TBranch     *b__l1Flavor;
+        TBranch     *b__l1Charge;
+        TBranch     *b__mll;
+        TBranch     *b__mlljet;
+        TBranch     *b__dRll;
+        TBranch     *b__dphill;
+        TBranch     *b__dRljet;
+
+        TBranch     *b__SV_PVSVdist;
+        TBranch     *b__SV_PVSVdist_2D;
+        TBranch     *b__SV_ntracks;
+        TBranch     *b__SV_mass;
+        TBranch     *b__SV_l1mass;
+        TBranch     *b__SV_pt;
+        TBranch     *b__SV_eta;
+        TBranch     *b__SV_phi;
+        TBranch     *b__SV_normchi2;
+
+        //Functions
+        BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber);//Constructor meant to create file and write events
+        BkgEstimator(TString filename);//Constructor meant to read existing file and access events
+        void open_file_and_tree(TString filename);
+        void set_branch_adresses();
+        void analyze(int max_entries, int partition, int partitionjobnumber);
         void fill_tree();
         void write_tree();
         void delete_tree();
+
 };
 #endif
