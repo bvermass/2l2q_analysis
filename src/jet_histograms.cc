@@ -154,27 +154,21 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
     hnltagger._l1Pt            = _lPt[i_leading];
     hnltagger._l1Pt_log        = log(_lPt[i_leading]);
     hnltagger._l1Eta           = _lEta[i_leading];
-    hnltagger._mll             = get_mll(i_leading, i_subleading);
+    hnltagger._mll             = mll;
     hnltagger._mlljet          = 0;//maybe add it?
-    hnltagger._dRll            = get_dRll(i_leading, i_subleading);
-    hnltagger._dRljet          = get_dR_lepton_jet(i_subleading, i_jetl2);
+    hnltagger._dRll            = dRll;
+    hnltagger._dRljet          = dRljet;
 
-    hnltagger._SV_PVSVdist     = get_IVF_PVSVdist(i_subleading);
-    hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_subleading);
+    hnltagger._SV_PVSVdist     = IVF_PVSVdist;
+    hnltagger._SV_PVSVdist_2D  = IVF_PVSVdist_2D;
     hnltagger._SV_ntracks      = _IVF_ntracks[i_subleading];
     hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
-    LorentzVector tracksum;
-    LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
-        LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
-        tracksum += tmptrack;
-    }
-    hnltagger._SV_mass               = tracksum.mass();
-    hnltagger._SV_l1mass             = (tracksum + l1_vec).mass();
-    hnltagger._SV_pt                 = tracksum.pt();
-    hnltagger._SV_pt_log             = log(tracksum.pt());
-    hnltagger._SV_eta                = tracksum.eta();
-    hnltagger._SV_phi                = tracksum.phi();
+    hnltagger._SV_mass         = SVmass;
+    hnltagger._SV_l1mass       = SVl1mass;
+    hnltagger._SV_pt           = SVpt;
+    hnltagger._SV_pt_log       = log(SVpt);
+    hnltagger._SV_eta          = SVeta;
+    hnltagger._SV_phi          = SVphi;
 
     hnltagger._nJetConstituents                    = _nJetConstituents[i_jetl2];//Constituents[i_jetl2];
     for(unsigned i = 0; i < _nJetConstituents[i_jetl2]; i++){
@@ -283,18 +277,13 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 //    hnlbdttagger._JetChargeSum          = jetchargesum;
 //
 //    hnlbdttagger._SV_ntracks            = _IVF_ntracks[i_subleading];
-//    hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_subleading);
-//    hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_subleading);
+//    hnlbdttagger._SV_PVSVdist_2D        = IVF_PVSVdist_2D;
+//    hnlbdttagger._SV_PVSVdist           = IVF_PVSVdist;
 //    hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
-//    LorentzVector tracksum;
-//    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
-//        LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
-//        tracksum += tmptrack;
-//    }
-//    hnlbdttagger._SV_mass               = tracksum.mass();
-//    hnlbdttagger._SV_pt                 = tracksum.pt();
-//    hnlbdttagger._SV_eta                = tracksum.eta();
-//    hnlbdttagger._SV_phi                = tracksum.phi();
+//    hnlbdttagger._SV_mass               = SVmass;
+//    hnlbdttagger._SV_pt                 = SVpt;
+//    hnlbdttagger._SV_eta                = SVeta;
+//    hnlbdttagger._SV_phi                = SVphi;
 //
 //    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
 //}

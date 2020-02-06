@@ -794,10 +794,10 @@ public :
    std::map<int, std::map<double, bool>> _TrainingHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
 
    // relevant lepton variables
-   double mll, dRll, dphill;
+   double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
+   double SVmass, SVl1mass, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
    
    // functions
    // in src/full_analyzer_constructor.cc

@@ -30,27 +30,21 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
     bkgestimator._l1Pt            = _lPt[i_leading];
     bkgestimator._l1Eta           = _lEta[i_leading];
     bkgestimator._l1Phi           = _lPhi[i_leading];
-    bkgestimator._mll             = get_mll(i_leading, i_subleading);
+    bkgestimator._mll             = mll;
     bkgestimator._mlljet          = 0;//maybe add it?
-    bkgestimator._dRll            = get_dRll(i_leading, i_subleading);
-    bkgestimator._dphill          = get_dphill(i_leading, i_subleading);
-    bkgestimator._dRljet          = get_dR_lepton_jet(i_subleading, i_jetl2);
+    bkgestimator._dRll            = dRll;
+    bkgestimator._dphill          = dphill;
+    bkgestimator._dRljet          = dRljet;
 
-    bkgestimator._SV_PVSVdist     = get_IVF_PVSVdist(i_subleading);
-    bkgestimator._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_subleading);
+    bkgestimator._SV_PVSVdist     = IVF_PVSVdist;
+    bkgestimator._SV_PVSVdist_2D  = IVF_PVSVdist_2D;
     bkgestimator._SV_ntracks      = _IVF_ntracks[i_subleading];
     bkgestimator._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
-    LorentzVector tracksum;
-    LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
-        LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
-        tracksum += tmptrack;
-    }
-    bkgestimator._SV_mass               = tracksum.mass();
-    bkgestimator._SV_l1mass             = (tracksum + l1_vec).mass();
-    bkgestimator._SV_pt                 = tracksum.pt();
-    bkgestimator._SV_eta                = tracksum.eta();
-    bkgestimator._SV_phi                = tracksum.phi();
+    bkgestimator._SV_mass         = SVmass;
+    bkgestimator._SV_l1mass       = SVl1mass;
+    bkgestimator._SV_pt           = SVpt;
+    bkgestimator._SV_eta          = SVeta;
+    bkgestimator._SV_phi          = SVphi;
 
     bkgestimator.fill_tree();
 }

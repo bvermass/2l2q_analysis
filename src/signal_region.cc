@@ -32,15 +32,21 @@ void full_analyzer::set_relevant_lepton_variables(){
         mll = get_mll(i_leading, i_subleading);
         dRll = get_dRll(i_leading, i_subleading);
         dphill = get_dphill(i_leading, i_subleading);
+        dRljet = get_dR_lepton_jet(i_subleading, i_jetl2);
         if(_lIVF_match[i_subleading]){
             LorentzVector tracksum(0,0,0,0);
+            LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
             if(_IVF_ntracks[i_subleading] > 1){
                 for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
                     LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
                     tracksum += tmptrack;
                 }
             }
-            SVmass = tracksum.mass();
+            SVmass          = tracksum.mass();
+            SVl1mass        = (tracksum + l1_vec).mass();
+            SVpt            = tracksum.pt();
+            SVeta           = tracksum.eta();
+            SVphi           = tracksum.phi();
             IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_subleading);
             IVF_PVSVdist    = get_IVF_PVSVdist(i_subleading);
             if(!isData){
