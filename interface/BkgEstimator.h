@@ -28,9 +28,11 @@ class BkgEstimator
         double   _gen_NV;
         double   _gen_Nctau;
         bool     _JetIsFromHNL;
+        unsigned _nTightJet;
         double   _JetPt;
         double   _JetEta;
         double   _JetPhi;
+        unsigned _nTightLep;
         double   _lPt;
         double   _lEta;
         double   _lPhi;
@@ -42,10 +44,14 @@ class BkgEstimator
         double   _lptRel;
         unsigned _lNumberOfHits;
         unsigned _lNumberOfPixelHits;
+        unsigned _lFlavor;
+        int      _lCharge;
         
         double   _l1Pt;
         double   _l1Eta;
         double   _l1Phi;
+        unsigned _l1Flavor;
+        int      _l1Charge;
         double   _mll;
         double   _mlljet;
         double   _dRll;

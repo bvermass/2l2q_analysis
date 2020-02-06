@@ -12,9 +12,11 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
     bkgestimator._gen_NV       = _gen_NV;
     bkgestimator._gen_Nctau     = _gen_Nctau;
     bkgestimator._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
+    bkgestimator._nTightJet    = nTightJet;
     bkgestimator._JetPt        = _jetPt[i_jetl2];
     bkgestimator._JetEta       = _jetEta[i_jetl2];
     bkgestimator._JetPhi       = _jetPhi[i_jetl2];
+    bkgestimator._nTightLep             = nTightEle + nTightMu;
     bkgestimator._lPt                   = _lPt[i_subleading];
     bkgestimator._lEta                  = _lEta[i_subleading];
     bkgestimator._lPhi                  = _lPhi[i_subleading];
@@ -26,10 +28,14 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
     bkgestimator._lptRatio              = _ptRatio[i_subleading];
     bkgestimator._lNumberOfHits         = _lNumberOfValidTrackerHits[i_subleading];
     bkgestimator._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_subleading];
+    bkgestimator._lFlavor               = _lFlavor[i_subleading];
+    bkgestimator._lCharge               = _lCharge[i_subleading];
 
     bkgestimator._l1Pt            = _lPt[i_leading];
     bkgestimator._l1Eta           = _lEta[i_leading];
     bkgestimator._l1Phi           = _lPhi[i_leading];
+    bkgestimator._l1Flavor        = _lFlavor[i_leading];
+    bkgestimator._l1Charge        = _lCharge[i_leading];
     bkgestimator._mll             = mll;
     bkgestimator._mlljet          = 0;//maybe add it?
     bkgestimator._dRll            = dRll;

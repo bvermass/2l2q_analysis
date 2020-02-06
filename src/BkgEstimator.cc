@@ -14,9 +14,11 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
     BkgEstimator_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
+    BkgEstimator_tree->Branch("_nTightJet",                        &_nTightJet,                        "_nTightJet/i");
     BkgEstimator_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     BkgEstimator_tree->Branch("_JetEta",                           &_JetEta,                           "_JetEta/D");
     BkgEstimator_tree->Branch("_JetPhi",                           &_JetPhi,                           "_JetPhi/D");
+    BkgEstimator_tree->Branch("_nTightLep",                        &_nTightLep,                        "_nTightLep/i");
     BkgEstimator_tree->Branch("_lPt",                              &_lPt,                              "_lPt/D");
     BkgEstimator_tree->Branch("_lEta",                             &_lEta,                             "_lEta/D");
     BkgEstimator_tree->Branch("_lPhi",                             &_lPhi,                             "_lPhi/D");
@@ -28,10 +30,14 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
     BkgEstimator_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
     BkgEstimator_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
+    BkgEstimator_tree->Branch("_lFlavor",                          &_lFlavor,                          "_lFlavor/i");
+    BkgEstimator_tree->Branch("_lCharge",                          &_lCharge,                          "_lCharge/I");
 
     BkgEstimator_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
     BkgEstimator_tree->Branch("_l1Eta",                            &_l1Eta,                            "_l1Eta/D");
     BkgEstimator_tree->Branch("_l1Phi",                            &_l1Phi,                            "_l1Phi/D");
+    BkgEstimator_tree->Branch("_l1Flavor",                         &_l1Flavor,                         "_l1Flavor/i");
+    BkgEstimator_tree->Branch("_l1Charge",                         &_l1Charge,                         "_l1Charge/I");
     BkgEstimator_tree->Branch("_mll",                              &_mll,                              "_mll/D");
     BkgEstimator_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
     BkgEstimator_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");

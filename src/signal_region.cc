@@ -67,6 +67,10 @@ void full_analyzer::set_relevant_lepton_variables(){
         else if(displElectronID[i] and ele_clean_full_displ[i]) nDisplEle++;
         else if(displMuonID[i]) nDisplMu++;
     }
+    nTightJet = 0;
+    for(unsigned i = 0; i < _nJets; i++){
+        if(fullJetID[i] and jet_clean_full_displ[i]) nTightJet++;
+    }
 }
 
 
