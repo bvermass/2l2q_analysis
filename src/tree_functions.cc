@@ -6,9 +6,9 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
+void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight)
 {
-    bkgestimator._weight       = ev_weight;
+    bkgestimator._weight       = event_weight;
     bkgestimator._gen_Nmass    = _gen_Nmass;
     bkgestimator._gen_NV       = _gen_NV;
     bkgestimator._gen_Nctau     = _gen_Nctau;

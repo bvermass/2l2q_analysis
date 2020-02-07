@@ -238,7 +238,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 6);
             }
             additional_signal_regions();
-            fill_BkgEstimator_tree(bkgestimator);
+            fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
         }else {
             JetTagVal.clear();
         }

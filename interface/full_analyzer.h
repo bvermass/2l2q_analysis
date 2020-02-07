@@ -916,7 +916,7 @@ public :
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
 
     // in src/tree_functions.cc
-    void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator);
+    void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight);
 
    // in src/SelectionOptimization.cc
    // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
