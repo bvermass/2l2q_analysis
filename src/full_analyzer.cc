@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
+TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_20/src/2l2q_analysis/";
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
