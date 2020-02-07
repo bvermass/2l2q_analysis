@@ -4,10 +4,12 @@
 void full_analyzer::SetSampleTypes(TString filename)
 {
     if(filename.Index("_e_") != -1){
+        is2016 = true;
         sampleflavor = "e";
         isSignal = true;
     }
     else if(filename.Index("_mu_") != -1){
+        is2016 = true;
         sampleflavor = "mu";
         isSignal = true;
     }
@@ -27,10 +29,30 @@ void full_analyzer::SetSampleTypes(TString filename)
         is2018 = true;
     }
     else{
+        is2016 = true;
         sampleflavor = "bkg";
         isBackground = true;
         // figure out which year of background it is
     }
+}
+
+
+LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
+{
+    TString filename_LSF = local_dir + "data/LeptonScaleFactors/";
+    if(flavor == "e"){
+        if(is2016) filename_LSF += "TTHMVA_looseToTight_2016_e_3l.root";
+        if(is2017) filename_LSF += "TTHMVA_looseToTight_2017_e_3l.root";
+        if(is2018) filename_LSF += "TTHMVA_looseToTight_2018_e_3l.root";
+    }else if(flavor == "mu"){
+        if(is2016) filename_LSF += "TTHMVA_looseToTight_2016_m_3l.root";
+        if(is2017) filename_LSF += "TTHMVA_looseToTight_2017_m_3l.root";
+        if(is2018) filename_LSF += "TTHMVA_looseToTight_2018_m_3l.root";
+    }
+
+    TString histname_LSF = "EGamma_SF2D";
+    LSFReader lsfreader(filename_LSF, histname_LSF, flavor);
+    return lsfreader;
 }
 
 
@@ -256,6 +278,11 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_dz", _dz, &b__dz);
    fChain->SetBranchAddress("_3dIP", _3dIP, &b__3dIP);
    fChain->SetBranchAddress("_3dIPSig", _3dIPSig, &b__3dIPSig);
+   fChain->SetBranchAddress("_lElectronSummer16MvaGP", _lElectronSummer16MvaGP, &b__lElectronSummer16MvaGP);
+   fChain->SetBranchAddress("_lElectronSummer16MvaHZZ", _lElectronSummer16MvaHZZ, &b__lElectronSummer16MvaHZZ);
+   fChain->SetBranchAddress("_lElectronMvaFall17v1NoIso", _lElectronMvaFall17v1NoIso, &b__lElectronMvaFall17v1NoIso);
+   fChain->SetBranchAddress("_lElectronMvaFall17Iso", _lElectronMvaFall17Iso, &b__lElectronMvaFall17Iso);
+   fChain->SetBranchAddress("_lElectronMvaFall17NoIso", _lElectronMvaFall17NoIso, &b__lElectronMvaFall17NoIso);
    fChain->SetBranchAddress("_lElectronPassEmu", _lElectronPassEmu, &b__lElectronPassEmu);
    fChain->SetBranchAddress("_lElectronPassConvVeto", _lElectronPassConvVeto, &b__lElectronPassConvVeto);
    fChain->SetBranchAddress("_lElectronChargeConst", _lElectronChargeConst, &b__lElectronChargeConst);
@@ -307,6 +334,11 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_closestJetCsvV2", _closestJetCsvV2, &b__closestJetCsvV2);
    fChain->SetBranchAddress("_closestJetDeepCsv_b", _closestJetDeepCsv_b, &b__closestJetDeepCsv_b);
    fChain->SetBranchAddress("_closestJetDeepCsv_bb", _closestJetDeepCsv_bb, &b__closestJetDeepCsv_bb);
+   fChain->SetBranchAddress("_closestJetDeepCsv", _closestJetDeepCsv, &b__closestJetDeepCsv);
+   fChain->SetBranchAddress("_closestJetDeepFlavor_b", _closestJetDeepFlavor_b, &b__closestJetDeepFlavor_b);
+   fChain->SetBranchAddress("_closestJetDeepFlavor_bb", _closestJetDeepFlavor_bb, &b__closestJetDeepFlavor_bb);
+   fChain->SetBranchAddress("_closestJetDeepFlavor_lepb", _closestJetDeepFlavor_lepb, &b__closestJetDeepFlavor_lepb);
+   fChain->SetBranchAddress("_closestJetDeepFlavor", _closestJetDeepFlavor, &b__closestJetDeepFlavor);
    fChain->SetBranchAddress("_selectedTrackMult", _selectedTrackMult, &b__selectedTrackMult);
    //fChain->SetBranchAddress("_lKVF_valid", _lKVF_valid, &b__lKVF_valid);
    //fChain->SetBranchAddress("_lKVF_x", _lKVF_x, &b__lKVF_x);
@@ -407,6 +439,14 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_jetDeepCsv_b", _jetDeepCsv_b, &b__jetDeepCsv_b);
    fChain->SetBranchAddress("_jetDeepCsv_c", _jetDeepCsv_c, &b__jetDeepCsv_c);
    fChain->SetBranchAddress("_jetDeepCsv_bb", _jetDeepCsv_bb, &b__jetDeepCsv_bb);
+   fChain->SetBranchAddress("_jetDeepCsv", &_jetDeepCsv, &b__jetDeepCsv);
+   fChain->SetBranchAddress("_jetDeepFlavor_b", &_jetDeepFlavor_b, &b__jetDeepFlavor_b);
+   fChain->SetBranchAddress("_jetDeepFlavor_bb", &_jetDeepFlavor_bb, &b__jetDeepFlavor_bb);
+   fChain->SetBranchAddress("_jetDeepFlavor_lepb", &_jetDeepFlavor_lepb, &b__jetDeepFlavor_lepb);
+   fChain->SetBranchAddress("_jetDeepFlavor", &_jetDeepFlavor, &b__jetDeepFlavor);
+   fChain->SetBranchAddress("_jetDeepFlavor_c", &_jetDeepFlavor_c, &b__jetDeepFlavor_c);
+   fChain->SetBranchAddress("_jetDeepFlavor_uds", &_jetDeepFlavor_uds, &b__jetDeepFlavor_uds);
+   fChain->SetBranchAddress("_jetDeepFlavor_g", &_jetDeepFlavor_g, &b__jetDeepFlavor_g);
    fChain->SetBranchAddress("_jetHadronFlavor", _jetHadronFlavor, &b__jetHadronFlavor);
    fChain->SetBranchAddress("_jetIsLoose", _jetIsLoose, &b__jetIsLoose);
    fChain->SetBranchAddress("_jetIsTight", _jetIsTight, &b__jetIsTight);

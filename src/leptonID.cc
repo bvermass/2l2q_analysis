@@ -18,9 +18,47 @@ void full_analyzer::get_electronID()
 			                _miniIso[i]    < 0.4 &&
 			                _leptonMvaTTH[i] > 0.8 && //move to MVA of TTH as soon as others caught up
 			                _lElectronPassConvVeto[i] &&
-			                _lElectronMissingHits[i] < 1;
+			                _lElectronMissingHits[i] < 1 &&
+                            _lElehadronicOverEm[i] < 0.1 &&
+                            _lEleInvMinusPInv[i] > -0.04 &&
+                            ((fabs(_lEtaSC[i]) < 1.479 && _lElefull5x5SigmaIetaIeta[i] < 0.011) || (fabs(_lEtaSC[i]) > 1.479 && _lElefull5x5SigmaIetaIeta[i] < 0.030)) &&
+                            ((is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
+                             (is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
+                             (is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018()));
+                            rawElectronMVA( _lElectronMvaFall17NoIso[i] ) > looseMVACut( i );
     }
 }
+
+
+double full_analyzer::rawElectronMVA( const double electronMVA ){
+        return -0.5 * ( std::log( ( 1. - electronMVA ) / ( 1. + electronMVA ) ) );
+}
+
+
+unsigned full_analyzer::electronMVACategory( unsigned i ){
+    double etasc = fabs(_lEtaSC[i]);
+    if( _lPt[i] < 10 ){
+        if( etasc < 0.8 ) return 0;
+        else if( etasc < 1.479 ) return 1;
+        else return 2;
+    } else {
+        if( etasc < 0.8 ) return 3;
+        else if( etasc < 1.479 ) return 4;
+        else return 5;
+    }
+}
+
+
+double full_analyzer::looseMVACut( unsigned i ){
+	unsigned category = electronMVACategory( i );
+	if( category == 0 ) return 0.700642584415;
+    else if( category == 1 ) return 0.739335420875;
+    else if( category == 2 ) return 1.45390456109;
+    else if( category == 3 ) return -0.146270871164;
+    else if( category == 4 ) return -0.0315850882679;
+    else return -0.0321841194737;
+}
+
 
 //void full_analyzer::get_electronID(bool* ID)
 //{
@@ -92,10 +130,15 @@ void full_analyzer::get_muonID()
 			            fabs(_dz[i])  < 0.1 &&
 			            _3dIPSig[i]   < 8 &&
 			            _miniIso[i]    < 0.4 &&
-                        _leptonMvaTTH[i] > 0.8; //move to MVA of TTH as soon as others caught up
+                        _leptonMvaTTH[i] > 0.85 &&
+                        _lPOGMedium[i] &&
+                        ((is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
+                         (is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
+                         (is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018()));
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
     }
 }
+
 
 //void full_analyzer::get_muonID(bool* ID)
 //{

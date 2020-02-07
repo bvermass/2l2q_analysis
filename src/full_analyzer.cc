@@ -112,13 +112,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TString histname_PUWeights = "PUWeights";
     PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
 
-    // Load Lepton Scale Factors (these are for 2018 METResolution task, don't have them yet for HNL analysis)
-    //TString filename_LSF_e = local_dir + "data/LeptonScaleFactors/2018_ElectronTight.root";
-    //TString histname_LSF_e = "EGamma_SF2D";
-    //LSFReader lsfreader_e(filename_LSF_e, histname_LSF_e, "e");
-    //TString filename_LSF_mu = local_dir + "data/LeptonScaleFactors/RunABCD_SF_ID.root";
-    //TString histname_LSF_mu = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
-    //LSFReader lsfreader_mu(filename_LSF_mu, histname_LSF_mu, "mu");
+    // Load Lepton Scale Factors for TTH MVA
+    LSFReader lsfreader_e = get_LSFReader(local_dir, "e");
+    LSFReader lsfreader_m = get_LSFReader(local_dir, "mu");
    
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);

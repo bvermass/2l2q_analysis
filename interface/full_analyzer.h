@@ -31,6 +31,7 @@
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
 #include "../interface/BkgEstimator.h"
+#include "../interface/bTagWP.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
 #include "../helpertools/LorentzVector/LorentzVector.h"
 #include "../helpertools/PUWeightReader/PUWeightReader.h"
@@ -205,6 +206,11 @@ public :
    Double_t        _dz[10];   //[_nL]
    Double_t        _3dIP[10];   //[_nL]
    Double_t        _3dIPSig[10];   //[_nL]
+   Double_t        _lElectronSummer16MvaGP[10];
+   Double_t        _lElectronSummer16MvaHZZ[10];
+   Double_t        _lElectronMvaFall17v1NoIso[10];
+   Double_t        _lElectronMvaFall17Iso[10];
+   Double_t        _lElectronMvaFall17NoIso[10];
    Bool_t          _lElectronPassEmu[10];   //[_nLight]
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
@@ -256,6 +262,11 @@ public :
    Double_t        _closestJetCsvV2[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_b[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_bb[10];   //[_nLight]
+   Double_t        _closestJetDeepCsv[10];   //[_nLight]
+   Double_t        _closestJetDeepFlavor_b[10];
+   Double_t        _closestJetDeepFlavor_bb[10];
+   Double_t        _closestJetDeepFlavor_lepb[10];
+   Double_t        _closestJetDeepFlavor[10];
    UInt_t          _selectedTrackMult[10];   //[_nLight]
    Bool_t          _lKVF_valid[10];
    Double_t	       _lKVF_x[10];
@@ -356,6 +367,14 @@ public :
    Double_t        _jetDeepCsv_b[20];   //[_nJets]
    Double_t        _jetDeepCsv_c[20];   //[_nJets]
    Double_t        _jetDeepCsv_bb[20];   //[_nJets]
+   Double_t        _jetDeepCsv[20];   //[_nJets]
+   Double_t        _jetDeepFlavor_b[20];
+   Double_t        _jetDeepFlavor_bb[20];
+   Double_t        _jetDeepFlavor_lepb[20];
+   Double_t        _jetDeepFlavor[20];
+   Double_t        _jetDeepFlavor_c[20];
+   Double_t        _jetDeepFlavor_uds[20];
+   Double_t        _jetDeepFlavor_g[20];
    UInt_t          _jetHadronFlavor[20];   //[_nJets]
    Bool_t          _jetIsLoose[20];   //[_nJets]
    Bool_t          _jetIsTight[20];   //[_nJets]
@@ -556,6 +575,11 @@ public :
    TBranch        *b__dz;   //!
    TBranch        *b__3dIP;   //!
    TBranch        *b__3dIPSig;   //!
+   TBranch        *b__lElectronSummer16MvaGP;
+   TBranch        *b__lElectronSummer16MvaHZZ;
+   TBranch        *b__lElectronMvaFall17v1NoIso;
+   TBranch        *b__lElectronMvaFall17Iso;
+   TBranch        *b__lElectronMvaFall17NoIso;
    TBranch        *b__lElectronPassEmu;   //!
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
@@ -607,6 +631,11 @@ public :
    TBranch        *b__closestJetCsvV2;   //!
    TBranch        *b__closestJetDeepCsv_b;   //!
    TBranch        *b__closestJetDeepCsv_bb;   //!
+   TBranch        *b__closestJetDeepCsv;   //!
+   TBranch        *b__closestJetDeepFlavor_b;   //!
+   TBranch        *b__closestJetDeepFlavor_bb;   //!
+   TBranch        *b__closestJetDeepFlavor_lepb;   //!
+   TBranch        *b__closestJetDeepFlavor;   //!
    TBranch        *b__selectedTrackMult;   //!
    //TBranch        *b__lKVF_valid;
    //TBranch	      *b__lKVF_x;
@@ -707,6 +736,14 @@ public :
    TBranch        *b__jetDeepCsv_b;   //!
    TBranch        *b__jetDeepCsv_c;   //!
    TBranch        *b__jetDeepCsv_bb;   //!
+   TBranch        *b__jetDeepCsv;   //!
+   TBranch        *b__jetDeepFlavor_b;   //!
+   TBranch        *b__jetDeepFlavor_bb;   //!
+   TBranch        *b__jetDeepFlavor_lepb;   //!
+   TBranch        *b__jetDeepFlavor;   //!
+   TBranch        *b__jetDeepFlavor_c;   //!
+   TBranch        *b__jetDeepFlavor_uds;   //!
+   TBranch        *b__jetDeepFlavor_g;   //!
    TBranch        *b__jetHadronFlavor;   //!
    TBranch        *b__jetIsLoose;   //!
    TBranch        *b__jetIsTight;   //!
@@ -801,7 +838,8 @@ public :
    
    // functions
    // in src/full_analyzer_constructor.cc
-   void SetSampleTypes(TString filename);
+   void      SetSampleTypes(TString filename);
+   LSFReader get_LSFReader(TString local_dir, TString flavor);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
@@ -815,6 +853,9 @@ public :
 
    // in src/leptonID.cc
     void     get_electronID();
+    double   rawElectronMVA(const double electronMVA);
+    unsigned electronMVACategory(unsigned i);
+    double   looseMVACut(unsigned i);
     void     get_displ_electronID();
     void     get_loose_electronID();
     void     get_muonID();
