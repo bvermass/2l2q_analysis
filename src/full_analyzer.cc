@@ -162,21 +162,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
 
-        //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) ev_weight = _weight * puweightreader.get_PUWeight(_nVertex);
-        else ev_weight = 1;
-
-        //Reweighting weights for HNL V2s, map: <V2, weight>
-        for(auto& MassMap : evaluating_V2s){
-            for(double V2 : MassMap.second){
-                if(sampleflavor == "e" or sampleflavor == "mu"){
-                    reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
-                }else {
-                    reweighting_weights[V2] = 1.;
-                }
-            }
-        }
-
         //Get ID
         get_electronID();
         get_loose_electronID();
@@ -223,6 +208,21 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         signal_regions();
         
         
+        //Calculate Event weight
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nVertex) * get_LSF(lsfreader_e, lsfreader_m);
+        else ev_weight = 1;
+
+        //Reweighting weights for HNL V2s, map: <V2, weight>
+        for(auto& MassMap : evaluating_V2s){
+            for(double V2 : MassMap.second){
+                if(sampleflavor == "e" or sampleflavor == "mu"){
+                    reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
+                }else {
+                    reweighting_weights[V2] = 1.;
+                }
+            }
+        }
+
         if(_Training){
             if(_lFlavor[i_subleading] == 0){
                 fill_HNLtagger_tree(hnltagger_e);
