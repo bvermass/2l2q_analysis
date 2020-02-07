@@ -8,7 +8,7 @@
 
 void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator)
 {
-    bkgestimator._weight       = ev_weight;
+    bkgestimator._weight       = ev_weight*total_weight;
     bkgestimator._gen_Nmass    = _gen_Nmass;
     bkgestimator._gen_NV       = _gen_NV;
     bkgestimator._gen_Nctau     = _gen_Nctau;
