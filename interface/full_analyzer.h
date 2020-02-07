@@ -900,6 +900,7 @@ public :
     double   get_KVF_PVSVdist_2D(int);
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
+    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu);
 
    // in src/jetID.cc
     void     get_jetID();

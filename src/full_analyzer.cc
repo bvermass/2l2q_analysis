@@ -137,10 +137,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
 
-        //Calculate Event weight
-        if(sampleflavor.Index("Run") == -1) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);
-        else ev_weight = 1;
-
         //Get ID
         get_electronID();
         get_loose_electronID();
@@ -169,7 +165,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         set_leptons(i_subleading_e, i_subleading_mu);
         signal_regions();
-        
+
+        //Calculate Event weight
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt) * get_LSF(lsfreader_e, lsfreader_mu);
+        else ev_weight = 1;
+
+
         fill_histograms(&hists, &hists2D);
         SR_counters[sr_flavor]++;
         SR_counters[sr_flavor+"_weighted"] += ev_weight;

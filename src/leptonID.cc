@@ -313,3 +313,16 @@ double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
     if(i_gen_l == -1) return -1; 
     return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
 }
+
+double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu){
+    double lsf = 1.;
+    if(i_leading != -1){
+        if(_lFlavor[i_leading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        else if(_lFlavor[i_leading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_leading], _lEta[i_leading]);
+    }
+    if(i_subleading != -1){
+        if(_lFlavor[i_subleading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+        else if(_lFlavor[i_subleading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+    }
+    return lsf;
+}
