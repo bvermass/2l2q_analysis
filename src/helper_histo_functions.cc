@@ -16,11 +16,13 @@ void make_logscale(double* xbins, unsigned nbins, double xmin, double xmax)
     }
 }
 
-TString make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber)
+TString make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer)
 {
     TString outputfilename = base_directory;
-    if(filename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
-    else outputfilename += "full_analyzer/";
+    if(full_analyzer){
+        if(filename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
+        else outputfilename += "full_analyzer/";
+    }
     
     if(partition != 1) {
         outputfilename += "subfiles/";

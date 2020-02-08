@@ -15,7 +15,6 @@
 
 // other headers to communicate with
 #include "../interface/helper_histo_functions.h"
-#include "../helpertools/PFNEvaluation/PFNReader.h"
 
 class BkgEstimator
 {

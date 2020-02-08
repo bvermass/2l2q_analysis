@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= src/helper_histo_functions.cc src/BkgEstimator.cc src/bTagWP.cc helpertools/LorentzVector/LorentzVector.cc src/mini_analyzer.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execMiniAnalyzer
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)

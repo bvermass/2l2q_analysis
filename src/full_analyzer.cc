@@ -295,7 +295,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
     bkgestimator.write_tree();
 
-    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
+    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber, true);
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
