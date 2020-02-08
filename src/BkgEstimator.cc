@@ -33,12 +33,16 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
     BkgEstimator_tree->Branch("_lFlavor",                          &_lFlavor,                          "_lFlavor/i");
     BkgEstimator_tree->Branch("_lCharge",                          &_lCharge,                          "_lCharge/I");
+    BkgEstimator_tree->Branch("_lProvenance",                      &_lProvenance,                      "_lProvenance/i");
+    BkgEstimator_tree->Branch("_lProvenanceCompressed",            &_lProvenanceCompressed,            "_lProvenanceCompressed/i");
 
     BkgEstimator_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
     BkgEstimator_tree->Branch("_l1Eta",                            &_l1Eta,                            "_l1Eta/D");
     BkgEstimator_tree->Branch("_l1Phi",                            &_l1Phi,                            "_l1Phi/D");
     BkgEstimator_tree->Branch("_l1Flavor",                         &_l1Flavor,                         "_l1Flavor/i");
     BkgEstimator_tree->Branch("_l1Charge",                         &_l1Charge,                         "_l1Charge/I");
+    BkgEstimator_tree->Branch("_l1Provenance",                     &_l1Provenance,                     "_l1Provenance/i");
+    BkgEstimator_tree->Branch("_l1ProvenanceCompressed",           &_l1ProvenanceCompressed,           "_l1ProvenanceCompressed/i");
     BkgEstimator_tree->Branch("_mll",                              &_mll,                              "_mll/D");
     BkgEstimator_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
     BkgEstimator_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");
@@ -104,12 +108,16 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_lNumberOfPixelHits", &_lNumberOfPixelHits, &b__lNumberOfPixelHits);
     BkgEstimator_tree->SetBranchAddress("_lFlavor", &_lFlavor, &b__lFlavor);
     BkgEstimator_tree->SetBranchAddress("_lCharge", &_lCharge, &b__lCharge);
+    BkgEstimator_tree->SetBranchAddress("_lProvenance", &_lProvenance, &b__lProvenance);
+    BkgEstimator_tree->SetBranchAddress("_lProvenanceCompressed", &_lProvenanceCompressed, &b__lProvenanceCompressed);
 
     BkgEstimator_tree->SetBranchAddress("_l1Pt", &_l1Pt, &b__l1Pt);
     BkgEstimator_tree->SetBranchAddress("_l1Eta", &_l1Eta, &b__l1Eta);
     BkgEstimator_tree->SetBranchAddress("_l1Phi", &_l1Phi, &b__l1Phi);
     BkgEstimator_tree->SetBranchAddress("_l1Flavor", &_l1Flavor, &b__l1Flavor);
     BkgEstimator_tree->SetBranchAddress("_l1Charge", &_l1Charge, &b__l1Charge);
+    BkgEstimator_tree->SetBranchAddress("_l1Provenance", &_l1Provenance, &b__l1Provenance);
+    BkgEstimator_tree->SetBranchAddress("_l1ProvenanceCompressed", &_l1ProvenanceCompressed, &b__l1ProvenanceCompressed);
     BkgEstimator_tree->SetBranchAddress("_mll", &_mll, &b__mll);
     BkgEstimator_tree->SetBranchAddress("_mlljet", &_mlljet, &b__mlljet);
     BkgEstimator_tree->SetBranchAddress("_dRll", &_dRll, &b__dRll);

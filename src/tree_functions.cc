@@ -31,12 +31,16 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_subleading];
     bkgestimator._lFlavor               = _lFlavor[i_subleading];
     bkgestimator._lCharge               = _lCharge[i_subleading];
+    bkgestimator._lProvenance           = _lProvenance[i_subleading];
+    bkgestimator._lProvenanceCompressed = _lProvenanceCompressed[i_subleading];
 
     bkgestimator._l1Pt            = _lPt[i_leading];
     bkgestimator._l1Eta           = _lEta[i_leading];
     bkgestimator._l1Phi           = _lPhi[i_leading];
     bkgestimator._l1Flavor        = _lFlavor[i_leading];
     bkgestimator._l1Charge        = _lCharge[i_leading];
+    bkgestimator._l1Provenance           = _lProvenance[i_leading];
+    bkgestimator._l1ProvenanceCompressed = _lProvenanceCompressed[i_leading];
     bkgestimator._mll             = mll;
     bkgestimator._mlljet          = 0;//maybe add it?
     bkgestimator._dRll            = dRll;

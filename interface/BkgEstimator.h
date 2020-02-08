@@ -46,12 +46,16 @@ class BkgEstimator
         unsigned _lNumberOfPixelHits;
         unsigned _lFlavor;
         int      _lCharge;
+        unsigned _lProvenance;
+        unsigned _lProvenanceCompressed;
 
         double   _l1Pt;
         double   _l1Eta;
         double   _l1Phi;
         unsigned _l1Flavor;
         int      _l1Charge;
+        unsigned _l1Provenance;
+        unsigned _l1ProvenanceCompressed;
         double   _mll;
         double   _mlljet;
         double   _dRll;
@@ -99,12 +103,16 @@ class BkgEstimator
         TBranch     *b__lNumberOfPixelHits;
         TBranch     *b__lFlavor;
         TBranch     *b__lCharge;
+        TBranch     *b__lProvenance;
+        TBranch     *b__lProvenanceCompressed;
 
         TBranch     *b__l1Pt;
         TBranch     *b__l1Eta;
         TBranch     *b__l1Phi;
         TBranch     *b__l1Flavor;
         TBranch     *b__l1Charge;
+        TBranch     *b__l1Provenance;
+        TBranch     *b__l1ProvenanceCompressed;
         TBranch     *b__mll;
         TBranch     *b__mlljet;
         TBranch     *b__dRll;
