@@ -12,6 +12,7 @@
 #include <TMath.h>
 #include <TSystem.h>
 #include <TString.h>
+#include <TH1.h>
 
 void        make_logscale(double* xbins, unsigned nbins, double xmin, double xmax);
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer);
@@ -32,5 +33,6 @@ std::vector<double> get_evaluating_V2s(double mass);
 std::vector<double> get_evaluating_V2s_short(double mass);
 TString     get_MV2name(int mass, double V2);
 void        filePutContents(const std::string& name, const std::string& content, bool append = false);
+void        fix_overflow_and_negative_bins(TH1* h);
 
 #endif

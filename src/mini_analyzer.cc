@@ -41,29 +41,7 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
-        int nb = h->GetNbinsX();
-        double b0  = h->GetBinContent( 0  );
-        double e0  = h->GetBinError  ( 0  );
-        double b1  = h->GetBinContent( 1  );
-        double e1  = h->GetBinError  ( 1  );
-        double bn  = h->GetBinContent(nb  );
-        double en  = h->GetBinError  (nb  );
-        double bn1 = h->GetBinContent(nb+1);
-        double en1 = h->GetBinError  (nb+1);
-    
-        h->SetBinContent(0   , 0.);
-        h->SetBinError  (0   , 0.);
-        h->SetBinContent(1   , b0+b1);
-        h->SetBinError  (1   , std::sqrt(e0*e0 + e1*e1  ));
-        h->SetBinContent(nb  , bn+bn1);
-        h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
-        h->SetBinContent(nb+1, 0.);
-        h->SetBinError  (nb+1, 0.);
-        
-        //if bin content is below zero, set it to 0 (dealing with negative weights)
-        for(int i = 0; i < nb+1; i++){
-            if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
-        }
+        fix_overflow_and_negative_bins(h);
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
     
