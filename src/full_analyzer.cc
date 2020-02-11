@@ -71,7 +71,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_Training", "_Training_nRIso", "_TooFar"}){
+        for(const TString &ev_region : {"", "_Training", "_Training_nRIso", "_TooFar", "_2prompt"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
@@ -260,6 +260,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 }
             }
         }
+
+
+        // after everything happened, set subleading lepton to tight prompt lepton to measure 2 lepton prompt performance
+        set_leptons(i_subleading_e, i_subleading_mu);
+        signal_regions();
+        if(_l1l2 and _lPt[i_subleading] > 20){
+            fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
+        }
+
     }
     //Small summary to write to terminal in order to quickly check state of results
     print_SR_counters(SR_counters, total_weight);
