@@ -405,15 +405,8 @@ double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
 }
 
 
-double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu){
-    double lsf = 1.;
-    if(i_leading != -1){
-        if(_lFlavor[i_leading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_leading], _lEta[i_leading]);
-        else if(_lFlavor[i_leading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_leading], _lEta[i_leading]);
-    }
-    if(i_subleading != -1){
-        if(_lFlavor[i_subleading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-        else if(_lFlavor[i_subleading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-    }
-    return lsf;
+double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i){
+    if(i == -1) return 1.;
+    if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEta[i]);
+    else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i]);
 }
