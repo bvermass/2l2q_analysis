@@ -34,7 +34,8 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         fill_histograms();
     }
     
-    TString outputfilename = make_outputfilename(event.BkgEstimator_filename, "/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/", "hists_mini_analyzer", partition, partitionjobnumber, false);
+    TString outputfilename = event.BkgEstimator_filename;
+    outputfilename.ReplaceAll("trees/BkgEstimator/final/full_analyzer/BkgEstimator_", "histograms/mini_analyzer/hists_mini_analyzer_");
     std::cout << "output to: " << outputfilename << std::endl;
     TFile *output = new TFile(outputfilename, "recreate");
     
