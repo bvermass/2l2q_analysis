@@ -57,26 +57,26 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
 
 TString make_plotspecific_pathname(const TString& histname, const TString& pathname, const TString& linorlog)
 {
-    // append directories such as SS/OS, e/mu or HLT to pathname
-    TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
-    TString lflavor         = get_lflavor(histname);
-    TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
-    TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
-    TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";
-    TString signal_region   = (histname.Index("_SR") == -1)?            "" : "SR/";
-    TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1 && histname.Index("_Training") == -1)?         "" : "partialcuts/";
-    TString MV2             = (histname.Index("_M-") != -1 and histname.Index("_V2-") != -1)? (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/" : "";
-    TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
-    TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
-    TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
-    TString oldID           = (histname.Index("_oldID_") == -1)?        "" : "oldID/";
-    TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
-    TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
-    TString invIVFSVgenreco = (histname.Index("_invIVFSVgenreco") == -1)? "" : "invIVFSVgenreco/";
-    TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
-    TString Bool            = (histname.Index("_Bool_") == -1)? "" : "Bool/";
+    TString fullname = pathname + linorlog;
 
-    TString fullname = pathname + linorlog + gen + HLT + lflavor + SSorOS + Bool + control_region + signal_region + partialcuts + MV2 + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
+    if(histname.Contains("gen_"))               fullname += "gen/";
+    if(histname.Contains("HLT_"))               fullname += "HLT/";
+    fullname += get_lflavor(histname);
+    if(histname.Contains("_OS_"))               fullname += "OS/";
+    else if(histname.Contains("_SS_"))          fullname += "SS/";
+    if(histname.Contains("_Bool_"))             fullname += "Bool/";
+    if(histname.Contains("_CR"))                fullname += "CR/";
+    if(histname.Contains("_SR"))                fullname += "SR/";
+    if(histname.Contains("before") or histname.Contains("after") or histname.Contains("_Training")) fullname += "partialcuts/";
+    if(histname.Contains("_M-") and histname.Contains("_V2-")) fullname += (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/";
+    if(histname.Contains("_KVF_"))              fullname += "KVF/";
+    if(histname.Contains("_IVF_"))              fullname += "IVF/";
+    if(histname.Contains("_jetl2_"))            fullname += "jetl2";
+    if(histname.Contains("_oldID_"))            fullname += "oldID/";
+    if(histname.Contains("_invVtx_"))           fullname += "invVtx/";
+    if(histname.Contains("_eff"))               fullname += "eff/";
+    if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
+
     gSystem->Exec("mkdir -p " + fullname);
     return fullname;
 }

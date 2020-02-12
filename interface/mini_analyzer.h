@@ -45,8 +45,13 @@ class mini_analyzer {
         ~mini_analyzer();
 
         void analyze(int max_entries, int partition, int partitionjobnumber);
+
+        void ABCD_ratios();
+        void calculate_ratio(TString numerator_tag, TString denominator_tag, TString ratio_tag);
+        void apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag);
+
         void set_signal_regions();
-        
+
         void add_histograms();
         void add_standard_histograms(TString prefix);
         void add_pfn_histograms(TString prefix);

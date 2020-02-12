@@ -39,6 +39,9 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     std::cout << "output to: " << outputfilename << std::endl;
     TFile *output = new TFile(outputfilename, "recreate");
     
+    std::cout << "calculating and applying ABCD method" << std::endl;
+    ABCD_ratios();
+
     std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
@@ -52,6 +55,46 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
     std::cout << "close file" << std::endl;
     output->Close();
+}
+
+
+void mini_analyzer::ABCD_ratios()
+{
+    calculate_ratio("_quadA", "_quadB", "_AoverB");
+    calculate_ratio("_quadC", "_quadD", "_CoverD");
+
+    apply_ratio("_CoverD", "_quadD", "_DtoCwithCD");
+    apply_ratio("_CoverD", "_quadB", "_BtoAwithCD");
+}
+
+
+void mini_analyzer::calculate_ratio(TString numerator_tag, TString denominator_tag, TString ratio_tag)
+{
+    for(auto const& it : hists){
+        TH1* h = it.second;
+        TString hname = h->GetName();
+        if(hname.Index(numerator_tag) != -1){
+            TString hname_den(hname), hname_ratio(hname);
+            hname_den.ReplaceAll(numerator_tag, denominator_tag);
+            hname_ratio.ReplaceAll(numerator_tag, ratio_tag);
+            hists[hname_ratio]->Divide(hists[hname], hists[hname_den]);
+        }
+    }
+}
+
+
+void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag)
+{
+    for(auto const& it : hists){
+        TH1* h = it.second;
+        TString hname = h->GetName();
+        if(hname.Index(histo_tag) != -1){
+            TString hname_ratio(hname), hname_target(hname);
+            hname_ratio.ReplaceAll(histo_tag, ratio_tag);
+            hname_target.ReplaceAll(histo_tag, target_tag);
+            hists[hname_target]->Multiply(hists[hname], hists[hname_ratio]);
+        }
+    }
 }
 
 
@@ -92,7 +135,7 @@ void mini_analyzer::add_histograms()
 {
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD"}){
+        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
             add_standard_histograms(lep_region + quadrant);
             //move to parametrized pfn evaluation:
             add_pfn_histograms(lep_region + quadrant);
