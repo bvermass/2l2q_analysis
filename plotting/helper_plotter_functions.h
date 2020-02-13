@@ -23,6 +23,20 @@
 
 // other header files
 
+// class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
+class CMSandLuminosity{
+    public:
+        CMSandLuminosity(TPad* pad);
+        ~CMSandLuminosity();
+        void Draw();
+    private:
+        TString CMStext;
+        TString lumitext;
+        float leftmargin, rightmargin, topmargin;
+        TLatex CMSlatex;
+        TLatex lumilatex;
+};
+
 // Helper functions
 std::vector<std::vector<TString>> get_identifiers(const TString identifier_filename, const char* delim);
 bool        check_identifiers(TString histname, std::vector<std::vector<TString>> identifiers);

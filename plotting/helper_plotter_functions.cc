@@ -1,5 +1,25 @@
 #include "helper_plotter_functions.h"
 
+// CMSandluminosity class functions
+CMSandLuminosity::CMSandLuminosity(TPad* pad):
+    CMStext( "#bf{CMS} #scale[0.8]{#it{Preliminary}}" )
+    , lumitext( "35.9 fb^{-1} (13 TeV)" )
+    , leftmargin( pad->GetLeftMargin() )
+    , topmargin( pad->GetTopMargin() )
+    , rightmargin( pad->GetRightMargin() )
+    , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
+    , lumilatex( get_latex(0.6*topmargin, 31, 42) )
+{}
+
+CMSandLuminosity::~CMSandLuminosity(){}
+
+void CMSandLuminosity::Draw()
+{
+    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+}
+
+
 std::vector<std::vector<TString>> get_identifiers(TString identifier_filename, const char* delim)
 {
     std::string line;
