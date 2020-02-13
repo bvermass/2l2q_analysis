@@ -60,11 +60,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
 void mini_analyzer::ABCD_ratios()
 {
-    calculate_ratio("_quadA", "_quadB", "_AoverB");
-    calculate_ratio("_quadC", "_quadD", "_CoverD");
+    calculate_ratio("_quadA_", "_quadB_", "_AoverB_");
+    calculate_ratio("_quadC_", "_quadD_", "_CoverD_");
 
-    apply_ratio("_CoverD", "_quadD", "_DtoCwithCD");
-    apply_ratio("_CoverD", "_quadB", "_BtoAwithCD");
+    apply_ratio("_CoverD_", "_quadD_", "_DtoCwithCD_");
+    apply_ratio("_CoverD_", "_quadB_", "_BtoAwithCD_");
 }
 
 
@@ -77,7 +77,9 @@ void mini_analyzer::calculate_ratio(TString numerator_tag, TString denominator_t
             TString hname_den(hname), hname_ratio(hname);
             hname_den.ReplaceAll(numerator_tag, denominator_tag);
             hname_ratio.ReplaceAll(numerator_tag, ratio_tag);
-            hists[hname_ratio]->Divide(hists[hname], hists[hname_den]);
+            if(hists[hname]->GetMaximum() > 0 and hists[hname_den]->GetMaximum() > 0){
+                hists[hname_ratio]->Divide(hists[hname], hists[hname_den]);
+            }
         }
     }
 }
@@ -92,7 +94,9 @@ void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString ta
             TString hname_ratio(hname), hname_target(hname);
             hname_ratio.ReplaceAll(histo_tag, ratio_tag);
             hname_target.ReplaceAll(histo_tag, target_tag);
-            hists[hname_target]->Multiply(hists[hname], hists[hname_ratio]);
+            if(hists[hname]->GetMaximum() > 0 and hists[hname_ratio]->GetMaximum() > 0){
+                hists[hname_target]->Multiply(hists[hname], hists[hname_ratio]);
+            }
         }
     }
 }
@@ -124,10 +128,10 @@ void mini_analyzer::set_signal_regions()
     if(event._lFlavor == 0) sr_flavor += "e";
     else if(event._lFlavor == 1) sr_flavor += "m";
 
-    if(isA) sr_flavor += "_quadA";
-    else if(isB) sr_flavor += "_quadB";
-    else if(isC) sr_flavor += "_quadC";
-    else if(isD) sr_flavor += "_quadD";
+    if(isA) quad = "_quadA";
+    else if(isB) quad = "_quadB";
+    else if(isC) quad = "_quadC";
+    else if(isD) quad = "_quadD";
 }
 
 
@@ -135,7 +139,7 @@ void mini_analyzer::add_histograms()
 {
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
+        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_quadAB", "_quadCD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
             add_standard_histograms(lep_region + quadrant);
             //move to parametrized pfn evaluation:
             add_pfn_histograms(lep_region + quadrant);
@@ -193,8 +197,17 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
 
 void mini_analyzer::fill_histograms()
 {
-    fill_standard_histograms(sr_flavor, event._weight);
-    fill_pfn_histograms(sr_flavor, event._weight * event._reweighting_weight[0], 0);
+    fill_standard_histograms(sr_flavor + quad, event._weight);
+    fill_pfn_histograms(sr_flavor + quad, event._weight * event._reweighting_weight[0], 0);
+
+    if(isA or isB){
+        fill_standard_histograms(sr_flavor + "_quadAB", event._weight);
+        fill_pfn_histograms(sr_flavor + "_quadAB", event._weight * event._reweighting_weight[0], 0);
+    }else if(isC or isD){
+        fill_standard_histograms(sr_flavor + "_quadCD", event._weight);
+        fill_pfn_histograms(sr_flavor + "_quadCD", event._weight * event._reweighting_weight[0], 0);
+    }
+
 }
 
 

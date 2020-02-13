@@ -33,7 +33,7 @@
 class mini_analyzer {
     public :
         BkgEstimator event;
-        TString sr_flavor;
+        TString sr_flavor, quad;
         std::map<TString, TH1*> hists;
 
         //For ABCD method based on PFN output and dphi
