@@ -409,4 +409,6 @@ double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, i
     if(i == -1) return 1.;
     if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEta[i]);
     else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i]);
+    std::cout << "wrong lepton flavor, returning 1 for scale factor. flavor: " << _lFlavor[i] << std::endl;
+    return 1.;
 }
