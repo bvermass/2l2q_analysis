@@ -206,14 +206,16 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lMuonSegComp", i_lMuonSegComp, &bi__lMuonSegComp);
     tree->SetBranchAddress("_lMuonTrackPt", i_lMuonTrackPt, &bi__lMuonTrackPt);
     tree->SetBranchAddress("_lMuonTrackPtErr", i_lMuonTrackPtErr, &bi__lMuonTrackPtErr);
-    tree->SetBranchAddress("_lIsPrompt", i_lIsPrompt, &bi__lIsPrompt);
-    tree->SetBranchAddress("_lMatchPdgId", i_lMatchPdgId, &bi__lMatchPdgId);
-    tree->SetBranchAddress("_lMatchCharge", i_lMatchCharge, &bi__lMatchCharge);
-    tree->SetBranchAddress("_tauGenStatus", i_tauGenStatus, &bi__tauGenStatus);
-    tree->SetBranchAddress("_lMomPdgId", i_lMomPdgId, &bi__lMomPdgId);
-    tree->SetBranchAddress("_lProvenance", i_lProvenance, &bi__lProvenance);
-    tree->SetBranchAddress("_lProvenanceCompressed", i_lProvenanceCompressed, &bi__lProvenanceCompressed);
-    tree->SetBranchAddress("_lProvenanceConversion", i_lProvenanceConversion, &bi__lProvenanceConversion);
+    if(!isData){
+        tree->SetBranchAddress("_lIsPrompt", i_lIsPrompt, &bi__lIsPrompt);
+        tree->SetBranchAddress("_lMatchPdgId", i_lMatchPdgId, &bi__lMatchPdgId);
+        tree->SetBranchAddress("_lMatchCharge", i_lMatchCharge, &bi__lMatchCharge);
+        tree->SetBranchAddress("_tauGenStatus", i_tauGenStatus, &bi__tauGenStatus);
+        tree->SetBranchAddress("_lMomPdgId", i_lMomPdgId, &bi__lMomPdgId);
+        tree->SetBranchAddress("_lProvenance", i_lProvenance, &bi__lProvenance);
+        tree->SetBranchAddress("_lProvenanceCompressed", i_lProvenanceCompressed, &bi__lProvenanceCompressed);
+        tree->SetBranchAddress("_lProvenanceConversion", i_lProvenanceConversion, &bi__lProvenanceConversion);
+    }
     tree->SetBranchAddress("_lPtCorr", i_lPtCorr, &bi__lPtCorr);
     tree->SetBranchAddress("_lPtScaleUp", i_lPtScaleUp, &bi__lPtScaleUp);
     tree->SetBranchAddress("_lPtScaleDown", i_lPtScaleDown, &bi__lPtScaleDown);
@@ -238,8 +240,10 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_phHadTowOverEm", i_phHadTowOverEm, &bi__phHadTowOverEm);
     tree->SetBranchAddress("_phPassElectronVeto", i_phPassElectronVeto, &bi__phPassElectronVeto);
     tree->SetBranchAddress("_phHasPixelSeed", i_phHasPixelSeed, &bi__phHasPixelSeed);
-    tree->SetBranchAddress("_phIsPrompt", i_phIsPrompt, &bi__phIsPrompt);
-    tree->SetBranchAddress("_phMatchPdgId", i_phMatchPdgId, &bi__phMatchPdgId);
+    if(!isData){
+        tree->SetBranchAddress("_phIsPrompt", i_phIsPrompt, &bi__phIsPrompt);
+        tree->SetBranchAddress("_phMatchPdgId", i_phMatchPdgId, &bi__phMatchPdgId);
+    }
     tree->SetBranchAddress("_phPtCorr", i_phPtCorr, &bi__phPtCorr);
     tree->SetBranchAddress("_phPtScaleUp", i_phPtScaleUp, &bi__phPtScaleUp);
     tree->SetBranchAddress("_phPtScaleDown", i_phPtScaleDown, &bi__phPtScaleDown);
@@ -552,6 +556,35 @@ void Skimmer::Add_branches(TTree* tree)
     //tree->Branch("_lEScaleDown",                        &o_lEScaleDown,                          "_lEScaleDown[_nLight]/D");
     //tree->Branch("_lEResUp",                            &o_lEResUp,                              "_lEResUp[_nLight]/D");
     //tree->Branch("_lEResDown",                          &o_lEResDown,                            "_lEResDown[_nLight]/D");
+    
+    tree->Branch("_nPh",                                &o_nPh,                                 "_nPh/i");
+    tree->Branch("_phPt",                               &o_phPt,                                "_phPt[_nPh]/D");
+    tree->Branch("_phEta",                              &o_phEta,                               "_phEta[_nPh]/D");
+    tree->Branch("_phEtaSC",                            &o_phEtaSC,                             "_phEtaSC[_nPh]/D");
+    tree->Branch("_phPhi",                              &o_phPhi,                               "_phPhi[_nPh]/D");
+    tree->Branch("_phE",                                &o_phE,                                 "_phE[_nPh]/D");
+    tree->Branch("_phCutBasedLoose",                    &o_phCutBasedLoose,                     "_phCutBasedLoose[_nPh]/O");
+    tree->Branch("_phCutBasedMedium",                   &o_phCutBasedMedium,                    "_phCutBasedMedium[_nPh]/O");
+    tree->Branch("_phCutBasedTight",                    &o_phCutBasedTight,                     "_phCutBasedTight[_nPh]/O");
+    tree->Branch("_phMva",                              &o_phMva,                               "_phMva[_nPh]/D");
+    tree->Branch("_phRandomConeChargedIsolation",       &o_phRandomConeChargedIsolation,        "_phRandomConeChargedIsolation[_nPh]/D");
+    tree->Branch("_phChargedIsolation",                 &o_phChargedIsolation,                  "_phChargedIsolation[_nPh]/D");
+    tree->Branch("_phNeutralHadronIsolation",           &o_phNeutralHadronIsolation,            "_phNeutralHadronIsolation[_nPh]/D");
+    tree->Branch("_phPhotonIsolation",                  &o_phPhotonIsolation,                   "_phPhotonIsolation[_nPh]/D");
+    tree->Branch("_phSigmaIetaIeta",                    &o_phSigmaIetaIeta,                     "_phSigmaIetaIeta[_nPh]/D");
+    tree->Branch("_phHadronicOverEm",                   &o_phHadronicOverEm,                    "_phHadronicOverEm[_nPh]/D");
+    tree->Branch("_phHadTowOverEm",                     &o_phHadTowOverEm,                      "_phHadTowOverEm[_nPh]/D");
+    tree->Branch("_phPassElectronVeto",                 &o_phPassElectronVeto,                  "_phPassElectronVeto[_nPh]/O");
+    tree->Branch("_phHasPixelSeed",                     &o_phHasPixelSeed,                      "_phHasPixelSeed[_nPh]/O");
+    if(!isData){
+        tree->Branch("_phIsPrompt",                     &o_phIsPrompt,                          "_phIsPrompt[_nPh]/O");
+        tree->Branch("_phMatchPdgId",                   &o_phMatchPdgId,                        "_phMatchPdgId[_nPh]/I");
+    }
+    tree->Branch("_phPtCorr",                           &o_phPtCorr,                            "_phPtCorr[_nPh]/D");
+    tree->Branch("_phPtScaleUp",                        &o_phPtScaleUp,                         "_phPtScaleUp[_nPh]/D");
+    tree->Branch("_phPtScaleDown",                      &o_phPtScaleDown,                       "_phPtScaleDown[_nPh]/D");
+    tree->Branch("_phPtResUp",                          &o_phPtResUp,                           "_phPtResUp[_nPh]/D");
+    tree->Branch("_phPtResDown",                        &o_phPtResDown,                         "_phPtResDown[_nPh]/D");
 
     tree->Branch("_nJets",                              &o_nJets,                                "_nJets/i");
     tree->Branch("_jetPt",                              &o_jetPt,                                "_jetPt[_nJets]/D");
@@ -594,60 +627,60 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_jetHFHadronFraction",                &o_jetHFHadronFraction,                  "_jetHFHadronFraction[_nJets]/D");
     tree->Branch("_jetHFEmFraction",                    &o_jetHFEmFraction,                      "_jetHFEmFraction[_nJets]/D");
 
-    outputTree->Branch("_nJetsPuppi",                &o_nJetsPuppi,               "_nJetsPuppi/i");
-    outputTree->Branch("_jetPuppiPt",                &o_jetPuppiPt,               "_jetPuppiPt[_nJetsPuppi]/D");
-    outputTree->Branch("_jetPuppiEta",               &o_jetPuppiEta,              "_jetPuppiEta[_nJetsPuppi]/D");
-    outputTree->Branch("_jetPuppiPhi",               &o_jetPuppiPhi,              "_jetPuppiPhi[_nJetsPuppi]/D");
-    outputTree->Branch("_jetPuppiPt_JECDown",        &o_jetPuppiPt_JECDown,       "_jetPuppiPt_JECDown[_nJetsPuppi]/D");
-    outputTree->Branch("_jetPuppiPt_JECUp",          &o_jetPuppiPt_JECUp,         "_jetPuppiPt_JECUp[_nJetsPuppi]/D");
+    tree->Branch("_nJetsPuppi",                &o_nJetsPuppi,               "_nJetsPuppi/i");
+    tree->Branch("_jetPuppiPt",                &o_jetPuppiPt,               "_jetPuppiPt[_nJetsPuppi]/D");
+    tree->Branch("_jetPuppiEta",               &o_jetPuppiEta,              "_jetPuppiEta[_nJetsPuppi]/D");
+    tree->Branch("_jetPuppiPhi",               &o_jetPuppiPhi,              "_jetPuppiPhi[_nJetsPuppi]/D");
+    tree->Branch("_jetPuppiPt_JECDown",        &o_jetPuppiPt_JECDown,       "_jetPuppiPt_JECDown[_nJetsPuppi]/D");
+    tree->Branch("_jetPuppiPt_JECUp",          &o_jetPuppiPt_JECUp,         "_jetPuppiPt_JECUp[_nJetsPuppi]/D");
 
-    outputTree->Branch("_met",                          &o_met,                          "_met/D");
-    outputTree->Branch("_metType1",                     &o_metType1,                     "_metType1/D");
-    outputTree->Branch("_metRaw",                       &o_metRaw,                       "_metRaw/D");
-    outputTree->Branch("_metJECDown",                   &o_metJECDown,                   "_metJECDown/D");
-    outputTree->Branch("_metJECUp",                     &o_metJECUp,                     "_metJECUp/D");
-    outputTree->Branch("_metUnclDown",                  &o_metUnclDown,                  "_metUnclDown/D");
-    outputTree->Branch("_metUnclUp",                    &o_metUnclUp,                    "_metUnclUp/D");
-    outputTree->Branch("_metResDown",                   &o_metResDown,                   "_metResDown/D");
-    outputTree->Branch("_metResUp",                     &o_metResUp,                     "_metResUp/D");
+    tree->Branch("_met",                          &o_met,                          "_met/D");
+    tree->Branch("_metType1",                     &o_metType1,                     "_metType1/D");
+    tree->Branch("_metRaw",                       &o_metRaw,                       "_metRaw/D");
+    tree->Branch("_metJECDown",                   &o_metJECDown,                   "_metJECDown/D");
+    tree->Branch("_metJECUp",                     &o_metJECUp,                     "_metJECUp/D");
+    tree->Branch("_metUnclDown",                  &o_metUnclDown,                  "_metUnclDown/D");
+    tree->Branch("_metUnclUp",                    &o_metUnclUp,                    "_metUnclUp/D");
+    tree->Branch("_metResDown",                   &o_metResDown,                   "_metResDown/D");
+    tree->Branch("_metResUp",                     &o_metResUp,                     "_metResUp/D");
 
-    outputTree->Branch("_metPhi",                       &o_metPhi,                       "_metPhi/D");
-    outputTree->Branch("_metType1Phi",                  &o_metType1Phi,                  "_metType1Phi/D");
-    outputTree->Branch("_metRawPhi",                    &o_metRawPhi,                    "_metRawPhi/D");
-    outputTree->Branch("_metPhiJECDown",                &o_metPhiJECDown,                "_metPhiJECDown/D");
-    outputTree->Branch("_metPhiJECUp",                  &o_metPhiJECUp,                  "_metPhiJECUp/D");
-    outputTree->Branch("_metPhiUnclDown",               &o_metPhiUnclDown,               "_metPhiUnclDown/D");
-    outputTree->Branch("_metPhiUnclUp",                 &o_metPhiUnclUp,                 "_metPhiUnclUp/D");
-    outputTree->Branch("_metPhiResDown",                &o_metPhiResDown,                "_metPhiResDown/D");
-    outputTree->Branch("_metPhiResUp",                  &o_metPhiResUp,                  "_metPhiResUp/D");
-    outputTree->Branch("_metSignificance",              &o_metSignificance,              "_metSignificance/D");
+    tree->Branch("_metPhi",                       &o_metPhi,                       "_metPhi/D");
+    tree->Branch("_metType1Phi",                  &o_metType1Phi,                  "_metType1Phi/D");
+    tree->Branch("_metRawPhi",                    &o_metRawPhi,                    "_metRawPhi/D");
+    tree->Branch("_metPhiJECDown",                &o_metPhiJECDown,                "_metPhiJECDown/D");
+    tree->Branch("_metPhiJECUp",                  &o_metPhiJECUp,                  "_metPhiJECUp/D");
+    tree->Branch("_metPhiUnclDown",               &o_metPhiUnclDown,               "_metPhiUnclDown/D");
+    tree->Branch("_metPhiUnclUp",                 &o_metPhiUnclUp,                 "_metPhiUnclUp/D");
+    tree->Branch("_metPhiResDown",                &o_metPhiResDown,                "_metPhiResDown/D");
+    tree->Branch("_metPhiResUp",                  &o_metPhiResUp,                  "_metPhiResUp/D");
+    tree->Branch("_metSignificance",              &o_metSignificance,              "_metSignificance/D");
 
-    outputTree->Branch("_metPuppi",                          &o_metPuppi,                          "_metPuppi/D");
-    outputTree->Branch("_metPuppiRaw",                       &o_metPuppiRaw,                       "_metPuppiRaw/D");
-    outputTree->Branch("_metPuppiJECDown",                   &o_metPuppiJECDown,                   "_metPuppiJECDown/D");
-    outputTree->Branch("_metPuppiJECUp",                     &o_metPuppiJECUp,                     "_metPuppiJECUp/D");
-    outputTree->Branch("_metPuppiUnclDown",                  &o_metPuppiUnclDown,                  "_metPuppiUnclDown/D");
-    outputTree->Branch("_metPuppiUnclUp",                    &o_metPuppiUnclUp,                    "_metPuppiUnclUp/D");
-    outputTree->Branch("_metPuppiResDown",                   &o_metPuppiResDown,                   "_metPuppiResDown/D");
-    outputTree->Branch("_metPuppiResUp",                     &o_metPuppiResUp,                     "_metPuppiResUp/D");
+    tree->Branch("_metPuppi",                          &o_metPuppi,                          "_metPuppi/D");
+    tree->Branch("_metPuppiRaw",                       &o_metPuppiRaw,                       "_metPuppiRaw/D");
+    tree->Branch("_metPuppiJECDown",                   &o_metPuppiJECDown,                   "_metPuppiJECDown/D");
+    tree->Branch("_metPuppiJECUp",                     &o_metPuppiJECUp,                     "_metPuppiJECUp/D");
+    tree->Branch("_metPuppiUnclDown",                  &o_metPuppiUnclDown,                  "_metPuppiUnclDown/D");
+    tree->Branch("_metPuppiUnclUp",                    &o_metPuppiUnclUp,                    "_metPuppiUnclUp/D");
+    tree->Branch("_metPuppiResDown",                   &o_metPuppiResDown,                   "_metPuppiResDown/D");
+    tree->Branch("_metPuppiResUp",                     &o_metPuppiResUp,                     "_metPuppiResUp/D");
 
-    outputTree->Branch("_metPuppiPhi",                       &o_metPuppiPhi,                       "_metPuppiPhi/D");
-    outputTree->Branch("_metPuppiRawPhi",                    &o_metPuppiRawPhi,                    "_metPuppiRawPhi/D");
-    outputTree->Branch("_metPuppiPhiJECDown",                &o_metPuppiPhiJECDown,                "_metPuppiPhiJECDown/D");
-    outputTree->Branch("_metPuppiPhiJECUp",                  &o_metPuppiPhiJECUp,                  "_metPuppiPhiJECUp/D");
-    outputTree->Branch("_metPuppiPhiUnclDown",               &o_metPuppiPhiUnclDown,               "_metPuppiPhiUnclDown/D");
-    outputTree->Branch("_metPuppiPhiUnclUp",                 &o_metPuppiPhiUnclUp,                 "_metPuppiPhiUnclUp/D");
-    outputTree->Branch("_metPuppiPhiResDown",                &o_metPuppiPhiResDown,                "_metPuppiPhiResDown/D");
-    outputTree->Branch("_metPuppiPhiResUp",                  &o_metPuppiPhiResUp,                  "_metPuppiPhiResUp/D");
+    tree->Branch("_metPuppiPhi",                       &o_metPuppiPhi,                       "_metPuppiPhi/D");
+    tree->Branch("_metPuppiRawPhi",                    &o_metPuppiRawPhi,                    "_metPuppiRawPhi/D");
+    tree->Branch("_metPuppiPhiJECDown",                &o_metPuppiPhiJECDown,                "_metPuppiPhiJECDown/D");
+    tree->Branch("_metPuppiPhiJECUp",                  &o_metPuppiPhiJECUp,                  "_metPuppiPhiJECUp/D");
+    tree->Branch("_metPuppiPhiUnclDown",               &o_metPuppiPhiUnclDown,               "_metPuppiPhiUnclDown/D");
+    tree->Branch("_metPuppiPhiUnclUp",                 &o_metPuppiPhiUnclUp,                 "_metPuppiPhiUnclUp/D");
+    tree->Branch("_metPuppiPhiResDown",                &o_metPuppiPhiResDown,                "_metPuppiPhiResDown/D");
+    tree->Branch("_metPuppiPhiResUp",                  &o_metPuppiPhiResUp,                  "_metPuppiPhiResUp/D");
 }
 
 
 Skimmer::Skimmer(TString inputfilename, TString outputfilename)
 {
+    isData = (inputfilename.Index("Run20") != -1);
     input = new TFile(inputfilename, "open");
     inputtree = (TTree*)input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init_input_branches(inputtree);
-    isData = (inputfilename.Index("Run20") != -1);
     std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
     std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( "blackJackAndHookers/nVertices" ) );
@@ -708,50 +741,52 @@ void Skimmer::Skim(TString skimcondition)
             o_PV_xErr = i_PV_xErr;
             o_PV_yErr = i_PV_yErr;
             o_PV_zErr = i_PV_zErr;
-            o_prefireWeight = i_prefireWeight;
-            o_prefireWeightUp = i_prefireWeightUp;
-            o_prefireWeightDown = i_prefireWeightDown;
-            o_nTrueInt = i_nTrueInt;
-            o_weight   = i_weight;
-            o_lheHTIncoming = i_lheHTIncoming;
-            o_ctauHN = i_ctauHN;
-            o_nLheTau = i_nLheTau;
-            o_nLheWeights = i_nLheWeights;
-            for(unsigned i = 0; i < i_nLheWeights; i++) o_lheWeight[i] = i_lheWeight[i];
-            o_nPsWeights = i_nPsWeights;
-            for(unsigned i = 0; i < i_nPsWeights; i++) o_psWeight[i] = i_psWeight[i];
-            o_ttgEventType = i_ttgEventType;
-            o_zgEventType  = i_zgEventType;
-            o_gen_met      = i_gen_met;
-            o_gen_metPhi   = i_gen_metPhi;
-            o_gen_nPh      = i_gen_nPh;
-            for(unsigned i = 0; i < i_gen_nPh; i++){
-                o_gen_phStatus[i] = i_gen_phStatus[i];
-                o_gen_phPt[i] = i_gen_phPt[i];   
-                o_gen_phEta[i] = i_gen_phEta[i];   
-                o_gen_phPhi[i] = i_gen_phPhi[i];   
-                o_gen_phE[i] = i_gen_phE[i];   
-                o_gen_phMomPdg[i] = i_gen_phMomPdg[i];   
-                o_gen_phIsPrompt[i] = i_gen_phIsPrompt[i];   
-                o_gen_phMinDeltaR[i] = i_gen_phMinDeltaR[i];   
-                o_gen_phPassParentage[i] = i_gen_phPassParentage[i];   
-            }
-            o_gen_nL = i_gen_nL;
-            for(unsigned i = 0; i < i_gen_nL; i++){
-                o_gen_lPt[i] = i_gen_lPt[i];   
-                o_gen_lEta[i] = i_gen_lEta[i];   
-                o_gen_lPhi[i] = i_gen_lPhi[i];   
-                o_gen_lE[i] = i_gen_lE[i];   
-                o_gen_lFlavor[i] = i_gen_lFlavor[i];   
-                o_gen_lCharge[i] = i_gen_lCharge[i];   
-                o_gen_lMomPdg[i] = i_gen_lMomPdg[i];   
-                o_gen_vertex_x[i] = i_gen_vertex_x[i];
-                o_gen_vertex_y[i] = i_gen_vertex_y[i];
-                o_gen_vertex_z[i] = i_gen_vertex_z[i];
-                o_gen_lIsPrompt[i] = i_gen_lIsPrompt[i];   
-                o_gen_lDecayedHadr[i] = i_gen_lDecayedHadr[i];
-                o_gen_lMinDeltaR[i] = i_gen_lMinDeltaR[i];   
-                o_gen_lPassParentage[i] = i_gen_lPassParentage[i];   
+            if(!isData){
+                o_prefireWeight = i_prefireWeight;
+                o_prefireWeightUp = i_prefireWeightUp;
+                o_prefireWeightDown = i_prefireWeightDown;
+                o_nTrueInt = i_nTrueInt;
+                o_weight   = i_weight;
+                o_lheHTIncoming = i_lheHTIncoming;
+                o_ctauHN = i_ctauHN;
+                o_nLheTau = i_nLheTau;
+                o_nLheWeights = i_nLheWeights;
+                for(unsigned i = 0; i < i_nLheWeights; i++) o_lheWeight[i] = i_lheWeight[i];
+                o_nPsWeights = i_nPsWeights;
+                for(unsigned i = 0; i < i_nPsWeights; i++) o_psWeight[i] = i_psWeight[i];
+                o_ttgEventType = i_ttgEventType;
+                o_zgEventType  = i_zgEventType;
+                o_gen_met      = i_gen_met;
+                o_gen_metPhi   = i_gen_metPhi;
+                o_gen_nPh      = i_gen_nPh;
+                for(unsigned i = 0; i < i_gen_nPh; i++){
+                    o_gen_phStatus[i] = i_gen_phStatus[i];
+                    o_gen_phPt[i] = i_gen_phPt[i];   
+                    o_gen_phEta[i] = i_gen_phEta[i];   
+                    o_gen_phPhi[i] = i_gen_phPhi[i];   
+                    o_gen_phE[i] = i_gen_phE[i];   
+                    o_gen_phMomPdg[i] = i_gen_phMomPdg[i];   
+                    o_gen_phIsPrompt[i] = i_gen_phIsPrompt[i];   
+                    o_gen_phMinDeltaR[i] = i_gen_phMinDeltaR[i];   
+                    o_gen_phPassParentage[i] = i_gen_phPassParentage[i];   
+                }
+                o_gen_nL = i_gen_nL;
+                for(unsigned i = 0; i < i_gen_nL; i++){
+                    o_gen_lPt[i] = i_gen_lPt[i];   
+                    o_gen_lEta[i] = i_gen_lEta[i];   
+                    o_gen_lPhi[i] = i_gen_lPhi[i];   
+                    o_gen_lE[i] = i_gen_lE[i];   
+                    o_gen_lFlavor[i] = i_gen_lFlavor[i];   
+                    o_gen_lCharge[i] = i_gen_lCharge[i];   
+                    o_gen_lMomPdg[i] = i_gen_lMomPdg[i];   
+                    o_gen_vertex_x[i] = i_gen_vertex_x[i];
+                    o_gen_vertex_y[i] = i_gen_vertex_y[i];
+                    o_gen_vertex_z[i] = i_gen_vertex_z[i];
+                    o_gen_lIsPrompt[i] = i_gen_lIsPrompt[i];   
+                    o_gen_lDecayedHadr[i] = i_gen_lDecayedHadr[i];
+                    o_gen_lMinDeltaR[i] = i_gen_lMinDeltaR[i];   
+                    o_gen_lPassParentage[i] = i_gen_lPassParentage[i];   
+                }
             }
             o_passMETFilters = i_passMETFilters;
             o_Flag_goodVertices = i_Flag_goodVertices;
@@ -812,14 +847,16 @@ void Skimmer::Skim(TString skimcondition)
                 o_tauIsoMVADBdR03newDMwLT[i] = i_tauIsoMVADBdR03newDMwLT[i];
                 o_tauIsoMVAPWnewDMwLT[i] = i_tauIsoMVAPWnewDMwLT[i];
                 o_tauIsoMVAPWoldDMwLT[i] = i_tauIsoMVAPWoldDMwLT[i];
-                o_lIsPrompt[i] = i_lIsPrompt[i];   
-                o_lMatchPdgId[i] = i_lMatchPdgId[i];   
-                o_lMatchCharge[i] = i_lMatchCharge[i];   
-                o_tauGenStatus[i] = i_tauGenStatus[i];   
-                o_lMomPdgId[i] = i_lMomPdgId[i];   
-                o_lProvenance[i] = i_lProvenance[i];   
-                o_lProvenanceCompressed[i] = i_lProvenanceCompressed[i];   
-                o_lProvenanceConversion[i] = i_lProvenanceConversion[i];   
+                if(!isData){
+                    o_lIsPrompt[i] = i_lIsPrompt[i];   
+                    o_lMatchPdgId[i] = i_lMatchPdgId[i];   
+                    o_lMatchCharge[i] = i_lMatchCharge[i];   
+                    o_tauGenStatus[i] = i_tauGenStatus[i];   
+                    o_lMomPdgId[i] = i_lMomPdgId[i];   
+                    o_lProvenance[i] = i_lProvenance[i];   
+                    o_lProvenanceCompressed[i] = i_lProvenanceCompressed[i];   
+                    o_lProvenanceConversion[i] = i_lProvenanceConversion[i];   
+                }
                 o_lPtCorr[i] = i_lPtCorr[i];   
                 o_lPtScaleUp[i] = i_lPtScaleUp[i];   
                 o_lPtScaleDown[i] = i_lPtScaleDown[i];   
@@ -878,8 +915,10 @@ void Skimmer::Skim(TString skimcondition)
                 o_phHadTowOverEm[i] = i_phHadTowOverEm[i];
                 o_phPassElectronVeto[i] = i_phPassElectronVeto[i];   
                 o_phHasPixelSeed[i] = i_phHasPixelSeed[i];   
-                o_phIsPrompt[i] = i_phIsPrompt[i];   
-                o_phMatchPdgId[i] = i_phMatchPdgId[i];   
+                if(!isData){
+                    o_phIsPrompt[i] = i_phIsPrompt[i];   
+                    o_phMatchPdgId[i] = i_phMatchPdgId[i];   
+                }
                 o_phPtCorr[i] = i_phPtCorr[i];   
                 o_phPtScaleUp[i] = i_phPtScaleUp[i];   
                 o_phPtScaleDown[i] = i_phPtScaleDown[i];   
