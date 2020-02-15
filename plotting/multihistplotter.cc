@@ -116,7 +116,7 @@ int main(int argc, char * argv[])
             lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
             
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
 
             // Draw log version
             pad->Clear();
@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
             lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
             
             pad->Modified();
-            c->Print(pathname_log + histname + ".pdf");
+            c->Print(pathname_log + histname + ".png");
 
 
 
@@ -163,7 +163,7 @@ int main(int argc, char * argv[])
                 lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
                 pad->Modified();
-                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
+                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
             }
         }
     }

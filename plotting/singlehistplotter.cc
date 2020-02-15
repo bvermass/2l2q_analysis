@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
             CMSandLumi->Draw();
 
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
 
             // Efficiencies are calculated right here as TGraphAsymmErrors
             if(histname.Index("eff_num") != -1){
@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
                 CMSandLumi->Draw();
 
                 pad->Modified();
-                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
+                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
             }
 
             // Mini analyzer specific plots
@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
             CMSandLumi->Draw();
 
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
         }
     }
 }
@@ -168,7 +168,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         CMSandLumi->Draw();
 
         pad->Modified();
-        c->Print(pathname_lin + plotname + ".pdf");
+        c->Print(pathname_lin + plotname + ".png");
 
         // Draw log version
         pad->Clear();
@@ -183,6 +183,6 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         CMSandLumi->Draw();
 
         pad->Modified();
-        c->Print(pathname_log + plotname + ".pdf");
+        c->Print(pathname_log + plotname + ".png");
     }
 }

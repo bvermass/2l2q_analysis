@@ -160,7 +160,7 @@ int main(int argc, char * argv[])
             CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
 
             c->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
 
             // Plot ROC for several V2 (only for plots with 1 sig-bkg combo):
             if(histname.Index("_V2-3e-05") != -1 and files_signal.size() == 1 and histname.Index("_M-") != -1){
@@ -185,17 +185,17 @@ int main(int argc, char * argv[])
                     gSystem->Exec("mkdir -p " + pathname_lin);
 
                     c->Modified();
-                    c->Print(pathname_lin + histname + ".pdf");
+                    c->Print(pathname_lin + histname + ".png");
 
                     multigraph->GetXaxis()->SetRangeUser(0., 0.1);
                     multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
                     c->Modified();
-                    c->Print(pathname_lin + histname + "_zoom.pdf");
+                    c->Print(pathname_lin + histname + "_zoom.png");
 
                     //c->SetLogx(1);
                     //c->Modified();
-                    //c->Print(pathname_log + histname + "_zoom.pdf");
+                    //c->Print(pathname_log + histname + "_zoom.png");
                 }
             }
             // Plot PFN vs BDT
@@ -205,17 +205,17 @@ int main(int argc, char * argv[])
 
             //        histname.ReplaceAll("PFN", "PFNvsBDT");
             //        c->Modified();
-            //        c->Print(pathname_lin + histname + ".pdf");
+            //        c->Print(pathname_lin + histname + ".png");
 
             //        multigraph->GetXaxis()->SetRangeUser(0., 0.1);
             //        multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
             //        c->Modified();
-            //        c->Print(pathname_lin + histname + "_zoom.pdf");
+            //        c->Print(pathname_lin + histname + "_zoom.png");
 
             //        c->SetLogx(1);
             //        c->Modified();
-            //        c->Print(pathname_log + histname + "_zoom.pdf");
+            //        c->Print(pathname_log + histname + "_zoom.png");
             //    }
             //}
         }
@@ -260,7 +260,7 @@ int main(int argc, char * argv[])
                 lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
                 c->Modified();
-                c->Print(pathname_lin + histname + ".pdf");
+                c->Print(pathname_lin + histname + ".png");
             }
         }
     }

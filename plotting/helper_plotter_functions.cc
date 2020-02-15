@@ -71,7 +71,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     }
 
-    return "/user/bvermass/public/2l2q_analysis/" + plottype + specific_dir;
+    return "/user/bvermass/public_html/2l2q_analysis/" + plottype + specific_dir;
 }
 
 
@@ -98,6 +98,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
 
     gSystem->Exec("mkdir -p " + fullname);
+    gSystem->Exec("cp /user/bvermass/public_html/index.php " + fullname);
     return fullname;
 }
 
