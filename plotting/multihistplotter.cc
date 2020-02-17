@@ -209,7 +209,7 @@ int main(int argc, char * argv[])
                     for(int i = 0; i < files.size(); i++){
                         //find corresponding meanqT histname by adapting absScale histname
                         TString meanqT_histname = histname;
-                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "").ReplaceAll("_metXY", "");
+                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "").ReplaceAll("_metXY", "").ReplaceAll("_metPuppiRaw", "").ReplaceAll("_metPuppi", "");
                         //make a copy of the numerator histogram, then divide it by the denominator histogram
                         hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone(meanqT_histname + std::to_string(i)));
                         if(hists_meanqT[i] == 0 or hists_meanqT[i]->GetMaximum() == 0) continue;
@@ -247,7 +247,9 @@ int main(int argc, char * argv[])
                     }
 
                     multigraph->Draw("AP pmc plc");
-                    multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
+                    multigraph->SetMaximum(1.1);
+                    multigraph->SetMinimum(0.65);
+                    //multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
                     legend.Draw("same");
                     CMSandLumi->Draw();
 
@@ -313,7 +315,15 @@ int main(int argc, char * argv[])
                 }
 
                 multigraph->Draw("AP pmc plc");
-                multigraph->SetMaximum(1.15*multigraph->GetHistogram()->GetMaximum());
+                if(histname.Contains("_AbsScale_vsqT_uperp")){
+                    multigraph->SetMaximum(35);
+                    multigraph->SetMinimum(0);
+                }
+                else if(histname.Contains("_AbsScale_vsqT")){
+                    multigraph->SetMaximum(50);
+                    multigraph->SetMinimum(0);
+                }
+                else multigraph->SetMaximum(1.15*multigraph->GetHistogram()->GetMaximum());
                 legend.Draw("same");
                 CMSandLumi->Draw();
 

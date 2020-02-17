@@ -1,6 +1,6 @@
 METResolution_Run2018C_ee 1
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_EGamma_Run2018C.root     Run2018C
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Triboson.root Triboson
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Top.root      Top
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_Diboson.root  Diboson
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_Background_DYJets.root   DY
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_EGamma_Run2018C.root     Run2018C
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_Background_Triboson.root Triboson
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_Background_Top.root      Top
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_Background_Diboson.root  Diboson
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_Background_DYJets_Jetbinned.root   DY

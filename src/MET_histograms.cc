@@ -150,27 +150,37 @@ std::pair<double,double> full_analyzer::METXYCorr_Met_MetPhi(double uncormet, do
 
 
 void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
-    (*hists)[prefix+"_met"]                     = new TH1F(prefix+"_met", ";E_{T}^{miss} [GeV];Events", 50, 0, 300); 
-    (*hists)[prefix+"_metSM"]                   = new TH1F(prefix+"_metSM", ";Smeared E_{T}^{miss} [GeV];Events", 50, 0, 300); 
-    (*hists)[prefix+"_metXY"]                   = new TH1F(prefix+"_metXY", ";E_{T}^{miss} [GeV];Events", 50, 0, 300); 
-    (*hists)[prefix+"_metRaw"]                  = new TH1F(prefix+"_metRaw", ";Raw E_{T}^{miss} [GeV];Events", 50, 0, 300); 
-    (*hists)[prefix+"_metPhi"]                  = new TH1F(prefix+"_metPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415); 
-    (*hists)[prefix+"_metSMPhi"]                = new TH1F(prefix+"_metSMPhi", ";Smeared E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415); 
-    (*hists)[prefix+"_metXYPhi"]                = new TH1F(prefix+"_metXYPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415); 
-    (*hists)[prefix+"_metRawPhi"]               = new TH1F(prefix+"_metRawPhi", ";Raw E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415); 
+    (*hists)[prefix+"_met"]                     = new TH1F(prefix+"_met", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metSM"]                   = new TH1F(prefix+"_metSM", ";Smeared E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metXY"]                   = new TH1F(prefix+"_metXY", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metRaw"]                  = new TH1F(prefix+"_metRaw", ";Raw E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metPuppi"]                = new TH1F(prefix+"_metPuppi", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metPuppiRaw"]             = new TH1F(prefix+"_metPuppiRaw", ";Raw Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metPhi"]                  = new TH1F(prefix+"_metPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metSMPhi"]                = new TH1F(prefix+"_metSMPhi", ";Smeared E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metXYPhi"]                = new TH1F(prefix+"_metXYPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metRawPhi"]               = new TH1F(prefix+"_metRawPhi", ";Raw E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metPuppiPhi"]             = new TH1F(prefix+"_metPuppiPhi", ";Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metPuppiRawPhi"]          = new TH1F(prefix+"_metPuppiRawPhi", ";Raw Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     
-    (*hists)[prefix+"_nPV"]                     = new TH1F(prefix+"_nPV", ";nPV;Events", 100, 0, 100); 
+    (*hists)[prefix+"_nPV"]                     = new TH1F(prefix+"_nPV", ";nPV;Events", 100, 0, 100);
 
     (*hists)[prefix+"_q_pt"]                    = new TH1F(prefix+"_q_pt", ";q #it{p}_{T} [GeV];Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt"]                   = new TH1F(prefix+"_uT_pt", ";u_{T} [GeV];Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt_metXY"]             = new TH1F(prefix+"_uT_pt_metXY", ";u_{T} [GeV];Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt_metRaw"]            = new TH1F(prefix+"_uT_pt_metRaw", ";u_{T} [GeV];Events", 100, 0, 200);
+    (*hists)[prefix+"_uT_pt_metPuppi"]          = new TH1F(prefix+"_uT_pt_metPuppi", ";u_{T} [GeV] (Puppi);Events", 100, 0, 200);
+    (*hists)[prefix+"_uT_pt_metPuppiRaw"]       = new TH1F(prefix+"_uT_pt_metPuppiRaw", ";u_{T} [GeV] (Raw Puppi);Events", 100, 0, 200);
     (*hists)[prefix+"_upara"]                   = new TH1F(prefix+"_upara", ";u_{#parallel} + q_{T} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uperp"]                   = new TH1F(prefix+"_uperp", ";u_{#perp}  [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metXY"]             = new TH1F(prefix+"_upara_metXY", ";u_{#parallel} + q_{T} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metXY"]             = new TH1F(prefix+"_uperp_metXY", ";u_{#perp}  [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metRaw"]            = new TH1F(prefix+"_upara_metRaw", ";u_{#parallel} + q_{T} [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metRaw"]            = new TH1F(prefix+"_uperp_metRaw", ";u_{#perp}  [GeV] (Raw MET);Events", 100, -200, 200);
+    (*hists)[prefix+"_upara_metPuppi"]          = new TH1F(prefix+"_upara_metPuppi", ";u_{#parallel} + q_{T} [GeV] (Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_uperp_metPuppi"]          = new TH1F(prefix+"_uperp_metPuppi", ";u_{#perp}  [GeV] (Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_upara_metPuppiRaw"]       = new TH1F(prefix+"_upara_metPuppiRaw", ";u_{#parallel} + q_{T} [GeV] (Raw Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_uperp_metPuppiRaw"]       = new TH1F(prefix+"_uperp_metPuppiRaw", ";u_{#perp}  [GeV] (Raw Puppi);Events", 100, -200, 200);
 
     int nbins = 15;
     double xbins_vsqT[nbins] = {10, 20, 30, 40, 50, 70, 90, 110, 130, 150, 170, 200, 240, 320, 400, 500};
@@ -179,12 +189,18 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]       = new TH2F(prefix+"_AbsScale_vsqT_metXY", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppi"]    = new TH2F(prefix+"_AbsScale_vsqT_metPuppi", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsqT_metPuppiRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]       = new TH2F(prefix+"_AbsScale_vsqT_uperp", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]= new TH2F(prefix+"_AbsScale_vsqT_uperp_metRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metXY", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppi"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metPuppi", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metPuppiRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]      = new TH2F(prefix+"_AbsScale_vsnPV_metXY", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppi"]   = new TH2F(prefix+"_AbsScale_vsnPV_metPuppi", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsnPV_metPuppiRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists)[prefix+"_meanqT_vsqT_num"]             = new TH1F(prefix+"_meanqT_vsqT_num", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
     (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
 }
@@ -192,19 +208,24 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
 void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
 
     // do xy corrections
-    setRunEra(_runNb);
-    std::pair<double, double > _metAndPhi_XYCorr = METXYCorr_Met_MetPhi(_met, _metPhi, _nVertex);
-    if(_metAndPhi_XYCorr.first == 0 and _metAndPhi_XYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
+    //setRunEra(_runNb);
+    //std::pair<double, double > _metAndPhi_XYCorr = METXYCorr_Met_MetPhi(_met, _metPhi, _nVertex);
+    //if(_metAndPhi_XYCorr.first == 0 and _metAndPhi_XYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
 
 
-    (*hists)[prefix+"_met"]->Fill(_met, event_weight);
+    (*hists)[prefix+"_met"]->Fill(_metType1, event_weight);
     (*hists)[prefix+"_metSM"]->Fill(_met, event_weight); //FIX
-    (*hists)[prefix+"_metXY"]->Fill(_metAndPhi_XYCorr.first, event_weight); //FIX
+    (*hists)[prefix+"_metXY"]->Fill(_met, event_weight);
     (*hists)[prefix+"_metRaw"]->Fill(_metRaw, event_weight);
-    (*hists)[prefix+"_metPhi"]->Fill(_metPhi, event_weight);
+    (*hists)[prefix+"_metPuppi"]->Fill(_metPuppi, event_weight);
+    (*hists)[prefix+"_metPuppiRaw"]->Fill(_metPuppiRaw, event_weight);
+    (*hists)[prefix+"_metPhi"]->Fill(_metType1Phi, event_weight);
     (*hists)[prefix+"_metSMPhi"]->Fill(_metPhi, event_weight);//FIX
-    (*hists)[prefix+"_metXYPhi"]->Fill(_metAndPhi_XYCorr.second, event_weight);//FIX
+    (*hists)[prefix+"_metXYPhi"]->Fill(_metPhi, event_weight);
     (*hists)[prefix+"_metRawPhi"]->Fill(_metRawPhi, event_weight);
+    (*hists)[prefix+"_metXYPhi"]->Fill(_metPhi, event_weight);
+    (*hists)[prefix+"_metPuppiPhi"]->Fill(_metPuppiPhi, event_weight);
+    (*hists)[prefix+"_metPuppiRawPhi"]->Fill(_metPuppiRawPhi, event_weight);
 
     (*hists)[prefix+"_nPV"]->Fill(_nVertex, event_weight);
 
@@ -212,12 +233,16 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
     LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
     LorentzVector q_vec = l1_vec + l2_vec; // q_vec = Z boson
-    LorentzVector met_vec(_met, 0, _metPhi, _met); // met is always transverse (eta = 0)
+    LorentzVector met_vec(_metType1, 0, _metType1Phi, _met); // met is always transverse (eta = 0)
     LorentzVector metRaw_vec(_metRaw, 0, _metRawPhi, _metRaw);
-    LorentzVector metXY_vec(_metAndPhi_XYCorr.first, 0, _metAndPhi_XYCorr.second, _metAndPhi_XYCorr.first);
+    LorentzVector metXY_vec(_met, 0, _metPhi, _met);
+    LorentzVector metPuppi_vec(_metPuppi, 0, _metPuppiPhi, _metPuppi);
+    LorentzVector metPuppiRaw_vec(_metPuppiRaw, 0, _metPuppiRawPhi, _metPuppiRaw);
     LorentzVector uT_vec = -(q_vec + met_vec);  // Hadronic recoil u_T is defined as the sum of all PF particles momenta except for the Z boson. Therefore uT + q + met = 0
     LorentzVector uT_frommetXY_vec = -(q_vec + metXY_vec);
     LorentzVector uT_frommetRaw_vec = -(q_vec + metRaw_vec);
+    LorentzVector uT_frommetPuppi_vec = -(q_vec + metPuppi_vec);
+    LorentzVector uT_frommetPuppiRaw_vec = -(q_vec + metPuppiRaw_vec);
 
     // Calculate, in TRANSVERSE PLANE, the parallel and perpendicular component of uT to Z
     double upara = uT_vec.pt() * cos( uT_vec.phi() - q_vec.phi() );
@@ -226,26 +251,42 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     double uperp_frommetRaw = uT_frommetRaw_vec.pt() * sin( uT_frommetRaw_vec.phi() - q_vec.phi() );
     double upara_frommetXY = uT_frommetXY_vec.pt() * cos( uT_frommetXY_vec.phi() - q_vec.phi() );
     double uperp_frommetXY = uT_frommetXY_vec.pt() * sin( uT_frommetXY_vec.phi() - q_vec.phi() );
+    double upara_frommetPuppi = uT_frommetPuppi_vec.pt() * cos( uT_frommetPuppi_vec.phi() - q_vec.phi() );
+    double uperp_frommetPuppi = uT_frommetPuppi_vec.pt() * sin( uT_frommetPuppi_vec.phi() - q_vec.phi() );
+    double upara_frommetPuppiRaw = uT_frommetPuppiRaw_vec.pt() * cos( uT_frommetPuppiRaw_vec.phi() - q_vec.phi() );
+    double uperp_frommetPuppiRaw = uT_frommetPuppiRaw_vec.pt() * sin( uT_frommetPuppiRaw_vec.phi() - q_vec.phi() );
 
     (*hists)[prefix+"_q_pt"]->Fill(q_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt"]->Fill(uT_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt_metXY"]->Fill(uT_frommetXY_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt_metRaw"]->Fill(uT_frommetRaw_vec.pt(), event_weight);
+    (*hists)[prefix+"_uT_pt_metPuppi"]->Fill(uT_frommetPuppi_vec.pt(), event_weight);
+    (*hists)[prefix+"_uT_pt_metPuppiRaw"]->Fill(uT_frommetPuppiRaw_vec.pt(), event_weight);
     (*hists)[prefix+"_upara"]->Fill(upara, event_weight);
     (*hists)[prefix+"_uperp"]->Fill(uperp, event_weight);
     (*hists)[prefix+"_upara_metXY"]->Fill(upara_frommetXY, event_weight);
     (*hists)[prefix+"_uperp_metXY"]->Fill(uperp_frommetXY, event_weight);
     (*hists)[prefix+"_upara_metRaw"]->Fill(upara_frommetRaw, event_weight);
     (*hists)[prefix+"_uperp_metRaw"]->Fill(uperp_frommetRaw, event_weight);
+    (*hists)[prefix+"_upara_metPuppi"]->Fill(upara_frommetPuppi, event_weight);
+    (*hists)[prefix+"_uperp_metPuppi"]->Fill(uperp_frommetPuppi, event_weight);
+    (*hists)[prefix+"_upara_metPuppiRaw"]->Fill(upara_frommetPuppiRaw, event_weight);
+    (*hists)[prefix+"_uperp_metPuppiRaw"]->Fill(uperp_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT"]->Fill(q_vec.pt(), upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]->Fill(q_vec.pt(), upara_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppi"]->Fill(q_vec.pt(), upara_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiRaw"]->Fill(q_vec.pt(), upara_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]->Fill(q_vec.pt(), uperp, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"]->Fill(q_vec.pt(), uperp_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]->Fill(q_vec.pt(), uperp_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppi"]->Fill(q_vec.pt(), uperp_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiRaw"]->Fill(q_vec.pt(), uperp_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV"]->Fill(_nVertex, upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]->Fill(_nVertex, upara_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]->Fill(_nVertex, upara_frommetRaw, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppi"]->Fill(_nVertex, upara_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiRaw"]->Fill(_nVertex, upara_frommetPuppiRaw, event_weight);
     (*hists)[prefix+"_meanqT_vsqT_num"]->Fill(q_vec.pt(), q_vec.pt()*event_weight);
     (*hists)[prefix+"_meanqT_vsqT_den"]->Fill(q_vec.pt(), event_weight);
 }

@@ -26,6 +26,7 @@ function hadd_specific_backgrounds {
     if [ 0 -lt $(ls ${1}${2}Background_DYJetsToLL_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding DY files: \n"
         hadd -f ${1}${2}Background_DYJets.root ${1}${2}Background_DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root ${1}${2}Background_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root
+        hadd -f ${1}${2}Background_DYJets_Jetbinned.root ${1}${2}Background_DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8.root ${1}${2}Background_DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8.root
     fi
     #diboson 
     if [ 0 -lt $(ls ${1}${2}Background_WZ* 2>/dev/null | wc -w) ]; then
@@ -45,7 +46,7 @@ function hadd_specific_backgrounds {
     #Top
     if [ 0 -lt $(ls ${1}${2}Background_ST_* 2>/dev/null | wc -w) ]; then
         echo -e "\nhadding Top files: \n"
-        hadd -f ${1}${2}Background_Top.root ${1}${2}Background_TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-madgraph-pythia8.root ${1}${2}Background_ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8.root ${1}${2}Background_ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8.root ${1}${2}Background_ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8.root
+        hadd -f ${1}${2}Background_Top.root ${1}${2}Background_TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_TTToHadronic_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-madgraph-pythia8.root ${1}${2}Background_ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8.root ${1}${2}Background_ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8.root ${1}${2}Background_ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8.root
     fi
     #Data DoubleMuon
     if [ 0 -lt $(ls ${1}${2}DoubleMuon_Run2018* 2>/dev/null | wc -w) ]; then

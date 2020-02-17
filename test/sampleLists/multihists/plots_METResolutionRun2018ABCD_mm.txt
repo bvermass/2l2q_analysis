@@ -1,5 +1,5 @@
 METResolution_Run2018ABCD_mm
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018A.root     Run2018A
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018B.root     Run2018B
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018C.root     Run2018C
-/user/bvermass/public/MET_scale_resolution/histograms/METResolution/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018D.root     Run2018D
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018A.root     Run2018A
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018B.root     Run2018B
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018C.root     Run2018C
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018D.root     Run2018D
