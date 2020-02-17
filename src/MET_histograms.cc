@@ -176,15 +176,15 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     double xbins_vsqT[nbins] = {10, 20, 30, 40, 50, 70, 90, 110, 130, 150, 170, 200, 240, 320, 400, 500};
     double xbins_vsnPV[nbins] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60};
 
-    (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]       = new TH2F(prefix+"_AbsScale_vsqT_metXY", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]       = new TH2F(prefix+"_AbsScale_vsqT_uperp", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]= new TH2F(prefix+"_AbsScale_vsqT_uperp_metRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metXY", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 500, -500, 500);
-    (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]      = new TH2F(prefix+"_AbsScale_vsnPV_metXY", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 500, -500, 500);
+    (*hists2D)[prefix+"_AbsScale_vsqT"]             = new TH2F(prefix+"_AbsScale_vsqT", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]       = new TH2F(prefix+"_AbsScale_vsqT_metXY", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp"]       = new TH2F(prefix+"_AbsScale_vsqT_uperp", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]= new TH2F(prefix+"_AbsScale_vsqT_uperp_metRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metXY", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV"]            = new TH2F(prefix+"_AbsScale_vsnPV", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]      = new TH2F(prefix+"_AbsScale_vsnPV_metXY", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists)[prefix+"_meanqT_vsqT_num"]             = new TH1F(prefix+"_meanqT_vsqT_num", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
     (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
 }

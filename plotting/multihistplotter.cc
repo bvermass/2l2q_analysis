@@ -46,6 +46,7 @@ int main(int argc, char * argv[])
     pad->cd();
 
     TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
+    TLegend legend_profiles = get_legend(0.18, 0.84, 0.95, 0.93, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad);
@@ -210,7 +211,7 @@ int main(int argc, char * argv[])
                         TString meanqT_histname = histname;
                         meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "").ReplaceAll("_metXY", "");
                         //make a copy of the numerator histogram, then divide it by the denominator histogram
-                        hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone());
+                        hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone(meanqT_histname + std::to_string(i)));
                         if(hists_meanqT[i] == 0 or hists_meanqT[i]->GetMaximum() == 0) continue;
                         hists_meanqT[i]->Divide(hists_meanqT[i], (TH1*)files[i]->Get(meanqT_histname.ReplaceAll("vsqT_num", "vsqT_den")), 1, 1, "b");
 
@@ -267,10 +268,10 @@ int main(int argc, char * argv[])
                     for(int i_bin = 1; i_bin <= nbins; i_bin++){
                         pad->Clear();
                         pad->SetLogy(0);
-                        legend.Clear();
+                        legend_profiles.Clear();
 
                         TH1D* projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_projection_" + std::to_string(i_bin), i_bin, i_bin, "e");
-                        legend.AddEntry(projection, legends[i]);
+                        legend_profiles.AddEntry(projection, legends[i]);
                         TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]*x + [5]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
                         voigt->SetLineColor(kGreen+3);
                         voigt->SetLineWidth(2);
@@ -285,11 +286,15 @@ int main(int argc, char * argv[])
                             eFWHM[i_bin] = 0;
 
                             projection->Draw();
-                            legend.Draw("same");
+                            legend_profiles.Draw("same");
                             voigt->Draw("C same");
                             CMSandLumi->Draw();
-                            chi2latex.DrawLatex(1 - rightmargin*1.8, 1 - 2.2*topmargin, (TString)"#chi^{2}_{norm}: " + std::to_string((int)round(voigt->GetChisquare()/voigt->GetNDF())));
-                            FWHMlatex.DrawLatex(1 - rightmargin*1.8, 1 - 3.3*topmargin, (TString)"FWHM: " + std::to_string((int)FWHM[i_bin]));
+                            std::ostringstream chi2stream;
+                            chi2stream << 0.01*round(100*voigt->GetChisquare()/voigt->GetNDF());
+                            std::ostringstream FWHMstream;
+                            FWHMstream << 0.01*round(100*FWHM[i_bin]);
+                            chi2latex.DrawLatex(1 - rightmargin*1.8, 1 - 2.2*topmargin, (TString)"#chi^{2}_{norm}: " + chi2stream.str());
+                            FWHMlatex.DrawLatex(1 - rightmargin*1.8, 1 - 3.3*topmargin, (TString)"FWHM: " + FWHMstream.str());
 
                             pad->Modified();
                             c->Print(pathname_lin + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".pdf");
