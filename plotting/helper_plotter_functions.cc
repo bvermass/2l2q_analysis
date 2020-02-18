@@ -242,7 +242,7 @@ double computeAUC(TGraph* roc)
     return  fabs(round(area*10000)/100);
 }
 
-void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff)
+void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname)
 {
     double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;
     for(int j = eff_signal.size() -1;  j >= 0; j--){
@@ -257,12 +257,22 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
             break;
         }
     }
-    std::cout << " \\item Sig " << cp_eff_signal*100 << "\\% (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
-    std::cout << "Bkg " << cp_eff_bkg*100 << "\\% (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
-    std::cout << "PFN output > " << cp << std::endl;
-    //std::cout << " \\item Sig " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
-    //std::cout << "Bkg " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
-    //std::cout << "PFN output > " << cp << std::endl;
+    std::ostringstream eff_signal_stream;
+    eff_signal_stream << round(cp_eff_signal*10000)/100;
+    std::ostringstream eff_bkg_stream;
+    eff_bkg_stream << round(cp_eff_bkg*10000)/100;
+    std::ostringstream eff_signal_unc_stream;
+    eff_signal_unc_stream << round(cp_eff_signal_unc*10000)/100;
+    std::ostringstream eff_bkg_unc_stream;
+    eff_bkg_unc_stream << round(cp_eff_bkg_unc*10000)/100;
+    std::ostringstream eff_cp_stream;
+    eff_cp_stream << round(cp*10000)/100;
+
+    std::string content = (std::string)histname + "\n";
+    content += "\\item Sig " + eff_signal_stream.str() + "\\% (" + eff_signal_unc_stream.str() + " events)\\\\\n";
+    content += "Bkg " + eff_bkg_stream.str() + "\\% (" + eff_bkg_unc_stream.str() + " events)\\\\\n";
+    content += "PFN output > " + eff_cp_stream.str() + "\n\n";
+    filePutContents((std::string)general_pathname + "Signal_Bkg_Yields.txt", content, true);
 }
 
 

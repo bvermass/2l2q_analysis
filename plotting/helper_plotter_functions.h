@@ -4,6 +4,7 @@
 // c++ libraries
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cmath>
 #include <string>
 
@@ -22,6 +23,7 @@
 #include <TLatex.h>
 
 // other header files
+#include "../interface/helper_histo_functions.h"
 
 // class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
 class CMSandLuminosity{
@@ -52,7 +54,7 @@ void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 std::vector< double > computeEfficiencyForROC(TH1F* hist);
 double      computeAUC(TGraph* roc);
-void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff);
+void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname);
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);

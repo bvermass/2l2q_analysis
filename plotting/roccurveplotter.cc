@@ -87,6 +87,7 @@ int main(int argc, char * argv[])
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
+    gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -137,12 +138,12 @@ int main(int argc, char * argv[])
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
                 // calculate cutting point to get 75% signal efficiency for PFN or BDT
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.85);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.85, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95, general_pathname, histname);
 
                 TGraph* roc = get_roc(eff_signal, eff_bkg);
                 roc->SetLineColor(colors[i]);
