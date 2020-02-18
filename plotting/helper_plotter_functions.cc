@@ -97,6 +97,24 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_eff"))               fullname += "eff/";
     if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
 
+
+    //related to ABCD method
+    if(histname.Contains("quadA_"))              fullname += "quadA/";
+    if(histname.Contains("quadB_"))              fullname += "quadB/";
+    if(histname.Contains("quadC_"))              fullname += "quadC/";
+    if(histname.Contains("quadD_"))              fullname += "quadD/";
+    if(histname.Contains("quadAB_"))             fullname += "quadAB/";
+    if(histname.Contains("quadCD_"))             fullname += "quadCD/";
+    if(histname.Contains("quadAB-CD_"))          fullname += "quadAB-CD/";
+    if(histname.Contains("quadA-B_"))            fullname += "quadA-B/";
+    if(histname.Contains("quadC-D_"))            fullname += "quadC-D/";
+    if(histname.Contains("AoverB_"))             fullname += "AoverB/";
+    if(histname.Contains("CoverD_"))             fullname += "CoverD/";
+    if(histname.Contains("DtoCwithCD_"))         fullname += "DtoCwithCD/";
+    if(histname.Contains("BtoAwithCD_"))         fullname += "BtoAwithCD/";
+    if(histname.Contains("quadAwithBtoA_"))      fullname += "quadAwithBtoA/";
+    if(histname.Contains("quadCwithDtoC_"))      fullname += "quadCwithDtoC/";
+
     gSystem->Exec("mkdir -p " + fullname);
     gSystem->Exec("cp /user/bvermass/public_html/index.php " + fullname);
     return fullname;
