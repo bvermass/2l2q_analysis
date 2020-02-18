@@ -87,6 +87,7 @@ double HNLtagger::predict(PFNReader& pfn, int pfn_version, double M, double V)
     if(pfn_version == 4) return predict_PFN_v4(pfn, M, V);
     if(pfn_version == 5) return predict_PFN_v5(pfn, M, V);//V is actually ctau in v5
     if(pfn_version == 6) return predict_PFN_v6(pfn, M, V);//V is actually ctau in v6
+    if(pfn_version == 7) return predict_PFN_v7(pfn, M, V);
     std::cout << "wrong PFN version input: " << pfn_version << std::endl;
     return -1;
 }
@@ -150,6 +151,23 @@ double HNLtagger::predict_PFN_v6(PFNReader& pfn, double M, double ctau)
 {
     if(!isValid) return -1;
     std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, _SV_l1mass,  (double)_nJetConstituents, _l1Pt_log, _l1Eta, _mll, _dRll, _dRljet, M, ctau } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt_log[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
+double HNLtagger::predict_PFN_v7(PFNReader& pfn, double M, double ctau)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _dRljet, M, ctau } );
     std::vector< std::vector< double > > pfnInput;
 
     for( unsigned p = 0; p < _nJetConstituents; ++p){

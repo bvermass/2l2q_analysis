@@ -101,6 +101,7 @@ class HNLtagger
         double predict_PFN_v4(PFNReader& pfn, double M, double V);
         double predict_PFN_v5(PFNReader& pfn, double M, double ctau);
         double predict_PFN_v6(PFNReader& pfn, double M, double ctau);
+        double predict_PFN_v7(PFNReader& pfn, double M, double ctau);
         void write_HNLtagger_tree();
         void delete_HNLtagger_tree();
 };
