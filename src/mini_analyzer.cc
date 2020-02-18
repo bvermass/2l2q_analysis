@@ -151,48 +151,48 @@ void mini_analyzer::add_histograms()
 void mini_analyzer::add_standard_histograms(TString prefix)
 {
     hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 10, 0, 10);
-    hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 30, 0, 100);
-    hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 30, -3, 3);
-    hists[prefix+"_JetPhi"]             = new TH1F(prefix+"_JetPhi", ";Jet #phi;Events", 30, 0, 3.14);
+    hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 10, 0, 100);
+    hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 10, -3, 3);
+    hists[prefix+"_JetPhi"]             = new TH1F(prefix+"_JetPhi", ";Jet #phi;Events", 10, -3.14, 3.14);
     hists[prefix+"_nTightLep"]          = new TH1F(prefix+"_nTightLep", ";N_{Lep};Events", 10, 0, 10);
-    hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 30, 0, 50);
-    hists[prefix+"_l2_eta"]             = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 30, -3, 3);
-    hists[prefix+"_l2_phi"]             = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, -3.14, 3.14);
-    hists[prefix+"_l2_dxy"]             = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 30, 0, 0.5);
-    hists[prefix+"_l2_dz"]              = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 30, 0, 2);
-    hists[prefix+"_l2_3dIPSig"]         = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 30, 0, 20);
-    hists[prefix+"_l2_reliso"]          = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 30, 0, 3.5);
-    hists[prefix+"_l2_ptratio"]         = new TH1F(prefix+"_l2_ptratio", ";l_{2} #it{p}_{T}^{ratio} [GeV];Events", 30, 0, 1);
-    hists[prefix+"_l2_ptrel"]           = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 30, 0, 10);
-    hists[prefix+"_l2_NumberOfHits"]    = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Hits;Events", 30, 0, 30);
+    hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 10, 0, 50);
+    hists[prefix+"_l2_eta"]             = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 10, -3, 3);
+    hists[prefix+"_l2_phi"]             = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 10, -3.14, 3.14);
+    hists[prefix+"_l2_dxy"]             = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 10, 0, 0.5);
+    hists[prefix+"_l2_dz"]              = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 10, 0, 2);
+    hists[prefix+"_l2_3dIPSig"]         = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 10, 0, 20);
+    hists[prefix+"_l2_reliso"]          = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 10, 0, 3.5);
+    hists[prefix+"_l2_ptratio"]         = new TH1F(prefix+"_l2_ptratio", ";l_{2} #it{p}_{T}^{ratio} [GeV];Events", 10, 0, 1);
+    hists[prefix+"_l2_ptrel"]           = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 10, 0, 10);
+    hists[prefix+"_l2_NumberOfHits"]    = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Hits;Events", 10, 0, 10);
     hists[prefix+"_l2_NumberOfPixHits"] = new TH1F(prefix+"_l2_NumberOfPixHits", ";l_{2} Nr. of Pixel Hits;Events", 15, 0, 15);
     
-    hists[prefix+"_l1_pt"]              = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 30, 0, 150);
-    hists[prefix+"_l1_eta"]             = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 30, -3, 3);
-    hists[prefix+"_l1_phi"]             = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, -3.14, 3.14);
+    hists[prefix+"_l1_pt"]              = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 10, 0, 150);
+    hists[prefix+"_l1_eta"]             = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 10, -3, 3);
+    hists[prefix+"_l1_phi"]             = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 10, -3.14, 3.14);
 
-    hists[prefix+"_mll"]                = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 30, 0, 200);
-    hists[prefix+"_dRll"]               = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 30, 0, 6);
-    hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 30, 0, 3.14);
-    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{ll};Events", 30, 0, 1.5);
+    hists[prefix+"_mll"]                = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 10, 0, 200);
+    hists[prefix+"_dRll"]               = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 10, 0, 6);
+    hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 10, 0, 3.14);
+    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{ll};Events", 10, 0, 1.5);
 
-    hists[prefix+"_IVF_PV-SVdxy"]       = new TH1F(prefix+"_IVF_PV-SVdxy", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 30, 0, 60);
-    hists[prefix+"_IVF_PV-SVdxy_zoom"]  = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 30, 0, 20);
-    hists[prefix+"_IVF_PV-SVdxyz"]      = new TH1F(prefix+"_IVF_PV-SVdxyz", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 30, 0, 100);
-    hists[prefix+"_IVF_PV-SVdxyz_zoom"] = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 30, 0, 20);
+    hists[prefix+"_IVF_PV-SVdxy"]       = new TH1F(prefix+"_IVF_PV-SVdxy", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 10, 0, 60);
+    hists[prefix+"_IVF_PV-SVdxy_zoom"]  = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 10, 0, 20);
+    hists[prefix+"_IVF_PV-SVdxyz"]      = new TH1F(prefix+"_IVF_PV-SVdxyz", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 10, 0, 100);
+    hists[prefix+"_IVF_PV-SVdxyz_zoom"] = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 10, 0, 20);
     hists[prefix+"_IVF_ntracks"]        = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
-    hists[prefix+"_IVF_mass"]           = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 30, 0, 20);
-    hists[prefix+"_IVF_l1mass"]         = new TH1F(prefix+"_IVF_l1mass", ";SV Mass [GeV];Events", 30, 0, 150);
-    hists[prefix+"_IVF_pt"]             = new TH1F(prefix+"_IVF_pt", ";SV #it{p}_{T} [GeV];Events", 30, 0, 100);
-    hists[prefix+"_IVF_eta"]            = new TH1F(prefix+"_IVF_eta", ";SV #eta;Events", 30, -3, 3);
-    hists[prefix+"_IVF_phi"]            = new TH1F(prefix+"_IVF_phi", ";SV #phi;Events", 30, -3.14, 3.14);
-    hists[prefix+"_IVF_normchi2"]       = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2};Events", 30, 0, 10);
+    hists[prefix+"_IVF_mass"]           = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 10, 0, 20);
+    hists[prefix+"_IVF_l1mass"]         = new TH1F(prefix+"_IVF_l1mass", ";SV Mass [GeV];Events", 10, 0, 150);
+    hists[prefix+"_IVF_pt"]             = new TH1F(prefix+"_IVF_pt", ";SV #it{p}_{T} [GeV];Events", 10, 0, 100);
+    hists[prefix+"_IVF_eta"]            = new TH1F(prefix+"_IVF_eta", ";SV #eta;Events", 10, -3, 3);
+    hists[prefix+"_IVF_phi"]            = new TH1F(prefix+"_IVF_phi", ";SV #phi;Events", 10, -3.14, 3.14);
+    hists[prefix+"_IVF_normchi2"]       = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2};Events", 10, 0, 10);
 
 }
 
 void mini_analyzer::add_pfn_histograms(TString prefix)
 {
-    hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 30, 0, 1);
+    hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 10, 0, 1);
 }
 
 void mini_analyzer::fill_histograms()
