@@ -18,20 +18,28 @@ int main(int argc, char * argv[])
     std::vector<TFile*>  files_signal;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
-    for(int i = i_rootfiles; i < i_legends; i++){
-        TString filename = (TString)argv[i];
-        if(filename.Index("_HeavyNeutrino_lljj_") != -1) files_signal.push_back(TFile::Open(filename));
-        else if(filename.Index("_Background_") != -1) files_bkg.push_back(TFile::Open(filename));
-        else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
-    }
     std::vector<TString> legends_signal;
     std::vector<TString> legends_bkg;
     std::vector<TString> legends_data;
-    for(int i = i_legends; i < argc; i++){
-        TString legendname = (TString)argv[i];
-        if(legendname.Index("HNL") != -1) legends_signal.push_back(adjust_legend(legendname));
-        else if(legendname.Index("201") != -1 or legendname.Index("Data") != -1 or legendname.Index("data") != -1) legends_data.push_back(adjust_legend(legendname));
-        else legends_bkg.push_back(adjust_legend(legendname));
+    bool is_mini_analyzer = false;
+    for(int i = 0; i < argc - i_legends; i++){
+        TString filename = (TString)argv[i_rootfiles + i];
+        TString legendname = (TString)argv[i_legends + i];
+
+        if(legendname.Contains("HNL")){
+            files_signal.push_back(TFile::Open(filename));
+            legends_signal.push_back(adjust_legend(legendname));
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data") or legendname.Contains("pred")){
+            files_data.push_back(TFile::Open(filename));
+            legends_data.push_back(adjust_legend(legendname));
+        }else {
+            files_bkg.push_back(TFile::Open(filename));
+            legends_bkg.push_back(adjust_legend(legendname));
+        }
+
+        if(filename.Contains("hists_mini_analyzer") and legendname.Contains("pred")){
+            is_mini_analyzer = true;
+        }
     }
 
     // determine whether the samplelist wants plotting with data, signal or without
@@ -121,11 +129,19 @@ int main(int argc, char * argv[])
 
                 // get data histogram and fill legend
                 TH1F* data_hist;
-                if(withdata){ 
+                if(withdata and !is_mini_analyzer){
                     data_hist = (TH1F*) files_data[0]->Get(histname);
                     if(histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
                     if(histname.Contains("JetTagVal")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
+                    legend.AddEntry(data_hist, legends_data[0], "pl");
+                }else if(is_mini_analyzer){
+                    TString histname_BtoA = histname;
+                    if(histname.Contains("_quadA_")){
+                        histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                    }
+                    data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
+                    if(data_hist == 0 or data_hist->GetMaximum() == 0) continue;
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
                 
