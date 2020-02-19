@@ -53,10 +53,12 @@ class mini_analyzer {
         void set_signal_regions();
 
         void add_histograms();
+        void add_fraction_histograms(TString prefix);
         void add_standard_histograms(TString prefix);
         void add_pfn_histograms(TString prefix);
 
         void fill_histograms();
+        void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
 };

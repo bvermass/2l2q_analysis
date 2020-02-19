@@ -144,6 +144,19 @@ void mini_analyzer::add_histograms()
             //move to parametrized pfn evaluation:
             add_pfn_histograms(lep_region + quadrant);
         }
+        add_fraction_histograms(lep_region);
+    }
+}
+
+
+void mini_analyzer::add_fraction_histograms(TString prefix)
+{
+    hists[prefix+"_QuadFractions"]          = new TH1F(prefix+"_QuadFractions", ";;Fraction", 4, 0, 4);
+    hists[prefix+"_QuadFractions_unw"]      = new TH1F(prefix+"_QuadFractions_unw", ";;Unweighted Events", 4, 0, 4);
+    const char *quadfractions_labels[4] = {"A", "B", "C", "D"};
+    for(int i = 0; i < 4; i++){
+        hists[prefix+"_QuadFractions"]->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
+        hists[prefix+"_QuadFractions_unw"]->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
     }
 }
 
@@ -199,6 +212,7 @@ void mini_analyzer::fill_histograms()
 {
     fill_standard_histograms(sr_flavor + quad, event._weight);
     fill_pfn_histograms(sr_flavor + quad, event._weight * event._reweighting_weight[0], 0);
+    fill_fraction_histograms(sr_flavor, event._weight);
 
     if(isA or isB){
         fill_standard_histograms(sr_flavor + "_quadAB", event._weight);
@@ -208,6 +222,18 @@ void mini_analyzer::fill_histograms()
         fill_pfn_histograms(sr_flavor + "_quadCD", event._weight * event._reweighting_weight[0], 0);
     }
 
+}
+
+
+void mini_analyzer::fill_fraction_histograms(TString prefix, double event_weight)
+{
+    int binnr;
+    if(isA) binnr = 0;
+    else if(isB) binnr = 1;
+    else if(isC) binnr = 2;
+    else binnr =3;
+    hists[prefix+"_QuadFractions"]->Fill(binnr, event_weight);
+    hists[prefix+"_QuadFractions_unw"]->Fill(binnr);
 }
 
 
