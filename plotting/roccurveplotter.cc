@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
-    TLegend legend = get_legend(0.6, 0.15, 1, 0.3, 1);
+    TLegend legend = get_legend(0.4, 0.15, 1, 0.3, 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";

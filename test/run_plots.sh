@@ -17,7 +17,7 @@ else
 fi
 
 if [[ choice -eq 1 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////////////\n"
@@ -48,7 +48,7 @@ if [[ choice -eq 1 ]]; then
     fi
 fi
 if [[ choice -eq 2 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/multihistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/multihistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////////\n"
@@ -83,7 +83,7 @@ if [[ choice -eq 2 ]]; then
     fi
 fi
 if [[ choice -eq 3 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////\n"
@@ -162,7 +162,7 @@ if [[ choice -eq 4 ]]; then
     fi
 fi
 if [[ choice -eq 5 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/sensitivity_estimator.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/sensitivity_estimator.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n////////////////////////////////////////////////"
         echo -e "//SENSITIVITY ESTIMATOR COMPILATION SUCCESSFUL//"
         echo -e "////////////////////////////////////////////////\n"
@@ -197,7 +197,7 @@ if [[ choice -eq 5 ]]; then
     fi
 fi
 if [[ choice -eq 6 ]]; then
-    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n/////////////////////////////////////////////////"
         echo -e "//Combine Datacards Prep COMPILATION SUCCESSFUL//"
         echo -e "/////////////////////////////////////////////////\n"

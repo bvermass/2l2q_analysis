@@ -103,11 +103,11 @@ int main(int argc, char * argv[])
 
             // Mini analyzer specific plots
             if(inputfilename.Contains("hists_mini_analyzer")){
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadAB_", "_quadCD_"}, {"AR+SR", "MR"}, "_quadAB-CD_");
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_DtoCwithCD_", "_quadC_"}, {"MC", "ABCD pred.(MC)"}, "_quadCwithDtoC_");
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_BtoAwithCD_", "_quadA_"}, {"MC", "ABCD pred.(MC)"}, "_quadAwithBtoA_");
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_");
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_");
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadAB_", "_quadCD_"}, {"Region A+B", "Region C+D"}, "_quadAB-CD_", true);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_DtoCwithCD_", "_quadC_"}, {"Region C (pred.)", "Region C"}, "_quadCwithDtoC_", false);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_BtoAwithCD_", "_quadA_"}, {"Region A (pred.)", "Region A"}, "_quadAwithBtoA_", false);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
             }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
 }
 # endif
 
-void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, std::vector<TString> tags, std::vector<TString> legend_tags, TString plot_tag)
+void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, std::vector<TString> tags, std::vector<TString> legend_tags, TString plot_tag, bool normalize_to_1)
 {
     if(histname.Contains(tags[0])){
         legend.Clear();
@@ -139,7 +139,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         THStack* hists = new THStack("stack", "");
 
         hists->Add(sample_hist);
-        sample_hist->Scale(1./sample_hist->Integral());
+        if(normalize_to_1) sample_hist->Scale(1./sample_hist->Integral());
         legend.AddEntry(sample_hist, legend_tags[0], "l");
 
         for(int i = 1; i < tags.size(); i++){
@@ -150,7 +150,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
             hist_extra->SetLineColor(colors[i]);
             hists->Add(hist_extra);
             legend.AddEntry(hist_extra, legend_tags[i], "l");
-            hist_extra->Scale(1./hist_extra->Integral());
+            if(normalize_to_1) hist_extra->Scale(1./hist_extra->Integral());
         }
 
         TString plotname = histname;

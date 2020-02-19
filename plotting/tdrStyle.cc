@@ -159,7 +159,7 @@ void setTDRStyle() {
   //tdrStyle->SetHatchesSpacing(0.05);
 
   tdrStyle->SetLegendBorderSize(0);
-  tdrStyle->SetLegendTextSize(0.03);
+  tdrStyle->SetLegendTextSize(0.045);
 
 	
 

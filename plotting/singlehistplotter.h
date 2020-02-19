@@ -26,6 +26,6 @@
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);
 #endif
-void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, std::vector<TString> tags, std::vector<TString> legend_tags, TString plot_tag);
+void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, std::vector<TString> tags, std::vector<TString> legend_tags, TString plot_tag, bool normalize_to_1);
 
 #endif
