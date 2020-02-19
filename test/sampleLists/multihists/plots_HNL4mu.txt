@@ -1,0 +1,4 @@
+HNL_4mu
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.004472135955_mu_massiveAndCKM_LO/dilep_final.root   M-4_24mm
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.00547722557505_mu_massiveAndCKM_LO/dilep_final.root M-4_16mm
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.00836660026534_mu_massiveAndCKM_LO/dilep_final.root M-4_7mm
