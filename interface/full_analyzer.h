@@ -834,7 +834,7 @@ public :
    double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, SVl1mass, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
+   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
    
    // functions
    // in src/full_analyzer_constructor.cc
