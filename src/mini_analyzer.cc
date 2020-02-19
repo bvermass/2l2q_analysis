@@ -187,12 +187,12 @@ void mini_analyzer::add_standard_histograms(TString prefix)
     hists[prefix+"_mll"]                = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 10, 0, 200);
     hists[prefix+"_dRll"]               = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 10, 0, 6);
     hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 10, 0, 3.14);
-    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{ll};Events", 10, 0, 1.5);
+    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{l,jet};Events", 10, 0, 1.5);
 
-    hists[prefix+"_IVF_PV-SVdxy"]       = new TH1F(prefix+"_IVF_PV-SVdxy", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 10, 0, 60);
-    hists[prefix+"_IVF_PV-SVdxy_zoom"]  = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";#Delta_{xy}(PV, SV_{fit}) [cm];Events", 10, 0, 20);
-    hists[prefix+"_IVF_PV-SVdxyz"]      = new TH1F(prefix+"_IVF_PV-SVdxyz", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 10, 0, 100);
-    hists[prefix+"_IVF_PV-SVdxyz_zoom"] = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";#Delta_{xyz}(PV, SV_{fit}) [cm];Events", 10, 0, 20);
+    hists[prefix+"_IVF_PV-SVdxy"]       = new TH1F(prefix+"_IVF_PV-SVdxy", ";L_{xy} [cm];Events", 10, 0, 60);
+    hists[prefix+"_IVF_PV-SVdxy_zoom"]  = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 10, 0, 20);
+    hists[prefix+"_IVF_PV-SVdxyz"]      = new TH1F(prefix+"_IVF_PV-SVdxyz", ";L_{xyz} [cm];Events", 10, 0, 100);
+    hists[prefix+"_IVF_PV-SVdxyz_zoom"] = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 10, 0, 20);
     hists[prefix+"_IVF_ntracks"]        = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     hists[prefix+"_IVF_mass"]           = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 10, 0, 20);
     hists[prefix+"_IVF_l1mass"]         = new TH1F(prefix+"_IVF_l1mass", ";SV Mass [GeV];Events", 10, 0, 150);
