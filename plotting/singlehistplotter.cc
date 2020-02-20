@@ -104,6 +104,7 @@ int main(int argc, char * argv[])
             // Mini analyzer specific plots
             if(inputfilename.Contains("hists_mini_analyzer")){
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadAB_", "_quadCD_"}, {"Region A+B", "Region C+D"}, "_quadAB-CD_", true);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadAC_", "_quadBD_"}, {"Region A+C", "Region B+D"}, "_quadAC-BD_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_DtoCwithCD_", "_quadC_"}, {"Region C (pred.)", "Region C"}, "_quadCwithDtoC_", false);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_BtoAwithCD_", "_quadA_"}, {"Region A (pred.)", "Region A"}, "_quadAwithBtoA_", false);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);

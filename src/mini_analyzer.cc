@@ -60,11 +60,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
 void mini_analyzer::ABCD_ratios()
 {
-    calculate_ratio("_quadA_", "_quadB_", "_AoverB_");
-    calculate_ratio("_quadC_", "_quadD_", "_CoverD_");
+    calculate_ratio("_quadA_Yield", "_quadB_Yield", "_AoverB_Yield");
+    calculate_ratio("_quadC_Yield", "_quadD_Yield", "_CoverD_Yield");
 
-    apply_ratio("_CoverD_", "_quadD_", "_DtoCwithCD_");
-    apply_ratio("_CoverD_", "_quadB_", "_BtoAwithCD_");
+    apply_ratio("_CoverD_Yield", "_quadD_", "_DtoCwithCD_");
+    apply_ratio("_CoverD_Yield", "_quadB_", "_BtoAwithCD_");
 }
 
 
@@ -73,10 +73,13 @@ void mini_analyzer::calculate_ratio(TString numerator_tag, TString denominator_t
     for(auto const& it : hists){
         TH1* h = it.second;
         TString hname = h->GetName();
-        if(hname.Index(numerator_tag) != -1){
+
+        if(hname.Contains(numerator_tag)){
             TString hname_den(hname), hname_ratio(hname);
+
             hname_den.ReplaceAll(numerator_tag, denominator_tag);
             hname_ratio.ReplaceAll(numerator_tag, ratio_tag);
+
             if(hists[hname]->GetMaximum() > 0 and hists[hname_den]->GetMaximum() > 0){
                 hists[hname_ratio]->Divide(hists[hname], hists[hname_den]);
             }
@@ -90,12 +93,14 @@ void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString ta
     for(auto const& it : hists){
         TH1* h = it.second;
         TString hname = h->GetName();
-        if(hname.Index(histo_tag) != -1){
-            TString hname_ratio(hname), hname_target(hname);
-            hname_ratio.ReplaceAll(histo_tag, ratio_tag);
+
+        if(hname.Contains(histo_tag)){
+            TString hname_ratio(hname(0, hname.Index(histo_tag)) + ratio_tag), hname_target(hname);
             hname_target.ReplaceAll(histo_tag, target_tag);
+
             if(hists[hname]->GetMaximum() > 0 and hists[hname_ratio]->GetMaximum() > 0){
-                hists[hname_target]->Multiply(hists[hname], hists[hname_ratio]);
+                hists[hname_target] = (TH1F*)hists[hname]->Clone(hname_target);
+                hists[hname_target]->Scale(hists[hname_ratio]->GetBinContent(1));
             }
         }
     }
@@ -111,9 +116,9 @@ void mini_analyzer::set_signal_regions()
     isD = false;
     if(event._dphill > 2.3){
         if(event._JetTagVal[0] > 0.9) isA = true;
-        else isB = true;
+        else isC = true;
     }else {
-        if(event._JetTagVal[0] > 0.9) isC = true;
+        if(event._JetTagVal[0] > 0.9) isB = true;
         else isD = true;
     }
 
@@ -139,7 +144,7 @@ void mini_analyzer::add_histograms()
 {
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_quadAB", "_quadCD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
+        for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_quadAB", "_quadCD", "_quadAC", "_quadBD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
             add_standard_histograms(lep_region + quadrant);
             //move to parametrized pfn evaluation:
             add_pfn_histograms(lep_region + quadrant);
@@ -163,6 +168,7 @@ void mini_analyzer::add_fraction_histograms(TString prefix)
 
 void mini_analyzer::add_standard_histograms(TString prefix)
 {
+    hists[prefix+"_Yield"]              = new TH1F(prefix+"_Yield", ";;Events", 1, 0, 1);
     hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 10, 0, 10);
     hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 10, 0, 100);
     hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 10, -3, 3);
@@ -221,6 +227,13 @@ void mini_analyzer::fill_histograms()
         fill_standard_histograms(sr_flavor + "_quadCD", event._weight);
         fill_pfn_histograms(sr_flavor + "_quadCD", event._weight * event._reweighting_weight[0], 0);
     }
+    if(isA or isC){
+        fill_standard_histograms(sr_flavor + "_quadAC", event._weight);
+        fill_pfn_histograms(sr_flavor + "_quadAC", event._weight * event._reweighting_weight[0], 0);
+    }else if(isB or isD){
+        fill_standard_histograms(sr_flavor + "_quadBD", event._weight);
+        fill_pfn_histograms(sr_flavor + "_quadBD", event._weight * event._reweighting_weight[0], 0);
+    }
 
 }
 
@@ -239,6 +252,7 @@ void mini_analyzer::fill_fraction_histograms(TString prefix, double event_weight
 
 void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight)
 {
+    hists[prefix+"_Yield"]->Fill(0., event_weight);
     hists[prefix+"_nTightJet"]->Fill(event._nTightJet,event_weight);         
     hists[prefix+"_JetPt"]->Fill(event._JetPt,event_weight);             
     hists[prefix+"_JetEta"]->Fill(event._JetEta,event_weight);            
