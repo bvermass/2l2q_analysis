@@ -126,31 +126,31 @@ void mini_analyzer::set_signal_regions()
     // dphill
     if(baseline_cutphill){
         if(event._dphill > 2.3){
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutphill_quadA");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutphill_quadC");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphill_quadC");
         }else {
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutphill_quadB");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutphill_quadD");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphill_quadD");
         }
     }
     // mll
     if(baseline_cutmll){
         if(event._mll < 80){
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutmll_quadA");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutmll_quadC");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmll_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadC");
         }else {
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutmll_quadB");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutmll_quadD");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmll_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadD");
         }
     }
     // dphill or mll
     if(baseline_cutphiORmll){
         if(event._dphill > 2.3 and event._mll < 80){
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutphiORmll_quadA");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutphiORmll_quadC");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphiORmll_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadC");
         }else {
-            if(event._JetTagVal[0] > 0.9) ABCDtags.push_back("_cutphiORmll_quadB");
-            else if(event._JetTagVal[0] > 0.2) ABCDtags.push_back("_cutphiORmll_quadD");
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphiORmll_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadD");
         }
     }
 
@@ -251,7 +251,7 @@ void mini_analyzer::fill_histograms()
 {
     for(const auto& ABCDtag : ABCDtags){
         fill_standard_histograms(sr_flavor + ABCDtag, event._weight);
-        fill_pfn_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[0], 0);
+        fill_pfn_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[16], 16);
         fill_fraction_histograms(sr_flavor + ABCDtag, event._weight);
     }
 }

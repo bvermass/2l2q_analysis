@@ -70,14 +70,16 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(0);
     
-            sample_hist->SetMarkerColor(colors[0]);
-            sample_hist->SetLineColor(colors[0]);
-            sample_hist->Draw("E0 P");
-            legend.Draw("same");
-            CMSandLumi->Draw();
+            if(!histname.Contains("_quadA_") and !histname.Contains("_quadB_") and !histname.Contains("_quadC_") and !histname.Contains("_quadD_")){
+                sample_hist->SetMarkerColor(colors[0]);
+                sample_hist->SetLineColor(colors[0]);
+                sample_hist->Draw("E0 P");
+                legend.Draw("same");
+                CMSandLumi->Draw();
 
-            pad->Modified();
-            c->Print(pathname_lin + histname + ".png");
+                pad->Modified();
+                c->Print(pathname_lin + histname + ".png");
+            }
 
             // Efficiencies are calculated right here as TGraphAsymmErrors
             if(histname.Index("eff_num") != -1){
