@@ -33,12 +33,15 @@
 class mini_analyzer {
     public :
         BkgEstimator event;
-        TString sr_flavor, quad;
+        TString sr_flavor;
         std::map<TString, TH1*> hists;
 
         //For ABCD method based on PFN output and dphi
+        std::vector<TString> ABCDtags;
         bool isPrompt;
-        bool isA, isB, isC, isD;
+        bool baseline_cutphill;
+        bool baseline_cutmll;
+        bool baseline_cutphiORmll;
 
         //General functions
         mini_analyzer(TString filename);
@@ -61,6 +64,8 @@ class mini_analyzer {
         void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
+
+        void sum_quad_histograms();
 };
 
 #endif
