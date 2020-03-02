@@ -50,7 +50,6 @@ TString     adjust_legend(TString legend);
 TLatex      get_latex(double textsize, int textalign, int textfont);
 TString     get_correct_lumitext(TString RunId, TString lumitext);
 int         get_color(TString legend);
-TH1F        get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle);
 void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 double      get_scale(TString RunId);

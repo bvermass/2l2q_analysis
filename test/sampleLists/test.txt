@@ -1,1 +1,1 @@
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_V19.root                                    687.1      -1      1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/dilep_METResolution_V19.root                          4758.52     10000      1

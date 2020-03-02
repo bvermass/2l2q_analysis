@@ -73,7 +73,7 @@ int main(int argc, char * argv[])
             //drawLumi(pad);
 
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
 
             // Efficiencies are calculated right here as TGraphAsymmErrors
             if(histname.Index("eff_num") != -1){
@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
                 lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
                 pad->Modified();
-                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
+                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
             }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
             lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
         }
     }
 }

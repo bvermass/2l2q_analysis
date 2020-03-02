@@ -73,7 +73,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
     }
 
-    return "/user/bvermass/public/MET_scale_resolution/" + plottype + specific_dir;
+    return "/user/bvermass/public_html/MET_scale_resolution/" + plottype + specific_dir;
 }
 
 
@@ -167,23 +167,6 @@ int get_color(TString legend)
     else if(legend.Index("M-8")    != -1) return kMagenta-7;
     else if(legend.Index("M-10")   != -1) return kCyan-2;
     else return kBlack;
-}
-
-
-TH1F get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle)
-{
-    TH1F histo_ratio("data/MC", ";" + xaxistitle + ";data/MC", data->GetNbinsX(), data->GetXaxis()->GetXmin(), data->GetXaxis()->GetXmax());
-    histo_ratio.Divide(data, MC);
-
-    histo_ratio.GetXaxis()->SetLabelSize(0.09);
-    histo_ratio.GetYaxis()->SetLabelSize(0.09);
-    histo_ratio.GetXaxis()->SetTitleSize(0.09);
-    histo_ratio.GetYaxis()->SetTitleSize(0.09);
-    histo_ratio.GetYaxis()->SetTitleOffset(0.7);
-    histo_ratio.SetMinimum(0);
-    histo_ratio.SetMaximum(2);
-
-    return histo_ratio;
 }
 
 

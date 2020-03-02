@@ -23,6 +23,7 @@
 // other header files
 #include "tdrStyle.h"
 #include "helper_plotter_functions.h"
+#include "ratioplotter.h"
 
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);

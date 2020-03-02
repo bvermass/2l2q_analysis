@@ -116,7 +116,7 @@ int main(int argc, char * argv[])
             CMSandLumi->Draw();
             
             pad->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+            c->Print(pathname_lin + histname + ".png");
 
             // Draw log version
             pad->Clear();
@@ -130,7 +130,7 @@ int main(int argc, char * argv[])
             CMSandLumi->Draw();
             
             pad->Modified();
-            c->Print(pathname_log + histname + ".pdf");
+            c->Print(pathname_log + histname + ".png");
 
 
 
@@ -161,7 +161,7 @@ int main(int argc, char * argv[])
                 CMSandLumi->Draw();
 
                 pad->Modified();
-                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".pdf");
+                c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
             }
         }
         else if(cl->InheritsFrom("TH2")){
@@ -195,7 +195,7 @@ int main(int argc, char * argv[])
                     profiles.push_back(hists[i]->ProfileX(histname + "_" + legends[i] + "_profile"));
                     legend.AddEntry(profiles[i], legends[i], "pl");
                 }
-                draw_profiles(c, pad, profiles, pathname_lin + histname + "_profile.pdf", &legend, xaxistitle, "<" + yaxistitle + ">", CMSandLumi);
+                draw_profiles(c, pad, profiles, pathname_lin + histname + "_profile.png", &legend, xaxistitle, "<" + yaxistitle + ">", CMSandLumi);
 
 
                 // Draw -<upara>/<qT> as a function of qT (<upara> has been calculated by the profileX, <qT> is simply the bin center)
@@ -226,7 +226,7 @@ int main(int argc, char * argv[])
                     CMSandLumi->Draw();
 
                     pad->Modified();
-                    c->Print(pathname_lin + histname + "_meanqT.pdf");
+                    c->Print(pathname_lin + histname + "_meanqT.png");
                     pad->Clear();
                     legend.Clear();
 
@@ -254,7 +254,7 @@ int main(int argc, char * argv[])
                     CMSandLumi->Draw();
 
                     pad->Modified();
-                    c->Print(pathname_lin + histname + "_response.pdf");
+                    c->Print(pathname_lin + histname + "_response.png");
                     pad->Clear();
                     pad->SetLogy(0);
                     legend.Clear();
@@ -299,7 +299,7 @@ int main(int argc, char * argv[])
                             FWHMlatex.DrawLatex(1 - rightmargin*1.8, 1 - 3.3*topmargin, (TString)"FWHM: " + FWHMstream.str());
 
                             pad->Modified();
-                            c->Print(pathname_lin + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".pdf");
+                            c->Print(pathname_lin + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".png");
                         } else {
                             x[i_bin] = 0;
                             ex[i_bin] = 0;
@@ -328,7 +328,7 @@ int main(int argc, char * argv[])
                 CMSandLumi->Draw();
 
                 pad->Modified();
-                c->Print(pathname_lin + histname + "_resolution.pdf");
+                c->Print(pathname_lin + histname + "_resolution.png");
             }
         }
     }
