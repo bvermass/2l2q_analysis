@@ -9,7 +9,7 @@ void full_analyzer::get_jetID()
     for(unsigned i = 0; i < _nJets; ++i){
 	    fullJetID[i] = fabs(_jetEta[i]) < 2.4 &&
                        _jetPt[i] > 20 &&
-                       _jetIsTight[i];
+                       _jetIsTightLepVeto[i];
     }
 }
 

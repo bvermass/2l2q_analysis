@@ -151,13 +151,16 @@ std::pair<double,double> full_analyzer::METXYCorr_Met_MetPhi(double uncormet, do
 
 void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
     (*hists)[prefix+"_met"]                     = new TH1F(prefix+"_met", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metSM"]                   = new TH1F(prefix+"_metSM", ";Smeared E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metXY"]                   = new TH1F(prefix+"_metXY", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metRaw"]                  = new TH1F(prefix+"_metRaw", ";Raw E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppi"]                = new TH1F(prefix+"_metPuppi", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppiRaw"]             = new TH1F(prefix+"_metPuppiRaw", ";Raw Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_met_zoom"]                = new TH1F(prefix+"_met_zoom", ";E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metXY_zoom"]              = new TH1F(prefix+"_metXY_zoom", ";E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metRaw_zoom"]             = new TH1F(prefix+"_metRaw_zoom", ";Raw E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoom"]           = new TH1F(prefix+"_metPuppi_zoom", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppiRaw_zoom"]        = new TH1F(prefix+"_metPuppiRaw_zoom", ";Raw Puppi E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPhi"]                  = new TH1F(prefix+"_metPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metSMPhi"]                = new TH1F(prefix+"_metSMPhi", ";Smeared E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metXYPhi"]                = new TH1F(prefix+"_metXYPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metRawPhi"]               = new TH1F(prefix+"_metRawPhi", ";Raw E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPuppiPhi"]             = new TH1F(prefix+"_metPuppiPhi", ";Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
@@ -216,6 +219,12 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_metResUp"]                       = new TH1F(prefix+"_metResUp", ";JER Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metUnclDown"]                    = new TH1F(prefix+"_metUnclDown", ";Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metUnclUp"]                      = new TH1F(prefix+"_metUnclUp", ";Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_met_zoomJECDown"]                = new TH1F(prefix+"_met_zoomJECDown", ";JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_met_zoomJECUp"]                  = new TH1F(prefix+"_met_zoomJECUp", ";JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_met_zoomResDown"]                = new TH1F(prefix+"_met_zoomResDown", ";JER Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_met_zoomResUp"]                  = new TH1F(prefix+"_met_zoomResUp", ";JER Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_met_zoomUnclDown"]               = new TH1F(prefix+"_met_zoomUnclDown", ";Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_met_zoomUnclUp"]                 = new TH1F(prefix+"_met_zoomUnclUp", ";Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPhiJECDown"]                  = new TH1F(prefix+"_metPhiJECDown", ";JEC Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPhiJECUp"]                    = new TH1F(prefix+"_metPhiJECUp", ";JEC Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPhiResDown"]                  = new TH1F(prefix+"_metPhiResDown", ";JER Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
@@ -229,6 +238,12 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_metPuppiResUp"]                  = new TH1F(prefix+"_metPuppiResUp", ";Puppi JER Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppiUnclDown"]               = new TH1F(prefix+"_metPuppiUnclDown", ";Puppi Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppiUnclUp"]                 = new TH1F(prefix+"_metPuppiUnclUp", ";Puppi Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metPuppi_zoomJECDown"]           = new TH1F(prefix+"_metPuppi_zoomJECDown", ";Puppi JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoomJECUp"]             = new TH1F(prefix+"_metPuppi_zoomJECUp", ";Puppi JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoomResDown"]           = new TH1F(prefix+"_metPuppi_zoomResDown", ";Puppi JER Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoomResUp"]             = new TH1F(prefix+"_metPuppi_zoomResUp", ";Puppi JER Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoomUnclDown"]          = new TH1F(prefix+"_metPuppi_zoomUnclDown", ";Puppi Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppi_zoomUnclUp"]            = new TH1F(prefix+"_metPuppi_zoomUnclUp", ";Puppi Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPuppiPhiJECDown"]             = new TH1F(prefix+"_metPuppiPhiJECDown", ";Puppi JEC Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPuppiPhiJECUp"]               = new TH1F(prefix+"_metPuppiPhiJECUp", ";Puppi JEC Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPuppiPhiResDown"]             = new TH1F(prefix+"_metPuppiPhiResDown", ";Puppi JER Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
@@ -246,13 +261,16 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
 
 
     (*hists)[prefix+"_met"]->Fill(_metType1, event_weight);
-    (*hists)[prefix+"_metSM"]->Fill(_met, event_weight); //FIX
     (*hists)[prefix+"_metXY"]->Fill(_met, event_weight);
     (*hists)[prefix+"_metRaw"]->Fill(_metRaw, event_weight);
     (*hists)[prefix+"_metPuppi"]->Fill(_metPuppi, event_weight);
     (*hists)[prefix+"_metPuppiRaw"]->Fill(_metPuppiRaw, event_weight);
+    (*hists)[prefix+"_met_zoom"]->Fill(_metType1, event_weight);
+    (*hists)[prefix+"_metXY_zoom"]->Fill(_met, event_weight);
+    (*hists)[prefix+"_metRaw_zoom"]->Fill(_metRaw, event_weight);
+    (*hists)[prefix+"_metPuppi_zoom"]->Fill(_metPuppi, event_weight);
+    (*hists)[prefix+"_metPuppiRaw_zoom"]->Fill(_metPuppiRaw, event_weight);
     (*hists)[prefix+"_metPhi"]->Fill(_metType1Phi, event_weight);
-    (*hists)[prefix+"_metSMPhi"]->Fill(_metPhi, event_weight);//FIX
     (*hists)[prefix+"_metXYPhi"]->Fill(_metPhi, event_weight);
     (*hists)[prefix+"_metRawPhi"]->Fill(_metRawPhi, event_weight);
     (*hists)[prefix+"_metXYPhi"]->Fill(_metPhi, event_weight);
@@ -334,6 +352,12 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_metResUp"]->Fill(_metResUp, event_weight);
     (*hists)[prefix+"_metUnclDown"]->Fill(_metUnclDown, event_weight);
     (*hists)[prefix+"_metUnclUp"]->Fill(_metUnclUp, event_weight);
+    (*hists)[prefix+"_met_zoomJECDown"]->Fill(_metJECDown, event_weight);
+    (*hists)[prefix+"_met_zoomJECUp"]->Fill(_metJECUp, event_weight);
+    (*hists)[prefix+"_met_zoomResDown"]->Fill(_metResDown, event_weight);
+    (*hists)[prefix+"_met_zoomResUp"]->Fill(_metResUp, event_weight);
+    (*hists)[prefix+"_met_zoomUnclDown"]->Fill(_metUnclDown, event_weight);
+    (*hists)[prefix+"_met_zoomUnclUp"]->Fill(_metUnclUp, event_weight);
     (*hists)[prefix+"_metPhiJECDown"]->Fill(_metPhiJECDown, event_weight);
     (*hists)[prefix+"_metPhiJECUp"]->Fill(_metPhiJECUp, event_weight);
     (*hists)[prefix+"_metPhiResDown"]->Fill(_metPhiResDown, event_weight);
@@ -347,6 +371,12 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_metPuppiResUp"]->Fill(_metPuppiResUp, event_weight);
     (*hists)[prefix+"_metPuppiUnclDown"]->Fill(_metPuppiUnclDown, event_weight);
     (*hists)[prefix+"_metPuppiUnclUp"]->Fill(_metPuppiUnclUp, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomJECDown"]->Fill(_metPuppiJECDown, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomJECUp"]->Fill(_metPuppiJECUp, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomResDown"]->Fill(_metPuppiResDown, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomResUp"]->Fill(_metPuppiResUp, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomUnclDown"]->Fill(_metPuppiUnclDown, event_weight);
+    (*hists)[prefix+"_metPuppi_zoomUnclUp"]->Fill(_metPuppiUnclUp, event_weight);
     (*hists)[prefix+"_metPuppiPhiJECDown"]->Fill(_metPuppiPhiJECDown, event_weight);
     (*hists)[prefix+"_metPuppiPhiJECUp"]->Fill(_metPuppiPhiJECUp, event_weight);
     (*hists)[prefix+"_metPuppiPhiResDown"]->Fill(_metPuppiPhiResDown, event_weight);
