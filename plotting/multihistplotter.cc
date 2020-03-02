@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
+    TLegend legend = get_legend(0.2, 0.8, 0.95, 0.91, 3);
     TLegend legend_profiles = get_legend(0.18, 0.84, 0.95, 0.93, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
@@ -183,7 +183,9 @@ int main(int argc, char * argv[])
                 legend.Clear();
 
                 TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
+                TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
                 gSystem->Exec("mkdir -p " + pathname_lin + "resolution/");
+                gSystem->Exec("mkdir -p " + pathname_log + "resolution/");
 
 
                 //1) make profile of the histogram to get <u_para> vs qT
@@ -274,18 +276,21 @@ int main(int argc, char * argv[])
 
                         TH1D* projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_projection_" + std::to_string(i_bin), i_bin, i_bin, "e");
                         legend_profiles.AddEntry(projection, legends[i]);
-                        TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]*x + [5]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
+                        TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
                         voigt->SetLineColor(kGreen+3);
                         voigt->SetLineWidth(2);
 
                         if(projection->GetMaximum() > 0){
                             // perform fit
-                            voigt->SetParameters(projection->Integral(), projection->GetMean(), projection->GetRMS(), 1, 0, 0);
+                            voigt->SetParameters(projection->Integral()*2., projection->GetBinCenter(projection->GetMaximumBin()), projection->GetRMS(), 1, 1);
                             projection->Fit(voigt, "0");
                             x[i_bin] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
                             ex[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
                             FWHM[i_bin] = get_FWHM(voigt)/(2*sqrt(2*log(2)));
                             eFWHM[i_bin] = 0;
+
+                            pad->Clear();
+                            pad->SetLogy(0);
 
                             projection->Draw();
                             legend_profiles.Draw("same");
@@ -300,6 +305,20 @@ int main(int argc, char * argv[])
 
                             pad->Modified();
                             c->Print(pathname_lin + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".png");
+
+                            // Draw log version
+                            pad->Clear();
+                            pad->SetLogy(1);
+
+                            projection->Draw();
+                            legend_profiles.Draw("same");
+                            voigt->Draw("C same");
+                            CMSandLumi->Draw();
+                            chi2latex.DrawLatex(1 - rightmargin*1.8, 1 - 2.2*topmargin, (TString)"#chi^{2}_{norm}: " + chi2stream.str());
+                            FWHMlatex.DrawLatex(1 - rightmargin*1.8, 1 - 3.3*topmargin, (TString)"FWHM: " + FWHMstream.str());
+
+                            pad->Modified();
+                            c->Print(pathname_log + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".png");
                         } else {
                             x[i_bin] = 0;
                             ex[i_bin] = 0;
@@ -313,6 +332,9 @@ int main(int argc, char * argv[])
                     multigraph->Add(graph);
                     legend.AddEntry(graph, legends[i], "pl");
                 }
+
+                pad->Clear();
+                pad->SetLogy(0);
 
                 multigraph->Draw("AP pmc plc");
                 if(histname.Contains("_AbsScale_vsqT_uperp")){
