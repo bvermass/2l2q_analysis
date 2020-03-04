@@ -318,4 +318,14 @@ void alphanumeric_labels(TH2F* hist)
             hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
         }
     }
+    if(histname.Contains("l2provCompressedvsConversion")){
+        const char* labely[4] = {"prompt", "fragmentation", "non-prompt", "not photon"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[5] = {"prompt", "b", "c", "fake", "unknown"};
+        for(int i = 1; i <= 5; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
+        }
+    }
 }

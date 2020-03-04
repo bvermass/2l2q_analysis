@@ -61,6 +61,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists2D)[prefix+"_lsources"]                      = new TH2F(prefix+"_lsources", ";l1 source;l2 source", 14, -2, 12, 14, -2, 12);
     (*hists2D)[prefix+"_lprovenance"]                   = new TH2F(prefix+"_lprovenance", ";l1 source;l2 source", 19, 0, 19, 19, 0, 19);
     (*hists2D)[prefix+"_lprovenanceCompressed"]         = new TH2F(prefix+"_lprovenanceCompressed", ";l1 source;l2 source", 5, 0, 5, 5, 0, 5);
+    (*hists2D)[prefix+"_l2provCompressedvsConversion"]  = new TH2F(prefix+"_l2provCompressedvsConversion", ";l2 Provenance;l2 Conversion", 5, 0, 5, 4, 0, 4);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 30, 0, 150);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 30, 0, 200);
     (*hists)[prefix+"_Zpeak"]                           = new TH1F(prefix+"_Zpeak", ";On-Z;Events", 1, 0, 1);
@@ -76,6 +77,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom"]              = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_ntracks"]                     = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 30, 0, 10);
+    (*hists)[prefix+"_IVF_l1mass"]                      = new TH1F(prefix+"_IVF_l1mass", ";l_{1}+SV Mass [GeV];Events", 30, 0, 140);
     (*hists)[prefix+"_IVF_massminl2"]                   = new TH1F(prefix+"_IVF_massminl2_K0", ";SV mass (without l_{2}) [GeV];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_massminl2_K0"]                = new TH1F(prefix+"_IVF_massminl2_K0", ";SV mass (without l_{2}) [GeV];Events", 20, 0.4, 0.6);
 
@@ -256,6 +258,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists2D)[prefix+"_lsources"]->Fill(get_lsource(i_gen_leading), get_lsource(i_gen_subleading), event_weight);
     (*hists2D)[prefix+"_lprovenance"]->Fill(_lProvenance[i_leading], _lProvenance[i_subleading], event_weight);
     (*hists2D)[prefix+"_lprovenanceCompressed"]->Fill(_lProvenanceCompressed[i_leading], _lProvenanceCompressed[i_subleading], event_weight);
+    (*hists2D)[prefix+"_l2provCompressedvsConversion"]->Fill(_lProvenanceCompressed[i_subleading], std::min((unsigned)3, _lProvenanceConversion[i_subleading]), event_weight);
 
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
     //(*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
@@ -424,6 +427,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom"]->Fill(IVF_PVSVdist, event_weight);
     (*hists)[prefix+"_IVF_ntracks"]->Fill(_IVF_ntracks[i_subleading], event_weight);
     (*hists)[prefix+"_IVF_mass"]->Fill(SVmass, event_weight);
+    (*hists)[prefix+"_IVF_l1mass"]->Fill(SVl1mass, event_weight);
     (*hists)[prefix+"_IVF_massminl2"]->Fill(SVmassminl2, event_weight);
     (*hists)[prefix+"_IVF_massminl2_K0"]->Fill(SVmassminl2, event_weight);
     
