@@ -2,7 +2,8 @@
 #include "../interface/mini_analyzer.h"
 
 mini_analyzer::mini_analyzer(TString filename) :
-    event(filename)
+    event(filename),
+    isData(filename.Contains("Run201"))
 {
     TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
     add_histograms();
@@ -63,7 +64,7 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
 void mini_analyzer::ABCD_ratios()
 {
-    calculate_ratio("_quadA_Yield", "_quadB_Yield", "_AoverB_Yield");
+    if(!isData) calculate_ratio("_quadA_Yield", "_quadB_Yield", "_AoverB_Yield");
     calculate_ratio("_quadC_Yield", "_quadD_Yield", "_CoverD_Yield");
 
     apply_ratio("_CoverD_Yield", "_quadD_", "_DtoCwithCD_");
@@ -179,12 +180,21 @@ void mini_analyzer::add_histograms()
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
         for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll"}){
-            for(const TString& quadrant : {"_quadA", "_quadB", "_quadC", "_quadD", "_quadAB", "_quadCD", "_quadAC", "_quadBD", "_AoverB", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
+            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
                 add_standard_histograms(lep_region + cut2region + quadrant);
                 //move to parametrized pfn evaluation:
                 add_pfn_histograms(lep_region + cut2region + quadrant);
             }
             add_fraction_histograms(lep_region + cut2region);
+
+            // only make region A histograms if we're not running over data
+            if(!isData){
+                for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB"}){
+                    add_standard_histograms(lep_region + cut2region + quadrant);
+                    //move to parametrized pfn evaluation:
+                    add_pfn_histograms(lep_region + cut2region + quadrant);
+                }
+            }
         }
     }
 }
@@ -259,6 +269,7 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
 void mini_analyzer::fill_histograms()
 {
     for(const auto& ABCDtag : ABCDtags){
+        if(isData and ABCDtag.Contains("_quadA")) continue;// don't fill region A histograms for data
         fill_standard_histograms(sr_flavor + ABCDtag, event._weight);
         fill_pfn_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[16], 16);
         fill_fraction_histograms(sr_flavor + ABCDtag, event._weight);

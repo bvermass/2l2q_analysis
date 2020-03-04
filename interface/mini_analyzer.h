@@ -34,6 +34,7 @@ class mini_analyzer {
     public :
         BkgEstimator event;
         TString sr_flavor;
+        bool isData;
         std::map<TString, TH1*> hists;
         std::map<TString, TH2*> hists2D;
 
