@@ -161,6 +161,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
             TString histname_extra = histname;
             histname_extra.ReplaceAll(tags[0], tags[i]);
             TH1* hist_extra = (TH1*)sample_file->Get(histname_extra);
+            if(!hist_extra) continue;
             hist_extra->SetMarkerColor(colors[i]);
             hist_extra->SetLineColor(colors[i]);
             hists->Add(hist_extra);

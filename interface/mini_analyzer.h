@@ -68,6 +68,7 @@ class mini_analyzer {
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
 
         void sum_quad_histograms();
+        void sum_histograms_based_on_tags(TString base_tag, TString second_tags, TString target_tag);
 };
 
 #endif

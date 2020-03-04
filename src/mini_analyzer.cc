@@ -189,7 +189,7 @@ void mini_analyzer::add_histograms()
 
             // only make region A histograms if we're not running over data
             if(!isData){
-                for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB"}){
+                for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_quadABCD"}){
                     add_standard_histograms(lep_region + cut2region + quadrant);
                     //move to parametrized pfn evaluation:
                     add_pfn_histograms(lep_region + cut2region + quadrant);
@@ -346,22 +346,42 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
 
 void mini_analyzer::sum_quad_histograms()
 {
-    std::vector< std::vector< TString > > quadcombos;
-    quadcombos.push_back({"_quadA_", "_quadB_", "_quadAB_"});
-    quadcombos.push_back({"_quadA_", "_quadC_", "_quadAC_"});
-    quadcombos.push_back({"_quadB_", "_quadD_", "_quadBD_"});
-    quadcombos.push_back({"_quadC_", "_quadD_", "_quadCD_"});
+    if(!isData){
+        sum_histograms_based_on_tags("_quadA_", "_quadB_", "_quadAB_");
+        sum_histograms_based_on_tags("_quadA_", "_quadC_", "_quadAC_");
+    }
+    sum_histograms_based_on_tags("_quadB_", "_quadD_", "_quadBD_");
+    sum_histograms_based_on_tags("_quadC_", "_quadD_", "_quadCD_");
+
+    if(!isData) sum_histograms_based_on_tags("_quadAB_", "_quadCD_", "_quadABCD_");
+}
+
+
+void mini_analyzer::sum_histograms_based_on_tags(TString base_tag, TString second_tag, TString target_tag)
+{
     for(const auto& hist : hists){
         TString histname = hist.first;
         TH1* h           = hist.second;
-        for(const auto& quadcombo : quadcombos){
-            if(histname.Contains(quadcombo[0])){
-                TString histname_second = histname;
-                TString histname_combined  = histname;
-                histname_second.ReplaceAll(quadcombo[0], quadcombo[1]);
-                histname_combined.ReplaceAll(quadcombo[0], quadcombo[2]);
-                hists[histname_combined]->Add(h, hists[histname_second]);
-            }
+        if(histname.Contains(base_tag)){
+            TString histname_second = histname;
+            TString histname_combined  = histname;
+            histname_second.ReplaceAll(base_tag, second_tag);
+            histname_combined.ReplaceAll(base_tag, target_tag);
+
+            hists[histname_combined]->Add(h, hists[histname_second]);
+        }
+    }
+
+    for(const auto& hist : hists2D){
+        TString histname = hist.first;
+        TH2* h           = hist.second;
+        if(histname.Contains(base_tag)){
+            TString histname_second = histname;
+            TString histname_combined  = histname;
+            histname_second.ReplaceAll(base_tag, second_tag);
+            histname_combined.ReplaceAll(base_tag, target_tag);
+
+            hists2D[histname_combined]->Add(h, hists2D[histname_second]);
         }
     }
 }
