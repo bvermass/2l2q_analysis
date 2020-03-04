@@ -35,6 +35,7 @@ class mini_analyzer {
         BkgEstimator event;
         TString sr_flavor;
         std::map<TString, TH1*> hists;
+        std::map<TString, TH2*> hists2D;
 
         //For ABCD method based on PFN output and dphi
         std::vector<TString> ABCDtags;

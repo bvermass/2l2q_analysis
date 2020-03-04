@@ -47,6 +47,10 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         fix_overflow_and_negative_bins(h);
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
+    for(auto const& it : hists2D){
+        TH2* h = it.second;
+        h->Write(h->GetName(), TObject::kOverwrite);
+    }
     
     TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
     hadd_counter->Fill(0);
@@ -116,6 +120,7 @@ void mini_analyzer::set_signal_regions()
                         event._nTightJet <= 1;
 
     baseline_cutmll = event._dphill > 2.3 &&
+                      event._mll > 10 &&
                       event._nTightJet <= 1;
 
     baseline_cutphiORmll = event._mll > 10 &&
@@ -200,50 +205,54 @@ void mini_analyzer::add_fraction_histograms(TString prefix)
 void mini_analyzer::add_standard_histograms(TString prefix)
 {
     hists[prefix+"_Yield"]              = new TH1F(prefix+"_Yield", ";;Events", 1, 0, 1);
-    hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 10, 0, 10);
-    hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 10, 0, 100);
-    hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 10, -3, 3);
-    //hists[prefix+"_JetPhi"]             = new TH1F(prefix+"_JetPhi", ";Jet #phi;Events", 10, -3.14, 3.14);
-    hists[prefix+"_nTightLep"]          = new TH1F(prefix+"_nTightLep", ";N_{Lep};Events", 10, 0, 10);
-    hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 10, 0, 50);
-    hists[prefix+"_l2_eta"]             = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 10, -3, 3);
-    //hists[prefix+"_l2_phi"]             = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 10, -3.14, 3.14);
-    hists[prefix+"_l2_dxy"]             = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 10, 0, 0.5);
-    hists[prefix+"_l2_dz"]              = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 10, 0, 2);
-    hists[prefix+"_l2_3dIPSig"]         = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 10, 0, 20);
-    hists[prefix+"_l2_reliso"]          = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 10, 0, 3.5);
-    //hists[prefix+"_l2_ptratio"]         = new TH1F(prefix+"_l2_ptratio", ";l_{2} #it{p}_{T}^{ratio} [GeV];Events", 10, 0, 1);
-    //hists[prefix+"_l2_ptrel"]           = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 10, 0, 10);
-    //hists[prefix+"_l2_NumberOfHits"]    = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Hits;Events", 10, 0, 10);
+    hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 6, 0, 10);
+    hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 6, 0, 100);
+    hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 6, -3, 3);
+    //hists[prefix+"_JetPhi"]             = new TH1F(prefix+"_JetPhi", ";Jet #phi;Events", 6, -3.14, 3.14);
+    hists[prefix+"_nTightLep"]          = new TH1F(prefix+"_nTightLep", ";N_{Lep};Events", 6, 0, 10);
+    hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 6, 0, 50);
+    hists[prefix+"_l2_eta"]             = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 6, -3, 3);
+    //hists[prefix+"_l2_phi"]             = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 6, -3.14, 3.14);
+    hists[prefix+"_l2_dxy"]             = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 6, 0, 0.5);
+    hists[prefix+"_l2_dz"]              = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 6, 0, 2);
+    hists[prefix+"_l2_3dIPSig"]         = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 6, 0, 20);
+    hists[prefix+"_l2_reliso"]          = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 6, 0, 3.5);
+    //hists[prefix+"_l2_ptratio"]         = new TH1F(prefix+"_l2_ptratio", ";l_{2} #it{p}_{T}^{ratio} [GeV];Events", 6, 0, 1);
+    //hists[prefix+"_l2_ptrel"]           = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 6, 0, 10);
+    //hists[prefix+"_l2_NumberOfHits"]    = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Hits;Events", 6, 0, 10);
     hists[prefix+"_l2_NumberOfPixHits"] = new TH1F(prefix+"_l2_NumberOfPixHits", ";l_{2} Nr. of Pixel Hits;Events", 15, 0, 15);
     
-    hists[prefix+"_l1_pt"]              = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 10, 0, 150);
-    hists[prefix+"_l1_eta"]             = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 10, -3, 3);
-    //hists[prefix+"_l1_phi"]             = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 10, -3.14, 3.14);
+    hists[prefix+"_l1_pt"]              = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 6, 0, 150);
+    hists[prefix+"_l1_eta"]             = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 6, -3, 3);
+    //hists[prefix+"_l1_phi"]             = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 6, -3.14, 3.14);
 
-    hists[prefix+"_mll"]                = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 10, 0, 200);
-    hists[prefix+"_dRll"]               = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 10, 0, 6);
-    hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 10, 0, 3.14);
-    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{l,jet};Events", 10, 0, 1.5);
+    hists[prefix+"_mll"]                = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 6, 0, 200);
+    hists[prefix+"_dRll"]               = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 6, 0, 6);
+    hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 6, 0, 3.14);
+    hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{l,jet};Events", 6, 0, 1.5);
 
-    hists[prefix+"_IVF_PV-SVdxy"]       = new TH1F(prefix+"_IVF_PV-SVdxy", ";L_{xy} [cm];Events", 10, 0, 60);
-    hists[prefix+"_IVF_PV-SVdxy_zoom"]  = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 10, 0, 20);
-    //hists[prefix+"_IVF_PV-SVdxyz"]      = new TH1F(prefix+"_IVF_PV-SVdxyz", ";L_{xyz} [cm];Events", 10, 0, 100);
-    //hists[prefix+"_IVF_PV-SVdxyz_zoom"] = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 10, 0, 20);
-    hists[prefix+"_IVF_ntracks"]        = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
-    hists[prefix+"_IVF_mass"]           = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 10, 0, 20);
-    hists[prefix+"_IVF_l1mass"]         = new TH1F(prefix+"_IVF_l1mass", ";SV Mass [GeV];Events", 10, 0, 150);
-    hists[prefix+"_IVF_pt"]             = new TH1F(prefix+"_IVF_pt", ";SV #it{p}_{T} [GeV];Events", 10, 0, 100);
-    hists[prefix+"_IVF_eta"]            = new TH1F(prefix+"_IVF_eta", ";SV #eta;Events", 10, -3, 3);
-    //hists[prefix+"_IVF_phi"]            = new TH1F(prefix+"_IVF_phi", ";SV #phi;Events", 10, -3.14, 3.14);
-    hists[prefix+"_IVF_normchi2"]       = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2};Events", 10, 0, 10);
+    hists[prefix+"_PV-SVdxy"]       = new TH1F(prefix+"_PV-SVdxy", ";L_{xy} [cm];Events", 6, 0, 60);
+    hists[prefix+"_PV-SVdxy_zoom"]  = new TH1F(prefix+"_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 6, 0, 20);
+    //hists[prefix+"_PV-SVdxyz"]      = new TH1F(prefix+"_PV-SVdxyz", ";L_{xyz} [cm];Events", 6, 0, 100);
+    //hists[prefix+"_PV-SVdxyz_zoom"] = new TH1F(prefix+"_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 6, 0, 20);
+    hists[prefix+"_ntracks"]        = new TH1F(prefix+"_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
+    hists[prefix+"_SVmass"]         = new TH1F(prefix+"_SVmass", ";SV Mass [GeV];Events", 6, 0, 20);
+    hists[prefix+"_SVl1mass"]         = new TH1F(prefix+"_SVl1mass", ";SV + l_{1} Mass [GeV];Events", 6, 0, 150);
+    hists[prefix+"_SVpt"]             = new TH1F(prefix+"_SVpt", ";SV #it{p}_{T} [GeV];Events", 6, 0, 100);
+    hists[prefix+"_SVeta"]            = new TH1F(prefix+"_SVeta", ";SV #eta;Events", 6, -3, 3);
+    //hists[prefix+"_SVphi"]            = new TH1F(prefix+"_SVphi", ";SV #phi;Events", 6, -3.14, 3.14);
+    hists[prefix+"_SVnormchi2"]       = new TH1F(prefix+"_SVnormchi2", ";Normalized #Chi^{2};Events", 6, 0, 10);
 
+    hists2D[prefix+"_lprovenance"] = new TH2F(prefix+"_lprovenance", "", 19, 0, 19, 19, 0, 19);
+    hists2D[prefix+"_lprovenanceCompressed"] = new TH2F(prefix+"_lprovenanceCompressed", "", 5, 0, 5, 5, 0, 5);
 }
 
 
 void mini_analyzer::add_pfn_histograms(TString prefix)
 {
+    hists2D[prefix+"_PFNvsdphill"]      = new TH2F(prefix+"_PFNvsdphill", ";Jet Tag Value; #Delta #phi_{ll}", 40, 0, 1, 40, 0, 3.14);
     hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 10, 0, 1);
+    hists[prefix+"_JetTagVal_zoom"]     = new TH1F(prefix+"_JetTagVal_zoom", ";Jet Tag Value;Events", 10, 0.9, 1);
 }
 
 
@@ -259,11 +268,11 @@ void mini_analyzer::fill_histograms()
 
 void mini_analyzer::fill_fraction_histograms(TString prefix, double event_weight)
 {
-    int binnr;
-    if(prefix.Contains("_quadA")) binnr = 0;
-    else if(prefix.Contains("_quadB")) binnr = 1;
-    else if(prefix.Contains("_quadC")) binnr = 2;
-    else binnr =3;
+    double binnr;
+    if(prefix.Contains("_quadA")) binnr = 0.;
+    else if(prefix.Contains("_quadB")) binnr = 1.;
+    else if(prefix.Contains("_quadC")) binnr = 2.;
+    else binnr =3.;
     prefix = prefix(0, prefix.Index("_quad"));
     hists[prefix+"_QuadFractions"]->Fill(binnr, event_weight);
     hists[prefix+"_QuadFractions_unw"]->Fill(binnr);
@@ -299,23 +308,28 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
     hists[prefix+"_dphill"]->Fill(event._dphill,event_weight);            
     hists[prefix+"_dRljet"]->Fill(event._dRljet,event_weight);            
                                        
-    hists[prefix+"_IVF_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);      
-    hists[prefix+"_IVF_PV-SVdxy_zoom"]->Fill(event._SV_PVSVdist_2D,event_weight); 
-    //hists[prefix+"_IVF_PV-SVdxyz"]->Fill(event._SV_PVSVdist,event_weight);
-    //hists[prefix+"_IVF_PV-SVdxyz_zoom"]->Fill(event._SV_PVSVdist,event_weight);
-    hists[prefix+"_IVF_ntracks"]->Fill(event._SV_ntracks,event_weight);       
-    hists[prefix+"_IVF_mass"]->Fill(event._SV_mass,event_weight);          
-    hists[prefix+"_IVF_l1mass"]->Fill(event._SV_l1mass,event_weight);        
-    hists[prefix+"_IVF_pt"]->Fill(event._SV_pt,event_weight);            
-    hists[prefix+"_IVF_eta"]->Fill(event._SV_eta,event_weight);           
-    //hists[prefix+"_IVF_phi"]->Fill(event._SV_phi,event_weight);
-    hists[prefix+"_IVF_normchi2"]->Fill(event._SV_normchi2,event_weight);      
+    hists[prefix+"_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);
+    hists[prefix+"_PV-SVdxy_zoom"]->Fill(event._SV_PVSVdist_2D,event_weight);
+    //hists[prefix+"_PV-SVdxyz"]->Fill(event._SV_PVSVdist,event_weight);
+    //hists[prefix+"_PV-SVdxyz_zoom"]->Fill(event._SV_PVSVdist,event_weight);
+    hists[prefix+"_ntracks"]->Fill(event._SV_ntracks,event_weight);
+    hists[prefix+"_SVmass"]->Fill(event._SV_mass,event_weight);
+    hists[prefix+"_SVl1mass"]->Fill(event._SV_l1mass,event_weight);
+    hists[prefix+"_SVpt"]->Fill(event._SV_pt,event_weight);
+    hists[prefix+"_SVeta"]->Fill(event._SV_eta,event_weight);
+    //hists[prefix+"_SVphi"]->Fill(event._SV_phi,event_weight);
+    hists[prefix+"_SVnormchi2"]->Fill(event._SV_normchi2,event_weight);
+
+    hists2D[prefix+"_lprovenance"]->Fill(event._l1Provenance, event._lProvenance, event_weight);
+    hists2D[prefix+"_lprovenanceCompressed"]->Fill(event._l1ProvenanceCompressed, event._lProvenanceCompressed, event_weight);
 }
 
 
 void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, unsigned i)
 {
+    hists2D[prefix+"_PFNvsdphill"]->Fill(event._JetTagVal[i], event._dphill, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
+    hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
 }
 
 

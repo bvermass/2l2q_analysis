@@ -22,6 +22,7 @@
 // other header files
 #include "tdrStyle.h"
 #include "helper_plotter_functions.h"
+#include "../interface/helper_histo_functions.h"
 
 # ifndef __CINT__ 
 int main(int argc, char * argv[]);

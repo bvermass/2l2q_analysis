@@ -110,6 +110,7 @@ int main(int argc, char * argv[])
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_DtoCwithCD_", "_quadC_"}, {"Region C (pred.)", "Region C"}, "_quadCwithDtoC_", false);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_BtoAwithCD_", "_quadA_"}, {"Region A (pred.)", "Region A"}, "_quadAwithBtoA_", false);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadC_"}, {"Region A", "Region C"}, "_quadA-C_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
             }
         }else if(cl->InheritsFrom("TH2")){
@@ -129,6 +130,15 @@ int main(int argc, char * argv[])
 
             pad->Modified();
             c->Print(pathname_lin + histname + ".png");
+
+            if(histname.Contains("_PFNvsdphill")){
+                std::string corfilename = (std::string)(pathname_lin + histname + "_corr.txt");
+                double cor = sample_hist->GetCorrelationFactor();
+                std::ostringstream corstream;
+                corstream << cor;
+                std::string corstring = (std::string)histname + " correlation factor: " + corstream.str();
+                filePutContents(corfilename, corstring, false);
+            }
         }
     }
 }
@@ -143,6 +153,8 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
 
         hists->Add(sample_hist);
         if(normalize_to_1) sample_hist->Scale(1./sample_hist->Integral());
+        sample_hist->SetMarkerColor(colors[0]);
+        sample_hist->SetLineColor(colors[0]);
         legend.AddEntry(sample_hist, legend_tags[0], "l");
 
         for(int i = 1; i < tags.size(); i++){

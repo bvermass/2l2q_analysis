@@ -105,6 +105,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("quadAB-CD_"))         fullname += "quadAB-CD/";
     if(histname.Contains("quadAC-BD_"))         fullname += "quadAC-BD/";
     if(histname.Contains("quadA-B_"))           fullname += "quadA-B/";
+    if(histname.Contains("quadA-C_"))           fullname += "quadA-C/";
     if(histname.Contains("quadC-D_"))           fullname += "quadC-D/";
     if(histname.Contains("AoverB_"))            fullname += "AoverB/";
     if(histname.Contains("CoverD_"))            fullname += "CoverD/";
