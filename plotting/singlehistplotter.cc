@@ -6,13 +6,20 @@ int main(int argc, char * argv[])
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    int color = TColor::GetColor(66, 129, 174);
 
     // Argument 1: name of root input file
     // Argument 2: legend associated to sample
     TString inputfilename = (TString)argv[1];
     TFile*  sample_file   = TFile::Open(inputfilename);
     TString sample_legend = adjust_legend((TString)argv[2]);
+
+    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
+    //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<int> colors;
+    for(int i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
+    }
 
     // Name of directory where plots will end up
     TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
@@ -28,20 +35,18 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
+    TLegend legend = get_legend(0.2, 0.8, 0.95, 0.91, 3);
+    legend.SetTextSize(0.04);
+
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
-    float leftmargin  = pad->GetLeftMargin();
-    float topmargin   = pad->GetTopMargin();
-    float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad);
 
     TIter next(sample_file->GetListOfKeys());
     TKey* key;
     while(key = (TKey*)next()){
 
         TClass *cl = gROOT->GetClass(key->GetClassName());
+        legend.Clear();
 
         // -- TH1 --
         if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
@@ -61,18 +66,16 @@ int main(int argc, char * argv[])
             if(xlog) divide_by_binwidth(sample_hist);
             sample_hist->GetYaxis()->SetRangeUser(0, 1.25*sample_hist->GetMaximum());
 
-            TLegend legend = get_legend(0.2, 0.88, 0.95, 0.93, 4);
             legend.AddEntry(sample_hist, sample_legend);
     
-            sample_hist->SetMarkerColor(color);
-            sample_hist->SetLineColor(color);
+            sample_hist->SetMarkerColor(colors[0]);
+            sample_hist->SetLineColor(colors[0]);
             sample_hist->Draw("E0 X0 P");
             legend.Draw("same");
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-            lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
-            //drawLumi(pad);
+            CMSandLumi->Draw();
 
             pad->Modified();
+
             c->Print(pathname_lin + histname + ".png");
 
             // Efficiencies are calculated right here as TGraphAsymmErrors
@@ -91,11 +94,15 @@ int main(int argc, char * argv[])
 
                 efficiency_graph->Draw("AP");
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
                 pad->Modified();
                 c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
+            }
+
+            // METResolution specfic plots
+            if(histname.Contains("_metRaw")){
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_metRaw", "_met", "_metXY", "_metPuppiRaw", "_metPuppi"}, {"Raw MET", "Type 1 MET", "Type 1 + XY MET", "Raw Puppi MET", "Type 1 Puppi MET"}, "_mets", false);
             }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -110,8 +117,7 @@ int main(int argc, char * argv[])
             pad->Clear();
 
             sample_hist->Draw(get_2D_draw_options(sample_hist));
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-            lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+            CMSandLumi->Draw();
 
             pad->Modified();
             c->Print(pathname_lin + histname + ".png");
@@ -119,3 +125,70 @@ int main(int argc, char * argv[])
     }
 }
 # endif
+
+void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, std::vector<TString> tags, std::vector<TString> legend_tags, TString plot_tag, bool normalize_to_1)
+{
+    if(histname.Contains(tags[0])){
+        legend.Clear();
+
+        THStack* hists = new THStack("stack", "");
+
+        hists->Add(sample_hist);
+        if(normalize_to_1) sample_hist->Scale(1./sample_hist->Integral());
+        sample_hist->SetMarkerColor(colors[0]);
+        sample_hist->SetLineColor(colors[0]);
+
+        // resize legend if necessary
+        for(const TString& legend_tag : legend_tags){
+            if(legend_tag.Length() > 9){
+                legend.SetNColumns(2);
+            }
+        }
+        legend.AddEntry(sample_hist, legend_tags[0], "l");
+
+        for(int i = 1; i < tags.size(); i++){
+            TString histname_extra = histname;
+            histname_extra.ReplaceAll(tags[0], tags[i]);
+            TH1* hist_extra = (TH1*)sample_file->Get(histname_extra);
+            hist_extra->SetMarkerColor(colors[i]);
+            hist_extra->SetLineColor(colors[i]);
+            hists->Add(hist_extra);
+            legend.AddEntry(hist_extra, legend_tags[i], "l");
+            if(normalize_to_1) hist_extra->Scale(1./hist_extra->Integral());
+        }
+
+        TString plotname = histname;
+        plotname.ReplaceAll(tags[0], plot_tag);
+        TString pathname_lin    = make_plotspecific_pathname(plotname, general_pathname, "lin/");
+        TString pathname_log    = make_plotspecific_pathname(plotname, general_pathname, "log/");
+
+        pad->Clear();
+        pad->SetLogy(0);
+
+        hists->Draw("E P hist nostack");
+        hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
+        hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
+        hists->SetMaximum(1.4*hists->GetMaximum("nostack"));
+        hists->SetMinimum(0);
+        legend.Draw("same");
+        CMSandLumi->Draw();
+
+        pad->Modified();
+        c->Print(pathname_lin + plotname + ".png");
+
+        // Draw log version
+        pad->Clear();
+        pad->SetLogy(1);
+
+        hists->Draw("E P hist nostack");
+        hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
+        hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
+        hists->SetMaximum(50*hists->GetMaximum("nostack"));
+        hists->SetMinimum(std::max(1e-2, 0.5*hists->GetMinimum("nostack")));
+        legend.Draw("same");
+        CMSandLumi->Draw();
+
+        pad->Modified();
+        c->Print(pathname_log + plotname + ".png");
+    }
+}
