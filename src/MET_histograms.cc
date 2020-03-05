@@ -213,43 +213,17 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
 
     // systematic uncertainties
-    (*hists)[prefix+"_metJECDown"]                     = new TH1F(prefix+"_metJECDown", ";JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metJECUp"]                       = new TH1F(prefix+"_metJECUp", ";JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metResDown"]                     = new TH1F(prefix+"_metResDown", ";JER Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metResUp"]                       = new TH1F(prefix+"_metResUp", ";JER Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metUnclDown"]                    = new TH1F(prefix+"_metUnclDown", ";Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metUnclUp"]                      = new TH1F(prefix+"_metUnclUp", ";Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_met_zoomJECDown"]                = new TH1F(prefix+"_met_zoomJECDown", ";JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_met_zoomJECUp"]                  = new TH1F(prefix+"_met_zoomJECUp", ";JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_met_zoomResDown"]                = new TH1F(prefix+"_met_zoomResDown", ";JER Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_met_zoomResUp"]                  = new TH1F(prefix+"_met_zoomResUp", ";JER Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_met_zoomUnclDown"]               = new TH1F(prefix+"_met_zoomUnclDown", ";Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_met_zoomUnclUp"]                 = new TH1F(prefix+"_met_zoomUnclUp", ";Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPhiJECDown"]                  = new TH1F(prefix+"_metPhiJECDown", ";JEC Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPhiJECUp"]                    = new TH1F(prefix+"_metPhiJECUp", ";JEC Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPhiResDown"]                  = new TH1F(prefix+"_metPhiResDown", ";JER Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPhiResUp"]                    = new TH1F(prefix+"_metPhiResUp", ";JER Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPhiUnclDown"]                 = new TH1F(prefix+"_metPhiUnclDown", ";Uncl Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPhiUnclUp"]                   = new TH1F(prefix+"_metPhiUnclUp", ";Uncl Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-
-    (*hists)[prefix+"_metPuppiJECDown"]                = new TH1F(prefix+"_metPuppiJECDown", ";Puppi JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppiJECUp"]                  = new TH1F(prefix+"_metPuppiJECUp", ";Puppi JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppiResDown"]                = new TH1F(prefix+"_metPuppiResDown", ";Puppi JER Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppiResUp"]                  = new TH1F(prefix+"_metPuppiResUp", ";Puppi JER Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppiUnclDown"]               = new TH1F(prefix+"_metPuppiUnclDown", ";Puppi Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppiUnclUp"]                 = new TH1F(prefix+"_metPuppiUnclUp", ";Puppi Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 300);
-    (*hists)[prefix+"_metPuppi_zoomJECDown"]           = new TH1F(prefix+"_metPuppi_zoomJECDown", ";Puppi JEC Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppi_zoomJECUp"]             = new TH1F(prefix+"_metPuppi_zoomJECUp", ";Puppi JEC Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppi_zoomResDown"]           = new TH1F(prefix+"_metPuppi_zoomResDown", ";Puppi JER Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppi_zoomResUp"]             = new TH1F(prefix+"_metPuppi_zoomResUp", ";Puppi JER Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppi_zoomUnclDown"]          = new TH1F(prefix+"_metPuppi_zoomUnclDown", ";Puppi Uncl Down E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppi_zoomUnclUp"]            = new TH1F(prefix+"_metPuppi_zoomUnclUp", ";Puppi Uncl Up E_{T}^{miss} [GeV];Events", 50, 0, 800);
-    (*hists)[prefix+"_metPuppiPhiJECDown"]             = new TH1F(prefix+"_metPuppiPhiJECDown", ";Puppi JEC Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPuppiPhiJECUp"]               = new TH1F(prefix+"_metPuppiPhiJECUp", ";Puppi JEC Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPuppiPhiResDown"]             = new TH1F(prefix+"_metPuppiPhiResDown", ";Puppi JER Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPuppiPhiResUp"]               = new TH1F(prefix+"_metPuppiPhiResUp", ";Puppi JER Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPuppiPhiUnclDown"]            = new TH1F(prefix+"_metPuppiPhiUnclDown", ";Puppi Uncl Down E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
-    (*hists)[prefix+"_metPuppiPhiUnclUp"]              = new TH1F(prefix+"_metPuppiPhiUnclUp", ";Puppi Uncl Up E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    for(const TString& systunc : {"JECDown", "JECUp", "ResDown", "ResUp", "UnclDown", "UnclUp"}){
+        (*hists)[prefix+"_met"+systunc]                     = new TH1F(prefix+"_met"+systunc, ";" + systunc + " E_{T}^{miss} [GeV];Events", 50, 0, 300);
+        (*hists)[prefix+"_met_zoom"+systunc]                = new TH1F(prefix+"_met_zoom"+systunc, ";"+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 800);
+        (*hists)[prefix+"_metXY"+systunc]                   = new TH1F(prefix+"_metXY"+systunc, ";" + systunc + " E_{T}^{miss} [GeV];Events", 50, 0, 300);
+        (*hists)[prefix+"_metXY_zoom"+systunc]              = new TH1F(prefix+"_metXY_zoom"+systunc, ";"+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 800);
+        (*hists)[prefix+"_metPhi"+systunc]                  = new TH1F(prefix+"_metPhi"+systunc, ";"+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+        (*hists)[prefix+"_metXYPhi"+systunc]                = new TH1F(prefix+"_metXYPhi"+systunc, ";"+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+        (*hists)[prefix+"_metPuppi"+systunc]                = new TH1F(prefix+"_metPuppi"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 300);
+        (*hists)[prefix+"_metPuppi_zoom"+systunc]           = new TH1F(prefix+"_metPuppi_zoom"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 800);
+        (*hists)[prefix+"_metPuppiPhi"+systunc]             = new TH1F(prefix+"_metPuppiPhi"+systunc, ";Puppi "+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    }
 }
 
 void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
@@ -383,4 +357,30 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_metPuppiPhiResUp"]->Fill(_metPuppiPhiResUp, event_weight);
     (*hists)[prefix+"_metPuppiPhiUnclDown"]->Fill(_metPuppiPhiUnclDown, event_weight);
     (*hists)[prefix+"_metPuppiPhiUnclUp"]->Fill(_metPuppiPhiUnclUp, event_weight);
+
+    std::pair<double, double> _metAndPhiXYJECDown   = METXYCorr_Met_MetPhi(_metJECDown, _metPhiJECDown, _nVertex);
+    std::pair<double, double> _metAndPhiXYJECUp     = METXYCorr_Met_MetPhi(_metJECUp, _metPhiJECUp, _nVertex);
+    std::pair<double, double> _metAndPhiXYResDown   = METXYCorr_Met_MetPhi(_metResDown, _metPhiResDown, _nVertex);
+    std::pair<double, double> _metAndPhiXYResUp     = METXYCorr_Met_MetPhi(_metResUp, _metPhiResUp, _nVertex);
+    std::pair<double, double> _metAndPhiXYUnclDown  = METXYCorr_Met_MetPhi(_metUnclDown, _metPhiUnclDown, _nVertex);
+    std::pair<double, double> _metAndPhiXYUnclUp    = METXYCorr_Met_MetPhi(_metUnclUp, _metPhiUnclUp, _nVertex);
+
+    (*hists)[prefix+"_metXYJECDown"]->Fill(_metAndPhiXYJECDown.first, event_weight);
+    (*hists)[prefix+"_metXYJECUp"]->Fill(_metAndPhiXYJECUp.first, event_weight);
+    (*hists)[prefix+"_metXYResDown"]->Fill(_metAndPhiXYResDown.first, event_weight);
+    (*hists)[prefix+"_metXYResUp"]->Fill(_metAndPhiXYResUp.first, event_weight);
+    (*hists)[prefix+"_metXYUnclDown"]->Fill(_metAndPhiXYUnclDown.first, event_weight);
+    (*hists)[prefix+"_metXYUnclUp"]->Fill(_metAndPhiXYUnclUp.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomJECDown"]->Fill(_metAndPhiXYJECDown.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomJECUp"]->Fill(_metAndPhiXYJECUp.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomResDown"]->Fill(_metAndPhiXYResDown.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomResUp"]->Fill(_metAndPhiXYResUp.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomUnclDown"]->Fill(_metAndPhiXYUnclDown.first, event_weight);
+    (*hists)[prefix+"_metXY_zoomUnclUp"]->Fill(_metAndPhiXYUnclUp.first, event_weight);
+    (*hists)[prefix+"_metXYPhiJECDown"]->Fill(_metAndPhiXYJECDown.second, event_weight);
+    (*hists)[prefix+"_metXYPhiJECUp"]->Fill(_metAndPhiXYJECUp.second, event_weight);
+    (*hists)[prefix+"_metXYPhiResDown"]->Fill(_metAndPhiXYResDown.second, event_weight);
+    (*hists)[prefix+"_metXYPhiResUp"]->Fill(_metAndPhiXYResUp.second, event_weight);
+    (*hists)[prefix+"_metXYPhiUnclDown"]->Fill(_metAndPhiXYUnclDown.second, event_weight);
+    (*hists)[prefix+"_metXYPhiUnclUp"]->Fill(_metAndPhiXYUnclUp.second, event_weight);
 }
