@@ -66,9 +66,11 @@ void mini_analyzer::ABCD_ratios()
 {
     if(!isData) calculate_ratio("_quadA_Yield", "_quadB_Yield", "_AoverB_Yield");
     calculate_ratio("_quadC_Yield", "_quadD_Yield", "_CoverD_Yield");
+    calculate_ratio("_quadB_Yield", "_quadD_Yield", "_BoverD_Yield");
 
     apply_ratio("_CoverD_Yield", "_quadD_", "_DtoCwithCD_");
     apply_ratio("_CoverD_Yield", "_quadB_", "_BtoAwithCD_");
+    apply_ratio("_BoverD_Yield", "_quadC_", "_CtoAwithBD_");
 }
 
 
@@ -180,7 +182,7 @@ void mini_analyzer::add_histograms()
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
         for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll"}){
-            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_CoverD", "_DtoCwithCD", "_BtoAwithCD"}){
+            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_CoverD", "_BoverD", "_DtoCwithCD", "_BtoAwithCD", "_CtoAwithBD"}){
                 add_standard_histograms(lep_region + cut2region + quadrant);
                 //move to parametrized pfn evaluation:
                 add_pfn_histograms(lep_region + cut2region + quadrant);
@@ -215,6 +217,7 @@ void mini_analyzer::add_fraction_histograms(TString prefix)
 void mini_analyzer::add_standard_histograms(TString prefix)
 {
     hists[prefix+"_Yield"]              = new TH1F(prefix+"_Yield", ";;Events", 1, 0, 1);
+    hists[prefix+"_SRShape"]            = new TH1F(prefix+"_SRShape", ";;Events", 4, 0, 4);
     hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 6, 0, 10);
     hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 6, 0, 100);
     hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 6, -3, 3);
@@ -243,10 +246,14 @@ void mini_analyzer::add_standard_histograms(TString prefix)
 
     hists[prefix+"_PV-SVdxy"]       = new TH1F(prefix+"_PV-SVdxy", ";L_{xy} [cm];Events", 6, 0, 60);
     hists[prefix+"_PV-SVdxy_zoom"]  = new TH1F(prefix+"_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 6, 0, 20);
+    double PVSVdxybins[3] = {0, 10, 60};
+    hists[prefix+"_PV-SVdxy_zoom2"]  = new TH1F(prefix+"_PV-SVdxy_zoom2", ";L_{xy} [cm];Events", 2, PVSVdxybins);
     //hists[prefix+"_PV-SVdxyz"]      = new TH1F(prefix+"_PV-SVdxyz", ";L_{xyz} [cm];Events", 6, 0, 100);
     //hists[prefix+"_PV-SVdxyz_zoom"] = new TH1F(prefix+"_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 6, 0, 20);
     hists[prefix+"_ntracks"]        = new TH1F(prefix+"_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     hists[prefix+"_SVmass"]         = new TH1F(prefix+"_SVmass", ";SV Mass [GeV];Events", 6, 0, 20);
+    double SVmassbins[3] = {0, 4, 20};
+    hists[prefix+"_SVmass2"]         = new TH1F(prefix+"_SVmass2", ";SV Mass [GeV];Events", 2, SVmassbins);
     hists[prefix+"_SVl1mass"]         = new TH1F(prefix+"_SVl1mass", ";SV + l_{1} Mass [GeV];Events", 6, 0, 150);
     hists[prefix+"_SVpt"]             = new TH1F(prefix+"_SVpt", ";SV #it{p}_{T} [GeV];Events", 6, 0, 100);
     hists[prefix+"_SVeta"]            = new TH1F(prefix+"_SVeta", ";SV #eta;Events", 6, -3, 3);
@@ -261,6 +268,7 @@ void mini_analyzer::add_standard_histograms(TString prefix)
 void mini_analyzer::add_pfn_histograms(TString prefix)
 {
     hists2D[prefix+"_PFNvsdphill"]      = new TH2F(prefix+"_PFNvsdphill", ";Jet Tag Value; #Delta #phi_{ll}", 40, 0, 1, 40, 0, 3.14);
+    hists2D[prefix+"_PFNvsmll"]         = new TH2F(prefix+"_PFNvsmll", ";Jet Tag Value; M_{ll}", 40, 0, 1, 40, 0, 150);
     hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 10, 0, 1);
     hists[prefix+"_JetTagVal_zoom"]     = new TH1F(prefix+"_JetTagVal_zoom", ";Jet Tag Value;Events", 10, 0.9, 1);
 }
@@ -293,6 +301,7 @@ void mini_analyzer::fill_fraction_histograms(TString prefix, double event_weight
 void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight)
 {
     hists[prefix+"_Yield"]->Fill(0., event_weight);
+    hists[prefix+"_SRShape"]->Fill(get_SRShapebin(event._SV_PVSVdist_2D, event._SV_mass), event_weight);
     hists[prefix+"_nTightJet"]->Fill(event._nTightJet,event_weight);         
     hists[prefix+"_JetPt"]->Fill(event._JetPt,event_weight);             
     hists[prefix+"_JetEta"]->Fill(event._JetEta,event_weight);            
@@ -321,10 +330,12 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
                                        
     hists[prefix+"_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);
     hists[prefix+"_PV-SVdxy_zoom"]->Fill(event._SV_PVSVdist_2D,event_weight);
+    hists[prefix+"_PV-SVdxy_zoom2"]->Fill(event._SV_PVSVdist_2D,event_weight);
     //hists[prefix+"_PV-SVdxyz"]->Fill(event._SV_PVSVdist,event_weight);
     //hists[prefix+"_PV-SVdxyz_zoom"]->Fill(event._SV_PVSVdist,event_weight);
     hists[prefix+"_ntracks"]->Fill(event._SV_ntracks,event_weight);
     hists[prefix+"_SVmass"]->Fill(event._SV_mass,event_weight);
+    hists[prefix+"_SVmass2"]->Fill(event._SV_mass,event_weight);
     hists[prefix+"_SVl1mass"]->Fill(event._SV_l1mass,event_weight);
     hists[prefix+"_SVpt"]->Fill(event._SV_pt,event_weight);
     hists[prefix+"_SVeta"]->Fill(event._SV_eta,event_weight);
@@ -339,6 +350,7 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
 void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, unsigned i)
 {
     hists2D[prefix+"_PFNvsdphill"]->Fill(event._JetTagVal[i], event._dphill, event_weight);
+    hists2D[prefix+"_PFNvsmll"]->Fill(event._JetTagVal[i], event._mll, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
     hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
 }
@@ -384,6 +396,14 @@ void mini_analyzer::sum_histograms_based_on_tags(TString base_tag, TString secon
             hists2D[histname_combined]->Add(h, hists2D[histname_second]);
         }
     }
+}
+
+double mini_analyzer::get_SRShapebin(double PVSVdist_2D, double SV_mass)
+{
+    if(PVSVdist_2D < 10 and SV_mass < 4) return 0.;
+    else if(PVSVdist_2D > 10 and SV_mass < 4) return 1.;
+    else if(PVSVdist_2D < 10 and SV_mass > 4) return 2.;
+    return 3.;
 }
 
 

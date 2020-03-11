@@ -112,6 +112,7 @@ int main(int argc, char * argv[])
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadC_"}, {"Region A", "Region C"}, "_quadA-C_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_AoverB_Yield", "_CoverD_Yield"}, {"A/B", "C/D"}, "_AoverB-CoverD_Yield", false);
             }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -131,12 +132,12 @@ int main(int argc, char * argv[])
             pad->Modified();
             c->Print(pathname_lin + histname + ".png");
 
-            if(histname.Contains("_PFNvsdphill")){
+            if(histname.Contains("_PFNvs")){
                 std::string corfilename = (std::string)(pathname_lin + histname + "_corr.txt");
                 double cor = sample_hist->GetCorrelationFactor();
                 std::ostringstream corstream;
                 corstream << cor;
-                std::string corstring = (std::string)histname + " correlation factor: " + corstream.str();
+                std::string corstring = (std::string)histname + " correlation factor:" + corstream.str();
                 filePutContents(corfilename, corstring, false);
             }
         }

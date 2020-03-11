@@ -69,6 +69,7 @@ class mini_analyzer {
 
         void sum_quad_histograms();
         void sum_histograms_based_on_tags(TString base_tag, TString second_tags, TString target_tag);
+        double get_SRShapebin(double PVSVdist_2D, double SV_mass);
 };
 
 #endif
