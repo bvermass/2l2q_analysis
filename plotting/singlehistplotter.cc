@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
             pad->Modified();
             c->Print(pathname_lin + histname + ".png");
 
-            if(histname.Contains("_PFNvs")){
+            if(histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs")){
                 std::string corfilename = (std::string)(pathname_lin + histname + "_corr.txt");
                 double cor = sample_hist->GetCorrelationFactor();
                 std::ostringstream corstream;

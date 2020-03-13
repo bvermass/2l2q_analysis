@@ -182,7 +182,7 @@ void mini_analyzer::add_histograms()
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
         for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll"}){
-            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_CoverD", "_BoverD", "_DtoCwithCD", "_BtoAwithCD", "_CtoAwithBD"}){
+            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD", "_DtoCwithCD", "_BtoAwithCD", "_CtoAwithBD"}){
                 add_standard_histograms(lep_region + cut2region + quadrant);
                 //move to parametrized pfn evaluation:
                 add_pfn_histograms(lep_region + cut2region + quadrant);
@@ -260,6 +260,10 @@ void mini_analyzer::add_standard_histograms(TString prefix)
     //hists[prefix+"_SVphi"]            = new TH1F(prefix+"_SVphi", ";SV #phi;Events", 6, -3.14, 3.14);
     hists[prefix+"_SVnormchi2"]       = new TH1F(prefix+"_SVnormchi2", ";Normalized #Chi^{2};Events", 6, 0, 10);
 
+    hists2D[prefix+"_mllvsSVmass"] = new TH2F(prefix+"_mllvsSVmass", ";M_{ll} [GeV];M_{SV} [GeV]", 150, 0, 150, 150, 0, 20);
+    hists2D[prefix+"_mllvsPVSVdxy"] = new TH2F(prefix+"_mllvsPVSVdxy", "M_{ll} [GeV];L_{xy} [cm]", 150, 0, 150, 150, 0, 60);
+    hists2D[prefix+"_dphillvsSVmass"] = new TH2F(prefix+"_dphillvsSVmass", "#Delta #phi_{ll};M_{SV} [GeV]", 150, 0, 3.14, 150, 0, 20);
+    hists2D[prefix+"_dphillvsPVSVdxy"] = new TH2F(prefix+"_dphillvsPVSVdxy", "#Delta #phi_{ll};L_{xy} [cm]", 150, 0, 3.14, 150, 0, 60);
     hists2D[prefix+"_lprovenance"] = new TH2F(prefix+"_lprovenance", "", 19, 0, 19, 19, 0, 19);
     hists2D[prefix+"_lprovenanceCompressed"] = new TH2F(prefix+"_lprovenanceCompressed", "", 5, 0, 5, 5, 0, 5);
 }
@@ -342,6 +346,10 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
     //hists[prefix+"_SVphi"]->Fill(event._SV_phi,event_weight);
     hists[prefix+"_SVnormchi2"]->Fill(event._SV_normchi2,event_weight);
 
+    hists2D[prefix+"_mllvsSVmass"]->Fill(event._mll, event._SV_mass, event_weight);
+    hists2D[prefix+"_mllvsPVSVdxy"]->Fill(event._mll, event._SV_PVSVdist_2D, event_weight);
+    hists2D[prefix+"_dphillvsSVmass"]->Fill(event._dphill, event._SV_mass, event_weight);
+    hists2D[prefix+"_dphillvsPVSVdxy"]->Fill(event._dphill, event._SV_PVSVdist_2D, event_weight);
     hists2D[prefix+"_lprovenance"]->Fill(event._l1Provenance, event._lProvenance, event_weight);
     hists2D[prefix+"_lprovenanceCompressed"]->Fill(event._l1ProvenanceCompressed, event._lProvenanceCompressed, event_weight);
 }
@@ -364,6 +372,7 @@ void mini_analyzer::sum_quad_histograms()
     }
     sum_histograms_based_on_tags("_quadB_", "_quadD_", "_quadBD_");
     sum_histograms_based_on_tags("_quadC_", "_quadD_", "_quadCD_");
+    sum_histograms_based_on_tags("_quadB_", "_quadCD_", "_quadBCD_");
 
     if(!isData) sum_histograms_based_on_tags("_quadAB_", "_quadCD_", "_quadABCD_");
 }
@@ -400,8 +409,8 @@ void mini_analyzer::sum_histograms_based_on_tags(TString base_tag, TString secon
 
 double mini_analyzer::get_SRShapebin(double PVSVdist_2D, double SV_mass)
 {
-    if(PVSVdist_2D < 10 and SV_mass < 4) return 0.;
-    else if(PVSVdist_2D > 10 and SV_mass < 4) return 1.;
+    if(PVSVdist_2D < 10 and SV_mass <= 4) return 0.;
+    else if(PVSVdist_2D > 10 and SV_mass <= 4) return 1.;
     else if(PVSVdist_2D < 10 and SV_mass > 4) return 2.;
     return 3.;
 }
