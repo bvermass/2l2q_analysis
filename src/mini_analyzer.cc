@@ -129,6 +129,9 @@ void mini_analyzer::set_signal_regions()
     baseline_cutphiORmll = event._mll > 10 &&
                            event._nTightJet <= 1;
 
+    baseline_cutmlSV = event._SV_l1mass > 10 &&
+                       event._nTightJet <= 1;
+
 
     // Determine quadrant (in PFN output and dphi)
     // dphill
@@ -161,6 +164,16 @@ void mini_analyzer::set_signal_regions()
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadD");
         }
     }
+    // mlSV
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmlSV_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmlSV_quadD");
+        }
+    }
 
 
     // Determine sr_flavor
@@ -181,7 +194,7 @@ void mini_analyzer::add_histograms()
 {
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll"}){
+        for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll", "_cutmlSV"}){
             for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD", "_DtoCwithCD", "_BtoAwithCD", "_CtoAwithBD"}){
                 add_standard_histograms(lep_region + cut2region + quadrant);
                 //move to parametrized pfn evaluation:
@@ -271,8 +284,9 @@ void mini_analyzer::add_standard_histograms(TString prefix)
 
 void mini_analyzer::add_pfn_histograms(TString prefix)
 {
-    hists2D[prefix+"_PFNvsdphill"]      = new TH2F(prefix+"_PFNvsdphill", ";Jet Tag Value; #Delta #phi_{ll}", 40, 0, 1, 40, 0, 3.14);
-    hists2D[prefix+"_PFNvsmll"]         = new TH2F(prefix+"_PFNvsmll", ";Jet Tag Value; M_{ll}", 40, 0, 1, 40, 0, 150);
+    hists2D[prefix+"_PFNvsdphill"]      = new TH2F(prefix+"_PFNvsdphill", ";PFN output; #Delta #phi_{ll}", 40, 0, 1, 40, 0, 3.14);
+    hists2D[prefix+"_PFNvsmll"]         = new TH2F(prefix+"_PFNvsmll", ";PFN output; M_{ll} [GeV]", 40, 0, 1, 40, 0, 150);
+    hists2D[prefix+"_PFNvsmlSV"]        = new TH2F(prefix+"_PFNvsmlSV", ";PFN output; M_{l,SV} [GeV]", 40, 0, 1, 40, 0, 150);
     hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 10, 0, 1);
     hists[prefix+"_JetTagVal_zoom"]     = new TH1F(prefix+"_JetTagVal_zoom", ";Jet Tag Value;Events", 10, 0.9, 1);
 }
@@ -359,6 +373,7 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
 {
     hists2D[prefix+"_PFNvsdphill"]->Fill(event._JetTagVal[i], event._dphill, event_weight);
     hists2D[prefix+"_PFNvsmll"]->Fill(event._JetTagVal[i], event._mll, event_weight);
+    hists2D[prefix+"_PFNvsmll"]->Fill(event._JetTagVal[i], event._SV_l1mass, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
     hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
 }

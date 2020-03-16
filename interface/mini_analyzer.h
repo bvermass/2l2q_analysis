@@ -44,6 +44,7 @@ class mini_analyzer {
         bool baseline_cutphill;
         bool baseline_cutmll;
         bool baseline_cutphiORmll;
+        bool baseline_cutmlSV;
 
         //General functions
         mini_analyzer(TString filename);
