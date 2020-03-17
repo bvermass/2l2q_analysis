@@ -94,6 +94,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutphill_"))          fullname += "ABCDwithDeltaPhi/";
     if(histname.Contains("cutmll_"))            fullname += "ABCDwithmll/";
     if(histname.Contains("cutphiORmll_"))       fullname += "ABCDwithDeltaPhiORmll/";
+    if(histname.Contains("cutmlSV_"))           fullname += "ABCDwithmlSV/";
     if(histname.Contains("quadA_"))             fullname += "quadA/";
     if(histname.Contains("quadB_"))             fullname += "quadB/";
     if(histname.Contains("quadC_"))             fullname += "quadC/";
