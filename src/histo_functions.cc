@@ -128,11 +128,6 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
         //(*hists)[prefix+"_IVF_mass_check"]                  = new TH1F(prefix+"_IVF_mass_check", ";SV Mass [GeV] (IVF);Events", 30, 0, 10);
         (*hists)[prefix+"_IVF_ptsum"]                       = new TH1F(prefix+"_IVF_ptsum", ";SV #it{p}_{T}^{sum} [GeV] (IVF);Events", 30, 0, 80);
         (*hists)[prefix+"_IVF_l1_mass"]                     = new TH1F(prefix+"_IVF_l1_mass", ";l_{1} + SV Mass [GeV] (IVF);Events", 40, 0, 150);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dphi", ";#Delta#phi: HNL flight - IVF track sum;Events", 30, 0, 0.04);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_deta", ";#Delta#eta: HNL flight - IVF track sum;Events", 30, 0, 0.3);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR: HNL flight - IVF track sum;Events", 30, 0, 0.3);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";cos #theta: HNL flight - IVF track sum;Events", 30, 0.9, 1);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";sin #theta: HNL flight - IVF track sum;Events", 30, 0, 0.15);
         (*hists)[prefix+"_IVF_PV-SVdxy_zoom2"]              = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
         (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2"]             = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
     }
@@ -462,13 +457,6 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             (*hists)[prefix+"_IVF_ptsum"]->Fill(tracksum.Pt(), event_weight);
             (*hists)[prefix+"_IVF_l1_mass"]->Fill((tracksum+l1vector).M(), event_weight);
 
-            // not using LorentzVector here, since I need the option to set (x, y, z, t)
-            TLorentzVector PVSV_vector(_IVF_x[i_subleading] - _PV_x, _IVF_y[i_subleading] - _PV_y, _IVF_z[i_subleading] - _PV_z, 0);
-            (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]->Fill(tracksum.DeltaPhi(PVSV_vector), event_weight);
-            (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]->Fill(fabs(tracksum.Eta() - PVSV_vector.Eta()), event_weight);
-            (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]->Fill(tracksum.DeltaR(PVSV_vector), event_weight);
-            (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"]->Fill(-tracksum*PVSV_vector/tracksum.Vect().Mag()/PVSV_vector.Vect().Mag(), event_weight);
-            (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]->Fill(fabs(tracksum.Perp(PVSV_vector.Vect())/tracksum.Vect().Mag()), event_weight);
         }
         
         if(sampleflavor.Index("Run") == -1){

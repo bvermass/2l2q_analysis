@@ -112,6 +112,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("quadC-D_"))           fullname += "quadC-D/";
     if(histname.Contains("AoverB_"))            fullname += "AoverB/";
     if(histname.Contains("CoverD_"))            fullname += "CoverD/";
+    if(histname.Contains("BoverD_"))            fullname += "BoverD/";
     if(histname.Contains("DtoCwithCD_"))        fullname += "DtoCwithCD/";
     if(histname.Contains("BtoAwithCD_"))        fullname += "BtoAwithCD/";
     if(histname.Contains("CtoAwithBD_"))        fullname += "CtoAwithBD/";
@@ -279,7 +280,7 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
     std::ostringstream eff_bkg_unc_stream;
     eff_bkg_unc_stream << round(cp_eff_bkg_unc*10000)/100;
     std::ostringstream eff_cp_stream;
-    eff_cp_stream << round(cp*10000)/100;
+    eff_cp_stream << round(cp*100)/100;
 
     std::string content = (std::string)histname + "\n";
     content += "\\item Sig " + eff_signal_stream.str() + "\\% (" + eff_signal_unc_stream.str() + " events)\\\\\n";

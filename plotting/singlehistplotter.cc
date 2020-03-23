@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_BtoAwithCD_", "_quadA_"}, {"Region A (pred.)", "Region A"}, "_quadAwithBtoA_", false);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadC_"}, {"Region A", "Region C"}, "_quadA-C_", true);
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
+                //plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_AoverB_Yield", "_CoverD_Yield"}, {"A/B", "C/D"}, "_AoverB-CoverD_Yield", false);
             }
         }else if(cl->InheritsFrom("TH2")){
