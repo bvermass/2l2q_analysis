@@ -288,6 +288,12 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lMuonSegComp", i_lMuonSegComp, &bi__lMuonSegComp);
     tree->SetBranchAddress("_lMuonTrackPt", i_lMuonTrackPt, &bi__lMuonTrackPt);
     tree->SetBranchAddress("_lMuonTrackPtErr", i_lMuonTrackPtErr, &bi__lMuonTrackPtErr);
+    tree->SetBranchAddress("_lMuonTimenDof", i_lMuonTimenDof, &bi__lMuonTimenDof);
+    tree->SetBranchAddress("_lMuonTime", i_lMuonTime, &bi__lMuonTime);
+    tree->SetBranchAddress("_lMuonTimeErr", i_lMuonTimeErr, &bi__lMuonTimeErr);
+    tree->SetBranchAddress("_lMuonRPCTimenDof", i_lMuonRPCTimenDof, &bi__lMuonRPCTimenDof);
+    tree->SetBranchAddress("_lMuonRPCTime", i_lMuonRPCTime, &bi__lMuonRPCTime);
+    tree->SetBranchAddress("_lMuonRPCTimeErr", i_lMuonRPCTimeErr, &bi__lMuonRPCTimeErr);
     if(!isData){
         tree->SetBranchAddress("_lIsPrompt", i_lIsPrompt, &bi__lIsPrompt);
         tree->SetBranchAddress("_lMatchPdgId", i_lMatchPdgId, &bi__lMatchPdgId);
@@ -696,6 +702,12 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lMuonSegComp",                       &o_lMuonSegComp,                         "_lMuonSegComp[_nMu]/D");
     tree->Branch("_lMuonTrackPt",                       &o_lMuonTrackPt,                         "_lMuonTrackPt[_nMu]/D");
     tree->Branch("_lMuonTrackPtErr",                    &o_lMuonTrackPtErr,                      "_lMuonTrackPtErr[_nMu]/D");
+    tree->Branch("_lMuonTimenDof",                      &o_lMuonTimenDof,                "_lMuonTimenDof[_nMu]/I");
+    tree->Branch("_lMuonTime",                          &o_lMuonTime,                    "_lMuonTime[_nMu]/D");
+    tree->Branch("_lMuonTimeErr",                       &o_lMuonTimeErr,                 "_lMuonTimeErr[_nMu]/D");
+    tree->Branch("_lMuonRPCTimenDof",                   &o_lMuonRPCTimenDof,             "_lMuonRPCTimenDof[_nMu]/I");
+    tree->Branch("_lMuonRPCTime",                       &o_lMuonRPCTime,                 "_lMuonRPCTime[_nMu]/D");
+    tree->Branch("_lMuonRPCTimeErr",                    &o_lMuonRPCTimeErr,              "_lMuonRPCTimeErr[_nMu]/D");
     if( !isData ){
         tree->Branch("_lIsPrompt",                        &o_lIsPrompt,                            "_lIsPrompt[_nL]/O");
         tree->Branch("_lMatchPdgId",                      &o_lMatchPdgId,                          "_lMatchPdgId[_nL]/I");
@@ -1075,6 +1087,12 @@ void Skimmer::Skim(TString skimcondition)
                 o_lMuonSegComp[i] = i_lMuonSegComp[i];   
                 o_lMuonTrackPt[i] = i_lMuonTrackPt[i];   
                 o_lMuonTrackPtErr[i] = i_lMuonTrackPtErr[i];   
+                o_lMuonTimenDof[i] = i_lMuonTimenDof[i];
+                o_lMuonTime[i] = i_lMuonTime[i];
+                o_lMuonTimeErr[i] = i_lMuonTimeErr[i];
+                o_lMuonRPCTimenDof[i] = i_lMuonRPCTimenDof[i];
+                o_lMuonRPCTime[i] = i_lMuonRPCTime[i];
+                o_lMuonRPCTimeErr[i] = i_lMuonRPCTimeErr[i];
             }
             o_nPh = i_nPh;
             for(unsigned i = 0; i < i_nPh; i++){

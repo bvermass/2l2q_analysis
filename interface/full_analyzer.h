@@ -323,6 +323,12 @@ public :
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
+   Int_t           _lMuonTimenDof[10];
+   Double_t        _lMuonTime[10];
+   Double_t        _lMuonTimeErr[10];
+   Int_t           _lMuonRPCTimenDof[10];
+   Double_t        _lMuonRPCTime[10];
+   Double_t        _lMuonRPCTimeErr[10];
    Bool_t          _lIsPrompt[10];   //[_nL]
    Int_t           _lMatchPdgId[10];   //[_nL]
    Int_t           _lMatchCharge[10];
@@ -692,6 +698,12 @@ public :
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
+   TBranch        *b__lMuonTimenDof;
+   TBranch        *b__lMuonTime;
+   TBranch        *b__lMuonTimeErr;
+   TBranch        *b__lMuonRPCTimenDof;
+   TBranch        *b__lMuonRPCTime;
+   TBranch        *b__lMuonRPCTimeErr;
    TBranch        *b__lIsPrompt;   //!
    TBranch        *b__lMatchPdgId;   //!
    TBranch        *b__lMatchCharge;
