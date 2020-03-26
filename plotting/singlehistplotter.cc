@@ -126,6 +126,7 @@ int main(int argc, char * argv[])
 
             pad->Clear();
 
+            sample_hist->SetMinimum(0);
             sample_hist->Draw(get_2D_draw_options(sample_hist));
             CMSandLumi->Draw();
 

@@ -148,7 +148,7 @@ void full_analyzer::signal_regions(){
                                   i_subleading_jet == -1;
 
      _FullNoPFN_toofar          = _FullNoPFN &&
-                                  IVF_PVSVdist_2D > 60;
+                                  IVF_PVSVdist_2D > 40;
 
      _CR_FullNoPFN_invdphi      = _Training &&
                                   mll < 80 &&
