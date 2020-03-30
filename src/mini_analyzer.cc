@@ -218,22 +218,15 @@ void mini_analyzer::add_histograms()
 
 void mini_analyzer::add_fraction_histograms(TString prefix)
 {
-    hists[prefix+"_QuadFractions"]          = new TH1F(prefix+"_QuadFractions", ";;Fraction", 5, 0, 5);
-    hists[prefix+"_QuadFractions_unw"]      = new TH1F(prefix+"_QuadFractions_unw", ";;Unweighted Events", 5, 0, 5);
-    const char *quadfractions_labels[4] = {"A", "B", "C", "D"};
-    for(int i = 0; i < 4; i++){
-        hists[prefix+"_QuadFractions"]->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
-        hists[prefix+"_QuadFractions_unw"]->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
-    }
+    hists[prefix+"_QuadFractions"]          = new TH1F(prefix+"_QuadFractions", ";;Fraction", 4, 0, 4);
+    hists[prefix+"_QuadFractions_unw"]      = new TH1F(prefix+"_QuadFractions_unw", ";;Unweighted Events", 4, 0, 4);
 }
 
 
 void mini_analyzer::add_standard_histograms(TString prefix)
 {
     hists[prefix+"_Yield"]              = new TH1F(prefix+"_Yield", ";;Events", 1, 0, 1);
-    hists[prefix+"_SRShape"]            = new TH1F(prefix+"_SRShape", ";;Events", 5, 0, 5);
-    const char* xlabels_SRShape[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
-    for(int i = 1; i <= 4; i++) hists[prefix+"_SRShape"]->GetXaxis()->SetBinLabel(i, xlabels_SRShape[i-1]);
+    hists[prefix+"_SRShape"]            = new TH1F(prefix+"_SRShape", ";;Events", 4, 0, 4);
     hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 6, 0, 10);
     hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 6, 0, 100);
     hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 6, -3, 3);
@@ -376,7 +369,7 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
 {
     hists2D[prefix+"_PFNvsdphill"]->Fill(event._JetTagVal[i], event._dphill, event_weight);
     hists2D[prefix+"_PFNvsmll"]->Fill(event._JetTagVal[i], event._mll, event_weight);
-    hists2D[prefix+"_PFNvsmll"]->Fill(event._JetTagVal[i], event._SV_l1mass, event_weight);
+    hists2D[prefix+"_PFNvsmlSV"]->Fill(event._JetTagVal[i], event._SV_l1mass, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
     hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
 }

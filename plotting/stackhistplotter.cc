@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
             legends_bkg.push_back(adjust_legend(legendname));
         }
 
-        if(filename.Contains("hists_mini_analyzer") and legendname.Contains("pred")){
+        if(filename.Contains("hists_mini_analyzer")){
             is_mini_analyzer = true;
         }
     }
@@ -121,27 +121,23 @@ int main(int argc, char * argv[])
                 TString histname   = sample_hist_ref->GetName();
                 TString xaxistitle = sample_hist_ref->GetXaxis()->GetTitle();
                 TString yaxistitle = sample_hist_ref->GetYaxis()->GetTitle();
-                std::cout << histname << std::endl;
                 
                 if(histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
                 if(!check_identifiers(histname, identifiers)) continue;
+                std::cout << histname << std::endl;
 
                 // get data histogram and fill legend
                 TH1F* data_hist;
-                if(withdata and !is_mini_analyzer){
-                    data_hist = (TH1F*) files_data[0]->Get(histname);
-                    if(histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
-                    if(histname.Contains("JetTagVal")) continue;
-                    if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
-                    legend.AddEntry(data_hist, legends_data[0], "pl");
-                }else if(is_mini_analyzer){
+                if(withdata){
                     TString histname_BtoA = histname;
                     if(histname.Contains("_quadA_")){
                         histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
                     }
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(data_hist == 0 or data_hist->GetMaximum() == 0) continue;
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
+                    if(histname.Contains("JetTagVal")) continue;
+                    if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
                 
@@ -209,6 +205,7 @@ int main(int argc, char * argv[])
                 hists_bkg->Draw("hist");
                 if(withdata) hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+                if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 hists_bkg->SetMinimum(0.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
@@ -224,6 +221,8 @@ int main(int argc, char * argv[])
                     pad_ratio->Clear();
                 
                     histo_ratio.Draw("E0 X0 P");
+                    alphanumeric_labels(&histo_ratio, histname);
+                    histo_ratio.SetLabelSize(0.15, "X");
                     draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
 
                     pad_ratio->Modified();
@@ -242,6 +241,7 @@ int main(int argc, char * argv[])
                 hists_bkg->Draw("hist");
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+                if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 hists_bkg->SetMinimum(0.1);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
@@ -257,6 +257,8 @@ int main(int argc, char * argv[])
                     pad_ratio->Clear();
 
                     histo_ratio.Draw("E0 X0 P");
+                    alphanumeric_labels(&histo_ratio, histname);
+                    histo_ratio.SetLabelSize(0.15, "X");
                     draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
 
                     pad_ratio->Modified();

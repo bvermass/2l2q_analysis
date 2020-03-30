@@ -10,6 +10,7 @@ int main(int argc, char * argv[])
     // Argument 1: name of root input file
     // Argument 2: legend associated to sample
     TString inputfilename = (TString)argv[1];
+    bool is_mini_analyzer = inputfilename.Contains("hists_mini_analyzer");
     TFile*  sample_file   = TFile::Open(inputfilename);
     TString sample_legend = adjust_legend((TString)argv[2]);
 
@@ -55,6 +56,7 @@ int main(int argc, char * argv[])
             if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
             if(sample_hist->GetMaximum() == 0) continue;
             if(!check_identifiers(histname, identifiers)) continue;
+            alphanumeric_labels(sample_hist, histname);
 
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
@@ -65,12 +67,30 @@ int main(int argc, char * argv[])
             if(xlog) divide_by_binwidth(sample_hist);
             sample_hist->GetYaxis()->SetRangeUser(0, 1.25*sample_hist->GetMaximum());
 
-            legend.AddEntry(sample_hist, sample_legend);
+            if(!is_mini_analyzer) legend.AddEntry(sample_hist, sample_legend);
+            else {
+                if(histname.Contains("_quadA")) legend.AddEntry(sample_hist, "Region A");
+                else if(histname.Contains("_quadB")) legend.AddEntry(sample_hist, "Region B");
+                else if(histname.Contains("_quadC")) legend.AddEntry(sample_hist, "Region C");
+                else if(histname.Contains("_quadD")) legend.AddEntry(sample_hist, "Region D");
+                else if(histname.Contains("_quadAB")) legend.AddEntry(sample_hist, "Region A+B");
+                else if(histname.Contains("_quadAC")) legend.AddEntry(sample_hist, "Region A+C");
+                else if(histname.Contains("_quadCD")) legend.AddEntry(sample_hist, "Region C+D");
+                else if(histname.Contains("_quadBD")) legend.AddEntry(sample_hist, "Region B+D");
+                else if(histname.Contains("_quadBCD")) legend.AddEntry(sample_hist, "Region B+C+D");
+                else if(histname.Contains("_quadABCD")) legend.AddEntry(sample_hist, "Region A+B+C+D");
+                else if(histname.Contains("_CoverD")) legend.AddEntry(sample_hist, "C/D");
+                else if(histname.Contains("_BoverD")) legend.AddEntry(sample_hist, "B/D");
+                else if(histname.Contains("_AoverB")) legend.AddEntry(sample_hist, "A/B");
+                else if(histname.Contains("_DtoCwithCD")) legend.AddEntry(sample_hist, "C pred.");
+                else if(histname.Contains("_BtoAwithCD")) legend.AddEntry(sample_hist, "A pred.");
+                else if(histname.Contains("_CtoAwithBD")) legend.AddEntry(sample_hist, "A.pred.");
+            }
 
             pad->Clear();
             pad->SetLogy(0);
     
-            if(!histname.Contains("_quadA_") and !histname.Contains("_quadB_") and !histname.Contains("_quadC_") and !histname.Contains("_quadD_")){
+            if(!histname.Contains("_quadA_")){
                 sample_hist->SetMarkerColor(colors[0]);
                 sample_hist->SetLineColor(colors[0]);
                 sample_hist->Draw("E0 P");
@@ -112,7 +132,7 @@ int main(int argc, char * argv[])
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadB_"}, {"Region A", "Region B"}, "_quadA-B_", true);
                 plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadA_", "_quadC_"}, {"Region A", "Region C"}, "_quadA-C_", true);
                 //plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_quadC_", "_quadD_"}, {"Region C", "Region D"}, "_quadC-D_", true);
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_AoverB_Yield", "_CoverD_Yield"}, {"A/B", "C/D"}, "_AoverB-CoverD_Yield", false);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_AoverB_", "_CoverD_"}, {"A/B", "C/D"}, "_AoverB-CoverD_", false);
             }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -120,7 +140,7 @@ int main(int argc, char * argv[])
             
             if(sample_hist->GetMaximum() == 0) continue;
             if(!check_identifiers(histname, identifiers)) continue;
-            alphanumeric_labels(sample_hist);
+            alphanumeric_labels_2D(sample_hist, histname);
 
             TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 

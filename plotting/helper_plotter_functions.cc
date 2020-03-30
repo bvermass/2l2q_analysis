@@ -299,9 +299,8 @@ TString get_2D_draw_options(TH2F* h)
     else return "colz text";
 }
 
-void alphanumeric_labels(TH2F* hist)
+void alphanumeric_labels_2D(TH2F* hist, TString histname)
 {
-    TString histname = hist->GetName();
     if(histname.Index("lsources") != -1){
         const char* labels[14] = {"und.", "mis.", "Z", "W", "t", "b", "c", "uds", "g", "phot", "tau", "mu", "e", "HNL"};
         for(int i = 1; i <= 14; i++){

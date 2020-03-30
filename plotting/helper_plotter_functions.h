@@ -58,6 +58,21 @@ void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<doub
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
-void        alphanumeric_labels(TH2F* hist);
+void        alphanumeric_labels_2D(TH2F* hist, TString histname);
+
+// template functions are put entirely in the header
+template <typename T>
+void alphanumeric_labels(T hist, TString histname)
+{
+    if(histname.Contains("SRShape")){
+        const char* xlabels_SRShape[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
+        for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, xlabels_SRShape[i]);
+    }
+    if(histname.Contains("QuadFractions")){
+        const char *quadfractions_labels[4] = {"A", "B", "C", "D"};
+        for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
+    }
+}
+
 
 #endif
