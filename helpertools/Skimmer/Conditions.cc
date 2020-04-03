@@ -5,12 +5,12 @@ void Skimmer::get_TightelectronID(bool* ID)
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)   =   i_lFlavor[i] == 0 &&
 			            fabs(i_lEta[i]) < 2.5 &&
-			            i_lPt[i] > 7 &&
+			            i_lPt[i] > 20 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
 			            i_3dIPSig[i]   < 8 &&
 			            //i_relIso[i]    < 0.1 &&
-                        (i_leptonMvatZq[i] > 0.6 or i_leptonMvaTTH[i] > 0.6 or i_lPOGMedium[i]) &&
+                        (i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_lPOGMedium[i]) &&
 			            //i_lPOGMedium[i] && old ID, move to MVAtZqTTV16
 			            i_lElectronPassConvVeto[i] &&
 			            i_lElectronMissingHits[i] < 1;
@@ -50,12 +50,12 @@ void Skimmer::get_TightmuonID(bool* ID)
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)    = 	i_lFlavor[i] == 1 &&
 			            fabs(i_lEta[i]) < 2.4 &&
-			            i_lPt[i] > 5 &&
+			            i_lPt[i] > 20 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
 			            i_3dIPSig[i]   < 4 &&
 			            //i_relIso[i]    < 0.1 &&
-                        (i_leptonMvatZq[i] > 0.6 or i_leptonMvaTTH[i] > 0.6 or i_lPOGMedium[i]);
+                        (i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_lPOGMedium[i]);
                         //i_lPOGMedium[i]; old ID, move to MVAtZqTTV16
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
     }
@@ -104,10 +104,26 @@ void Skimmer::get_clean_ele(bool* cleaned, bool* muonID)
 }
 
 
-bool Skimmer::ElectronTriggerSkim(){return i_HLT_Ele27_WPTight_Gsf;}
+bool Skimmer::ElectronTriggerSkim()
+{
+    if(i_is2017) return ElectronTriggerSkim2017();
+    else if(i_is2018) return ElectronTriggerSkim2018();
+    else return ElectronTriggerSkim2016();
+}
+bool Skimmer::ElectronTriggerSkim2016(){return i_HLT_Ele27_WPTight_Gsf;}
+bool Skimmer::ElectronTriggerSkim2017(){return i_HLT_Ele32_WPTight_Gsf;}
+bool Skimmer::ElectronTriggerSkim2018(){return i_HLT_Ele32_WPTight_Gsf;}
 
 
-bool Skimmer::MuonTriggerSkim(){return (i_HLT_IsoMu24 or i_HLT_IsoTkMu24);}
+bool Skimmer::MuonTriggerSkim()
+{
+    if(i_is2017) return MuonTriggerSkim2017();
+    else if(i_is2018) return MuonTriggerSkim2018();
+    else return MuonTriggerSkim2016();
+}
+bool Skimmer::MuonTriggerSkim2016(){return (i_HLT_IsoMu24 or i_HLT_IsoTkMu24);}
+bool Skimmer::MuonTriggerSkim2017(){return (i_HLT_IsoMu24);}
+bool Skimmer::MuonTriggerSkim2018(){return (i_HLT_IsoMu24);}
 
 
 bool Skimmer::dileptonSkim(){
@@ -126,7 +142,7 @@ bool Skimmer::dileptonSkim(){
     int Displleptons = 0;
     for(unsigned i = 0; i < i_nL; i++){
         if(TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) Tightleptons++;
-        if(DisplmuonID[i] or (DisplelectronID[i] and ele_cleaned_both[i])) Displleptons++;
+        if((DisplmuonID[i] or (DisplelectronID[i] and ele_cleaned_both[i])) and i_lIVF_match[i]) Displleptons++;
     }
     return (Tightleptons >= 1 and Displleptons >= 1);
 }

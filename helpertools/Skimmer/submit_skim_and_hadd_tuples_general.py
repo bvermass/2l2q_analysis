@@ -27,6 +27,9 @@ def merge_skimmed_files( input_crab_paths ):
         sys.exit()
 
 def copy_dilepskim_to_pnfs( output_sample_path, RunEra, dilep_tag, input_crab_paths ):
+    if os.path.exists('{}/{}{}.root'.format(output_sample_path, RunEra, dilep_tag)):
+        os.system('gfal-copy -p -f -t 5000 srm://maite.iihe.ac.be:8443{}/{}{}.root srm://maite.iihe.ac.be:8443{}/{}{}_old.root'.format(output_sample_path, RunEra, dilep_tag, output_sample_path, RunEra, dilep_tag))
+
     if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}/{}{}.root'.format(output_sample_path, RunEra, dilep_tag)) == 0:
         print 'successfully copied dilep_skim to pnfs to {}{}'.format(RunEra, dilep_tag)
         os.system('rm ~/public/heavyNeutrino/dilep_skim.root')
@@ -72,6 +75,7 @@ for sampledir in os.listdir(input_base_path):
         input_crab_paths = [] #this one will keep track of crab paths that will be hadded together at the same time (mainly for missingLumis) and then finished
         input_crab_paths.append( input_sample_path + crabdir + "/" )
         if production_version in crabdir and not input_crab_paths[0] in open('finished_samples.txt').read():
+            print '        Submitting...'
             hasproduction = True
 
             startindex = crabdir.find('Run201')
@@ -82,8 +86,10 @@ for sampledir in os.listdir(input_base_path):
 
             #add paths of missing lumi files if they exist
             if os.path.exists( input_sample_path + crabdir + "_missingLumis/" ):
+                print '        with missingLumis/'
                 input_crab_paths.append( input_sample_path + crabdir + "_missingLumis/" )
             if os.path.exists( input_sample_path + crabdir + "_missingLumis2/" ):
+                print '        and missingLumis2/'
                 input_crab_paths.append( input_sample_path + crabdir + "_missingLumis2/" )
 
             for input_crab_path in input_crab_paths:
@@ -95,7 +101,7 @@ for sampledir in os.listdir(input_base_path):
                     addendum = ""
                 for root, dirs, files in os.walk(input_crab_path):
                     for f in files:
-                        if 'dilep' in f and '.root' in f:
+                        if '.root' in f:
                             if hadd_counter == 0:
                                 scriptname = 'script_{}.sh'.format( script_counter )
                                 print 'making next {}'.format( scriptname )

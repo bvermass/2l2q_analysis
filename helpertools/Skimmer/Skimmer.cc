@@ -98,6 +98,8 @@ void Skimmer::Init_input_branches(TTree* tree)
     }
     tree->SetBranchAddress("_HLT_Ele27_WPTight_Gsf", &i_HLT_Ele27_WPTight_Gsf, &bi__HLT_Ele27_WPTight_Gsf);
     tree->SetBranchAddress("_HLT_Ele27_WPTight_Gsf_prescale", &i_HLT_Ele27_WPTight_Gsf_prescale, &bi__HLT_Ele27_WPTight_Gsf_prescale);
+    tree->SetBranchAddress("_HLT_Ele32_WPTight_Gsf", &i_HLT_Ele32_WPTight_Gsf, &bi__HLT_Ele32_WPTight_Gsf);
+    tree->SetBranchAddress("_HLT_Ele32_WPTight_Gsf_prescale", &i_HLT_Ele32_WPTight_Gsf_prescale, &bi__HLT_Ele32_WPTight_Gsf_prescale);
     tree->SetBranchAddress("_HLT_IsoMu24", &i_HLT_IsoMu24, &bi__HLT_IsoMu24);
     tree->SetBranchAddress("_HLT_IsoMu24_prescale", &i_HLT_IsoMu24_prescale, &bi__HLT_IsoMu24_prescale);
     tree->SetBranchAddress("_HLT_IsoTkMu24", &i_HLT_IsoTkMu24, &bi__HLT_IsoTkMu24);
@@ -507,6 +509,8 @@ void Skimmer::Add_branches(TTree* tree)
 
     tree->Branch("_HLT_Ele27_WPTight_Gsf", &o_HLT_Ele27_WPTight_Gsf, "_HLT_Ele27_WPTight_Gsf/O");
     tree->Branch("_HLT_Ele27_WPTight_Gsf_prescale", &o_HLT_Ele27_WPTight_Gsf_prescale, "_HLT_Ele27_WPTight_Gsf_prescale/I");
+    tree->Branch("_HLT_Ele32_WPTight_Gsf", &o_HLT_Ele32_WPTight_Gsf, "_HLT_Ele32_WPTight_Gsf/O");
+    tree->Branch("_HLT_Ele32_WPTight_Gsf_prescale", &o_HLT_Ele32_WPTight_Gsf_prescale, "_HLT_Ele32_WPTight_Gsf_prescale/I");
     tree->Branch("_HLT_IsoMu24", &o_HLT_IsoMu24, "_HLT_IsoMu24/O");
     tree->Branch("_HLT_IsoMu24_prescale", &o_HLT_IsoMu24_prescale, "_HLT_IsoMu24_prescale/I");
     tree->Branch("_HLT_IsoTkMu24", &o_HLT_IsoTkMu24, "_HLT_IsoTkMu24/O");
@@ -952,6 +956,8 @@ void Skimmer::Skim(TString skimcondition)
             }
             o_HLT_Ele27_WPTight_Gsf = i_HLT_Ele27_WPTight_Gsf;
             o_HLT_Ele27_WPTight_Gsf_prescale = i_HLT_Ele27_WPTight_Gsf_prescale;
+            o_HLT_Ele32_WPTight_Gsf = i_HLT_Ele32_WPTight_Gsf;
+            o_HLT_Ele32_WPTight_Gsf_prescale = i_HLT_Ele32_WPTight_Gsf_prescale;
             o_HLT_IsoMu24 = i_HLT_IsoMu24;
             o_HLT_IsoMu24_prescale = i_HLT_IsoMu24_prescale;
             o_HLT_IsoTkMu24 = i_HLT_IsoTkMu24;

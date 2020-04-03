@@ -128,6 +128,8 @@ class Skimmer {
         Bool_t          i_Flag_globalSuperTightHalo2016Filter;
         Bool_t          i_HLT_Ele27_WPTight_Gsf;
         Int_t           i_HLT_Ele27_WPTight_Gsf_prescale;
+        Bool_t          i_HLT_Ele32_WPTight_Gsf;
+        Int_t           i_HLT_Ele32_WPTight_Gsf_prescale;
         Bool_t          i_HLT_IsoMu24;
         Int_t           i_HLT_IsoMu24_prescale;
         Bool_t          i_HLT_IsoTkMu24;
@@ -527,6 +529,8 @@ class Skimmer {
         Bool_t          o_Flag_globalSuperTightHalo2016Filter;
         Bool_t          o_HLT_Ele27_WPTight_Gsf;
         Int_t           o_HLT_Ele27_WPTight_Gsf_prescale;
+        Bool_t          o_HLT_Ele32_WPTight_Gsf;
+        Int_t           o_HLT_Ele32_WPTight_Gsf_prescale;
         Bool_t          o_HLT_IsoMu24;
         Int_t           o_HLT_IsoMu24_prescale;
         Bool_t          o_HLT_IsoTkMu24;
@@ -924,6 +928,8 @@ class Skimmer {
         TBranch        *bi__Flag_globalSuperTightHalo2016Filter;   //!
         TBranch        *bi__HLT_Ele27_WPTight_Gsf;   //!
         TBranch        *bi__HLT_Ele27_WPTight_Gsf_prescale;   //!
+        TBranch        *bi__HLT_Ele32_WPTight_Gsf;   //!
+        TBranch        *bi__HLT_Ele32_WPTight_Gsf_prescale;   //!
         TBranch        *bi__HLT_IsoMu24;   //!
         TBranch        *bi__HLT_IsoMu24_prescale;   //!
         TBranch        *bi__HLT_IsoTkMu24;   //!
@@ -1232,7 +1238,13 @@ class Skimmer {
         void get_DisplmuonID(bool* ID);
         void get_clean_ele(bool* cleaned, bool* muonID);
         bool ElectronTriggerSkim();
+        bool ElectronTriggerSkim2016();
+        bool ElectronTriggerSkim2017();
+        bool ElectronTriggerSkim2018();
         bool MuonTriggerSkim();
+        bool MuonTriggerSkim2016();
+        bool MuonTriggerSkim2017();
+        bool MuonTriggerSkim2018();
         bool dileptonSkim();
         bool Check_SkimCondition(TString Condition);
 
