@@ -68,7 +68,12 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
         if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
         else if(filename.Index("Background") != -1) specific_dir += filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") - 11) + "/";
-        else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
+        else if(filename.Index("Run") != -1){
+            specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
+            if(filename.Contains("Muon")) specific_dir += "_mm/";
+            else if(filename.Contains("Electron")) specific_dir += "_ee/";
+            else specific_dir += "/";
+        }
     }
 
     return "/user/bvermass/public_html/2l2q_analysis/" + plottype + specific_dir;
@@ -95,6 +100,14 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutmll_"))            fullname += "ABCDwithmll/";
     if(histname.Contains("cutphiORmll_"))       fullname += "ABCDwithDeltaPhiORmll/";
     if(histname.Contains("cutmlSV_"))           fullname += "ABCDwithmlSV/";
+    if(histname.Contains("cutCR1mlSV_"))        fullname += "ABCDwithCR1mlSV/";
+    if(histname.Contains("cutCR2phill_"))       fullname += "ABCDwithCR2phill/";
+    if(histname.Contains("cutTightphill_"))     fullname += "ABCDwithTightDeltaPhi/";
+    if(histname.Contains("cutTightmll_"))       fullname += "ABCDwithTightmll/";
+    if(histname.Contains("cutTightphiORmll_"))  fullname += "ABCDwithTightDeltaPhiORmll/";
+    if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
+    if(histname.Contains("cutTightCR1mlSV_"))   fullname += "ABCDwithTightCR1mlSV/";
+    if(histname.Contains("cutTightCR2phill_"))  fullname += "ABCDwithTightCR2phill/";
     if(histname.Contains("quadA_"))             fullname += "quadA/";
     if(histname.Contains("quadB_"))             fullname += "quadB/";
     if(histname.Contains("quadC_"))             fullname += "quadC/";
@@ -329,6 +342,16 @@ void alphanumeric_labels_2D(TH2F* hist, TString histname)
         }
         const char* labelx[5] = {"prompt", "b", "c", "fake", "unknown"};
         for(int i = 1; i <= 5; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
+        }
+    }
+    if(histname.Contains("_QuadFractions_2D")){
+        const char* labely[4] = {"A", "B", "C", "D"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
+        for(int i = 1; i <= 4; i++){
             hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
         }
     }

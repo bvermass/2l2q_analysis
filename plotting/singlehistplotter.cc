@@ -27,6 +27,12 @@ int main(int argc, char * argv[])
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
+    std::cout << "identifiers: " << std::endl;
+    for(const auto& identifier : identifiers){
+        for(const auto& id : identifier){
+            std::cout << id << ", ";
+        }std::cout << std::endl;
+    }
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -69,16 +75,16 @@ int main(int argc, char * argv[])
 
             if(!is_mini_analyzer) legend.AddEntry(sample_hist, sample_legend);
             else {
-                if(histname.Contains("_quadA")) legend.AddEntry(sample_hist, "Region A");
-                else if(histname.Contains("_quadB")) legend.AddEntry(sample_hist, "Region B");
-                else if(histname.Contains("_quadC")) legend.AddEntry(sample_hist, "Region C");
-                else if(histname.Contains("_quadD")) legend.AddEntry(sample_hist, "Region D");
+                if(histname.Contains("_quadABCD")) legend.AddEntry(sample_hist, "Region A+B+C+D");
+                else if(histname.Contains("_quadBCD")) legend.AddEntry(sample_hist, "Region B+C+D");
                 else if(histname.Contains("_quadAB")) legend.AddEntry(sample_hist, "Region A+B");
                 else if(histname.Contains("_quadAC")) legend.AddEntry(sample_hist, "Region A+C");
                 else if(histname.Contains("_quadCD")) legend.AddEntry(sample_hist, "Region C+D");
                 else if(histname.Contains("_quadBD")) legend.AddEntry(sample_hist, "Region B+D");
-                else if(histname.Contains("_quadBCD")) legend.AddEntry(sample_hist, "Region B+C+D");
-                else if(histname.Contains("_quadABCD")) legend.AddEntry(sample_hist, "Region A+B+C+D");
+                else if(histname.Contains("_quadA")) legend.AddEntry(sample_hist, "Region A");
+                else if(histname.Contains("_quadB")) legend.AddEntry(sample_hist, "Region B");
+                else if(histname.Contains("_quadC")) legend.AddEntry(sample_hist, "Region C");
+                else if(histname.Contains("_quadD")) legend.AddEntry(sample_hist, "Region D");
                 else if(histname.Contains("_CoverD")) legend.AddEntry(sample_hist, "C/D");
                 else if(histname.Contains("_BoverD")) legend.AddEntry(sample_hist, "B/D");
                 else if(histname.Contains("_AoverB")) legend.AddEntry(sample_hist, "A/B");
@@ -203,6 +209,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
         hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
+        if(plot_tag.Contains("AoverB")) hists->SetMaximum(std::min((1.25*hists->GetMaximum("nostack")), 10.));
         hists->SetMinimum(0);
         legend.Draw("same");
         CMSandLumi->Draw();

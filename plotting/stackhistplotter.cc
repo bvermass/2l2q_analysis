@@ -169,6 +169,12 @@ int main(int argc, char * argv[])
                     }
                 }
 
+                // get summed background as a single histogram to draw error bands
+                TH1F* bkgForError = (TH1F*) hists_bkg->GetStack()->Last()->Clone();
+                bkgForError->SetFillStyle(3244);
+                bkgForError->SetFillColor(kGray+2);
+                bkgForError->SetMarkerStyle(0);
+
                 // get ratio of data/MC
                 TH1F histo_ratio;
                 if(withdata) histo_ratio = get_histoRatio(data_hist, (TH1F*) hists_bkg->GetStack()->Last(), xaxistitle);
@@ -203,6 +209,7 @@ int main(int argc, char * argv[])
                 pad_histo->SetLogy(0);
 
                 hists_bkg->Draw("hist");
+                bkgForError->Draw("e2 same");
                 if(withdata) hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
@@ -239,6 +246,7 @@ int main(int argc, char * argv[])
                 pad_histo->SetLogy(1);
 
                 hists_bkg->Draw("hist");
+                bkgForError->Draw("e2 same");
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
