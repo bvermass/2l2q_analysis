@@ -48,12 +48,11 @@ if [[ choice -eq 1 ]]; then
                     fi
                 done
                 if [ $firstline -eq 2 ]; then
-                    ./$exec_name $subdirectory_name 0 1 $sample $legend
+                    python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name $partition $sample $legend
                 fi
                 echo
             fi
         done < "$1"
-        rm $exec_name
     else
         echo -e "\n///////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION FAILED//"
@@ -92,9 +91,8 @@ if [[ choice -eq 2 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name 0 1 ${samples[@]} ${legends[@]}
+        python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
         echo
-        rm $exec_name
     else
         echo -e "\n//////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION FAILED//"
@@ -133,9 +131,8 @@ if [[ choice -eq 3 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name 0 1 ${samples[@]} ${legends[@]}
+        python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
         echo
-        #rm $exec_name
     else
         echo -e "\n//////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION FAILED//"
@@ -171,7 +168,7 @@ if [[ choice -eq 4 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name ${legends[@]} ${signals[@]} ${bkgs[@]}
+        python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name 1 ${legends[@]} ${signals[@]} ${bkgs[@]}
         echo
         rm $exec_name
     else

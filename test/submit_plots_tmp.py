@@ -17,14 +17,18 @@ def submit_script( script, scriptname ):
         time.sleep(2)
     os.system('rm {}'.format(scriptname))
 
-scriptname_base = sys.argv[1].replace('.out', '_')
+scriptname_base = sys.argv[2].replace('.out', '_')
+partition = int(sys.argv[4])
 
-partition = int(sys.argv[3])
-line_base = './{} {}'.format(sys.argv[1], sys.argv[2])
+line_base = './{} {}'.format(sys.argv[2], sys.argv[3])
+
 for partitionjobnumber in range(partition):
-    line = line_base + ' {} {}'.format(partitionjobnumber, partition)
+    if sys.argv[1] != 4:
+        line = line_base + ' {} {}'.format(partitionjobnumber, partition)
+    else:
+        line = line_base
     for i in range(len(sys.argv)):
-        if i > 3:
+        if i > 4:
             line = line + ' {}'.format(sys.argv[i])
 
     line = line + '\n'
