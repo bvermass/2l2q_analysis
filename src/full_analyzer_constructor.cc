@@ -50,6 +50,17 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
     return lsfreader;
 }
 
+PUWeightReader full_analyzer::get_PUWeightReader(TString local_dir)
+{
+    TString filename_PUWeights;
+    if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+    if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+    if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    TString histname_PUWeights = "PUWeights";
+    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
+    return puweightreader;
+}
+
 
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {
@@ -398,14 +409,16 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lMuonRPCTimenDof", _lMuonRPCTimenDof, &b__lMuonRPCTimenDof);
    fChain->SetBranchAddress("_lMuonRPCTime", _lMuonRPCTime, &b__lMuonRPCTime);
    fChain->SetBranchAddress("_lMuonRPCTimeErr", _lMuonRPCTimeErr, &b__lMuonRPCTimeErr);
-   fChain->SetBranchAddress("_lIsPrompt", _lIsPrompt, &b__lIsPrompt);
-   fChain->SetBranchAddress("_lMatchPdgId", _lMatchPdgId, &b__lMatchPdgId);
-   fChain->SetBranchAddress("_lMatchCharge", _lMatchCharge, &b__lMatchCharge);
-   fChain->SetBranchAddress("_tauGenStatus", _tauGenStatus, &b__tauGenStatus);
-   fChain->SetBranchAddress("_lMomPdgId", _lMomPdgId, &b__lMomPdgId);
-   fChain->SetBranchAddress("_lProvenance", _lProvenance, &b__lProvenance);
-   fChain->SetBranchAddress("_lProvenanceCompressed", _lProvenanceCompressed, &b__lProvenanceCompressed);
-   fChain->SetBranchAddress("_lProvenanceConversion", _lProvenanceConversion, &b__lProvenanceConversion);
+   if(sampleflavor.Index("Run") == -1){
+        fChain->SetBranchAddress("_lIsPrompt", _lIsPrompt, &b__lIsPrompt);
+        fChain->SetBranchAddress("_lMatchPdgId", _lMatchPdgId, &b__lMatchPdgId);
+        fChain->SetBranchAddress("_lMatchCharge", _lMatchCharge, &b__lMatchCharge);
+        fChain->SetBranchAddress("_tauGenStatus", _tauGenStatus, &b__tauGenStatus);
+        fChain->SetBranchAddress("_lMomPdgId", _lMomPdgId, &b__lMomPdgId);
+        fChain->SetBranchAddress("_lProvenance", _lProvenance, &b__lProvenance);
+        fChain->SetBranchAddress("_lProvenanceCompressed", _lProvenanceCompressed, &b__lProvenanceCompressed);
+        fChain->SetBranchAddress("_lProvenanceConversion", _lProvenanceConversion, &b__lProvenanceConversion);
+   }
    //fChain->SetBranchAddress("_nPh", &_nPh, &b__nPh);
    //fChain->SetBranchAddress("_phPt", _phPt, &b__phPt);
    //fChain->SetBranchAddress("_phEta", _phEta, &b__phEta);

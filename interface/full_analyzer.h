@@ -856,6 +856,7 @@ public :
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
    LSFReader get_LSFReader(TString local_dir, TString flavor);
+   PUWeightReader get_PUWeightReader(TString local_dir);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);

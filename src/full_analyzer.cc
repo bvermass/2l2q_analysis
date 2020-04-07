@@ -106,11 +106,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
-    TString histname_PUWeights = "PUWeights";
-    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
+    PUWeightReader puweightreader = get_PUWeightReader(local_dir);
 
     // Load Lepton Scale Factors for TTH MVA
     LSFReader lsfreader_e = get_LSFReader(local_dir, "e");
@@ -134,6 +130,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     std::map<TString, double> SR_counters = add_SR_counters();
 
+    int int_lumi;
+    if(_is2016) int_lumi = 35920;
+    if(_is2017) int_lumi = 41530;
+    if(_is2018) int_lumi = 59740;
+
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
     //cout << "full_analyzer.cc file: " << filename << endl;
@@ -141,7 +142,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
     if(sampleflavor.Index("Run") == -1){ 
-        total_weight = (cross_section * 35900 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+        total_weight = (cross_section * int_lumi * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
     print_evaluating_points(evaluating_ctaus);
