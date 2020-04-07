@@ -11,6 +11,9 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
     BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
     BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
+    BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/D");
+    BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/D");
+    BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/D");
     BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
@@ -86,6 +89,9 @@ void BkgEstimator::open_file_and_tree(TString filename)
 void BkgEstimator::set_branch_adresses()
 {
     BkgEstimator_tree->SetBranchAddress("_weight", &_weight, &b__weight);
+    BkgEstimator_tree->SetBranchAddress("_is2016", &_is2016, &b__is2016);
+    BkgEstimator_tree->SetBranchAddress("_is2017", &_is2017, &b__is2017);
+    BkgEstimator_tree->SetBranchAddress("_is2018", &_is2018, &b__is2018);
     BkgEstimator_tree->SetBranchAddress("_gen_Nmass", &_gen_Nmass, &b__gen_Nmass);
     BkgEstimator_tree->SetBranchAddress("_gen_NV", &_gen_NV, &b__gen_NV);
     BkgEstimator_tree->SetBranchAddress("_gen_Nctau", &_gen_Nctau, &b__gen_Nctau);

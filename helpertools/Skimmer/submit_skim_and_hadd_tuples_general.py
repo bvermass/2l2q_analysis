@@ -78,9 +78,12 @@ for sampledir in os.listdir(input_base_path):
             print '        Submitting...'
             hasproduction = True
 
-            startindex = crabdir.find('Run201')
-            if startindex != -1:
-                RunEra = crabdir[startindex:startindex+8] + '/'
+            startindex_data = crabdir.find('Run201')
+            startindex_mc   = crabdir.find('MiniAOD201')
+            if startindex_data != -1:
+                RunEra = crabdir[startindex_data:startindex_data+8] + '/'
+            elif startindex_mc != -1:
+                RunEra = crabdir[startindex_mc:startindex_mc+11] + '/'
             else:
                 RunEra = ''
 

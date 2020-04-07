@@ -49,6 +49,8 @@ public :
    ULong64_t       _lumiBlock;
    ULong64_t       _eventNb;
    UChar_t         _nVertex;
+   Bool_t          _is2017;
+   Bool_t          _is2018;
    Double_t        _BS_x;
    Double_t        _BS_y;
    Double_t        _BS_z;
@@ -424,6 +426,8 @@ public :
    TBranch        *b__lumiBlock;   //!
    TBranch        *b__eventNb;   //!
    TBranch        *b__nVertex;   //!
+   TBranch        *b__is2017;   //!
+   TBranch        *b__is2018;   //!
    TBranch        *b__BS_x;
    TBranch        *b__BS_y;
    TBranch        *b__BS_z;
@@ -796,7 +800,7 @@ public :
    
    Double_t ev_weight;
    TString sampleflavor;
-   bool isSignal = false, isBackground = false, isData = false, is2016 = false, is2017 = false, is2018 = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};

@@ -19,12 +19,12 @@ void full_analyzer::get_electronID()
 			                _leptonMvaTTH[i] > 0.8 && //move to MVA of TTH as soon as others caught up
 			                _lElectronPassConvVeto[i] &&
 			                _lElectronMissingHits[i] < 1 &&
-                            _lElehadronicOverEm[i] < 0.1 &&
-                            _lEleInvMinusPInv[i] > -0.04 &&
-                            ((fabs(_lEtaSC[i]) < 1.479 && _lElefull5x5SigmaIetaIeta[i] < 0.011) || (fabs(_lEtaSC[i]) > 1.479 && _lElefull5x5SigmaIetaIeta[i] < 0.030)) &&
-                            ((is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
-                             (is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
-                             (is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018())) &&
+                            _lElectronHOverE[i] < 0.1 &&
+                            _lElectronEInvMinusPInv[i] > -0.04 &&
+                            ((fabs(_lEtaSC[i]) < 1.479 && _lElectronSigmaIetaIeta[i] < 0.011) || (fabs(_lEtaSC[i]) > 1.479 && _lElectronSigmaIetaIeta[i] < 0.030)) &&
+                            ((_is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
+                             (_is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
+                             (_is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018())) &&
                             rawElectronMVA( _lElectronMvaFall17NoIso[i] ) > looseMVACut( i );
     }
 }
@@ -132,9 +132,9 @@ void full_analyzer::get_muonID()
 			            _miniIso[i]    < 0.4 &&
                         _leptonMvaTTH[i] > 0.85 &&
                         _lPOGMedium[i] &&
-                        ((is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
-                         (is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
-                         (is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018()));
+                        ((_is2016 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2016()) || //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
+                         (_is2017 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2017()) ||
+                         (_is2018 and _closestJetDeepFlavor[i] < bTagWP::mediumDeepFlavor2018()));
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
     }
 }

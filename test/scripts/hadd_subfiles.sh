@@ -48,6 +48,10 @@ function hadd_specific_backgrounds {
     hadd -f ${1}${2}SingleMuon_Run2016.root ${1}${2}SingleMuon_Run2016B.root ${1}${2}SingleMuon_Run2016C.root ${1}${2}SingleMuon_Run2016D.root ${1}${2}SingleMuon_Run2016E.root ${1}${2}SingleMuon_Run2016F.root ${1}${2}SingleMuon_Run2016G.root ${1}${2}SingleMuon_Run2016H.root
     hadd -f ${1}${2}SingleElectron_Run2016.root ${1}${2}SingleElectron_Run2016B.root ${1}${2}SingleElectron_Run2016C.root ${1}${2}SingleElectron_Run2016D.root ${1}${2}SingleElectron_Run2016E.root ${1}${2}SingleElectron_Run2016F.root ${1}${2}SingleElectron_Run2016G.root ${1}${2}SingleElectron_Run2016H.root
 
+    #Run2017 Data
+    hadd -f ${1}${2}SingleMuon_Run2017.root ${1}${2}SingleMuon_Run2017B.root ${1}${2}SingleMuon_Run2017C.root ${1}${2}SingleMuon_Run2017D.root ${1}${2}SingleMuon_Run2017E.root ${1}${2}SingleMuon_Run2017F.root
+    hadd -f ${1}${2}SingleElectron_Run2017.root ${1}${2}SingleElectron_Run2017B.root ${1}${2}SingleElectron_Run2017C.root ${1}${2}SingleElectron_Run2017D.root ${1}${2}SingleElectron_Run2017E.root ${1}${2}SingleElectron_Run2017F.root
+
     #all backgrounds together
     hadd -f ${1}${2}Background.root ${1}${2}Background_DYJets.root ${1}${2}Background_Diboson.root ${1}${2}Background_TTJets.root ${1}${2}Background_ST.root ${1}${2}Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
     hadd -f ${1}${2}Background_Top.root ${1}${2}Background_ST.root ${1}${2}Background_TTJets.root

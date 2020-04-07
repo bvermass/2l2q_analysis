@@ -29,6 +29,9 @@ class HNLtagger
         int      _gen_Nmass;
         double   _gen_NV;
         double   _gen_Nctau;
+        bool     _is2016;
+        bool     _is2017;
+        bool     _is2018;
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetPt_log;

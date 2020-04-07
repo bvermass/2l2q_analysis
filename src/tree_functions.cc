@@ -9,6 +9,9 @@
 void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight)
 {
     bkgestimator._weight       = event_weight;
+    bkgestimator._is2016       = _is2016;
+    bkgestimator._is2017       = _is2017;
+    bkgestimator._is2018       = _is2018;
     bkgestimator._gen_Nmass    = _gen_Nmass;
     bkgestimator._gen_NV       = _gen_NV;
     bkgestimator._gen_Nctau     = _gen_Nctau;

@@ -127,6 +127,9 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
     hnltagger._gen_Nmass    = _gen_Nmass;
     hnltagger._gen_NV       = _gen_NV;
     hnltagger._gen_Nctau     = _gen_Nctau;
+    hnltagger._is2016       = _is2016;
+    hnltagger._is2017       = _is2017;
+    hnltagger._is2018       = _is2018;
     hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
     hnltagger._JetPt        = _jetPt[i_jetl2];
     hnltagger._JetPt_log    = log(_jetPt[i_jetl2]);

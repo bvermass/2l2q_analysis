@@ -23,6 +23,9 @@ class BkgEstimator
         TFile* BkgEstimator_file;
         TTree* BkgEstimator_tree;
 
+        bool     _is2016;
+        bool     _is2017;
+        bool     _is2018;
         double   _weight;
         int      _gen_Nmass;
         double   _gen_NV;
@@ -80,6 +83,9 @@ class BkgEstimator
         double   _reweighting_weight[nMV2_max];
 
         //Branches for reading variables from an existing tree (produced with this class)
+        TBranch     *b__is2016;
+        TBranch     *b__is2017;
+        TBranch     *b__is2018;
         TBranch     *b__weight;
         TBranch     *b__gen_Nmass;
         TBranch     *b__gen_NV;

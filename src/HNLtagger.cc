@@ -13,6 +13,9 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     HNLtagger_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     HNLtagger_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
+    HNLtagger_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
+    HNLtagger_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
+    HNLtagger_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     HNLtagger_tree->Branch("_JetPt_log",                        &_JetPt_log,                        "_JetPt_log/D");

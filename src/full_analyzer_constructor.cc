@@ -3,36 +3,31 @@
 
 void full_analyzer::SetSampleTypes(TString filename)
 {
+    if(!_is2017 and !_is2018) _is2016 = true;
+
     if(filename.Index("_e_") != -1){
-        is2016 = true;
         sampleflavor = "e";
         isSignal = true;
     }
     else if(filename.Index("_mu_") != -1){
-        is2016 = true;
         sampleflavor = "mu";
         isSignal = true;
     }
     else if(filename.Index("Run2016") != -1){
         sampleflavor = "Run2016";
         isData = true;
-        is2016 = true;
     }
     else if(filename.Index("Run2017") != -1){
         sampleflavor = "Run2017";
         isData = true;
-        is2017 = true;
     }
     else if(filename.Index("Run2018") != -1){
         sampleflavor = "Run2018";
         isData = true;
-        is2018 = true;
     }
     else{
-        is2016 = true;
         sampleflavor = "bkg";
         isBackground = true;
-        // figure out which year of background it is
     }
 }
 
@@ -41,13 +36,13 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
 {
     TString filename_LSF = local_dir + "data/LeptonScaleFactors/";
     if(flavor == "e"){
-        if(is2016) filename_LSF += "TTHMVA_looseToTight_2016_e_3l.root";
-        if(is2017) filename_LSF += "TTHMVA_looseToTight_2017_e_3l.root";
-        if(is2018) filename_LSF += "TTHMVA_looseToTight_2018_e_3l.root";
+        if(_is2016) filename_LSF += "TTHMVA_looseToTight_2016_e_3l.root";
+        if(_is2017) filename_LSF += "TTHMVA_looseToTight_2017_e_3l.root";
+        if(_is2018) filename_LSF += "TTHMVA_looseToTight_2018_e_3l.root";
     }else if(flavor == "mu"){
-        if(is2016) filename_LSF += "TTHMVA_looseToTight_2016_m_3l.root";
-        if(is2017) filename_LSF += "TTHMVA_looseToTight_2017_m_3l.root";
-        if(is2018) filename_LSF += "TTHMVA_looseToTight_2018_m_3l.root";
+        if(_is2016) filename_LSF += "TTHMVA_looseToTight_2016_m_3l.root";
+        if(_is2017) filename_LSF += "TTHMVA_looseToTight_2017_m_3l.root";
+        if(_is2018) filename_LSF += "TTHMVA_looseToTight_2018_m_3l.root";
     }
 
     TString histname_LSF = "EGamma_SF2D";
@@ -119,6 +114,8 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lumiBlock", &_lumiBlock, &b__lumiBlock);
    fChain->SetBranchAddress("_eventNb", &_eventNb, &b__eventNb);
    fChain->SetBranchAddress("_nVertex", &_nVertex, &b__nVertex);
+   fChain->SetBranchAddress("_is2017", &_is2017, &b__is2017);
+   fChain->SetBranchAddress("_is2018", &_is2018, &b__is2018);
    fChain->SetBranchAddress("_BS_x", &_BS_x, &b__BS_x);
    fChain->SetBranchAddress("_BS_y", &_BS_y, &b__BS_y);
    fChain->SetBranchAddress("_BS_z", &_BS_z, &b__BS_z);
