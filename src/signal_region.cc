@@ -124,8 +124,13 @@ int full_analyzer::select_leading_lepton(int i_leading_e, int i_leading_mu){
 void full_analyzer::signal_regions(){
 
     //signal region method: sequential booleans so that I can make histograms between each step if I want
-    _trige                      = _HLT_Ele27_WPTight_Gsf;
-    _trigmu                     = _HLT_IsoMu24 || _HLT_IsoTkMu24;
+    if(_is2016){
+        _trige                  = _HLT_Ele27_WPTight_Gsf;
+        _trigmu                 = _HLT_IsoMu24 || _HLT_IsoTkMu24;
+    }else if(_is2017 or _is2018){
+        _trige                  = _HLT_Ele32_WPTight_Gsf;
+        _trigmu                 = _HLT_IsoMu24;
+    }
     
      _l1                        = i_leading != -1 &&
                                   ((_trige && _lFlavor[i_leading] == 0) || (_trigmu && _lFlavor[i_leading] == 1)) &&

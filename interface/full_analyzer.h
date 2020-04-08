@@ -132,6 +132,8 @@ public :
    Double_t        _gen_qE[2];   //[_gen_nq23]
    Bool_t          _HLT_Ele27_WPTight_Gsf;
    Int_t           _HLT_Ele27_WPTight_Gsf_prescale;
+   Bool_t          _HLT_Ele32_WPTight_Gsf;
+   Int_t           _HLT_Ele32_WPTight_Gsf_prescale;
    Bool_t          _HLT_IsoMu24;
    Int_t           _HLT_IsoMu24_prescale;
    Bool_t          _HLT_IsoTkMu24;
@@ -509,6 +511,8 @@ public :
    TBranch        *b__gen_qE;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf_prescale;   //!
+   TBranch        *b__HLT_Ele32_WPTight_Gsf;   //!
+   TBranch        *b__HLT_Ele32_WPTight_Gsf_prescale;   //!
    TBranch        *b__HLT_IsoMu24;   //!
    TBranch        *b__HLT_IsoMu24_prescale;   //!
    TBranch        *b__HLT_IsoTkMu24;   //!
