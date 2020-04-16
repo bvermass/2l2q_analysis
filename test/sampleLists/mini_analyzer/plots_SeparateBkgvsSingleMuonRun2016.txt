@@ -1,6 +1,9 @@
-mini_separateBkgWithData_mm 10
+mini_separateBkgWithData_mm 20
 /user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_Diboson.root                                                          Diboson
 /user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_Top.root                                                              Top
 /user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_DYJets.root                                                           DY
 /user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
 /user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_SingleMuon_Run2016.root                                                          Data_pred.
+/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-0.0141421356237_mu_massiveAndCKM_LO.root                HNL_M-3
+/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO.root               HNL_M-5
+/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-8_V-0.00151327459504_mu_massiveAndCKM_LO.root               HNL_M-8

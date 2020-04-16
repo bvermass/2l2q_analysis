@@ -1,4 +1,5 @@
 /user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleMuon_Run2016.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleElectron_Run2016.root -1 1
 /user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root  -1 1
 /user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_DYJets.root  -1 1
 /user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_Top.root  -1 1
