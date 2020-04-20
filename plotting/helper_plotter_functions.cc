@@ -102,13 +102,21 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutphiORmll_"))       fullname += "ABCDwithDeltaPhiORmll/";
     if(histname.Contains("cutmlSV_"))           fullname += "ABCDwithmlSV/";
     if(histname.Contains("cutCR1mlSV_"))        fullname += "ABCDwithCR1mlSV/";
+    if(histname.Contains("cutCR2mlSV_"))        fullname += "ABCDwithCR2mlSV/";
+    if(histname.Contains("cutCR3mlSV_"))        fullname += "ABCDwithCR3mlSV/";
+    if(histname.Contains("cutCR1phill_"))       fullname += "ABCDwithCR1phill/";
     if(histname.Contains("cutCR2phill_"))       fullname += "ABCDwithCR2phill/";
+    if(histname.Contains("cutCR3phill_"))       fullname += "ABCDwithCR3phill/";
     if(histname.Contains("cutTightphill_"))     fullname += "ABCDwithTightDeltaPhi/";
     if(histname.Contains("cutTightmll_"))       fullname += "ABCDwithTightmll/";
     if(histname.Contains("cutTightphiORmll_"))  fullname += "ABCDwithTightDeltaPhiORmll/";
     if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
-    if(histname.Contains("cutTightCR1mlSV_"))   fullname += "ABCDwithTightCR1mlSV/";
+    if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
+    if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
     if(histname.Contains("cutTightCR2phill_"))  fullname += "ABCDwithTightCR2phill/";
+    if(histname.Contains("cutTightCR3phill_"))  fullname += "ABCDwithTightCR3phill/";
+    if(histname.Contains("cutAll_"))            fullname += "ABCDwithAllmethods/";
+    if(histname.Contains("cutTightAll_"))       fullname += "ABCDwithAllTightmethods/";
     if(histname.Contains("quadA_"))             fullname += "quadA/";
     if(histname.Contains("quadB_"))             fullname += "quadB/";
     if(histname.Contains("quadC_"))             fullname += "quadC/";
@@ -352,6 +360,16 @@ void alphanumeric_labels_2D(TH2F* hist, TString histname)
             hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
         }
         const char* labelx[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
+        }
+    }
+    if(histname.Contains("_QuadFractions2_2D")){
+        const char* labely[4] = {"A", "B", "C", "D"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[4] = {"L_{xy}<10", "L_{xy}>10"};
         for(int i = 1; i <= 4; i++){
             hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
         }

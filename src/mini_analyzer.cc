@@ -64,13 +64,13 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
 void mini_analyzer::ABCD_ratios()
 {
-    if(!isData) calculate_ratio("_quadA_Yield", "_quadB_Yield", "_AoverB_Yield");
-    calculate_ratio("_quadC_Yield", "_quadD_Yield", "_CoverD_Yield");
-    calculate_ratio("_quadB_Yield", "_quadD_Yield", "_BoverD_Yield");
+    if(!isData) calculate_ratio("_quadA_", "_quadB_", "_AoverB_");
+    calculate_ratio("_quadC_", "_quadD_", "_CoverD_");
+    //calculate_ratio("_quadB_", "_quadD_", "_BoverD_");
 
-    apply_ratio("_CoverD_Yield", "_quadD_", "_DtoCwithCD_");
-    apply_ratio("_CoverD_Yield", "_quadB_", "_BtoAwithCD_");
-    apply_ratio("_BoverD_Yield", "_quadC_", "_CtoAwithBD_");
+    //apply_ratio("_CoverD_", "_quadD_", "_DtoCwithCD_");
+    apply_ratio("_CoverD_", "_quadB_", "_BtoAwithCD_");
+    //apply_ratio("_BoverD_", "_quadC_", "_CtoAwithBD_");
 }
 
 
@@ -101,12 +101,14 @@ void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString ta
         TString hname = h->GetName();
 
         if(hname.Contains(histo_tag)){
-            TString hname_ratio(hname(0, hname.Index(histo_tag)) + ratio_tag), hname_target(hname);
+            TString hname_ratio(hname), hname_target(hname);
+            hname_ratio.ReplaceAll(histo_tag, ratio_tag);
             hname_target.ReplaceAll(histo_tag, target_tag);
 
             if(hists[hname]->GetMaximum() > 0 and hists[hname_ratio]->GetMaximum() > 0){
                 hists[hname_target] = (TH1F*)hists[hname]->Clone(hname_target);
-                hists[hname_target]->Scale(hists[hname_ratio]->GetBinContent(1));
+                //hists[hname_target]->Scale(hists[hname_ratio]->GetBinContent(1));//use this in case of using a full ratio for ABCD prediction
+                hists[hname_target]->Multiply(hists[hname_ratio]);
             }
         }
     }
@@ -120,58 +122,212 @@ void mini_analyzer::set_signal_regions()
     //Training selection is already applied before filling BkgEstimator tree
     baseline_cutphill = event._mll < 80 &&
                         event._mll > 10 &&
+                        event._dphill > 0.4 &&
+                        event._nTightLep == 1 &&
                         event._nTightJet <= 1;
 
     baseline_cutmll = event._dphill > 2.3 &&
                       event._mll > 10 &&
+                      event._nTightLep == 1 &&
                       event._nTightJet <= 1;
 
     baseline_cutphiORmll = event._mll > 10 &&
+                           event._nTightLep == 1 &&
                            event._nTightJet <= 1;
 
     baseline_cutmlSV = event._SV_l1mass > 10 &&
+                       event._nTightLep == 1 &&
                        event._nTightJet <= 1;
 
+    baseline_cutCR3phill = event._SV_l1mass > 10 &&
+                           (event._SV_l1mass < 40 || event._SV_l1mass > 90) &&
+                           event._dphill > 0.4 &&
+                           event._nTightLep == 1 &&
+                           event._nTightJet <= 1;
 
     // Determine quadrant (in PFN output and dphi)
     // dphill
     if(baseline_cutphill){
         if(event._dphill > 2.3){
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphill_quadA");
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutphill_quadA");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphill_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphill_quadB");
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutphill_quadB");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphill_quadD");
         }
     }
-    // mll
-    if(baseline_cutmll){
-        if(event._mll < 80){
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmll_quadA");
-            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadC");
+    // control region 1: dphill only up to PFN 0.8
+    if(baseline_cutphill and event._JetTagVal[16] < 0.8){
+        if(event._dphill > 2.3){
+            if(event._JetTagVal[16] > 0.6) ABCDtags.push_back("_cutCR1phill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR1phill_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmll_quadB");
-            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadD");
+            if(event._JetTagVal[16] > 0.6) ABCDtags.push_back("_cutCR1phill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR1phill_quadD");
         }
     }
-    // dphill or mll
-    if(baseline_cutphiORmll){
-        if(event._dphill > 2.3 and event._mll < 80){
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphiORmll_quadA");
-            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadC");
+    // control region 2: dphill only up to dphi of 2.3
+    if(baseline_cutphill and event._dphill < 2.3){
+        if(event._dphill > 1.9){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR2phill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR2phill_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutphiORmll_quadB");
-            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadD");
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR2phill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR2phill_quadD");
         }
     }
+    // control region 3: dphill normal method within mlSV inverted region
+    if(baseline_cutCR3phill){
+        if(event._dphill > 2.3){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR3phill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR3phill_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR3phill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR3phill_quadD");
+        }
+    }
+    //// mll
+    //if(baseline_cutmll){
+    //    if(event._mll < 80){
+    //        if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutmll_quadA");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadC");
+    //    }else {
+    //        if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutmll_quadB");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmll_quadD");
+    //    }
+    //}
+    //// dphill or mll
+    //if(baseline_cutphiORmll){
+    //    if(event._dphill > 2.3 and event._mll < 80){
+    //        if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutphiORmll_quadA");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadC");
+    //    }else {
+    //        if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutphiORmll_quadB");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutphiORmll_quadD");
+    //    }
+    //}
     // mlSV
     if(baseline_cutmlSV){
         if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmlSV_quadA");
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutmlSV_quadA");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmlSV_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.9) ABCDtags.push_back("_cutmlSV_quadB");
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutmlSV_quadB");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutmlSV_quadD");
+        }
+    }
+    // control region 1: mlSV with PFN below 0.8
+    if(baseline_cutmlSV and event._JetTagVal[16] < 0.8){
+        if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._JetTagVal[16] > 0.6) ABCDtags.push_back("_cutCR1mlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR1mlSV_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.6) ABCDtags.push_back("_cutCR1mlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR1mlSV_quadD");
+        }
+    }
+    // control region 2: mlSV with signal region between 90 - 110 GeV
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass > 90 and event._SV_l1mass < 110){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR2mlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR2mlSV_quadC");
+        }else if(event._SV_l1mass < 40 or event._SV_l1mass > 110){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR2mlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR2mlSV_quadD");
+        }
+    }
+    // control region 3: mlSV with signal region between 10 - 40 Gev
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass < 40){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR3mlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR3mlSV_quadC");
+        }else if(event._SV_l1mass > 90){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutCR3mlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutCR3mlSV_quadD");
+        }
+    }
+
+
+
+    // Tight predictions: PFN > 0.95
+    // dphill
+    if(baseline_cutphill){
+        if(event._dphill > 2.3){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightphill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightphill_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightphill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightphill_quadD");
+        }
+    }
+    // control region 2: dphill only up to dphi of 2.3
+    if(baseline_cutphill and event._dphill < 2.3){
+        if(event._dphill > 1.9){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR2phill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2phill_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR2phill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2phill_quadD");
+        }
+    }
+    // control region 2: dphill normal method within mlSV inverted region
+    if(baseline_cutCR3phill){
+        if(event._dphill > 2.3){
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR3phill_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3phill_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR3phill_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3phill_quadD");
+        }
+    }
+    //// mll
+    //if(baseline_cutmll){
+    //    if(event._mll < 80){
+    //        if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightmll_quadA");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightmll_quadC");
+    //    }else {
+    //        if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightmll_quadB");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightmll_quadD");
+    //    }
+    //}
+    //// dphill or mll
+    //if(baseline_cutphiORmll){
+    //    if(event._dphill > 2.3 and event._mll < 80){
+    //        if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightphiORmll_quadA");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightphiORmll_quadC");
+    //    }else {
+    //        if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightphiORmll_quadB");
+    //        else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightphiORmll_quadD");
+    //    }
+    //}
+    // mlSV
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightmlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightmlSV_quadC");
+        }else {
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightmlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightmlSV_quadD");
+        }
+    }
+    // control region 2: mlSV with signal region between 90 - 110 GeV
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass > 90 and event._SV_l1mass < 110){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR2mlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2mlSV_quadC");
+        }else if(event._SV_l1mass < 40 or event._SV_l1mass > 110){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR2mlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2mlSV_quadD");
+        }
+    }
+    // control region 3: mlSV with signal region between 10 - 40 Gev
+    if(baseline_cutmlSV){
+        if(event._SV_l1mass < 40){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR3mlSV_quadA");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3mlSV_quadC");
+        }else if(event._SV_l1mass > 90){
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR3mlSV_quadB");
+            else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3mlSV_quadD");
         }
     }
 
@@ -194,7 +350,7 @@ void mini_analyzer::add_histograms()
 {
     std::cout << "Initializing histograms" << std::endl;
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString& cut2region : {"_cutphill", "_cutmll", "_cutphiORmll", "_cutmlSV"}){
+        for(const TString& cut2region : {"_cutphill"/*, "_cutmll", "_cutphiORmll"*/, "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV", "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill"/*, "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutTightCR2mlSV", "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"}){
             for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD", "_DtoCwithCD", "_BtoAwithCD", "_CtoAwithBD"}){
                 add_standard_histograms(lep_region + cut2region + quadrant);
                 //move to parametrized pfn evaluation:
@@ -203,7 +359,7 @@ void mini_analyzer::add_histograms()
             add_fraction_histograms(lep_region + cut2region);
 
             // only make region A histograms if we're not running over data
-            if(!isData){
+            if(!isData or cut2region.Contains("CR")){
                 for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_quadABCD"}){
                     add_standard_histograms(lep_region + cut2region + quadrant);
                     //move to parametrized pfn evaluation:
@@ -220,6 +376,8 @@ void mini_analyzer::add_fraction_histograms(TString prefix)
 {
     hists[prefix+"_QuadFractions"]          = new TH1F(prefix+"_QuadFractions", ";;Fraction", 4, 0, 4);
     hists[prefix+"_QuadFractions_unw"]      = new TH1F(prefix+"_QuadFractions_unw", ";;Unweighted Events", 4, 0, 4);
+    hists2D[prefix+"_QuadFractions_2D"]     = new TH2F(prefix+"_QuadFractions_2D", ";;", 4, 0, 4, 4, 0, 4);
+    hists2D[prefix+"_QuadFractions2_2D"]    = new TH2F(prefix+"_QuadFractions2_2D", ";;", 2, 0, 2, 4, 0, 4);
 }
 
 
@@ -227,6 +385,7 @@ void mini_analyzer::add_standard_histograms(TString prefix)
 {
     hists[prefix+"_Yield"]              = new TH1F(prefix+"_Yield", ";;Events", 1, 0, 1);
     hists[prefix+"_SRShape"]            = new TH1F(prefix+"_SRShape", ";;Events", 4, 0, 4);
+    hists[prefix+"_SRShape2"]           = new TH1F(prefix+"_SRShape2", ";;Events", 2, 0, 2);
     hists[prefix+"_nTightJet"]          = new TH1F(prefix+"_nTightJet", ";N_{Jet};Events", 6, 0, 10);
     hists[prefix+"_JetPt"]              = new TH1F(prefix+"_JetPt", ";Jet #it{p}_{T} [GeV];Events", 6, 0, 100);
     hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 6, -3, 3);
@@ -291,7 +450,7 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
 void mini_analyzer::fill_histograms()
 {
     for(const auto& ABCDtag : ABCDtags){
-        if(isData and ABCDtag.Contains("_quadA")) continue;// don't fill region A histograms for data
+        if(isData and ABCDtag.Contains("_quadA") and not ABCDtag.Contains("CR")) continue;// don't fill region A histograms for data
         fill_standard_histograms(sr_flavor + ABCDtag, event._weight);
         fill_pfn_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[16], 16);
         fill_fraction_histograms(sr_flavor + ABCDtag, event._weight);
@@ -307,8 +466,14 @@ void mini_analyzer::fill_fraction_histograms(TString prefix, double event_weight
     else if(prefix.Contains("_quadC")) binnr = 2.;
     else binnr =3.;
     prefix = prefix(0, prefix.Index("_quad"));
+
+    double SRShapebin = get_SRShapebin(event._SV_PVSVdist_2D, event._SV_mass);
+    double SRShape2bin = get_SRShape2bin(event._SV_PVSVdist_2D);
+
     hists[prefix+"_QuadFractions"]->Fill(binnr, event_weight);
     hists[prefix+"_QuadFractions_unw"]->Fill(binnr);
+    hists2D[prefix+"_QuadFractions_2D"]->Fill(SRShapebin, binnr, event_weight);
+    hists2D[prefix+"_QuadFractions2_2D"]->Fill(SRShape2bin, binnr, event_weight);
 }
 
 
@@ -316,6 +481,7 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
 {
     hists[prefix+"_Yield"]->Fill(0., event_weight);
     hists[prefix+"_SRShape"]->Fill(get_SRShapebin(event._SV_PVSVdist_2D, event._SV_mass), event_weight);
+    hists[prefix+"_SRShape2"]->Fill(get_SRShape2bin(event._SV_PVSVdist_2D), event_weight);
     hists[prefix+"_nTightJet"]->Fill(event._nTightJet,event_weight);         
     hists[prefix+"_JetPt"]->Fill(event._JetPt,event_weight);             
     hists[prefix+"_JetEta"]->Fill(event._JetEta,event_weight);            
@@ -424,6 +590,12 @@ double mini_analyzer::get_SRShapebin(double PVSVdist_2D, double SV_mass)
     else if(PVSVdist_2D > 10 and SV_mass <= 4) return 1.;
     else if(PVSVdist_2D < 10 and SV_mass > 4) return 2.;
     return 3.;
+}
+
+double mini_analyzer::get_SRShape2bin(double PVSVdist_2D)
+{
+    if(PVSVdist_2D < 10) return 0.;
+    else return 1.;
 }
 
 

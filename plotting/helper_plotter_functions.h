@@ -64,11 +64,15 @@ void        alphanumeric_labels_2D(TH2F* hist, TString histname);
 template <typename T>
 void alphanumeric_labels(T hist, TString histname)
 {
-    if(histname.Contains("SRShape")){
+    if(histname.Contains("SRShape2")){
+        const char* xlabels_SRShape[2] = {"L_{xy}<10", "L_{xy}>10"};
+        for(int i = 0; i < 2; i++) hist->GetXaxis()->SetBinLabel(i+1, xlabels_SRShape[i]);
+    }
+    else if(histname.Contains("SRShape")){
         const char* xlabels_SRShape[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
         for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, xlabels_SRShape[i]);
     }
-    if(histname.Contains("QuadFractions")){
+    else if(histname.Contains("QuadFractions")){
         const char *quadfractions_labels[4] = {"A", "B", "C", "D"};
         for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
     }

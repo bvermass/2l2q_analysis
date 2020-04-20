@@ -45,6 +45,7 @@ class mini_analyzer {
         bool baseline_cutmll;
         bool baseline_cutphiORmll;
         bool baseline_cutmlSV;
+        bool baseline_cutCR3phill;
 
         //General functions
         mini_analyzer(TString filename);
@@ -71,6 +72,7 @@ class mini_analyzer {
         void sum_quad_histograms();
         void sum_histograms_based_on_tags(TString base_tag, TString second_tags, TString target_tag);
         double get_SRShapebin(double PVSVdist_2D, double SV_mass);
+        double get_SRShape2bin(double PVSVdist_2D);
 };
 
 #endif

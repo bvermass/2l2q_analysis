@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
     gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
-    
+
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
@@ -128,7 +128,7 @@ int main(int argc, char * argv[])
             // get plot specific pathnames
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
-    
+
             // for parametrized PFN, put evaluated mass and V2 in legend
             if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(("PFN: " + (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " "));
 
