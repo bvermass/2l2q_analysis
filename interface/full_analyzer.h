@@ -218,17 +218,18 @@ public :
    Bool_t          _lElectronPassEmu[10];   //[_nLight]
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
-   UInt_t          _lElectronMissingHits[10];   //[_nLight]
-   Bool_t          _lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
-   Bool_t          _lEleIsEE[10];
-   Double_t        _lEleSuperClusterOverP[10];
-   Double_t        _lEleEcalEnergy[10];
-   Double_t        _lElefull5x5SigmaIetaIeta[10];
-   Double_t        _lEleDEtaInSeed[10];
-   Double_t        _lEleDeltaPhiSuperClusterTrackAtVtx[10];
-   Double_t        _lElehadronicOverEm[10];
-   Double_t        _lEleInvMinusPInv[10];
-   Double_t        _eleNumberInnerHitsMissing[10];
+   unsigned        _lElectronMissingHits[10];   //[_nLight]
+   Bool_t          _lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+   Bool_t          _lElectronIsEE[10];
+   Double_t        _lElectronSuperClusterOverP[10];
+   Double_t        _lElectronEcalEnergy[10];
+   Double_t        _lElectronSigmaIetaIeta[10];
+   Double_t        _lElectronDEtaInSeed[10];
+   Double_t        _lElectronDeltaPhiSuperClusterTrack[10];
+   Double_t        _lElectronDeltaEtaSuperClusterTrack[10];
+   Double_t        _lElectronHOverE[10];
+   Double_t        _lElectronEInvMinusPInv[10];
+   Double_t        _lElectronNumberInnerHitsMissing[10];
    Double_t        _leptonMvatZq[10];
    Double_t        _leptonMvaTTH[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
@@ -598,16 +599,17 @@ public :
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
    TBranch        *b__lElectronMissingHits;   //!
-   TBranch        *b__lEleIsEB;                                                                         //electron specific variables for displaced electron ID
-   TBranch        *b__lEleIsEE;
-   TBranch        *b__lEleSuperClusterOverP;
-   TBranch        *b__lEleEcalEnergy;
-   TBranch        *b__lElefull5x5SigmaIetaIeta;
-   TBranch        *b__lEleDEtaInSeed;
-   TBranch        *b__lEleDeltaPhiSuperClusterTrackAtVtx;
-   TBranch        *b__lElehadronicOverEm;
-   TBranch        *b__lEleInvMinusPInv;
-   TBranch        *b__eleNumberInnerHitsMissing;
+   TBranch        *b__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
+   TBranch        *b__lElectronIsEE;
+   TBranch        *b__lElectronSuperClusterOverP;
+   TBranch        *b__lElectronEcalEnergy;
+   TBranch        *b__lElectronSigmaIetaIeta;
+   TBranch        *b__lElectronDEtaInSeed;
+   TBranch        *b__lElectronDeltaPhiSuperClusterTrack;
+   TBranch        *b__lElectronDeltaEtaSuperClusterTrack;
+   TBranch        *b__lElectronHOverE;
+   TBranch        *b__lElectronEInvMinusPInv;
+   TBranch        *b__lElectronNumberInnerHitsMissing;
    TBranch        *b__leptonMvatZq;
    TBranch        *b__leptonMvaTTH;
    TBranch        *b__leptonMvaSUSY16;   //!

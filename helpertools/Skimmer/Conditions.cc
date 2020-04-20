@@ -26,19 +26,19 @@ void Skimmer::get_DisplelectronID(bool* ID)  //basically medium POG cut-based ID
                         i_lPt[i] > 7 &&
                         //fabs(i_dxy[i]) > 0.01 && for now, require this as a separate condition
                         i_lElectronPassConvVeto[i] &&
-                        (   (i_lEleIsEB[i] &&
-                             i_lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
-                             i_lEleDEtaInSeed[i] <= 0.00477 &&
-                             i_lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.222 &&
-                             i_lElehadronicOverEm[i] <= 0.298 &&
-                             i_lEleInvMinusPInv[i] <= 0.241) 
+                        (   (i_lElectronIsEB[i] &&
+                             i_lElectronSigmaIetaIeta[i] <= 0.11 &&
+                             i_lElectronDEtaInSeed[i] <= 0.00477 &&
+                             i_lElectronDeltaPhiSuperClusterTrack[i] <= 0.222 &&
+                             i_lElectronHOverE[i] <= 0.298 &&
+                             i_lElectronEInvMinusPInv[i] <= 0.241)
                             || 
-                            (i_lEleIsEE[i] &&
-                             i_lElefull5x5SigmaIetaIeta[i] <= 0.0314 &&
-                             i_lEleDEtaInSeed[i] <= 0.00868 &&
-                             i_lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.213 &&
-                             i_lElehadronicOverEm[i] <= 0.101 &&
-                             i_lEleInvMinusPInv[i] <= 0.14
+                            (i_lElectronIsEE[i] &&
+                             i_lElectronSigmaIetaIeta[i] <= 0.0314 &&
+                             i_lElectronDEtaInSeed[i] <= 0.00868 &&
+                             i_lElectronDeltaPhiSuperClusterTrack[i] <= 0.213 &&
+                             i_lElectronHOverE[i] <= 0.101 &&
+                             i_lElectronEInvMinusPInv[i] <= 0.14
                             )
                         );
     }

@@ -214,17 +214,18 @@ class Skimmer {
         Bool_t          i_lElectronPassEmu[10];   //[_nLight]
         Bool_t          i_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          i_lElectronChargeConst[10];   //[_nLight]
-        UInt_t          i_lElectronMissingHits[10];   //[_nLight]
-        Bool_t          i_lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
-        Bool_t          i_lEleIsEE[10];
-        Double_t        i_lEleSuperClusterOverP[10];
-        Double_t        i_lEleEcalEnergy[10];
-        Double_t        i_lElefull5x5SigmaIetaIeta[10];
-        Double_t        i_lEleDEtaInSeed[10];
-        Double_t        i_lEleDeltaPhiSuperClusterTrackAtVtx[10];
-        Double_t        i_lElehadronicOverEm[10];
-        Double_t        i_lEleInvMinusPInv[10];
-        Double_t        i_eleNumberInnerHitsMissing[10];
+        unsigned        i_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          i_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+        Bool_t          i_lElectronIsEE[10];
+        Double_t        i_lElectronSuperClusterOverP[10];
+        Double_t        i_lElectronEcalEnergy[10];
+        Double_t        i_lElectronSigmaIetaIeta[10];
+        Double_t        i_lElectronDEtaInSeed[10];
+        Double_t        i_lElectronDeltaPhiSuperClusterTrack[10];
+        Double_t        i_lElectronDeltaEtaSuperClusterTrack[10];
+        Double_t        i_lElectronHOverE[10];
+        Double_t        i_lElectronEInvMinusPInv[10];
+        Double_t        i_lElectronNumberInnerHitsMissing[10];
         Double_t        i_leptonMvaTTH[10];
         Double_t        i_leptonMvatZq[10];
         Bool_t          i_lPOGVeto[10];   //[_nL]
@@ -615,17 +616,18 @@ class Skimmer {
         Bool_t          o_lElectronPassEmu[10];   //[_nLight]
         Bool_t          o_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          o_lElectronChargeConst[10];   //[_nLight]
-        UInt_t          o_lElectronMissingHits[10];   //[_nLight]
-        Bool_t          o_lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
-        Bool_t          o_lEleIsEE[10];
-        Double_t        o_lEleSuperClusterOverP[10];
-        Double_t        o_lEleEcalEnergy[10];
-        Double_t        o_lElefull5x5SigmaIetaIeta[10];
-        Double_t        o_lEleDEtaInSeed[10];
-        Double_t        o_lEleDeltaPhiSuperClusterTrackAtVtx[10];
-        Double_t        o_lElehadronicOverEm[10];
-        Double_t        o_lEleInvMinusPInv[10];
-        Double_t        o_eleNumberInnerHitsMissing[10];
+        unsigned        o_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          o_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+        Bool_t          o_lElectronIsEE[10];
+        Double_t        o_lElectronSuperClusterOverP[10];
+        Double_t        o_lElectronEcalEnergy[10];
+        Double_t        o_lElectronSigmaIetaIeta[10];
+        Double_t        o_lElectronDEtaInSeed[10];
+        Double_t        o_lElectronDeltaPhiSuperClusterTrack[10];
+        Double_t        o_lElectronDeltaEtaSuperClusterTrack[10];
+        Double_t        o_lElectronHOverE[10];
+        Double_t        o_lElectronEInvMinusPInv[10];
+        Double_t        o_lElectronNumberInnerHitsMissing[10];
         Double_t        o_leptonMvaTTH[10];
         Double_t        o_leptonMvatZq[10];
         Bool_t          o_lPOGVeto[10];   //[_nL]
@@ -1015,16 +1017,17 @@ class Skimmer {
         TBranch        *bi__lElectronPassConvVeto;   //!
         TBranch        *bi__lElectronChargeConst;   //!
         TBranch        *bi__lElectronMissingHits;   //!
-        TBranch        *bi__lEleIsEB;                                                                         //electron specific variables for displaced electron ID
-        TBranch        *bi__lEleIsEE;
-        TBranch        *bi__lEleSuperClusterOverP;
-        TBranch        *bi__lEleEcalEnergy;
-        TBranch        *bi__lElefull5x5SigmaIetaIeta;
-        TBranch        *bi__lEleDEtaInSeed;
-        TBranch        *bi__lEleDeltaPhiSuperClusterTrackAtVtx;
-        TBranch        *bi__lElehadronicOverEm;
-        TBranch        *bi__lEleInvMinusPInv;
-        TBranch        *bi__eleNumberInnerHitsMissing;
+        TBranch        *bi__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
+        TBranch        *bi__lElectronIsEE;
+        TBranch        *bi__lElectronSuperClusterOverP;
+        TBranch        *bi__lElectronEcalEnergy;
+        TBranch        *bi__lElectronSigmaIetaIeta;
+        TBranch        *bi__lElectronDEtaInSeed;
+        TBranch        *bi__lElectronDeltaPhiSuperClusterTrack;
+        TBranch        *bi__lElectronDeltaEtaSuperClusterTrack;
+        TBranch        *bi__lElectronHOverE;
+        TBranch        *bi__lElectronEInvMinusPInv;
+        TBranch        *bi__lElectronNumberInnerHitsMissing;
         TBranch        *bi__leptonMvaTTH;
         TBranch        *bi__leptonMvatZq;
         TBranch        *bi__lPOGVeto;   //!

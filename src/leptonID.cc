@@ -102,19 +102,19 @@ void full_analyzer::get_displ_electronID()  //basically medium POG cut-based ID 
                              _lPt[i] > 7 &&
                              fabs(_dxy[i]) > 0.02 &&
                              _lElectronPassConvVeto[i] &&
-                             (   (_lEleIsEB[i] &&
-                                  _lElefull5x5SigmaIetaIeta[i] <= 0.11 &&
-                                  _lEleDEtaInSeed[i] <= 0.00477 &&
-                                  _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.222 &&
-                                  _lElehadronicOverEm[i] <= 0.298 &&
-                                  _lEleInvMinusPInv[i] <= 0.241) 
+                             (   (_lElectronIsEB[i] &&
+                                  _lElectronSigmaIetaIeta[i] <= 0.11 &&
+                                  _lElectronDEtaInSeed[i] <= 0.00477 &&
+                                  _lElectronDeltaPhiSuperClusterTrack[i] <= 0.222 &&
+                                  _lElectronHOverE[i] <= 0.298 &&
+                                  _lElectronEInvMinusPInv[i] <= 0.241) 
                                  || 
-                                 (_lEleIsEE[i] &&
-                                  _lElefull5x5SigmaIetaIeta[i] <= 0.0314 &&
-                                  _lEleDEtaInSeed[i] <= 0.00868 &&
-                                  _lEleDeltaPhiSuperClusterTrackAtVtx[i] <= 0.213 &&
-                                  _lElehadronicOverEm[i] <= 0.101 &&
-                                  _lEleInvMinusPInv[i] <= 0.14
+                                 (_lElectronIsEE[i] &&
+                                  _lElectronSigmaIetaIeta[i] <= 0.0314 &&
+                                  _lElectronDEtaInSeed[i] <= 0.00868 &&
+                                  _lElectronDeltaPhiSuperClusterTrack[i] <= 0.213 &&
+                                  _lElectronHOverE[i] <= 0.101 &&
+                                  _lElectronEInvMinusPInv[i] <= 0.14
                                  )
                              );
     }
