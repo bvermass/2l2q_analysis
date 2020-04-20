@@ -1,18 +1,18 @@
 #DATA 2016
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016B/MiniAOD2016/dilep_final.root                                                               1           -1          18
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016C/MiniAOD2016/dilep_final.root                                                               1           -1          9
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016D/MiniAOD2016/dilep_final.root                                                               1           -1          14
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016E/MiniAOD2016/dilep_final.root                                                               1           -1          14
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016F/MiniAOD2016/dilep_final.root                                                               1           -1          11
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016G/MiniAOD2016/dilep_final.root                                                               1           -1          29
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016H/MiniAOD2016/dilep_final.root                                                               1           -1          30
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016B/MiniAOD2016/dilep_final.root                                                               1           -1          20
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016C/MiniAOD2016/dilep_final.root                                                               1           -1          8
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016D/MiniAOD2016/dilep_final.root                                                               1           -1          14
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016E/MiniAOD2016/dilep_final.root                                                               1           -1          11
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016F/MiniAOD2016/dilep_final.root                                                               1           -1          9
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016G/MiniAOD2016/dilep_final.root                                                               1           -1          26
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016H/MiniAOD2016/dilep_final.root                                                               1           -1          27
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016B/dilep_final.root                                                               1           -1          18
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016C/dilep_final.root                                                               1           -1          9
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016D/dilep_final.root                                                               1           -1          14
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016E/dilep_final.root                                                               1           -1          14
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016F/dilep_final.root                                                               1           -1          11
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016G/dilep_final.root                                                               1           -1          29
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleMuon/Run2016H/dilep_final.root                                                               1           -1          30
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016B/dilep_final.root                                                               1           -1          20
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016C/dilep_final.root                                                               1           -1          8
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016D/dilep_final.root                                                               1           -1          14
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016E/dilep_final.root                                                               1           -1          11
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016F/dilep_final.root                                                               1           -1          9
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016G/dilep_final.root                                                               1           -1          26
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/Run2016H/dilep_final.root                                                               1           -1          27
 
 
 #Wjets
