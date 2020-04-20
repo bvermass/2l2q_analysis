@@ -134,12 +134,12 @@ int main(int argc, char * argv[])
 
             TMultiGraph* multigraph = new TMultiGraph();
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");
+            bool valid_graph = false;
             for(int i = 0; i < files_signal.size(); i++){
                 //auc.push_back(get_roc_and_auc(multigraph, histname, files_signal[i], files_bkg[i]);
                 TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
                 TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
-                if(hist_signal->GetMaximum() <= 0 or hist_bkg->GetMaximum() <= 0) continue;
-
+                if(!hist_signal or !hist_bkg or hist_signal->GetMaximum() <= 0 or hist_bkg->GetMaximum() <= 0) continue;
                 
                 std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
@@ -155,20 +155,30 @@ int main(int argc, char * argv[])
                 TGraph* roc = get_roc(eff_signal, eff_bkg);
                 roc->SetLineColor(colors[i]);
                 multigraph->Add(roc);
+                valid_graph = true;
                 auc[i][histname] = computeAUC(roc);
                 TString auc_str = std::to_string(auc[i][histname]).substr(0, std::to_string(auc[i][histname]).find(".") + 3);
                 legend.AddEntry(roc, legends[i] + ": " + auc_str, "l");
             }
 
+
             c->Clear();
             c->SetLogx(0);
             c->SetLogy(0);
-            multigraph->Draw("AL");
-            legend.Draw("same");
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+            if(valid_graph){
+                multigraph->Draw("AL");
 
-            c->Modified();
-            c->Print(pathname_lin + histname + ".png");
+
+                multigraph->GetXaxis()->SetLimits(-0.02, 0.3);
+                multigraph->SetMinimum(0.7);
+                multigraph->SetMaximum(1.02);
+
+                legend.Draw("same");
+                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+
+                c->Modified();
+                c->Print(pathname_lin + histname + ".png");
+            }
 
             // Plot ROC for several V2 (only for plots with 1 sig-bkg combo):
             if(histname.Index("_V2-3e-05") != -1 and files_signal.size() == 1 and histname.Index("_M-") != -1){
