@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
 
-                hists->Draw("hist nostack");
+                hists->Draw("E P hist nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -129,7 +129,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(1);
 
-                hists->Draw("hist nostack");
+                hists->Draw("E P hist nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));

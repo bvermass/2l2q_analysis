@@ -21,7 +21,7 @@ int main(int argc, char * argv[])
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -29,6 +29,8 @@ int main(int argc, char * argv[])
 
     // Name of directory where plots will end up
     TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
+    std::string corfilename = (std::string)(general_pathname + "correlations.txt");
+    gSystem->Exec("rm " + (TString)corfilename);
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -108,16 +110,14 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
     
-                if(!histname.Contains("_quadA_")){
-                    sample_hist->SetMarkerColor(colors[0]);
-                    sample_hist->SetLineColor(colors[0]);
-                    sample_hist->Draw("E0 P");
-                    legend.Draw("same");
-                    CMSandLumi->Draw();
+                sample_hist->SetMarkerColor(colors[0]);
+                sample_hist->SetLineColor(colors[0]);
+                sample_hist->Draw("E0 P");
+                legend.Draw("same");
+                CMSandLumi->Draw();
 
-                    pad->Modified();
-                    c->Print(pathname_lin + histname + ".png");
-                }
+                pad->Modified();
+                c->Print(pathname_lin + histname + ".png");
 
                 // Efficiencies are calculated right here as TGraphAsymmErrors
                 if(histname.Index("eff_num") != -1){
@@ -165,6 +165,7 @@ int main(int argc, char * argv[])
                 TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 
                 pad->Clear();
+                pad->SetLogy(0);
 
                 sample_hist->SetMinimum(0);
                 sample_hist->Draw(get_2D_draw_options(sample_hist));
@@ -173,13 +174,12 @@ int main(int argc, char * argv[])
                 pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
 
-                if(histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs")){
-                    std::string corfilename = (std::string)(pathname_lin + histname + "_corr.txt");
+                if(is_mini_analyzer and (histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs"))){
                     double cor = sample_hist->GetCorrelationFactor();
                     std::ostringstream corstream;
                     corstream << cor;
                     std::string corstring = (std::string)histname + " correlation factor:" + corstream.str();
-                    filePutContents(corfilename, corstring, false);
+                    filePutContents(corfilename, corstring, true);
                 }
             }
         }
@@ -234,18 +234,18 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         c->Print(pathname_lin + plotname + ".png");
 
         // Draw log version
-        pad->Clear();
-        pad->SetLogy(1);
+        //pad->Clear();
+        //pad->SetLogy(1);
 
-        hists->Draw("E P hist nostack");
-        hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
-        hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
-        hists->SetMaximum(10*hists->GetMaximum("nostack"));
-        hists->SetMinimum(std::max(1e-6, 0.5*hists->GetMinimum("nostack")));
-        legend.Draw("same");
-        CMSandLumi->Draw();
+        //hists->Draw("E P hist nostack");
+        //hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
+        //hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
+        //hists->SetMaximum(10*hists->GetMaximum("nostack"));
+        //hists->SetMinimum(std::max(1e-6, 0.5*hists->GetMinimum("nostack")));
+        //legend.Draw("same");
+        //CMSandLumi->Draw();
 
-        pad->Modified();
-        c->Print(pathname_log + plotname + ".png");
+        //pad->Modified();
+        //c->Print(pathname_log + plotname + ".png");
     }
 }

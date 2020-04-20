@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -88,11 +88,14 @@ int main(int argc, char * argv[])
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
     gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
+    
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
-    TLegend legend = get_legend(0.4, 0.15, 1, 0.3, 1);
+    TLegend legend = get_legend(0.5, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
@@ -119,11 +122,15 @@ int main(int argc, char * argv[])
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
             if(histname.Index("_ROC") == -1 or histname.Index("_M-") == -1 or histname.Index("_V2-") == -1 or histname.Index("_Training") != -1 or histname.Index("_after") != -1) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
             std::cout << histname << std::endl;
             
             // get plot specific pathnames
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
+    
+            // for parametrized PFN, put evaluated mass and V2 in legend
+            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(("PFN: " + (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " "));
 
             TMultiGraph* multigraph = new TMultiGraph();
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");

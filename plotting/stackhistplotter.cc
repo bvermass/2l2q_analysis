@@ -154,6 +154,7 @@ int main(int argc, char * argv[])
                         legend.AddEntry(hist, legends_bkg[i], "f");
                     }
                 }
+                if(hists_bkg->GetMaximum() <= 0) continue;
                 
                 // get signal histograms and fill legend
                 THStack* hists_signal = new THStack("stack_signal", "");
@@ -163,6 +164,8 @@ int main(int argc, char * argv[])
                         if(hist->GetMaximum() > 0){
                             int color = get_color(legends_signal[i]);
                             hist->SetLineColor(color);
+                            hist->SetLineStyle(2);
+                            hist->SetLineWidth(3);
                             hists_signal->Add(hist);
                             legend.AddEntry(hist, legends_signal[i], "l");
                         }
