@@ -37,7 +37,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
         _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
         _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
-        evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
+        //evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
+        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
         filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(_gen_Nmass, _gen_NV*_gen_NV) + "\n", true);
     }else {
         _gen_Nmass = 0;

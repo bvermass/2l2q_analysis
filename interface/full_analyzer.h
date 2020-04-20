@@ -923,7 +923,6 @@ public :
     void     signal_regions();
     void     additional_signal_regions();
     bool     leadptcut(int);
-    bool     no_additional_leptons();
     double   get_mll(int, int);
     double   get_dRll(int, int);
     double   get_dphill(int, int);

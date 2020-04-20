@@ -150,7 +150,8 @@ void full_analyzer::signal_regions(){
      _FullNoPFN                 = _Training &&
                                   mll < 80 &&
                                   dphill > 2.3 &&
-                                  i_subleading_jet == -1;
+                                  i_subleading_jet == -1 &&
+                                  (nTightEle + nTightMu == 1);
 
      _FullNoPFN_toofar          = _FullNoPFN &&
                                   IVF_PVSVdist_2D > 40;
@@ -158,12 +159,14 @@ void full_analyzer::signal_regions(){
      _CR_FullNoPFN_invdphi      = _Training &&
                                   mll < 80 &&
                                   dphill < 2.3 &&
-                                  i_subleading_jet == -1;
+                                  i_subleading_jet == -1 &&
+                                  (nTightEle + nTightMu == 1);
 
      _CR_FullNoPFN_invmll       = _Training &&
                                   mll > 80 &&
                                   dphill > 2.3 &&
-                                  i_subleading_jet == -1;
+                                  i_subleading_jet == -1 &&
+                                  (nTightEle + nTightMu == 1);
 
      //questions: no additional leptons?
      //mll?
@@ -200,23 +203,13 @@ bool full_analyzer::leadptcut(int i_lep){
     if(i_lep == -1){ cout << "giving value -1 as i_lep to full_analyzer::leadptcut" << endl; return false;}
 
     double ptcutval;
-    if(_lFlavor[i_lep]      == 0) ptcutval = 30; //electron
+    if(_lFlavor[i_lep]      == 0 and _is2016) ptcutval = 30; //electron
+    else if(_lFlavor[i_lep] == 0) ptcutval = 34;
     else if(_lFlavor[i_lep] == 1) ptcutval = 25; //muon
     
     if(_lPt[i_lep] >= ptcutval) return true;
     else return false;
 }
-
-bool full_analyzer::no_additional_leptons(){
-    int loose_leptons = 0;
-    for(unsigned i = 0; i < _nL; i++){
-        if((displElectronID[i] and ele_clean_full_displ[i]) or (fullElectronID[i] and ele_clean_full_displ[i]) or looseMuonID[i] or fullMuonID[i]){ 
-            loose_leptons++;
-        }
-    }
-    return (loose_leptons == 2);
-}
-
 
 double full_analyzer::get_mll(int i_lead, int i_sublead){
     LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);

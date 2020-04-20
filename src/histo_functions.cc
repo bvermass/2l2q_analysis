@@ -26,7 +26,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
-    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 6, 0, 6);
+    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
     //(*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
 
@@ -299,12 +299,15 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
     /*
      * Cutflow
      */
-    if(_l1l2)                   (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
-    if(_l1l2SV)                 (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
-    if(_Training)               (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
-    if(_FullNoPFN)              (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
-    if(_CR_FullNoPFN_invdphi)   (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
-    if(_CR_FullNoPFN_invmll)    (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+    if(_lFlavor[i_leading] == 0 and _trige) (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
+    if(_lFlavor[i_leading] == 1 and _trigmu) (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
+    if(_l1)                     (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
+    if(_l1l2)                   (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
+    if(_l1l2SV)                 (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
+    if(_Training)               (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
+    if(_FullNoPFN)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+    if(_CR_FullNoPFN_invdphi)   (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
+    if(_CR_FullNoPFN_invmll)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
 
     /*
      * MVA ID versus cutbased medium prompt ID
@@ -634,8 +637,8 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //for(int i = 0; i < nx_jets; i++){ 
     //    (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     //}
-    int nx_cutflow = 6;
-    const char *cutflow_labels[nx_cutflow] = {"l1+l2", "SV", "jetl2", "FullNoPFN", "CR dphi", "CR mll"};
+    int nx_cutflow = 8;
+    const char *cutflow_labels[nx_cutflow] = {"trig", "l1", "l1+l2", "SV", "jetl2", "FullNoPFN", "CR dphi", "CR mll"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }

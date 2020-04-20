@@ -16,10 +16,10 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals(HNLtagger& 
 }
 
 void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
-    (*hists)[prefix+"_JetTagVal"]             = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 40, 0, 1);
-    (*hists)[prefix+"_PFN_ROC"]               = new TH1F(prefix+"_PFN_ROC", ";Jet Tag Value; Events", 1000, 0, 1);
-    (*hists)[prefix+"_JetTagValzm"]           = new TH1F(prefix+"_JetTagValzm", ";Jet Tag Value; Events", 40, 0.9, 1);
-    (*hists)[prefix+"_JetTagValzm2"]          = new TH1F(prefix+"_JetTagValzm2", ";Jet Tag Value; Events", 40, 0.96, 1);
+    (*hists)[prefix+"_JetTagVal"]             = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 20, 0, 1);
+    (*hists)[prefix+"_PFN_ROC"]               = new TH1F(prefix+"_PFN_ROC", ";Jet Tag Value; Events", 10000, 0, 1);
+    (*hists)[prefix+"_JetTagValzm"]           = new TH1F(prefix+"_JetTagValzm", ";Jet Tag Value; Events", 10, 0.9, 1);
+    (*hists)[prefix+"_JetTagValzm2"]          = new TH1F(prefix+"_JetTagValzm2", ";Jet Tag Value; Events", 10, 0.96, 1);
     if(extensive_plots) (*hists)[prefix+"_PFN_JetIsFromHNL_ROC"]  = new TH1F(prefix+"_PFN_JetIsFromHNL_ROC", ";Jet Tag Value (Jet from HNL); Events", 1000, 0, 1);
 
     //(*hists)[prefix+"_JetTagVal_BDT"]   = new TH1F(prefix+"_JetTagVal_BDT", ";Jet Tag Value (BDT); Events", 40, -0.1, 2);
