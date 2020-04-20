@@ -20,30 +20,28 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
 {
     TString outputfilename = base_directory;
     if(full_analyzer){
-        if(filename.Index("dilep_") != -1) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
+        if(filename.Contains("dilep_")) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
         else outputfilename += "full_analyzer/";
     }
     
     if(partition != 1) {
         outputfilename += "subfiles/";
-        if(filename.Index("HeavyNeutrino_lljj") != -1) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - filename.Index("HeavyNeutrino_"));
-        else if(filename.Index("Run20") != -1){
+        if(filename.Contains("HeavyNeutrino_lljj")) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - filename.Index("HeavyNeutrino_"));
+        else {
             TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
             tmpname.ReplaceAll("/", "_");
             outputfilename += tmpname + "/";
         }
-        else outputfilename += "Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15) + "/";
     }
     
     gSystem->Exec("mkdir -p " + outputfilename);
 
-    if(filename.Index("HeavyNeutrino_lljj") != -1) outputfilename += base_filename + "_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_"));
-    else if(filename.Index("Run20") != -1){ 
+    if(filename.Contains("HeavyNeutrino_lljj")) outputfilename += base_filename + "_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_"));
+    else { 
         TString tmpname2 = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
         tmpname2.ReplaceAll("/", "_");
         outputfilename += base_filename + "_" + tmpname2;
     }
-    else outputfilename += base_filename + "_Background_" + filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15);
     
     if(partition != 1) outputfilename += "_job_" + std::to_string(static_cast<long long>(partitionjobnumber)) + ".root";
     else outputfilename += ".root";

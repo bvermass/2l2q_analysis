@@ -81,7 +81,7 @@ public :
    Double_t        _gen_lEta[20];   //[_gen_nL]
    Double_t        _gen_lPhi[20];   //[_gen_nL]
    Double_t        _gen_lE[20];   //[_gen_nL]
-   UInt_t          _gen_lFlavor[20];   //[_gen_nL]
+   unsigned        _gen_lFlavor[20];   //[_gen_nL]
    Int_t           _gen_lCharge[20];   //[_gen_nL]
    Int_t           _gen_lMomPdg[20];   //[_gen_nL]
    Double_t        _gen_vertex_x[20];
@@ -118,13 +118,13 @@ public :
    Double_t        _gen_NPackedDtrs_matchdz[20];
    Int_t           _gen_NPackedDtrs_matchcharge[20];
    unsigned        _gen_nNdaughters;
-   UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+   unsigned        _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
    //UChar_t         _gen_nstatus23;
    //UChar_t         _gen_nstatus23_fromN;
    //UChar_t         _gen_nstatus23_fromW;
    //Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
-   //UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-   //UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
+   //unsigned        _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
+   //unsigned        _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
    unsigned        _gen_nq;
    Double_t        _gen_qPt[2];   //[_gen_nq23]
    Double_t        _gen_qEta[2];   //[_gen_nq23]
@@ -204,7 +204,7 @@ public :
    Double_t        _lEtaSC[10];   //[_nLight]
    Double_t        _lPhi[10];   //[_nL]
    Double_t        _lE[10];   //[_nL]
-   UInt_t          _lFlavor[10];   //[_nL]
+   unsigned        _lFlavor[10];   //[_nL]
    Int_t           _lCharge[10];   //[_nL]
    Double_t        _dxy[10];   //[_nL]
    Double_t        _dz[10];   //[_nL]
@@ -271,7 +271,7 @@ public :
    Double_t        _closestJetDeepFlavor_bb[10];
    Double_t        _closestJetDeepFlavor_lepb[10];
    Double_t        _closestJetDeepFlavor[10];
-   UInt_t          _selectedTrackMult[10];   //[_nLight]
+   unsigned        _selectedTrackMult[10];   //[_nLight]
    Bool_t          _lKVF_valid[10];
    Double_t	       _lKVF_x[10];
    Double_t	       _lKVF_y[10];
@@ -385,7 +385,7 @@ public :
    Double_t        _jetDeepFlavor_c[20];
    Double_t        _jetDeepFlavor_uds[20];
    Double_t        _jetDeepFlavor_g[20];
-   UInt_t          _jetHadronFlavor[20];   //[_nJets]
+   unsigned        _jetHadronFlavor[20];   //[_nJets]
    Bool_t          _jetIsLoose[20];   //[_nJets]
    Bool_t          _jetIsTight[20];   //[_nJets]
    Bool_t          _jetIsTightLepVeto[20];   //[_nJets]

@@ -141,7 +141,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //cout << "Number of events: " << nentries << endl;
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
-    if(sampleflavor.Index("Run") == -1){ 
+    if(!isData){
         total_weight = (cross_section * int_lumi * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;

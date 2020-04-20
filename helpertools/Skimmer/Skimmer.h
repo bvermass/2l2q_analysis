@@ -75,7 +75,7 @@ class Skimmer {
         Double_t        i_gen_lEta[20];   //[_gen_nL]
         Double_t        i_gen_lPhi[20];   //[_gen_nL]
         Double_t        i_gen_lE[20];   //[_gen_nL]
-        UInt_t          i_gen_lFlavor[20];   //[_gen_nL]
+        unsigned        i_gen_lFlavor[20];   //[_gen_nL]
         Int_t           i_gen_lCharge[20];   //[_gen_nL]
         Int_t           i_gen_lMomPdg[20];   //[_gen_nL]
         Double_t        i_gen_vertex_x[20];
@@ -101,7 +101,7 @@ class Skimmer {
         Int_t           i_gen_NPackedDtrsPdgId[20];
         Int_t           i_gen_NPackedDtrsCharge[20];
         unsigned        i_gen_nNdaughters;
-        UInt_t          i_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+        unsigned        i_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
         Double_t        i_gen_Ndaughters_Pt[30];
         Double_t        i_gen_Ndaughters_Eta[30];
         Double_t        i_gen_Ndaughters_Phi[30];
@@ -111,8 +111,8 @@ class Skimmer {
         //UChar_t         i_gen_nstatus23_fromN;
         //UChar_t         i_gen_nstatus23_fromW;
         //Int_t           i_gen_status23_pdg[5];   //[_gen_nstatus23]
-        //UInt_t          i_gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-        //UInt_t          i_gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
+        //unsigned        i_gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
+        //unsigned        i_gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
         unsigned        i_gen_nq;
         Double_t        i_gen_qPt[2];   //[_gen_nq23]
         Double_t        i_gen_qEta[2];   //[_gen_nq23]
@@ -200,7 +200,7 @@ class Skimmer {
         Double_t        i_lEtaSC[10];   //[_nLight]
         Double_t        i_lPhi[10];   //[_nL]
         Double_t        i_lE[10];   //[_nL]
-        UInt_t          i_lFlavor[10];   //[_nL]
+        unsigned        i_lFlavor[10];   //[_nL]
         Int_t           i_lCharge[10];   //[_nL]
         Double_t        i_dxy[10];   //[_nL]
         Double_t        i_dz[10];   //[_nL]
@@ -256,7 +256,7 @@ class Skimmer {
         Double_t        i_closestJetDeepFlavor_bb[10];
         Double_t        i_closestJetDeepFlavor_lepb[10];
         Double_t        i_closestJetDeepFlavor[10];
-        UInt_t          i_selectedTrackMult[10];   //[_nLight]
+        unsigned        i_selectedTrackMult[10];   //[_nLight]
         //Bool_t          i_lKVF_valid[10];
         //Double_t	    i_lKVF_x[10];
         //Double_t	    i_lKVF_y[10];
@@ -386,7 +386,7 @@ class Skimmer {
         Double_t        i_jetDeepFlavor_c[20];
         Double_t        i_jetDeepFlavor_uds[20];
         Double_t        i_jetDeepFlavor_g[20];
-        UInt_t          i_jetHadronFlavor[20];   //[_nJets]
+        unsigned        i_jetHadronFlavor[20];   //[_nJets]
         //Bool_t          i_jetIsLoose[20];   //[_nJets]
         Bool_t          i_jetIsTight[20];   //[_nJets]
         Bool_t          i_jetIsTightLepVeto[20];   //[_nJets]
@@ -476,7 +476,7 @@ class Skimmer {
         Double_t        o_gen_lEta[20];   //[_gen_nL]
         Double_t        o_gen_lPhi[20];   //[_gen_nL]
         Double_t        o_gen_lE[20];   //[_gen_nL]
-        UInt_t          o_gen_lFlavor[20];   //[_gen_nL]
+        unsigned        o_gen_lFlavor[20];   //[_gen_nL]
         Int_t           o_gen_lCharge[20];   //[_gen_nL]
         Int_t           o_gen_lMomPdg[20];   //[_gen_nL]
         Double_t        o_gen_vertex_x[20];
@@ -502,7 +502,7 @@ class Skimmer {
         Int_t           o_gen_NPackedDtrsPdgId[20];
         Int_t           o_gen_NPackedDtrsCharge[20];
         unsigned        o_gen_nNdaughters;
-        UInt_t          o_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
+        unsigned        o_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
         Double_t        o_gen_Ndaughters_Pt[30];
         Double_t        o_gen_Ndaughters_Eta[30];
         Double_t        o_gen_Ndaughters_Phi[30];
@@ -512,8 +512,8 @@ class Skimmer {
         //UChar_t         o_gen_nstatus23_fromN;
         //UChar_t         o_gen_nstatus23_fromW;
         //Int_t           o_gen_status23_pdg[5];   //[_gen_nstatus23]
-        //UInt_t          o_gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-        //UInt_t          o_gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
+        //unsigned        o_gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
+        //unsigned        o_gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
         unsigned        o_gen_nq;
         Double_t        o_gen_qPt[2];   //[_gen_nq23]
         Double_t        o_gen_qEta[2];   //[_gen_nq23]
@@ -601,7 +601,7 @@ class Skimmer {
         Double_t        o_lEtaSC[10];   //[_nLight]
         Double_t        o_lPhi[10];   //[_nL]
         Double_t        o_lE[10];   //[_nL]
-        UInt_t          o_lFlavor[10];   //[_nL]
+        unsigned        o_lFlavor[10];   //[_nL]
         Int_t           o_lCharge[10];   //[_nL]
         Double_t        o_dxy[10];   //[_nL]
         Double_t        o_dz[10];   //[_nL]
@@ -657,7 +657,7 @@ class Skimmer {
         Double_t        o_closestJetDeepFlavor_bb[10];
         Double_t        o_closestJetDeepFlavor_lepb[10];
         Double_t        o_closestJetDeepFlavor[10];
-        UInt_t          o_selectedTrackMult[10];   //[_nLight]
+        unsigned        o_selectedTrackMult[10];   //[_nLight]
         //Bool_t          o_lKVF_valid[10];
         //Double_t	    o_lKVF_x[10];
         //Double_t	    o_lKVF_y[10];
@@ -787,7 +787,7 @@ class Skimmer {
         Double_t        o_jetDeepFlavor_c[20];
         Double_t        o_jetDeepFlavor_uds[20];
         Double_t        o_jetDeepFlavor_g[20];
-        UInt_t          o_jetHadronFlavor[20];   //[_nJets]
+        unsigned        o_jetHadronFlavor[20];   //[_nJets]
         //Bool_t          o_jetIsLoose[20];   //[_nJets]
         Bool_t          o_jetIsTight[20];   //[_nJets]
         Bool_t          o_jetIsTightLepVeto[20];   //[_nJets]

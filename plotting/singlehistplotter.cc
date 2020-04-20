@@ -15,6 +15,7 @@ int main(int argc, char * argv[])
     TString subdirectory_name = (TString)argv[1];
     TString inputfilename = (TString)argv[4];
     bool is_mini_analyzer = inputfilename.Contains("hists_mini_analyzer");
+    bool isData           = inputfilename.Contains("Run201");
     TFile*  sample_file   = TFile::Open(inputfilename);
     TString sample_legend = adjust_legend((TString)argv[5]);
 

@@ -67,13 +67,14 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
         specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
         if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
-        else if(filename.Index("Background") != -1) specific_dir += filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") - 11) + "/";
         else if(filename.Index("Run") != -1){
             specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
             if(filename.Contains("Muon")) specific_dir += "_mm/";
             else if(filename.Contains("Electron")) specific_dir += "_ee/";
             else specific_dir += "/";
         }
+        else if(filename.Index("hists_full_analyzer") != -1) specific_dir += filename(filename.Index("hists_full_analyzer") + 20, filename.Index(".root") - filename.Index("hists_full_analyzer") - 20) + "/";
+        else if(filename.Index("hists_mini_analyzer") != -1) specific_dir += filename(filename.Index("hists_mini_analyzer") + 20, filename.Index(".root") - filename.Index("hists_mini_analyzer") - 20) + "/";
     }
 
     return "/user/bvermass/public_html/2l2q_analysis/" + plottype + specific_dir;
