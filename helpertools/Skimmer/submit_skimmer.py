@@ -126,30 +126,29 @@ for sampledir in os.listdir(input_base_path):
 
         for i in range(len(input_crab_paths)):
             print '    hadding {}: {}'.format(str(i), input_crab_paths[i])
-            print '\n\n'
-        #    for root, dirs, files in os.walk(input_crab_paths[i]):
-        #        for f in files:
-        #            if '.root' in f:
-        #                if hadd_counter == 0:
-        #                    scriptname = 'script_{}.sh'.format( script_counter )
-        #                    print 'making next {}'.format( scriptname )
-        #                    script = init_script( scriptname )
-        #                    script_counter += 1
-        #                print('{} to {}'.format(os.path.abspath(os.path.join(root, f)), f.split('.')[0] + '_' + str(i) + '.root'))
-        #                script.write('./test {} /user/bvermass/public/heavyNeutrino/skim/{}\n'.format(os.path.abspath(os.path.join(root, f)), f.split('.')[0] + '_' + str(i) + '.root'))
-        #                hadd_counter += 1
-        #                if hadd_counter == n_hadds:
-        #                    submit_script( script, scriptname )
-        #                    hadd_counter = 0
+            for root, dirs, files in os.walk(input_crab_paths[i]):
+                for f in files:
+                    if '.root' in f:
+                        if hadd_counter == 0:
+                            scriptname = 'script_{}.sh'.format( script_counter )
+                            print 'making next {}'.format( scriptname )
+                            script = init_script( scriptname )
+                            script_counter += 1
+                        print('{} to {}'.format(os.path.abspath(os.path.join(root, f)), f.split('.')[0] + '_' + str(i) + '.root'))
+                        script.write('./test {} /user/bvermass/public/heavyNeutrino/skim/{}\n'.format(os.path.abspath(os.path.join(root, f)), f.split('.')[0] + '_' + str(i) + '.root'))
+                        hadd_counter += 1
+                        if hadd_counter == n_hadds:
+                            submit_script( script, scriptname )
+                            hadd_counter = 0
 
 
-        ##send last job to the cluster if it wasn't filled up to n_hadds
-        #if hadd_counter != 0:
-        #    submit_script( script, scriptname )
-        #    hadd_counter = 0
-        #    
-        #os.system( './../../test/scripts/wait_until_jobs_are_finished.sh' )
-        #merge_skimmed_files( input_crab_paths )
-        #copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths )
+        #send last job to the cluster if it wasn't filled up to n_hadds
+        if hadd_counter != 0:
+            submit_script( script, scriptname )
+            hadd_counter = 0
+
+        os.system( './../../test/scripts/wait_until_jobs_are_finished.sh' )
+        merge_skimmed_files( input_crab_paths )
+        copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths )
 
 print 'successfully finished'

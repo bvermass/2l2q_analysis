@@ -20,6 +20,7 @@
 
 #include "../../interface/full_analyzer.h"
 #include "../LorentzVector/LorentzVector.h"
+#include "LeptonMvaHelper.h"
 
 class Skimmer {
     public :
@@ -630,6 +631,7 @@ class Skimmer {
         Double_t        o_lElectronNumberInnerHitsMissing[10];
         Double_t        o_leptonMvaTTH[10];
         Double_t        o_leptonMvatZq[10];
+        Double_t        o_leptonMvaTOP[10];
         Bool_t          o_lPOGVeto[10];   //[_nL]
         Bool_t          o_lPOGLoose[10];   //[_nL]
         Bool_t          o_lPOGMedium[10];   //[_nL]
@@ -1227,6 +1229,8 @@ class Skimmer {
         TBranch        *bi__metPhiUnclDown;   //!
         TBranch        *bi__metPhiUnclUp;   //!
         TBranch        *bi__metSignificance;   //!
+
+        LeptonMvaHelper* mvahelper;
 
         Skimmer(TString inputfilename, TString outputfilename);
         ~Skimmer();

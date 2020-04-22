@@ -620,6 +620,7 @@ void Skimmer::Add_branches(TTree* tree)
     //tree->Branch("_leptonMvaSUSY",                      &o_leptonMvaSUSY,                        "_leptonMvaSUSY[_nLight]/D");
     tree->Branch("_leptonMvaTTH",                       &o_leptonMvaTTH,                         "_leptonMvaTTH[_nLight]/D");
     tree->Branch("_leptonMvatZq",                       &o_leptonMvatZq,                         "_leptonMvatZq[_nLight]/D");
+    tree->Branch("_leptonMvaTOP",                       &o_leptonMvaTOP,                         "_leptonMvaTOP[_nLight]/D");
     tree->Branch("_lPOGVeto",                           &o_lPOGVeto,                             "_lPOGVeto[_nL]/O");
     tree->Branch("_lPOGLoose",                          &o_lPOGLoose,                            "_lPOGLoose[_nL]/O");
     tree->Branch("_lPOGMedium",                         &o_lPOGMedium,                           "_lPOGMedium[_nL]/O");
@@ -818,6 +819,11 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     input = new TFile(inputfilename, "open");
     inputtree = (TTree*)input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init_input_branches(inputtree);
+    inputtree->GetEntry(0);
+    TString year;
+    if(i_is2017) year = "2017";
+    else if(i_is2018) year = "2018";
+    else year = "2016";
     isData = (inputfilename.Index("Run20") != -1);
     std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
@@ -846,6 +852,8 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     }
     outputtree = new TTree("blackJackAndHookersTree", "blackJackAndHookersTree");
     Add_branches(outputtree);
+
+    mvahelper = new LeptonMvaHelper("TOP", year);
 }
 
 
@@ -1042,6 +1050,8 @@ void Skimmer::Skim(TString skimcondition)
                 o_lElectronNumberInnerHitsMissing[i] = i_lElectronNumberInnerHitsMissing[i];
                 o_leptonMvaTTH[i] = i_leptonMvaTTH[i];
                 o_leptonMvatZq[i] = i_leptonMvatZq[i];
+                if(i_lFlavor[i] == 0) o_leptonMvaTOP[i] = mvahelper->leptonMvaElectron(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_lElectronSummer16MvaGP[i], i_lElectronMvaFall17v1NoIso[i], i_lElectronMvaFall17NoIso[i]);
+                if(i_lFlavor[i] == 1) o_leptonMvaTOP[i] = mvahelper->leptonMvaMuon(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_relIso[i], i_lMuonSegComp[i]);
                 o_relIso[i] = i_relIso[i];   
                 o_relIso0p4[i] = i_relIso0p4[i];   
                 o_relIso0p4MuDeltaBeta[i] = i_relIso0p4MuDeltaBeta[i];   
