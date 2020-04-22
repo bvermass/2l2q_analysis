@@ -861,8 +861,12 @@ void Skimmer::Skim(TString skimcondition)
 {
     Long64_t nentries = inputtree->GetEntries();
     unsigned notice = ceil(0.01 * nentries / 20) * 100;
+    unsigned loop_counter = 0;
     for(Long64_t jentry = 0; jentry < nentries; ++jentry){
-        if(jentry%notice == 0) std::cout << jentry << " of " << nentries << std::endl;
+        if(loop_counter == notice){
+            std::cout << jentry << " of " << nentries << std::endl;
+            loop_counter = 0;
+        }
         inputtree->GetEntry(jentry);
 
         if(Check_SkimCondition(skimcondition)){
@@ -1216,6 +1220,8 @@ void Skimmer::Skim(TString skimcondition)
             o_metSignificance = i_metSignificance;
             outputtree->Fill();
         }
+
+        ++loop_counter;
     }
     std::cout << "--------------------------------" << std::endl;
 }

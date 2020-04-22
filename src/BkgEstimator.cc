@@ -155,14 +155,16 @@ void BkgEstimator::analyze(int max_entries, int partition, int partitionjobnumbe
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
     Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
     unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
+    unsigned loop_counter = 0;
 
     //main loop
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    BkgEstimator_tree->GetEntry(jentry);
-	    bool printevent = ((jentry -j_begin)%notice == 0);
-	    if(printevent){
+	    if(loop_counter == notice){
             std::cout << jentry - j_begin << " of " << j_end - j_begin << std::endl;
+            loop_counter = 0;
 	    }
+        ++loop_counter;
     }
 }
 

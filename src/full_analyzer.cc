@@ -152,15 +152,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
     Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
     unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
+    unsigned loop_counter = 0;
     cout << "j_begin j_end max_entries: " << j_begin << " " << j_end << " " << max_entries << endl;
     if(j_end - j_begin > 2000000) cout << "More than 2million events to run over! Increase partition (" << j_end - j_begin << ")" << endl;
 
     //main loop begins here
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    tree->GetEntry(jentry);
-	    bool printevent = ((jentry -j_begin)%notice == 0);
+        bool printevent = (loop_counter == notice);
 	    if(printevent){
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
+            loop_counter = 0;
 	    }
 
 
@@ -272,6 +274,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
         }
 
+        ++loop_counter;
     }
     //Small summary to write to terminal in order to quickly check state of results
     print_SR_counters(SR_counters, total_weight);
@@ -368,7 +371,6 @@ void full_analyzer::Loop()
 
     Long64_t nbytes = 0, nb = 0;
     for (Long64_t jentry=0; jentry<nentries;jentry++) {
-        if(jentry%1000 == 0) cout << "yeey " << jentry << endl;
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
         nb = fChain->GetEntry(jentry);   nbytes += nb;
