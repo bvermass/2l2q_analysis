@@ -229,6 +229,7 @@ class Skimmer {
         Double_t        i_lElectronNumberInnerHitsMissing[10];
         Double_t        i_leptonMvaTTH[10];
         Double_t        i_leptonMvatZq[10];
+        Double_t        i_leptonMvaTOP[10];
         Bool_t          i_lPOGVeto[10];   //[_nL]
         Bool_t          i_lPOGLoose[10];   //[_nL]
         Bool_t          i_lPOGMedium[10];   //[_nL]
@@ -1032,6 +1033,7 @@ class Skimmer {
         TBranch        *bi__lElectronNumberInnerHitsMissing;
         TBranch        *bi__leptonMvaTTH;
         TBranch        *bi__leptonMvatZq;
+        TBranch        *bi__leptonMvaTOP;
         TBranch        *bi__lPOGVeto;   //!
         TBranch        *bi__lPOGLoose;   //!
         TBranch        *bi__lPOGMedium;   //!
@@ -1231,6 +1233,7 @@ class Skimmer {
         TBranch        *bi__metSignificance;   //!
 
         LeptonMvaHelper* mvahelper;
+        bool hasLeptonMvaTOP;
 
         Skimmer(TString inputfilename, TString outputfilename);
         ~Skimmer();

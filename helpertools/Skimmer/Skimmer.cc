@@ -206,6 +206,14 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lElectronNumberInnerHitsMissing", i_lElectronNumberInnerHitsMissing, &bi__lElectronNumberInnerHitsMissing);
     tree->SetBranchAddress("_leptonMvaTTH", i_leptonMvaTTH, &bi__leptonMvaTTH);
     tree->SetBranchAddress("_leptonMvatZq", i_leptonMvatZq, &bi__leptonMvatZq);
+    if(tree->FindBranch("_leptonMvaTOP")){
+        std::cout << "found the TOP Lepton Mva branch" << std::endl;
+        tree->SetBranchAddress("_leptonMvaTOP", i_leptonMvaTOP, &bi__leptonMvaTOP);
+        hasLeptonMvaTOP = true;
+    }else {
+        std::cout << "no Lepton Mva branch found, computing one" << std::endl;
+        hasLeptonMvaTOP = false;
+    }
     tree->SetBranchAddress("_lPOGVeto", i_lPOGVeto, &bi__lPOGVeto);
     tree->SetBranchAddress("_lPOGLoose", i_lPOGLoose, &bi__lPOGLoose);
     tree->SetBranchAddress("_lPOGMedium", i_lPOGMedium, &bi__lPOGMedium);
@@ -827,21 +835,26 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     isData = (inputfilename.Index("Run20") != -1);
     std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
-    std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( "blackJackAndHookers/nVertices" ) );
+    TString blackJAH_version = "blackJackAndHookers";
+    if(input->GetListOfKeys()->Contains("blackJackAndHookersGlobal")){
+        std::cout << "Getting hCounter etc. from blackJackAndHookersGlobal directory" << std::endl;
+        blackJAH_version = "blackJackAndHookersGlobal";
+    }else std::cout << "Getting hCounter etc. from blackJackAndHookers directory" << std::endl;
+    std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( blackJAH_version + "/nVertices" ) );
     std::shared_ptr< TH1D > hCounter;
     std::shared_ptr< TH1D > lheCounter;
     std::shared_ptr< TH1D > nTrueInteractions;
     std::shared_ptr< TH1D> psCounter;
     if( !isData ){
-        hCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/hCounter" ) );
-        lheCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/lheCounter" ) );
-        nTrueInteractions = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/nTrueInteractions" ) );
-        psCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/psCounter" ) );
+        hCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/hCounter" ) );
+        lheCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/lheCounter" ) );
+        nTrueInteractions = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/nTrueInteractions" ) );
+        psCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/psCounter" ) );
     }
 
     output = new TFile(outputfilename, "recreate");
-    output->mkdir("blackJackAndHookers");
-    output->cd("blackJackAndHookers");
+    output->mkdir("blackJackAndHookersGlobal");
+    output->cd("blackJackAndHookersGlobal");
 
     nVertices->Write( "nVertices" );
     if( !isData ){
@@ -850,10 +863,13 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
         nTrueInteractions->Write( "nTrueInteractions" );
         psCounter->Write( "psCounter" );
     }
+
+    output->mkdir("blackJackAndHookers");
+    output->cd("blackJackAndHookers");
     outputtree = new TTree("blackJackAndHookersTree", "blackJackAndHookersTree");
     Add_branches(outputtree);
 
-    mvahelper = new LeptonMvaHelper("TOP", year);
+    if(!hasLeptonMvaTOP) mvahelper = new LeptonMvaHelper("TOP", year);
 }
 
 
@@ -1054,8 +1070,9 @@ void Skimmer::Skim(TString skimcondition)
                 o_lElectronNumberInnerHitsMissing[i] = i_lElectronNumberInnerHitsMissing[i];
                 o_leptonMvaTTH[i] = i_leptonMvaTTH[i];
                 o_leptonMvatZq[i] = i_leptonMvatZq[i];
-                if(i_lFlavor[i] == 0) o_leptonMvaTOP[i] = mvahelper->leptonMvaElectron(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_lElectronSummer16MvaGP[i], i_lElectronMvaFall17v1NoIso[i], i_lElectronMvaFall17NoIso[i]);
-                if(i_lFlavor[i] == 1) o_leptonMvaTOP[i] = mvahelper->leptonMvaMuon(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_relIso[i], i_lMuonSegComp[i]);
+                if(hasLeptonMvaTOP) o_leptonMvaTOP[i] = i_leptonMvaTOP[i];
+                else if(i_lFlavor[i] == 0) o_leptonMvaTOP[i] = mvahelper->leptonMvaElectron(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_lElectronSummer16MvaGP[i], i_lElectronMvaFall17v1NoIso[i], i_lElectronMvaFall17NoIso[i]);
+                else if(i_lFlavor[i] == 1) o_leptonMvaTOP[i] = mvahelper->leptonMvaMuon(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_relIso[i], i_lMuonSegComp[i]);
                 o_relIso[i] = i_relIso[i];   
                 o_relIso0p4[i] = i_relIso0p4[i];   
                 o_relIso0p4MuDeltaBeta[i] = i_relIso0p4MuDeltaBeta[i];   
