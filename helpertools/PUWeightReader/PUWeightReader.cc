@@ -7,7 +7,12 @@ PUWeightReader::PUWeightReader(){
 
 PUWeightReader::PUWeightReader(const TString filename_weights, const TString histoname_weights){
     file_weights = new TFile(filename_weights, "open");
-    histo_weights = (TH1F*) file_weights->Get(histoname_weights);
+    if(file_weights){
+        histo_weights = (TH1F*) file_weights->Get(histoname_weights);
+    }else {
+        std::cout << "Error: unknown filename for PUWeight file: " << filename_weights << std::endl;
+        histo_weights = new TH1F();
+    }
 }
 
 PUWeightReader::~PUWeightReader(){
