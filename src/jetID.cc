@@ -4,89 +4,88 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::get_jetID()
+bool full_analyzer::IsTightJetID(const unsigned i)
 {
-    for(unsigned i = 0; i < _nJets; ++i){
-	    fullJetID[i] = fabs(_jetEta[i]) < 2.4 &&
-                       _jetPt[i] > 20 &&
-                       _jetIsTight[i];
-    }
+    if(fabs(_jetEta[i]) > 2.4)  return false;
+    if(_jetPt[i] < 20)          return false;
+    if(!_jetIsTight[i])         return false;
+
+    return true;
 }
 
-
-void full_analyzer::get_clean_jets(bool* cleaned, bool* electronID, bool* muonID)
+bool full_analyzer::IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection)
 {
-    // jets are cleaned from leptons if dR < 0.4 
-    for(unsigned i = 0; i < _nJets; ++i){
-	    *(cleaned + i) = true;
-	    LorentzVector jet(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
+	LorentzVector jet(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
 
-	    for(unsigned j = 0; j < _nL; ++j){
-	        LorentzVector lepton(_lPt[j], _lEta[j], _lPhi[j], _lE[j]);
-	        if((_lFlavor[j] == 0 && *(electronID + j)) || (_lFlavor[j] == 1 && *(muonID + j))){
-		        if(deltaR(lepton, jet) < 0.4) *(cleaned + i) = false;
-	        }
-	    }
+    for(const auto& i_lepton : leptoncollection){
+        LorentzVector lepton(_lPt[i_lepton], _lEta[i_lepton], _lPhi[i_lepton], _lE[i_lepton]);
+
+        if(deltaR(jet, lepton) < 0.4) return false;
     }
+
+    return true;
 }
 
-
-int full_analyzer::find_leading_jet(bool* jetID, bool* jet_clean)
+int full_analyzer::find_leading_jet(const std::vector<unsigned>& jetcollection)
 {
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nJets; ++i){
-	    if(!*(jetID + i))      continue;
-	    if(!*(jet_clean + i))  continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
+    int index_leading = -1;
+
+    for(const auto& index_jet : jetcollection){
+        if(index_leading == -1) index_leading = (int)index_jet;
+        else if(_lPt[index_jet] > _lPt[index_leading]) index_leading = (int)index_jet;
     }
-    return index_good_leading;
+
+    return index_leading;
 }
 
-int full_analyzer::find_subleading_jet(bool* jetID, bool* jet_clean, int index_good_leading)
+int full_analyzer::find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading)
 {
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nJets; ++i){
-	    if((int)i == index_good_leading) continue;
-	    if(!*(jetID + i))           continue;
-	    if(!*(jet_clean + i))       continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
+    if(index_leading == -1) return -1;
+    int index_subleading = -1;
+
+    for(const auto& index_jet : jetcollection){
+        if((int)index_jet == index_leading) continue;
+
+        if(index_subleading == -1) index_subleading = (int)index_jet;
+        else if(_lPt[index_jet] > _lPt[index_subleading]) index_subleading = (int)index_jet;
     }
-    return index_good_subleading;
+
+    return index_subleading;
 }
 
-int full_analyzer::find_thirdleading_jet(bool* jetID, bool* jet_clean, int index_good_leading, int index_good_subleading)
+int full_analyzer::find_thirdleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading, const int index_subleading)
 {
-    int index_good_thirdleading = -1;
-    if(index_good_leading == -1 or index_good_subleading == -1) return index_good_thirdleading;
-    for(unsigned i = 0; i < _nJets; ++i){
-	    if((int)i == index_good_leading or (int)i == index_good_subleading) continue;
-	    if(!*(jetID + i))           continue;
-	    if(!*(jet_clean + i))       continue;
-	    if(index_good_thirdleading == -1) index_good_thirdleading = i;
-	    if(_lPt[i] > _lPt[index_good_thirdleading]) index_good_thirdleading = i;
+    if(index_leading == -1 or index_subleading == -1) return -1;
+    int index_thirdleading = -1;
+
+    for(const auto& index_jet : jetcollection){
+        if((int)index_jet == index_leading or (int)index_jet == index_subleading) continue;
+
+        if(index_thirdleading == -1) index_thirdleading = (int)index_jet;
+        else if(_lPt[index_jet] > _lPt[index_thirdleading]) index_thirdleading = (int)index_jet;
     }
-    return index_good_thirdleading;
+
+    return index_thirdleading;
 }
 
-int full_analyzer::find_jet_closest_to_lepton(bool* jetID, int i_lep)
+int full_analyzer::find_jet_closest_to_lepton(int i_lep)
 {
     int index_jet = -1;
     if(i_lep == -1) return index_jet;
-    
-    double dR    = -1;
+
+    double dR;
     double mindR = 0.7;
-    
+
     for(unsigned i_jet = 0; i_jet < _nJets; i_jet++){
-        if(!*(jetID + i_jet)) continue;
-        dR = get_dR_lepton_jet(i_lep, i_jet);
-        if(dR < mindR){ index_jet = i_jet; mindR = dR;}
+        if(IsTightJetID(i_jet)){
+            dR = get_dR_lepton_jet(i_lep, i_jet);
+            if(dR < mindR){ index_jet = (int)i_jet; mindR = dR;}
+        }
     }
 
     return index_jet;
 }
+
 
 double full_analyzer::get_dR_lepton_jet(int i_lep, int i_jet){
     LorentzVector vec_lep(_lPt[i_lep], _lEta[i_lep], _lPhi[i_lep], _lE[i_lep]);

@@ -19,7 +19,7 @@ void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu){
 
 void full_analyzer::set_relevant_lepton_variables(){
 
-    i_jetl2 = find_jet_closest_to_lepton(&fullJetID[0], i_subleading); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
+    i_jetl2             = find_jet_closest_to_lepton(i_subleading); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
     i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
     i_gen_subleading    = find_gen_lep(i_subleading);
     i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton
@@ -57,21 +57,6 @@ void full_analyzer::set_relevant_lepton_variables(){
                 gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
             }
         }
-    }
-
-    nTightEle = 0;
-    nTightMu  = 0;
-    nDisplEle = 0;
-    nDisplMu  = 0;
-    for(unsigned i = 0; i < _nL; i++){
-        if(fullElectronID[i] and ele_clean_full_displ[i]) nTightEle++;
-        else if(fullMuonID[i]) nTightMu++;
-        else if(displElectronID[i] and ele_clean_full_displ[i]) nDisplEle++;
-        else if(displMuonID[i]) nDisplMu++;
-    }
-    nTightJet = 0;
-    for(unsigned i = 0; i < _nJets; i++){
-        if(fullJetID[i] and jet_clean_full_displ[i]) nTightJet++;
     }
 }
 

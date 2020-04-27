@@ -818,10 +818,6 @@ public :
    std::map<int, std::map<double, TString>> MV2name;
    //double JetTagVal_BDT = -1;
    
-   // lepton and jet ID and cleaning bool arrays
-   bool jet_clean_loose[20], jet_clean_full[20], jet_clean_displ[20], jet_clean_full_displ[20];
-   bool ele_clean_loose[10], ele_clean_full[10], ele_clean_displ[10], ele_clean_full_displ[10];
-   bool fullElectronID[10], looseElectronID[10], displElectronID[10], fullMuonID[10], looseMuonID[10], displMuonID[10], fullJetID[10];
 
    // gen variables related to truth of event
    int i_gen_l1;
@@ -848,7 +844,7 @@ public :
    int i_jetl2;
 
    // numbers of leptons
-   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet;
+   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl;
 
    //Signal region booleans
    bool _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _Training, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
@@ -877,20 +873,18 @@ public :
     void     run_over_file(TString, double, int, int, int);
 
    // in src/leptonID.cc
-    void     get_electronID();
+    bool     IsPromptElectronID(const unsigned i);
     double   rawElectronMVA(const double electronMVA);
     unsigned electronMVACategory(unsigned i);
     double   looseMVACut(unsigned i);
-    void     get_displ_electronID();
-    void     get_loose_electronID();
-    void     get_muonID();
-    void     get_displ_muonID();
-    void     get_loose_muonID();
-    void     get_clean_ele(bool*, bool*);
-    int      find_leading_e(bool*, bool*);
-    int      find_leading_mu(bool*);
-    int      find_subleading_e(bool*, bool*, int);
-    int      find_subleading_mu(bool*, int);
+    bool     IsDisplacedElectronID(const unsigned i);
+    bool     IsLooseElectronID(const unsigned i);
+    bool     IsPromptMuonID(const unsigned i);
+    bool     IsDisplacedMuonID(const unsigned i);
+    bool     IsLooseMuonID(const unsigned i);
+    bool     IsCleanElectron(const unsigned i, const std::vector<unsigned>& muoncollection);
+    int      find_leading_lepton(const std::vector<unsigned>& leptoncollection);
+    int      find_subleading_lepton(const std::vector<unsigned>& leptoncollection, const int index_leading);
     int      find_gen_lep(int i_lep);
     int      find_gen_l1();
     int      find_gen_l2();
@@ -909,12 +903,12 @@ public :
     double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i);
 
    // in src/jetID.cc
-    void     get_jetID();
-    void     get_clean_jets(bool*, bool*, bool*);
-    int      find_leading_jet(bool*, bool*);
-    int      find_subleading_jet(bool*, bool*, int);
-    int      find_thirdleading_jet(bool*, bool*, int, int);
-    int      find_jet_closest_to_lepton(bool*, int);
+    bool     IsTightJetID(const unsigned i);
+    bool     IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection);
+    int      find_leading_jet(const std::vector<unsigned>& jetcollection);
+    int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
+    int      find_thirdleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading, const int index_subleading);
+    int      find_jet_closest_to_lepton(const int index_lepton);
     double   get_dR_lepton_jet(int, int);
     bool     get_JetIsFromHNL(int i_jet);
 

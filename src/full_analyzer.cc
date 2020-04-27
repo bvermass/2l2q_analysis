@@ -169,54 +169,56 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 	    }
 
 
-        //Get ID
-        get_electronID();
-        get_loose_electronID();
-        get_displ_electronID();
-        get_muonID();
-        get_loose_muonID();
-        get_displ_muonID();
-        get_jetID();
+        //Get muons, electrons and jets that pass ID and cleaning
+        std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID;
+        for(unsigned i = 0; i < _nLight; i++){
+            if(IsPromptMuonID(i))           promptMuonID.push_back(i);
+            if(IsDisplacedMuonID(i))        displacedMuonID.push_back(i);
+            if(IsLooseMuonID(i))            looseMuonID.push_back(i);
+        }
+        nTightMu = promptMuonID.size();
+        nDisplMu = displacedMuonID.size();
 
+        for(unsigned i = 0; i < _nLight; i++){
+            bool CleanElectron = IsCleanElectron(i, promptMuonID) and IsCleanElectron(i, displacedMuonID);
 
-        //Get Cleaning for jets
-	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
-	    get_clean_jets(&jet_clean_displ[0],  &displElectronID[0], &displMuonID[0]);
-        get_clean_jets(&jet_clean_loose[0],  &looseElectronID[0], &looseMuonID[0]);
-	    for(unsigned i = 0; i < 20; ++i){
-	        jet_clean_full_displ[i] = jet_clean_full[i] && jet_clean_displ[i];
-	    }
-	    
-        //Get cleaning for electrons
-	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
-	    get_clean_ele(&ele_clean_displ[0],  &displMuonID[0]);
-        get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
-	    for(unsigned i = 0; i < 10; ++i){
-	        ele_clean_full_displ[i] = ele_clean_full[i] && ele_clean_displ[i];
-	    }
+            if(IsPromptElectronID(i)    and CleanElectron) promptElectronID.push_back(i);
+            if(IsDisplacedElectronID(i) and CleanElectron) displacedElectronID.push_back(i);
+            if(IsLooseElectronID(i)     and CleanElectron) looseElectronID.push_back(i);
+        }
+        nTightEle = promptElectronID.size();
+        nDisplEle = displacedElectronID.size();
+
+        std::vector<unsigned> jetID, jetID_uncl;
+        for(unsigned i = 0; i < _nJets; i++){
+            if(IsTightJetID(i) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID) and IsCleanJet(i, displacedMuonID) and IsCleanJet(i, displacedElectronID)) jetID.push_back(i);
+            if(IsTightJetID(i)) jetID_uncl.push_back(i);
+        }
+        nTightJet       = jetID.size();
+        nTightJet_uncl  = jetID_uncl.size();
 
         //Find leptons and jets with leading pt
-	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full_displ[0]);
-	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
+	    int i_leading_e     		    = find_leading_lepton(promptElectronID);
+	    int i_leading_mu    		    = find_leading_lepton(promptMuonID);
 
         i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
 
-	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full_displ[0], i_leading);
-	    int i_subleading_displ_e  	    = find_subleading_e(&displElectronID[0], &ele_clean_full_displ[0], i_leading);
-	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading);
-	    int i_subleading_displ_mu 	    = find_subleading_mu(&displMuonID[0], i_leading);
+	    int i_subleading_e  		    = find_subleading_lepton(promptElectronID, i_leading);
+	    int i_subleading_displ_e  	    = find_subleading_lepton(displacedElectronID, i_leading);
+	    int i_subleading_mu 		    = find_subleading_lepton(promptMuonID, i_leading);
+	    int i_subleading_displ_mu 	    = find_subleading_lepton(displacedMuonID, i_leading);
 
-	    i_leading_jet                   = find_leading_jet(&fullJetID[0], &jet_clean_full_displ[0]);
-	    i_subleading_jet	            = find_subleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet);
-        i_thirdleading_jet              = find_thirdleading_jet(&fullJetID[0], &jet_clean_full_displ[0], i_leading_jet, i_subleading_jet);
+	    i_leading_jet                   = find_leading_jet(jetID);
+	    i_subleading_jet	            = find_subleading_jet(jetID, i_leading_jet);
+        i_thirdleading_jet              = find_thirdleading_jet(jetID, i_leading_jet, i_subleading_jet);
 
 
         set_leptons(i_subleading_displ_e, i_subleading_displ_mu);
         signal_regions();
-        
-        
+
+
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nVertex) * get_LSF(lsfreader_e, lsfreader_m, i_leading);
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt) * get_LSF(lsfreader_e, lsfreader_m, i_leading);
         else ev_weight = 1;
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
