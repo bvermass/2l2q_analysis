@@ -46,7 +46,7 @@ void RatioPlot::SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TStrin
 std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central)
 {
     THStack* MC_varied = new THStack("MC_varied", ";;Events");
-    bool varied_exists = false;
+    varied_exists = false;
     for(int i = 0; i < files_bkg.size(); i++){
         TH1F* varied_hist = (TH1F*) files_bkg[i]->Get(variation_name);
         if(varied_hist){
@@ -67,6 +67,8 @@ std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector
         }
     }
     
+    // temp fix to not plot syst uncs for metXYPhi
+    if(variation_name.Contains("metXYPhi")) varied_exists = false;
     return variations;
 }
 
@@ -144,7 +146,7 @@ void RatioPlot::dothething()
     Pad->Clear();
 
     Central_Ratio->Draw("E0 X0 P");
-    draw_systuncs();
+    if(varied_exists) draw_systuncs();
     draw_line_at_1(Central_Ratio->GetXaxis()->GetXmin(), Central_Ratio->GetXaxis()->GetXmax());
     Central_Ratio->Draw("E0 X0 P same");
     

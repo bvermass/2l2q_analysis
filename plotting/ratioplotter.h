@@ -41,6 +41,7 @@ class RatioPlot{
     private:
         TPad* Pad;
         TH1F* Central_Ratio;
+        bool varied_exists;
         std::vector<TGraphAsymmErrors*> systunc_graphs;
         std::vector<TString> systunc_legends;
         TLegend systunc_legend;
