@@ -54,6 +54,7 @@ void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 double      get_scale(TString RunId);
 double      get_FWHM(TF1* function);
+double      get_eFWHM(TF1* function, double FWHM, double newparameter2);
 void        draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi);
 std::vector< double > computeEfficiencyForROC(TH1F* hist);
 double      computeAUC(TGraph* roc);

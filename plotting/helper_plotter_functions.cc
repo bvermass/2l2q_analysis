@@ -210,6 +210,17 @@ double get_FWHM(TF1* function)
 }
 
 
+double get_eFWHM(TF1* function, double FWHM, double newparameter2)
+{
+    TF1* function_var = (TF1*)function->Clone("var");
+    function_var->FixParameter(2, newparameter2);
+    double FWHMl = get_FWHM(function_var)/(2*sqrt(2*log(2)));
+
+    delete function_var;
+    return fabs(FWHM - FWHMl);
+}
+
+
 void draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi)
 {
     profiles[0]->SetTitle((TString)";" + xaxistitle + ";" + yaxistitle);

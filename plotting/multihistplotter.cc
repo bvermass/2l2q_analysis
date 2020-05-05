@@ -210,8 +210,8 @@ int main(int argc, char * argv[])
                     std::vector<TH1*> hists_meanqT;
                     for(int i = 0; i < files.size(); i++){
                         //find corresponding meanqT histname by adapting absScale histname
-                        TString meanqT_histname = histname;
-                        meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_metRaw", "").ReplaceAll("_uperp", "").ReplaceAll("_metXY", "").ReplaceAll("_metPuppiRaw", "").ReplaceAll("_metPuppi", "");
+                        TString meanqT_histname = histname(0, histname.Index("AbsScale_vsqT")) + "meanqT_vsqT_num";
+                        //meanqT_histname.ReplaceAll("AbsScale_vsqT", "meanqT_vsqT_num").ReplaceAll("_met", "").ReplaceAll("Raw", "").ReplaceAll("_uperp", "").ReplaceAll("XY", "").ReplaceAll("PuppiRaw", "").ReplaceAll("Puppi", "");
                         //make a copy of the numerator histogram, then divide it by the denominator histogram
                         hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone(meanqT_histname + std::to_string(i)));
                         if(hists_meanqT[i] == 0 or hists_meanqT[i]->GetMaximum() == 0) continue;
@@ -267,7 +267,7 @@ int main(int argc, char * argv[])
                 multigraph->SetTitle((TString)";" + xaxistitle + ";#sigma(" + yaxistitle + ")");
                 for(int i = 0; i < hists.size(); i++){
                     int nbins = hists[i]->GetNbinsX();
-                    double x[nbins], FWHM[nbins], ex[nbins], eFWHM[nbins];
+                    double x[nbins], FWHM[nbins], exl[nbins], exh[nbins], eFWHMl[nbins], eFWHMh[nbins];
 
                     for(int i_bin = 1; i_bin <= nbins; i_bin++){
                         pad->Clear();
@@ -275,6 +275,9 @@ int main(int argc, char * argv[])
                         legend_profiles.Clear();
 
                         TH1D* projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_projection_" + std::to_string(i_bin), i_bin, i_bin, "e");
+                        if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 240) projection->Rebin(2);
+                        else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 320) projection->Rebin(4);
+                        else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 400) projection->Rebin(4);
                         legend_profiles.AddEntry(projection, legends[i]);
                         TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
                         voigt->SetLineColor(kGreen+3);
@@ -285,9 +288,11 @@ int main(int argc, char * argv[])
                             voigt->SetParameters(projection->Integral()*2., projection->GetBinCenter(projection->GetMaximumBin()), projection->GetRMS(), 1, 1);
                             projection->Fit(voigt, "0");
                             x[i_bin] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
-                            ex[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
+                            exl[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
+                            exh[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
                             FWHM[i_bin] = get_FWHM(voigt)/(2*sqrt(2*log(2)));
-                            eFWHM[i_bin] = 0;
+                            eFWHMl[i_bin] = get_eFWHM(voigt, FWHM[i_bin], voigt->GetParameter(2) - voigt->GetParError(2));
+                            eFWHMh[i_bin] = get_eFWHM(voigt, FWHM[i_bin], voigt->GetParameter(2) + voigt->GetParError(2));
 
                             pad->Clear();
                             pad->SetLogy(0);
@@ -321,14 +326,16 @@ int main(int argc, char * argv[])
                             c->Print(pathname_log + "resolution/" + histname + "_resolution_" + legends[i] + "_range" + std::to_string((int)hists[i]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[i]->GetXaxis()->GetBinUpEdge(i_bin)) + ".png");
                         } else {
                             x[i_bin] = 0;
-                            ex[i_bin] = 0;
+                            exl[i_bin] = 0;
+                            exh[i_bin] = 0;
                             FWHM[i_bin] = 0;
-                            eFWHM[i_bin] = 0;
+                            eFWHMl[i_bin] = 0;
+                            eFWHMh[i_bin] = 0;
                         }
                     }
 
                     // Draw FWHM graph as a function of x
-                    TGraphErrors* graph = new TGraphErrors(nbins, x, FWHM, ex, eFWHM);
+                    TGraphAsymmErrors* graph = new TGraphAsymmErrors(nbins, x, FWHM, exl, exh, eFWHMl, eFWHMh);
                     multigraph->Add(graph);
                     legend.AddEntry(graph, legends[i], "pl");
                 }
