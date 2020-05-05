@@ -16,7 +16,7 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     if(_3dIPSig[i] >= 8)                            return false;
     if(_miniIso[i] >= 0.4)                          return false;
     if(!_lPOGMedium[i])                             return false;
-    if(_leptonMvaTOP[i] < -0.4)                     return false;
+    if(_leptonMvaTOP[i] < 0.4)                      return false;
 
     return true;
 }
@@ -31,7 +31,8 @@ bool full_analyzer::IsPromptElectronID(const unsigned i)
     if(_3dIPSig[i] >= 8)                            return false;
     if(_miniIso[i] >= 0.4)                          return false;
     if(_lElectronNumberInnerHitsMissing[i] >= 2)    return false;
-    if(_leptonMvaTOP[i] < -0.4)                     return false;
+    if(!_lPOGMedium[i])                             return false;
+    //if(_leptonMvaTOP[i] < 0.4)                      return false;
 
     return true;
 }
