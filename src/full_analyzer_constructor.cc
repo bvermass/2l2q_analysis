@@ -3,7 +3,7 @@
 
 void full_analyzer::SetSampleTypes(TString filename)
 {
-    if(!_is2017 and !_is2018) _is2016 = true;
+    _is2016 = (!_is2017 and !_is2018);
 
     if(filename.Index("_e_") != -1){
         sampleflavor = "e";

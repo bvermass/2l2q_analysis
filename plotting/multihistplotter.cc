@@ -133,6 +133,7 @@ int main(int argc, char * argv[])
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));
+                hists->SetMinimum(0.5);
                 legend.Draw("same");
                 CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
                 lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);

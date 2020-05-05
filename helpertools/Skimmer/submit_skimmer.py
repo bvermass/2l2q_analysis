@@ -19,9 +19,9 @@ def submit_script( script, scriptname ):
 
 
 def merge_skimmed_files( input_crab_paths ):
-    if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/dilep_*') == 0:
+    if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/*.root') == 0:
         print 'successfully hadded dilep files into dilep_skim.root'
-        os.system('rm ~/public/heavyNeutrino/skim/dilep_*')
+        os.system('rm ~/public/heavyNeutrino/skim/*.root')
         for input_crab_path in input_crab_paths:
             os.system('echo {} >> hadded_samples.txt'.format(input_crab_path))
     else:
