@@ -67,10 +67,13 @@ int main(int argc, char * argv[])
             sample_hist->GetYaxis()->SetRangeUser(0, 1.25*sample_hist->GetMaximum());
 
             legend.AddEntry(sample_hist, sample_legend);
+
+            pad->Clear();
+            pad->SetLogy(0);
     
             sample_hist->SetMarkerColor(colors[0]);
             sample_hist->SetLineColor(colors[0]);
-            sample_hist->Draw("E0 X0 P");
+            sample_hist->Draw("E0 P");
             legend.Draw("same");
             CMSandLumi->Draw();
 

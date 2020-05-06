@@ -222,13 +222,14 @@ int main(int argc, char * argv[])
                         profiles[i]->Divide(hists_meanqT[i]);
                     }
 
-                    hists_meanqT[0]->Draw("pmc plc");
-                    for(int i = 1; i < hists_meanqT.size(); i++) hists_meanqT[i]->Draw("same pmc plc");
-                    legend.Draw("same");
-                    CMSandLumi->Draw();
+                    // Uncomment these lines if you want to see the mean qT histogram for each calculation of response
+                    //hists_meanqT[0]->Draw("pmc plc");
+                    //for(int i = 1; i < hists_meanqT.size(); i++) hists_meanqT[i]->Draw("same pmc plc");
+                    //legend.Draw("same");
+                    //CMSandLumi->Draw();
 
-                    pad->Modified();
-                    c->Print(pathname_lin + histname + "_meanqT.png");
+                    //pad->Modified();
+                    //c->Print(pathname_lin + histname + "_meanqT.png");
                     pad->Clear();
                     legend.Clear();
 
@@ -275,9 +276,13 @@ int main(int argc, char * argv[])
                         legend_profiles.Clear();
 
                         TH1D* projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_projection_" + std::to_string(i_bin), i_bin, i_bin, "e");
-                        if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 240) projection->Rebin(2);
-                        else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 320) projection->Rebin(4);
-                        else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 400) projection->Rebin(4);
+
+                        projection->Rebin(8);
+                        //if(histname.Contains("_vsnPV")) projection->Rebin(8);
+                        //if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 240) projection->Rebin(2);
+                        //else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 320) projection->Rebin(4);
+                        //else if(hists[i]->GetXaxis()->GetBinLowEdge(i_bin) == 400) projection->Rebin(4);
+
                         legend_profiles.AddEntry(projection, legends[i]);
                         TF1* voigt = new TF1("voigt", "[0]*TMath::Voigt(x - [1], [2], [3], 4) + [4]", projection->GetXaxis()->GetXmin(), projection->GetXaxis()->GetXmax());
                         voigt->SetLineColor(kGreen+3);
@@ -286,14 +291,13 @@ int main(int argc, char * argv[])
                         if(projection->GetMaximum() > 0){
                             // perform fit
                             voigt->SetParameters(projection->Integral()*2., projection->GetBinCenter(projection->GetMaximumBin()), projection->GetRMS(), 1, 1);
-                            projection->Fit(voigt, "0");
+                            projection->Fit(voigt, "WL 0");
                             x[i_bin] = hists[i]->GetXaxis()->GetBinCenter(i_bin);
                             exl[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
                             exh[i_bin] = hists[i]->GetXaxis()->GetBinWidth(i_bin)/2;
                             FWHM[i_bin] = get_FWHM(voigt)/(2*sqrt(2*log(2)));
                             eFWHMl[i_bin] = get_eFWHM(voigt, FWHM[i_bin], voigt->GetParameter(2) - voigt->GetParError(2));
                             eFWHMh[i_bin] = get_eFWHM(voigt, FWHM[i_bin], voigt->GetParameter(2) + voigt->GetParError(2));
-
                             pad->Clear();
                             pad->SetLogy(0);
 
@@ -349,6 +353,9 @@ int main(int argc, char * argv[])
                     multigraph->SetMinimum(0);
                 }
                 else if(histname.Contains("_AbsScale_vsqT")){
+                    multigraph->SetMaximum(50);
+                    multigraph->SetMinimum(0);
+                }else if(histname.Contains("_AbsScale_vsnPV")){
                     multigraph->SetMaximum(50);
                     multigraph->SetMinimum(0);
                 }
