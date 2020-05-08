@@ -32,8 +32,8 @@ void full_analyzer::setRunEra(const unsigned long runnb){
             runera = -1;
         }
     }else {
-        if(is2017) {runera = y2017MC; usemetv2 =true;}
-        else if(is2018) runera = y2018MC;
+        if(_is2017) {runera = y2017MC; usemetv2 =true;}
+        else if(_is2018) runera = y2018MC;
         else runera = y2016MC;
     }
 }

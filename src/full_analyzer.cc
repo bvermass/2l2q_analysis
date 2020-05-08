@@ -87,9 +87,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-    //TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-    TString filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    TString filename_PUWeights;
+    if(_is2016)      filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+    else if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+    else if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
     TString histname_PUWeights = "PUWeights";
     PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
 
@@ -167,7 +168,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         signal_regions();
 
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt) * get_LSF(lsfreader_e, lsfreader_mu);
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_mu);
         else ev_weight = 1;
 
 
