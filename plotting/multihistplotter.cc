@@ -84,6 +84,7 @@ int main(int argc, char * argv[])
                         hists->Add(hist);
                         hist->SetMarkerColor(colors[i]);
                         hist->SetLineColor(colors[i]);
+                        hist->SetMarkerColor(colors[i]);
                         legend.AddEntry(hist, legends[i], "l");
                     }
                 }
@@ -108,7 +109,7 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(0);
 
-            hists->Draw("hist nostack");
+            hists->Draw("E P hist nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -122,7 +123,7 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(1);
 
-            hists->Draw("hist nostack");
+            hists->Draw("E P hist nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(10*hists->GetMaximum("nostack"));
@@ -149,6 +150,7 @@ int main(int argc, char * argv[])
                         multigraph->Add(graph);
                         graph->SetMarkerColor(colors[i]);
                         graph->SetLineColor(colors[i]);
+                        graph->SetMarkerColor(colors[i]);
                         legend.AddEntry(graph, legends[i], "pl");
                     }
                 }
@@ -194,7 +196,11 @@ int main(int argc, char * argv[])
                 for(int i = 0; i < files.size(); i++){
                     // profile is <u_para> vs qT
                     hists.push_back((TH2*)files[i]->Get(histname));
+                    hists[i]->SetLineColor(colors[i]);
+                    hists[i]->SetMarkerColor(colors[i]);
                     profiles.push_back(hists[i]->ProfileX(histname + "_" + legends[i] + "_profile"));
+                    profiles[i]->SetLineColor(colors[i]);
+                    profiles[i]->SetMarkerColor(colors[i]);
                     legend.AddEntry(profiles[i], legends[i], "pl");
                 }
                 draw_profiles(c, pad, profiles, pathname_lin + histname + "_profile.png", &legend, xaxistitle, "<" + yaxistitle + ">", CMSandLumi);
@@ -216,6 +222,8 @@ int main(int argc, char * argv[])
                         hists_meanqT.push_back((TH1*)files[i]->Get(meanqT_histname)->Clone(meanqT_histname + std::to_string(i)));
                         if(hists_meanqT[i] == 0 or hists_meanqT[i]->GetMaximum() == 0) continue;
                         hists_meanqT[i]->Divide(hists_meanqT[i], (TH1*)files[i]->Get(meanqT_histname.ReplaceAll("vsqT_num", "vsqT_den")), 1, 1, "b");
+                        hists_meanqT[i]->SetLineColor(colors[i]);
+                        hists_meanqT[i]->SetMarkerColor(colors[i]);
 
                         legend.AddEntry(hists_meanqT[i], legends[i], "pl");
                         for(int i_bin = 1; i_bin <= hists_meanqT[i]->GetNbinsX(); i_bin++) hists_meanqT[i]->SetBinError(i_bin, 0.);
@@ -223,8 +231,8 @@ int main(int argc, char * argv[])
                     }
 
                     // Uncomment these lines if you want to see the mean qT histogram for each calculation of response
-                    //hists_meanqT[0]->Draw("pmc plc");
-                    //for(int i = 1; i < hists_meanqT.size(); i++) hists_meanqT[i]->Draw("same pmc plc");
+                    //hists_meanqT[0]->Draw("E0 P");
+                    //for(int i = 1; i < hists_meanqT.size(); i++) hists_meanqT[i]->Draw("same E0 P");
                     //legend.Draw("same");
                     //CMSandLumi->Draw();
 
@@ -245,11 +253,13 @@ int main(int argc, char * argv[])
                             ey[i_bin-1] = profiles[i]->GetBinError(i_bin);
                         }
                         TGraphErrors* graph = new TGraphErrors(nbins, x, y, ex, ey);
+                        graph->SetLineColor(colors[i]);
+                        graph->SetMarkerColor(colors[i]);
                         multigraph->Add(graph);
                         legend.AddEntry(graph, legends[i], "pl");
                     }
 
-                    multigraph->Draw("AP pmc plc");
+                    multigraph->Draw("AP");
                     multigraph->SetMaximum(1.1);
                     multigraph->SetMinimum(0.65);
                     //multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
@@ -340,6 +350,8 @@ int main(int argc, char * argv[])
 
                     // Draw FWHM graph as a function of x
                     TGraphAsymmErrors* graph = new TGraphAsymmErrors(nbins, x, FWHM, exl, exh, eFWHMl, eFWHMh);
+                    graph->SetLineColor(colors[i]);
+                    graph->SetMarkerColor(colors[i]);
                     multigraph->Add(graph);
                     legend.AddEntry(graph, legends[i], "pl");
                 }
@@ -347,7 +359,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
 
-                multigraph->Draw("AP pmc plc");
+                multigraph->Draw("AP");
                 if(histname.Contains("_AbsScale_vsqT_uperp")){
                     multigraph->SetMaximum(35);
                     multigraph->SetMinimum(0);

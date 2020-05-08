@@ -224,9 +224,9 @@ double get_eFWHM(TF1* function, double FWHM, double newparameter2)
 void draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi)
 {
     profiles[0]->SetTitle((TString)";" + xaxistitle + ";" + yaxistitle);
-    profiles[0]->Draw("pmc plc");
+    profiles[0]->Draw("E0 P");
     for(int i = 1; i < profiles.size(); i++){
-        profiles[i]->Draw("same pmc plc");
+        profiles[i]->Draw("same E0 P");
     }
     legend->Draw("same");
     CMSandLumi->Draw();
