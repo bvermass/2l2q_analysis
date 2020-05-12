@@ -219,7 +219,7 @@ int main(int argc, char * argv[])
                 hists_bkg->Draw("hist");
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
-                hists_bkg->SetMinimum(0.1);
+                hists_bkg->SetMinimum(0.01);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");

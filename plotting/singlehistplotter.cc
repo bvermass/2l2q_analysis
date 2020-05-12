@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.2, 0.8, 0.95, 0.91, 3);
+    TLegend legend = get_legend(0.2, 0.8, 0.95, 0.91, 1);
     legend.SetTextSize(0.04);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
@@ -64,13 +64,13 @@ int main(int argc, char * argv[])
             int xlog = (histname.Index("xlog") == -1)? 0 : 1;
             pad->SetLogx(xlog);
             if(xlog) divide_by_binwidth(sample_hist);
-            sample_hist->GetYaxis()->SetRangeUser(0, 1.25*sample_hist->GetMaximum());
 
             legend.AddEntry(sample_hist, sample_legend);
 
             pad->Clear();
             pad->SetLogy(0);
     
+            sample_hist->GetYaxis()->SetRangeUser(0.01, 1.25*sample_hist->GetMaximum());
             sample_hist->SetMarkerColor(colors[0]);
             sample_hist->SetLineColor(colors[0]);
             sample_hist->Draw("E0 P");
@@ -80,6 +80,12 @@ int main(int argc, char * argv[])
             pad->Modified();
 
             c->Print(pathname_lin + histname + ".png");
+
+            // METResolution specfic plots
+            if(histname.Contains("_metRaw")){
+                //plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_metRaw", "_met", "_metXY", "_metPuppiRaw", "_metPuppi"}, {"Raw MET", "Type 1 MET", "Type 1 + XY MET", "Raw Puppi MET", "Type 1 Puppi MET"}, "_Allmets", false);
+                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_metRaw", "_met", "_metXY"}, {"Raw MET", "Type 1 MET", "Type 1 + XY MET"}, "_mets", false);
+            }
 
             // Efficiencies are calculated right here as TGraphAsymmErrors
             if(histname.Index("eff_num") != -1){
@@ -103,10 +109,6 @@ int main(int argc, char * argv[])
                 c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
             }
 
-            // METResolution specfic plots
-            if(histname.Contains("_metRaw")){
-                plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, {"_metRaw", "_met", "_metXY", "_metPuppiRaw", "_metPuppi"}, {"Raw MET", "Type 1 MET", "Type 1 + XY MET", "Raw Puppi MET", "Type 1 Puppi MET"}, "_mets", false);
-            }
         }else if(cl->InheritsFrom("TH2")){
             TH2F *sample_hist = (TH2F*)key->ReadObj();
             TString histname = sample_hist->GetName();
@@ -168,11 +170,11 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         pad->Clear();
         pad->SetLogy(0);
 
-        hists->Draw("E P hist nostack");
+        hists->Draw("E nostack");
         hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
-        hists->SetMaximum(1.4*hists->GetMaximum("nostack"));
-        hists->SetMinimum(0);
+        hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
+        hists->SetMinimum(0.);
         legend.Draw("same");
         CMSandLumi->Draw();
 
@@ -183,10 +185,11 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         pad->Clear();
         pad->SetLogy(1);
 
-        hists->Draw("E P hist nostack");
+        hists->Draw("E nostack");
         hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
-        hists->SetMaximum(50*hists->GetMaximum("nostack"));
+        hists->SetMaximum(40*hists->GetMaximum("nostack"));
+        sample_hist->SetMinimum(1e-2);//individual histograms cannot have a 0 or negative minimum when drawing log scale! sample_hist was set to 0 earlier
         hists->SetMinimum(std::max(1e-2, 0.5*hists->GetMinimum("nostack")));
         legend.Draw("same");
         CMSandLumi->Draw();

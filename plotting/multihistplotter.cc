@@ -84,7 +84,6 @@ int main(int argc, char * argv[])
                         hists->Add(hist);
                         hist->SetMarkerColor(colors[i]);
                         hist->SetLineColor(colors[i]);
-                        hist->SetMarkerColor(colors[i]);
                         legend.AddEntry(hist, legends[i], "l");
                     }
                 }
@@ -109,10 +108,11 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(0);
 
-            hists->Draw("E P hist nostack");
+            hists->Draw("E nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
             hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
+            hists->SetMinimum(0.);
             legend.Draw("same");
             CMSandLumi->Draw();
             
@@ -123,16 +123,16 @@ int main(int argc, char * argv[])
             pad->Clear();
             pad->SetLogy(1);
 
-            hists->Draw("E P hist nostack");
+            hists->Draw("E nostack");
             hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
             hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
-            hists->SetMaximum(10*hists->GetMaximum("nostack"));
+            hists->SetMaximum(30*hists->GetMaximum("nostack"));
+            hists->SetMinimum(0.01);
             legend.Draw("same");
             CMSandLumi->Draw();
             
             pad->Modified();
             c->Print(pathname_log + histname + ".png");
-
 
 
 
@@ -262,6 +262,7 @@ int main(int argc, char * argv[])
                     multigraph->Draw("AP");
                     multigraph->SetMaximum(1.1);
                     multigraph->SetMinimum(0.65);
+                    draw_line_at_1(multigraph->GetXaxis()->GetXmin(), multigraph->GetXaxis()->GetXmax());
                     //multigraph->SetMaximum(1.1*multigraph->GetHistogram()->GetMaximum());
                     legend.Draw("same");
                     CMSandLumi->Draw();
@@ -360,18 +361,8 @@ int main(int argc, char * argv[])
                 pad->SetLogy(0);
 
                 multigraph->Draw("AP");
-                if(histname.Contains("_AbsScale_vsqT_uperp")){
-                    multigraph->SetMaximum(35);
-                    multigraph->SetMinimum(0);
-                }
-                else if(histname.Contains("_AbsScale_vsqT")){
-                    multigraph->SetMaximum(50);
-                    multigraph->SetMinimum(0);
-                }else if(histname.Contains("_AbsScale_vsnPV")){
-                    multigraph->SetMaximum(50);
-                    multigraph->SetMinimum(0);
-                }
-                else multigraph->SetMaximum(1.15*multigraph->GetHistogram()->GetMaximum());
+                multigraph->SetMaximum(60);
+                multigraph->SetMinimum(0);
                 legend.Draw("same");
                 CMSandLumi->Draw();
 
