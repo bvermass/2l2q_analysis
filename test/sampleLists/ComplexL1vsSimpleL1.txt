@@ -1,0 +1,18 @@
+#ComplexL1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root               5765.4 -1 27
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                          87.315 -1 15
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                   364.350 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                       687.1 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-mcatnlo-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root      3.68 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WW_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                                        118.7 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZ_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                                        22.82 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZ_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root                                        10.32 -1 1
+#SimpleL1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/dilep_METResolution_JEC_UL17_V4.root               5765.4 -1 27
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V4.root                          87.315 -1 15
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V4.root                   364.350 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/dilep_METResolution_JEC_UL17_V4.root                       687.1 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-mcatnlo-pythia8/dilep_METResolution_JEC_UL17_V4.root      3.68 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WW_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V4.root                                        118.7 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WZ_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V4.root                                        22.82 -1 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZ_TuneCP5_13TeV-pythia8/dilep_METResolution_JEC_UL17_V4.root                                        10.32 -1 1
