@@ -12,9 +12,9 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._is2016       = _is2016;
     bkgestimator._is2017       = _is2017;
     bkgestimator._is2018       = _is2018;
-    bkgestimator._gen_Nmass    = _gen_Nmass;
-    bkgestimator._gen_NV       = _gen_NV;
-    bkgestimator._gen_Nctau     = _gen_Nctau;
+    bkgestimator._gen_Nmass    = HNL_param->mass;
+    bkgestimator._gen_NV2      = HNL_param->V2;
+    bkgestimator._gen_Nctau    = HNL_param->ctau;
     bkgestimator._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
     bkgestimator._nTightJet    = nTightJet;
     bkgestimator._JetPt        = _jetPt[i_jetl2];

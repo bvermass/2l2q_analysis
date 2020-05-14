@@ -28,7 +28,7 @@ class BkgEstimator
         bool     _is2018;
         double   _weight;
         int      _gen_Nmass;
-        double   _gen_NV;
+        double   _gen_NV2;
         double   _gen_Nctau;
         bool     _JetIsFromHNL;
         unsigned _nTightJet;
@@ -88,7 +88,7 @@ class BkgEstimator
         TBranch     *b__is2018;
         TBranch     *b__weight;
         TBranch     *b__gen_Nmass;
-        TBranch     *b__gen_NV;
+        TBranch     *b__gen_NV2;
         TBranch     *b__gen_Nctau;
         TBranch     *b__JetIsFromHNL;
         TBranch     *b__nTightJet;

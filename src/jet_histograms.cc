@@ -124,9 +124,9 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
     }else {
         hnltagger.isValid = true;
     }
-    hnltagger._gen_Nmass    = _gen_Nmass;
-    hnltagger._gen_NV       = _gen_NV;
-    hnltagger._gen_Nctau     = _gen_Nctau;
+    hnltagger._gen_Nmass    = HNL_param->mass;
+    hnltagger._gen_NV2      = HNL_param->V2;
+    hnltagger._gen_Nctau    = HNL_param->ctau;
     hnltagger._is2016       = _is2016;
     hnltagger._is2017       = _is2017;
     hnltagger._is2018       = _is2018;
@@ -193,9 +193,9 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
         hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jetl2][i];
         hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jetl2][i];
         hnltagger._JetConstituentInSV[i]              = (_JetConstituentCharge[i_jetl2][i] == 0)? -1 : is_track_in_sv(i_subleading, i_jetl2, i);
-        hnltagger._JetConstituentNmass[i]              = _gen_Nmass;
-        hnltagger._JetConstituentNV[i]                 = _gen_NV;
-        hnltagger._JetConstituentNctau[i]              = _gen_Nctau;
+        hnltagger._JetConstituentNmass[i]              = HNL_param->mass;
+        hnltagger._JetConstituentNV2[i]                = HNL_param->V2;
+        hnltagger._JetConstituentNctau[i]              = HNL_param->ctau;
     }
     for(unsigned i = _nJetConstituents[i_jetl2]; i < 50; i++){
         hnltagger._JetConstituentPt[i]                 = 0;
@@ -217,7 +217,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
         hnltagger._JetConstituentHasTrack[i]          = 0;
         hnltagger._JetConstituentInSV[i]              = 0;
         hnltagger._JetConstituentNmass[i]             = 0;
-        hnltagger._JetConstituentNV[i]                = 0;
+        hnltagger._JetConstituentNV2[i]               = 0;
         hnltagger._JetConstituentNctau[i]             = 0;
     }
     if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
@@ -239,8 +239,8 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 //    }else {
 //        hnlbdttagger.isValid = true;
 //    }
-//    hnlbdttagger._gen_Nmass             = _gen_Nmass;
-//    hnlbdttagger._gen_NV                = _gen_NV;
+//    hnlbdttagger._gen_Nmass             = HNL_param->mass;
+//    hnlbdttagger._gen_NV2               = HNL_param->V2;
 //    hnlbdttagger._JetIsFromHNL          = get_JetIsFromHNL(i_jetl2);
 //    hnlbdttagger._weight                = weight;
 //    hnlbdttagger._lPt                   = _lPt[i_subleading];

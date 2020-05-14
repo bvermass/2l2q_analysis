@@ -8,7 +8,7 @@ TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_20/s
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
-//  'cross_section' is the cross section of the process
+//  'cross_section' is the cross section of the process, for HNL, this is taken from the HNL data file
 //  'max_entries' is the maximal entry over which must be ran, if its 50000, then we will run over the first 50000 events, if its -1, all events will be ran
 //  'partition' is the number of jobs that the file will be split in, if 5, then the code knows it is 1 of 5 jobs running over this file
 //  'partitionjobnumber' is the number of the particular job in the partition, so if it's 3 and partition is 5, then this code will run over the third fraction of events if they are divided in 5 fractions
@@ -27,26 +27,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     extensive_plots = false;
 
-    HNL_parameters HNL_param(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
     SetSampleTypes(filename);
-
-    
-    
-    if(sampleflavor == "e" or sampleflavor == "mu"){
-        _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
-        _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
-        _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
-        //evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
-        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
-        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(_gen_Nmass, _gen_NV*_gen_NV) + "\n", true);
-    }else {
-        _gen_Nmass = 0;
-        _gen_NV    = 0;
-        _gen_Nctau  = 0;
-        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+    HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
+    std::cout << "---HNL param---: " << HNL_param->mass << " " << HNL_param->V2 << " " << HNL_param->ctau << std::endl;
+    if(isSignal){
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
+        cross_section = HNL_param->cross_section;
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
+    evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
     for(const int& mass : evaluating_masses){
         evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
         for(const double& V2 : evaluating_V2s[mass]){
@@ -223,7 +213,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(auto& MassMap : evaluating_V2s){
             for(double V2 : MassMap.second){
                 if(sampleflavor == "e" or sampleflavor == "mu"){
-                    reweighting_weights[V2] = get_reweighting_weight(_gen_NV*_gen_NV, V2, _gen_Nctau, _ctauHN);
+                    reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN);
                 }else {
                     reweighting_weights[V2] = 1.;
                 }

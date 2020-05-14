@@ -23,7 +23,6 @@ double      calc_betagamma(int particle_mass, double particle_energy);
 double      get_dR(double eta1, double phi1, double eta2, double phi2);
 double      get_reducedPdgId(int pdgId);
 double      get_signedLog(double var);
-double      get_mean_ctau(TString sampleflavor, int _gen_Nmass, double _gen_NV);
 double      get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);
 double      get_xsec_reweighting_weight(double V2_old, double V2_new);
 double      get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);

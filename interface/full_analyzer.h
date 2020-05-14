@@ -821,11 +821,9 @@ public :
    
 
    // gen variables related to truth of event
+   HNL_parameters* HNL_param;
    int i_gen_l1;
    int i_gen_l2;
-   int _gen_Nmass;
-   double _gen_NV;
-   double _gen_Nctau;
    bool leadingIsl1;
    bool subleadingIsl2; 
 

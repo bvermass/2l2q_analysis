@@ -15,7 +15,7 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
     BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
     BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
-    BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
+    BkgEstimator_tree->Branch("_gen_NV2",                          &_gen_NV2,                          "_gen_NV2/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
     BkgEstimator_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     BkgEstimator_tree->Branch("_nTightJet",                        &_nTightJet,                        "_nTightJet/i");
@@ -93,7 +93,7 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_is2017", &_is2017, &b__is2017);
     BkgEstimator_tree->SetBranchAddress("_is2018", &_is2018, &b__is2018);
     BkgEstimator_tree->SetBranchAddress("_gen_Nmass", &_gen_Nmass, &b__gen_Nmass);
-    BkgEstimator_tree->SetBranchAddress("_gen_NV", &_gen_NV, &b__gen_NV);
+    BkgEstimator_tree->SetBranchAddress("_gen_NV2", &_gen_NV2, &b__gen_NV2);
     BkgEstimator_tree->SetBranchAddress("_gen_Nctau", &_gen_Nctau, &b__gen_Nctau);
     BkgEstimator_tree->SetBranchAddress("_JetIsFromHNL", &_JetIsFromHNL, &b__JetIsFromHNL);
     BkgEstimator_tree->SetBranchAddress("_nTightJet", &_nTightJet, &b__nTightJet);

@@ -274,7 +274,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
         (*hists)[prefix+"_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
         (*hists)[prefix+"_ngentr"]->Fill(charged_count, event_weight);
         (*hists)[prefix+"_ctau"]->Fill(_ctauHN, event_weight);
-        //(*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), event_weight);
+        //(*hists)[prefix+"_ctaug"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE), event_weight);
     }
 }
 
@@ -449,14 +449,14 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
         if(sampleflavor.Index("Run") == -1){
             (*hists)[prefix+"_IVF_ctau"]->Fill(_ctauHN, event_weight);
             (*hists2D)[prefix+"_IVF_ctauHN_PV-SVdxyz"]->Fill(_ctauHN, IVF_PVSVdist, event_weight);
-            (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), IVF_PVSVdist, event_weight);
+            (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE), IVF_PVSVdist, event_weight);
             if(i_gen_subleading != -1){
                 (*hists)[prefix+"_IVF_SVgen-reco"]->Fill(IVF_SVgenreco, event_weight);
                 (*hists)[prefix+"_IVF_SVgen-reco_zoom"]->Fill(IVF_SVgenreco, event_weight);
                 (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
                 (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco_zoom"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
                 (*hists2D)[prefix+"_IVF_ctauHN_genPV-SVdxyz"]->Fill(_ctauHN, gen_PVSVdist, event_weight);
-                (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE), gen_PVSVdist, event_weight);
+                (*hists2D)[prefix+"_IVF_ctaugHN_genPV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE), gen_PVSVdist, event_weight);
             }
         }
     }
@@ -502,9 +502,9 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         (*hists)[prefix+"_IVF_ctau_eff_den"]->Fill(_ctauHN);
         (*hists)[prefix+"_IVF_ctau_zoom_eff_den"]->Fill(_ctauHN);
         (*hists)[prefix+"_IVF_ctau_zoom2_eff_den"]->Fill(_ctauHN);
-        (*hists)[prefix+"_IVF_ctaug_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
-        (*hists)[prefix+"_IVF_ctaug_zoom_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
-        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
+        (*hists)[prefix+"_IVF_ctaug_eff_den"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
+        (*hists)[prefix+"_IVF_ctaug_zoom_eff_den"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
+        (*hists)[prefix+"_IVF_ctaug_zoom2_eff_den"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
     }
     
     if(_lIVF_match[i_subleading]){
@@ -535,9 +535,9 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
             (*hists)[prefix+"_IVF_ctau_eff_num"]->Fill(_ctauHN);
             (*hists)[prefix+"_IVF_ctau_zoom_eff_num"]->Fill(_ctauHN);
             (*hists)[prefix+"_IVF_ctau_zoom2_eff_num"]->Fill(_ctauHN);
-            (*hists)[prefix+"_IVF_ctaug_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
-            (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
-            (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]->Fill(_ctauHN*calc_betagamma(_gen_Nmass, _gen_NE));
+            (*hists)[prefix+"_IVF_ctaug_eff_num"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
+            (*hists)[prefix+"_IVF_ctaug_zoom_eff_num"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
+            (*hists)[prefix+"_IVF_ctaug_zoom2_eff_num"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE));
             (*hists)[prefix+"_IVF_PV-SVdxy_onlySVgen-reco_eff_num"]->Fill(IVF_PVSVdist_2D);
             (*hists)[prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_num"]->Fill(IVF_PVSVdist);
         }
