@@ -27,6 +27,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     extensive_plots = false;
 
+    HNL_parameters HNL_param(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
     SetSampleTypes(filename);
 
     

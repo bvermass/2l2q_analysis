@@ -30,6 +30,7 @@
 // helper functions
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
+#include "../interface/HNL_parameters.h"
 #include "../interface/BkgEstimator.h"
 #include "../interface/bTagWP.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
