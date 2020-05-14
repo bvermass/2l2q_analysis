@@ -170,6 +170,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     if(_Training){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
+        fill_HLT_efficiency(hists, "Afterptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, ev_weight);
     }
 
     if(_FullNoPFN){

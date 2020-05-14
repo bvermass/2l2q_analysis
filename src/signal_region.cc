@@ -115,6 +115,10 @@ void full_analyzer::signal_regions(){
     }else if(_is2017 or _is2018){
         _trige                  = _HLT_Ele32_WPTight_Gsf;
         _trigmu                 = _HLT_IsoMu24;
+    }else{
+        std::cout << "signal_regions.cc: did not correctly register data taking year!" << std::endl;
+        _trige                  = false;
+        _trigmu                 = false;
     }
     
      _l1                        = i_leading != -1 &&

@@ -20,17 +20,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - start loop over events
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
+    TFile *input = new TFile(filename, "open");
+    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
+    Init(tree);
+    tree->GetEntry(0);
 
     extensive_plots = false;
 
     SetSampleTypes(filename);
 
-    TString promptordisplaced = "";
-    if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
-    else if(filename.Index("displaced") != -1) promptordisplaced = "displaced";
-
-    TFile *input = new TFile(filename, "open");
-    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
     
     if(sampleflavor == "e" or sampleflavor == "mu"){
@@ -60,14 +58,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
     
-    Init(tree);
 
     //This map contains all 1D histograms
     std::map<TString, TH1*> hists;
     std::map<TString, TH2*> hists2D;
 
     //init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
-    //init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     //init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);
 
@@ -219,7 +216,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         //Calculate Event weight
         if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_m, i_leading);
-        else ev_weight = 1;
+        else ev_weight = 1.;
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
         for(auto& MassMap : evaluating_V2s){
@@ -244,14 +241,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             }
             additional_signal_regions();
             fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
+
+            SR_counters[sr_flavor]++;
+            SR_counters[sr_flavor+"_weighted"] += ev_weight;
         }else {
             JetTagVal.clear();
         }
 
 
         fill_histograms(&hists, &hists2D);
-        SR_counters[sr_flavor]++;
-        SR_counters[sr_flavor+"_weighted"] += ev_weight;
+
+
         if(sr_flavor == ""){
             if(i_leading == -1){
                 SR_counters["no_l1"]++;
@@ -267,9 +267,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                     SR_counters["no_l2_ot"]++;
                     SR_counters["no_l2_ot_weighted"]++;
                 }
+            }else {
+                SR_counters["unid."]++;
             }
         }
-
 
         // after everything happened, set subleading lepton to tight prompt lepton to measure 2 lepton prompt performance
         set_leptons(i_subleading_e, i_subleading_mu);

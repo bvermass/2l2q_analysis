@@ -56,7 +56,7 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'TTJets_MiniAOD2016.root', TTJets_2016_list)) != 0:
             print 'TTJets 2016 failed'
             all_good = False
-        
+
         DYJets_2016_list = [basename + 'DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root',
                        basename + 'DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root']
         #DYJets_2016_list = [basename + 'DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root',
@@ -82,12 +82,12 @@ def merge_similar_samples( base_path ):
                    basename + 'ST_tW_top_5f_NoFullyHadronicDecays_13TeV-powheg_TuneCUETP8M1_MiniAOD2016.root']
         if os.system(merge_files(basename + 'ST_MiniAOD2016.root', ST_2016_list)) != 0:
             all_good = False
-        
+
         Top_2016_list = [basename + 'TTJets_MiniAOD2016.root',
                          basename + 'ST_MiniAOD2016.root']
         if os.system(merge_files(basename + 'Top_MiniAOD2016.root', Top_2016_list)) != 0:
             all_good = False
-        
+
         Bkg_2016_list = [basename + 'DYJets_MiniAOD2016.root',
                     basename + 'Diboson_MiniAOD2016.root',
                     basename + 'TTJets_MiniAOD2016.root',
@@ -125,7 +125,7 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'WJets_012J_MiniAOD2017.root', WJets_2017_list)) != 0:
             print 'WJets 012J 2017 failed'
             all_good = False
-        
+
         DYJets_2017_list = [basename + 'DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root',
                        #basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root']
                        basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root']
@@ -139,7 +139,7 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'TTJets_MiniAOD2017.root', TTJets_2017_list)) != 0:
             print 'TTJets 2017 failed'
             all_good = False
-        
+
         ST_2017_list = [basename + 'ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8_MiniAOD2017.root',
                    basename + 'ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_MiniAOD2017.root',
                    basename + 'ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_MiniAOD2017.root',
@@ -152,7 +152,7 @@ def merge_similar_samples( base_path ):
                          basename + 'ST_MiniAOD2017.root']
         if os.system(merge_files(basename + 'Top_MiniAOD2017.root', Top_2017_list)) != 0:
             all_good = False
-        
+
         Diboson_2017_list = [basename + 'WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2017.root',
                         basename + 'WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_MiniAOD2017.root',
                         basename + 'WW_DoubleScattering_13TeV-pythia8_TuneCP5_MiniAOD2017.root',
@@ -167,7 +167,7 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'Diboson_MiniAOD2017.root', Diboson_2017_list)) != 0:
             all_good = False
 
-        
+
         Bkg_2017_list = [basename + 'DYJets_MiniAOD2017.root',
                     basename + 'Diboson_MiniAOD2017.root',
                     basename + 'TTJets_MiniAOD2017.root',
@@ -192,6 +192,82 @@ def merge_similar_samples( base_path ):
                         basename + 'SingleElectron_Run2017E.root',
                         basename + 'SingleElectron_Run2017F.root']
         if os.system(merge_files(basename + 'SingleElectron_Run2017.root', Electron_Run2017_list)) != 0:
+            all_good = False
+
+
+        #MiniAOD2018
+        WJets_2018_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
+                       basename + 'WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
+                       basename + 'WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'WJets_012J_MiniAOD2018.root', WJets_2018_list)) != 0:
+            print 'WJets 012J 2018 failed'
+            all_good = False
+
+        DYJets_2018_list = [basename + 'DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root',
+                       #basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root']
+                       basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'DYJets_MiniAOD2018.root', DYJets_2018_list)) != 0:
+            print 'DY 2018 failed'
+            all_good = False
+
+        TTJets_2018_list = [basename + 'TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                       #basename + 'TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root',
+                       basename + 'TTToHadronic_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                       basename + 'TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'TTJets_MiniAOD2018.root', TTJets_2018_list)) != 0:
+            print 'TTJets 2018 failed'
+            all_good = False
+
+        ST_2018_list = [basename + 'ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-madgraph-pythia8_MiniAOD2018.root',
+                   basename + 'ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8_MiniAOD2018.root',
+                   basename + 'ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8_MiniAOD2018.root',
+                   basename + 'ST_t-channel_top_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                   basename + 'ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                   basename + 'ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                   basename + 'ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'ST_MiniAOD2018.root', ST_2018_list)) != 0:
+            all_good = False
+
+        Top_2018_list = [basename + 'TTJets_MiniAOD2018.root',
+                         basename + 'ST_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Top_MiniAOD2018.root', Top_2018_list)) != 0:
+            all_good = False
+
+        Diboson_2018_list = [basename + 'WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                        basename + 'WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                        basename + 'WWTo2L2Nu_DoubleScattering_13TeV-pythia8_MiniAOD2018.root',
+                        basename + 'WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2018.root',
+                        basename + 'WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2018.root',
+                        basename + 'WZTo3LNu_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                        basename + 'ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8_MiniAOD2018.root',
+                        basename + 'ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2018.root',
+                        basename + 'ZZTo2Q2Nu_TuneCP5_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2018.root',
+                        basename + 'ZZTo4L_TuneCP5_13TeV_powheg_pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Diboson_MiniAOD2018.root', Diboson_2018_list)) != 0:
+            all_good = False
+
+        Bkg_2018_list = [basename + 'DYJets_MiniAOD2018.root',
+                    basename + 'Diboson_MiniAOD2018.root',
+                    basename + 'TTJets_MiniAOD2018.root',
+                    basename + 'ST_MiniAOD2018.root',
+                    basename + 'WJets_012J_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Background_MiniAOD2018.root', Bkg_2018_list)) != 0:
+            all_good = False
+
+
+        #Run2018
+        Muon_Run2018_list = [basename + 'SingleMuon_Run2018A.root',
+                        basename + 'SingleMuon_Run2018B.root',
+                        basename + 'SingleMuon_Run2018C.root',
+                        basename + 'SingleMuon_Run2018D.root']
+        if os.system(merge_files(basename + 'SingleMuon_Run2018.root', Muon_Run2018_list)) != 0:
+            all_good = False
+
+        Electron_Run2018_list = [basename + 'EGamma_Run2018A.root',
+                        basename + 'EGamma_Run2018B.root',
+                        basename + 'EGamma_Run2018C.root',
+                        basename + 'EGamma_Run2018D.root']
+        if os.system(merge_files(basename + 'EGamma_Run2018.root', Electron_Run2018_list)) != 0:
             all_good = False
 
     return all_good

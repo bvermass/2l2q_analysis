@@ -956,7 +956,7 @@ public :
    // in src/HLT_eff.cc
     void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
     void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
-    void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool);
+    void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool, double);
     void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
    // in src/gen_histograms.cc

@@ -29,6 +29,7 @@ void full_analyzer::SetSampleTypes(TString filename)
         sampleflavor = "bkg";
         isBackground = true;
     }
+    std::cout << "This is " << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
 
 

@@ -11,9 +11,9 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
     BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
     BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
-    BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/D");
-    BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/D");
-    BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/D");
+    BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
+    BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
+    BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
     BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
     BkgEstimator_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
     BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");

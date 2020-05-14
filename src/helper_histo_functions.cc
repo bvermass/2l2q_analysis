@@ -25,26 +25,20 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     }
     
     if(partition != 1) {
-        outputfilename += "subfiles/";
-        if(filename.Contains("HeavyNeutrino_lljj")) outputfilename += filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - filename.Index("HeavyNeutrino_"));
-        else {
-            TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
-            tmpname.ReplaceAll("/", "_");
-            outputfilename += tmpname + "/";
-        }
+        TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
+        tmpname.ReplaceAll("/", "_");
+        outputfilename += "subfiles/" + tmpname + "/";
     }
     
     gSystem->Exec("mkdir -p " + outputfilename);
 
-    if(filename.Contains("HeavyNeutrino_lljj")) outputfilename += base_filename + "_" + filename(filename.Index("HeavyNeutrino_"), filename.Index("dilep") - 1 - filename.Index("HeavyNeutrino_"));
-    else { 
-        TString tmpname2 = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
-        tmpname2.ReplaceAll("/", "_");
-        outputfilename += base_filename + "_" + tmpname2;
-    }
+    TString tmpname2 = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 
+    tmpname2.ReplaceAll("/", "_");
+    outputfilename += base_filename + "_" + tmpname2;
+
+    if(partition != 1) outputfilename += "_job_" + std::to_string(static_cast<long long>(partitionjobnumber));
     
-    if(partition != 1) outputfilename += "_job_" + std::to_string(static_cast<long long>(partitionjobnumber)) + ".root";
-    else outputfilename += ".root";
+    outputfilename += ".root";
 
     return outputfilename;
 }
