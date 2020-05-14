@@ -1,0 +1,26 @@
+# 2016
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleMuon_Run2016.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleElectron_Run2016.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_DYJets_MiniAOD2016.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Top_MiniAOD2016.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Diboson_MiniAOD2016.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_MiniAOD2016.root  -1 1
+
+# 2017
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleMuon_Run2017.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleElectron_Run2017.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_WJets_012J_MiniAOD2017.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_DYJets_MiniAOD2017.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Top_MiniAOD2017.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Diboson_MiniAOD2017.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_MiniAOD2017.root  -1 1
+
+# 2018
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_SingleMuon_Run2018.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_EGamma_Run2018.root -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_WJets_012J_MiniAOD2018.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_DYJets_MiniAOD2018.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Top_MiniAOD2018.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Diboson_MiniAOD2018.root  -1 1
+/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/final/full_analyzer/BkgEstimator_Background_MiniAOD2018.root  -1 1
