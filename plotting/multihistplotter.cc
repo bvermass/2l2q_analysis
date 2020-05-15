@@ -14,8 +14,14 @@ int main(int argc, char * argv[])
     int i_legends   = argc/2 + 2;
 
     std::vector<TFile*>  files;
+    bool is2016 = false, is2017 = false, is2018 = false;
     for(int i = i_rootfiles; i < i_legends; i++){
-        files.push_back(TFile::Open((TString)argv[i]));
+        TString filename = (TString)argv[i];
+        files.push_back(TFile::Open(filename));
+
+        if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
+        else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
+        else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
     }
     std::vector<TString> legends;
     for(int i = i_legends; i < argc; i++){
@@ -48,13 +54,11 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+
 
     int partitionjobnumber = std::atoi(argv[2]);
     int partition = std::atoi(argv[3]);
@@ -119,8 +123,7 @@ int main(int argc, char * argv[])
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
                 pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
@@ -135,8 +138,7 @@ int main(int argc, char * argv[])
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));
                 hists->SetMinimum(0.5);
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
                 pad->Modified();
                 c->Print(pathname_log + histname + ".png");
@@ -167,8 +169,7 @@ int main(int argc, char * argv[])
                     multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                     legend.Draw("same");
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                    CMSandLumi->Draw();
 
                     pad->Modified();
                     c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");

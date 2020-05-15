@@ -67,12 +67,17 @@ int main(int argc, char * argv[])
     std::vector<TFile*> files_signal;
     std::vector<TFile*> files_bkg;
     std::vector<TString> legends;
+    bool is2016 = false, is2017 = false, is2018 = false;
     for(int i = 2; i < argc; i++){
         std::cout << argv[i] << std::endl;
         TString argument = (TString)argv[i];
         if(i%3 == 2) legends.push_back(argument);
         else if(i%3 == 0) files_signal.push_back(TFile::Open(argument));
         else if(i%3 == 1) files_bkg.push_back(TFile::Open(argument));
+
+        if(argument.Contains("MiniAOD2016") or argument.Contains("Run2016")) is2016 = true;
+        else if(argument.Contains("MiniAOD2017") or argument.Contains("Run2017")) is2017 = true;
+        else if(argument.Contains("MiniAOD2018") or argument.Contains("Run2018")) is2018 = true;
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
@@ -98,13 +103,10 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.5, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
-    float leftmargin  = c->GetLeftMargin();
-    float topmargin   = c->GetTopMargin();
-    float rightmargin = c->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    float leftmargin  = pad->GetLeftMargin();
+    float topmargin   = pad->GetTopMargin();
+    float rightmargin = pad->GetRightMargin();
 
     std::vector< std::map< TString, double > > auc; // Vector for different files, map <V2, auc>
     for(int i = 0; i < files_signal.size(); i++) auc.push_back(std::map<TString, double>());
@@ -174,7 +176,7 @@ int main(int argc, char * argv[])
                 multigraph->SetMaximum(1.02);
 
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                CMSandLumi->Draw();
 
                 c->Modified();
                 c->Print(pathname_lin + histname + ".png");
@@ -196,7 +198,7 @@ int main(int argc, char * argv[])
                 }
 
                 if(plot_extra_hists_with_different_names(c, multigraph, &legend, files_signal, files_bkg, legendsV2, histnamesV2, colors)){
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                    CMSandLumi->Draw();
 
                     histname.ReplaceAll("_V2-3e-05", "_vsV2");
                     pathname_lin.ReplaceAll("_V2-3e-05", "_vsV2");

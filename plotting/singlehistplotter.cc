@@ -14,6 +14,10 @@ int main(int argc, char * argv[])
     // Argument 5: legend associated to sample
     TString subdirectory_name = (TString)argv[1];
     TString inputfilename = (TString)argv[4];
+    bool is2016 = false, is2017 = false, is2018 = false;
+    if(inputfilename.Contains("MiniAOD2016") or inputfilename.Contains("Run2016")) is2016 = true;
+    else if(inputfilename.Contains("MiniAOD2017") or inputfilename.Contains("Run2017")) is2017 = true;
+    else if(inputfilename.Contains("MiniAOD2018") or inputfilename.Contains("Run2018")) is2018 = true;
     bool is_mini_analyzer = inputfilename.Contains("hists_mini_analyzer");
     bool isData           = inputfilename.Contains("Run201");
     TFile*  sample_file   = TFile::Open(inputfilename);
@@ -52,7 +56,7 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.2, 0.88, 0.95, 0.93, 4);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
 
     int partitionjobnumber = std::atoi(argv[2]);
     int partition = std::atoi(argv[3]);

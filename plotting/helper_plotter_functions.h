@@ -28,8 +28,10 @@
 // class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
 class CMSandLuminosity{
     public:
-        CMSandLuminosity(TPad* pad);
+        CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018);
         ~CMSandLuminosity();
+        void change_CMStext(TString new_text);
+        void change_lumitext(TString new_text);
         void Draw();
     private:
         TString CMStext;

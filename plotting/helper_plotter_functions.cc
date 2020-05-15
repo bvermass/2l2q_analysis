@@ -1,17 +1,33 @@
 #include "helper_plotter_functions.h"
 
 // CMSandluminosity class functions
-CMSandLuminosity::CMSandLuminosity(TPad* pad):
+CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018):
     CMStext( "#bf{CMS} #scale[0.8]{#it{Preliminary}}" )
-    , lumitext( "35.9 fb^{-1} (13 TeV)" )
     , leftmargin( pad->GetLeftMargin() )
     , topmargin( pad->GetTopMargin() )
     , rightmargin( pad->GetRightMargin() )
     , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
     , lumilatex( get_latex(0.6*topmargin, 31, 42) )
-{}
+{
+    if((is2016 and is2017) or (is2016 and is2018) or (is2017 and is2018) or (!is2016 and !is2017 and !is2018)){
+        std::cout << "not clear which year to use for lumi info" << std::endl;
+        lumitext = "(13 TeV)";
+    }
+    else if(is2016) lumitext = "35.92 fb^{-1} (13 TeV)";
+    else if(is2017) lumitext = "41.53 fb^{-1} (13 TeV)";
+    else if(is2018) lumitext = "59.74 fb^{-1} (13 TeV)";
+    else lumitext = "(13 TeV)";
+}
 
 CMSandLuminosity::~CMSandLuminosity(){}
+
+void CMSandLuminosity::change_CMStext(TString new_text){
+    CMStext = new_text;
+}
+
+void CMSandLuminosity::change_lumitext(TString new_text){
+    lumitext = new_text;
+}
 
 void CMSandLuminosity::Draw()
 {

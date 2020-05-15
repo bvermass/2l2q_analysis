@@ -22,6 +22,7 @@ int main(int argc, char * argv[])
     std::vector<TString> legends_bkg;
     std::vector<TString> legends_data;
     bool is_mini_analyzer = false;
+    bool is2016 = false, is2017 = false, is2018 = false;
     for(int i = 0; i < argc - i_legends; i++){
         TString filename = (TString)argv[i_rootfiles + i];
         TString legendname = (TString)argv[i_legends + i];
@@ -40,6 +41,10 @@ int main(int argc, char * argv[])
         if(filename.Contains("hists_mini_analyzer")){
             is_mini_analyzer = true;
         }
+
+        if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
+        else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
+        else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
     }
 
     // determine whether the samplelist wants plotting with data, signal or without
@@ -80,13 +85,10 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018);
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
     float rightmargin = pad_histo->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
@@ -220,8 +222,7 @@ int main(int argc, char * argv[])
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
                 
                 pad_histo->Modified();
 
@@ -257,8 +258,7 @@ int main(int argc, char * argv[])
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
                 
                 pad_histo->Modified();
 
@@ -310,8 +310,7 @@ int main(int argc, char * argv[])
                     multigraph->SetMaximum(1.25);
 
                     legend.Draw("same");
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                    CMSandLumi->Draw();
 
                     pad_histo->Modified();
                     c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
