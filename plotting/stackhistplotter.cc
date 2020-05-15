@@ -93,11 +93,7 @@ int main(int argc, char * argv[])
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
     TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0., 1.,std::max(0.05, ymin));
-    if(withdata){
-        pad_ratio->SetBottomMargin(0.3);
-        pad_ratio->Draw();
-        pad_ratio->cd();
-    }
+    RatioPlot ratioplotter(pad_ratio);
 
     int partitionjobnumber = std::atoi(argv[2]);
     int partition = std::atoi(argv[3]);
@@ -180,9 +176,11 @@ int main(int argc, char * argv[])
                 bkgForError->SetFillColor(kGray+2);
                 bkgForError->SetMarkerStyle(0);
 
-                // get ratio of data/MC
-                TH1F histo_ratio;
-                if(withdata) histo_ratio = get_histoRatio(data_hist, (TH1F*) hists_bkg->GetStack()->Last(), xaxistitle);
+                // set ratio of data/MC
+                if(withdata){
+                    ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "data/MC");
+                    //ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Res", "Uncl"}, {"JEC", "JER", "Uncl."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
+                }
 
                 // get plot specific pathnames
                 TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -191,7 +189,7 @@ int main(int argc, char * argv[])
                 // set x range to log if necessary
                 int xlog = (histname.Index("xlog") == -1)? 0 : 1;
                 pad_histo->SetLogx(xlog);
-                if(withdata) pad_ratio->SetLogx(xlog);
+                if(withdata) ratioplotter.SetLogx(xlog);
                 if(xlog){
                     TIter stack_iterator(hists_bkg->GetHists());
                     TObject* sample_hist = 0;
@@ -207,8 +205,6 @@ int main(int argc, char * argv[])
 
 
                 // Draw lin version
-                pad_ratio->cd();
-                pad_ratio->Clear();
                 pad_histo->cd();
                 pad_histo->Clear();
                 pad_histo->SetLogy(0);
@@ -226,18 +222,8 @@ int main(int argc, char * argv[])
                 
                 pad_histo->Modified();
 
-                // Draw ratio version if data is present
-                if(withdata){
-                    pad_ratio->cd();
-                    pad_ratio->Clear();
-                
-                    histo_ratio.Draw("E0 X0 P");
-                    alphanumeric_labels(&histo_ratio, histname);
-                    histo_ratio.SetLabelSize(0.15, "X");
-                    draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
-
-                    pad_ratio->Modified();
-                }
+                // Draw ratio data/MC if data is present
+                if(withdata) ratioplotter.dothething();
 
                 c->Print(pathname_lin + histname + ".png");
 
@@ -263,17 +249,7 @@ int main(int argc, char * argv[])
                 pad_histo->Modified();
 
                 // Draw ratio data/MC if data is present
-                if(withdata){
-                    pad_ratio->cd();
-                    pad_ratio->Clear();
-
-                    histo_ratio.Draw("E0 X0 P");
-                    alphanumeric_labels(&histo_ratio, histname);
-                    histo_ratio.SetLabelSize(0.15, "X");
-                    draw_line_at_1(histo_ratio.GetXaxis()->GetXmin(), histo_ratio.GetXaxis()->GetXmax());
-
-                    pad_ratio->Modified();
-                }
+                if(withdata) ratioplotter.dothething();
 
                 c->Print(pathname_log + histname + ".png");
 

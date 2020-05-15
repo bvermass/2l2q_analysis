@@ -102,7 +102,7 @@ if [[ choice -eq 2 ]]; then
     fi
 fi
 if [[ choice -eq 3 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" "plotting/ratioplotter.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////\n"
