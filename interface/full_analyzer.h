@@ -30,6 +30,9 @@
 // helper functions
 #include "../interface/helper_histo_functions.h"
 #include "../interface/HNLtagger.h"
+#include "../interface/HNL_parameters.h"
+#include "../interface/BkgEstimator.h"
+#include "../interface/bTagWP.h"
 #include "../helpertools/PFNEvaluation/PFNReader.h"
 #include "../helpertools/LorentzVector/LorentzVector.h"
 #include "../helpertools/PUWeightReader/PUWeightReader.h"
@@ -79,7 +82,7 @@ public :
    Double_t        _gen_lEta[20];   //[_gen_nL]
    Double_t        _gen_lPhi[20];   //[_gen_nL]
    Double_t        _gen_lE[20];   //[_gen_nL]
-   UInt_t          _gen_lFlavor[20];   //[_gen_nL]
+   unsigned        _gen_lFlavor[20];   //[_gen_nL]
    Int_t           _gen_lCharge[20];   //[_gen_nL]
    Int_t           _gen_lMomPdg[20];   //[_gen_nL]
    Double_t        _gen_vertex_x[20];
@@ -89,47 +92,10 @@ public :
    Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
    Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
    Double_t        _gen_HT;
-   unsigned        _gen_nN;
-   Double_t        _gen_NPt;
-   Double_t        _gen_NEta;
-   Double_t        _gen_NPhi;
-   Double_t        _gen_NE;
-   Double_t        _gen_Nvertex_x;
-   Double_t        _gen_Nvertex_y;
-   Double_t        _gen_Nvertex_z;
-   unsigned        _gen_nNPackedDtrs;
-   Double_t        _gen_NPackedDtrsPt[20];
-   Double_t        _gen_NPackedDtrsEta[20];
-   Double_t        _gen_NPackedDtrsPhi[20];
-   Double_t        _gen_NPackedDtrsE[20];
-   Int_t           _gen_NPackedDtrsPdgId[20];
-   Int_t           _gen_NPackedDtrsCharge[20];
-   Int_t           matches[20];
-   Double_t        _gen_NPackedDtrsmineta[20];
-   Double_t        _gen_NPackedDtrsminphi[20];
-   Double_t        _gen_NPackedDtrsminpt[20];
-   Double_t        _gen_NPackedDtrs_matchPt[20];
-   Double_t        _gen_NPackedDtrs_matchEta[20];
-   Double_t        _gen_NPackedDtrs_matchPhi[20];
-   Double_t        _gen_NPackedDtrs_matchE[20];
-   Double_t        _gen_NPackedDtrs_matchdxy[20];
-   Double_t        _gen_NPackedDtrs_matchdz[20];
-   Int_t           _gen_NPackedDtrs_matchcharge[20];
-   unsigned        _gen_nNdaughters;
-   UInt_t          _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
-   //UChar_t         _gen_nstatus23;
-   //UChar_t         _gen_nstatus23_fromN;
-   //UChar_t         _gen_nstatus23_fromW;
-   //Int_t           _gen_status23_pdg[5];   //[_gen_nstatus23]
-   //UInt_t          _gen_status23_fromN_pdg[3];   //[_gen_nstatus23_fromN]
-   //UInt_t          _gen_status23_fromW_pdg[1];   //[_gen_nstatus23_fromW]
-   unsigned        _gen_nq;
-   Double_t        _gen_qPt[2];   //[_gen_nq23]
-   Double_t        _gen_qEta[2];   //[_gen_nq23]
-   Double_t        _gen_qPhi[2];   //[_gen_nq23]
-   Double_t        _gen_qE[2];   //[_gen_nq23]
    Bool_t          _HLT_Ele27_WPTight_Gsf;
    Int_t           _HLT_Ele27_WPTight_Gsf_prescale;
+   Bool_t          _HLT_Ele32_WPTight_Gsf;
+   Int_t           _HLT_Ele32_WPTight_Gsf_prescale;
    Bool_t          _HLT_IsoMu24;
    Int_t           _HLT_IsoMu24_prescale;
    Bool_t          _HLT_IsoTkMu24;
@@ -204,28 +170,35 @@ public :
    Double_t        _lEtaSC[10];   //[_nLight]
    Double_t        _lPhi[10];   //[_nL]
    Double_t        _lE[10];   //[_nL]
-   UInt_t          _lFlavor[10];   //[_nL]
+   unsigned        _lFlavor[10];   //[_nL]
    Int_t           _lCharge[10];   //[_nL]
    Double_t        _dxy[10];   //[_nL]
    Double_t        _dz[10];   //[_nL]
    Double_t        _3dIP[10];   //[_nL]
    Double_t        _3dIPSig[10];   //[_nL]
+   Double_t        _lElectronSummer16MvaGP[10];
+   Double_t        _lElectronSummer16MvaHZZ[10];
+   Double_t        _lElectronMvaFall17v1NoIso[10];
+   Double_t        _lElectronMvaFall17Iso[10];
+   Double_t        _lElectronMvaFall17NoIso[10];
    Bool_t          _lElectronPassEmu[10];   //[_nLight]
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
-   UInt_t          _lElectronMissingHits[10];   //[_nLight]
-   Bool_t          _lEleIsEB[10];                                                                         //electron specific variables for displaced electron ID
-   Bool_t          _lEleIsEE[10];
-   Double_t        _lEleSuperClusterOverP[10];
-   Double_t        _lEleEcalEnergy[10];
-   Double_t        _lElefull5x5SigmaIetaIeta[10];
-   Double_t        _lEleDEtaInSeed[10];
-   Double_t        _lEleDeltaPhiSuperClusterTrackAtVtx[10];
-   Double_t        _lElehadronicOverEm[10];
-   Double_t        _lEleInvMinusPInv[10];
-   Double_t        _eleNumberInnerHitsMissing[10];
+   unsigned        _lElectronMissingHits[10];   //[_nLight]
+   Bool_t          _lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+   Bool_t          _lElectronIsEE[10];
+   Double_t        _lElectronSuperClusterOverP[10];
+   Double_t        _lElectronEcalEnergy[10];
+   Double_t        _lElectronSigmaIetaIeta[10];
+   Double_t        _lElectronDEtaInSeed[10];
+   Double_t        _lElectronDeltaPhiSuperClusterTrack[10];
+   Double_t        _lElectronDeltaEtaSuperClusterTrack[10];
+   Double_t        _lElectronHOverE[10];
+   Double_t        _lElectronEInvMinusPInv[10];
+   Double_t        _lElectronNumberInnerHitsMissing[10];
    Double_t        _leptonMvatZq[10];
    Double_t        _leptonMvaTTH[10];
+   Double_t        _leptonMvaTOP[10];
    Double_t        _leptonMvaSUSY16[10];   //[_nLight]
    Double_t        _leptonMvaTTH16[10];   //[_nLight]
    Double_t        _leptonMvaSUSY17[10];   //[_nLight]
@@ -261,48 +234,12 @@ public :
    Double_t        _closestJetCsvV2[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_b[10];   //[_nLight]
    Double_t        _closestJetDeepCsv_bb[10];   //[_nLight]
-   UInt_t          _selectedTrackMult[10];   //[_nLight]
-   Bool_t          _lKVF_valid[10];
-   Double_t	       _lKVF_x[10];
-   Double_t	       _lKVF_y[10];
-   Double_t	       _lKVF_z[10];
-   Double_t	       _lKVF_cxx[10];
-   Double_t	       _lKVF_cyy[10];
-   Double_t	       _lKVF_czz[10];
-   Double_t	       _lKVF_cyx[10];
-   Double_t	       _lKVF_czy[10];
-   Double_t	       _lKVF_czx[10];
-   Double_t	       _lKVF_df[10];
-   Double_t	       _lKVF_chi2[10];
-   UInt_t	       _lKVF_ntracks[10];
-   Double_t        _lKVF_dRcut[10];
-   Double_t        _lKVF_trackPt[10][15];
-   Double_t        _lKVF_trackEta[10][15];
-   Double_t        _lKVF_trackPhi[10][15];
-   Double_t        _lKVF_trackE[10][15];
-   Double_t        _lKVF_trackdR[10][15];
-   Double_t        _lKVF_trackdxy[10][15];
-   Double_t        _lKVF_trackdz[10][15];
-   Double_t        _IVF_x[10];
-   Double_t        _IVF_y[10];
-   Double_t        _IVF_z[10];
-   Double_t        _IVF_cx[10];
-   Double_t        _IVF_cy[10];
-   Double_t        _IVF_cz[10];
-   Double_t        _IVF_df[10];
-   Double_t        _IVF_chi2[10];
-   Double_t        _IVF_pt[10];
-   Double_t        _IVF_eta[10];
-   Double_t        _IVF_phi[10];
-   Double_t        _IVF_E[10];
-   Double_t        _IVF_mass[10];
-   unsigned         _IVF_ntracks[10];
-   Double_t        _IVF_trackpt[10][15];
-   Double_t        _IVF_tracketa[10][15];
-   Double_t        _IVF_trackphi[10][15];
-   Double_t        _IVF_trackE[10][15];
-   Double_t        _IVF_trackcharge[10][15];
-   Bool_t          _lIVF_match[10];
+   Double_t        _closestJetDeepCsv[10];   //[_nLight]
+   Double_t        _closestJetDeepFlavor_b[10];
+   Double_t        _closestJetDeepFlavor_bb[10];
+   Double_t        _closestJetDeepFlavor_lepb[10];
+   Double_t        _closestJetDeepFlavor[10];
+   unsigned        _selectedTrackMult[10];   //[_nLight]
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
    Double_t        _lInnerTrackValidFraction[10];
@@ -317,6 +254,12 @@ public :
    Double_t        _lMuonSegComp[10];   //[_nMu]
    Double_t        _lMuonTrackPt[10];   //[_nMu]
    Double_t        _lMuonTrackPtErr[10];   //[_nMu]
+   Int_t           _lMuonTimenDof[10];
+   Double_t        _lMuonTime[10];
+   Double_t        _lMuonTimeErr[10];
+   Int_t           _lMuonRPCTimenDof[10];
+   Double_t        _lMuonRPCTime[10];
+   Double_t        _lMuonRPCTimeErr[10];
    Bool_t          _lIsPrompt[10];   //[_nL]
    Int_t           _lMatchPdgId[10];   //[_nL]
    Int_t           _lMatchCharge[10];
@@ -361,7 +304,15 @@ public :
    Double_t        _jetDeepCsv_b[20];   //[_nJets]
    Double_t        _jetDeepCsv_c[20];   //[_nJets]
    Double_t        _jetDeepCsv_bb[20];   //[_nJets]
-   UInt_t          _jetHadronFlavor[20];   //[_nJets]
+   Double_t        _jetDeepCsv[20];   //[_nJets]
+   Double_t        _jetDeepFlavor_b[20];
+   Double_t        _jetDeepFlavor_bb[20];
+   Double_t        _jetDeepFlavor_lepb[20];
+   Double_t        _jetDeepFlavor[20];
+   Double_t        _jetDeepFlavor_c[20];
+   Double_t        _jetDeepFlavor_uds[20];
+   Double_t        _jetDeepFlavor_g[20];
+   unsigned        _jetHadronFlavor[20];   //[_nJets]
    Bool_t          _jetIsLoose[20];   //[_nJets]
    Bool_t          _jetIsTight[20];   //[_nJets]
    Bool_t          _jetIsTightLepVeto[20];   //[_nJets]
@@ -474,47 +425,10 @@ public :
    TBranch        *b__gen_lMinDeltaR;   //!
    TBranch        *b__gen_lPassParentage;   //!
    TBranch        *b__gen_HT;   //!
-   TBranch        *b__gen_nN;   //!
-   TBranch        *b__gen_NPt;
-   TBranch        *b__gen_NEta;
-   TBranch        *b__gen_NPhi;
-   TBranch        *b__gen_NE;
-   TBranch        *b__gen_Nvertex_x;
-   TBranch        *b__gen_Nvertex_y;
-   TBranch        *b__gen_Nvertex_z;
-   TBranch        *b__gen_nNPackedDtrs;
-   TBranch        *b__gen_NPackedDtrsPt;
-   TBranch        *b__gen_NPackedDtrsEta;
-   TBranch        *b__gen_NPackedDtrsPhi;
-   TBranch        *b__gen_NPackedDtrsE;
-   TBranch        *b__gen_NPackedDtrsPdgId;
-   TBranch        *b__gen_NPackedDtrsCharge;
-   TBranch        *b_matches;
-   TBranch        *b__gen_NPackedDtrsmineta;
-   TBranch        *b__gen_NPackedDtrsminphi;
-   TBranch        *b__gen_NPackedDtrsminpt;
-   TBranch        *b__gen_NPackedDtrs_matchPt;
-   TBranch        *b__gen_NPackedDtrs_matchEta;
-   TBranch        *b__gen_NPackedDtrs_matchPhi;
-   TBranch        *b__gen_NPackedDtrs_matchE;
-   TBranch        *b__gen_NPackedDtrs_matchdxy;
-   TBranch        *b__gen_NPackedDtrs_matchdz;
-   TBranch        *b__gen_NPackedDtrs_matchcharge;
-   TBranch        *b__gen_nNdaughters;   //!
-   TBranch        *b__gen_Ndaughters_pdg;   //!
-   //TBranch        *b__gen_nstatus23;   //!
-   //TBranch        *b__gen_nstatus23_fromN;   //!
-   //TBranch        *b__gen_nstatus23_fromW;   //!
-   //TBranch        *b__gen_status23_pdg;   //!
-   //TBranch        *b__gen_status23_fromN_pdg;   //!
-   //TBranch        *b__gen_status23_fromW_pdg;   //!
-   TBranch        *b__gen_nq;   //!
-   TBranch        *b__gen_qPt;   //!
-   TBranch        *b__gen_qEta;   //!
-   TBranch        *b__gen_qPhi;   //!
-   TBranch        *b__gen_qE;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf;   //!
    TBranch        *b__HLT_Ele27_WPTight_Gsf_prescale;   //!
+   TBranch        *b__HLT_Ele32_WPTight_Gsf;   //!
+   TBranch        *b__HLT_Ele32_WPTight_Gsf_prescale;   //!
    TBranch        *b__HLT_IsoMu24;   //!
    TBranch        *b__HLT_IsoMu24_prescale;   //!
    TBranch        *b__HLT_IsoTkMu24;   //!
@@ -595,22 +509,29 @@ public :
    TBranch        *b__dz;   //!
    TBranch        *b__3dIP;   //!
    TBranch        *b__3dIPSig;   //!
+   TBranch        *b__lElectronSummer16MvaGP;
+   TBranch        *b__lElectronSummer16MvaHZZ;
+   TBranch        *b__lElectronMvaFall17v1NoIso;
+   TBranch        *b__lElectronMvaFall17Iso;
+   TBranch        *b__lElectronMvaFall17NoIso;
    TBranch        *b__lElectronPassEmu;   //!
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
    TBranch        *b__lElectronMissingHits;   //!
-   TBranch        *b__lEleIsEB;                                                                         //electron specific variables for displaced electron ID
-   TBranch        *b__lEleIsEE;
-   TBranch        *b__lEleSuperClusterOverP;
-   TBranch        *b__lEleEcalEnergy;
-   TBranch        *b__lElefull5x5SigmaIetaIeta;
-   TBranch        *b__lEleDEtaInSeed;
-   TBranch        *b__lEleDeltaPhiSuperClusterTrackAtVtx;
-   TBranch        *b__lElehadronicOverEm;
-   TBranch        *b__lEleInvMinusPInv;
-   TBranch        *b__eleNumberInnerHitsMissing;
+   TBranch        *b__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
+   TBranch        *b__lElectronIsEE;
+   TBranch        *b__lElectronSuperClusterOverP;
+   TBranch        *b__lElectronEcalEnergy;
+   TBranch        *b__lElectronSigmaIetaIeta;
+   TBranch        *b__lElectronDEtaInSeed;
+   TBranch        *b__lElectronDeltaPhiSuperClusterTrack;
+   TBranch        *b__lElectronDeltaEtaSuperClusterTrack;
+   TBranch        *b__lElectronHOverE;
+   TBranch        *b__lElectronEInvMinusPInv;
+   TBranch        *b__lElectronNumberInnerHitsMissing;
    TBranch        *b__leptonMvatZq;
    TBranch        *b__leptonMvaTTH;
+   TBranch        *b__leptonMvaTOP;
    TBranch        *b__leptonMvaSUSY16;   //!
    TBranch        *b__leptonMvaTTH16;   //!
    TBranch        *b__leptonMvaSUSY17;   //!
@@ -646,48 +567,12 @@ public :
    TBranch        *b__closestJetCsvV2;   //!
    TBranch        *b__closestJetDeepCsv_b;   //!
    TBranch        *b__closestJetDeepCsv_bb;   //!
+   TBranch        *b__closestJetDeepCsv;   //!
+   TBranch        *b__closestJetDeepFlavor_b;   //!
+   TBranch        *b__closestJetDeepFlavor_bb;   //!
+   TBranch        *b__closestJetDeepFlavor_lepb;   //!
+   TBranch        *b__closestJetDeepFlavor;   //!
    TBranch        *b__selectedTrackMult;   //!
-   //TBranch        *b__lKVF_valid;
-   //TBranch	      *b__lKVF_x;
-   //TBranch	      *b__lKVF_y;
-   //TBranch	      *b__lKVF_z;
-   //TBranch	      *b__lKVF_cxx;
-   //TBranch	      *b__lKVF_cyy;
-   //TBranch	      *b__lKVF_czz;
-   //TBranch	      *b__lKVF_cyx;
-   //TBranch	      *b__lKVF_czy;
-   //TBranch	      *b__lKVF_czx;
-   //TBranch	      *b__lKVF_df;
-   //TBranch	      *b__lKVF_chi2;
-   //TBranch        *b__lKVF_ntracks;
-   //TBranch        *b__lKVF_dRcut;
-   //TBranch        *b__lKVF_trackPt;
-   //TBranch        *b__lKVF_trackEta;
-   //TBranch        *b__lKVF_trackPhi;
-   //TBranch        *b__lKVF_trackE;
-   //TBranch        *b__lKVF_trackdR;
-   //TBranch        *b__lKVF_trackdxy;
-   //TBranch        *b__lKVF_trackdz;
-   TBranch        *b__IVF_x;
-   TBranch        *b__IVF_y;
-   TBranch        *b__IVF_z;
-   TBranch        *b__IVF_cx;
-   TBranch        *b__IVF_cy;
-   TBranch        *b__IVF_cz;
-   TBranch        *b__IVF_df;
-   TBranch        *b__IVF_chi2;
-   TBranch        *b__IVF_pt;
-   TBranch        *b__IVF_eta;
-   TBranch        *b__IVF_phi;
-   TBranch        *b__IVF_E;
-   TBranch        *b__IVF_mass;
-   TBranch        *b__IVF_ntracks;
-   TBranch        *b__IVF_trackpt;
-   TBranch        *b__IVF_tracketa;
-   TBranch        *b__IVF_trackphi;
-   TBranch        *b__IVF_trackE;
-   TBranch        *b__IVF_trackcharge;
-   TBranch        *b__lIVF_match;
    TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
    TBranch        *b__lTrackerMuon;
    TBranch        *b__lInnerTrackValidFraction;
@@ -702,6 +587,12 @@ public :
    TBranch        *b__lMuonSegComp;   //!
    TBranch        *b__lMuonTrackPt;   //!
    TBranch        *b__lMuonTrackPtErr;   //!
+   TBranch        *b__lMuonTimenDof;
+   TBranch        *b__lMuonTime;
+   TBranch        *b__lMuonTimeErr;
+   TBranch        *b__lMuonRPCTimenDof;
+   TBranch        *b__lMuonRPCTime;
+   TBranch        *b__lMuonRPCTimeErr;
    TBranch        *b__lIsPrompt;   //!
    TBranch        *b__lMatchPdgId;   //!
    TBranch        *b__lMatchCharge;
@@ -746,6 +637,14 @@ public :
    TBranch        *b__jetDeepCsv_b;   //!
    TBranch        *b__jetDeepCsv_c;   //!
    TBranch        *b__jetDeepCsv_bb;   //!
+   TBranch        *b__jetDeepCsv;   //!
+   TBranch        *b__jetDeepFlavor_b;   //!
+   TBranch        *b__jetDeepFlavor_bb;   //!
+   TBranch        *b__jetDeepFlavor_lepb;   //!
+   TBranch        *b__jetDeepFlavor;   //!
+   TBranch        *b__jetDeepFlavor_c;   //!
+   TBranch        *b__jetDeepFlavor_uds;   //!
+   TBranch        *b__jetDeepFlavor_g;   //!
    TBranch        *b__jetHadronFlavor;   //!
    TBranch        *b__jetIsLoose;   //!
    TBranch        *b__jetIsTight;   //!
@@ -824,17 +723,11 @@ public :
    std::map<int, std::map<double, TString>> MV2name;
    //double JetTagVal_BDT = -1;
    
-   // lepton and jet ID and cleaning bool arrays
-   bool jet_clean_loose[20], jet_clean_full[20];
-   bool ele_clean_loose[10], ele_clean_full[10];
-   bool fullElectronID[10], looseElectronID[10], fullMuonID[10], looseMuonID[10], fullJetID[10];
 
    // gen variables related to truth of event
+   HNL_parameters* HNL_param;
    int i_gen_l1;
    int i_gen_l2;
-   int _gen_Nmass;
-   double _gen_NV;
-   double _gen_Nctau;
    bool leadingIsl1;
    bool subleadingIsl2; 
 
@@ -854,20 +747,22 @@ public :
    int i_jetl2;
 
    // numbers of leptons
-   int nTightEle, nTightMu;
+   int nTightEle, nTightMu, nLooseEle, nLooseMu, nTightJet, nTightJet_uncl;
 
    //Signal region booleans
    bool _trige, _trigmu, _l1, _l1l2, _l1l2_Full, _l1l2_Full_noTrigger;
 
    // relevant lepton variables
-   double mll, dRll, dphill;
+   double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
+   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
    
    // functions
    // in src/full_analyzer_constructor.cc
-   void SetSampleTypes(TString filename);
+   void      SetSampleTypes(TString filename);
+   LSFReader get_LSFReader(TString local_dir, TString flavor);
+   PUWeightReader get_PUWeightReader(TString local_dir);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
@@ -880,41 +775,33 @@ public :
     void     run_over_file(TString, double, int, int, int);
 
    // in src/leptonID.cc
-    void     get_electronID();
-    void     get_loose_electronID();
-    void     get_muonID();
-    void     get_loose_muonID();
-    void     get_clean_ele(bool*, bool*);
-    int      find_leading_e(bool*, bool*);
-    int      find_leading_mu(bool*);
-    int      find_subleading_e(bool*, bool*, int);
-    int      find_subleading_mu(bool*, int);
+    bool     IsPromptElectronID(const unsigned i);
+    double   rawElectronMVA(const double electronMVA);
+    unsigned electronMVACategory(unsigned i);
+    double   looseMVACut(unsigned i);
+    bool     IsDisplacedElectronID(const unsigned i);
+    bool     IsLooseElectronID(const unsigned i);
+    bool     IsPromptMuonID(const unsigned i);
+    bool     IsDisplacedMuonID(const unsigned i);
+    bool     IsLooseMuonID(const unsigned i);
+    bool     IsCleanElectron(const unsigned i, const std::vector<unsigned>& muoncollection);
+    int      find_leading_lepton(const std::vector<unsigned>& leptoncollection);
+    int      find_subleading_lepton(const std::vector<unsigned>& leptoncollection, const int index_leading);
     int      find_gen_lep(int i_lep);
     int      find_gen_l1();
     int      find_gen_l2();
     bool     leptonIsGenLepton(int, int);
     double   get_lsource(int);
-    double   get_IVF_SVgenreco(int, int);
-    double   get_IVF_SVgenreco_2D(int, int);
-    double   get_IVF_PVSVdist(int);
-    double   get_IVF_PVSVdist_2D(int);
-    double   get_KVF_SVgenreco(int, int);
-    double   get_KVF_SVgenreco_2D(int, int);
-    double   get_KVF_PVSVdist(int);
-    double   get_KVF_PVSVdist_2D(int);
-    double   get_PVSVdist_gen(int);
-    double   get_PVSVdist_gen_2D(int);
-    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu);
+    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i);
 
    // in src/jetID.cc
-    void     get_jetID();
-    void     get_clean_jets(bool*, bool*, bool*);
-    int      find_leading_jet(bool*, bool*);
-    int      find_subleading_jet(bool*, bool*, int);
-    int      find_thirdleading_jet(bool*, bool*, int, int);
-    int      find_jet_closest_to_lepton(bool*, int);
+    bool     IsTightJetID(const unsigned i);
+    bool     IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection);
+    int      find_leading_jet(const std::vector<unsigned>& jetcollection);
+    int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
+    int      find_thirdleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading, const int index_subleading);
+    int      find_jet_closest_to_lepton(const int index_lepton);
     double   get_dR_lepton_jet(int, int);
-    bool     get_JetIsFromHNL(int i_jet);
 
    // in src/signal_regions.cc
     void     set_leptons(int i_subleading_e, int i_subleading_mu);
@@ -926,7 +813,6 @@ public :
     void     additional_signal_regions();
     bool     leadptcut(int);
     bool     subleadptcut(int);
-    bool     no_additional_leptons();
     double   get_mll(int, int);
     double   get_dRll(int, int);
     double   get_dphill(int, int);
@@ -936,12 +822,12 @@ public :
    
     // in src/histo_functions.cc
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
-    void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
+    void     add_general_histograms(std::map<TString, TH1*>*, TString);
     void     add_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString MV2, double event_weight);
     void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
-    void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
-    void     fill_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_relevant_histograms(std::map<TString, TH1*>*, TString, double);
+    void     fill_general_histograms(std::map<TString, TH1*>*, TString, double);
     void     fill_cutflow(std::map<TString, TH1*>*, TString, double);
     void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
     void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
@@ -950,7 +836,7 @@ public :
     void     add_jet_histograms(std::map<TString, TH1*>*, TString);
     void     fill_jet_histograms(std::map<TString, TH1*>*, TString, double);
     void     fill_jet_constituent_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
-    void     fill_HNLtagger_tree(HNLtagger& hnltagger);
+    //void     fill_HNLtagger_tree(HNLtagger& hnltagger);
     int      is_track_in_sv(int i_lep, int i_jet, int i_const);
     //void     fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, double _weight);
 
@@ -968,7 +854,7 @@ public :
     void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
-    void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
+    //void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
     int      get_lfromtau(int i_gen_l);
 
     // in src/MET_histograms.cc
@@ -978,6 +864,14 @@ public :
     std::pair<double, double> METXYCorr_Met_MetPhi(double uncormet, double uncormet_phi, int npv);
     void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
+   
+    // in src/tree_functions.cc
+    //void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight);
+
+   // in src/SelectionOptimization.cc
+   // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);
+   // void     add_Bool_hists(std::map<TString, TH1*>* hists, TString prefix);
+   // void     create_Bools_and_fill_Bool_hists(std::map<TString, TH1*>* hists, TString prefix, int i_leading, int i_subleading, bool base_selection);
 };
 
 #endif

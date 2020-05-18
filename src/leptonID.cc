@@ -6,183 +6,213 @@
 
 using namespace std;
 
-void full_analyzer::get_electronID()
+bool full_analyzer::IsPromptMuonID(const unsigned i)
 {
-    for(unsigned i = 0; i < _nL; ++i){
-	    fullElectronID[i] =  _lFlavor[i] == 0 &&
-			                fabs(_lEta[i]) < 2.5 &&
-			                _lPt[i] > 20 &&
-			                fabs(_dxy[i]) < 0.05 &&
-			                fabs(_dz[i])  < 0.1 &&
-			                _3dIPSig[i]   < 4 &&
-			                _relIso[i]    < 0.1 &&
-                            _lPOGTight[i] &&
-			                _lElectronPassConvVeto[i] &&
-			                _lElectronMissingHits[i] < 1;
-    }
+    if(_lFlavor[i] != 1)                            return false;
+    if(fabs(_lEta[i]) >= 2.4)                       return false;
+    if(_lPt[i] <= 20)                               return false;
+    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dz[i]) >= 0.1)                         return false;
+    if(_3dIPSig[i] >= 4)                            return false;
+    if(_relIso[i] >= 0.1)                           return false;
+    if(!_lPOGTight[i])                              return false;
+
+    return true;
 }
 
-//void full_analyzer::get_electronID(bool* ID)
+bool full_analyzer::IsPromptElectronID(const unsigned i)
+{
+    if(_lFlavor[i] != 0)                            return false;
+    if(fabs(_lEta[i]) >= 2.5)                       return false;
+    if(_lPt[i] <= 20)                               return false;
+    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dz[i]) >= 0.1)                         return false;
+    if(_3dIPSig[i] >= 4)                            return false;
+    if(_relIso[i] >= 0.1)                           return false;
+    if(_lElectronNumberInnerHitsMissing[i] >= 2)    return false;
+    if(!_lElectronPassConvVeto[i])                  return false;
+    if(!_lPOGTight[i])                              return false;
+
+    return true;
+}
+
+//bool full_analyzer::IsPromptElectronID(const unsigned i)
 //{
-//    for(unsigned i = 0; i < _nL; ++i){
-//	    bool fullID =   _lFlavor[i] == 0 &&
-//			            fabs(_lEta[i]) < 2.5 &&
-//			            _lPt[i] > 7 &&
-//			            fabs(_dxy[i]) < 0.05 &&
-//			            fabs(_dz[i])  < 0.1 &&
-//			            _3dIPSig[i]   < 4 &&
-//			            _relIso[i]    < 0.1 &&
-//			            _lPOGTight[i] && //move to MVA of TTH as soon as others caught up
-//			            _lElectronPassConvVeto[i] &&
-//			            _lElectronMissingHits[i] < 1;
-//	    if(fullID) *(ID + i) = true;
-//	    else *(ID + i) = false;
-//    }
+//    if(_lFlavor[i] != 0)                    return false;
+//    if(fabs(_lEta[i]) > 2.5)                return false;
+//    if(_lPt[i] < 7)                         return false;
+//    if(fabs(_dxy[i]) > 0.05)                return false;
+//    if(fabs(_dz[i])  > 0.1)                 return false;
+//    if(_3dIPSig[i]   > 8)                   return false;
+//    if(_miniIso[i]    > 0.4)                return false;
+//    if(_leptonMvaTTH[i] < 0.8)              return false;
+//    if(!_lElectronPassConvVeto[i])          return false;
+//    if(_lElectronMissingHits[i] >= 1)       return false;
+//    if(_lElectronHOverE[i] > 0.1)           return false;
+//    if(_lElectronEInvMinusPInv[i] < -0.04)  return false;
+//    if(!((fabs(_lEtaSC[i]) < 1.479 && _lElectronSigmaIetaIeta[i] < 0.011) || (fabs(_lEtaSC[i]) > 1.479 && _lElectronSigmaIetaIeta[i] < 0.030))) return false;
+//    if(_is2016 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2016()) return false; //closestJetDeepFlavor is sum of closestJetDeepFlavor_b, _bb and _lepb
+//    if(_is2017 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2017()) return false;
+//    if(_is2018 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2018()) return false;
+//    if(rawElectronMVA( _lElectronMvaFall17NoIso[i] ) < looseMVACut( i )) return false;
+//
+//    return true;
 //}
 
-void full_analyzer::get_loose_electronID()
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	    looseElectronID[i] = _lFlavor[i] == 0 &&
-                             fabs(_lEta[i]) < 2.5 &&
-                             _lPt[i] > 7 &&
-                             //fabs(_dxy[i]) < 0.05 &&
-                             //fabs(_dz[i])  < 0.1 &&
-                             //_3dIPSig[i]   < 4 &&
-                             //_relIso[i]    < 0.1 &&
-                             _lElectronPassConvVeto[i] &&
-                             _lPOGVeto[i];
-                             //_lElectronMissingHits[i] < 1;
+double full_analyzer::rawElectronMVA( const double electronMVA ){
+        return -0.5 * ( std::log( ( 1. - electronMVA ) / ( 1. + electronMVA ) ) );
+}
+
+
+unsigned full_analyzer::electronMVACategory( unsigned i ){
+    double etasc = fabs(_lEtaSC[i]);
+    if( _lPt[i] < 10 ){
+        if( etasc < 0.8 ) return 0;
+        else if( etasc < 1.479 ) return 1;
+        else return 2;
+    } else {
+        if( etasc < 0.8 ) return 3;
+        else if( etasc < 1.479 ) return 4;
+        else return 5;
     }
 }
 
-void full_analyzer::get_muonID()
-{
-    for(unsigned i = 0; i < _nL; ++i){
-	    fullMuonID[i] = _lFlavor[i] == 1 &&
-			            fabs(_lEta[i]) < 2.4 &&
-			            _lPt[i] > 20 &&
-			            fabs(_dxy[i]) < 0.05 &&
-			            fabs(_dz[i])  < 0.1 &&
-			            _3dIPSig[i]   < 4 &&
-			            _relIso[i]    < 0.1 &&
-                        _lPOGTight[i];
-			            //(_leptonMvatZqTTV16[i] > 0.8 || _leptonMvatZq[i] > 0.8); // HACK for 2 names for same variable
-                        //_leptonMvatZq[i] > 0.8;
-                        //_lPOGMedium[i]; old ID, move to MVAtZqTTV16
-			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-    }
+
+double full_analyzer::looseMVACut( unsigned i ){
+	unsigned category = electronMVACategory( i );
+	if( category == 0 ) return 0.700642584415;
+    else if( category == 1 ) return 0.739335420875;
+    else if( category == 2 ) return 1.45390456109;
+    else if( category == 3 ) return -0.146270871164;
+    else if( category == 4 ) return -0.0315850882679;
+    else return -0.0321841194737;
 }
 
-void full_analyzer::get_loose_muonID()
+
+bool full_analyzer::IsLooseElectronID(const unsigned i)
 {
-    for(unsigned i = 0; i < _nL; ++i){
-	    looseMuonID[i] = _lFlavor[i] == 1 &&
-                         fabs(_lEta[i]) < 2.4 &&
-                         _lPt[i] > 20 &&
-                         //fabs(_dxy[i]) < 0.05 &&
-                         //fabs(_dz[i])  < 0.1 &&
-                         //_3dIPSig[i]   < 4 &&
-                         //_relIso[i]    < 0.1 &&
-                         _lPOGLoose[i];
-                         // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-    }
+    if(_lFlavor[i] != 0)            return false;
+    if(fabs(_lEta[i]) > 2.5)        return false;
+    if(_lPt[i] < 7)                 return false;
+    if(!_lPOGLoose[i])              return false;
+    if(!_lElectronPassConvVeto[i])  return false;
+
+    return true;
 }
 
-//void full_analyzer::get_muonID(bool* ID)
+bool full_analyzer::IsDisplacedElectronID(const unsigned i)  //basically medium POG cut-based ID without displacement interfering requirements
+{
+    if(_lFlavor[i] != 0)            return false;
+    if(fabs(_lEta[i]) > 2.5)        return false;
+    if(_lPt[i] < 7)                 return false;
+    if(fabs(_dxy[i]) < 0.02)        return false;
+    if(!_lElectronPassConvVeto[i])  return false;
+    if(!( (_lElectronIsEB[i] &&
+         _lElectronSigmaIetaIeta[i] <= 0.11 &&
+         _lElectronDEtaInSeed[i] <= 0.00477 &&
+         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.222 &&
+         _lElectronHOverE[i] <= 0.298 &&
+         _lElectronEInvMinusPInv[i] <= 0.241)
+        ||
+        (_lElectronIsEE[i] &&
+         _lElectronSigmaIetaIeta[i] <= 0.0314 &&
+         _lElectronDEtaInSeed[i] <= 0.00868 &&
+         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.213 &&
+         _lElectronHOverE[i] <= 0.101 &&
+         _lElectronEInvMinusPInv[i] <= 0.14)
+    )) return false;
+
+    return true;
+}
+
+//bool full_analyzer::IsPromptMuonID(const unsigned i)
 //{
-//    for(unsigned i = 0; i < _nL; ++i){
-//	    bool fullID = 	_lFlavor[i] == 1 &&
-//			            fabs(_lEta[i]) < 2.4 &&
-//			            _lPt[i] > 5 &&
-//			            fabs(_dxy[i]) < 0.05 &&
-//			            fabs(_dz[i])  < 0.1 &&
-//			            _3dIPSig[i]   < 4 &&
-//			            _relIso[i]    < 0.1 &&
-//                        _lPOGTight[i]; //move to MVA of TTH as soon as others caught up
-//			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
-//	    if(fullID) *(ID + i) = true;
-//	    else *(ID + i) = false;
-//    }
+//    if(_lFlavor[i] != 1)        return false;
+//    if(fabs(_lEta[i]) > 2.4)    return false;
+//    if(_lPt[i] < 5)             return false;
+//    if(fabs(_dxy[i]) > 0.05)    return false;
+//    if(fabs(_dz[i])  > 0.1)     return false;
+//    if(_3dIPSig[i]   > 8)       return false;
+//    if(_miniIso[i]    > 0.4)    return false;
+//    if(_leptonMvaTTH[i] < 0.85) return false;
+//    if(!_lPOGMedium[i])         return false;
+//    if(_is2016 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2016()) return false;
+//    if(_is2017 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2017()) return false;
+//    if(_is2018 and _closestJetDeepFlavor[i] > bTagWP::mediumDeepFlavor2018()) return false;
+//    // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
+//
+//    return true;
 //}
 
-void full_analyzer::get_clean_ele(bool* cleaned, bool* muonID)
-{
-    // The array cleaned will contain value true when the electron is not within dR < 0.05 around a muon
-    for(unsigned i_el = 0; i_el < _nL; ++i_el){
-	    *(cleaned + i_el) = true;
-	    if(_lFlavor[i_el] != 0) continue;
-	    LorentzVector electron(_lPt[i_el], _lEta[i_el], _lPhi[i_el], _lE[i_el]);
 
-	    for(unsigned i_mu = 0; i_mu < _nL; ++i_mu){
-	        if(_lFlavor[i_mu] == 1 && *(muonID + i_mu)){
-                LorentzVector muon(_lPt[i_mu], _lEta[i_mu], _lPhi[i_mu], _lE[i_mu]);
-                if(deltaR(electron, muon) < 0.05) *(cleaned + i_el) = false;
-	        }
-	    }
-    }
+bool full_analyzer::IsLooseMuonID(const unsigned i)
+{
+    if(_lFlavor[i] != 1) return false;
+    if(fabs(_lEta[i]) > 2.4) return false;
+    if(_lPt[i] < 5) return false;
+    if(!_lPOGLoose[i]) return false;
+
+    return true;
 }
 
-
-
-
-int full_analyzer::find_leading_e(bool* electronID, bool* ele_clean)
+bool full_analyzer::IsDisplacedMuonID(const unsigned i)
 {
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if(!*(electronID + i)) continue;
-	    if(!*(ele_clean + i))  continue;
-	    //if(_lPt[i] < 30)       continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
-    }
-    return index_good_leading;
+    bool goodglobalmuon =   _lGlobalMuon[i] &&
+                            _lGlobalTrackNormalizedChi2[i] < 3 &&
+                            _lCQChi2Position[i] < 12 &&
+                            _lCQTrackKink[i] < 20;
+
+    if(_lFlavor[i] != 1)                                return false;
+    if(fabs(_lEta[i]) > 2.4)                            return false;
+    if(_lPt[i] < 5)                                     return false;
+    if(fabs(_dxy[i]) < 0.02)                            return false;
+    if(!_lPOGLoose[i])                                  return false;
+    if(_lMuonSegComp[i] < 0.303)                        return false;
+    if(_lMuonSegComp[i] < 0.451 and !goodglobalmuon)    return false;
+
+    return true;
 }
 
-int full_analyzer::find_leading_mu(bool* muonID)
+bool full_analyzer::IsCleanElectron(const unsigned i, const std::vector<unsigned>& muoncollection)
 {
-    int index_good_leading = -1;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if(!*(muonID + i))   continue;
-	    //if(_lPt[i] < 25)     continue;
-	    if(index_good_leading == -1) index_good_leading = i;
-	    if(_lPt[i] > _lPt[index_good_leading]) index_good_leading = i;
+    if(_lFlavor[i] != 0) return false;
+	LorentzVector electron(_lPt[i], _lEta[i], _lPhi[i], _lE[i]);
+
+    for(const auto& i_muon : muoncollection){
+        LorentzVector muon(_lPt[i_muon], _lEta[i_muon], _lPhi[i_muon], _lE[i_muon]);
+
+        if(deltaR(electron, muon) < 0.05) return false;
     }
-    return index_good_leading;
+
+    return true;
 }
 
-
-int full_analyzer::find_subleading_e(bool* electronID, bool* ele_clean, int index_good_leading)
+int full_analyzer::find_leading_lepton(const std::vector<unsigned>& leptoncollection)
 {
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if((int)i == index_good_leading) continue;
-	    if(!*(electronID + i))      continue;
-	    if(!*(ele_clean + i))       continue;
-	    if(_lPt[i] < 7)             continue;
-        if(_lPt[i] > _lPt[index_good_leading]) continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
+    int index_leading = -1;
+
+    for(const auto& index_lepton : leptoncollection){
+        if(index_leading == -1) index_leading = (int)index_lepton;
+        else if(_lPt[index_lepton] > _lPt[index_leading]) index_leading = (int)index_lepton;
     }
-    return index_good_subleading;
+
+    return index_leading;
 }
 
-int full_analyzer::find_subleading_mu(bool* muonID, int index_good_leading)
+int full_analyzer::find_subleading_lepton(const std::vector<unsigned>& leptoncollection, const int index_leading)
 {
-    int index_good_subleading = -1;
-    if(index_good_leading == -1) return index_good_subleading;
-    for(unsigned i = 0; i < _nL; ++i){
-	    if((int)i == index_good_leading) continue;
-	    if(!*(muonID + i))          continue;
-	    if(_lPt[i] < 5)             continue;
-        if(_lPt[i] > _lPt[index_good_leading]) continue;
-	    if(index_good_subleading == -1) index_good_subleading = i;
-	    if(_lPt[i] > _lPt[index_good_subleading]) index_good_subleading = i;
-    }
-    return index_good_subleading;
-}
+    if(index_leading == -1) return -1;
+    int index_subleading = -1;
 
+    for(const auto& index_lepton : leptoncollection){
+        if((int)index_lepton == index_leading) continue;
+
+        if(index_subleading == -1) index_subleading = (int)index_lepton;
+        else if(_lPt[index_lepton] > _lPt[index_subleading]) index_subleading = (int)index_lepton;
+    }
+
+    return index_subleading;
+}
 
 int full_analyzer::find_gen_lep(int i_lep)
 {
@@ -264,65 +294,10 @@ double full_analyzer::get_lsource(int i_gen_lep)
     }
 }
 
-double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_IVF_SVgenreco_2D(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_IVF_PVSVdist(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton]) + (_PV_z - _IVF_z[i_lepton])*(_PV_z - _IVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_IVF_PVSVdist_2D(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_SVgenreco(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_SVgenreco_2D(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_PVSVdist(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton]) + (_PV_z - _lKVF_z[i_lepton])*(_PV_z - _lKVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_PVSVdist_2D(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_PVSVdist_gen(int i_gen_l){
-    if(i_gen_l == -1) return -1; 
-    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]) + (_gen_Nvertex_z - _gen_vertex_z[i_gen_l])*(_gen_Nvertex_z - _gen_vertex_z[i_gen_l]));
-}
-
-double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
-    if(i_gen_l == -1) return -1; 
-    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
-}
-
-double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu){
-    double lsf = 1.;
-    if(i_leading != -1){
-        if(_lFlavor[i_leading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_leading], _lEta[i_leading]);
-        else if(_lFlavor[i_leading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_leading], _lEta[i_leading]);
-    }
-    if(i_subleading != -1){
-        if(_lFlavor[i_subleading] == 0) lsf *= lsfreader_e.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-        else if(_lFlavor[i_subleading] == 1) lsf *= lsfreader_mu.get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-    }
-    return lsf;
+double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i){
+    if(i == -1) return 1.;
+    if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEta[i]);
+    else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i]);
+    std::cout << "wrong lepton flavor, returning 1 for scale factor. flavor: " << _lFlavor[i] << std::endl;
+    return 1.;
 }

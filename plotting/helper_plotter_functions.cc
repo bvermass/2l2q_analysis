@@ -1,18 +1,33 @@
 #include "helper_plotter_functions.h"
 
-
 // CMSandluminosity class functions
-CMSandLuminosity::CMSandLuminosity(TPad* pad):
+CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018):
     CMStext( "#bf{CMS} #scale[0.8]{#it{Preliminary}}" )
-    , lumitext( "59.69 fb^{-1} (13 TeV)" )
     , leftmargin( pad->GetLeftMargin() )
     , topmargin( pad->GetTopMargin() )
     , rightmargin( pad->GetRightMargin() )
     , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
     , lumilatex( get_latex(0.6*topmargin, 31, 42) )
-{}
+{
+    if((is2016 and is2017) or (is2016 and is2018) or (is2017 and is2018) or (!is2016 and !is2017 and !is2018)){
+        std::cout << "not clear which year to use for lumi info" << std::endl;
+        lumitext = "(13 TeV)";
+    }
+    else if(is2016) lumitext = "35.92 fb^{-1} (13 TeV)";
+    else if(is2017) lumitext = "41.53 fb^{-1} (13 TeV)";
+    else if(is2018) lumitext = "59.74 fb^{-1} (13 TeV)";
+    else lumitext = "(13 TeV)";
+}
 
 CMSandLuminosity::~CMSandLuminosity(){}
+
+void CMSandLuminosity::change_CMStext(TString new_text){
+    CMStext = new_text;
+}
+
+void CMSandLuminosity::change_lumitext(TString new_text){
+    lumitext = new_text;
+}
 
 void CMSandLuminosity::Draw()
 {
@@ -21,7 +36,6 @@ void CMSandLuminosity::Draw()
 }
 
 
-// functions for all use
 std::vector<std::vector<TString>> get_identifiers(TString identifier_filename, const char* delim)
 {
     std::string line;
@@ -69,8 +83,14 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
         specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
         if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
-        else if(filename.Index("Background") != -1) specific_dir += filename(filename.Index("Background") + 11, filename.Index(".root") - filename.Index("Background") - 11) + "/";
-        else if(filename.Index("Run") != -1) specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run")) + "/";
+        else if(filename.Index("Run") != -1){
+            specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
+            if(filename.Contains("Muon")) specific_dir += "_mm/";
+            else if(filename.Contains("Electron")) specific_dir += "_ee/";
+            else specific_dir += "/";
+        }
+        else if(filename.Index("hists_full_analyzer") != -1) specific_dir += filename(filename.Index("hists_full_analyzer") + 20, filename.Index(".root") - filename.Index("hists_full_analyzer") - 20) + "/";
+        else if(filename.Index("hists_mini_analyzer") != -1) specific_dir += filename(filename.Index("hists_mini_analyzer") + 20, filename.Index(".root") - filename.Index("hists_mini_analyzer") - 20) + "/";
     }
 
     return "/user/bvermass/public_html/MET_scale_resolution/" + plottype + specific_dir;
@@ -79,27 +99,76 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
 
 TString make_plotspecific_pathname(const TString& histname, const TString& pathname, const TString& linorlog)
 {
-    // append directories such as SS/OS, e/mu or HLT to pathname
-    TString gen             = (histname.Index("gen_") == -1)?           "" : "gen/";
-    TString lflavor         = get_lflavor(histname);
-    TString SSorOS          = (histname.Index("_OS_") == -1)? ((histname.Index("_SS_") == -1)? "" : "SS/") : "OS/";
-    TString HLT             = (histname.Index("HLT_") == -1)?           "" : "HLT/";
-    TString control_region  = (histname.Index("_CR") == -1)?            "" : "CR/";
-    TString signal_region   = (histname.Index("_SR") == -1)?            "" : "SR/";
-    TString partialcuts     = (histname.Index("before") == -1 && histname.Index("after") == -1 && histname.Index("_Training") == -1)?         "" : "partialcuts/";
-    TString MV2             = (histname.Index("_M-") != -1 and histname.Index("_V2-") != -1)? (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/" : "";
-    TString KVF             = (histname.Index("_KVF_") == -1)?          "" : "KVF/";
-    TString IVF             = (histname.Index("_IVF_") == -1)?          "" : "IVF/";
-    TString jetl2           = (histname.Index("_jetl2_") == -1)?        "" : "jetl2/";
-    TString oldID           = (histname.Index("_oldID_") == -1)?        "" : "oldID/";
-    TString invVtx          = (histname.Index("_invVtx_") == -1)?       "" : "invVtx/";
-    TString eff             = (histname.Index("_eff") == -1)?           "" : "eff/";
-    TString invIVFSVgenreco = (histname.Index("_invIVFSVgenreco") == -1)? "" : "invIVFSVgenreco/";
-    TString endofselection  = (histname.Index("_endofselection_") == -1)? "" : "endofselection/";
-    TString Bool            = (histname.Index("_Bool_") == -1)? "" : "Bool/";
+    TString fullname = pathname + linorlog;
 
-    TString fullname = pathname + linorlog + gen + HLT + lflavor + SSorOS + Bool + control_region + signal_region + partialcuts + MV2 + KVF + IVF + jetl2 + oldID + invVtx + eff + invIVFSVgenreco + endofselection;
+    if(histname.Contains("gen_"))               fullname += "gen/";
+    if(histname.Contains("HLT_"))               fullname += "HLT/";
+    fullname += get_lflavor(histname);
+    if(histname.Contains("_OS_"))               fullname += "OS/";
+    else if(histname.Contains("_SS_"))          fullname += "SS/";
+    if(histname.Contains("_Bool_"))             fullname += "Bool/";
+    if(histname.Contains("_CR"))                fullname += "CR/";
+    if(histname.Contains("_SR"))                fullname += "SR/";
+    if(histname.Contains("_2prompt"))           fullname += "2prompt/";
+    if(histname.Contains("_TooFar"))            fullname += "TooFar/";
+
+    //related to ABCD method
+    if(histname.Contains("cutphill_"))          fullname += "ABCDwithDeltaPhi/";
+    if(histname.Contains("cutmll_"))            fullname += "ABCDwithmll/";
+    if(histname.Contains("cutphiORmll_"))       fullname += "ABCDwithDeltaPhiORmll/";
+    if(histname.Contains("cutmlSV_"))           fullname += "ABCDwithmlSV/";
+    if(histname.Contains("cutCR1mlSV_"))        fullname += "ABCDwithCR1mlSV/";
+    if(histname.Contains("cutCR2mlSV_"))        fullname += "ABCDwithCR2mlSV/";
+    if(histname.Contains("cutCR3mlSV_"))        fullname += "ABCDwithCR3mlSV/";
+    if(histname.Contains("cutCR1phill_"))       fullname += "ABCDwithCR1phill/";
+    if(histname.Contains("cutCR2phill_"))       fullname += "ABCDwithCR2phill/";
+    if(histname.Contains("cutCR3phill_"))       fullname += "ABCDwithCR3phill/";
+    if(histname.Contains("cutTightphill_"))     fullname += "ABCDwithTightDeltaPhi/";
+    if(histname.Contains("cutTightmll_"))       fullname += "ABCDwithTightmll/";
+    if(histname.Contains("cutTightphiORmll_"))  fullname += "ABCDwithTightDeltaPhiORmll/";
+    if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
+    if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
+    if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
+    if(histname.Contains("cutTightCR2phill_"))  fullname += "ABCDwithTightCR2phill/";
+    if(histname.Contains("cutTightCR3phill_"))  fullname += "ABCDwithTightCR3phill/";
+    if(histname.Contains("cutAll_"))            fullname += "ABCDwithAllmethods/";
+    if(histname.Contains("cutTightAll_"))       fullname += "ABCDwithAllTightmethods/";
+    if(histname.Contains("quadA_"))             fullname += "quadA/";
+    if(histname.Contains("quadB_"))             fullname += "quadB/";
+    if(histname.Contains("quadC_"))             fullname += "quadC/";
+    if(histname.Contains("quadD_"))             fullname += "quadD/";
+    if(histname.Contains("quadAB_"))            fullname += "quadAB/";
+    if(histname.Contains("quadAC_"))            fullname += "quadAC/";
+    if(histname.Contains("quadCD_"))            fullname += "quadCD/";
+    if(histname.Contains("quadBD_"))            fullname += "quadBD/";
+    if(histname.Contains("quadABCD_"))          fullname += "quadABCD/";
+    if(histname.Contains("quadBCD_"))           fullname += "quadBCD/";
+    if(histname.Contains("quadAB-CD_"))         fullname += "quadAB-CD/";
+    if(histname.Contains("quadAC-BD_"))         fullname += "quadAC-BD/";
+    if(histname.Contains("quadA-B_"))           fullname += "quadA-B/";
+    if(histname.Contains("quadA-C_"))           fullname += "quadA-C/";
+    if(histname.Contains("quadC-D_"))           fullname += "quadC-D/";
+    if(histname.Contains("AoverB_"))            fullname += "AoverB/";
+    if(histname.Contains("CoverD_"))            fullname += "CoverD/";
+    if(histname.Contains("BoverD_"))            fullname += "BoverD/";
+    if(histname.Contains("DtoCwithCD_"))        fullname += "DtoCwithCD/";
+    if(histname.Contains("BtoAwithCD_"))        fullname += "BtoAwithCD/";
+    if(histname.Contains("CtoAwithBD_"))        fullname += "CtoAwithBD/";
+    if(histname.Contains("quadAwithBtoA_"))     fullname += "quadAwithBtoA/";
+    if(histname.Contains("quadCwithDtoC_"))     fullname += "quadCwithDtoC/";
+
+    if(histname.Contains("before") or histname.Contains("after") or histname.Contains("_Training")) fullname += "partialcuts/";
+    if(histname.Contains("_M-") and histname.Contains("_V2-")) fullname += (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/";
+    if(histname.Contains("_KVF_"))              fullname += "KVF/";
+    if(histname.Contains("_IVF_"))              fullname += "IVF/";
+    if(histname.Contains("_jetl2_"))            fullname += "jetl2/";
+    if(histname.Contains("_oldID_"))            fullname += "oldID/";
+    if(histname.Contains("_invVtx_"))           fullname += "invVtx/";
+    if(histname.Contains("_eff"))               fullname += "eff/";
+    if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
+
     gSystem->Exec("mkdir -p " + fullname);
+    //gSystem->Exec("cp /user/bvermass/public_html/index.php " + fullname);
     return fullname;
 }
 
@@ -270,7 +339,7 @@ double computeAUC(TGraph* roc)
     return  fabs(round(area*10000)/100);
 }
 
-void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff)
+void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname)
 {
     double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;
     for(int j = eff_signal.size() -1;  j >= 0; j--){
@@ -285,12 +354,22 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
             break;
         }
     }
-    std::cout << " \\item Sig " << cp_eff_signal*100 << "\\% (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
-    std::cout << "Bkg " << cp_eff_bkg*100 << "\\% (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
-    std::cout << "PFN output > " << cp << std::endl;
-    //std::cout << " \\item Sig " << cp_eff_signal << "+-" << sqrt(cp_eff_signal_unc)/hist_signal->Integral() << " (" << cp_eff_signal_unc << " events)\\\\" << std::endl;
-    //std::cout << "Bkg " << cp_eff_bkg << "+-" << sqrt(cp_eff_bkg_unc)/hist_bkg->Integral() << " (" << cp_eff_bkg_unc << " events)\\\\" << std::endl;
-    //std::cout << "PFN output > " << cp << std::endl;
+    std::ostringstream eff_signal_stream;
+    eff_signal_stream << round(cp_eff_signal*10000)/100;
+    std::ostringstream eff_bkg_stream;
+    eff_bkg_stream << round(cp_eff_bkg*10000)/100;
+    std::ostringstream eff_signal_unc_stream;
+    eff_signal_unc_stream << round(cp_eff_signal_unc*10000)/100;
+    std::ostringstream eff_bkg_unc_stream;
+    eff_bkg_unc_stream << round(cp_eff_bkg_unc*10000)/100;
+    std::ostringstream eff_cp_stream;
+    eff_cp_stream << round(cp*100)/100;
+
+    std::string content = (std::string)histname + "\n";
+    content += "\\item Sig " + eff_signal_stream.str() + "\\% (" + eff_signal_unc_stream.str() + " events)\\\\\n";
+    content += "Bkg " + eff_bkg_stream.str() + "\\% (" + eff_bkg_unc_stream.str() + " events)\\\\\n";
+    content += "PFN output > " + eff_cp_stream.str() + "\n\n";
+    filePutContents((std::string)general_pathname + "Signal_Bkg_Yields.txt", content, true);
 }
 
 // 2D histograms
@@ -302,9 +381,8 @@ TString get_2D_draw_options(TH2F* h)
     else return "colz text";
 }
 
-void alphanumeric_labels(TH2F* hist)
+void alphanumeric_labels_2D(TH2F* hist, TString histname)
 {
-    TString histname = hist->GetName();
     if(histname.Index("lsources") != -1){
         const char* labels[14] = {"und.", "mis.", "Z", "W", "t", "b", "c", "uds", "g", "phot", "tau", "mu", "e", "HNL"};
         for(int i = 1; i <= 14; i++){
@@ -324,6 +402,36 @@ void alphanumeric_labels(TH2F* hist)
         for(int i = 1; i <= 5; i++){
             hist->GetXaxis()->SetBinLabel(i, labels[i-1]);
             hist->GetYaxis()->SetBinLabel(i, labels[i-1]);
+        }
+    }
+    if(histname.Contains("l2provCompressedvsConversion")){
+        const char* labely[4] = {"prompt", "fragmentation", "non-prompt", "not photon"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[5] = {"prompt", "b", "c", "fake", "unknown"};
+        for(int i = 1; i <= 5; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
+        }
+    }
+    if(histname.Contains("_QuadFractions_2D")){
+        const char* labely[4] = {"A", "B", "C", "D"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
+        }
+    }
+    if(histname.Contains("_QuadFractions2_2D")){
+        const char* labely[4] = {"A", "B", "C", "D"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetYaxis()->SetBinLabel(i, labely[i-1]);
+        }
+        const char* labelx[4] = {"L_{xy}<10", "L_{xy}>10"};
+        for(int i = 1; i <= 4; i++){
+            hist->GetXaxis()->SetBinLabel(i, labelx[i-1]);
         }
     }
 }

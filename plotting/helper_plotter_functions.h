@@ -4,6 +4,7 @@
 // c++ libraries
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cmath>
 #include <string>
 
@@ -24,12 +25,15 @@
 #include <TF1.h>
 
 // other header files
+#include "../interface/helper_histo_functions.h"
 
 // class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
 class CMSandLuminosity{
     public:
-        CMSandLuminosity(TPad* pad);
+        CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018);
         ~CMSandLuminosity();
+        void change_CMStext(TString new_text);
+        void change_lumitext(TString new_text);
         void Draw();
     private:
         TString CMStext;
@@ -58,10 +62,29 @@ double      get_eFWHM(TF1* function, double FWHM, double newparameter2);
 void        draw_profiles(TCanvas* c, TPad* pad, std::vector<TProfile*> profiles, TString plottitle, TLegend* legend, TString xaxistitle, TString yaxistitle, CMSandLuminosity* CMSandLumi);
 std::vector< double > computeEfficiencyForROC(TH1F* hist);
 double      computeAUC(TGraph* roc);
-void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff);
+void        computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname);
 
 // 2D histograms
 TString     get_2D_draw_options(TH2F* h);
-void        alphanumeric_labels(TH2F* hist);
+void        alphanumeric_labels_2D(TH2F* hist, TString histname);
+
+// template functions are put entirely in the header
+template <typename T>
+void alphanumeric_labels(T hist, TString histname)
+{
+    if(histname.Contains("SRShape2")){
+        const char* xlabels_SRShape[2] = {"L_{xy}<10", "L_{xy}>10"};
+        for(int i = 0; i < 2; i++) hist->GetXaxis()->SetBinLabel(i+1, xlabels_SRShape[i]);
+    }
+    else if(histname.Contains("SRShape")){
+        const char* xlabels_SRShape[4] = {"#splitline{M_{SV}<4}{L_{xy}<10}", "#splitline{M_{SV}<4}{L_{xy}>10}", "#splitline{M_{SV}>4}{L_{xy}<10}", "#splitline{M_{SV}>4}{L_{xy}>10}"};
+        for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, xlabels_SRShape[i]);
+    }
+    else if(histname.Contains("QuadFractions")){
+        const char *quadfractions_labels[4] = {"A", "B", "C", "D"};
+        for(int i = 0; i < 4; i++) hist->GetXaxis()->SetBinLabel(i+1, quadfractions_labels[i]);
+    }
+}
+
 
 #endif

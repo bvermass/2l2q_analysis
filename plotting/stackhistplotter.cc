@@ -18,28 +18,33 @@ int main(int argc, char * argv[])
     std::vector<TFile*>  files_signal;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
-    TString RunId;
-    for(int i = i_rootfiles; i < i_legends; i++){
-        TString filename = (TString)argv[i];
-        if(filename.Index("_HeavyNeutrino_lljj_") != -1) files_signal.push_back(TFile::Open(filename));
-        else if(filename.Index("_Background_") != -1) files_bkg.push_back(TFile::Open(filename));
-        else if(filename.Index("_Run201") != -1){ 
-            files_data.push_back(TFile::Open(filename));
-            if(filename.Index("_Run2018A") != -1) RunId = "Run2018A";
-            else if(filename.Index("_Run2018B") != -1) RunId = "Run2018B";
-            else if(filename.Index("_Run2018C") != -1) RunId = "Run2018C";
-            else if(filename.Index("_Run2018D") != -1) RunId = "Run2018D";
-            else if(filename.Index("_Run2018") != -1)  RunId = "Run2018";
-        }
-    }
     std::vector<TString> legends_signal;
     std::vector<TString> legends_bkg;
     std::vector<TString> legends_data;
-    for(int i = i_legends; i < argc; i++){
-        TString legendname = (TString)argv[i];
-        if(legendname.Index("HNL") != -1) legends_signal.push_back(adjust_legend(legendname));
-        else if(legendname.Index("201") != -1 or legendname.Index("Data") != -1 or legendname.Index("data") != -1) legends_data.push_back(adjust_legend(legendname));
-        else legends_bkg.push_back(adjust_legend(legendname));
+    bool is_mini_analyzer = false;
+    bool is2016 = false, is2017 = false, is2018 = false;
+    for(int i = 0; i < argc - i_legends; i++){
+        TString filename = (TString)argv[i_rootfiles + i];
+        TString legendname = (TString)argv[i_legends + i];
+
+        if(legendname.Contains("HNL")){
+            files_signal.push_back(TFile::Open(filename));
+            legends_signal.push_back(adjust_legend(legendname));
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data") or legendname.Contains("pred")){
+            files_data.push_back(TFile::Open(filename));
+            legends_data.push_back(adjust_legend(legendname));
+        }else {
+            files_bkg.push_back(TFile::Open(filename));
+            legends_bkg.push_back(adjust_legend(legendname));
+        }
+
+        if(filename.Contains("hists_mini_analyzer")){
+            is_mini_analyzer = true;
+        }
+
+        if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
+        else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
+        else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
     }
 
     // determine whether the samplelist wants plotting with data, signal or without
@@ -80,14 +85,10 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, 3);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "59.69 fb^{-1} (13 TeV)";
-    lumitext = get_correct_lumitext(RunId, lumitext);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018);
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
     float rightmargin = pad_histo->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
 
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
@@ -122,12 +123,18 @@ int main(int argc, char * argv[])
                 if(histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
                 if(!check_identifiers(histname, identifiers)) continue;
+                std::cout << histname << std::endl;
 
                 // get data histogram and fill legend
                 TH1F* data_hist;
-                if(withdata){ 
-                    data_hist = (TH1F*) files_data[0]->Get(histname);
-                    //if(histname.Index("_CR") == -1 and histname.Index("_Training_") == -1) continue; // Only print Control region plots for data or Training region with high background
+                if(withdata){
+                    TString histname_BtoA = histname;
+                    if(histname.Contains("_quadA_")){
+                        histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                    }
+                    data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
+                    //if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
+                    if(histname.Contains("JetTagVal")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
@@ -145,6 +152,7 @@ int main(int argc, char * argv[])
                         legend.AddEntry(hist, legends_bkg[i], "f");
                     }
                 }
+                if(hists_bkg->GetMaximum() <= 0) continue;
                 
                 // get signal histograms and fill legend
                 THStack* hists_signal = new THStack("stack_signal", "");
@@ -154,11 +162,19 @@ int main(int argc, char * argv[])
                         if(hist->GetMaximum() > 0){
                             int color = get_color(legends_signal[i]);
                             hist->SetLineColor(color);
+                            hist->SetLineStyle(2);
+                            hist->SetLineWidth(3);
                             hists_signal->Add(hist);
                             legend.AddEntry(hist, legends_signal[i], "l");
                         }
                     }
                 }
+
+                // get summed background as a single histogram to draw error bands
+                TH1F* bkgForError = (TH1F*) hists_bkg->GetStack()->Last()->Clone();
+                bkgForError->SetFillStyle(3244);
+                bkgForError->SetFillColor(kGray+2);
+                bkgForError->SetMarkerStyle(0);
 
                 // set ratio of data/MC
                 if(withdata){
@@ -194,14 +210,15 @@ int main(int argc, char * argv[])
                 pad_histo->SetLogy(0);
 
                 hists_bkg->Draw("hist");
+                bkgForError->Draw("e2 same");
                 if(withdata) hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+                if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 hists_bkg->SetMinimum(0.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
                 
                 pad_histo->Modified();
 
@@ -217,14 +234,15 @@ int main(int argc, char * argv[])
                 pad_histo->SetLogy(1);
 
                 hists_bkg->Draw("hist");
+                bkgForError->Draw("e2 same");
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 hists_bkg->SetMinimum(0.01);
+                if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
                 
                 pad_histo->Modified();
 
@@ -266,8 +284,7 @@ int main(int argc, char * argv[])
                     multigraph->SetMaximum(1.25);
 
                     legend.Draw("same");
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                    CMSandLumi->Draw();
 
                     pad_histo->Modified();
                     c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");

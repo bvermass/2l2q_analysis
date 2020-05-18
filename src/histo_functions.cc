@@ -10,7 +10,7 @@ using namespace std;
 
 
 void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
-    add_general_histograms(hists, hists2D, prefix);
+    add_general_histograms(hists, prefix);
     //add_jet_histograms(hists, prefix);
     //add_gen_histograms(hists, prefix);
     //add_KVF_eff_histograms(hists, prefix);
@@ -21,14 +21,14 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
 }
 
 
-void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
+void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, TString prefix){
     // Plotting histograms
     //(*hists)[prefix+"_l2_jets_categories"]              = new TH1F(prefix+"_l2_jets_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_jets_categories"]                 = new TH1F(prefix+"_jets_categories", ";;Events", 4, 0, 4);
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
-    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 6, 0, 6);
+    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
     (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
     //(*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
 
@@ -62,18 +62,8 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_Zpeak"]                           = new TH1F(prefix+"_Zpeak", ";On-Z;Events", 1, 0, 1);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 30, 0, 3.14);
     (*hists)[prefix+"_dRll"]                            = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 30, 0, 6);
-    (*hists)[prefix+"_l1_IVF_match"]                    = new TH1F(prefix+"_l1_IVF_match", ";l1 IVF match (IVF);Events", 2, 0, 2);
-    (*hists)[prefix+"_l2_IVF_match"]                    = new TH1F(prefix+"_l2_IVF_match", ";l2 IVF match (IVF);Events", 2, 0, 2);
     (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N_{PV}^{gen};Events", 100, 0, 100);
     
-    (*hists)[prefix+"_IVF_normchi2"]                    = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2} (IVF);Events", 30, 0, 10);
-    (*hists)[prefix+"_IVF_PV-SVdxy"]                    = new TH1F(prefix+"_IVF_PV-SVdxy", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 60);
-    (*hists)[prefix+"_IVF_PV-SVdxy_zoom"]               = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 20);
-    (*hists)[prefix+"_IVF_PV-SVdxyz"]                   = new TH1F(prefix+"_IVF_PV-SVdxyz", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 100);
-    (*hists)[prefix+"_IVF_PV-SVdxyz_zoom"]              = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 20);
-    (*hists)[prefix+"_IVF_ntracks"]                     = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit (IVF);Events", 15, 0, 15);
-    (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV] (IVF);Events", 30, 0, 10);
-
     if(extensive_plots){
         (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, 0, 3.14);
         (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, 0, 3.14);
@@ -81,14 +71,14 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
         (*hists)[prefix+"_l1_3dIP"]                         = new TH1F(prefix+"_l1_3dIP", ";l_{1} 3dIP;Events", 30, 0, 0.02);
         (*hists)[prefix+"_l2_3dIP"]                         = new TH1F(prefix+"_l2_3dIP", ";l_{2} 3dIP;Events", 30, 0, 0.5);
 
-        (*hists)[prefix+"_dRl2jet1_cl"]                     = new TH1F(prefix+"_dRl2jet1_cl", ";#it{#Delta R}(l_{2},jet_{1}^{cl});Events", 30, 0, 6);
-        (*hists)[prefix+"_dRl2jet2_cl"]                     = new TH1F(prefix+"_dRl2jet2_cl", ";#it{#Delta R}(l_{2},jet_{2}^{cl});Events", 30, 0, 6);
-        (*hists)[prefix+"_dRjet1jet2_cl"]                   = new TH1F(prefix+"_dRjet1jet2_cl", ";#it{#Delta R}(jet_{1}^{cl},jet_{2}^{cl});Events", 30, 0, 6);
-        (*hists2D)[prefix+"_dRl2jet1_2_cl"]                 = new TH2F(prefix+"_dRl2jet1_2_cl", ";#it{#Delta R}(l_{2}, jet_{1}^{cl});#it{#Delta R}(l_{2}, jet_{2}^{cl})", 30, 0, 6, 30, 0, 6);
-        (*hists)[prefix+"_dRl2jet1_uncl"]                   = new TH1F(prefix+"_dRl2jet1_uncl", ";#it{#Delta R}(l_{2},jet_{1}^{uncl});Events", 30, 0, 6);
-        (*hists)[prefix+"_dRl2jet2_uncl"]                   = new TH1F(prefix+"_dRl2jet2_uncl", ";#it{#Delta R}(l_{2},jet_{2}^{uncl});Events", 30, 0, 6);
-        (*hists)[prefix+"_dRjet1jet2_uncl"]                 = new TH1F(prefix+"_dRjet1jet2_uncl", ";#it{#Delta R}(jet_{1}^{uncl},jet_{2}^{uncl});Events", 30, 0, 6);
-        (*hists2D)[prefix+"_dRl2jet1_2_uncl"]               = new TH2F(prefix+"_dRl2jet1_2_uncl", ";#it{#Delta R}(l_{2}, jet_{1}^{uncl});#it{#Delta R}(l_{2}, jet_{2}^{uncl})", 30, 0, 6, 30, 0, 6);
+        //(*hists)[prefix+"_dRl2jet1_cl"]                     = new TH1F(prefix+"_dRl2jet1_cl", ";#it{#Delta R}(l_{2},jet_{1}^{cl});Events", 30, 0, 6);
+        //(*hists)[prefix+"_dRl2jet2_cl"]                     = new TH1F(prefix+"_dRl2jet2_cl", ";#it{#Delta R}(l_{2},jet_{2}^{cl});Events", 30, 0, 6);
+        //(*hists)[prefix+"_dRjet1jet2_cl"]                   = new TH1F(prefix+"_dRjet1jet2_cl", ";#it{#Delta R}(jet_{1}^{cl},jet_{2}^{cl});Events", 30, 0, 6);
+        //(*hists2D)[prefix+"_dRl2jet1_2_cl"]                 = new TH2F(prefix+"_dRl2jet1_2_cl", ";#it{#Delta R}(l_{2}, jet_{1}^{cl});#it{#Delta R}(l_{2}, jet_{2}^{cl})", 30, 0, 6, 30, 0, 6);
+        //(*hists)[prefix+"_dRl2jet1_uncl"]                   = new TH1F(prefix+"_dRl2jet1_uncl", ";#it{#Delta R}(l_{2},jet_{1}^{uncl});Events", 30, 0, 6);
+        //(*hists)[prefix+"_dRl2jet2_uncl"]                   = new TH1F(prefix+"_dRl2jet2_uncl", ";#it{#Delta R}(l_{2},jet_{2}^{uncl});Events", 30, 0, 6);
+        //(*hists)[prefix+"_dRjet1jet2_uncl"]                 = new TH1F(prefix+"_dRjet1jet2_uncl", ";#it{#Delta R}(jet_{1}^{uncl},jet_{2}^{uncl});Events", 30, 0, 6);
+        //(*hists2D)[prefix+"_dRl2jet1_2_uncl"]               = new TH2F(prefix+"_dRl2jet1_2_uncl", ";#it{#Delta R}(l_{2}, jet_{1}^{uncl});#it{#Delta R}(l_{2}, jet_{2}^{uncl})", 30, 0, 6, 30, 0, 6);
 
         //(*hists)[prefix+"_KVF_chi2"]                        = new TH1F(prefix+"_KVF_chi2", ";#Chi^{2} (KVF);Events", 100, 0, 200);
         //(*hists)[prefix+"_KVF_normchi2"]                    = new TH1F(prefix+"_KVF_normchi2", ";Normalized #Chi^{2} (KVF);Events", 100, 0, 200);
@@ -104,30 +94,6 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
         //(*hists)[prefix+"_KVF_dRcut"]                       = new TH1F(prefix+"_KVF_dRcut", ";dR cone size (KVF);Events", 11, 0, 1.1);
         
 
-        (*hists)[prefix+"_IVF_chi2"]                        = new TH1F(prefix+"_IVF_chi2", ";#Chi^{2} (IVF);Events", 30, 0, 10);
-        (*hists)[prefix+"_IVF_normchi2_zoom"]               = new TH1F(prefix+"_IVF_normchi2_zoom", ";Normalized #Chi^{2} (IVF);Events", 20, 0, 1);
-        (*hists)[prefix+"_IVF_df"]                          = new TH1F(prefix+"_IVF_df", ";# of degrees of freedom (IVF);Events", 15, 0, 5);
-        (*hists)[prefix+"_IVF_cxy"]                         = new TH1F(prefix+"_IVF_cxy", ";cxy (IVF);Events", 15, 0, 0.4);
-        (*hists)[prefix+"_IVF_cz"]                          = new TH1F(prefix+"_IVF_cz", ";cz (IVF);Events", 15, 0, 0.6);
-        (*hists)[prefix+"_IVF_cxyz"]                        = new TH1F(prefix+"_IVF_cxyz", ";cxyz (IVF);Events", 15, 0, 1);
-        (*hists)[prefix+"_IVF_trackpt"]                     = new TH1F(prefix+"_IVF_trackpt", ";track #it{p}_{T} (IVF);Events", 15, 0, 30);
-        (*hists)[prefix+"_IVF_tracketa"]                    = new TH1F(prefix+"_IVF_tracketa", ";track #eta (IVF);Events", 15, -3, 3);
-        (*hists)[prefix+"_IVF_trackphi"]                    = new TH1F(prefix+"_IVF_trackphi", ";track #phi (IVF);Events", 15, -3.14, 3.14);
-        (*hists)[prefix+"_IVF_trackE"]                      = new TH1F(prefix+"_IVF_trackE", ";track Energy (IVF);Events", 15, 0, 40);
-        (*hists)[prefix+"_IVF_trackcharge"]                 = new TH1F(prefix+"_IVF_trackcharge", ";track charge (IVF);Events", 15, -2, 2);
-        (*hists)[prefix+"_IVF_pt"]                          = new TH1F(prefix+"_IVF_pt", ";SV #it{p}_{T} [GeV] (IVF);Events", 30, 0, 80);
-        (*hists)[prefix+"_IVF_eta"]                         = new TH1F(prefix+"_IVF_eta", ";SV #eta (IVF);Events", 15, -3, 3);
-        (*hists)[prefix+"_IVF_phi"]                         = new TH1F(prefix+"_IVF_phi", ";SV #phi (IVF);Events", 15, -3.14, 3.14);
-        //(*hists)[prefix+"_IVF_mass_check"]                  = new TH1F(prefix+"_IVF_mass_check", ";SV Mass [GeV] (IVF);Events", 30, 0, 10);
-        (*hists)[prefix+"_IVF_ptsum"]                       = new TH1F(prefix+"_IVF_ptsum", ";SV #it{p}_{T}^{sum} [GeV] (IVF);Events", 30, 0, 80);
-        (*hists)[prefix+"_IVF_l1_mass"]                     = new TH1F(prefix+"_IVF_l1_mass", ";l_{1} + SV Mass [GeV] (IVF);Events", 40, 0, 150);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dphi"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dphi", ";#Delta#phi: HNL flight - IVF track sum;Events", 30, 0, 0.04);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_deta"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_deta", ";#Delta#eta: HNL flight - IVF track sum;Events", 30, 0, 0.3);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dR"]  = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dR", ";#DeltaR: HNL flight - IVF track sum;Events", 30, 0, 0.3);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_dot"] = new TH1F(prefix+"_IVF_PVSV_tracks_collimation_dot", ";cos #theta: HNL flight - IVF track sum;Events", 30, 0.9, 1);
-        (*hists)[prefix+"_IVF_PVSV_tracks_collimation_perp"]= new TH1F(prefix+"_IVF_PVSV_tracks_collimation_perp", ";sin #theta: HNL flight - IVF track sum;Events", 30, 0, 0.15);
-        (*hists)[prefix+"_IVF_PV-SVdxy_zoom2"]              = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
-        (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2"]             = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
     }
 }
 
@@ -159,43 +125,27 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     }
 
     if(_l1l2_Full){
-        fill_relevant_histograms(hists, hists2D, sr_flavor, ev_weight);
+        fill_relevant_histograms(hists, sr_flavor, ev_weight);
         fill_MET_histograms(hists, hists2D, sr_flavor, ev_weight);
     }
 }
 
 
-void full_analyzer::fill_relevant_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
-    fill_general_histograms(hists, hists2D, prefix, event_weight);
+void full_analyzer::fill_relevant_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
+    fill_general_histograms(hists, prefix, event_weight);
     //fill_IVF_histograms(hists, hists2D, prefix, event_weight);
     //fill_jet_histograms(hists, prefix, event_weight);
 }
 
 
-void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
-    // Plotting histograms
-    int nJets_uncl = 0;
-    int nJets_cl = 0;
-    std::vector<LorentzVector> jets_uncl;
-    std::vector<LorentzVector> jets_cl;
-    for(unsigned i = 0; i < _nJets; i++){
-        if(fullJetID[i]){ 
-            LorentzVector tmp(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
-            jets_uncl.push_back(tmp);
-            nJets_uncl++;
-        }
-        if(fullJetID[i] and jet_clean_full[i]){
-            LorentzVector tmp(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
-            jets_cl.push_back(tmp);
-            nJets_cl++;
-        }
-    }
+void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
 
     (*hists)[prefix+"_nTightEle"]->Fill(nTightEle, event_weight);
     (*hists)[prefix+"_nTightMu"]->Fill(nTightMu, event_weight);
     (*hists)[prefix+"_nTight"]->Fill(nTightEle + nTightMu, event_weight);
-    (*hists)[prefix+"_nJets_uncl"]->Fill(nJets_uncl, event_weight);
-    (*hists)[prefix+"_nJets_cl"]->Fill(nJets_cl, event_weight);
+    (*hists)[prefix+"_nJets_uncl"]->Fill(nTightJet_uncl, event_weight);
+    (*hists)[prefix+"_nJets_cl"]->Fill(nTightJet, event_weight);
+    
 
     (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
     (*hists)[prefix+"_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
@@ -226,15 +176,15 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
         (*hists)[prefix+"_l2_dxy_zoom"]->Fill(fabs(_dxy[i_subleading]), event_weight);
         (*hists)[prefix+"_l1_3dIP"]->Fill(_3dIP[i_leading], event_weight);
         (*hists)[prefix+"_l2_3dIP"]->Fill(_3dIP[i_subleading], event_weight);
-        LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
-        if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), event_weight);
-        if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[1]), event_weight);
-        if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(deltaR(jets_uncl[0], jets_uncl[1]), event_weight);
-        if(nJets_uncl > 1) (*hists2D)[prefix+"_dRl2jet1_2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), deltaR(l2_vec, jets_uncl[1]), event_weight);
-        if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), event_weight);
-        if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(deltaR(l2_vec, jets_cl[1]), event_weight);
-        if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(deltaR(jets_cl[0], jets_cl[1]), event_weight);
-        if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), deltaR(l2_vec, jets_cl[1]), event_weight);
+        //LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+        //if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), event_weight);
+        //if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[1]), event_weight);
+        //if(nJets_uncl > 1) (*hists)[prefix+"_dRjet1jet2_uncl"]->Fill(deltaR(jets_uncl[0], jets_uncl[1]), event_weight);
+        //if(nJets_uncl > 1) (*hists2D)[prefix+"_dRl2jet1_2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), deltaR(l2_vec, jets_uncl[1]), event_weight);
+        //if(nJets_cl > 0) (*hists)[prefix+"_dRl2jet1_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), event_weight);
+        //if(nJets_cl > 1) (*hists)[prefix+"_dRl2jet2_cl"]->Fill(deltaR(l2_vec, jets_cl[1]), event_weight);
+        //if(nJets_cl > 1) (*hists)[prefix+"_dRjet1jet2_cl"]->Fill(deltaR(jets_cl[0], jets_cl[1]), event_weight);
+        //if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), deltaR(l2_vec, jets_cl[1]), event_weight);
     }
 
     if(!isData){
@@ -295,14 +245,6 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
         if(fabs(_dxy[i_subleading]) > 0.01) (*hists)[prefix+"_dxy_cutflow"]->Fill(1., event_weight);
         if(fabs(_dxy[i_subleading]) > 0.02) (*hists)[prefix+"_dxy_cutflow"]->Fill(2., event_weight);
     }
-    
-    /*
-     * Is l1 or l2 matched to a vertex?
-     */
-    if(_l1l2){
-        (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
-        (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
-    }
 }
 
 
@@ -351,8 +293,8 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //for(int i = 0; i < nx_jets; i++){ 
     //    (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     //}
-    int nx_cutflow = 6;
-    const char *cutflow_labels[nx_cutflow] = {"l1+l2", "SV", "jetl2", "FullNoPFN", "CR dphi", "CR mll"};
+    int nx_cutflow = 8;
+    const char *cutflow_labels[nx_cutflow] = {"trig", "l1", "l1+l2", "SV", "jetl2", "FullNoPFN", "CR dphi", "CR mll"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }

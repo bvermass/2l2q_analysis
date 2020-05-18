@@ -7,12 +7,15 @@
 
 HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
-    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLtagger/", type_and_flavor, partition, partitionjobnumber);
+    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
-    HNLtagger_tree->Branch("_gen_NV",                           &_gen_NV,                           "_gen_NV/D");
+    HNLtagger_tree->Branch("_gen_NV2",                          &_gen_NV2,                          "_gen_NV2/D");
     HNLtagger_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
+    HNLtagger_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
+    HNLtagger_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
+    HNLtagger_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
     HNLtagger_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLtagger_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
     HNLtagger_tree->Branch("_JetPt_log",                        &_JetPt_log,                        "_JetPt_log/D");
@@ -76,7 +79,7 @@ HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, i
     HNLtagger_tree->Branch("_JetConstituentHasTrack",           &_JetConstituentHasTrack,           "_JetConstituentHasTrack[50]/O");
     HNLtagger_tree->Branch("_JetConstituentInSV",               &_JetConstituentInSV,               "_JetConstituentInSV[50]/I");
     HNLtagger_tree->Branch("_JetConstituentNmass",              &_JetConstituentNmass,              "_JetConstituentNmass[50]/D");
-    HNLtagger_tree->Branch("_JetConstituentNV",                 &_JetConstituentNV,                 "_JetConstituentNV[50]/D");
+    HNLtagger_tree->Branch("_JetConstituentNV2",                &_JetConstituentNV2,                "_JetConstituentNV2[50]/D");
     HNLtagger_tree->Branch("_JetConstituentNctau",              &_JetConstituentNctau,              "_JetConstituentNctau[50]/D");
 }
 
@@ -87,6 +90,7 @@ double HNLtagger::predict(PFNReader& pfn, int pfn_version, double M, double V)
     if(pfn_version == 4) return predict_PFN_v4(pfn, M, V);
     if(pfn_version == 5) return predict_PFN_v5(pfn, M, V);//V is actually ctau in v5
     if(pfn_version == 6) return predict_PFN_v6(pfn, M, V);//V is actually ctau in v6
+    if(pfn_version == 7) return predict_PFN_v7(pfn, M, V);
     std::cout << "wrong PFN version input: " << pfn_version << std::endl;
     return -1;
 }
@@ -163,6 +167,23 @@ double HNLtagger::predict_PFN_v6(PFNReader& pfn, double M, double ctau)
     return pfn.predict( highlevelInput, pfnInput );
 }
 
+double HNLtagger::predict_PFN_v7(PFNReader& pfn, double M, double ctau)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _dRljet, M, ctau } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt_log[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
 
 void HNLtagger::write_HNLtagger_tree()
 {
@@ -180,11 +201,11 @@ void HNLtagger::delete_HNLtagger_tree()
 
 HNLBDTtagger::HNLBDTtagger(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
-    HNLBDTtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLBDTtagger/", type_and_flavor, partition, partitionjobnumber);
+    HNLBDTtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/HNLBDTtagger/", type_and_flavor, partition, partitionjobnumber, true);
     HNLBDTtagger_file = new TFile(HNLBDTtagger_filename, "recreate");
     HNLBDTtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL BDT tagger");
     HNLBDTtagger_tree->Branch("_gen_Nmass",            &_gen_Nmass,                        "_gen_Nmass/I");
-    HNLBDTtagger_tree->Branch("_gen_NV",               &_gen_NV,                           "_gen_NV/D");
+    HNLBDTtagger_tree->Branch("_gen_NV2",              &_gen_NV2,                          "_gen_NV2/D");
     HNLBDTtagger_tree->Branch("_JetIsFromHNL",         &_JetIsFromHNL,                     "_JetIsFromHNL/O");
     HNLBDTtagger_tree->Branch("_weight",               &_weight,                           "_weight/D");
     HNLBDTtagger_tree->Branch("_lPt",                  &_lPt,                              "_lPt/D");

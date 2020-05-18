@@ -1,6 +1,9 @@
-final_data 30
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_SingleMuon_Run2016.root                                                          2016
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Diboson.root                                                          Diboson
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Top.root                                                              Top
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                           DY
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
+final_data_mm 30
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_SingleMuon_Run2016.root                                                           2016
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2016.root                                                          Diboson
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2016.root                                                              Top
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2016.root                                                           DY
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root               W+Jets
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_massiveAndCKM_LO.root          HNL_M-3_33mm
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO.root          HNL_M-5_18mm
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.000339116499156_mu_massiveAndCKM_LO.root          HNL_M-8_109mm

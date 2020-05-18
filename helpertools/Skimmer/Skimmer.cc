@@ -91,6 +91,14 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_passTrigger_mmm", &i_passTrigger_mmm, &bi__passTrigger_mmm);
     tree->SetBranchAddress("_passTrigger_mt", &i_passTrigger_mt, &bi__passTrigger_mt);
     tree->SetBranchAddress("_passTrigger_ref", &i_passTrigger_ref, &bi__passTrigger_ref);
+    tree->SetBranchAddress("_HLT_Ele27_WPTight_Gsf", &i_HLT_Ele27_WPTight_Gsf, &bi__HLT_Ele27_WPTight_Gsf);
+    tree->SetBranchAddress("_HLT_Ele27_WPTight_Gsf_prescale", &i_HLT_Ele27_WPTight_Gsf_prescale, &bi__HLT_Ele27_WPTight_Gsf_prescale);
+    tree->SetBranchAddress("_HLT_Ele32_WPTight_Gsf", &i_HLT_Ele32_WPTight_Gsf, &bi__HLT_Ele32_WPTight_Gsf);
+    tree->SetBranchAddress("_HLT_Ele32_WPTight_Gsf_prescale", &i_HLT_Ele32_WPTight_Gsf_prescale, &bi__HLT_Ele32_WPTight_Gsf_prescale);
+    tree->SetBranchAddress("_HLT_IsoMu24", &i_HLT_IsoMu24, &bi__HLT_IsoMu24);
+    tree->SetBranchAddress("_HLT_IsoMu24_prescale", &i_HLT_IsoMu24_prescale, &bi__HLT_IsoMu24_prescale);
+    tree->SetBranchAddress("_HLT_IsoTkMu24", &i_HLT_IsoTkMu24, &bi__HLT_IsoTkMu24);
+    tree->SetBranchAddress("_HLT_IsoTkMu24_prescale", &i_HLT_IsoTkMu24_prescale, &bi__HLT_IsoTkMu24_prescale);
     //tree->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL", &i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL, &bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL);
     //tree->SetBranchAddress("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale", &i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale, &bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale);
     //tree->SetBranchAddress("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, &bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
@@ -171,12 +179,27 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lElectronPassConvVeto", i_lElectronPassConvVeto, &bi__lElectronPassConvVeto);
     tree->SetBranchAddress("_lElectronChargeConst", i_lElectronChargeConst, &bi__lElectronChargeConst);
     tree->SetBranchAddress("_lElectronMissingHits", i_lElectronMissingHits, &bi__lElectronMissingHits);
-    tree->SetBranchAddress("_leptonMvaSUSY", i_leptonMvaSUSY, &bi__leptonMvaSUSY);
+    tree->SetBranchAddress("_lElectronIsEB", i_lElectronIsEB, &bi__lElectronIsEB);
+    tree->SetBranchAddress("_lElectronIsEE", i_lElectronIsEE, &bi__lElectronIsEE);
+    tree->SetBranchAddress("_lElectronSuperClusterOverP", i_lElectronSuperClusterOverP, &bi__lElectronSuperClusterOverP);
+    tree->SetBranchAddress("_lElectronEcalEnergy", i_lElectronEcalEnergy, &bi__lElectronEcalEnergy);
+    tree->SetBranchAddress("_lElectronSigmaIetaIeta", i_lElectronSigmaIetaIeta, &bi__lElectronSigmaIetaIeta);
+    tree->SetBranchAddress("_lElectronDEtaInSeed", i_lElectronDEtaInSeed, &bi__lElectronDEtaInSeed);
+    tree->SetBranchAddress("_lElectronDeltaPhiSuperClusterTrack", i_lElectronDeltaPhiSuperClusterTrack, &bi__lElectronDeltaPhiSuperClusterTrack);
+    tree->SetBranchAddress("_lElectronDeltaEtaSuperClusterTrack", i_lElectronDeltaEtaSuperClusterTrack, &bi__lElectronDeltaEtaSuperClusterTrack);
+    tree->SetBranchAddress("_lElectronHOverE", i_lElectronHOverE, &bi__lElectronHOverE);
+    tree->SetBranchAddress("_lElectronEInvMinusPInv", i_lElectronEInvMinusPInv, &bi__lElectronEInvMinusPInv);
+    tree->SetBranchAddress("_lElectronNumberInnerHitsMissing", i_lElectronNumberInnerHitsMissing, &bi__lElectronNumberInnerHitsMissing);
     tree->SetBranchAddress("_leptonMvaTTH", i_leptonMvaTTH, &bi__leptonMvaTTH);
     tree->SetBranchAddress("_leptonMvatZq", i_leptonMvatZq, &bi__leptonMvatZq);
-    tree->SetBranchAddress("_lEwkLoose", i_lEwkLoose, &bi__lEwkLoose);
-    tree->SetBranchAddress("_lEwkFO", i_lEwkFO, &bi__lEwkFO);
-    tree->SetBranchAddress("_lEwkTight", i_lEwkTight, &bi__lEwkTight);
+    if(tree->FindBranch("_leptonMvaTOP")){
+        std::cout << "found the TOP Lepton Mva branch" << std::endl;
+        tree->SetBranchAddress("_leptonMvaTOP", i_leptonMvaTOP, &bi__leptonMvaTOP);
+        hasLeptonMvaTOP = true;
+    }else {
+        std::cout << "no Lepton Mva branch found, computing one" << std::endl;
+        hasLeptonMvaTOP = false;
+    }
     tree->SetBranchAddress("_lPOGVeto", i_lPOGVeto, &bi__lPOGVeto);
     tree->SetBranchAddress("_lPOGLoose", i_lPOGLoose, &bi__lPOGLoose);
     tree->SetBranchAddress("_lPOGMedium", i_lPOGMedium, &bi__lPOGMedium);
@@ -206,6 +229,12 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lMuonSegComp", i_lMuonSegComp, &bi__lMuonSegComp);
     tree->SetBranchAddress("_lMuonTrackPt", i_lMuonTrackPt, &bi__lMuonTrackPt);
     tree->SetBranchAddress("_lMuonTrackPtErr", i_lMuonTrackPtErr, &bi__lMuonTrackPtErr);
+    tree->SetBranchAddress("_lMuonTimenDof", i_lMuonTimenDof, &bi__lMuonTimenDof);
+    tree->SetBranchAddress("_lMuonTime", i_lMuonTime, &bi__lMuonTime);
+    tree->SetBranchAddress("_lMuonTimeErr", i_lMuonTimeErr, &bi__lMuonTimeErr);
+    tree->SetBranchAddress("_lMuonRPCTimenDof", i_lMuonRPCTimenDof, &bi__lMuonRPCTimenDof);
+    tree->SetBranchAddress("_lMuonRPCTime", i_lMuonRPCTime, &bi__lMuonRPCTime);
+    tree->SetBranchAddress("_lMuonRPCTimeErr", i_lMuonRPCTimeErr, &bi__lMuonRPCTimeErr);
     if(!isData){
         tree->SetBranchAddress("_lIsPrompt", i_lIsPrompt, &bi__lIsPrompt);
         tree->SetBranchAddress("_lMatchPdgId", i_lMatchPdgId, &bi__lMatchPdgId);
@@ -420,6 +449,14 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_passTrigger_mmm", &o_passTrigger_mmm, "_passTrigger_mmm/O");
     tree->Branch("_passTrigger_mt", &o_passTrigger_mt, "_passTrigger_mt/O");
     tree->Branch("_passTrigger_ref", &o_passTrigger_ref, "_passTrigger_ref/O");
+    tree->Branch("_HLT_Ele27_WPTight_Gsf", &o_HLT_Ele27_WPTight_Gsf, "_HLT_Ele27_WPTight_Gsf/O");
+    tree->Branch("_HLT_Ele27_WPTight_Gsf_prescale", &o_HLT_Ele27_WPTight_Gsf_prescale, "_HLT_Ele27_WPTight_Gsf_prescale/I");
+    tree->Branch("_HLT_Ele32_WPTight_Gsf", &o_HLT_Ele32_WPTight_Gsf, "_HLT_Ele32_WPTight_Gsf/O");
+    tree->Branch("_HLT_Ele32_WPTight_Gsf_prescale", &o_HLT_Ele32_WPTight_Gsf_prescale, "_HLT_Ele32_WPTight_Gsf_prescale/I");
+    tree->Branch("_HLT_IsoMu24", &o_HLT_IsoMu24, "_HLT_IsoMu24/O");
+    tree->Branch("_HLT_IsoMu24_prescale", &o_HLT_IsoMu24_prescale, "_HLT_IsoMu24_prescale/I");
+    tree->Branch("_HLT_IsoTkMu24", &o_HLT_IsoTkMu24, "_HLT_IsoTkMu24/O");
+    tree->Branch("_HLT_IsoTkMu24_prescale", &o_HLT_IsoTkMu24_prescale, "_HLT_IsoTkMu24_prescale/I");
     //tree->Branch("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL", &o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL, "_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL/O");
     //tree->Branch("_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale", &o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale, "_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale/I");
     //tree->Branch("_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ, "_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ/O");
@@ -501,12 +538,21 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lElectronPassConvVeto",              &o_lElectronPassConvVeto,                "_lElectronPassConvVeto[_nLight]/O");
     tree->Branch("_lElectronChargeConst",               &o_lElectronChargeConst,                 "_lElectronChargeConst[_nLight]/O");
     tree->Branch("_lElectronMissingHits",               &o_lElectronMissingHits,                 "_lElectronMissingHits[_nLight]/i");
-    tree->Branch("_leptonMvaSUSY",                      &o_leptonMvaSUSY,                        "_leptonMvaSUSY[_nLight]/D");
+    tree->Branch("_lElectronIsEB",                      &o_lElectronIsEB,                        "_lElectronIsEB[_nLight]/O");
+    tree->Branch("_lElectronIsEE",                      &o_lElectronIsEE,                        "_lElectronIsEE[_nLight]/O");
+    tree->Branch("_lElectronSuperClusterOverP",         &o_lElectronSuperClusterOverP,           "_lElectronSuperClusterOverP[_nLight]/D");
+    tree->Branch("_lElectronEcalEnergy",                &o_lElectronEcalEnergy,                  "_lElectronEcalEnergy[_nLight]/D");
+    tree->Branch("_lElectronSigmaIetaIeta",             &o_lElectronSigmaIetaIeta,               "_lElectronSigmaIetaIeta[_nLight]/D");
+    tree->Branch("_lElectronDEtaInSeed",                &o_lElectronDEtaInSeed,                  "_lElectronDEtaInSeed[_nLight]/D");
+    tree->Branch("_lElectronDeltaPhiSuperClusterTrack", &o_lElectronDeltaPhiSuperClusterTrack,   "_lElectronDeltaPhiSuperClusterTrack[_nLight]/D");
+    tree->Branch("_lElectronDeltaEtaSuperClusterTrack", &o_lElectronDeltaEtaSuperClusterTrack,   "_lElectronDeltaEtaSuperClusterTrack[_nLight]/D");
+    tree->Branch("_lElectronHOverE",                    &o_lElectronHOverE,                      "_lElectronHOverE[_nLight]/D");
+    tree->Branch("_lElectronEInvMinusPInv",             &o_lElectronEInvMinusPInv,               "_lElectronEInvMinusPInv[_nLight]/D");
+    tree->Branch("_lElectronNumberInnerHitsMissing",    &o_lElectronNumberInnerHitsMissing,      "_lElectronNumberInnerHitsMissing[_nLight]/D");
+    //tree->Branch("_leptonMvaSUSY",                      &o_leptonMvaSUSY,                        "_leptonMvaSUSY[_nLight]/D");
     tree->Branch("_leptonMvaTTH",                       &o_leptonMvaTTH,                         "_leptonMvaTTH[_nLight]/D");
     tree->Branch("_leptonMvatZq",                       &o_leptonMvatZq,                         "_leptonMvatZq[_nLight]/D");
-    tree->Branch("_lEwkLoose",                          &o_lEwkLoose,                            "_lEwkLoose[_nL]/O");
-    tree->Branch("_lEwkFO",                             &o_lEwkFO,                               "_lEwkFO[_nL]/O");
-    tree->Branch("_lEwkTight",                          &o_lEwkTight,                            "_lEwkTight[_nL]/O");
+    tree->Branch("_leptonMvaTOP",                       &o_leptonMvaTOP,                         "_leptonMvaTOP[_nLight]/D");
     tree->Branch("_lPOGVeto",                           &o_lPOGVeto,                             "_lPOGVeto[_nL]/O");
     tree->Branch("_lPOGLoose",                          &o_lPOGLoose,                            "_lPOGLoose[_nL]/O");
     tree->Branch("_lPOGMedium",                         &o_lPOGMedium,                           "_lPOGMedium[_nL]/O");
@@ -536,6 +582,12 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lMuonSegComp",                       &o_lMuonSegComp,                         "_lMuonSegComp[_nMu]/D");
     tree->Branch("_lMuonTrackPt",                       &o_lMuonTrackPt,                         "_lMuonTrackPt[_nMu]/D");
     tree->Branch("_lMuonTrackPtErr",                    &o_lMuonTrackPtErr,                      "_lMuonTrackPtErr[_nMu]/D");
+    tree->Branch("_lMuonTimenDof",                      &o_lMuonTimenDof,                "_lMuonTimenDof[_nMu]/I");
+    tree->Branch("_lMuonTime",                          &o_lMuonTime,                    "_lMuonTime[_nMu]/D");
+    tree->Branch("_lMuonTimeErr",                       &o_lMuonTimeErr,                 "_lMuonTimeErr[_nMu]/D");
+    tree->Branch("_lMuonRPCTimenDof",                   &o_lMuonRPCTimenDof,             "_lMuonRPCTimenDof[_nMu]/I");
+    tree->Branch("_lMuonRPCTime",                       &o_lMuonRPCTime,                 "_lMuonRPCTime[_nMu]/D");
+    tree->Branch("_lMuonRPCTimeErr",                    &o_lMuonRPCTimeErr,              "_lMuonRPCTimeErr[_nMu]/D");
     if( !isData ){
         tree->Branch("_lIsPrompt",                        &o_lIsPrompt,                            "_lIsPrompt[_nL]/O");
         tree->Branch("_lMatchPdgId",                      &o_lMatchPdgId,                          "_lMatchPdgId[_nL]/I");
@@ -681,25 +733,38 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     input = new TFile(inputfilename, "open");
     inputtree = (TTree*)input->Get("blackJackAndHookers/blackJackAndHookersTree");
     Init_input_branches(inputtree);
+    inputtree->GetEntry(0);
+    TString year;
+    if(i_is2017) year = "2017";
+    else if(i_is2018) year = "2018";
+    else year = "2016";
+    isData = (inputfilename.Index("Run20") != -1);
     std::cout << "Skimming " << inputfilename << (isData? "(Data)" : "(MC)") << std::endl;
 
-    std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( "blackJackAndHookers/nVertices" ) );
+    TString blackJAH_version = "blackJackAndHookers";
+    if(input->GetListOfKeys()->Contains("blackJackAndHookersGlobal")){
+        std::cout << "Getting hCounter etc. from blackJackAndHookersGlobal directory" << std::endl;
+        blackJAH_version = "blackJackAndHookersGlobal";
+    }else {
+        std::cout << "Getting hCounter etc. from blackJackAndHookers directory" << std::endl;
+        blackJAH_version = "blackJackAndHookers";
+    }
+    std::shared_ptr< TH1D > nVertices( (TH1D*) input->Get( blackJAH_version + "/nVertices" ) );
     std::shared_ptr< TH1D > hCounter;
     std::shared_ptr< TH1D > lheCounter;
     std::shared_ptr< TH1D > psCounter;
     std::shared_ptr< TH1D > tauCounter;
     std::shared_ptr< TH1D > nTrueInteractions;
     if( !isData ){
-        hCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/hCounter" ) );
-        lheCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/lheCounter" ) );
-        psCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/psCounter" ) );
-        tauCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/tauCounter" ) );
-        nTrueInteractions = std::shared_ptr< TH1D >( (TH1D*) input->Get( "blackJackAndHookers/nTrueInteractions" ) );
+        hCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/hCounter" ) );
+        lheCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/lheCounter" ) );
+        nTrueInteractions = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/nTrueInteractions" ) );
+        psCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/psCounter" ) );
     }
 
     output = new TFile(outputfilename, "recreate");
-    output->mkdir("blackJackAndHookers");
-    output->cd("blackJackAndHookers");
+    output->mkdir("blackJackAndHookersGlobal");
+    output->cd("blackJackAndHookersGlobal");
 
     nVertices->Write( "nVertices" );
     if( !isData ){
@@ -709,8 +774,13 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
         tauCounter->Write( "tauCounter" );
         nTrueInteractions->Write( "nTrueInteractions" );
     }
+
+    output->mkdir("blackJackAndHookers");
+    output->cd("blackJackAndHookers");
     outputtree = new TTree("blackJackAndHookersTree", "blackJackAndHookersTree");
     Add_branches(outputtree);
+
+    if(!hasLeptonMvaTOP) mvahelper = new LeptonMvaHelper("TOP", year);
 }
 
 
@@ -718,8 +788,12 @@ void Skimmer::Skim(TString skimcondition)
 {
     Long64_t nentries = inputtree->GetEntries();
     unsigned notice = ceil(0.01 * nentries / 20) * 100;
+    unsigned loop_counter = 0;
     for(Long64_t jentry = 0; jentry < nentries; ++jentry){
-        if(jentry%notice == 0) std::cout << jentry << " of " << nentries << std::endl;
+        if(loop_counter == notice){
+            std::cout << jentry << " of " << nentries << std::endl;
+            loop_counter = 0;
+        }
         inputtree->GetEntry(jentry);
 
         if(Check_SkimCondition(skimcondition)){
@@ -810,6 +884,14 @@ void Skimmer::Skim(TString skimcondition)
             o_passTrigger_mmm = i_passTrigger_mmm;
             o_passTrigger_mt = i_passTrigger_mt;
             o_passTrigger_ref = i_passTrigger_ref;                       
+            o_HLT_Ele27_WPTight_Gsf = i_HLT_Ele27_WPTight_Gsf;
+            o_HLT_Ele27_WPTight_Gsf_prescale = i_HLT_Ele27_WPTight_Gsf_prescale;
+            o_HLT_Ele32_WPTight_Gsf = i_HLT_Ele32_WPTight_Gsf;
+            o_HLT_Ele32_WPTight_Gsf_prescale = i_HLT_Ele32_WPTight_Gsf_prescale;
+            o_HLT_IsoMu24 = i_HLT_IsoMu24;
+            o_HLT_IsoMu24_prescale = i_HLT_IsoMu24_prescale;
+            o_HLT_IsoTkMu24 = i_HLT_IsoTkMu24;
+            o_HLT_IsoTkMu24_prescale = i_HLT_IsoTkMu24_prescale;
             o_nL = i_nL;
             o_nMu = i_nMu;
             o_nEle = i_nEle;
@@ -830,9 +912,6 @@ void Skimmer::Skim(TString skimcondition)
                 o_lElectronPassConvVeto[i] = i_lElectronPassConvVeto[i];
                 o_lElectronChargeConst[i] = i_lElectronChargeConst[i];   
                 o_lElectronMissingHits[i] = i_lElectronMissingHits[i];
-                o_lEwkLoose[i] = i_lEwkLoose[i];   
-                o_lEwkFO[i] = i_lEwkFO[i];   
-                o_lEwkTight[i] = i_lEwkTight[i];   
                 o_lPOGVeto[i] = i_lPOGVeto[i];   
                 o_lPOGLoose[i] = i_lPOGLoose[i];   
                 o_lPOGMedium[i] = i_lPOGMedium[i];   
@@ -874,9 +953,22 @@ void Skimmer::Skim(TString skimcondition)
                 o_lElectronPassConvVeto[i] = i_lElectronPassConvVeto[i];   
                 o_lElectronChargeConst[i] = i_lElectronChargeConst[i];   
                 o_lElectronMissingHits[i] = i_lElectronMissingHits[i];   
-                o_leptonMvaSUSY[i] = i_leptonMvaSUSY[i];
+                o_lElectronIsEB[i] = i_lElectronIsEB[i];
+                o_lElectronIsEE[i] = i_lElectronIsEE[i];
+                o_lElectronSuperClusterOverP[i] = i_lElectronSuperClusterOverP[i];
+                o_lElectronEcalEnergy[i] = i_lElectronEcalEnergy[i];
+                o_lElectronSigmaIetaIeta[i] = i_lElectronSigmaIetaIeta[i];
+                o_lElectronDEtaInSeed[i] = i_lElectronDEtaInSeed[i];
+                o_lElectronDeltaPhiSuperClusterTrack[i] = i_lElectronDeltaPhiSuperClusterTrack[i];
+                o_lElectronDeltaEtaSuperClusterTrack[i] = i_lElectronDeltaEtaSuperClusterTrack[i];
+                o_lElectronHOverE[i] = i_lElectronHOverE[i];
+                o_lElectronEInvMinusPInv[i] = i_lElectronEInvMinusPInv[i];
+                o_lElectronNumberInnerHitsMissing[i] = i_lElectronNumberInnerHitsMissing[i];
                 o_leptonMvaTTH[i] = i_leptonMvaTTH[i];
                 o_leptonMvatZq[i] = i_leptonMvatZq[i];
+                if(hasLeptonMvaTOP) o_leptonMvaTOP[i] = i_leptonMvaTOP[i];
+                else if(i_lFlavor[i] == 0) o_leptonMvaTOP[i] = mvahelper->leptonMvaElectron(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_lElectronSummer16MvaGP[i], i_lElectronMvaFall17v1NoIso[i], i_lElectronMvaFall17NoIso[i]);
+                else if(i_lFlavor[i] == 1) o_leptonMvaTOP[i] = mvahelper->leptonMvaMuon(i_lPt[i], i_lEta[i], i_selectedTrackMult[i], i_miniIsoCharged[i], i_miniIso[i] - i_miniIsoCharged[i], i_ptRel[i], i_ptRatio[i], i_closestJetDeepCsv[i], i_closestJetDeepFlavor[i], i_3dIPSig[i], i_dxy[i], i_dz[i], i_relIso[i], i_relIso[i], i_lMuonSegComp[i]);
                 o_relIso[i] = i_relIso[i];   
                 o_relIso0p4[i] = i_relIso0p4[i];   
                 o_relIso0p4MuDeltaBeta[i] = i_relIso0p4MuDeltaBeta[i];   
@@ -894,6 +986,12 @@ void Skimmer::Skim(TString skimcondition)
                 o_lMuonSegComp[i] = i_lMuonSegComp[i];   
                 o_lMuonTrackPt[i] = i_lMuonTrackPt[i];   
                 o_lMuonTrackPtErr[i] = i_lMuonTrackPtErr[i];   
+                o_lMuonTimenDof[i] = i_lMuonTimenDof[i];
+                o_lMuonTime[i] = i_lMuonTime[i];
+                o_lMuonTimeErr[i] = i_lMuonTimeErr[i];
+                o_lMuonRPCTimenDof[i] = i_lMuonRPCTimenDof[i];
+                o_lMuonRPCTime[i] = i_lMuonRPCTime[i];
+                o_lMuonRPCTimeErr[i] = i_lMuonRPCTimeErr[i];
             }
             o_nPh = i_nPh;
             for(unsigned i = 0; i < i_nPh; i++){
@@ -1011,6 +1109,8 @@ void Skimmer::Skim(TString skimcondition)
             o_metPuppiPhiResUp = i_metPuppiPhiResUp;
             outputtree->Fill();
         }
+
+        ++loop_counter;
     }
     std::cout << "--------------------------------" << std::endl;
 }

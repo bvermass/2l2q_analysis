@@ -62,7 +62,7 @@ function hadd_specific_backgrounds {
     fi
 
     if [ 0 -lt $(ls ${1}${2}Background_TTTo* 2>/dev/null | wc -w) ]; then
-        echo -e "\nhadding Top files: \n"
+        echo -e "\nhadding UL17 files: \n"
         hadd -f ${1}${2}Background_UL17.root ${1}${2}Background_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root ${1}${2}Background_ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-mcatnlo-pythia8.root ${1}${2}Background_TTToHadronic_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8.root ${1}${2}Background_WW_TuneCP5_13TeV-pythia8.root ${1}${2}Background_WZ_TuneCP5_13TeV-pythia8.root ${1}${2}Background_ZZ_TuneCP5_13TeV-pythia8.root
     fi
 }
@@ -141,6 +141,12 @@ else
         hadd_subfiles $D HNLBDTtagger_electron_
         hadd_subfiles $D HNLBDTtagger_muon_
     done
+    bkgestimatordir=/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/${tag}
+    for D in $bkgestimatordir/full_analyzer/subfiles/*; do
+        hadd_subfiles $D BkgEstimator_
+    done
+    bkgestimatorfulldir=$bkgestimatordir/full_analyzer/
+    hadd_specific_backgrounds $bkgestimatorfulldir BkgEstimator_
     echo 'successfully done!'
 
     #hadd_all_backgrounds_and_signal_for_HNLtagger $treetagdir/full_analyzer/ HNLtagger_electron_

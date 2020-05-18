@@ -21,7 +21,7 @@ int main(int argc, char * argv[])
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
         if(filename.Index("_HeavyNeutrino_lljj_") != -1){ std::cout << "sig: " << filename << std::endl; flavor = (filename.Index("_mu_") != -1? "_mm_" : "_ee_"); files_signal.push_back(TFile::Open(filename)); }
-        else if(filename.Index("_Background_") != -1){ std::cout << "bkg: " << filename << std::endl; files_bkg.push_back(TFile::Open(filename)); }
+        else if(filename.Index("_MiniAOD201") != -1){ std::cout << "bkg: " << filename << std::endl; files_bkg.push_back(TFile::Open(filename)); }
         else if(i == (argc + 1)/2){ std::cout << "obs: " << filename << std::endl; files_data.push_back(TFile::Open(filename)); }
         //else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
     }

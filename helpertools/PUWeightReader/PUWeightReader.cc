@@ -7,7 +7,12 @@ PUWeightReader::PUWeightReader(){
 
 PUWeightReader::PUWeightReader(const TString filename_weights, const TString histoname_weights){
     file_weights = new TFile(filename_weights, "open");
-    histo_weights = (TH1F*) file_weights->Get(histoname_weights);
+    if(file_weights){
+        histo_weights = (TH1F*) file_weights->Get(histoname_weights);
+    }else {
+        std::cout << "Error: unknown filename for PUWeight file: " << filename_weights << std::endl;
+        histo_weights = new TH1F();
+    }
 }
 
 PUWeightReader::~PUWeightReader(){
@@ -40,10 +45,15 @@ void PUWeightReader::make_PUWeights(const TString filename_data, const TString f
     
     int NMC = tree_MC->GetEntries();
     int notice = NMC/20;
+    int loop_counter = 0;
     for(int jentry = 0; jentry < NMC; jentry++){
         tree_MC->GetEntry(jentry);
-        if(jentry%notice == 0) std::cout << jentry << " of " << NMC << std::endl;
+        if(loop_counter == notice){
+            std::cout << jentry << " of " << NMC << std::endl;
+            loop_counter = 0;
+        }
         nTrueInt_MC->Fill(_nTrueInt_MC, _weight);
+        ++loop_counter;
     }
     nTrueInt_MC->Scale(1./nTrueInt_MC->Integral());
 

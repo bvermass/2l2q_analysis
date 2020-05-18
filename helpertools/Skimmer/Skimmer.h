@@ -20,6 +20,7 @@
 
 #include "../../interface/full_analyzer.h"
 #include "../LorentzVector/LorentzVector.h"
+#include "LeptonMvaHelper.h"
 
 class Skimmer {
     public :
@@ -75,7 +76,7 @@ class Skimmer {
         Double_t        i_gen_lEta[20];   //[_gen_nL]
         Double_t        i_gen_lPhi[20];   //[_gen_nL]
         Double_t        i_gen_lE[20];   //[_gen_nL]
-        UInt_t          i_gen_lFlavor[20];   //[_gen_nL]
+        unsigned        i_gen_lFlavor[20];   //[_gen_nL]
         Int_t           i_gen_lCharge[20];   //[_gen_nL]
         Int_t           i_gen_lMomPdg[20];   //[_gen_nL]
         Double_t        i_gen_vertex_x[20];
@@ -107,6 +108,14 @@ class Skimmer {
         Bool_t          i_passTrigger_mmm;
         Bool_t          i_passTrigger_mt;
         Bool_t          i_passTrigger_ref;
+        Bool_t          i_HLT_Ele27_WPTight_Gsf;
+        Int_t           i_HLT_Ele27_WPTight_Gsf_prescale;
+        Bool_t          i_HLT_Ele32_WPTight_Gsf;
+        Int_t           i_HLT_Ele32_WPTight_Gsf_prescale;
+        Bool_t          i_HLT_IsoMu24;
+        Int_t           i_HLT_IsoMu24_prescale;
+        Bool_t          i_HLT_IsoTkMu24;
+        Int_t           i_HLT_IsoTkMu24_prescale;
         //Bool_t          i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
         //Int_t           i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
         //Bool_t          i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
@@ -172,7 +181,7 @@ class Skimmer {
         Double_t        i_lEtaSC[10];   //[_nLight]
         Double_t        i_lPhi[10];   //[_nL]
         Double_t        i_lE[10];   //[_nL]
-        UInt_t          i_lFlavor[10];   //[_nL]
+        unsigned        i_lFlavor[10];   //[_nL]
         Int_t           i_lCharge[10];   //[_nL]
         Double_t        i_dxy[10];   //[_nL]
         Double_t        i_dz[10];   //[_nL]
@@ -186,13 +195,21 @@ class Skimmer {
         Bool_t          i_lElectronPassEmu[10];   //[_nLight]
         Bool_t          i_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          i_lElectronChargeConst[10];   //[_nLight]
-        UInt_t          i_lElectronMissingHits[10];   //[_nLight]
-        Double_t        i_leptonMvaSUSY[10];
+        unsigned        i_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          i_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+        Bool_t          i_lElectronIsEE[10];
+        Double_t        i_lElectronSuperClusterOverP[10];
+        Double_t        i_lElectronEcalEnergy[10];
+        Double_t        i_lElectronSigmaIetaIeta[10];
+        Double_t        i_lElectronDEtaInSeed[10];
+        Double_t        i_lElectronDeltaPhiSuperClusterTrack[10];
+        Double_t        i_lElectronDeltaEtaSuperClusterTrack[10];
+        Double_t        i_lElectronHOverE[10];
+        Double_t        i_lElectronEInvMinusPInv[10];
+        Double_t        i_lElectronNumberInnerHitsMissing[10];
         Double_t        i_leptonMvaTTH[10];
         Double_t        i_leptonMvatZq[10];
-        Bool_t          i_lEwkLoose[10];   //[_nL]
-        Bool_t          i_lEwkFO[10];   //[_nL]
-        Bool_t          i_lEwkTight[10];   //[_nL]
+        Double_t        i_leptonMvaTOP[10];
         Bool_t          i_lPOGVeto[10];   //[_nL]
         Bool_t          i_lPOGLoose[10];   //[_nL]
         Bool_t          i_lPOGMedium[10];   //[_nL]
@@ -218,10 +235,31 @@ class Skimmer {
         Double_t        i_closestJetDeepCsv_b[10];   //[_nLight]
         Double_t        i_closestJetDeepCsv_bb[10];   //[_nLight]
         Double_t        i_closestJetDeepCsv[10];   //[_nLight]
-        UInt_t          i_selectedTrackMult[10];   //[_nLight]
+        Double_t        i_closestJetDeepFlavor_b[10];
+        Double_t        i_closestJetDeepFlavor_bb[10];
+        Double_t        i_closestJetDeepFlavor_lepb[10];
+        Double_t        i_closestJetDeepFlavor[10];
+        unsigned        i_selectedTrackMult[10];   //[_nLight]
+        Bool_t          i_lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
+        Bool_t          i_lTrackerMuon[10];
+        Double_t        i_lInnerTrackValidFraction[10];
+        Double_t        i_lGlobalTrackNormalizedChi2[10];
+        Double_t        i_lCQChi2Position[10];
+        Double_t        i_lCQTrackKink[10];
+        unsigned        i_lNumberOfMatchedStation[10];
+        unsigned        i_lNumberOfValidPixelHits[10];
+        unsigned        i_lNumberOfValidTrackerHits[10];
+        unsigned        i_muNumberInnerHits[10];
+        unsigned        i_lTrackerLayersWithMeasurement[10];
         Double_t        i_lMuonSegComp[10];   //[_nMu]
         Double_t        i_lMuonTrackPt[10];   //[_nMu]
         Double_t        i_lMuonTrackPtErr[10];   //[_nMu]
+        Int_t           i_lMuonTimenDof[10];
+        Double_t        i_lMuonTime[10];
+        Double_t        i_lMuonTimeErr[10];
+        Int_t           i_lMuonRPCTimenDof[10];
+        Double_t        i_lMuonRPCTime[10];
+        Double_t        i_lMuonRPCTimeErr[10];
         Bool_t          i_lIsPrompt[10];   //[_nL]
         Int_t           i_lMatchPdgId[10];   //[_nL]
         Int_t           i_lMatchCharge[10];   //[_nL]
@@ -290,7 +328,7 @@ class Skimmer {
         Double_t        i_jetDeepFlavor_c[20];
         Double_t        i_jetDeepFlavor_uds[20];
         Double_t        i_jetDeepFlavor_g[20];
-        UInt_t          i_jetHadronFlavor[20];   //[_nJets]
+        unsigned        i_jetHadronFlavor[20];   //[_nJets]
         //Bool_t          i_jetIsLoose[20];   //[_nJets]
         Bool_t          i_jetIsTight[20];   //[_nJets]
         Bool_t          i_jetIsTightLepVeto[20];   //[_nJets]
@@ -394,7 +432,7 @@ class Skimmer {
         Double_t        o_gen_lEta[20];   //[_gen_nL]
         Double_t        o_gen_lPhi[20];   //[_gen_nL]
         Double_t        o_gen_lE[20];   //[_gen_nL]
-        UInt_t          o_gen_lFlavor[20];   //[_gen_nL]
+        unsigned        o_gen_lFlavor[20];   //[_gen_nL]
         Int_t           o_gen_lCharge[20];   //[_gen_nL]
         Int_t           o_gen_lMomPdg[20];   //[_gen_nL]
         Double_t        o_gen_vertex_x[20];
@@ -426,6 +464,14 @@ class Skimmer {
         Bool_t          o_passTrigger_mmm;
         Bool_t          o_passTrigger_mt;
         Bool_t          o_passTrigger_ref;
+        Bool_t          o_HLT_Ele27_WPTight_Gsf;
+        Int_t           o_HLT_Ele27_WPTight_Gsf_prescale;
+        Bool_t          o_HLT_Ele32_WPTight_Gsf;
+        Int_t           o_HLT_Ele32_WPTight_Gsf_prescale;
+        Bool_t          o_HLT_IsoMu24;
+        Int_t           o_HLT_IsoMu24_prescale;
+        Bool_t          o_HLT_IsoTkMu24;
+        Int_t           o_HLT_IsoTkMu24_prescale;
         //Bool_t          o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
         //Int_t           o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
         //Bool_t          o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
@@ -491,7 +537,7 @@ class Skimmer {
         Double_t        o_lEtaSC[10];   //[_nLight]
         Double_t        o_lPhi[10];   //[_nL]
         Double_t        o_lE[10];   //[_nL]
-        UInt_t          o_lFlavor[10];   //[_nL]
+        unsigned        o_lFlavor[10];   //[_nL]
         Int_t           o_lCharge[10];   //[_nL]
         Double_t        o_dxy[10];   //[_nL]
         Double_t        o_dz[10];   //[_nL]
@@ -505,13 +551,21 @@ class Skimmer {
         Bool_t          o_lElectronPassEmu[10];   //[_nLight]
         Bool_t          o_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          o_lElectronChargeConst[10];   //[_nLight]
-        UInt_t          o_lElectronMissingHits[10];   //[_nLight]
-        Double_t        o_leptonMvaSUSY[10];
+        unsigned        o_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          o_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
+        Bool_t          o_lElectronIsEE[10];
+        Double_t        o_lElectronSuperClusterOverP[10];
+        Double_t        o_lElectronEcalEnergy[10];
+        Double_t        o_lElectronSigmaIetaIeta[10];
+        Double_t        o_lElectronDEtaInSeed[10];
+        Double_t        o_lElectronDeltaPhiSuperClusterTrack[10];
+        Double_t        o_lElectronDeltaEtaSuperClusterTrack[10];
+        Double_t        o_lElectronHOverE[10];
+        Double_t        o_lElectronEInvMinusPInv[10];
+        Double_t        o_lElectronNumberInnerHitsMissing[10];
         Double_t        o_leptonMvaTTH[10];
         Double_t        o_leptonMvatZq[10];
-        Bool_t          o_lEwkLoose[10];   //[_nL]
-        Bool_t          o_lEwkFO[10];   //[_nL]
-        Bool_t          o_lEwkTight[10];   //[_nL]
+        Double_t        o_leptonMvaTOP[10];
         Bool_t          o_lPOGVeto[10];   //[_nL]
         Bool_t          o_lPOGLoose[10];   //[_nL]
         Bool_t          o_lPOGMedium[10];   //[_nL]
@@ -537,10 +591,31 @@ class Skimmer {
         Double_t        o_closestJetDeepCsv_b[10];   //[_nLight]
         Double_t        o_closestJetDeepCsv_bb[10];   //[_nLight]
         Double_t        o_closestJetDeepCsv[10];
-        UInt_t          o_selectedTrackMult[10];   //[_nLight]
+        Double_t        o_closestJetDeepFlavor_b[10];
+        Double_t        o_closestJetDeepFlavor_bb[10];
+        Double_t        o_closestJetDeepFlavor_lepb[10];
+        Double_t        o_closestJetDeepFlavor[10];
+        unsigned        o_selectedTrackMult[10];   //[_nLight]
+        Bool_t          o_lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
+        Bool_t          o_lTrackerMuon[10];
+        Double_t        o_lInnerTrackValidFraction[10];
+        Double_t        o_lGlobalTrackNormalizedChi2[10];
+        Double_t        o_lCQChi2Position[10];
+        Double_t        o_lCQTrackKink[10];
+        unsigned        o_lNumberOfMatchedStation[10];
+        unsigned        o_lNumberOfValidPixelHits[10];
+        unsigned        o_lNumberOfValidTrackerHits[10];
+        unsigned        o_muNumberInnerHits[10];
+        unsigned        o_lTrackerLayersWithMeasurement[10];
         Double_t        o_lMuonSegComp[10];   //[_nMu]
         Double_t        o_lMuonTrackPt[10];   //[_nMu]
         Double_t        o_lMuonTrackPtErr[10];   //[_nMu]
+        Int_t           o_lMuonTimenDof[10];
+        Double_t        o_lMuonTime[10];
+        Double_t        o_lMuonTimeErr[10];
+        Int_t           o_lMuonRPCTimenDof[10];
+        Double_t        o_lMuonRPCTime[10];
+        Double_t        o_lMuonRPCTimeErr[10];
         Bool_t          o_lIsPrompt[10];   //[_nL]
         Int_t           o_lMatchPdgId[10];   //[_nL]
         Int_t           o_lMatchCharge[10];   //[_nL]
@@ -609,7 +684,7 @@ class Skimmer {
         Double_t        o_jetDeepFlavor_c[20];
         Double_t        o_jetDeepFlavor_uds[20];
         Double_t        o_jetDeepFlavor_g[20];
-        UInt_t          o_jetHadronFlavor[20];   //[_nJets]
+        unsigned        o_jetHadronFlavor[20];   //[_nJets]
         //Bool_t          o_jetIsLoose[20];   //[_nJets]
         Bool_t          o_jetIsTight[20];   //[_nJets]
         Bool_t          o_jetIsTightLepVeto[20];   //[_nJets]
@@ -742,6 +817,14 @@ class Skimmer {
         TBranch        *bi__passTrigger_mmm;
         TBranch        *bi__passTrigger_mt;
         TBranch        *bi__passTrigger_ref;
+        TBranch        *bi__HLT_Ele27_WPTight_Gsf;   //!
+        TBranch        *bi__HLT_Ele27_WPTight_Gsf_prescale;   //!
+        TBranch        *bi__HLT_Ele32_WPTight_Gsf;   //!
+        TBranch        *bi__HLT_Ele32_WPTight_Gsf_prescale;   //!
+        TBranch        *bi__HLT_IsoMu24;   //!
+        TBranch        *bi__HLT_IsoMu24_prescale;   //!
+        TBranch        *bi__HLT_IsoTkMu24;   //!
+        TBranch        *bi__HLT_IsoTkMu24_prescale;   //!
         //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
         //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
         //TBranch        *bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
@@ -822,12 +905,20 @@ class Skimmer {
         TBranch        *bi__lElectronPassConvVeto;   //!
         TBranch        *bi__lElectronChargeConst;   //!
         TBranch        *bi__lElectronMissingHits;   //!
-        TBranch        *bi__leptonMvaSUSY;
+        TBranch        *bi__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
+        TBranch        *bi__lElectronIsEE;
+        TBranch        *bi__lElectronSuperClusterOverP;
+        TBranch        *bi__lElectronEcalEnergy;
+        TBranch        *bi__lElectronSigmaIetaIeta;
+        TBranch        *bi__lElectronDEtaInSeed;
+        TBranch        *bi__lElectronDeltaPhiSuperClusterTrack;
+        TBranch        *bi__lElectronDeltaEtaSuperClusterTrack;
+        TBranch        *bi__lElectronHOverE;
+        TBranch        *bi__lElectronEInvMinusPInv;
+        TBranch        *bi__lElectronNumberInnerHitsMissing;
         TBranch        *bi__leptonMvaTTH;
         TBranch        *bi__leptonMvatZq;
-        TBranch        *bi__lEwkLoose;   //!
-        TBranch        *bi__lEwkFO;   //!
-        TBranch        *bi__lEwkTight;   //!
+        TBranch        *bi__leptonMvaTOP;
         TBranch        *bi__lPOGVeto;   //!
         TBranch        *bi__lPOGLoose;   //!
         TBranch        *bi__lPOGMedium;   //!
@@ -857,6 +948,12 @@ class Skimmer {
         TBranch        *bi__lMuonSegComp;   //!
         TBranch        *bi__lMuonTrackPt;   //!
         TBranch        *bi__lMuonTrackPtErr;   //!
+        TBranch        *bi__lMuonTimenDof;
+        TBranch        *bi__lMuonTime;
+        TBranch        *bi__lMuonTimeErr;
+        TBranch        *bi__lMuonRPCTimenDof;
+        TBranch        *bi__lMuonRPCTime;
+        TBranch        *bi__lMuonRPCTimeErr;
         TBranch        *bi__lIsPrompt;   //!
         TBranch        *bi__lMatchPdgId;   //!
         TBranch        *bi__lMatchCharge;   //[_nL]
@@ -977,6 +1074,9 @@ class Skimmer {
         TBranch        *bi__metPuppiPhiResDown;
         TBranch        *bi__metPuppiPhiResUp;
 
+        LeptonMvaHelper* mvahelper;
+        bool hasLeptonMvaTOP;
+
         Skimmer(TString inputfilename, TString outputfilename);
         ~Skimmer();
         void Init_input_branches(TTree* tree);
@@ -985,9 +1085,7 @@ class Skimmer {
 
         //Skim conditions related stuff
         void get_TightelectronID(bool* ID);
-        void get_DisplelectronID(bool* ID);
         void get_TightmuonID(bool* ID);
-        void get_DisplmuonID(bool* ID);
         void get_clean_ele(bool* cleaned, bool* muonID);
         bool ElectronTriggerSkim();
         bool MuonTriggerSkim();

@@ -1,0 +1,5 @@
+HNL_10mu
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000169410743461_mu_massiveAndCKM_LO.root M-10_138mm
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_mu_massiveAndCKM_LO.root M-10_6.9mm
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000793725393319_mu_massiveAndCKM_LO.root M-10_6.3mm
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_mu_massiveAndCKM_LO.root  M-10_0.6mm

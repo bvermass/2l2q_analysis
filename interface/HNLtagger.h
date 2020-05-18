@@ -27,8 +27,11 @@ class HNLtagger
 
         static const unsigned maxJetSize = 50;
         int      _gen_Nmass;
-        double   _gen_NV;
+        double   _gen_NV2;
         double   _gen_Nctau;
+        bool     _is2016;
+        bool     _is2017;
+        bool     _is2018;
         bool     _JetIsFromHNL;
         double   _JetPt;
         double   _JetPt_log;
@@ -92,7 +95,7 @@ class HNLtagger
         bool     _JetConstituentHasTrack[maxJetSize];
         int      _JetConstituentInSV[maxJetSize];
         double   _JetConstituentNmass[maxJetSize];
-        double   _JetConstituentNV[maxJetSize];
+        double   _JetConstituentNV2[maxJetSize];
         double   _JetConstituentNctau[maxJetSize];
 
         HNLtagger(TString filename, TString flavor, int partition, int partitionjobnumber);
@@ -101,6 +104,7 @@ class HNLtagger
         double predict_PFN_v4(PFNReader& pfn, double M, double V);
         double predict_PFN_v5(PFNReader& pfn, double M, double ctau);
         double predict_PFN_v6(PFNReader& pfn, double M, double ctau);
+        double predict_PFN_v7(PFNReader& pfn, double M, double ctau);
         void write_HNLtagger_tree();
         void delete_HNLtagger_tree();
 };
@@ -114,7 +118,7 @@ class HNLBDTtagger
         TTree* HNLBDTtagger_tree;
 
         int      _gen_Nmass;
-        double   _gen_NV;
+        double   _gen_NV2;
         bool     _JetIsFromHNL;
         double   _weight;
         double   _lPt;

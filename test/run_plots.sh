@@ -17,26 +17,39 @@ else
 fi
 
 if [[ choice -eq 1 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////////////\n"
         
+        firstline=0
         while IFS='' read -r line || [[ -n "$line" ]]; do
             if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
                 echo ""
             else
                 counter=0
                 for val in $line; do
-                    if [ $counter -eq 0 ]; then
+                    if [ $firstline -eq 0 ]; then
+                        if [ $counter -eq 0 ]; then
+                            subdirectory_name=($val)
+                            counter=1
+                        elif [ $counter -eq 1 ]; then
+                            partition=($val)
+                            counter=0
+                            firstline=1
+                        fi
+                    elif [ $counter -eq 0 ]; then
                         sample=($val)
                         counter=1
+                        firstline=2
                     elif [ $counter -eq 1 ]; then
                         legend=($val)
                         counter=0
                     fi
                 done
-                ./$exec_name $sample $legend
+                if [ $firstline -eq 2 ]; then
+                    ./$exec_name $subdirectory_name 0 1 $sample $legend
+                fi
                 echo
             fi
         done < "$1"
@@ -48,7 +61,7 @@ if [[ choice -eq 1 ]]; then
     fi
 fi
 if [[ choice -eq 2 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/multihistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/multihistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////////"
         echo -e "//MULTIHIST PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////////\n"
@@ -61,8 +74,14 @@ if [[ choice -eq 2 ]]; then
                 counter=0
                 for val in $line; do
                     if [ $firstline -eq 0 ]; then
-                        subdirectory_name=($val)
-                        firstline=1
+                        if [ $counter -eq 0 ]; then
+                            subdirectory_name=($val)
+                            counter=1
+                        elif [ $counter -eq 1 ]; then
+                            partition=($val)
+                            counter=0
+                            firstline=1
+                        fi
                     elif [ $counter -eq 0 ]; then
                         samples+=($val)
                         counter=1
@@ -73,7 +92,7 @@ if [[ choice -eq 2 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
+        ./$exec_name $subdirectory_name 0 1 ${samples[@]} ${legends[@]}
         echo
         rm $exec_name
     else
@@ -83,7 +102,7 @@ if [[ choice -eq 2 ]]; then
     fi
 fi
 if [[ choice -eq 3 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" "plotting/ratioplotter.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/stackhistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" "plotting/ratioplotter.cc" `root-config --cflags --glibs`; then
         echo -e "\n//////////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION SUCCESSFUL//"
         echo -e "//////////////////////////////////////\n"
@@ -114,7 +133,7 @@ if [[ choice -eq 3 ]]; then
                 done
             fi
         done < "$1"
-        ./$exec_name $subdirectory_name 0 $partition ${samples[@]} ${legends[@]}
+        ./$exec_name $subdirectory_name 0 1 ${samples[@]} ${legends[@]}
         echo
         #rm $exec_name
     else
@@ -162,7 +181,7 @@ if [[ choice -eq 4 ]]; then
     fi
 fi
 if [[ choice -eq 5 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/sensitivity_estimator.cc" "plotting/tdrStyle.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/sensitivity_estimator.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n////////////////////////////////////////////////"
         echo -e "//SENSITIVITY ESTIMATOR COMPILATION SUCCESSFUL//"
         echo -e "////////////////////////////////////////////////\n"
@@ -197,7 +216,7 @@ if [[ choice -eq 5 ]]; then
     fi
 fi
 if [[ choice -eq 6 ]]; then
-    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
         echo -e "\n/////////////////////////////////////////////////"
         echo -e "//Combine Datacards Prep COMPILATION SUCCESSFUL//"
         echo -e "/////////////////////////////////////////////////\n"

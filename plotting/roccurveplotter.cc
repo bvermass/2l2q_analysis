@@ -67,17 +67,22 @@ int main(int argc, char * argv[])
     std::vector<TFile*> files_signal;
     std::vector<TFile*> files_bkg;
     std::vector<TString> legends;
+    bool is2016 = false, is2017 = false, is2018 = false;
     for(int i = 2; i < argc; i++){
         std::cout << argv[i] << std::endl;
         TString argument = (TString)argv[i];
         if(i%3 == 2) legends.push_back(argument);
         else if(i%3 == 0) files_signal.push_back(TFile::Open(argument));
         else if(i%3 == 1) files_bkg.push_back(TFile::Open(argument));
+
+        if(argument.Contains("MiniAOD2016") or argument.Contains("Run2016")) is2016 = true;
+        else if(argument.Contains("MiniAOD2017") or argument.Contains("Run2017")) is2017 = true;
+        else if(argument.Contains("MiniAOD2018") or argument.Contains("Run2018")) is2018 = true;
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -87,20 +92,21 @@ int main(int argc, char * argv[])
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
+    gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
+
+    // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
+    std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
-    TLegend legend = get_legend(0.6, 0.15, 1, 0.3, 1);
+    TLegend legend = get_legend(0.5, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "21.1 fb^{-1} (13 TeV)";
-    float leftmargin  = c->GetLeftMargin();
-    float topmargin   = c->GetTopMargin();
-    float rightmargin = c->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    float leftmargin  = pad->GetLeftMargin();
+    float topmargin   = pad->GetTopMargin();
+    float rightmargin = pad->GetRightMargin();
 
     std::vector< std::map< TString, double > > auc; // Vector for different files, map <V2, auc>
     for(int i = 0; i < files_signal.size(); i++) auc.push_back(std::map<TString, double>());
@@ -118,49 +124,63 @@ int main(int argc, char * argv[])
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();
             if(histname.Index("_ROC") == -1 or histname.Index("_M-") == -1 or histname.Index("_V2-") == -1 or histname.Index("_Training") != -1 or histname.Index("_after") != -1) continue;
+            if(!check_identifiers(histname, identifiers)) continue;
             std::cout << histname << std::endl;
             
             // get plot specific pathnames
             TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
 
+            // for parametrized PFN, put evaluated mass and V2 in legend
+            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(("PFN: " + (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " "));
+
             TMultiGraph* multigraph = new TMultiGraph();
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");
+            bool valid_graph = false;
             for(int i = 0; i < files_signal.size(); i++){
                 //auc.push_back(get_roc_and_auc(multigraph, histname, files_signal[i], files_bkg[i]);
                 TH1F* hist_signal = (TH1F*) files_signal[i]->Get(histname);
                 TH1F* hist_bkg    = (TH1F*) files_bkg[i]->Get(histname);
-                if(hist_signal->GetMaximum() <= 0 or hist_bkg->GetMaximum() <= 0) continue;
-
+                if(!hist_signal or !hist_bkg or hist_signal->GetMaximum() <= 0 or hist_bkg->GetMaximum() <= 0) continue;
                 
                 std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
                 // calculate cutting point to get 75% signal efficiency for PFN or BDT
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.85);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.85, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95, general_pathname, histname);
 
                 TGraph* roc = get_roc(eff_signal, eff_bkg);
                 roc->SetLineColor(colors[i]);
                 multigraph->Add(roc);
+                valid_graph = true;
                 auc[i][histname] = computeAUC(roc);
                 TString auc_str = std::to_string(auc[i][histname]).substr(0, std::to_string(auc[i][histname]).find(".") + 3);
                 legend.AddEntry(roc, legends[i] + ": " + auc_str, "l");
             }
 
+
             c->Clear();
             c->SetLogx(0);
             c->SetLogy(0);
-            multigraph->Draw("AL");
-            legend.Draw("same");
-            CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+            if(valid_graph){
+                multigraph->Draw("AL");
 
-            c->Modified();
-            c->Print(pathname_lin + histname + ".pdf");
+
+                multigraph->GetXaxis()->SetLimits(-0.02, 0.3);
+                multigraph->SetMinimum(0.7);
+                multigraph->SetMaximum(1.02);
+
+                legend.Draw("same");
+                CMSandLumi->Draw();
+
+                c->Modified();
+                c->Print(pathname_lin + histname + ".png");
+            }
 
             // Plot ROC for several V2 (only for plots with 1 sig-bkg combo):
             if(histname.Index("_V2-3e-05") != -1 and files_signal.size() == 1 and histname.Index("_M-") != -1){
@@ -178,24 +198,24 @@ int main(int argc, char * argv[])
                 }
 
                 if(plot_extra_hists_with_different_names(c, multigraph, &legend, files_signal, files_bkg, legendsV2, histnamesV2, colors)){
-                    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+                    CMSandLumi->Draw();
 
                     histname.ReplaceAll("_V2-3e-05", "_vsV2");
                     pathname_lin.ReplaceAll("_V2-3e-05", "_vsV2");
                     gSystem->Exec("mkdir -p " + pathname_lin);
 
                     c->Modified();
-                    c->Print(pathname_lin + histname + ".pdf");
+                    c->Print(pathname_lin + histname + ".png");
 
                     multigraph->GetXaxis()->SetRangeUser(0., 0.1);
                     multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
                     c->Modified();
-                    c->Print(pathname_lin + histname + "_zoom.pdf");
+                    c->Print(pathname_lin + histname + "_zoom.png");
 
                     //c->SetLogx(1);
                     //c->Modified();
-                    //c->Print(pathname_log + histname + "_zoom.pdf");
+                    //c->Print(pathname_log + histname + "_zoom.png");
                 }
             }
             // Plot PFN vs BDT
@@ -205,17 +225,17 @@ int main(int argc, char * argv[])
 
             //        histname.ReplaceAll("PFN", "PFNvsBDT");
             //        c->Modified();
-            //        c->Print(pathname_lin + histname + ".pdf");
+            //        c->Print(pathname_lin + histname + ".png");
 
             //        multigraph->GetXaxis()->SetRangeUser(0., 0.1);
             //        multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
             //        c->Modified();
-            //        c->Print(pathname_lin + histname + "_zoom.pdf");
+            //        c->Print(pathname_lin + histname + "_zoom.png");
 
             //        c->SetLogx(1);
             //        c->Modified();
-            //        c->Print(pathname_log + histname + "_zoom.pdf");
+            //        c->Print(pathname_log + histname + "_zoom.png");
             //    }
             //}
         }
@@ -260,7 +280,7 @@ int main(int argc, char * argv[])
                 lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
                 c->Modified();
-                c->Print(pathname_lin + histname + ".pdf");
+                c->Print(pathname_lin + histname + ".png");
             }
         }
     }

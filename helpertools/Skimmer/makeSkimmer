@@ -1,7 +1,7 @@
 CC=g++ -Wall -Wno-reorder -Wextra
 CFLAGS= -Wl,--no-as-needed
-LDFLAGS=`root-config --glibs --cflags`
-SOURCES= ../LorentzVector/LorentzVector.cc Conditions.cc Skimmer.cc main.cc
+LDFLAGS=`root-config --glibs --cflags` -lTMVA
+SOURCES= ../LorentzVector/LorentzVector.cc LeptonMvaHelper.cc Conditions.cc Skimmer.cc main.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE= test
 

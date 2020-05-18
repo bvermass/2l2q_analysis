@@ -2,9 +2,14 @@
 
 #First argument must be the txt file containing: SAMPLENAME CROSS-SECTION MaxEntry(to avoid crashes)
 headdir=$(pwd)
+if [ $# -eq 2 ] ; then
+    exec_name=$2
+else
+    exec_name=a_interactive.out
+fi
 
 #compile code
-if g++ -Wall -Wno-reorder -Wextra -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/include/python2.7 -L/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/lib -lpython2.7  -lboost_python -std=c++11 -o a_interactive.out ${headdir}"/src/MET_histograms.cc" ${headdir}"/helpertools/LSFReader/LSFReader.cc" ${headdir}"/helpertools/PUWeightReader/PUWeightReader.cc" ${headdir}"/helpertools/LorentzVector/LorentzVector.cc" ${headdir}"/helpertools/PFNEvaluation/PFNReader.cc" ${headdir}"/src/PFNTools.cc" ${headdir}"/src/HNLtagger.cc" ${headdir}"/src/jet_histograms.cc" ${headdir}"/src/helper_histo_functions.cc" ${headdir}"/src/gen_histograms.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
+if g++ -Wall -Wno-reorder -Wextra -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/include/python2.7 -L/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/lib -lpython2.7  -lboost_python -std=c++11 -o $exec_name ${headdir}"/src/MET_histograms.cc" ${headdir}"/src/HNL_parameters.cc" ${headdir}"/src/bTagWP.cc" ${headdir}"/helpertools/LSFReader/LSFReader.cc" ${headdir}"/helpertools/PUWeightReader/PUWeightReader.cc" ${headdir}"/helpertools/LorentzVector/LorentzVector.cc" ${headdir}"/helpertools/PFNEvaluation/PFNReader.cc" ${headdir}"/src/PFNTools.cc" ${headdir}"/src/jet_histograms.cc" ${headdir}"/src/helper_histo_functions.cc" ${headdir}"/src/gen_histograms.cc" ${headdir}"/src/signal_region.cc" ${headdir}"/src/HLT_eff.cc" ${headdir}"/src/jetID.cc" ${headdir}"/src/leptonID.cc" ${headdir}"/src/histo_functions.cc" ${headdir}"/src/full_analyzer_constructor.cc" ${headdir}"/src/full_analyzer.cc" ${headdir}"/src/print_table.cc" ${headdir}"/test/mainroot.cc" `root-config --cflags --glibs`; then
     echo -e "\n//////////////////////////"
     echo -e "//COMPILATION SUCCESSFUL//"
     echo -e "//////////////////////////\n"
@@ -37,13 +42,13 @@ if g++ -Wall -Wno-reorder -Wextra -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/externa
             partitionjobnumber=0
             while [[ ! $partitionjobnumber -eq $partition ]]; do
                 echo $line" "$partitionjobnumber > $tmp
-                #exec_analyzer will process the input in tmp again and run a_interactive.out
-                bash ${headdir}/test/scripts/exec_analyzer.sh $tmp a_interactive.out
+                #exec_analyzer will process the input in tmp again and run $exec_name
+                bash ${headdir}/test/scripts/exec_analyzer.sh $tmp $exec_name
                 let "partitionjobnumber++"
             done
         fi
     done < "$1"
-    rm a_interactive.out
+    rm $exec_name
     rm $tmp
 else
     echo -e "\n//////////////////////"

@@ -53,124 +53,121 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
     }
 }
 
-// fill function is part of full_analyzer class to access the tree variables
-void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
-{
-    if(i_jetl2 == -1 or i_subleading == -1 or !_lIVF_match[i_subleading]){
-        hnltagger.isValid = false;
-        return;
-    }else {
-        hnltagger.isValid = true;
-    }
-    hnltagger._gen_Nmass    = _gen_Nmass;
-    hnltagger._gen_NV       = _gen_NV;
-    hnltagger._gen_Nctau     = _gen_Nctau;
-    hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
-    hnltagger._JetPt        = _jetPt[i_jetl2];
-    hnltagger._JetPt_log    = log(_jetPt[i_jetl2]);
-    hnltagger._JetEta       = _jetEta[i_jetl2];
-    hnltagger._JetPhi       = _jetPhi[i_jetl2];
-    hnltagger._lPt                   = _lPt[i_subleading];
-    hnltagger._lPt_log               = log(_lPt[i_subleading]);
-    hnltagger._lEta                  = _lEta[i_subleading];
-    hnltagger._lPhi                  = _lPhi[i_subleading];
-    hnltagger._ldxy                  = _dxy[i_subleading];
-    hnltagger._ldxy_log              = log(fabs(_dxy[i_subleading]));
-    hnltagger._ldxy_sgnlog           = get_signedLog(_dxy[i_subleading]);
-    hnltagger._ldz                   = _dz[i_subleading];
-    hnltagger._ldz_log               = log(fabs(_dz[i_subleading]));
-    hnltagger._ldz_sgnlog            = get_signedLog(_dz[i_subleading]);
-    hnltagger._l3dIPSig              = _3dIPSig[i_subleading];
-    hnltagger._l3dIPSig_log          = log(_3dIPSig[i_subleading]);
-    hnltagger._lrelIso               = _relIso[i_subleading];
-    hnltagger._lptRel                = _ptRel[i_subleading];
-    hnltagger._lptRel_log            = log(_ptRel[i_subleading]);
-    hnltagger._lptRatio              = _ptRatio[i_subleading];
-    hnltagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_subleading];
-    hnltagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_subleading];
-
-    hnltagger._l1Pt            = _lPt[i_leading];
-    hnltagger._l1Pt_log        = log(_lPt[i_leading]);
-    hnltagger._l1Eta           = _lEta[i_leading];
-    hnltagger._mll             = get_mll(i_leading, i_subleading);
-    hnltagger._mlljet          = 0;//maybe add it?
-    hnltagger._dRll            = get_dRll(i_leading, i_subleading);
-    hnltagger._dRljet          = get_dR_lepton_jet(i_subleading, i_jetl2);
-
-    hnltagger._SV_PVSVdist     = get_IVF_PVSVdist(i_subleading);
-    hnltagger._SV_PVSVdist_2D  = get_IVF_PVSVdist_2D(i_subleading);
-    hnltagger._SV_ntracks      = _IVF_ntracks[i_subleading];
-    hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
-    LorentzVector tracksum;
-    LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
-    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
-        LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
-        tracksum += tmptrack;
-    }
-    hnltagger._SV_mass               = tracksum.mass();
-    hnltagger._SV_l1mass             = (tracksum + l1_vec).mass();
-    hnltagger._SV_pt                 = tracksum.pt();
-    hnltagger._SV_pt_log             = log(tracksum.pt());
-    hnltagger._SV_eta                = tracksum.eta();
-    hnltagger._SV_phi                = tracksum.phi();
-
-    hnltagger._nJetConstituents                    = _nJetConstituents[i_jetl2];//Constituents[i_jetl2];
-    for(unsigned i = 0; i < _nJetConstituents[i_jetl2]; i++){
-        hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jetl2][i];
-        hnltagger._JetConstituentPt_log[i]             = log(_JetConstituentPt[i_jetl2][i]);
-        hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jetl2][i];
-        hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jetl2][i];
-        hnltagger._JetConstituentPdgId[i]              = get_reducedPdgId(_JetConstituentPdgId[i_jetl2][i]);
-        hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jetl2][i];
-        hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jetl2][i];
-        hnltagger._JetConstituentdxy_log[i]            = log(fabs(_JetConstituentdxy[i_jetl2][i]));
-        hnltagger._JetConstituentdxy_sgnlog[i]         = get_signedLog(_JetConstituentdxy[i_jetl2][i]);
-        hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jetl2][i];
-        hnltagger._JetConstituentdz_log[i]             = log(fabs(_JetConstituentdz[i_jetl2][i]));
-        hnltagger._JetConstituentdz_sgnlog[i]          = get_signedLog(_JetConstituentdz[i_jetl2][i]);
-        hnltagger._JetConstituentdxyErr[i]             = (std::isinf(_JetConstituentdxyErr[i_jetl2][i]))? -1 : _JetConstituentdxyErr[i_jetl2][i];  //Rarely, dxy(z)Err were infinite, keras didn't like this
-        hnltagger._JetConstituentdzErr[i]              = (std::isinf(_JetConstituentdzErr[i_jetl2][i]))? -1 : _JetConstituentdzErr[i_jetl2][i];
-        hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jetl2][i];
-        hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jetl2][i];
-        hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jetl2][i];
-        hnltagger._JetConstituentInSV[i]              = (_JetConstituentCharge[i_jetl2][i] == 0)? -1 : is_track_in_sv(i_subleading, i_jetl2, i);
-        hnltagger._JetConstituentNmass[i]              = _gen_Nmass;
-        hnltagger._JetConstituentNV[i]                 = _gen_NV;
-        hnltagger._JetConstituentNctau[i]              = _gen_Nctau;
-    }
-    for(unsigned i = _nJetConstituents[i_jetl2]; i < 50; i++){
-        hnltagger._JetConstituentPt[i]                 = 0;
-        hnltagger._JetConstituentPt_log[i]             = 0;
-        hnltagger._JetConstituentEta[i]                = 0;
-        hnltagger._JetConstituentPhi[i]                = 0;
-        hnltagger._JetConstituentPdgId[i]              = 0;
-        hnltagger._JetConstituentCharge[i]             = 0;
-        hnltagger._JetConstituentdxy[i]                = 0;
-        hnltagger._JetConstituentdxy_log[i]            = 0;
-        hnltagger._JetConstituentdxy_sgnlog[i]         = 0;
-        hnltagger._JetConstituentdz[i]                 = 0;
-        hnltagger._JetConstituentdz_log[i]             = 0;
-        hnltagger._JetConstituentdz_sgnlog[i]          = 0;
-        hnltagger._JetConstituentdxyErr[i]             = 0;
-        hnltagger._JetConstituentdzErr[i]              = 0;
-        hnltagger._JetConstituentNumberOfHits[i]      = 0;
-        hnltagger._JetConstituentNumberOfPixelHits[i] = 0;
-        hnltagger._JetConstituentHasTrack[i]          = 0;
-        hnltagger._JetConstituentInSV[i]              = 0;
-        hnltagger._JetConstituentNmass[i]             = 0;
-        hnltagger._JetConstituentNV[i]                = 0;
-        hnltagger._JetConstituentNctau[i]             = 0;
-    }
-    if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
-}
-
-int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
-{
-    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
-        if(fabs(_IVF_trackpt[i_lep][i_track] - _JetConstituentPt[i_jet][i_const]) < 0.01 and fabs(_IVF_tracketa[i_lep][i_track] - _JetConstituentEta[i_jet][i_const]) < 0.01) return 1;
-    }
-    return 0;
-}
+//// fill function is part of full_analyzer class to access the tree variables
+//void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
+//{
+//    if(i_jetl2 == -1 or i_subleading == -1 or !_lIVF_match[i_subleading]){
+//        hnltagger.isValid = false;
+//        return;
+//    }else {
+//        hnltagger.isValid = true;
+//    }
+//    hnltagger._gen_Nmass    = HNL_param->mass;
+//    hnltagger._gen_NV2      = HNL_param->V2;
+//    hnltagger._gen_Nctau    = HNL_param->ctau;
+//    hnltagger._is2016       = _is2016;
+//    hnltagger._is2017       = _is2017;
+//    hnltagger._is2018       = _is2018;
+//    hnltagger._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
+//    hnltagger._JetPt        = _jetPt[i_jetl2];
+//    hnltagger._JetPt_log    = log(_jetPt[i_jetl2]);
+//    hnltagger._JetEta       = _jetEta[i_jetl2];
+//    hnltagger._JetPhi       = _jetPhi[i_jetl2];
+//    hnltagger._lPt                   = _lPt[i_subleading];
+//    hnltagger._lPt_log               = log(_lPt[i_subleading]);
+//    hnltagger._lEta                  = _lEta[i_subleading];
+//    hnltagger._lPhi                  = _lPhi[i_subleading];
+//    hnltagger._ldxy                  = _dxy[i_subleading];
+//    hnltagger._ldxy_log              = log(fabs(_dxy[i_subleading]));
+//    hnltagger._ldxy_sgnlog           = get_signedLog(_dxy[i_subleading]);
+//    hnltagger._ldz                   = _dz[i_subleading];
+//    hnltagger._ldz_log               = log(fabs(_dz[i_subleading]));
+//    hnltagger._ldz_sgnlog            = get_signedLog(_dz[i_subleading]);
+//    hnltagger._l3dIPSig              = _3dIPSig[i_subleading];
+//    hnltagger._l3dIPSig_log          = log(_3dIPSig[i_subleading]);
+//    hnltagger._lrelIso               = _relIso[i_subleading];
+//    hnltagger._lptRel                = _ptRel[i_subleading];
+//    hnltagger._lptRel_log            = log(_ptRel[i_subleading]);
+//    hnltagger._lptRatio              = _ptRatio[i_subleading];
+//    hnltagger._lNumberOfHits         = _lNumberOfValidTrackerHits[i_subleading];
+//    hnltagger._lNumberOfPixelHits    = _lNumberOfValidPixelHits[i_subleading];
+//
+//    hnltagger._l1Pt            = _lPt[i_leading];
+//    hnltagger._l1Pt_log        = log(_lPt[i_leading]);
+//    hnltagger._l1Eta           = _lEta[i_leading];
+//    hnltagger._mll             = mll;
+//    hnltagger._mlljet          = 0;//maybe add it?
+//    hnltagger._dRll            = dRll;
+//    hnltagger._dRljet          = dRljet;
+//
+//    hnltagger._SV_PVSVdist     = IVF_PVSVdist;
+//    hnltagger._SV_PVSVdist_2D  = IVF_PVSVdist_2D;
+//    hnltagger._SV_ntracks      = _IVF_ntracks[i_subleading];
+//    hnltagger._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
+//    hnltagger._SV_mass         = SVmass;
+//    hnltagger._SV_l1mass       = SVl1mass;
+//    hnltagger._SV_pt           = SVpt;
+//    hnltagger._SV_pt_log       = log(SVpt);
+//    hnltagger._SV_eta          = SVeta;
+//    hnltagger._SV_phi          = SVphi;
+//
+//    hnltagger._nJetConstituents                    = _nJetConstituents[i_jetl2];//Constituents[i_jetl2];
+//    for(unsigned i = 0; i < _nJetConstituents[i_jetl2]; i++){
+//        hnltagger._JetConstituentPt[i]                 = _JetConstituentPt[i_jetl2][i];
+//        hnltagger._JetConstituentPt_log[i]             = log(_JetConstituentPt[i_jetl2][i]);
+//        hnltagger._JetConstituentEta[i]                = _JetConstituentEta[i_jetl2][i];
+//        hnltagger._JetConstituentPhi[i]                = _JetConstituentPhi[i_jetl2][i];
+//        hnltagger._JetConstituentPdgId[i]              = get_reducedPdgId(_JetConstituentPdgId[i_jetl2][i]);
+//        hnltagger._JetConstituentCharge[i]             = _JetConstituentCharge[i_jetl2][i];
+//        hnltagger._JetConstituentdxy[i]                = _JetConstituentdxy[i_jetl2][i];
+//        hnltagger._JetConstituentdxy_log[i]            = log(fabs(_JetConstituentdxy[i_jetl2][i]));
+//        hnltagger._JetConstituentdxy_sgnlog[i]         = get_signedLog(_JetConstituentdxy[i_jetl2][i]);
+//        hnltagger._JetConstituentdz[i]                 = _JetConstituentdz[i_jetl2][i];
+//        hnltagger._JetConstituentdz_log[i]             = log(fabs(_JetConstituentdz[i_jetl2][i]));
+//        hnltagger._JetConstituentdz_sgnlog[i]          = get_signedLog(_JetConstituentdz[i_jetl2][i]);
+//        hnltagger._JetConstituentdxyErr[i]             = (std::isinf(_JetConstituentdxyErr[i_jetl2][i]))? -1 : _JetConstituentdxyErr[i_jetl2][i];  //Rarely, dxy(z)Err were infinite, keras didn't like this
+//        hnltagger._JetConstituentdzErr[i]              = (std::isinf(_JetConstituentdzErr[i_jetl2][i]))? -1 : _JetConstituentdzErr[i_jetl2][i];
+//        hnltagger._JetConstituentNumberOfHits[i]      = _JetConstituentNumberOfHits[i_jetl2][i];
+//        hnltagger._JetConstituentNumberOfPixelHits[i] = _JetConstituentNumberOfPixelHits[i_jetl2][i];
+//        hnltagger._JetConstituentHasTrack[i]          = _JetConstituentHasTrack[i_jetl2][i];
+//        hnltagger._JetConstituentInSV[i]              = (_JetConstituentCharge[i_jetl2][i] == 0)? -1 : is_track_in_sv(i_subleading, i_jetl2, i);
+//        hnltagger._JetConstituentNmass[i]              = HNL_param->mass;
+//        hnltagger._JetConstituentNV2[i]                = HNL_param->V2;
+//        hnltagger._JetConstituentNctau[i]              = HNL_param->ctau;
+//    }
+//    for(unsigned i = _nJetConstituents[i_jetl2]; i < 50; i++){
+//        hnltagger._JetConstituentPt[i]                 = 0;
+//        hnltagger._JetConstituentPt_log[i]             = 0;
+//        hnltagger._JetConstituentEta[i]                = 0;
+//        hnltagger._JetConstituentPhi[i]                = 0;
+//        hnltagger._JetConstituentPdgId[i]              = 0;
+//        hnltagger._JetConstituentCharge[i]             = 0;
+//        hnltagger._JetConstituentdxy[i]                = 0;
+//        hnltagger._JetConstituentdxy_log[i]            = 0;
+//        hnltagger._JetConstituentdxy_sgnlog[i]         = 0;
+//        hnltagger._JetConstituentdz[i]                 = 0;
+//        hnltagger._JetConstituentdz_log[i]             = 0;
+//        hnltagger._JetConstituentdz_sgnlog[i]          = 0;
+//        hnltagger._JetConstituentdxyErr[i]             = 0;
+//        hnltagger._JetConstituentdzErr[i]              = 0;
+//        hnltagger._JetConstituentNumberOfHits[i]      = 0;
+//        hnltagger._JetConstituentNumberOfPixelHits[i] = 0;
+//        hnltagger._JetConstituentHasTrack[i]          = 0;
+//        hnltagger._JetConstituentInSV[i]              = 0;
+//        hnltagger._JetConstituentNmass[i]             = 0;
+//        hnltagger._JetConstituentNV2[i]               = 0;
+//        hnltagger._JetConstituentNctau[i]             = 0;
+//    }
+//    if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
+//}
+//
+//int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
+//{
+//    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_lep]; i_track++){
+//        if(fabs(_IVF_trackpt[i_lep][i_track] - _JetConstituentPt[i_jet][i_const]) < 0.01 and fabs(_IVF_tracketa[i_lep][i_track] - _JetConstituentEta[i_jet][i_const]) < 0.01) return 1;
+//    }
+//    return 0;
+//}
 
 //void full_analyzer::fill_HNLBDTtagger_tree(HNLBDTtagger& hnlbdttagger, double weight)
 //{
@@ -180,8 +177,8 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 //    }else {
 //        hnlbdttagger.isValid = true;
 //    }
-//    hnlbdttagger._gen_Nmass             = _gen_Nmass;
-//    hnlbdttagger._gen_NV                = _gen_NV;
+//    hnlbdttagger._gen_Nmass             = HNL_param->mass;
+//    hnlbdttagger._gen_NV2               = HNL_param->V2;
 //    hnlbdttagger._JetIsFromHNL          = get_JetIsFromHNL(i_jetl2);
 //    hnlbdttagger._weight                = weight;
 //    hnlbdttagger._lPt                   = _lPt[i_subleading];
@@ -221,18 +218,13 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 //    hnlbdttagger._JetChargeSum          = jetchargesum;
 //
 //    hnlbdttagger._SV_ntracks            = _IVF_ntracks[i_subleading];
-//    hnlbdttagger._SV_PVSVdist_2D        = get_IVF_PVSVdist_2D(i_subleading);
-//    hnlbdttagger._SV_PVSVdist           = get_IVF_PVSVdist(i_subleading);
+//    hnlbdttagger._SV_PVSVdist_2D        = IVF_PVSVdist_2D;
+//    hnlbdttagger._SV_PVSVdist           = IVF_PVSVdist;
 //    hnlbdttagger._SV_normchi2           = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
-//    LorentzVector tracksum;
-//    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
-//        LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
-//        tracksum += tmptrack;
-//    }
-//    hnlbdttagger._SV_mass               = tracksum.mass();
-//    hnlbdttagger._SV_pt                 = tracksum.pt();
-//    hnlbdttagger._SV_eta                = tracksum.eta();
-//    hnlbdttagger._SV_phi                = tracksum.phi();
+//    hnlbdttagger._SV_mass               = SVmass;
+//    hnlbdttagger._SV_pt                 = SVpt;
+//    hnlbdttagger._SV_eta                = SVeta;
+//    hnlbdttagger._SV_phi                = SVphi;
 //
 //    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
 //}

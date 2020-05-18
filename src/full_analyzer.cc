@@ -4,11 +4,11 @@
 
 using namespace std;
 
-TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
+TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_20/src/2l2q_analysis/";
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
-//  'cross_section' is the cross section of the process
+//  'cross_section' is the cross section of the process, for HNL, this is taken from the HNL data file
 //  'max_entries' is the maximal entry over which must be ran, if its 50000, then we will run over the first 50000 events, if its -1, all events will be ran
 //  'partition' is the number of jobs that the file will be split in, if 5, then the code knows it is 1 of 5 jobs running over this file
 //  'partitionjobnumber' is the number of the particular job in the partition, so if it's 3 and partition is 5, then this code will run over the third fraction of events if they are divided in 5 fractions
@@ -20,33 +20,23 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - start loop over events
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
+    TFile *input = new TFile(filename, "open");
+    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
+    Init(tree);
+    tree->GetEntry(0);
 
     extensive_plots = false;
 
     SetSampleTypes(filename);
-
-    //TString promptordisplaced = "";
-    //if(filename.Index("prompt") != -1) promptordisplaced = "prompt";
-    //else if(filename.Index("displaced") != -1) promptordisplaced = "displaced";
-
-    TFile *input = new TFile(filename, "open");
-    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    
-    
-    if(sampleflavor == "e" or sampleflavor == "mu"){
-        _gen_Nmass = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V-") - filename.Index("_M-") - 3)).Atof();
-        _gen_NV    = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_" + sampleflavor + "_") - filename.Index("_V-") - 3)).Atof();
-        _gen_Nctau  = get_mean_ctau(sampleflavor, _gen_Nmass, _gen_NV);
-        evaluating_masses = {_gen_Nmass};//controls which masses will be evaluated in the HNLtagger, for signal, only its own mass
-        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(_gen_Nmass, _gen_NV*_gen_NV) + "\n", true);
-    }else {
-        _gen_Nmass = 0;
-        _gen_NV    = 0;
-        _gen_Nctau  = 0;
-        evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+    HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
+    std::cout << "---HNL param---: " << HNL_param->mass << " " << HNL_param->V2 << " " << HNL_param->ctau << std::endl;
+    if(isSignal){
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
+        cross_section = HNL_param->cross_section;
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
+    evaluating_masses = {};
     for(const int& mass : evaluating_masses){
         evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
         for(const double& V2 : evaluating_V2s[mass]){
@@ -56,17 +46,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
 
-    //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookers/hCounter");
+    //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
     //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
     
-    Init(tree);
 
     //This map contains all 1D histograms
     std::map<TString, TH1*> hists;
     std::map<TString, TH2*> hists2D;
 
     //init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
-    //init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     //init_HLT_allevents_efficiency(&hists, "");
 
     for(const TString &lep_region : {"_mm", "_ee"}){
@@ -87,37 +76,41 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    TString filename_PUWeights;
-    if(_is2016)      filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-    else if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-    else if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
-    TString histname_PUWeights = "PUWeights";
-    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
+    PUWeightReader puweightreader = get_PUWeightReader(local_dir);
 
-    // Load Lepton Scale Factors (these are for 2018 METResolution task, don't have them yet for HNL analysis)
-    TString filename_LSF_e = local_dir + "data/LeptonScaleFactors/2018_ElectronTight.root";
-    TString histname_LSF_e = "EGamma_SF2D";
-    LSFReader lsfreader_e(filename_LSF_e, histname_LSF_e, "e");
-    TString filename_LSF_mu = local_dir + "data/LeptonScaleFactors/RunABCD_SF_ID.root";
-    TString histname_LSF_mu = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
-    LSFReader lsfreader_mu(filename_LSF_mu, histname_LSF_mu, "mu");
+    // Load Lepton Scale Factors for POG Tight IDs
+    LSFReader lsfreader_e = get_LSFReader(local_dir, "e");
+    LSFReader lsfreader_m = get_LSFReader(local_dir, "mu");
    
     //HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
+    // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
+    //BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber);
+
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
     std::map<TString, double> SR_counters = add_SR_counters();
 
+    double int_lumi;
+    if(_is2016) int_lumi = 35.92;
+    if(_is2017) int_lumi = 41.53;
+    if(_is2018) int_lumi = 59.74;
+
     // Determine range of events to loop over
     Long64_t nentries = tree->GetEntries();
+    //cout << "full_analyzer.cc file: " << filename << endl;
+    //cout << "Number of events: " << nentries << endl;
+    TH1F* hCounter = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
+    if(!hCounter) hCounter = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
-    if(sampleflavor.Index("Run") == -1){ 
-        total_weight = (cross_section * 59690 * nentries / max_entries) / ((TH1F*) input->Get("blackJackAndHookers/hCounter"))->GetBinContent(1); // 35900 is in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+    if(!isData){
+        std::cout << "xsec: " << cross_section << " nentries: " << nentries << " max_entries: " << max_entries << " hCounter: " << hCounter->GetBinContent(1) << std::endl;
+        total_weight = (cross_section * int_lumi * 1000. * (double)nentries / (double)max_entries) / hCounter->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
     std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
     print_evaluating_points(evaluating_ctaus);
@@ -126,55 +119,72 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     Long64_t j_begin = floor(1.0 * max_entries * partitionjobnumber / partition);
     Long64_t j_end   = floor(1.0 * max_entries * (partitionjobnumber + 1) / partition);
     unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
+    unsigned loop_counter = 0;
     cout << "j_begin j_end max_entries: " << j_begin << " " << j_end << " " << max_entries << endl;
     if(j_end - j_begin > 2000000) cout << "More than 2million events to run over! Increase partition (" << j_end - j_begin << ")" << endl;
 
     //main loop begins here
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    tree->GetEntry(jentry);
-	    bool printevent = ((jentry -j_begin)%notice == 0);
+        bool printevent = (loop_counter == notice);
 	    if(printevent){
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
+            loop_counter = 0;
 	    }
 
 
-        //Get ID
-        get_electronID();
-        get_loose_electronID();
-        get_muonID();
-        get_loose_muonID();
-        get_jetID();
+        //Get muons, electrons and jets that pass ID and cleaning
+        std::vector<unsigned> promptMuonID, promptElectronID, looseMuonID, looseElectronID;
+        for(unsigned i = 0; i < _nLight; i++){
+            if(IsPromptMuonID(i))           promptMuonID.push_back(i);
+            if(IsLooseMuonID(i))            looseMuonID.push_back(i);
+        }
+        nTightMu = promptMuonID.size();
+        nLooseMu = looseMuonID.size();
 
+        for(unsigned i = 0; i < _nLight; i++){
+            bool CleanElectron = IsCleanElectron(i, promptMuonID);
 
-        //Get Cleaning for jets
-	    get_clean_jets(&jet_clean_full[0],   &fullElectronID[0], &fullMuonID[0]);
-	    get_clean_ele(&ele_clean_full[0],   &fullMuonID[0]);
-        get_clean_ele(&ele_clean_loose[0], &looseMuonID[0]);
+            if(IsPromptElectronID(i)    and CleanElectron) promptElectronID.push_back(i);
+            if(IsLooseElectronID(i)     and CleanElectron) looseElectronID.push_back(i);
+        }
+        nTightEle = promptElectronID.size();
+        nLooseEle = looseElectronID.size();
 
-	    int i_leading_e     		    = find_leading_e(&fullElectronID[0], &ele_clean_full[0]);
-	    int i_leading_mu    		    = find_leading_mu(&fullMuonID[0]);
+        std::vector<unsigned> jetID, jetID_uncl;
+        for(unsigned i = 0; i < _nJets; i++){
+            if(IsTightJetID(i) and IsCleanJet(i, looseMuonID) and IsCleanJet(i, looseElectronID)) jetID.push_back(i);
+            if(IsTightJetID(i)) jetID_uncl.push_back(i);
+        }
+        nTightJet       = jetID.size();
+        nTightJet_uncl  = jetID_uncl.size();
+
+        //Find leptons and jets with leading pt
+	    int i_leading_e     		    = find_leading_lepton(promptElectronID);
+	    int i_leading_mu    		    = find_leading_lepton(promptMuonID);
 
         i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
 
-	    int i_subleading_e  		    = find_subleading_e(&fullElectronID[0], &ele_clean_full[0], i_leading);
-	    int i_subleading_mu 		    = find_subleading_mu(&fullMuonID[0], i_leading);
+	    int i_subleading_e  		    = find_subleading_lepton(promptElectronID, i_leading);
+	    int i_subleading_mu 		    = find_subleading_lepton(promptMuonID, i_leading);
 
-	    i_leading_jet                   = find_leading_jet(&fullJetID[0], &jet_clean_full[0]);
-	    i_subleading_jet	            = find_subleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet);
-        i_thirdleading_jet              = find_thirdleading_jet(&fullJetID[0], &jet_clean_full[0], i_leading_jet, i_subleading_jet);
+	    i_leading_jet                   = find_leading_jet(jetID);
+	    i_subleading_jet	            = find_subleading_jet(jetID, i_leading_jet);
+        i_thirdleading_jet              = find_thirdleading_jet(jetID, i_leading_jet, i_subleading_jet);
 
 
         set_leptons(i_subleading_e, i_subleading_mu);
         signal_regions();
 
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_mu);
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_mu, i_leading) * get_LSF(lsfreader_e, lsfreader_mu, i_subleading);
         else ev_weight = 1;
-
 
         fill_histograms(&hists, &hists2D);
         SR_counters[sr_flavor]++;
         SR_counters[sr_flavor+"_weighted"] += ev_weight;
+
+        ++loop_counter;
     }
     //Small summary to write to terminal in order to quickly check state of results
     print_SR_counters(SR_counters, total_weight);
@@ -186,62 +196,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    //if(sampleflavor == "e"){
-    //    hnltagger_e.write_HNLtagger_tree();
-    //    hnltagger_mu.delete_HNLtagger_tree();
-    //    hnltagger_gen_e.write_HNLtagger_tree();
-    //    hnltagger_gen_mu.delete_HNLtagger_tree();
-    //    hnlbdttagger_e.write_HNLBDTtagger_tree();
-    //    hnlbdttagger_mu.delete_HNLBDTtagger_tree();
-    //}else if(sampleflavor == "mu"){
-    //    hnltagger_e.delete_HNLtagger_tree();
-    //    hnltagger_mu.write_HNLtagger_tree();
-    //    hnltagger_gen_e.delete_HNLtagger_tree();
-    //    hnltagger_gen_mu.write_HNLtagger_tree();
-    //    hnlbdttagger_e.delete_HNLBDTtagger_tree();
-    //    hnlbdttagger_mu.write_HNLBDTtagger_tree();
-    //}else {
-    //    hnltagger_e.write_HNLtagger_tree();
-    //    hnltagger_mu.write_HNLtagger_tree();
-    //    hnltagger_gen_e.delete_HNLtagger_tree();
-    //    hnltagger_gen_mu.delete_HNLtagger_tree();
-    //    hnlbdttagger_e.write_HNLBDTtagger_tree();
-    //    hnlbdttagger_mu.write_HNLBDTtagger_tree();
-    //}
 
-    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/MET_scale_resolution/histograms/", "hists_full_analyzer", partition, partitionjobnumber);
+    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/MET_scale_resolution/histograms/", "hists_full_analyzer", partition, partitionjobnumber, true);
     cout << "output to: " << outputfilename << endl;
     TFile *output = new TFile(outputfilename, "recreate");
 
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
     for(auto const& it : hists){
         TH1* h = it.second;
-        if(((TString)h->GetName()).Index("_meanqT") == -1){
-            int nb = h->GetNbinsX();
-            double b0  = h->GetBinContent( 0  );
-            double e0  = h->GetBinError  ( 0  );
-            double b1  = h->GetBinContent( 1  );
-            double e1  = h->GetBinError  ( 1  );
-            double bn  = h->GetBinContent(nb  );
-            double en  = h->GetBinError  (nb  );
-            double bn1 = h->GetBinContent(nb+1);
-            double en1 = h->GetBinError  (nb+1);
-
-            h->SetBinContent(0   , 0.);
-            h->SetBinError  (0   , 0.);
-            h->SetBinContent(1   , b0+b1);
-            h->SetBinError  (1   , std::sqrt(e0*e0 + e1*e1  ));
-            h->SetBinContent(nb  , bn+bn1);
-            h->SetBinError  (nb  , std::sqrt(en*en + en1*en1));
-            h->SetBinContent(nb+1, 0.);
-            h->SetBinError  (nb+1, 0.);
-
-            //if bin content is below zero, set it to 0 (dealing with negative weights)
-            for(int i = 0; i < nb+1; i++){
-                if(h->GetBinContent(i) < 0.) h->SetBinContent(i, 0.);
-            }
-            if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
-        }
+        if(!((TString)h->GetName()).Contains("_meanqT")) fix_overflow_and_negative_bins(h);
+        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
     // Normalize 2D histograms to correct total weight and write them
@@ -294,7 +258,6 @@ void full_analyzer::Loop()
 
     Long64_t nbytes = 0, nb = 0;
     for (Long64_t jentry=0; jentry<nentries;jentry++) {
-        if(jentry%1000 == 0) cout << "yeey " << jentry << endl;
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
         nb = fChain->GetEntry(jentry);   nbytes += nb;
