@@ -29,9 +29,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     SetSampleTypes(filename);
     HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
-    std::cout << "---HNL param---: " << HNL_param->mass << " " << HNL_param->V2 << " " << HNL_param->ctau << std::endl;
     if(isSignal){
-        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)sampleflavor + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)HNL_param->flavor + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
         cross_section = HNL_param->cross_section;
     }
 
@@ -136,7 +135,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         std::cout << "xsec: " << cross_section << " nentries: " << nentries << " max_entries: " << max_entries << " hCounter: " << hCounter->GetBinContent(1) << std::endl;
         total_weight = (cross_section * int_lumi * 1000. * (double)nentries / (double)max_entries) / hCounter->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }
-    std::cout << "sampleflavor and total weight: " << sampleflavor << " " << total_weight << std::endl;
+    std::cout << "flavor and total weight: " << HNL_param->flavor << " " << total_weight << std::endl;
     print_evaluating_points(evaluating_ctaus);
     //hweight->Scale(hweight->GetBinContent(1) * nentries / max_entries);
     
@@ -212,7 +211,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Reweighting weights for HNL V2s, map: <V2, weight>
         for(auto& MassMap : evaluating_V2s){
             for(double V2 : MassMap.second){
-                if(sampleflavor == "e" or sampleflavor == "mu"){
+                if(isSignal){
                     reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN);
                 }else {
                     reweighting_weights[V2] = 1.;
@@ -283,14 +282,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    if(sampleflavor == "e"){
+    if(HNL_param->flavor == "e"){
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.delete_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();
         hnltagger_gen_mu.delete_HNLtagger_tree();
         //hnlbdttagger_e.write_HNLBDTtagger_tree();
         //hnlbdttagger_mu.delete_HNLBDTtagger_tree();
-    }else if(sampleflavor == "mu"){
+    }else if(HNL_param->flavor == "mu"){
         hnltagger_e.delete_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
         hnltagger_gen_e.delete_HNLtagger_tree();

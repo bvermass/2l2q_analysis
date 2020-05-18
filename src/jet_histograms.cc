@@ -220,7 +220,7 @@ void full_analyzer::fill_HNLtagger_tree(HNLtagger& hnltagger)
         hnltagger._JetConstituentNV2[i]               = 0;
         hnltagger._JetConstituentNctau[i]             = 0;
     }
-    if(hnltagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnltagger.HNLtagger_tree->Fill();
+    if(hnltagger._JetIsFromHNL or isBackground or isData) hnltagger.HNLtagger_tree->Fill();
 }
 
 int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
@@ -288,5 +288,5 @@ int full_analyzer::is_track_in_sv(int i_lep, int i_jet, int i_const)
 //    hnlbdttagger._SV_eta                = SVeta;
 //    hnlbdttagger._SV_phi                = SVphi;
 //
-//    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
+//    if(hnlbdttagger._JetIsFromHNL or isBackground or isData) hnlbdttagger.HNLBDTtagger_tree->Fill();
 //}

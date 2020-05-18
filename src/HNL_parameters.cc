@@ -49,7 +49,14 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
                 year                = year_str;
                 directory           = directory_str;
                 
-                std::cout << "--HNL parameters-- rec: " << recommended << " type: " << type << " mass: " << mass << " V2: " << V2 << " ctau: " << ctau << " ctauRatioToTheory: " << ctauRatioToTheory << " events: " << events << " xsec: " << cross_section << " year: " << year <<  std::endl;
+                if(HNL_sample_filename.Contains("_e_"))         flavor = "e";
+                else if(HNL_sample_filename.Contains("_mu_"))   flavor = "mu";
+                else if(HNL_sample_filename.Contains("_tau_"))  flavor = "tau";
+                else if(HNL_sample_filename.Contains("_2l_"))   flavor = "2l";
+                else if(HNL_sample_filename.Contains("_3l_"))   flavor = "3l";
+                else flavor = "";
+
+                std::cout << "--HNL parameters-- " << recommended << " " << flavor << " " << type << " M=" << mass << " V2=" << V2 << " ctau=" << ctau << " ctauRatioToTheory=" << ctauRatioToTheory << " events: " << events << " xsec: " << cross_section << " year: " << year <<  std::endl;
                 std::cout << "--HNL parameters-- directory: " << directory << std::endl;
 
                 break;
@@ -73,6 +80,7 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
         cross_section_unc   = 0.;
         year                = "";
         directory           = "";
+        flavor              = "";
 
         std::cout << "--HNL parameters-- No parameters initialized" << std::endl;
     }

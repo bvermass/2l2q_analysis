@@ -263,7 +263,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
         //if(nJets_cl > 1) (*hists2D)[prefix+"_dRl2jet1_2_cl"]->Fill(deltaR(l2_vec, jets_cl[0]), deltaR(l2_vec, jets_cl[1]), event_weight);
     }
 
-    if(sampleflavor.Index("Run") == -1){
+    if(!isData){
         int charged_count = 0;
         for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
             if(_gen_NPackedDtrsCharge[i] != 0){
@@ -312,7 +312,7 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
     /*
      * KVF vs IVF for events
      */
-    //if(sampleflavor.Index("Run") == -1){
+    //if(!isData){
     //    if(_1e1disple and fabs(_lCharge[i_leading] + _lCharge[i_subleading]) == SSorOS and i_gen_subleading != -1) {
     //        if(_lIVF_match[i_subleading] and get_IVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2){
     //            if(_lKVF_valid[i_subleading] and get_KVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2) (*hists)[prefix+"_KVForIVF_categories"]->Fill(0., event_weight);
@@ -385,7 +385,7 @@ void full_analyzer::fill_KVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_KVF_PV-SVdxyz_zoom2"]->Fill(KVF_PVSVdist, event_weight);
     (*hists)[prefix+"_KVF_dRcut"]->Fill(_lKVF_dRcut[i_subleading], event_weight);
 
-    if(sampleflavor.Index("Run") == -1){
+    if(!isData){
         if(i_gen_subleading != -1){
             double KVF_SVgenreco    = get_KVF_SVgenreco(i_gen_subleading, i_subleading);
             double gen_PVSVdist     = get_PVSVdist_gen(i_gen_subleading);
@@ -446,7 +446,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 
         }
         
-        if(sampleflavor.Index("Run") == -1){
+        if(!isData){
             (*hists)[prefix+"_IVF_ctau"]->Fill(_ctauHN, event_weight);
             (*hists2D)[prefix+"_IVF_ctauHN_PV-SVdxyz"]->Fill(_ctauHN, IVF_PVSVdist, event_weight);
             (*hists2D)[prefix+"_IVF_ctaugHN_PV-SVdxyz"]->Fill(_ctauHN*calc_betagamma(HNL_param->mass, _gen_NE), IVF_PVSVdist, event_weight);
@@ -464,7 +464,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 
 
 void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN);
     if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
@@ -483,7 +483,7 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
 
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     if(i_gen_subleading == -1 or !(leadingIsl1 and subleadingIsl2)) return;
 
     (*hists)[prefix+"_IVF_cutflow"]->Fill(0., event_weight);
@@ -545,7 +545,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
 }
 
 void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     if(i_gen_subleading == -1) return;
 
     double KVF_SVgenreco    = get_KVF_SVgenreco(i_gen_subleading, i_subleading);
@@ -599,7 +599,7 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //for(int i = 0; i < nx_MVAvsPOGMedium; i++){
     //    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->GetXaxis()->SetBinLabel(i+1,MVAvsPOGMedium_labels[i]);
     //}
-    //if(sampleflavor.Index("Run") == -1){
+    //if(!isData){
     //    int nx_KVForIVF = 4;
     //    const char *KVForIVF_labels[nx_KVForIVF] = {"IVF, KVF", "IVF, no KVF", "no IVF, KVF", "no IVF, no KVF"};
     //    for(int i = 0; i < nx_KVForIVF; i++){ 
@@ -631,7 +631,7 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     for(int i = 0; i < nx_dxy; i++){
         (*hists)[prefix+"_dxy_cutflow"]->GetXaxis()->SetBinLabel(i+1, dxy_labels[i]);
     }
-    if(sampleflavor.Index("Run") == -1){
+    if(!isData){
         int nx_IVF = 3;
         const char *IVF_labels[nx_IVF] = {"Preselection", "Vertex", "|SV-SVgen| < 0.2cm"};
         for(int i = 0; i < nx_IVF; i++){

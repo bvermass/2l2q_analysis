@@ -8,7 +8,7 @@ using namespace std;
 
 void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists2D)["MC_check_gen_l1_l2_charge"]         = new TH2F("MC_check_gen_l1_l2_charge", ";l_{1} Charge; l_{2} Charge", 2, -2, 2, 2, -2, 2);
     (*hists)["gen_ctauHN"]                          = new TH1F("gen_ctauHN", ";c#tau [mm];Events", 40, 0, 100);
     (*hists)["gen_l1_pt"]                           = new TH1F("gen_l1_pt", ";l_{1}^{gen} #it{p}_{T} [GeV]; Events", 40, 0, 80);
@@ -41,7 +41,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
 void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, double event_weight)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     // stuff related to gen Packed Candidates
     int ch_count = 0;
     for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
@@ -110,7 +110,7 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
 void full_analyzer::add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
     //(*hists)[prefix+"_KVForIVF_categories"]             = new TH1F(prefix+"_KVForIVF_categories", ";;Events", 4, 0, 4);
     (*hists)[prefix+"_ngentr"]                          = new TH1F(prefix+"_ngentr", ";N_{tracks}^{gen} from HNL;Events", 15, 0, 15);
@@ -150,7 +150,7 @@ void full_analyzer::add_gen_histograms(std::map<TString, TH1*>* hists, std::map<
 
 void full_analyzer::add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_KVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 60);
     (*hists)[prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num"]   = new TH1F(prefix+"_KVF_gen_PV-SVdxy_zoom_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (KVF);Events", 20, 0, 10);
@@ -184,7 +184,7 @@ void full_analyzer::add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TStri
 
 void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_IVF_cutflow"]                     = new TH1F(prefix+"_IVF_cutflow", ";;Events", 3, 0, 3);
     //(*hists)[prefix+"_IVF_PV-SVdxy_eff_num"]            = new TH1F(prefix+"_IVF_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 10, 0, 60);
     //(*hists)[prefix+"_IVF_PV-SVdxy_eff_den"]            = new TH1F(prefix+"_IVF_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 10, 0, 60);
@@ -233,7 +233,7 @@ void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TStri
 
 void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
 {
-    if(sampleflavor != "e" and sampleflavor != "mu") return;
+    if(!isSignal) return;
     if(i_jet == -1) return;
     hnltagger_gen._JetIsFromHNL = get_JetIsFromHNL(i_jet);
     hnltagger_gen._JetPt        = _jetPt[i_jet];

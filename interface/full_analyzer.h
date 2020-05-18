@@ -808,7 +808,6 @@ public :
    TBranch        *b__metSignificance;   //!
    
    Double_t ev_weight;
-   TString sampleflavor;
    bool isSignal = false, isBackground = false, isData = false, _is2016 = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
