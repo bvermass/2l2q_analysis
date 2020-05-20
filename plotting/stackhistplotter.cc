@@ -23,9 +23,12 @@ int main(int argc, char * argv[])
     std::vector<TString> legends_data;
     bool is_mini_analyzer = false;
     bool is2016 = false, is2017 = false, is2018 = false;
+    int n_columns = 3;
     for(int i = 0; i < argc - i_legends; i++){
         TString filename = (TString)argv[i_rootfiles + i];
         TString legendname = (TString)argv[i_legends + i];
+        if(legendname.Length() > 13) n_columns = 1;
+        else if(legendname.Length() > 9) n_columns = 2;
 
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));
@@ -82,7 +85,7 @@ int main(int argc, char * argv[])
     pad_histo->Draw();
     pad_histo->cd();
 
-    TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, 3);
+    TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018);

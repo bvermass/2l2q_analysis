@@ -24,8 +24,14 @@ int main(int argc, char * argv[])
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
     }
     std::vector<TString> legends;
+    int n_columns = 3;
     for(int i = i_legends; i < argc; i++){
         legends.push_back(adjust_legend((TString)argv[i]));
+
+        // adjust number of columns for legend if an entry is too large to fit
+        if(legends[i].Length() > 13) n_columns = 1;
+        else if(legends[i].Length() > 9) n_columns = 2;
+
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
@@ -51,7 +57,7 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, 3);
+    TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
