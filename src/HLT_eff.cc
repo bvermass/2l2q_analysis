@@ -26,7 +26,7 @@ void full_analyzer::init_HLT_efficiency(std::map<TString, TH1*>* hists, TString 
 }
 
 void full_analyzer::init_HLT_allevents_efficiency(std::map<TString, TH1*>* hists, TString prefix){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_HLT_e_allevents_eff_den"]                        = new TH1F(prefix+"_HLT_e_allevents_eff_den", ";#it{p}_{T} [GeV];Events", 60, 0, 150);
     (*hists)[prefix+"_HLT_e_allevents_eff_num"]                        = new TH1F(prefix+"_HLT_e_allevents_eff_num", ";#it{p}_{T} [GeV];Events", 60, 0, 150);
     (*hists)[prefix+"_HLT_mu_allevents_eff_den"]                       = new TH1F(prefix+"_HLT_mu_allevents_eff_den", ";#it{p}_{T} [GeV];Events", 60, 0, 150);
@@ -65,7 +65,7 @@ void full_analyzer::fill_HLT_efficiency(std::map<TString, TH1*>* hists, TString 
 }
 
 void full_analyzer::fill_HLT_allevents_efficiency(std::map<TString, TH1*>* hists, TString prefix){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     if(_gen_nL == 0) return;
 
     (*hists)[prefix+"_HLT_e_allevents_eff_den"]->Fill(_gen_lPt[0]);

@@ -5,31 +5,12 @@ void full_analyzer::SetSampleTypes(TString filename)
 {
     _is2016 = (!_is2017 and !_is2018);
 
-    if(filename.Index("_e_") != -1){
-        sampleflavor = "e";
-        isSignal = true;
-    }
-    else if(filename.Index("_mu_") != -1){
-        sampleflavor = "mu";
-        isSignal = true;
-    }
-    else if(filename.Index("Run2016") != -1){
-        sampleflavor = "Run2016";
-        isData = true;
-    }
-    else if(filename.Index("Run2017") != -1){
-        sampleflavor = "Run2017";
-        isData = true;
-    }
-    else if(filename.Index("Run2018") != -1){
-        sampleflavor = "Run2018";
-        isData = true;
-    }
-    else{
-        sampleflavor = "bkg";
-        isBackground = true;
-    }
-    std::cout << "This is " << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
+    isSignal     = filename.Contains("HeavyNeutrino_lljj_");
+    isData       = filename.Contains("Run201");
+    isBackground = (!isSignal and !isData);
+    isUL         = filename.Contains("_UL");
+
+    std::cout << "This is " << (isUL? "UL " : "") << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
 
 
@@ -64,9 +45,14 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
 PUWeightReader full_analyzer::get_PUWeightReader(TString local_dir)
 {
     TString filename_PUWeights;
-    if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-    if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-    if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    if(isUL){
+        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_UL17_XSecCentral.root";
+        else std::cout << "no PU weights yet for UL from this year" << std::endl;
+    }else{
+        if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+        if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    }
     TString histname_PUWeights = "PUWeights";
     PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
     return puweightreader;
@@ -144,7 +130,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_PV_x", &_PV_x, &b__PV_x);
    fChain->SetBranchAddress("_PV_y", &_PV_y, &b__PV_y);
    fChain->SetBranchAddress("_PV_z", &_PV_z, &b__PV_z);
-   if(sampleflavor.Index("Run") == -1){
+   if(tree->FindBranch("_weight")){ // check if we're dealing with data or MC, can't use isData yet because it's not yet initialized
         fChain->SetBranchAddress("_nTrueInt", &_nTrueInt, &b__nTrueInt);
         fChain->SetBranchAddress("_weight", &_weight, &b__weight);
         fChain->SetBranchAddress("_lheHTIncoming", &_lheHTIncoming, &b__lheHTIncoming);
@@ -348,7 +334,7 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lMuonRPCTimenDof", _lMuonRPCTimenDof, &b__lMuonRPCTimenDof);
    fChain->SetBranchAddress("_lMuonRPCTime", _lMuonRPCTime, &b__lMuonRPCTime);
    fChain->SetBranchAddress("_lMuonRPCTimeErr", _lMuonRPCTimeErr, &b__lMuonRPCTimeErr);
-   if(sampleflavor.Index("Run") == -1){
+   if(tree->FindBranch("_weight")){ // check if we're dealing with data or MC, can't use isData yet because it's not yet initialized
         fChain->SetBranchAddress("_lIsPrompt", _lIsPrompt, &b__lIsPrompt);
         fChain->SetBranchAddress("_lMatchPdgId", _lMatchPdgId, &b__lMatchPdgId);
         fChain->SetBranchAddress("_lMatchCharge", _lMatchCharge, &b__lMatchCharge);

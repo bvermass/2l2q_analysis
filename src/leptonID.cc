@@ -216,7 +216,7 @@ int full_analyzer::find_subleading_lepton(const std::vector<unsigned>& leptoncol
 
 int full_analyzer::find_gen_lep(int i_lep)
 {
-    if(sampleflavor.Index("Run") != -1) return -1;
+    if(isData) return -1;
     double dR = 0.3;
     int i_gen = -1;
     if(i_lep != -1) {
@@ -234,7 +234,7 @@ int full_analyzer::find_gen_lep(int i_lep)
 
 int full_analyzer::find_gen_l1()
 {
-    if(sampleflavor.Index("Run") != -1) return -1;
+    if(isData) return -1;
     int fromW = 0;
     int i_found = -1;
     for(unsigned i = 0; i < _gen_nL; i++){
@@ -249,7 +249,7 @@ int full_analyzer::find_gen_l1()
 
 int full_analyzer::find_gen_l2()
 {
-    if(sampleflavor.Index("Run") != -1) return -1;
+    if(isData) return -1;
     int fromN = 0;
     int i_found = -1;
     for(unsigned i = 0; i < _gen_nL; i++){

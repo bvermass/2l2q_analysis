@@ -226,5 +226,5 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
 //    hnlbdttagger._SV_eta                = SVeta;
 //    hnlbdttagger._SV_phi                = SVphi;
 //
-//    if(hnlbdttagger._JetIsFromHNL or sampleflavor == "bkg" or sampleflavor.Index("Run20") != -1) hnlbdttagger.HNLBDTtagger_tree->Fill();
+//    if(hnlbdttagger._JetIsFromHNL or isBackground or isData) hnlbdttagger.HNLBDTtagger_tree->Fill();
 //}

@@ -249,7 +249,7 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
 
 
 void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix){
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     if(subleadingIsl2){
         (*hists)[prefix+"_l2_pt_eff_num"]->Fill(_lPt[i_subleading]);
@@ -271,7 +271,7 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //for(int i = 0; i < nx_MVAvsPOGMedium; i++){
     //    (*hists)[prefix+"_MVAvsPOGMedium_categories"]->GetXaxis()->SetBinLabel(i+1,MVAvsPOGMedium_labels[i]);
     //}
-    //if(sampleflavor.Index("Run") == -1){
+    //if(!isData){
     //    int nx_KVForIVF = 4;
     //    const char *KVForIVF_labels[nx_KVForIVF] = {"IVF, KVF", "IVF, no KVF", "no IVF, KVF", "no IVF, no KVF"};
     //    for(int i = 0; i < nx_KVForIVF; i++){ 

@@ -8,7 +8,7 @@ using namespace std;
 
 void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists2D)["MC_check_gen_l1_l2_charge"]         = new TH2F("MC_check_gen_l1_l2_charge", ";l_{1} Charge; l_{2} Charge", 2, -2, 2, 2, -2, 2);
     (*hists)["gen_ctauHN"]                          = new TH1F("gen_ctauHN", ";c#tau [mm];Events", 40, 0, 100);
     (*hists)["gen_l1_pt"]                           = new TH1F("gen_l1_pt", ";l_{1}^{gen} #it{p}_{T} [GeV]; Events", 40, 0, 80);
@@ -29,7 +29,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
 void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, double event_weight)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     // stuff related to gen Packed Candidates
     // jets containing any particles from HNL
     (*hists)["gen_nTrueInteractions"]->Fill(_nTrueInt, event_weight);
@@ -47,7 +47,7 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
 
 void full_analyzer::add_gen_histograms(std::map<TString, TH1*>* hists, TString prefix)
 {
-    if(sampleflavor.Index("Run") != -1) return;
+    if(isData) return;
     (*hists)[prefix+"_nTrueInteractions"]               = new TH1F(prefix+"_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
 
     (*hists)[prefix+"_l1_pt_eff_num"]                   = new TH1F(prefix+"_l1_pt_eff_num", ";#it{p}_{T} [GeV];Events", 15, 0, 40);
@@ -55,45 +55,6 @@ void full_analyzer::add_gen_histograms(std::map<TString, TH1*>* hists, TString p
     (*hists)[prefix+"_l2_pt_eff_num"]                   = new TH1F(prefix+"_l2_pt_eff_num", ";#it{p}_{T} [GeV];Events", 15, 0, 40);
     (*hists)[prefix+"_l2_pt_eff_den"]                   = new TH1F(prefix+"_l2_pt_eff_den", ";#it{p}_{T} [GeV];Events", 15, 0, 40);
 }
-
-//void full_analyzer::fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet)
-//{
-//    if(sampleflavor != "e" and sampleflavor != "mu") return;
-//    if(i_jet == -1) return;
-//    hnltagger_gen._JetIsFromHNL = get_JetIsFromHNL(i_jet);
-//    hnltagger_gen._JetPt        = _jetPt[i_jet];
-//    hnltagger_gen._JetEta       = _jetEta[i_jet];
-//    hnltagger_gen._nJetConstituents                    = _gen_nNPackedDtrs;
-//    for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
-//        hnltagger_gen._JetConstituentPt[i]                 = _gen_NPackedDtrsPt[i];
-//        hnltagger_gen._JetConstituentEta[i]                = _gen_NPackedDtrsEta[i];
-//        hnltagger_gen._JetConstituentPhi[i]                = _gen_NPackedDtrsPhi[i];
-//        hnltagger_gen._JetConstituentPdgId[i]              = _gen_NPackedDtrsPdgId[i];
-//        hnltagger_gen._JetConstituentCharge[i]             = _gen_NPackedDtrsCharge[i];
-//        hnltagger_gen._JetConstituentdxy[i]                = _gen_NPackedDtrs_matchdxy[i];
-//        hnltagger_gen._JetConstituentdz[i]                 = _gen_NPackedDtrs_matchdz[i];
-//        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
-//        hnltagger_gen._JetConstituentdzErr[i]              = 0;
-//        hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
-//        hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
-//        hnltagger_gen._JetConstituentHasTrack[i]          = 0;
-//    }
-//    for(unsigned i = _gen_nNPackedDtrs; i < 50; i++){
-//        hnltagger_gen._JetConstituentPt[i]                 = 0;
-//        hnltagger_gen._JetConstituentEta[i]                = 0;
-//        hnltagger_gen._JetConstituentPhi[i]                = 0;
-//        hnltagger_gen._JetConstituentPdgId[i]              = 0;
-//        hnltagger_gen._JetConstituentCharge[i]             = 0;
-//        hnltagger_gen._JetConstituentdxy[i]                = 0;
-//        hnltagger_gen._JetConstituentdz[i]                 = 0;
-//        hnltagger_gen._JetConstituentdxyErr[i]             = 0;
-//        hnltagger_gen._JetConstituentdzErr[i]              = 0;
-//        hnltagger_gen._JetConstituentNumberOfHits[i]      = 0;
-//        hnltagger_gen._JetConstituentNumberOfPixelHits[i] = 0;
-//        hnltagger_gen._JetConstituentHasTrack[i]          = 0;
-//    }
-//    hnltagger_gen.HNLtagger_tree->Fill();
-//}
 
 
 void full_analyzer::add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){

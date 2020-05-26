@@ -27,7 +27,7 @@ class HNL_parameters
 
         // parameters from file
         bool isValid;
-        std::string recommended, type, year, directory;
+        std::string recommended, type, year, directory, flavor;
         double mass, V2, ctau, ctauRatioToTheory, cross_section, cross_section_unc;
         int events;
 
