@@ -808,7 +808,7 @@ public :
    TBranch        *b__metSignificance;   //!
    
    Double_t ev_weight;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};

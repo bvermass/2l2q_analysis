@@ -5,11 +5,12 @@ void full_analyzer::SetSampleTypes(TString filename)
 {
     _is2016 = (!_is2017 and !_is2018);
 
-    if(filename.Contains("HeavyNeutrino_lljj_")) isSignal = true;
-    else if(filename.Index("Run201") != -1) isData = true;
-    else isBackground = true;
+    isSignal     = filename.Contains("HeavyNeutrino_lljj_");
+    isData       = filename.Contains("Run201");
+    isBackground = (!isSignal and !isData);
+    isUL         = filename.Contains("_UL");
 
-    std::cout << "This is " << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
+    std::cout << "This is " << (isUL? "UL " : "") << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
 
 
@@ -34,9 +35,14 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
 PUWeightReader full_analyzer::get_PUWeightReader(TString local_dir)
 {
     TString filename_PUWeights;
-    if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-    if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-    if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    if(isUL){
+        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_UL17_XSecCentral.root";
+        else std::cout << "no PU weights yet for UL from this year" << std::endl;
+    }else{
+        if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
+        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
+        if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    }
     TString histname_PUWeights = "PUWeights";
     PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
     return puweightreader;
