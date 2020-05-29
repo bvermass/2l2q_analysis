@@ -35,6 +35,43 @@ def add_subjob_hadd( path, script ):
         script.write('rm {}*.root\n'.format(path))
         return 1
 
+# Add HeavyNeutrino 'Dirac' and their charge conjugate 'Dirac_cc' files together. in the original 'Dirac' production, 'Dirac_cc' was missing. 
+# Dirac and Dirac_cc HNL samples don't have the same cross_section (due to different cross section of W+ and W- production) so they should be hadded after full_analyzer is run
+def add_Dirac_cc( path, n_hadds):
+    hadd_counter = 0
+    script_counter = 0
+    for filename in os.listdir(path):
+        if 'HeavyNeutrino_lljj' in filename and 'Dirac_cc' in filename:
+            filename = os.path.join(path, filename)
+            filename_dirac = filename.replace('Dirac_cc', 'Dirac')
+            filename_combined = filename.replace('Dirac_cc', 'Dirac_combined')
+
+            if hadd_counter == 0:
+                scriptname = 'haddscript_dirac_cc_{}.sh'.format( script_counter )
+                print 'making next {}'.format( scriptname )
+                script = init_script( scriptname )
+                script_counter += 1
+
+            hadd_counter += 1
+            script.write('hadd -f {} {} {}\n'.format(filename_combined, filename, filename_dirac))
+            script.write('rm {} {}\n'.format(filename, filename_dirac))
+
+            if hadd_counter == n_hadds:
+                submit_script( script, scriptname )
+                hadd_counter = 0
+
+
+    #submit last job if we end on a number of subfiles smaller than n_hadds
+    if hadd_counter != 0:
+        submit_script( script, scriptname )
+        hadd_counter = 0
+
+
+
+
+
+
+
 
 def merge_similar_samples( base_path ):
     basenames = []
@@ -47,8 +84,12 @@ def merge_similar_samples( base_path ):
     elif 'BkgEstimator' in base_path:
         basenames.append(base_path + 'BkgEstimator_')
 
+    # all_good is a boolean that will keep track if any hadd operation fails
     all_good = True
+
     for basename in basenames:
+
+
         #MiniAOD2016
         TTJets_2016_list = [basename + 'TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root',
                        basename + 'TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root',
@@ -313,6 +354,9 @@ for base_path in base_paths:
 if hadd_counter != 0:
     submit_script( script, scriptname )
     hadd_counter = 0
+
+for base_path in base_paths:
+    add_Dirac_cc( base_path, n_hadds)
 
 os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
 

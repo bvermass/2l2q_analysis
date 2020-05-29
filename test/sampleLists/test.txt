@@ -1,4 +1,6 @@
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV-amcatnloFXFX-pythia8/MiniAOD2016/dilep_final.root 1 4200 1
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-1_V-0.141421356237_2l_massiveAndCKM_LO/MiniAOD2017/dilep_final.root 1 1000 1
+#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-12_V-0.001_mu_massiveAndCKM_LO/MiniAOD2017/dilep_final.root 1 1000 1
+#/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/ZZTo4L_13TeV-amcatnloFXFX-pythia8/MiniAOD2016/dilep_final.root 1 4200 1
 #/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MiniAOD2016/dilep_final.root                                1 2000 1
 #/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/SingleElectron/crab_Run2017F-31Mar2018-v1_singlelepton_data_2017/200311_164910/0000/dilep_100.root 1 -1 1
 #/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/helpertools/Skimmer/Run2017/dilep_skimmed.root 1 -1 1

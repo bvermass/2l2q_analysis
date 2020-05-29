@@ -1,3 +1,2 @@
-wjets_2017_comparison 10
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_WJets_012J_MiniAOD2017.root                                     jet
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root   incl
+2017D 1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root DY_18
