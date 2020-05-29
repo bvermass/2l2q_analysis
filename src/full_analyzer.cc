@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_20/src/2l2q_analysis/";
+TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
@@ -30,7 +30,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     SetSampleTypes(filename);
     HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
     if(isSignal){
-        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)HNL_param->flavor + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
+        filePutContents("/user/bvermass/public/2l2q_analysis/log/Mctau_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->ctau) + "\n", true);
         cross_section = HNL_param->cross_section;
     }
 
@@ -102,8 +103,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
    
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
-    HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
-    HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
+    //HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
+    //HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
     BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber);
@@ -285,24 +286,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(HNL_param->flavor == "e"){
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.delete_HNLtagger_tree();
-        hnltagger_gen_e.delete_HNLtagger_tree();
-        hnltagger_gen_mu.delete_HNLtagger_tree();
-        //hnlbdttagger_e.write_HNLBDTtagger_tree();
-        //hnlbdttagger_mu.delete_HNLBDTtagger_tree();
     }else if(HNL_param->flavor == "mu"){
         hnltagger_e.delete_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
-        hnltagger_gen_e.delete_HNLtagger_tree();
-        hnltagger_gen_mu.delete_HNLtagger_tree();
-        //hnlbdttagger_e.delete_HNLBDTtagger_tree();
-        //hnlbdttagger_mu.write_HNLBDTtagger_tree();
+    }else if(HNL_param->flavor == "2l" or HNL_param->flavor == "3l"){
+        hnltagger_e.write_HNLtagger_tree();
+        hnltagger_mu.write_HNLtagger_tree();
     }else {
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
-        hnltagger_gen_e.delete_HNLtagger_tree();
-        hnltagger_gen_mu.delete_HNLtagger_tree();
-        //hnlbdttagger_e.write_HNLBDTtagger_tree();
-        //hnlbdttagger_mu.write_HNLBDTtagger_tree();
     }
     bkgestimator.write_tree();
 

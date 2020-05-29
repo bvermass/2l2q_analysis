@@ -41,14 +41,18 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
                 type                = type_str;
                 mass                = std::stod(mass_str);
                 V2                  = std::stod(V2_str);
-                ctau                = std::stod(ctau_str);
-                ctauRatioToTheory   = std::stod(ctauRatioToTheory_str);
                 events              = std::stoi(events_str);
                 cross_section       = std::stod(cross_section_str);
                 cross_section_unc   = std::stod(cross_section_unc_str);
                 year                = year_str;
                 directory           = directory_str;
                 
+                // ctau and ctauRatioToTheory are sometimes - instead of a numerical value. other parameters should always be a numerical value
+                if(ctau_str != "-") ctau = std::stod(ctau_str);
+                else ctau = 0;
+                if(ctauRatioToTheory_str != "-") ctauRatioToTheory   = std::stod(ctauRatioToTheory_str);
+                else ctauRatioToTheory = 0;
+
                 if(HNL_sample_filename.Contains("_e_"))         flavor = "e";
                 else if(HNL_sample_filename.Contains("_mu_"))   flavor = "mu";
                 else if(HNL_sample_filename.Contains("_tau_"))  flavor = "tau";

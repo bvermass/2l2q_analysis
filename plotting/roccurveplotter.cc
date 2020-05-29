@@ -100,6 +100,11 @@ int main(int argc, char * argv[])
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
 
+    // Make the pad that will contain the plot
+    TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
+    pad->Draw();
+    pad->cd();
+
     TLegend legend = get_legend(0.5, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
@@ -164,9 +169,9 @@ int main(int argc, char * argv[])
             }
 
 
-            c->Clear();
-            c->SetLogx(0);
-            c->SetLogy(0);
+            pad->Clear();
+            pad->SetLogx(0);
+            pad->SetLogy(0);
             if(valid_graph){
                 multigraph->Draw("AL");
 
@@ -178,7 +183,7 @@ int main(int argc, char * argv[])
                 legend.Draw("same");
                 CMSandLumi->Draw();
 
-                c->Modified();
+                pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
             }
 
@@ -204,37 +209,37 @@ int main(int argc, char * argv[])
                     pathname_lin.ReplaceAll("_V2-3e-05", "_vsV2");
                     gSystem->Exec("mkdir -p " + pathname_lin);
 
-                    c->Modified();
+                    pad->Modified();
                     c->Print(pathname_lin + histname + ".png");
 
                     multigraph->GetXaxis()->SetRangeUser(0., 0.1);
                     multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
-                    c->Modified();
+                    pad->Modified();
                     c->Print(pathname_lin + histname + "_zoom.png");
 
-                    //c->SetLogx(1);
-                    //c->Modified();
-                    //c->Print(pathname_log + histname + "_zoom.png");
+                    //pad->SetLogx(1);
+                    //pad->Modified();
+                    //pad->Print(pathname_log + histname + "_zoom.png");
                 }
             }
             // Plot PFN vs BDT
             //if(histname.Index("PFN") != -1){ 
             //    if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){
-            //        CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
+            //        CMSandLumi->Draw();
 
             //        histname.ReplaceAll("PFN", "PFNvsBDT");
-            //        c->Modified();
+            //        pad->Modified();
             //        c->Print(pathname_lin + histname + ".png");
 
             //        multigraph->GetXaxis()->SetRangeUser(0., 0.1);
             //        multigraph->GetYaxis()->SetRangeUser(0.7, 1.);
 
-            //        c->Modified();
+            //        pad->Modified();
             //        c->Print(pathname_lin + histname + "_zoom.png");
 
-            //        c->SetLogx(1);
-            //        c->Modified();
+            //        pad->SetLogx(1);
+            //        pad->Modified();
             //        c->Print(pathname_log + histname + "_zoom.png");
             //    }
             //}
@@ -245,7 +250,7 @@ int main(int argc, char * argv[])
     // Use stored auc values to make plots vs V2
     //TMultiGraph* multigraph = new TMultiGraph();
     //multigraph->SetTitle((TString)";|V|^{2};auc");
-    c->SetLogx(1);
+    pad->SetLogx(1);
     for(int i = 0; i < auc.size(); i++){
 
         for(auto& auc_withname : auc[i]){
@@ -276,10 +281,9 @@ int main(int argc, char * argv[])
                 auc_graph->Draw("AP");
                 auc_graph->SetMaximum(100);
                 legend.Draw("same");
-                CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-                lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+                CMSandLumi->Draw();
 
-                c->Modified();
+                pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
             }
         }

@@ -96,9 +96,7 @@ os.system('touch finished_samples.txt')
 os.system('touch hadded_samples.txt')
 
 output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
-input_base_path = output_base_path
-output_sample_path = output_base_path
-input_crab_path = output_base_path
+input_base_path = "/user/bvermass/public/heavyNeutrino/"
 
 production_version = sys.argv[1]
 dilep_tag = sys.argv[2]
@@ -151,4 +149,5 @@ for sampledir in os.listdir(input_base_path):
         merge_skimmed_files( input_crab_paths )
         copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths )
 
+os.system('echo >> finished_samples.txt')
 print 'successfully finished'
