@@ -496,6 +496,10 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_den"]->Fill(gen_PVSVdist_2D);
     (*hists)[prefix+"_IVF_gen_PV-SVdxyz_eff_den"]->Fill(gen_PVSVdist);
     (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_den"]->Fill(gen_PVSVdist);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_eff_den"]->Fill(gen_PVSVdist_2D);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_den"]->Fill(gen_PVSVdist_2D);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_eff_den"]->Fill(gen_PVSVdist);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_den"]->Fill(gen_PVSVdist);
     if(extensive_plots){
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]->Fill(gen_PVSVdist_2D);
         (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom2_eff_den"]->Fill(gen_PVSVdist);
@@ -516,6 +520,12 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
     }else {
         if(extensive_plots) (*hists)[prefix+"_IVF_PV-SVdxy_nomatch"]->Fill(IVF_PVSVdist, event_weight);
     }
+    if(_lIVF_match[i_subleading] && IVF_SVgenreco / IVF_PVSVdist < 0.1){
+        (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]->Fill(gen_PVSVdist_2D);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_num"]->Fill(gen_PVSVdist_2D);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxyz_eff_num"]->Fill(gen_PVSVdist);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_num"]->Fill(gen_PVSVdist);
+    }
     
     if(_lIVF_match[i_subleading] && IVF_SVgenreco < 0.2){
         (*hists)[prefix+"_IVF_cutflow"]->Fill(2., event_weight);
@@ -524,10 +534,10 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         //(*hists)[prefix+"_IVF_PV-SVdxy_zoom2_eff_num"]->Fill(IVF_PVSVdist_2D);
         //(*hists)[prefix+"_IVF_PV-SVdxyz_eff_num"]->Fill(IVF_PVSVdist);
         //(*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_num"]->Fill(IVF_PVSVdist);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]->Fill(gen_PVSVdist_2D);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom_eff_num"]->Fill(gen_PVSVdist_2D);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxyz_eff_num"]->Fill(gen_PVSVdist);
-        (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_num"]->Fill(gen_PVSVdist);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxy2_eff_num"]->Fill(gen_PVSVdist_2D);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_num"]->Fill(gen_PVSVdist_2D);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_eff_num"]->Fill(gen_PVSVdist);
+        (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_num"]->Fill(gen_PVSVdist);
         if(extensive_plots){
             (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]->Fill(gen_PVSVdist_2D);
             (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom2_eff_num"]->Fill(gen_PVSVdist);

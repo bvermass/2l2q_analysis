@@ -206,6 +206,14 @@ void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TStri
     (*hists)[prefix+"_IVF_gen_PV-SVdxyz_eff_den"]       = new TH1F(prefix+"_IVF_gen_PV-SVdxyz_eff_den", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
     (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_num"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
     (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_den"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxyz_zoom_eff_den", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_eff_num"]       = new TH1F(prefix+"_IVF_gen_PV-SVdxy2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_eff_den"]       = new TH1F(prefix+"_IVF_gen_PV-SVdxy2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_num"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_den"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy2_zoom_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_eff_num"]      = new TH1F(prefix+"_IVF_gen_PV-SVdxyz2_eff_num", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_eff_den"]      = new TH1F(prefix+"_IVF_gen_PV-SVdxyz2_eff_den", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_num"] = new TH1F(prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_num", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_den"] = new TH1F(prefix+"_IVF_gen_PV-SVdxyz2_zoom_eff_den", ";#Delta_{xyz}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 20);
     if(extensive_plots){
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);
