@@ -67,6 +67,7 @@ class BkgEstimator
 
         double   _SV_PVSVdist;
         double   _SV_PVSVdist_2D;
+        double   _SV_genreco;
         unsigned _SV_ntracks;
         double   _SV_mass;
         double   _SV_l1mass;
@@ -127,6 +128,7 @@ class BkgEstimator
 
         TBranch     *b__SV_PVSVdist;
         TBranch     *b__SV_PVSVdist_2D;
+        TBranch     *b__SV_genreco;
         TBranch     *b__SV_ntracks;
         TBranch     *b__SV_mass;
         TBranch     *b__SV_l1mass;

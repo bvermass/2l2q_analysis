@@ -54,6 +54,7 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
 
     BkgEstimator_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
     BkgEstimator_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");
+    BkgEstimator_tree->Branch("_SV_genreco",                       &_SV_genreco,                       "_SV_genreco/D");
     BkgEstimator_tree->Branch("_SV_ntracks",                       &_SV_ntracks,                       "_SV_ntracks/i");
     BkgEstimator_tree->Branch("_SV_mass",                          &_SV_mass,                          "_SV_mass/D");
     BkgEstimator_tree->Branch("_SV_l1mass",                        &_SV_l1mass,                        "_SV_l1mass/D");
@@ -131,6 +132,7 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_dRljet", &_dRljet, &b__dRljet);
     BkgEstimator_tree->SetBranchAddress("_SV_PVSVdist", &_SV_PVSVdist, &b__SV_PVSVdist);
     BkgEstimator_tree->SetBranchAddress("_SV_PVSVdist_2D", &_SV_PVSVdist_2D, &b__SV_PVSVdist_2D);
+    BkgEstimator_tree->SetBranchAddress("_SV_genreco", &_SV_genreco, &b__SV_genreco);
     BkgEstimator_tree->SetBranchAddress("_SV_ntracks", &_SV_ntracks, &b__SV_ntracks);
     BkgEstimator_tree->SetBranchAddress("_SV_mass", &_SV_mass, &b__SV_mass);
     BkgEstimator_tree->SetBranchAddress("_SV_l1mass", &_SV_l1mass, &b__SV_l1mass);

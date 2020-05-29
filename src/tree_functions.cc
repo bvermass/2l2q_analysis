@@ -52,6 +52,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
 
     bkgestimator._SV_PVSVdist     = IVF_PVSVdist;
     bkgestimator._SV_PVSVdist_2D  = IVF_PVSVdist_2D;
+    bkgestimator._SV_genreco      = IVF_SVgenreco;
     bkgestimator._SV_ntracks      = _IVF_ntracks[i_subleading];
     bkgestimator._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
     bkgestimator._SV_mass         = SVmass;

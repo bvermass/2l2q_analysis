@@ -467,11 +467,11 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
     if(isData) return;
     (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN);
-    if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
+    if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(IVF_SVgenreco);
     if(subleadingIsl2){
         (*hists)[prefix+"_l2_pt_eff_num"]->Fill(_lPt[i_subleading]);
         (*hists)[prefix+"_l2_ctau_eff_num"]->Fill(_ctauHN);
-        if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_num"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading));
+        if(_lIVF_match[i_subleading] and i_gen_subleading != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_num"]->Fill(IVF_SVgenreco);
     }
     (*hists)[prefix+"_l1_pt_eff_den"]->Fill(_lPt[i_leading]);
     (*hists)[prefix+"_l1_ctau_eff_den"]->Fill(_ctauHN);
@@ -517,7 +517,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         if(extensive_plots) (*hists)[prefix+"_IVF_PV-SVdxy_nomatch"]->Fill(IVF_PVSVdist, event_weight);
     }
     
-    if(_lIVF_match[i_subleading] && get_IVF_SVgenreco(i_gen_subleading, i_subleading) < 0.2){
+    if(_lIVF_match[i_subleading] && IVF_SVgenreco < 0.2){
         (*hists)[prefix+"_IVF_cutflow"]->Fill(2., event_weight);
         //(*hists)[prefix+"_IVF_PV-SVdxy_eff_num"]->Fill(IVF_PVSVdist_2D);
         //(*hists)[prefix+"_IVF_PV-SVdxy_zoom_eff_num"]->Fill(IVF_PVSVdist_2D);
@@ -531,7 +531,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix,
         if(extensive_plots){
             (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]->Fill(gen_PVSVdist_2D);
             (*hists)[prefix+"_IVF_gen_PV-SVdxyz_zoom2_eff_num"]->Fill(gen_PVSVdist);
-            (*hists)[prefix+"_IVF_SVgen-reco_aftercut_zoom"]->Fill(get_IVF_SVgenreco(i_gen_subleading, i_subleading), event_weight);
+            (*hists)[prefix+"_IVF_SVgen-reco_aftercut_zoom"]->Fill(IVF_SVgenreco, event_weight);
             (*hists)[prefix+"_IVF_ctau_eff_num"]->Fill(_ctauHN);
             (*hists)[prefix+"_IVF_ctau_zoom_eff_num"]->Fill(_ctauHN);
             (*hists)[prefix+"_IVF_ctau_zoom2_eff_num"]->Fill(_ctauHN);
