@@ -26,17 +26,18 @@ int main(int argc, char * argv[])
     std::vector<TString> legends;
     int n_columns = 3;
     for(int i = i_legends; i < argc; i++){
-        legends.push_back(adjust_legend((TString)argv[i]));
+        TString legendname = adjust_legend((TString)argv[i]);
+        legends.push_back(legendname);
 
         // adjust number of columns for legend if an entry is too large to fit
-        if(legends[i].Length() > 13) n_columns = 1;
-        else if(legends[i].Length() > 9) n_columns = 2;
+        if(legendname.Length() > 13) n_columns = 1;
+        else if(legendname.Length() > 9) n_columns = 2;
 
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {20, 30, 190}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -86,11 +87,11 @@ int main(int argc, char * argv[])
                 // Get a reference histogram for the name, then get all histograms in  a vector
                 TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
                 TString histname   = sample_hist_ref->GetName();
-                //std::cout << histname << std::endl;
 
                 if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0) continue;
                 if(!check_identifiers(histname, identifiers)) continue;
+                std::cout << histname << std::endl;
 
                 THStack* hists = new THStack("stack", "");
                 for(int i = 0; i < files.size(); i++){
@@ -142,7 +143,7 @@ int main(int argc, char * argv[])
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));
-                hists->SetMinimum(0.5);
+                hists->SetMinimum(1e-2);
                 legend.Draw("same");
                 CMSandLumi->Draw();
 

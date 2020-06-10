@@ -137,7 +137,7 @@ int main(int argc, char * argv[])
                     }
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
                     if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
-                    if(histname.Contains("JetTagVal")) continue;
+                    if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
