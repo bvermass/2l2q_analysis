@@ -3,10 +3,10 @@
 ///////////////////////////////////////////////////////////////////
 
 //Include header for the class
-#include "../interface/HNL_parameters.h"
+#include "HNL_parameters.h"
 
 
-// Constructor where HNL_parameters variables are read from an existing file that was produced USING THIS CLASS.
+// Constructor where HNL_parameters variables are read from an existing file in the format of http://tomc.web.cern.ch/tomc/heavyNeutrino/
 HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filename):
     HNL_parameters_filename(parameters_filename),
     HNL_sample_filename(sample_filename),
@@ -89,3 +89,4 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
         std::cout << "--HNL parameters-- No parameters initialized" << std::endl;
     }
 }
+

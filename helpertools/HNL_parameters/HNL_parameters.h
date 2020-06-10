@@ -17,7 +17,7 @@
 #include <TBranch.h>
 
 // other headers to communicate with
-#include "../interface/helper_histo_functions.h"
+#include "../../interface/helper_histo_functions.h"
 
 class HNL_parameters
 {
@@ -33,11 +33,5 @@ class HNL_parameters
 
         //Functions
         HNL_parameters(TString parameters_filename, TString HNL_sample_filename);//Constructor meant to read existing file and access events
-        //void open_file_and_tree(TString filename);
-        //void set_branch_adresses();
-        //void analyze(int max_entries, int partition, int partitionjobnumber);
-        //void fill_tree();
-        //void write_tree();
-        //void delete_tree();
 };
 #endif

@@ -5,4 +5,5 @@ helpertools/Skimmer/hadded_samples.txt
 helpertools/Skimmer/script_*
 helpertools/Skimmer/using_submit_skim_and_hadd_for_data.sh
 helpertools/CombineTools/test
+helpertools/HNL_parameters/test
 plotting/identifiers.txt
