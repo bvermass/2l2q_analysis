@@ -1,0 +1,5 @@
+RewVal_M-2_2l_2017 1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_V-0.0141421356237_2l_Dirac_massiveAndCKM_LO_MiniAOD2017.root c#tau-96.3
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_V-0.0173205080757_2l_Dirac_massiveAndCKM_LO_MiniAOD2017.root c#tau-64.1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_V-0.022360679775_2l_Dirac_massiveAndCKM_LO_MiniAOD2017.root  c#tau-38.5
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-2_2l_Dirac_massiveAndCKM_LO_MiniAOD2017.root combined

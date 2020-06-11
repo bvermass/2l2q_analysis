@@ -1,0 +1,6 @@
+RewVal_comb_M-4_e_2017_majorana 2
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.0013_e_massiveAndCKM_LO_MiniAOD2017.root c#tau-286.5
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.00251197133742_e_massiveAndCKM_LO_MiniAOD2017.root c#tau-76.7
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.00290516780927_e_massiveAndCKM_LO_MiniAOD2017.root c#tau-57.4
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-0.00721803297305_e_massiveAndCKM_LO_MiniAOD2017.root c#tau-9.3
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-4_V-combined_e_massiveAndCKM_LO_MiniAOD2017.root combined

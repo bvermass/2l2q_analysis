@@ -1,0 +1,3 @@
+RewVal_M-1_2l_2016v3_majorana 1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-1_V-0.0632455532034_2l_massiveAndCKM_LO_MiniAOD2016.root c#tau-81.8
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-1_V-0.141421356237_2l_massiveAndCKM_LO_MiniAOD2016.root c#tau-16.4

@@ -1,0 +1,15 @@
+RewVal_comb_M-3_mu_2016v3_majorana 2
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00244948974278_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-380.4
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00282842712475_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-285.3
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.0031384709653_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-231.7
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00316227766017_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-228.2
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.004472135955_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-114.1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00547722557505_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-76.1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707106781187_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-45.6
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00707813534767_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-45.6
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-32.6
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-23.1
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.0141421356237_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-11.4
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.0173205080757_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-7.6
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.01_mu_massiveAndCKM_LO_MiniAOD2016.root c#tau-22.8
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-combined_mu_massiveAndCKM_LO_MiniAOD2016.root combined

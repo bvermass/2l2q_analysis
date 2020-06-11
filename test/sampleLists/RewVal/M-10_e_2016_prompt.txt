@@ -1,0 +1,13 @@
+RewVal_M-10_e_2016_prompt 10
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-7.56967634711e-05_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-689
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000147309198627_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-182
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000169410743461_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-137
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000244948974278_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-65
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.0004472135955_e_massiveAndCKM_LO_MiniAOD2016.root    c#tau-20
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-6.8
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000793725393319_e_massiveAndCKM_LO_MiniAOD2016.root  c#tau-6.2
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00244948974278_e_massiveAndCKM_LO_MiniAOD2016.root   c#tau-0.6
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00282842712475_e_massiveAndCKM_LO_MiniAOD2016.root   c#tau-0.5
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.00316227766017_e_massiveAndCKM_LO_MiniAOD2016.root   c#tau-0.4
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.004472135955_e_massiveAndCKM_LO_MiniAOD2016.root     c#tau-0.2
+#/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_e_massiveAndCKM_LO_MiniAOD2016.root                      combined
