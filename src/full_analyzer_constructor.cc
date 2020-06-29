@@ -13,18 +13,15 @@ void full_analyzer::SetSampleTypes(TString filename)
     std::cout << "This is " << (isUL? "UL " : "") << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
 
-
-LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
-{
-    TString filename_LSF = local_dir + "data/LeptonScaleFactors/";
-    if(flavor == "e"){
-        if(_is2016) filename_LSF += "TTHMVA_looseToTight_2016_e_3l.root";
-        if(_is2017) filename_LSF += "TTHMVA_looseToTight_2017_e_3l.root";
-        if(_is2018) filename_LSF += "TTHMVA_looseToTight_2018_e_3l.root";
-    }else if(flavor == "mu"){
-        if(_is2016) filename_LSF += "TTHMVA_looseToTight_2016_m_3l.root";
-        if(_is2017) filename_LSF += "TTHMVA_looseToTight_2017_m_3l.root";
-        if(_is2018) filename_LSF += "TTHMVA_looseToTight_2018_m_3l.root";
+PUWeightReader full_analyzer::get_PUWeightReader(TFile* input, TString local_dir){
+    if(!isData){
+        TH1F* nTrueInteractions = (TH1F*) input->Get("blackJackAndHookersGlobal/nTrueInteractions");
+        if(!nTrueInteractions) nTrueInteractions = (TH1F*) input->Get("blackJackAndHookers/nTrueInteractions");
+        PUWeightReader puweightreader(local_dir, _is2017, _is2018, nTrueInteractions);
+        return puweightreader;
+    }else{
+        PUWeightReader puweightreader;
+        return puweightreader;
     }
 }
 

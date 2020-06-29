@@ -12,15 +12,15 @@
 
 class PUWeightReader{
     public:
-        PUWeightReader();//dummy initializer if you just want to use make_PUWeights.
-        PUWeightReader(const TString filename_weights, const TString histoname_weights);
+        PUWeightReader();
+        PUWeightReader(TString local_dir, bool is2017, bool is2018, const TH1F* nTrueInteractions);
         ~PUWeightReader();
 
-        double get_PUWeight(const int nPV);
-        void make_PUWeights(const TString filename_data, const TString filename_MC, const int nbins, const double xmin, const double xmax);
+        double get_PUWeight_Central(const int nPV);
+        double get_PUWeight_Up(const int nPV);
+        double get_PUWeight_Down(const int nPV);
 
     private:
-        TFile* file_weights;
-        TH1F* histo_weights;
+        TH1F *PUWeights_Central, *PUWeights_Up, *PUWeights_Down;
 };
 #endif

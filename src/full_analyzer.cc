@@ -95,7 +95,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    PUWeightReader puweightreader = get_PUWeightReader(local_dir);
+    PUWeightReader puweightreader = get_PUWeightReader(input, local_dir);
 
     // Load Lepton Scale Factors
     LSFReader lsfreader_e_ID = get_LSFReader(local_dir, "e", "ID");
