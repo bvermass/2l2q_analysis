@@ -26,26 +26,74 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
         if(_is2017) filename_LSF += "TTHMVA_looseToTight_2017_m_3l.root";
         if(_is2018) filename_LSF += "TTHMVA_looseToTight_2018_m_3l.root";
     }
-
-    TString histname_LSF = "EGamma_SF2D";
-    LSFReader lsfreader(filename_LSF, histname_LSF, flavor);
-    return lsfreader;
 }
 
-PUWeightReader full_analyzer::get_PUWeightReader(TString local_dir)
+LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor, TString type_SF)
 {
-    TString filename_PUWeights;
-    if(isUL){
-        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_UL17_XSecCentral.root";
-        else std::cout << "no PU weights yet for UL from this year" << std::endl;
-    }else{
-        if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-        if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+    TString filename_LSF = local_dir + "data/LeptonScaleFactors/POG/";
+    TString histname_LSF;
+    TString pt_eta_config;
+    double pt_max;
+    if(flavor == "e"){
+        if(_is2016){
+            filename_LSF += "Electron/2016LegacyReReco_ElectronTight_Fall17V2.root";
+            histname_LSF  = "EGamma_SF2D";
+            pt_eta_config = "eta_pt";
+            pt_max        = 500;
+        }
+        if(_is2017){
+            filename_LSF += "Electron/2017_ElectronTight.root";
+            histname_LSF  = "EGamma_SF2D";
+            pt_eta_config = "eta_pt";
+            pt_max        = 500;
+        }
+        if(_is2018){
+            filename_LSF += "Electron/2018_ElectronTight.root";
+            histname_LSF  = "EGamma_SF2D";
+            pt_eta_config = "eta_pt";
+            pt_max        = 500;
+        }
+    }else if(flavor == "mu" and type_SF == "ID"){
+        if(_is2016){
+            filename_LSF += "Muon/2016_RunBCDEFGH_SF_ID.root";
+            histname_LSF  = "NUM_TightID_DEN_genTracks_eta_pt";
+            pt_eta_config = "eta_pt";
+            pt_max        = 120;
+        }
+        if(_is2017){
+            filename_LSF += "Muon/2017_RunBCDEF_SF_ID.root";
+            histname_LSF  = "NUM_TightID_DEN_genTracks_pt_abseta";
+            pt_eta_config = "pt_abseta";
+            pt_max        = 120;
+        }
+        if(_is2018){
+            filename_LSF += "Muon/2018_RunABCD_SF_ID.root";
+            histname_LSF  = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
+            pt_eta_config = "pt_abseta";
+            pt_max        = 120;
+        }
+    }else if(flavor == "mu" and type_SF == "ISO"){
+        if(_is2016){
+            filename_LSF += "Muon/2016_RunBCDEFGH_SF_ISO.root";
+            histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt";
+            pt_eta_config = "eta_pt";
+            pt_max        = 120;
+        }
+        if(_is2017){
+            filename_LSF += "Muon/2017_RunBCDEF_SF_ISO.root";
+            histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta";
+            pt_eta_config = "pt_abseta";
+            pt_max        = 120;
+        }
+        if(_is2018){
+            filename_LSF += "Muon/2018_RunABCD_SF_ISO.root";
+            histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta";
+            pt_eta_config = "pt_abseta";
+            pt_max        = 120;
+        }
     }
-    TString histname_PUWeights = "PUWeights";
-    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
-    return puweightreader;
+    LSFReader lsfreader(filename_LSF, histname_LSF, pt_eta_config, pt_max);
+    return lsfreader;
 }
 
 PFNReader full_analyzer::get_PFNReader(int flavor)

@@ -97,9 +97,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // Load PU weights
     PUWeightReader puweightreader = get_PUWeightReader(local_dir);
 
-    // Load Lepton Scale Factors for TTH MVA
-    LSFReader lsfreader_e = get_LSFReader(local_dir, "e");
-    LSFReader lsfreader_m = get_LSFReader(local_dir, "mu");
+    // Load Lepton Scale Factors
+    LSFReader lsfreader_e_ID = get_LSFReader(local_dir, "e", "ID");
+    LSFReader lsfreader_m_ID = get_LSFReader(local_dir, "mu", "ID");
+    LSFReader lsfreader_m_ISO = get_LSFReader(local_dir, "mu", "ISO");
    
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
@@ -205,7 +206,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_m, i_leading);
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight_Central(_nTrueInt) * get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_leading);
         else ev_weight = 1.;
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
@@ -264,7 +265,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         // after everything happened, set subleading lepton to tight prompt lepton to measure 2 lepton prompt performance
         set_leptons(i_subleading_e, i_subleading_mu);
-        //if(!isData) ev_weight *= get_LSF(lsfreader_e, lsfreader_m, i_subleading);
+        if(!isData) ev_weight *= get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_subleading);
         signal_regions();
         if(_l1l2 and _lPt[i_subleading] > 20){
             fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);

@@ -857,7 +857,7 @@ public :
    // functions
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
-   LSFReader get_LSFReader(TString local_dir, TString flavor);
+   LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
    PUWeightReader get_PUWeightReader(TString local_dir);
    PFNReader get_PFNReader(int flavor);
    full_analyzer(TTree *tree=0);
@@ -899,7 +899,7 @@ public :
     double   get_KVF_PVSVdist_2D(int);
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
-    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i);
+    double   get_LSF(LSFReader& lsfreader_e_ID, LSFReader& lsfreader_m_ID, LSFReader& lsfreader_m_ISO, int i);
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i);
