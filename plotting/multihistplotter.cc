@@ -103,6 +103,7 @@ int main(int argc, char * argv[])
                             hists->Add(hist);
                             hist->SetMarkerColor(colors[i]);
                             hist->SetLineColor(colors[i]);
+                            if(histname.Contains("_ctau")) hist->Scale(1./hist->Integral());
                             legend.AddEntry(hist, legends[i], "l");
                         }
                     }
