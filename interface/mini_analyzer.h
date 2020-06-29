@@ -63,11 +63,13 @@ class mini_analyzer {
         void add_fraction_histograms(TString prefix);
         void add_standard_histograms(TString prefix);
         void add_pfn_histograms(TString prefix);
+        void add_Shape_SR_histograms(TString prefix);
 
         void fill_histograms();
         void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
+        void fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight);
 
         void sum_quad_histograms();
         void sum_histograms_based_on_tags(TString base_tag, TString second_tags, TString target_tag);

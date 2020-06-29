@@ -269,20 +269,20 @@ void mini_analyzer::set_signal_regions()
     // control region 2: dphill only up to dphi of 2.3
     if(baseline_cutphill and event._dphill < 2.3){
         if(event._dphill > 1.9){
-            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR2phill_quadA");
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR2phill_quadA");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2phill_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR2phill_quadB");
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR2phill_quadB");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR2phill_quadD");
         }
     }
     // control region 2: dphill normal method within mlSV inverted region
     if(baseline_cutCR3phill){
         if(event._dphill > 2.3){
-            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR3phill_quadA");
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR3phill_quadA");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3phill_quadC");
         }else {
-            if(event._JetTagVal[16] > 0.8) ABCDtags.push_back("_cutTightCR3phill_quadB");
+            if(event._JetTagVal[16] > 0.95) ABCDtags.push_back("_cutTightCR3phill_quadB");
             else if(event._JetTagVal[16] > 0.2) ABCDtags.push_back("_cutTightCR3phill_quadD");
         }
     }
@@ -374,6 +374,19 @@ void mini_analyzer::add_histograms()
             }
         }
     }
+    // Signal region yield histograms
+    for(const TString& lep_region : {"_mm", "_ee", "_2l"}){
+        for(const TString& cut2region : {"_cutphill"/*, "_cutmll", "_cutphiORmll"*/, "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV", "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill"/*, "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutTightCR2mlSV", "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"}){
+            for(const TString& quadrant : {"_quadB", "_quadC", "_quadD"/*, "_quadCD", "_quadBD", "_quadBCD"*/,  "_CoverD"/*, "_BoverD", "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
+                add_Shape_SR_histograms(lep_region + cut2region + quadrant);
+            }
+            if(!isData or cut2region.Contains("CR")){
+                for(const TString & quadrant : {"_quadA"/*, "_quadAB", "_quadAC"*/, "_AoverB"/*, "_quadABCD"*/}){
+                    add_Shape_SR_histograms(lep_region + cut2region + quadrant);
+                }
+            }
+        }
+    }
     for(const auto& hist : hists) hist.second->Sumw2();
 }
 
@@ -452,6 +465,14 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
     hists[prefix+"_JetTagVal_zoom"]     = new TH1F(prefix+"_JetTagVal_zoom", ";Jet Tag Value;Events", 10, 0.9, 1);
 }
 
+void mini_analyzer::add_Shape_SR_histograms(TString prefix)
+{
+    if(prefix.Contains("_mm") or prefix.Contains("_ee"))
+        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";Search Region;Events", 4, 0, 4);
+    else if(prefix.Contains("_2l"))
+        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";Search Region;Events", 16, 0, 16);
+}
+
 
 void mini_analyzer::fill_histograms()
 {
@@ -460,6 +481,7 @@ void mini_analyzer::fill_histograms()
         fill_standard_histograms(sr_flavor + ABCDtag, event._weight);
         fill_pfn_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[16], 16);
         fill_fraction_histograms(sr_flavor + ABCDtag, event._weight);
+        fill_Shape_SR_histograms(sr_flavor, ABCDtag, event._weight);
     }
 }
 
@@ -544,6 +566,25 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
     hists2D[prefix+"_PFNvsmlSV"]->Fill(event._JetTagVal[i], event._SV_l1mass, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
     hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
+}
+
+void mini_analyzer::fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight)
+{
+    double SRShape2bin = get_SRShape2bin(event._SV_PVSVdist_2D);//gives 0 or 1 based on L_xy
+    if(sr_flavor.Contains("_SS")) SRShape2bin += 2.;
+
+    if(sr_flavor.Contains("_mm")){
+        hists["_mm" + ABCDtag + "_Shape_SR"]->Fill(SRShape2bin, event_weight);
+    }else if(sr_flavor.Contains("_ee")){
+        hists["_ee" + ABCDtag + "_Shape_SR"]->Fill(SRShape2bin, event_weight);
+    }
+
+
+    double _2lbin = 0.;
+    if(sr_flavor.Contains("_em"))      _2lbin += 4.;
+    else if(sr_flavor.Contains("_ee")) _2lbin += 8.;
+    else if(sr_flavor.Contains("_me")) _2lbin += 12.;
+    hists["_2l" + ABCDtag + "_Shape_SR"]->Fill(SRShape2bin + _2lbin, event_weight);
 }
 
 
