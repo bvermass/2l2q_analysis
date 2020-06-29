@@ -96,7 +96,7 @@ os.system('touch finished_samples.txt')
 os.system('touch hadded_samples.txt')
 
 output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
-input_base_path = "/user/bvermass/public/heavyNeutrino/"
+input_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
 
 production_version = sys.argv[1]
 dilep_tag = sys.argv[2]
