@@ -204,6 +204,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         set_leptons(i_subleading_displ_e, i_subleading_displ_mu);
         signal_regions();
 
+        // Skip data events that have the wrong leading lepton flavor, making SingleMuon and SingleElectron datasets fully orthogonal
+        if((isSingleElectron and _lFlavor[i_leading] == 1) or (isSingleMuon and _lFlavor[i_leading] == 0)) continue;
 
         //Calculate Event weight
         if(!isData) ev_weight = _weight * puweightreader.get_PUWeight_Central(_nTrueInt) * get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_leading);

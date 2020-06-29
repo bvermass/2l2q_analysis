@@ -7,10 +7,12 @@ void full_analyzer::SetSampleTypes(TString filename)
 
     isSignal     = filename.Contains("HeavyNeutrino_lljj_");
     isData       = filename.Contains("Run201");
+    isSingleElectron = isData and (filename.Contains("SingleElectron") or filename.Contains("EGamma"));
+    isSingleMuon     = isData and filename.Contains("SingleMuon");
     isBackground = (!isSignal and !isData);
     isUL         = filename.Contains("_UL");
 
-    std::cout << "This is " << (isUL? "UL " : "") << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
+    std::cout << "This is " << (isUL? "UL " : "") << (isData? (isSingleMuon? "Muon Data" : (isSingleElectron? "Electron Data" : "Unid. Data")) : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
 
 PUWeightReader full_analyzer::get_PUWeightReader(TFile* input, TString local_dir){

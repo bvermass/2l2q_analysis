@@ -808,7 +808,7 @@ public :
    TBranch        *b__metSignificance;   //!
    
    Double_t ev_weight;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
@@ -857,8 +857,8 @@ public :
    // functions
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
+   PUWeightReader get_PUWeightReader(TFile* input, TString local_dir);
    LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
-   PUWeightReader get_PUWeightReader(TString local_dir);
    PFNReader get_PFNReader(int flavor);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();

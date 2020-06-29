@@ -346,10 +346,10 @@ double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
 }
 
 
-double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i){
+double full_analyzer::get_LSF(LSFReader& lsfreader_e_ID, LSFReader& lsfreader_m_ID, LSFReader& lsfreader_m_ISO, int i){
     if(i == -1) return 1.;
-    if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEta[i]);
-    else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i]);
+    if(_lFlavor[i] == 0) return lsfreader_e_ID.get_LSF(_lPt[i], _lEtaSC[i]);
+    else if(_lFlavor[i] == 1) return lsfreader_m_ID.get_LSF(_lPt[i], _lEta[i]) * lsfreader_m_ISO.get_LSF(_lPt[i], _lEta[i]);
     std::cout << "wrong lepton flavor, returning 1 for scale factor. flavor: " << _lFlavor[i] << std::endl;
     return 1.;
 }
