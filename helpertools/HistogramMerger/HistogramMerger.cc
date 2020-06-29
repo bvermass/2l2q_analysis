@@ -17,6 +17,8 @@ HistogramMerger::HistogramMerger(TString filename)
 
     if(sampleList.is_open()){
         while(std::getline(sampleList, line)){
+            std::cout << "line: " << line << std::endl;
+            if(line.size() == 0 or line.find("#") == 0 or line.find_first_not_of(" ") == std::string::npos) continue;//skip empty lines or commented out lines or lines that are only spaces
             
             std::vector<std::string> line_split;
             size_t start, end = 0;
