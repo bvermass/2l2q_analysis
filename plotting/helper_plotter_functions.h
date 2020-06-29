@@ -41,6 +41,18 @@ class CMSandLuminosity{
         TLatex lumilatex;
 };
 
+class Shape_SR_plottext{
+    public:
+        Shape_SR_plottext(TPad* pad);
+        ~Shape_SR_plottext();
+        void Draw();
+    private:
+        TString mm, em, ee, me, OS, SS;
+        float leftmargin, rightmargin, topmargin, bottommargin;
+        TLatex mmlatex, emlatex, eelatex, melatex, OSlatex, SSlatex;
+        TLine fullLine, dashedLine;
+};
+
 // Helper functions
 std::vector<std::vector<TString>> get_identifiers(const TString identifier_filename, const char* delim);
 bool        check_identifiers(TString histname, std::vector<std::vector<TString>> identifiers);

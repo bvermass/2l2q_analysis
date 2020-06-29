@@ -89,6 +89,7 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018);
+    Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad_histo);
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
     float rightmargin = pad_histo->GetRightMargin();
@@ -222,6 +223,7 @@ int main(int argc, char * argv[])
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
+                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
                 
                 pad_histo->Modified();
 
@@ -248,6 +250,7 @@ int main(int argc, char * argv[])
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
+                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
                 
                 pad_histo->Modified();
 

@@ -35,6 +35,60 @@ void CMSandLuminosity::Draw()
     lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 }
 
+// Shape_SR_plottext class functions
+Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
+    mm( "mm" )
+    , em( "em" )
+    , ee( "ee" )
+    , me( "me" )
+    , OS( "OS" )
+    , SS( "SS" )
+    , leftmargin( pad->GetLeftMargin() )
+    , topmargin( pad->GetTopMargin() )
+    , rightmargin( pad->GetRightMargin() )
+    , bottommargin( pad->GetBottomMargin() )
+    , mmlatex( get_latex(0.6*topmargin, 21, 42) )
+    , emlatex( get_latex(0.6*topmargin, 21, 42) )
+    , eelatex( get_latex(0.6*topmargin, 21, 42) )
+    , melatex( get_latex(0.6*topmargin, 21, 42) )
+    , OSlatex( get_latex(0.6*topmargin, 21, 42) )
+    , SSlatex( get_latex(0.6*topmargin, 21, 42) )
+    , fullLine()
+    , dashedLine()
+{
+    fullLine.SetLineStyle(1);
+    dashedLine.SetLineStyle(2);
+}
+
+Shape_SR_plottext::~Shape_SR_plottext(){}
+
+void Shape_SR_plottext::Draw()
+{
+    mmlatex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
+    emlatex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
+    eelatex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, ee);
+    melatex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, me);
+
+    OSlatex.DrawLatex(0.0625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    OSlatex.DrawLatex(0.3125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    OSlatex.DrawLatex(0.5625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    OSlatex.DrawLatex(0.8125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+
+    SSlatex.DrawLatex(0.1875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    SSlatex.DrawLatex(0.4375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    SSlatex.DrawLatex(0.6875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    SSlatex.DrawLatex(0.9375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+
+    fullLine.DrawLineNDC(0.25*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.25*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+    fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+    fullLine.DrawLineNDC(0.75*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.75*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+
+    dashedLine.DrawLineNDC(0.125*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.125*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.375*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.375*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.625*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.625*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.875*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.875*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+}
+
 
 std::vector<std::vector<TString>> get_identifiers(TString identifier_filename, const char* delim)
 {

@@ -62,6 +62,7 @@ int main(int argc, char * argv[])
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad);
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
@@ -131,6 +132,7 @@ int main(int argc, char * argv[])
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
                 legend.Draw("same");
                 CMSandLumi->Draw();
+                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
 
                 pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
@@ -146,6 +148,7 @@ int main(int argc, char * argv[])
                 hists->SetMinimum(1e-2);
                 legend.Draw("same");
                 CMSandLumi->Draw();
+                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
 
                 pad->Modified();
                 c->Print(pathname_log + histname + ".png");
