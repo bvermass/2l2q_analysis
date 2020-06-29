@@ -140,7 +140,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
         else if(filename.Index("Run") != -1){
             specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
             if(filename.Contains("Muon")) specific_dir += "_mm/";
-            else if(filename.Contains("Electron")) specific_dir += "_ee/";
+            else if(filename.Contains("Electron") or filename.Contains("EGamma")) specific_dir += "_ee/";
             else specific_dir += "/";
         }
         else if(filename.Index("hists_full_analyzer") != -1) specific_dir += filename(filename.Index("hists_full_analyzer") + 20, filename.Index(".root") - filename.Index("hists_full_analyzer") - 20) + "/";

@@ -205,7 +205,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         if(normalize_to_1) sample_hist->Scale(1./sample_hist->Integral());
         sample_hist->SetMarkerColor(colors[0]);
         sample_hist->SetLineColor(colors[0]);
-        legend.AddEntry(sample_hist, legend_tags[0], "l");
+        legend.AddEntry(sample_hist, legend_tags[0], "pl");
 
         for(int i = 1; i < tags.size(); i++){
             TString histname_extra = histname;
@@ -215,7 +215,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
             hist_extra->SetMarkerColor(colors[i]);
             hist_extra->SetLineColor(colors[i]);
             hists->Add(hist_extra);
-            legend.AddEntry(hist_extra, legend_tags[i], "l");
+            legend.AddEntry(hist_extra, legend_tags[i], "pl");
             if(normalize_to_1) hist_extra->Scale(1./hist_extra->Integral());
         }
 

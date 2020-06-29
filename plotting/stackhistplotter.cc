@@ -27,8 +27,9 @@ int main(int argc, char * argv[])
     for(int i = 0; i < argc - i_legends; i++){
         TString filename = (TString)argv[i_rootfiles + i];
         TString legendname = (TString)argv[i_legends + i];
-        if(legendname.Length() > 13) n_columns = 1;
-        else if(legendname.Length() > 9) n_columns = 2;
+        int adjusted_legend_length = legendname.Length() - 3*legendname.Contains("#tau");
+        if(adjusted_legend_length > 13) n_columns = 1;
+        else if(adjusted_legend_length > 9) n_columns = 2;
 
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));

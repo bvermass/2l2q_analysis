@@ -30,8 +30,9 @@ int main(int argc, char * argv[])
         legends.push_back(legendname);
 
         // adjust number of columns for legend if an entry is too large to fit
-        if(legendname.Length() > 13) n_columns = 1;
-        else if(legendname.Length() > 9) n_columns = 2;
+        int adjusted_legend_length = legendname.Length() - 3*legendname.Contains("#tau");
+        if(adjusted_legend_length > 13) n_columns = 1;
+        else if(adjusted_legend_length > 9) n_columns = 2;
 
     }
 
