@@ -1,6 +1,0 @@
-mini_separateBkgWithPrediction 30
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_Diboson.root                                                          Diboson
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_Top.root                                                              Top
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_DYJets.root                                                           DY
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_Background.root                                                                  A_pred.

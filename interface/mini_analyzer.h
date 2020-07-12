@@ -40,6 +40,7 @@ class mini_analyzer {
 
         //For ABCD method based on PFN output and dphi
         std::vector<TString> ABCDtags;
+        std::map<TString, unsigned> MV2tags;
         bool isPrompt;
         bool baseline_cutphill;
         bool baseline_cutmll;
@@ -50,6 +51,7 @@ class mini_analyzer {
         //General functions
         mini_analyzer(TString filename);
         ~mini_analyzer();
+        void init_MV2_parametrization();
 
         void analyze(int max_entries, int partition, int partitionjobnumber);
 

@@ -1,0 +1,9 @@
+mini_separateBkgWithData_2018 20
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2018.root                                                                     Diboson
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2018.root                                                                         Top
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2018.root                                                                      DY
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_WJets_012J_MiniAOD2018.root                                                                  W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root                                                                  Data_pred.
+#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-0.0141421356237_e_massiveAndCKM_LO_MiniAOD2018.root                 HNL_M-3
+#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO_MiniAOD2018.root                HNL_M-5
+#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-8_V-0.00151327459504_e_massiveAndCKM_LO_MiniAOD2018.root                HNL_M-8

@@ -76,8 +76,8 @@ class BkgEstimator
         double   _SV_phi;
         double   _SV_normchi2;
 
-        unsigned _nMV2;
-        static const unsigned nMV2_max = 100;
+        unsigned _nMV2 = 0;
+        static const unsigned nMV2_max = 150;
         int      _evaluating_mass[nMV2_max];
         double   _evaluating_V2[nMV2_max];
         double   _JetTagVal[nMV2_max];

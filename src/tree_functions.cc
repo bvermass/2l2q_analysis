@@ -64,7 +64,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._nMV2            = 0;
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
-            if(bkgestimator._nMV2 >= 100){
+            if(bkgestimator._nMV2 >= 150){
                 std::cout << "error: more than 100 MV2 points, increase size of nMV2_max in BkgEstimator arrays" << std::endl;
                 break;
             }

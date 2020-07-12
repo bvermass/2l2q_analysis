@@ -1,0 +1,5 @@
+mini_separateBkg_2017 20
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2017.root                                                          Diboson
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2017.root                                                              Top
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2017.root                                                           DY
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_WJets_012J_MiniAOD2017.root                                                       W+Jets

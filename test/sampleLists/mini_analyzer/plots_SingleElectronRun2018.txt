@@ -1,0 +1,2 @@
+electron2018 10
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_EGamma_Run2018.root Single_Electron_Run2018

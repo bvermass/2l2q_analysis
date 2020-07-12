@@ -1,0 +1,6 @@
+mini_separateBkgWithPrediction_2016 30
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2016.root                                                          Diboson
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2016.root                                                              Top
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2016.root                                                           DY
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root               W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Background_MiniAOD2016.root                                                       A_pred.
