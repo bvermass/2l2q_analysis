@@ -17,7 +17,7 @@ else
 fi
 
 if [[ choice -eq 1 ]]; then
-    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
+    if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" "plotting/ratioplotter.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"
         echo -e "//SINGLE PROCESS PLOTS COMPILATION SUCCESSFUL//"
         echo -e "///////////////////////////////////////////////\n"
@@ -216,37 +216,27 @@ if [[ choice -eq 5 ]]; then
     fi
 fi
 if [[ choice -eq 6 ]]; then
-    if g++ -std=c++11 -o $exec_name "helpertools/CombineTools/CombineDatacardPrep.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" `root-config --cflags --glibs`; then
-        echo -e "\n/////////////////////////////////////////////////"
-        echo -e "//Combine Datacards Prep COMPILATION SUCCESSFUL//"
-        echo -e "/////////////////////////////////////////////////\n"
-
-        firstline=0
-        while IFS='' read -r line || [[ -n "$line" ]]; do
-            if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
-                echo ""
-            else
-                counter=0
-                for val in $line; do
-                    if [ $firstline -eq 0 ]; then
-                        subdirectory_name=($val)
-                        firstline=1
-                    elif [ $counter -eq 0 ]; then
-                        samples+=($val)
-                        counter=1
-                    elif [ $counter -eq 1 ]; then
-                        legends+=($val)
-                        counter=0
-                    fi
-                done
-            fi
-        done < "$1"
-        ./$exec_name $subdirectory_name ${samples[@]} ${legends[@]}
-        echo
-        rm $exec_name
-    else
-        echo -e "\n/////////////////////////////////////////////"
-        echo -e "//Combine Datacards Prep COMPILATION FAILED//"
-        echo -e "/////////////////////////////////////////////\n"
-    fi
+    #combine Datacard Prep
+    firstline=0
+    while IFS='' read -r line || [[ -n "$line" ]]; do
+        if [[ ! "$line" =~ [^[:space:]] ]] || [[ "${line:0:1}" = "#" ]]; then #CHANGE THIS TO SKIP THIS PRINT MESSAGE AND ONLY EXECUTE COMMANDS
+            echo ""
+        else
+            counter=0
+            for val in $line; do
+                if [ $firstline -eq 0 ]; then
+                    subdirectory_name=($val)
+                    firstline=1
+                elif [ $counter -eq 0 ]; then
+                    samples+=($val)
+                    counter=1
+                elif [ $counter -eq 1 ]; then
+                    legends+=($val)
+                    counter=0
+                fi
+            done
+        fi
+    done < "$1"
+    ./helpertools/CombineTools/datacardprep $subdirectory_name ${samples[@]} ${legends[@]}
+    echo
 fi

@@ -13,7 +13,7 @@ def init_script( scriptname ):
 def submit_script( script, scriptname ):
     print 'submitting {}'.format( scriptname )
     script.close()
-    while os.system('qsub {} -l walltime=01:00:00'.format(scriptname)) != 0:
+    while os.system('qsub {} -l walltime=02:00:00'.format(scriptname)) != 0:
         print 'qsub error caught, resubmitting'
         time.sleep(2)
 
@@ -23,7 +23,7 @@ if len(sys.argv) != 3:
     sys.exit()
 
 
-os.system('make -f test/make_mini_analyzer')
+#os.system('make -f test/make_mini_analyzer')
 
 sampleList      = sys.argv[1]
 filesperJob     = int(sys.argv[2])

@@ -19,11 +19,13 @@ def submit_script( script, scriptname ):
 
 scriptname_base = sys.argv[2].replace('.out', '_')
 partition = int(sys.argv[4])
+plot_choice = int(sys.argv[1])
 
 line_base = './{} {}'.format(sys.argv[2], sys.argv[3])
 
 for partitionjobnumber in range(partition):
-    if sys.argv[1] != 4:
+    if plot_choice != 4 and plot_choice != 6:
+        print 'adding partition stuff'
         line = line_base + ' {} {}'.format(partitionjobnumber, partition)
     else:
         line = line_base
