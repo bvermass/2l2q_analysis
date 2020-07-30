@@ -8,3 +8,4 @@ helpertools/CombineTools/test
 helpertools/HNL_parameters/test
 helpertools/HistogramMerger/test
 plotting/identifiers.txt
+test/sampleLists/RewVal/*
