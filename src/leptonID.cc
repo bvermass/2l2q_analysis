@@ -11,17 +11,43 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     if(_lFlavor[i] != 1)                            return false;
     if(fabs(_lEta[i]) >= 2.4)                       return false;
     if(_lPt[i] <= 10)                               return false;
-    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dxy[i]) >= 0.005)                      return false;
     if(fabs(_dz[i]) >= 0.1)                         return false;
-    if(_3dIPSig[i] >= 8)                            return false;
-    if(_miniIso[i] >= 0.4)                          return false;
-    if(!_lPOGMedium[i])                             return false;
-    if(_leptonMvaTOP[i] < 0.4)                      return false;
+    if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
+    if(!_lPOGTight[i])                              return false;
 
     return true;
 }
 
 bool full_analyzer::IsPromptElectronID(const unsigned i)
+{
+    if(_lFlavor[i] != 0)                            return false;
+    if(fabs(_lEta[i]) >= 2.5)                       return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.02)                       return false;
+    if(fabs(_dz[i]) >= 0.04)                        return false;
+    if(_relIso[i] >= 0.1)                           return false;
+    if(!_lPOGTight[i])                              return false;
+
+    return true;
+}
+
+bool full_analyzer::IsTOPPromptMuonID(const unsigned i)
+{
+    if(_lFlavor[i] != 1)                            return false;
+    if(fabs(_lEta[i]) >= 2.4)                       return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dz[i]) >= 0.1)                         return false;
+    if(_3dIPSig[i] >= 8)                            return false;
+    if(_miniIso[i] >= 0.4)                          return false;
+    if(!_lPOGMedium[i])                             return false;
+    if(_leptonMvaTOP[i] < 0.65)                     return false;
+
+    return true;
+}
+
+bool full_analyzer::IsTOPPromptElectronID(const unsigned i)
 {
     if(_lFlavor[i] != 0)                            return false;
     if(fabs(_lEta[i]) >= 2.5)                       return false;
@@ -32,7 +58,7 @@ bool full_analyzer::IsPromptElectronID(const unsigned i)
     if(_miniIso[i] >= 0.4)                          return false;
     if(_lElectronNumberInnerHitsMissing[i] >= 2)    return false;
     if(!_lPOGMedium[i])                             return false;
-    //if(_leptonMvaTOP[i] < 0.4)                      return false;
+    if(_leptonMvaTOP[i] < 0.6)                      return false;
 
     return true;
 }

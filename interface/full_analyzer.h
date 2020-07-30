@@ -874,12 +874,14 @@ public :
 
    // in src/leptonID.cc
     bool     IsPromptElectronID(const unsigned i);
+    bool     IsTOPPromptElectronID(const unsigned i);
     double   rawElectronMVA(const double electronMVA);
     unsigned electronMVACategory(unsigned i);
     double   looseMVACut(unsigned i);
     bool     IsDisplacedElectronID(const unsigned i);
     bool     IsLooseElectronID(const unsigned i);
     bool     IsPromptMuonID(const unsigned i);
+    bool     IsTOPPromptMuonID(const unsigned i);
     bool     IsDisplacedMuonID(const unsigned i);
     bool     IsLooseMuonID(const unsigned i);
     bool     IsCleanElectron(const unsigned i, const std::vector<unsigned>& muoncollection);
