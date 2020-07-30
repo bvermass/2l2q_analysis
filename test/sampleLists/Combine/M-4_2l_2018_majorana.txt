@@ -1,0 +1,4 @@
+M-4_2l_2018_majorana
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-4_V-combined_2l_massiveAndCKM_LO_MiniAOD2018.root HNL_M-4
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root ABCD
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root Obs

@@ -1,0 +1,4 @@
+M-15_e_2017_majorana
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-15_V-combined_e_massiveAndCKM_LO_MiniAOD2017.root HNL_M-15
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2017.root ABCD
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2017.root Obs

@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES=CombineDatacardPrep.cc ../../src/helper_histo_functions.cc ../../plotting/helper_plotter_functions.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= datacardprep
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)

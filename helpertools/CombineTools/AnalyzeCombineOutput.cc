@@ -4,7 +4,7 @@
 int main(int argc, char * argv[])
 {
     if(argc != 3){
-        std::cout << "Command should be ./test [combine_rootfile_dir] [flavor_mass_otherId]" << std::endl;
+        std::cout << "Command should be ./test [combine_rootfile_sampleList] [flavor_mass_otherId]" << std::endl;
         return 1;
     }
     //Argument 1: text file containing all necessary combine rootfiles to analyze
@@ -22,9 +22,14 @@ int main(int argc, char * argv[])
     if(txtfile.is_open()){
         while(std::getline(txtfile, line)){
             std::cout << line << std::endl;
-            combine_outputs.push_back(new CombineOutput((TString)line));
+            CombineOutput* combine_output = new CombineOutput((TString)line);
+            if(combine_output->combine_tree){
+                combine_outputs.push_back(combine_output);
+            }
         }
     }
+
+
     std::cout << "--------------------" << std::endl << "reading signal strengths" << std::endl;
     std::map<double, std::map<double, std::map<float, double>>> signal_strengths; //<M, <V2, <quantile, limit>>
     for(unsigned i = 0; i < combine_outputs.size(); i++){
@@ -100,7 +105,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     setTDRStyle();
     gROOT->ForceStyle();
 
-    TString pathname = "~/public/2l2q_analysis/combine/plots/";
+    TString pathname = "~/public_html/2l2q_analysis/combine/plots/";
     gSystem->Exec("mkdir -p " + pathname);
 
     TCanvas* c = new TCanvas("c","",700,700);
@@ -149,13 +154,17 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     TGraphAsymmErrors* sr_central_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
 
     sr_2s_graph->Draw("A3");
+    if(specific_dir.Contains("ExclusionLimit")){
+        sr_2s_graph->GetXaxis()->SetRangeUser(1,13);
+        sr_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-2);
+    }
     sr_1s_graph->Draw("3 same");
     sr_central_graph->Draw("L same");
     CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
     lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
     pad->Modified();
-    c->Print(pathname + specific_dir + ".pdf");
+    c->Print(pathname + specific_dir + ".png");
     return;
 }
 
@@ -164,7 +173,7 @@ CombineOutput::CombineOutput(TString filename)
 {
     combine_filename = filename;
     M  = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V2-") - filename.Index("_M-") -3)).Atof();
-    V2 = ((TString)filename(filename.Index("_V2-") + 4, filename.Index(".AsymptoticLimits") - filename.Index("_V2-") - 4)).Atof();
+    V2 = ((TString)filename(filename.Index("_V2-") + 4, filename.Index("_cut") - filename.Index("_V2-") - 4)).Atof();
     combine_file = new TFile(filename, "open");
     combine_tree = (TTree*) combine_file->Get("limit");
     Init(combine_tree);
