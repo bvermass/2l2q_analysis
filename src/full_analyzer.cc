@@ -36,11 +36,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
-    evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+    evaluating_masses = {5, 10};
+    if(isSignal and HNL_param->mass != 5 and HNL_param->mass != 10) evaluating_masses.push_back(HNL_param->mass);
+
     for(const int& mass : evaluating_masses){
-        evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
+        evaluating_V2s[mass] = get_evaluating_V2s_all();
         for(const double& V2 : evaluating_V2s[mass]){
-            evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2);
+            evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2, isSignal? HNL_param->flavor : "e");
             MV2name[mass][V2] = get_MV2name(mass, V2);
         }
     }

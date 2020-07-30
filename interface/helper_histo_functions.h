@@ -8,6 +8,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
+#include <map>
 #include <TROOT.h>
 #include <TMath.h>
 #include <TSystem.h>
@@ -26,8 +28,9 @@ double      get_signedLog(double var);
 double      get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);
 double      get_xsec_reweighting_weight(double V2_old, double V2_new);
 double      get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct);
-double      get_evaluating_ctau(double mass, double V2_new);//for evaluating PFN on bkg (when parametrized in ctau)
-double      get_truncated_ctau(double mass, double ctau_true);
+double      get_evaluating_ctau(double mass, double V2_new, TString flavor);//for evaluating PFN on bkg (when parametrized in ctau)
+double      get_truncated_ctau(bool is2016, double mass, double ctau_true);
+std::vector<double> get_evaluating_V2s_all();
 std::vector<double> get_evaluating_V2s(double mass);
 std::vector<double> get_evaluating_V2s_short(double mass);
 TString     get_MV2name(int mass, double V2);

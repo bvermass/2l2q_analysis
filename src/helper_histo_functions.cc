@@ -134,43 +134,85 @@ double get_ctprofile_reweighting_weight(double V2_old, double V2_new, double cta
     return (ctau_old/ctau_new)*exp((1./ctau_old - 1./ctau_new)*ct);
 }
 
-double get_evaluating_ctau(double mass, double V2_new)
+double get_evaluating_ctau(double mass, double V2_new, TString flavor)
 {
     //get ctau corresponding to V2_new by using a certain value of V2_old and ctau_old for each mass,
     //hardcoded because I need the correct ctau for several masses, not just the mass from the sample we are running over
-    if(mass == 2) return 97. * 2e-4 / V2_new;
-    if(mass == 3) return 32.43 * 7e-5 / V2_new;
-    if(mass == 4) return 24.23 * 2e-5 / V2_new;
-    if(mass == 5) return 18.4 * 8e-6 / V2_new;
-    if(mass == 6) return 13.7 * 4.1e-6 / V2_new;
-    if(mass == 8) return 5.46 * 2.3e-6 / V2_new;
-    if(mass == 10) return 6.27 * 6.3e-7 / V2_new;
-    if(mass == 15) return 0.08 * 6e-6 / V2_new;
+    if(flavor.Contains("2l")){
+        if(mass == 1) return 16.36 * 2e-2 / V2_new;
+        if(mass == 2) return 48.31 * 2e-4 / V2_new;
+        if(mass == 3) return 16.26 * 7e-5 / V2_new;
+        if(mass == 4) return 12.12 * 2e-5 / V2_new;
+        if(mass == 5) return 9.19  * 8e-6 / V2_new;
+        if(mass == 6) return 6.85  * 4.1e-6 / V2_new;
+        if(mass == 8) return 2.73  * 2.3e-6 / V2_new;
+        if(mass == 10) return 3.135 * 6.3e-7 / V2_new;
+        if(mass == 12) return 1.938 * 4e-7 / V2_new;
+        if(mass == 14) return 0.3502 * 1e-6 / V2_new;
+        if(mass == 15) return 0.0410 * 6e-6 / V2_new;
+    }else {
+        if(mass == 1) return 70.7357 * 9e-3 / V2_new;
+        if(mass == 2) return 97. * 2e-4 / V2_new;
+        if(mass == 3) return 32.43 * 7e-5 / V2_new;
+        if(mass == 4) return 24.23 * 2e-5 / V2_new;
+        if(mass == 5) return 18.4 * 8e-6 / V2_new;
+        if(mass == 6) return 13.7 * 4.1e-6 / V2_new;
+        if(mass == 8) return 5.46 * 2.3e-6 / V2_new;
+        if(mass == 10) return 6.27 * 6.3e-7 / V2_new;
+        if(mass == 12) return 3.8774 * 4e-7 / V2_new;
+        if(mass == 14) return 0.7039 * 1e-6 / V2_new;
+        if(mass == 15) return 0.082 * 6e-6 / V2_new;
+    }
     std::cout << "Warning: reached end of get_evaluating_ctau without returning a correct ctau value, returning 0" << std::endl;
     return 0;
 }
 
-double get_truncated_ctau(double mass, double ctau_true)
+double get_truncated_ctau(bool is2016, double mass, double ctau_true)
 {
     // hardcoded minimum and maximum values on which the PFN is trained. Extrapolation of PFN outside of trained V2 region does not work, therefore truncate ctau for evaluation at max or min trained value instead of true value.
-    if(mass == 2) return (ctau_true > 97.)? 97. : (ctau_true < 31.)? 31. : ctau_true;
-    if(mass == 3) return (ctau_true > 32.43)? 32.43 : (ctau_true < 7.6)? 7.6 : ctau_true;
-    if(mass == 4) return (ctau_true > 24.)? 24. : (ctau_true < 6.9)? 6.9 : ctau_true;
-    if(mass == 5) return (ctau_true > 18.4)? 18.4 : (ctau_true < 4.9)? 4.9 : ctau_true;
-    if(mass == 6) return (ctau_true > 109)? 109 : (ctau_true < 12.)? 12. : ctau_true;
-    if(mass == 8) return (ctau_true > 108.8)? 108.8 : (ctau_true < 1.6)? 1.6 : ctau_true;
-    if(mass == 10) return (ctau_true > 6.9)? 6.9 : (ctau_true < 0.66)? 0.66 : ctau_true;
-    if(mass == 15) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
+    if(is2016){
+        if(mass == 1) return (ctau_true > 97.)? 97. : (ctau_true < 31.)? 31. : ctau_true;
+        if(mass == 2) return (ctau_true > 97.)? 97. : (ctau_true < 31.)? 31. : ctau_true;
+        if(mass == 3) return (ctau_true > 32.43)? 32.43 : (ctau_true < 7.6)? 7.6 : ctau_true;
+        if(mass == 4) return (ctau_true > 24.)? 24. : (ctau_true < 6.9)? 6.9 : ctau_true;
+        if(mass == 5) return (ctau_true > 18.4)? 18.4 : (ctau_true < 4.9)? 4.9 : ctau_true;
+        if(mass == 6) return (ctau_true > 109)? 109 : (ctau_true < 12.)? 12. : ctau_true;
+        if(mass == 8) return (ctau_true > 108.8)? 108.8 : (ctau_true < 1.6)? 1.6 : ctau_true;
+        if(mass == 10) return (ctau_true > 6.9)? 6.9 : (ctau_true < 0.66)? 0.66 : ctau_true;
+        if(mass == 12) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
+        if(mass == 14) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
+        if(mass == 15) return (ctau_true > 0.08)? 0.08 : (ctau_true < 0.06)? 0.06 : ctau_true;
+    }else {
+        if(mass == 1) return (ctau_true > 74.2)? 74.2 : (ctau_true < 14.8)? 14.8 : ctau_true;
+        if(mass == 2) return (ctau_true > 205.0)? 205.0 : (ctau_true < 31.5)? 31.5 : ctau_true;
+        if(mass == 3) return (ctau_true > 231.7)? 231.7 : (ctau_true < 23.1)? 23.1 : ctau_true;
+        if(mass == 4) return (ctau_true > 288.5)? 288.5 : (ctau_true < 9.3)? 9.3 : ctau_true;
+        if(mass == 5) return (ctau_true > 348.4)? 348.4 : (ctau_true < 6.9)? 6.9 : ctau_true;
+        if(mass == 6) return (ctau_true > 411.5)? 411.5 : (ctau_true < 12.5)? 12.5 : ctau_true;
+        if(mass == 8) return (ctau_true > 144.8)? 144.8 : (ctau_true < 1.89)? 1.89 : ctau_true;
+        if(mass == 10) return (ctau_true > 182.1)? 182.1 : (ctau_true < 6.2)? 6.2 : ctau_true;
+        if(mass == 12) return (ctau_true > 3.88)? 3.88 : (ctau_true < 1.55)? 1.55 : ctau_true;
+        if(mass == 14) return (ctau_true > 2.34)? 2.34 : (ctau_true < 0.70)? 0.70 : ctau_true;
+        if(mass == 15) return (ctau_true > 216.)? 216. : (ctau_true < 217.)? 217. : ctau_true;
+    }
     std::cout << "Warning: reached end of get_truncated_ctau without returning a correct ctau value, returning ctau_true" << std::endl;
     return ctau_true;
 }
 
+std::vector<double> get_evaluating_V2s_all()
+{
+    return {4e-8, 6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3, 3e-3, 5e-3, 7e-3, 9e-3, 1e-2, 3e-2, 5e-2, 7e-2, 9e-2};
+}
+
+
 std::vector<double> get_evaluating_V2s(double mass)
 {
-    if(mass == 2) return {6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5};
-    if(mass == 3) return {4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5};
-    if(mass == 4) return {9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
-    if(mass == 5 or mass == 6 or mass == 8 or mass == 10) return {8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
+    if(mass == 1) return {9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3};
+    if(mass == 2) return {6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4};
+    if(mass > 2 and mass < 10) return {8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
+    if(mass == 10) return {4e-8, 6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
+    if(mass == 12) return {5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
+    if(mass == 14) return {5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
     if(mass == 15) return {5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5};
     std::cout << "Warning: reached end of get_evaluating_V2s without a correct ctau value, returning {}" << std::endl;
     return {};
@@ -191,7 +233,7 @@ std::vector<double> get_evaluating_V2s_short(double mass)
 TString get_MV2name(int mass, double V2)
 {
     std::ostringstream V2stream;
-    V2stream << V2;
+    V2stream << std::setprecision(0) << std::scientific << V2;
     return "_M-" + std::to_string(mass) + "_V2-" + V2stream.str();
 }
 
