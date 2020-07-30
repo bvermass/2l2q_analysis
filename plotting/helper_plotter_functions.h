@@ -45,7 +45,12 @@ class Shape_SR_plottext{
     public:
         Shape_SR_plottext(TPad* pad);
         ~Shape_SR_plottext();
-        void Draw();
+        void Draw(TString histname);
+        void Draw_2l();
+        void Draw_ee();
+        void Draw_em();
+        void Draw_me();
+        void Draw_mm();
     private:
         TString mm, em, ee, me, OS, SS;
         float leftmargin, rightmargin, topmargin, bottommargin;

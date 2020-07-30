@@ -224,7 +224,7 @@ int main(int argc, char * argv[])
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
-                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
+                if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
                 
                 pad_histo->Modified();
 
@@ -251,7 +251,7 @@ int main(int argc, char * argv[])
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
-                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
+                if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
                 
                 pad_histo->Modified();
 

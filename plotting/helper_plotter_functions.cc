@@ -62,7 +62,16 @@ Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
 
 Shape_SR_plottext::~Shape_SR_plottext(){}
 
-void Shape_SR_plottext::Draw()
+void Shape_SR_plottext::Draw(TString histname)
+{
+    if(histname.Contains("_2l")) Draw_2l();
+    if(histname.Contains("_ee")) Draw_ee();
+    if(histname.Contains("_em")) Draw_em();
+    if(histname.Contains("_me")) Draw_me();
+    if(histname.Contains("_mm")) Draw_mm();
+}
+
+void Shape_SR_plottext::Draw_2l()
 {
     mmlatex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
     emlatex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
@@ -87,6 +96,38 @@ void Shape_SR_plottext::Draw()
     dashedLine.DrawLineNDC(0.375*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.375*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
     dashedLine.DrawLineNDC(0.625*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.625*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
     dashedLine.DrawLineNDC(0.875*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.875*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+}
+
+void Shape_SR_plottext::Draw_ee()
+{
+    eelatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
+    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
+    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
+    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+}
+
+void Shape_SR_plottext::Draw_em()
+{
+    emlatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
+    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
+    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
+    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+}
+
+void Shape_SR_plottext::Draw_me()
+{
+    melatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
+    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
+    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
+    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+}
+
+void Shape_SR_plottext::Draw_mm()
+{
+    mmlatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
+    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
+    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
+    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
 }
 
 
@@ -232,6 +273,7 @@ TString get_lflavor(const TString& histname){
     else if(histname.Index("_mm_") != -1) return "mm/";
     else if(histname.Index("_em_") != -1) return "em/";
     else if(histname.Index("_me_") != -1) return "me/";
+    else if(histname.Index("_2l_") != -1) return "2l/";
     else return "";
 }
 
@@ -315,7 +357,7 @@ void divide_by_binwidth(TH1F* h)
         double binwidth   = h->GetBinWidth(i);
         h->SetBinContent(i, bincontent/binwidth);
     }
-    if(h->GetYaxis()->GetTitle() == "Events") h->GetYaxis()->SetTitle("Events / GeV");
+    if(h->GetYaxis()->GetTitle() == (TString)"Events") h->GetYaxis()->SetTitle("Events / GeV");
 }
 
 

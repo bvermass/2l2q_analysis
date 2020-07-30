@@ -120,9 +120,10 @@ int main(int argc, char * argv[])
                 sample_hist->Draw("E0 P");
                 legend.Draw("same");
                 CMSandLumi->Draw();
-                if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
+                if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
                 pad->Modified();
+                gSystem->Exec("pwd " + pathname_lin);
                 c->Print(pathname_lin + histname + ".png");
 
                 // Efficiencies are calculated right here as TGraphAsymmErrors
@@ -235,7 +236,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         hists->SetMinimum(0);
         legend.Draw("same");
         CMSandLumi->Draw();
-        if(histname.Contains("Shape_SR") and histname.Contains("_2l")) shapeSR_text->Draw();
+        if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
         pad->Modified();
         c->Print(pathname_lin + plotname + ".png");
