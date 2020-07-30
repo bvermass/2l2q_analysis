@@ -113,7 +113,10 @@ PFNReader full_analyzer::get_PFNReader(int flavor)
 }
 
 
-full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
+full_analyzer::full_analyzer(TTree *tree, bool mkHistograms, bool mkHNLtagger, bool mkBkgEstimator) : fChain(0)
+    , makeHistograms(mkHistograms)
+    , makeHNLtagger(mkHNLtagger)
+    , makeBkgEstimator(mkBkgEstimator)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.

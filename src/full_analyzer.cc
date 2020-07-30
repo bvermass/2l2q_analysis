@@ -224,16 +224,16 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         if(_Training){
             if(_lFlavor[i_subleading] == 0){
-                fill_HNLtagger_tree(hnltagger_e);
+                if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_e);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_e, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 7);
             }else if(_lFlavor[i_subleading] == 1){
-                fill_HNLtagger_tree(hnltagger_mu);
+                if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_mu);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_mu, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 7);
             }
             additional_signal_regions();
-            fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
+            if(makeBkgEstimator) fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
 
             SR_counters[sr_flavor]++;
             SR_counters[sr_flavor+"_weighted"] += ev_weight;
@@ -242,7 +242,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
 
 
-        fill_histograms(&hists, &hists2D);
+        if(makeHistograms) fill_histograms(&hists, &hists2D);
 
 
         if(sr_flavor == ""){
@@ -285,7 +285,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
  * 4. give necessary text bin labels
  * 5. write events to output
  */
-    if(HNL_param->flavor == "e"){
+    if(!makeHNLtagger){
+        hnltagger_e.delete_HNLtagger_tree();
+        hnltagger_mu.delete_HNLtagger_tree();
+    }else if(HNL_param->flavor == "e"){
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.delete_HNLtagger_tree();
     }else if(HNL_param->flavor == "mu"){
@@ -298,36 +301,39 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         hnltagger_e.write_HNLtagger_tree();
         hnltagger_mu.write_HNLtagger_tree();
     }
-    bkgestimator.write_tree();
+    if(makeBkgEstimator) bkgestimator.write_tree();
 
-    TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber, true);
-    cout << "output to: " << outputfilename << endl;
-    TFile *output = new TFile(outputfilename, "recreate");
+    if(makeHistograms){
+        //TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber, true);
+        TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID/", "hists_full_analyzer", partition, partitionjobnumber, true);
+        cout << "output to: " << outputfilename << endl;
+        TFile *output = new TFile(outputfilename, "recreate");
 
-    std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
-    for(auto const& it : hists){
-        TH1* h = it.second;
-        fix_overflow_and_negative_bins(h);
-        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
-	    h->Write(h->GetName(), TObject::kOverwrite);
+        std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
+        for(auto const& it : hists){
+            TH1* h = it.second;
+            fix_overflow_and_negative_bins(h);
+            if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
+	        h->Write(h->GetName(), TObject::kOverwrite);
+        }
+        // Normalize 2D histograms to correct total weight and write them
+        for(auto const& it2D : hists2D){
+            TH2* h = it2D.second;
+            if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
+            h->Write(h->GetName(), TObject::kOverwrite);
+        }
+
+        // This is a histogram with 1 bin that is filled with value 1.
+        // After hadding files together, this allows to see how many were hadded together.
+        // This was used for efficiency histograms that were elevated by number of hadded files. at the moment it is not used anymore (efficiencies are calculated after hadding, in plotting step)
+        TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
+        hadd_counter->Fill(0);
+        hadd_counter->Write();
+
+        //hweight->Write();
+        std::cout << "close file" << std::endl;
+        output->Close();
     }
-    // Normalize 2D histograms to correct total weight and write them
-    for(auto const& it2D : hists2D){
-        TH2* h = it2D.second;
-        if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
-        h->Write(h->GetName(), TObject::kOverwrite);
-    }
-
-    // This is a histogram with 1 bin that is filled with value 1.
-    // After hadding files together, this allows to see how many were hadded together.
-    // This was used for efficiency histograms that were elevated by number of hadded files. at the moment it is not used anymore (efficiencies are calculated after hadding, in plotting step)
-    TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
-    hadd_counter->Fill(0);
-    hadd_counter->Write();
-
-    //hweight->Write();
-    std::cout << "close file" << std::endl;
-    output->Close();
 }
 
 void full_analyzer::Loop()

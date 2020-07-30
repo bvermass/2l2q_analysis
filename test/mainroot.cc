@@ -11,7 +11,12 @@ void mainroot(TString sample, double cross_section, int max_entries, int partiti
     TFile *input = new TFile(sample, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
-    full_analyzer b(tree);
+    bool makeHistograms = true;
+    bool makeHNLtagger = false;
+    bool makeBkgEstimator = false;
+
+
+    full_analyzer b(tree, makeHistograms, makeHNLtagger, makeBkgEstimator);
     b.run_over_file(sample, cross_section, max_entries, partition, partitionjobnumber);
 }
 

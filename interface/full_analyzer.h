@@ -808,6 +808,7 @@ public :
    TBranch        *b__metSignificance;   //!
    
    Double_t ev_weight;
+   bool makeHistograms, makeHNLtagger, makeBkgEstimator;
    bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
@@ -860,7 +861,7 @@ public :
    PUWeightReader get_PUWeightReader(TFile* input, TString local_dir);
    LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
    PFNReader get_PFNReader(int flavor);
-   full_analyzer(TTree *tree=0);
+   full_analyzer(TTree *tree=0, bool mkHistograms = true, bool mkHNLtagger = true, bool mkBkgEstimator = true);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
     Long64_t LoadTree(Long64_t entry);
