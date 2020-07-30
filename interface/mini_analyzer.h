@@ -51,6 +51,9 @@ class mini_analyzer {
         //General functions
         mini_analyzer(TString filename);
         ~mini_analyzer();
+        double get_PFNcut(int mass, unsigned flavor, bool is2016);
+        double get_LoosePFNcut(int mass, unsigned flavor, bool is2016);
+        unsigned get_PFNevaluation_index(int mass, unsigned flavor);
         void init_MV2_parametrization();
 
         void analyze(int max_entries, int partition, int partitionjobnumber);
