@@ -40,11 +40,18 @@ HistogramMerger::HistogramMerger(TString filename)
 
 void HistogramMerger::inverse_variance_weighted_merging()
 {
+    std::cout << "inputs: " << inputfilenames.size() << std::endl;
+    if(inputfilenames.size() == 1){
+        gSystem->Exec("cp " + inputfilenames[0] + " " + outputfilename);
+        return;
+    }
+
     std::vector<TFile*> files;
     for(unsigned i = 0; i < inputfilenames.size(); i++){
         std::cout << "opening " << inputfilenames[i] << std::endl;
         files.push_back(TFile::Open(inputfilenames[i]));
     }
+
 
     std::vector<TH1F*> result_hists;
 

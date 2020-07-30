@@ -13,7 +13,7 @@ def init_script( scriptname ):
 def submit_script( script, scriptname ):
     print 'submitting {}'.format( scriptname )
     script.close()
-    while os.system('qsub {} -l walltime=01:00:00'.format(scriptname)) != 0:
+    while os.system('qsub {} -l walltime=02:00:00'.format(scriptname)) != 0:
         print 'qsub error caught, resubmitting'
         time.sleep(2)
 
@@ -29,7 +29,7 @@ script_counter = 0
 for root, dirs, files in os.walk(sampleListdir):
     for f in files:
         if 'comb' in f:
-            scriptname = 'script_{}.sh'.format(script_counter)
+            scriptname = 'HNLHistmerging_{}.sh'.format(script_counter)
             script = init_script(scriptname)
             script.write('./test {}'.format(root + f))
             submit_script(script, scriptname)
