@@ -1,4 +1,5 @@
 LocalJob*
+*.sh.*
 helpertools/Skimmer/test
 helpertools/Skimmer/finished_samples.txt
 helpertools/Skimmer/hadded_samples.txt
