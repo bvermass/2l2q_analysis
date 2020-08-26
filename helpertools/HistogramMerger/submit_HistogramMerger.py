@@ -19,7 +19,7 @@ def submit_script( script, scriptname ):
 
 
 if len(sys.argv) != 2:
-    print('Wrong number of arguments, input should be: python submit_HistogramMerger.py [sampleList]')
+    print('Wrong number of arguments, input should be: python submit_HistogramMerger.py [sampleListdir]')
     sys.exit()
 
 

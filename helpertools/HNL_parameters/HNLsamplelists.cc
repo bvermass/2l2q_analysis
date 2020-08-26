@@ -87,7 +87,8 @@ int main(int argc, char * argv[]){
     //booleans to decide which lists I want to make
     bool make_full_analyzer_lists = false;
     bool make_mini_analyzer_lists = false;
-    bool make_HNLtagger_list = true;
+    bool make_HNLtagger_list = false;
+    bool make_full_analyzer_input_list = false;
 
 
     const char* delim = " ";
@@ -124,8 +125,13 @@ int main(int argc, char * argv[]){
                 filePutContents(HNLtagger_sampleList, HNLfilename + "\n", true);
             }
 
-
             if(!goodsample(HNL_param)) continue;
+
+            // full_analyzer input
+            if(make_full_analyzer_input_list){
+                std::string full_run2_sampleList = "../../test/sampleLists/full_HNL.txt";
+                filePutContents(full_run2_sampleList, HNLfilename + " 1 -1 1\n", true);
+            }
 
             // full_analyzer output
             if(make_full_analyzer_lists){
