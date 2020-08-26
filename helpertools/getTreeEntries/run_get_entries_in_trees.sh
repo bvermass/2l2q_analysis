@@ -6,7 +6,7 @@ if g++ -std=c++0x -o a.out "get_entries_in_trees.cc" `root-config --cflags --gli
             echo -e ""
         else
             for val in $line; do 
-                ./a.out $val
+                ./a.out $val blackJackAndHookers/blackJackAndHookersTree
                 break                   # line contains more info than just the filename (which is first) therefore break before going to the second value
             done
         fi

@@ -17,9 +17,12 @@ Long64_t get_nentries_from_file(TString filename, TString treename)
 #ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    if(argc == 0) return 1;
+    if(argc != 3){
+        std::cout << "command should be: ./a.out [filename] [treename]" << std::endl;
+        return 1;
+    }
     TString file = (TString) argv[1];
-    TString treename = "blackJackAndHookers/blackJackAndHookersTree";
+    TString treename = (TString) argv[2];
     Long64_t entries = get_nentries_from_file(file, treename);
     std::cout << 1000*floor(0.001*entries) << " entries in " << file << "(" << entries << ")" << std::endl;
     return 0;
