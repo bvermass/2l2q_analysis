@@ -135,6 +135,30 @@ class Skimmer {
         Int_t           i_HLT_IsoMu24_prescale;
         Bool_t          i_HLT_IsoTkMu24;
         Int_t           i_HLT_IsoTkMu24_prescale;
+        Bool_t          i_HLT_IsoMu27;
+        Int_t           i_HLT_IsoMu27_prescale;
+        Bool_t          i_HLT_IsoMu24_eta2p1;
+        Int_t           i_HLT_IsoMu24_eta2p1_prescale;
+        Bool_t          i_HLT_MET200;
+        Int_t           i_HLT_MET200_prescale;
+        Bool_t          i_HLT_PFMET300;
+        Int_t           i_HLT_PFMET300_prescale;
+        Bool_t          i_HLT_PFMET170_HBHECleaned;
+        Int_t           i_HLT_PFMET170_HBHECleaned_prescale;
+        Bool_t          i_HLT_PFMET120_PFMHT120_IDTight;
+        Int_t           i_HLT_PFMET120_PFMHT120_IDTight_prescale;
+        Bool_t          i_HLT_PFMET140_PFMHT140_IDTight;
+        Int_t           i_HLT_PFMET140_PFMHT140_IDTight_prescale;
+        Bool_t          i_HLT_CaloMET350_HBHECleaned;
+        Int_t           i_HLT_CaloMET350_HBHECleaned_prescale;
+        Bool_t          i_HLT_PFMET250_HBHECleaned;
+        Int_t           i_HLT_PFMET250_HBHECleaned_prescale;
+        Bool_t          i_HLT_PFMET200_HBHE_BeamHaloCleaned;
+        Int_t           i_HLT_PFMET200_HBHE_BeamHaloCleaned_prescale;
+        Bool_t          i_HLT_PFMETTypeOne140_PFMHT140_IDTight;
+        Int_t           i_HLT_PFMETTypeOne140_PFMHT140_IDTight_prescale;
+        Bool_t          i_HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned;
+        Int_t           i_HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned_prescale;
         //Bool_t          i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
         //Int_t           i_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
         //Bool_t          i_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
@@ -538,6 +562,30 @@ class Skimmer {
         Int_t           o_HLT_IsoMu24_prescale;
         Bool_t          o_HLT_IsoTkMu24;
         Int_t           o_HLT_IsoTkMu24_prescale;
+        Bool_t          o_HLT_IsoMu27;
+        Int_t           o_HLT_IsoMu27_prescale;
+        Bool_t          o_HLT_IsoMu24_eta2p1;
+        Int_t           o_HLT_IsoMu24_eta2p1_prescale;
+        Bool_t          o_HLT_MET200;
+        Int_t           o_HLT_MET200_prescale;
+        Bool_t          o_HLT_PFMET300;
+        Int_t           o_HLT_PFMET300_prescale;
+        Bool_t          o_HLT_PFMET170_HBHECleaned;
+        Int_t           o_HLT_PFMET170_HBHECleaned_prescale;
+        Bool_t          o_HLT_PFMET120_PFMHT120_IDTight;
+        Int_t           o_HLT_PFMET120_PFMHT120_IDTight_prescale;
+        Bool_t          o_HLT_PFMET140_PFMHT140_IDTight;
+        Int_t           o_HLT_PFMET140_PFMHT140_IDTight_prescale;
+        Bool_t          o_HLT_CaloMET350_HBHECleaned;
+        Int_t           o_HLT_CaloMET350_HBHECleaned_prescale;
+        Bool_t          o_HLT_PFMET250_HBHECleaned;
+        Int_t           o_HLT_PFMET250_HBHECleaned_prescale;
+        Bool_t          o_HLT_PFMET200_HBHE_BeamHaloCleaned;
+        Int_t           o_HLT_PFMET200_HBHE_BeamHaloCleaned_prescale;
+        Bool_t          o_HLT_PFMETTypeOne140_PFMHT140_IDTight;
+        Int_t           o_HLT_PFMETTypeOne140_PFMHT140_IDTight_prescale;
+        Bool_t          o_HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned;
+        Int_t           o_HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned_prescale;
         //Bool_t          o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;
         //Int_t           o_HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;
         //Bool_t          o_HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
@@ -939,6 +987,30 @@ class Skimmer {
         TBranch        *bi__HLT_IsoMu24_prescale;   //!
         TBranch        *bi__HLT_IsoTkMu24;   //!
         TBranch        *bi__HLT_IsoTkMu24_prescale;   //!
+        TBranch        *bi__HLT_IsoMu27;
+        TBranch        *bi__HLT_IsoMu27_prescale;
+        TBranch        *bi__HLT_IsoMu24_eta2p1;
+        TBranch        *bi__HLT_IsoMu24_eta2p1_prescale;
+        TBranch        *bi__HLT_MET200;
+        TBranch        *bi__HLT_MET200_prescale;
+        TBranch        *bi__HLT_PFMET300;
+        TBranch        *bi__HLT_PFMET300_prescale;
+        TBranch        *bi__HLT_PFMET170_HBHECleaned;
+        TBranch        *bi__HLT_PFMET170_HBHECleaned_prescale;
+        TBranch        *bi__HLT_PFMET120_PFMHT120_IDTight;
+        TBranch        *bi__HLT_PFMET120_PFMHT120_IDTight_prescale;
+        TBranch        *bi__HLT_PFMET140_PFMHT140_IDTight;
+        TBranch        *bi__HLT_PFMET140_PFMHT140_IDTight_prescale;
+        TBranch        *bi__HLT_CaloMET350_HBHECleaned;
+        TBranch        *bi__HLT_CaloMET350_HBHECleaned_prescale;
+        TBranch        *bi__HLT_PFMET250_HBHECleaned;
+        TBranch        *bi__HLT_PFMET250_HBHECleaned_prescale;
+        TBranch        *bi__HLT_PFMET200_HBHE_BeamHaloCleaned;
+        TBranch        *bi__HLT_PFMET200_HBHE_BeamHaloCleaned_prescale;
+        TBranch        *bi__HLT_PFMETTypeOne140_PFMHT140_IDTight;
+        TBranch        *bi__HLT_PFMETTypeOne140_PFMHT140_IDTight_prescale;
+        TBranch        *bi__HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned;
+        TBranch        *bi__HLT_PFMETTypeOne200_HBHE_BeamHaloCleaned_prescale;
         //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL;   //!
         //TBranch        *bi__HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_prescale;   //!
         //TBranch        *bi__HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;   //!
