@@ -1,3 +1,0 @@
-RewVal_comb_M-6_e_2017_majorana 2
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.000716240183179_e_massiveAndCKM_LO_MiniAOD2017.root c#tau-109.2
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-combined_e_massiveAndCKM_LO_MiniAOD2017.root combined
