@@ -157,7 +157,7 @@ void full_analyzer::fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TSt
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D){
     fill_HNL_MC_check(hists, hists2D, ev_weight);
-    //fill_HLT_efficiency(hists, "Beforeptcut", (i_leading_e != -1), (i_leading_mu != -1));
+    if(i_leading != -1) fill_HLT_efficiency(hists, "Beforeptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, 1);
     //fill_HLT_efficiency(hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
     fill_cutflow(hists, sr_flavor, ev_weight);

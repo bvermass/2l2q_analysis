@@ -56,7 +56,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     std::map<TString, TH1*> hists;
     std::map<TString, TH2*> hists2D;
 
-    //init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
+    init_HLT_efficiency(&hists, "Beforeptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     init_HLT_efficiency(&hists, "Afterptcut");//found in src/HLT_eff.cc, does everything HLT efficiency related
     //init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);

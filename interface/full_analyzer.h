@@ -857,7 +857,7 @@ public :
    
    Double_t ev_weight;
    bool makeHistograms, makeHNLtagger, makeBkgEstimator;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false, isMET = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
@@ -1007,6 +1007,7 @@ public :
     void     init_HLT_efficiency(std::map<TString, TH1*>*, TString);
     void     init_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
     void     fill_HLT_efficiency(std::map<TString, TH1*>*, TString, bool, bool, double);
+    bool     METtriggers();
     void     fill_HLT_allevents_efficiency(std::map<TString, TH1*>*, TString);
 
    // in src/gen_histograms.cc
