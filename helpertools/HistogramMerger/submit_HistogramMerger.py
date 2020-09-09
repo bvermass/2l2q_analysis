@@ -24,16 +24,16 @@ if len(sys.argv) != 2:
 
 
 os.system('make -f makeHistogramMerger')
-sampleListdir = sys.argv[1]
+sampleListdir = os.path.abspath(sys.argv[1])
+print 'working on {}'.format(sampleListdir)
 script_counter = 0
-for root, dirs, files in os.walk(sampleListdir):
-    for f in files:
-        if 'comb' in f:
-            scriptname = 'HNLHistmerging_{}.sh'.format(script_counter)
-            script = init_script(scriptname)
-            script.write('./test {}'.format(root + f))
-            submit_script(script, scriptname)
-            script_counter += 1
+for f in os.listdir(sampleListdir):
+    if 'comb' in f:
+        scriptname = 'HNLHistmerging_{}.sh'.format(script_counter)
+        script = init_script(scriptname)
+        script.write('./test {}'.format(sampleListdir + '/' + f))
+        submit_script(script, scriptname)
+        script_counter += 1
 
 
 

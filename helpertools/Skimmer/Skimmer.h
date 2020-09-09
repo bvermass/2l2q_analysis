@@ -1327,6 +1327,7 @@ class Skimmer {
         bool MuonTriggerSkim2016();
         bool MuonTriggerSkim2017();
         bool MuonTriggerSkim2018();
+        bool singleleptonSkim();
         bool dileptonSkim();
         bool Check_SkimCondition(TString Condition);
 

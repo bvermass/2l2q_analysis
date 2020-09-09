@@ -5,7 +5,7 @@ void Skimmer::get_TightelectronID(bool* ID)
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)   =   i_lFlavor[i] == 0 &&
 			            fabs(i_lEta[i]) < 2.5 &&
-			            i_lPt[i] > 20 &&
+			            i_lPt[i] > 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
 			            i_3dIPSig[i]   < 8 &&
@@ -50,7 +50,7 @@ void Skimmer::get_TightmuonID(bool* ID)
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)    = 	i_lFlavor[i] == 1 &&
 			            fabs(i_lEta[i]) < 2.4 &&
-			            i_lPt[i] > 20 &&
+			            i_lPt[i] > 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
 			            i_3dIPSig[i]   < 4 &&
@@ -122,9 +122,25 @@ bool Skimmer::MuonTriggerSkim()
     else return MuonTriggerSkim2016();
 }
 bool Skimmer::MuonTriggerSkim2016(){return (i_HLT_IsoMu24 or i_HLT_IsoTkMu24);}
-bool Skimmer::MuonTriggerSkim2017(){return (i_HLT_IsoMu24);}
+bool Skimmer::MuonTriggerSkim2017(){return (i_HLT_IsoMu24 or i_HLT_IsoMu27 or i_HLT_IsoMu24_eta2p1);}
 bool Skimmer::MuonTriggerSkim2018(){return (i_HLT_IsoMu24);}
 
+
+bool Skimmer::singleleptonSkim(){
+    get_TightelectronID(&TightelectronID[0]);
+    get_TightmuonID(&TightmuonID[0]);
+
+    get_clean_ele(&ele_cleaned_tight[0], &TightmuonID[0]);
+    for(unsigned i = 0; i < i_nL; i++){
+        ele_cleaned_both[i] = ele_cleaned_tight[i];
+    }
+
+    int Tightleptons = 0;
+    for(unsigned i = 0; i < i_nL; i++){
+        if(TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) Tightleptons++;
+    }
+    return (Tightleptons >= 1);
+}
 
 bool Skimmer::dileptonSkim(){
     get_TightelectronID(&TightelectronID[0]);
@@ -141,7 +157,7 @@ bool Skimmer::dileptonSkim(){
     int Tightleptons = 0;
     int Displleptons = 0;
     for(unsigned i = 0; i < i_nL; i++){
-        if(TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) Tightleptons++;
+        if((TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) and i_lPt[i] > 20) Tightleptons++;
         if((DisplmuonID[i] or (DisplelectronID[i] and ele_cleaned_both[i])) and i_lIVF_match[i]) Displleptons++;
     }
     return (Tightleptons >= 1 and Displleptons >= 1);
@@ -151,5 +167,6 @@ bool Skimmer::dileptonSkim(){
 bool Skimmer::Check_SkimCondition(TString Condition)
 {
     if(Condition == "2l2qSkim") return ((ElectronTriggerSkim() or MuonTriggerSkim()) and dileptonSkim());
+    if(Condition == "Trigger") return singleleptonSkim();
     else return true;
 }
