@@ -7,7 +7,8 @@
 
 HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
-    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
+    //HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
+    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_POGTightID/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
@@ -91,6 +92,8 @@ double HNLtagger::predict(PFNReader& pfn, int pfn_version, double M, double V)
     if(pfn_version == 5) return predict_PFN_v5(pfn, M, V);//V is actually ctau in v5
     if(pfn_version == 6) return predict_PFN_v6(pfn, M, V);//V is actually ctau in v6
     if(pfn_version == 7) return predict_PFN_v7(pfn, M, V);
+    if(pfn_version == 8) return predict_PFN_v8(pfn, M, V);
+    if(pfn_version == 9) return predict_PFN_v8_unparametrized(pfn);
     std::cout << "wrong PFN version input: " << pfn_version << std::endl;
     return -1;
 }
@@ -182,6 +185,60 @@ double HNLtagger::predict_PFN_v7(PFNReader& pfn, double M, double ctau)
     }
 
     return pfn.predict( highlevelInput, pfnInput );
+}
+
+double HNLtagger::predict_PFN_v8(PFNReader& pfn, double M, double ctau)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _dRljet, M, ctau } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt_log[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
+
+double HNLtagger::predict_PFN_v8_unparametrized(PFNReader& pfn)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _dRljet } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt_log[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    return pfn.predict( highlevelInput, pfnInput );
+}
+
+
+double HNLtagger::predict_PFN_v8_unparametrized_LowAndHighMass(PFNReader& pfn_LowMass, PFNReader& pfn_HighMass, double M)
+{
+    if(!isValid) return -1;
+    std::vector< double > highlevelInput( { _JetPt_log, _JetEta, _JetPhi, _lPt, _lEta, _lPhi, _ldxy_sgnlog, _ldz_sgnlog, _l3dIPSig, _lrelIso, _lptRel, _lptRatio, (double)_lNumberOfPixelHits, _SV_PVSVdist, _SV_PVSVdist_2D, (double) _SV_ntracks, _SV_mass, _SV_pt, _SV_eta, _SV_phi, _SV_normchi2, (double)_nJetConstituents, _dRljet } );
+    std::vector< std::vector< double > > pfnInput;
+
+    for( unsigned p = 0; p < _nJetConstituents; ++p){
+        pfnInput.push_back( { _JetConstituentPt_log[p], _JetConstituentEta[p], _JetConstituentPhi[p], (double) _JetConstituentPdgId[p], (double)_JetConstituentCharge[p], _JetConstituentdxy_sgnlog[p], _JetConstituentdxyErr[p], _JetConstituentdz_sgnlog[p], _JetConstituentdzErr[p], (double) _JetConstituentNumberOfHits[p], (double) _JetConstituentNumberOfPixelHits[p], (double)_JetConstituentHasTrack[p], (double)_JetConstituentInSV[p] } );
+    }
+
+    for( unsigned i = _nJetConstituents; i < 50; ++i){
+        pfnInput.push_back( {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } );
+    }
+
+    if(M < 5.1) return pfn_LowMass.predict( highlevelInput, pfnInput );
+    else return pfn_HighMass.predict( highlevelInput, pfnInput );
 }
 
 

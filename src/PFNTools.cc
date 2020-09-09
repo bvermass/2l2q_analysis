@@ -15,6 +15,21 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals(HNLtagger& 
     return values;
 }
 
+std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals_LowAndHighMass(HNLtagger& hnltagger, PFNReader& pfn_lowmass, PFNReader& pfn_highmass){
+    std::map<int, std::map<double, double>> values;
+
+    double JetTagVal_LowMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 2.);
+    double JetTagVal_HighMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 10.);
+    std::cout << "Low and High Mass PFN value: " << JetTagVal_LowMass << " " << JetTagVal_HighMass << std::endl;
+    for(auto& MassMap : evaluating_ctaus){
+        for(auto& V2Map : MassMap.second){
+            if(MassMap.first < 6.) values[MassMap.first][V2Map.first] = JetTagVal_LowMass;
+            else                   values[MassMap.first][V2Map.first] = JetTagVal_HighMass;
+        }
+    }
+    return values;
+}
+
 void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_JetTagVal"]             = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 20, 0, 1);
     (*hists)[prefix+"_PFN_ROC"]               = new TH1F(prefix+"_PFN_ROC", ";Jet Tag Value; Events", 10000, 0, 1);

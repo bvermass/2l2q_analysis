@@ -860,7 +860,7 @@ public :
    bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false, isMET = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
-   std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
+   std::vector<int> evaluating_masses;
    std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
    std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
@@ -909,6 +909,9 @@ public :
    PUWeightReader get_PUWeightReader(TFile* input, TString local_dir);
    LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
    PFNReader get_PFNReader(int flavor);
+   PFNReader get_PFNReader_unparametrized(int flavor);
+   PFNReader get_PFNReader_unparametrized_LowMass(int flavor);
+   PFNReader get_PFNReader_unparametrized_HighMass(int flavor);
    full_analyzer(TTree *tree=0, bool mkHistograms = true, bool mkHNLtagger = true, bool mkBkgEstimator = true);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
@@ -1023,6 +1026,7 @@ public :
 
    // in src/PFNTools.cc
     std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
+    std::map<int, std::map<double, double>> GetJetTagVals_LowAndHighMass(HNLtagger& hnltagger, PFNReader& pfn_lowmass, PFNReader& pfn_highmass);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
 

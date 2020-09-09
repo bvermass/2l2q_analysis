@@ -102,11 +102,65 @@ PFNReader full_analyzer::get_PFNReader(int flavor)
     std::pair<unsigned, unsigned> pfn_shape = {50, 13};
     std::string PFN_filename;
     if(flavor == 0){//electron
-        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFNe_v7/jetTagger.h5";
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_2016_v8/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
         else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_201718_v8/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
     }else if(flavor == 1){//muon
-        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFNmu_v7/jetTagger.h5";
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
         else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }
+
+    PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);
+    return pfn;
+}
+
+
+PFNReader full_analyzer::get_PFNReader_unparametrized(int flavor)
+{
+    unsigned highlevel_shape = 23;
+    std::pair<unsigned, unsigned> pfn_shape = {50, 13};
+    std::string PFN_filename;
+    if(flavor == 0){//electron
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_2016_v8_unparametrized/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_201718_v8_unparametrized/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }else if(flavor == 1){//muon
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8_unparametrized/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8_unparametrized/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }
+
+    PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);
+    return pfn;
+}
+
+
+PFNReader full_analyzer::get_PFNReader_unparametrized_LowMass(int flavor)
+{
+    unsigned highlevel_shape = 23;
+    std::pair<unsigned, unsigned> pfn_shape = {50, 13};
+    std::string PFN_filename;
+    if(flavor == 0){//electron
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_2016_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_201718_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }else if(flavor == 1){//muon
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }
+
+    PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);
+    return pfn;
+}
+
+
+PFNReader full_analyzer::get_PFNReader_unparametrized_HighMass(int flavor)
+{
+    unsigned highlevel_shape = 23;
+    std::pair<unsigned, unsigned> pfn_shape = {50, 13};
+    std::string PFN_filename;
+    if(flavor == 0){//electron
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_2016_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNe_201718_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    }else if(flavor == 1){//muon
+        if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+        else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
     }
 
     PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);

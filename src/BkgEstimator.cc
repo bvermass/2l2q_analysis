@@ -7,7 +7,8 @@
 
 BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
-    BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
+    //BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
+    BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_POGTightID/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
     BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
     BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");

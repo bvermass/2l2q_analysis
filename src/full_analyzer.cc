@@ -36,11 +36,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
-    evaluating_masses = {5, 10};
-    if(isSignal and HNL_param->mass != 5 and HNL_param->mass != 10) evaluating_masses.push_back(HNL_param->mass);
+    evaluating_masses = {2,3,4,5,6,8,10,12,14};
+    //evaluating_masses = {};
+    //if(isSignal and HNL_param->mass != 5 and HNL_param->mass != 10) evaluating_masses.push_back(HNL_param->mass);
 
     for(const int& mass : evaluating_masses){
-        evaluating_V2s[mass] = get_evaluating_V2s_all();
+        evaluating_V2s[mass] = get_evaluating_V2s_short(mass);
         for(const double& V2 : evaluating_V2s[mass]){
             evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2, isSignal? HNL_param->flavor : "e");
             MV2name[mass][V2] = get_MV2name(mass, V2);
@@ -115,8 +116,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
     //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
-    PFNReader pfn_e = get_PFNReader(0);
-    PFNReader pfn_mu = get_PFNReader(1);
+    PFNReader pfn_e_LowMass = get_PFNReader_unparametrized_LowMass(0);
+    PFNReader pfn_e_HighMass = get_PFNReader_unparametrized_HighMass(0);
+    PFNReader pfn_mu_LowMass = get_PFNReader_unparametrized_LowMass(1);
+    PFNReader pfn_mu_HighMass = get_PFNReader_unparametrized_HighMass(1);
 
     //these were meant to test cut flow selection, maybe should make these into histograms eventually
     std::map<TString, double> SR_counters = add_SR_counters();
@@ -228,11 +231,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             if(_lFlavor[i_subleading] == 0){
                 if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_e);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_e, ev_weight*total_weight);
-                JetTagVal = GetJetTagVals(hnltagger_e, pfn_e, 7);
+                JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
             }else if(_lFlavor[i_subleading] == 1){
                 if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_mu);
                 //fill_HNLBDTtagger_tree(hnlbdttagger_mu, ev_weight*total_weight);
-                JetTagVal = GetJetTagVals(hnltagger_mu, pfn_mu, 7);
+                JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
             }
             additional_signal_regions();
             if(makeBkgEstimator) fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
