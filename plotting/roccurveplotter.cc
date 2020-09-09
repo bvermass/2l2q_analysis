@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
     TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
-    gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
+    //gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.5, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
+    TLegend legend = get_legend(0.27, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
@@ -137,7 +137,7 @@ int main(int argc, char * argv[])
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
 
             // for parametrized PFN, put evaluated mass and V2 in legend
-            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(("PFN: " + (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " "));
+            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(((TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " ") + " [AUC] - [Bkg eff] - [cut]");
 
             TMultiGraph* multigraph = new TMultiGraph();
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");
@@ -151,13 +151,15 @@ int main(int argc, char * argv[])
                 std::vector< double > eff_signal = computeEfficiencyForROC(hist_signal);
                 std::vector< double > eff_bkg    = computeEfficiencyForROC(hist_bkg);
 
+                std::tuple<double,double, double> cp;
                 // calculate cutting point to get 75% signal efficiency for PFN or BDT
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.70, general_pathname, histname);
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.75, general_pathname, histname);
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.80, general_pathname, histname);
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.85, general_pathname, histname);
-                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90, general_pathname, histname);
+                if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) cp = computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.90, general_pathname, histname);
                 if(histname.Index("PFN") != -1 or histname.Index("BDT") != -1) computeCuttingPoint(eff_signal, eff_bkg, hist_signal, hist_bkg, 0.95, general_pathname, histname);
+
 
                 TGraph* roc = get_roc(eff_signal, eff_bkg);
                 roc->SetLineColor(colors[i]);
@@ -165,7 +167,10 @@ int main(int argc, char * argv[])
                 valid_graph = true;
                 auc[i][histname] = computeAUC(roc);
                 TString auc_str = std::to_string(auc[i][histname]).substr(0, std::to_string(auc[i][histname]).find(".") + 3);
-                legend.AddEntry(roc, legends[i] + ": " + auc_str, "l");
+                TString sig_eff_str = std::to_string(0.01 * round(100*std::get<0>(cp))).substr(0,4);
+                TString bkg_eff_str = std::to_string(0.0001 * round(10000*std::get<1>(cp))).substr(0,6);
+                TString cut_eff_str = std::to_string(0.001 * round(1000*std::get<2>(cp))).substr(0,5);
+                legend.AddEntry(roc, legends[i] + ": " + auc_str + " - " + bkg_eff_str + " - " + cut_eff_str, "l");
             }
 
 
@@ -176,7 +181,7 @@ int main(int argc, char * argv[])
                 multigraph->Draw("AL");
 
 
-                multigraph->GetXaxis()->SetLimits(-0.02, 0.3);
+                multigraph->GetXaxis()->SetLimits(-0.02, 0.2);
                 multigraph->SetMinimum(0.7);
                 multigraph->SetMaximum(1.02);
 

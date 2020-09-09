@@ -262,7 +262,11 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_eff"))               fullname += "eff/";
     if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
 
-    gSystem->Exec("mkdir -p " + fullname);
+    while(gSystem->Exec("mkdir -p " + fullname) != 0){
+        std::cout << "command \"mkdir -p " << fullname << "\" failed, checking" << std::endl;
+        gSystem->Exec("rm " + (TString)fullname(0, fullname.Length() - 1));
+        std::this_thread::sleep_for( std::chrono::milliseconds( 2000 ) );
+    }
     //gSystem->Exec("cp /user/bvermass/public_html/index.php " + fullname);
     return fullname;
 }
@@ -390,7 +394,7 @@ double computeAUC(TGraph* roc)
     return  fabs(round(area*10000)/100);
 }
 
-void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname)
+std::tuple<double,double, double> computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname)
 {
     double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;
     for(int j = eff_signal.size() -1;  j >= 0; j--){
@@ -421,6 +425,8 @@ void computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff
     content += "Bkg " + eff_bkg_stream.str() + "\\% (" + eff_bkg_unc_stream.str() + " events)\\\\\n";
     content += "PFN output > " + eff_cp_stream.str() + "\n\n";
     filePutContents((std::string)general_pathname + "Signal_Bkg_Yields.txt", content, true);
+
+    return std::make_tuple(cp_eff_signal, cp_eff_bkg, cp);
 }
 
 
