@@ -1,1 +1,1 @@
-/user/bvermass/public/2l2q_analysis/trees_POGTightID/BkgEstimator/final/full_analyzer/BkgEstimator_SingleLepton_Run2016.root -1 1
+/user/bvermass/public/2l2q_analysis/trees_POGTightID/BkgEstimator/final/full_analyzer/BkgEstimator_HeavyNeutrino_lljj_M-12_V-0.000632455532034_2l_massiveAndCKM_LO_MiniAOD2017.root -1 1

@@ -1,8 +1,8 @@
 full_separateBkg_mm_2016 20
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00836660026534_mu_massiveAndCKM_LO_MiniAOD2016.root               HNL_M-3_32mm
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_mu_massiveAndCKM_LO_MiniAOD2016.root               HNL_M-5_18mm
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO_MiniAOD2016.root               HNL_M-8_2mm
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000793725393319_mu_massiveAndCKM_LO_MiniAOD2016.root             HNL_M-10_6mm
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2016.root               HNL_M-3_23mm
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00126095202129_mu_massiveAndCKM_LO_MiniAOD2016.root               HNL_M-5_92mm
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.0004472135955_mu_massiveAndCKM_LO_MiniAOD2016.root                HNL_M-8_62mm
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_mu_massiveAndCKM_LO_MiniAOD2016.root             HNL_M-10_7mm
 /user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2016.root                                                          Diboson
 /user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2016.root                                                              Top
 /user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2016.root                                                           DY
