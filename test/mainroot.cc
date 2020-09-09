@@ -12,8 +12,8 @@ void mainroot(TString sample, double cross_section, int max_entries, int partiti
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
     bool makeHistograms = true;
-    bool makeHNLtagger = false;
-    bool makeBkgEstimator = false;
+    bool makeHNLtagger = true;
+    bool makeBkgEstimator = true;
 
 
     full_analyzer b(tree, makeHistograms, makeHNLtagger, makeBkgEstimator);

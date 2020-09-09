@@ -13,3 +13,4 @@ test/sampleLists/RewVal/*
 helpertools/CombineTools/analyzeoutput
 helpertools/CombineTools/datacardprep
 helpertools/HistogramMerger/identifiers.txt
+execMiniAnalyzer
