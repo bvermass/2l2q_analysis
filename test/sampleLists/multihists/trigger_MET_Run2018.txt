@@ -1,0 +1,5 @@
+Trigger_MET_Run2018 1
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2018A.root 2018A
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2018B.root 2018B
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2018C.root 2018C
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2018D.root 2018D

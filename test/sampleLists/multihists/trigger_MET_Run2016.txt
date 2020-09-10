@@ -1,0 +1,8 @@
+Trigger_MET_Run2016 1
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016B.root 2016B
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016C.root 2016C
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016D.root 2016D
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016E.root 2016E
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016F.root 2016F
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016G.root 2016G
+/user/bvermass/public/2l2q_analysis/histograms_Trigger/trigger/full_analyzer/hists_full_analyzer_MET_Run2016H.root 2016H
