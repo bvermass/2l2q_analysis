@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
+    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {20, 30, 190}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
     std::string corfilename = (std::string)(general_pathname + "correlations.txt");
-    gSystem->Exec("rm " + (TString)corfilename);
+    gSystem->Exec("rm -f " + (TString)corfilename);
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -160,7 +160,8 @@ int main(int argc, char * argv[])
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"_cutphill_", "_cutmll_", "_cutphiORmll_", "_cutmlSV_"}, {"#Delta #phi", "m_{ll}", "#Delta #phi or m_{ll}", "m_{l,SV}"}, "_cutAll_", false);
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"_cutTightphill_", "_cutTightmll_", "_cutTightphiORmll_", "_cutTightmlSV_"}, {"#Delta #phi", "m_{ll}", "#Delta #phi or m_{ll}", "m_{l,SV}"}, "_cutTightAll_", false);
 
-                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BtoAwithCD") and !histname.Contains("M-15")) plot_Shape_SR_with_Signal_eff(inputfilename, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
+                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BtoAwithCD") and !histname.Contains("M-15")) plot_Shape_SR_with_Signal_eff(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
+                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BoverD")) plot_Shape_SR_with_Signal_AoverC(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
                 }
             }else if(cl->InheritsFrom("TH2")){
                 TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -233,7 +234,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         histname_extra.ReplaceAll(tags[0], tags[1]);
         TH1F* hist_extra = (TH1F*)sample_file->Get(histname_extra);
         if(!hist_extra){
-            std::cout << "hist " << histname_extra << " does not exist" << std::endl;
+            std::cout << "hist " << histname_extra << " does not exist, skipping " << plot_tag << std::endl;
             return;
         }
         hist_extra->SetMarkerColor(colors[1]);
@@ -349,19 +350,18 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
     }
 }
 
-void plot_Shape_SR_with_Signal_eff(TString filename, TString general_pathname, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, Shape_SR_plottext* shapeSR_text)
+void plot_Shape_SR_with_Signal_AoverC(TString filename, TString pathname_lin, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, Shape_SR_plottext* shapeSR_text)
 {
     if(!histname.Contains("M-") or !histname.Contains("V2-")) return;
 
     pad->Clear();
     pad->SetLogy(0);
     legend.Clear();
-    TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
 
     sample_hist->SetMarkerColor(kBlack);
     sample_hist->SetLineColor(kBlack);
 
-    //get corresponding signal
+    //get mass, flavor, year for correct HNL samples
     TString mass = (TString)histname(histname.Index("_M-"), histname.Index("_V2-") - histname.Index("_M-"));
     TString flavor;
     if(histname.Contains("_mm")) flavor = "_mu";
@@ -373,38 +373,75 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString general_pathname, T
     if(filename.Contains("2017")) year = "_MiniAOD2017";
     if(filename.Contains("2018")) year = "_MiniAOD2018";
 
-    TString full_HNL_name = (TString)filename(0, filename.Index("_analyzer_") + 10) + "HeavyNeutrino_lljj" + mass + "_V-combined" + flavor + "_massiveAndCKM_LO" + year + ".root";
-    TFile*  HNL_file   = TFile::Open(full_HNL_name);
+    THStack* hists = new THStack("stack", "");
+    hists->Add(sample_hist);
+    hists->Draw("E P hist nostack");
+    legend.AddEntry(sample_hist, "Data pred.", "pl");
 
-    TString histname_quadA = histname;
-    histname_quadA.ReplaceAll("BtoAwithCD", "quadA");
-    TH1F* HNL_hist_quadA = (TH1F*)HNL_file->Get(histname_quadA);
-    HNL_hist_quadA->SetMarkerColor(colors[0]);
-    HNL_hist_quadA->SetLineColor(colors[0]);
+    TH1F* m2_eff, *m3_eff, *m4_eff, *m5_eff, *m6_eff, *m8_eff, *m10_eff, *m12_eff, *m14_eff;
+    if(mass == "_M-5" or mass == "_M-2" or mass == "_M-3" or mass == "_M-4"){
+        m2_eff = get_HNL_eff_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
+        m2_eff->Draw("P");
+        legend.AddEntry(m2_eff, "M-2 eff", "pl");
+        m3_eff = get_HNL_eff_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
+        m3_eff->Draw("same P");
+        legend.AddEntry(m3_eff, "M-3 eff", "pl");
+        m4_eff = get_HNL_eff_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
+        m4_eff->Draw("same P");
+        legend.AddEntry(m4_eff, "M-4 eff", "pl");
+        m5_eff = get_HNL_eff_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
+        m5_eff->Draw("same P");
+        legend.AddEntry(m5_eff, "M-5 eff", "pl");
+    }else {
+        m6_eff = get_HNL_eff_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
+        m6_eff->Draw("P");
+        legend.AddEntry(m6_eff, "M-6 eff", "pl");
+        m8_eff = get_HNL_eff_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
+        m8_eff->Draw("same P");
+        legend.AddEntry(m8_eff, "M-8 eff", "pl");
+        m10_eff = get_HNL_eff_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
+        m10_eff->Draw("same P");
+        legend.AddEntry(m10_eff, "M-10 eff", "pl");
+        m12_eff = get_HNL_eff_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
+        m12_eff->Draw("same P");
+        legend.AddEntry(m12_eff, "M-12 eff", "pl");
+        m14_eff = get_HNL_eff_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
+        m14_eff->Draw("same P");
+        legend.AddEntry(m14_eff, "M-14 eff", "pl");
+    }
 
-    //getting quadB, C and D as well and calculating percent of events in A
-    histname_quadA.ReplaceAll("quadA", "quadB");
-    TH1F* HNL_hist_quadB = (TH1F*)HNL_file->Get(histname_quadA);
-    HNL_hist_quadB->SetMarkerColor(colors[2]);
-    HNL_hist_quadB->SetLineColor(colors[2]);
-    histname_quadA.ReplaceAll("quadB", "quadC");
-    TH1F* HNL_hist_quadC = (TH1F*)HNL_file->Get(histname_quadA);
-    HNL_hist_quadC->SetMarkerColor(colors[3]);
-    HNL_hist_quadC->SetLineColor(colors[3]);
-    histname_quadA.ReplaceAll("quadC", "quadD");
-    TH1F* HNL_hist_quadD = (TH1F*)HNL_file->Get(histname_quadA);
-    HNL_hist_quadD->SetMarkerColor(colors[4]);
-    HNL_hist_quadD->SetLineColor(colors[4]);
+    legend.Draw("same");
+    CMSandLumi->Draw();
+    if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
-    TH1F* HNL_hist_effA = (TH1F*)HNL_hist_quadA->Clone();
-    HNL_hist_effA->Add(HNL_hist_quadB);
-    HNL_hist_effA->Add(HNL_hist_quadC);
-    HNL_hist_effA->Add(HNL_hist_quadD);
+    pad->Modified();
+    c->Print(pathname_lin + histname + "_withHNL.png");
+}
 
-    HNL_hist_effA->Divide(HNL_hist_quadA, HNL_hist_effA);
-    HNL_hist_effA->SetMarkerColor(colors[1]);
-    HNL_hist_effA->SetLineColor(colors[1]);
-    HNL_hist_effA->GetYaxis()->SetRangeUser(0, 1.1);
+void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, Shape_SR_plottext* shapeSR_text)
+{
+    if(!histname.Contains("M-") or !histname.Contains("V2-")) return;
+
+    pad->Clear();
+    pad->SetLogy(0);
+    legend.Clear();
+
+    sample_hist->SetMarkerColor(kBlack);
+    sample_hist->SetLineColor(kBlack);
+
+    //get mass, flavor, year for correct HNL samples
+    TString mass = (TString)histname(histname.Index("_M-"), histname.Index("_V2-") - histname.Index("_M-"));
+    TString flavor;
+    if(histname.Contains("_mm")) flavor = "_mu";
+    if(histname.Contains("_ee")) flavor = "_e";
+    if(histname.Contains("_2l") or histname.Contains("_em") or histname.Contains("_me")) flavor = "_2l";
+
+    TString year;
+    if(filename.Contains("2016")) year = "_MiniAOD2016";
+    if(filename.Contains("2017")) year = "_MiniAOD2017";
+    if(filename.Contains("2018")) year = "_MiniAOD2018";
+
+    legend.AddEntry(sample_hist, "Data B/D", "pl");
 
     // Make the pad that will contain the plot
     c->cd();
@@ -416,25 +453,53 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString general_pathname, T
     pad_eff->SetTicky(0);
     pad_eff->SetRightMargin(0.07);
 
-    HNL_hist_effA->Draw("E P Y+");
+    TH1F* m2_AoverC, *m3_AoverC, *m4_AoverC, *m5_AoverC, *m6_AoverC, *m8_AoverC, *m10_AoverC, *m12_AoverC, *m14_AoverC;
+    if(mass == "_M-5" or mass == "_M-2" or mass == "_M-3" or mass == "_M-4"){
+        m2_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
+        m2_AoverC->Draw("E P Y+");
+        legend.AddEntry(m2_AoverC, "M-2 A/C", "pl");
+        m3_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
+        m3_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m3_AoverC, "M-3 A/C", "pl");
+        m4_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
+        m4_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m4_AoverC, "M-4 A/C", "pl");
+        m5_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
+        m5_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m5_AoverC, "M-5 A/C", "pl");
+    }else {
+        m6_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
+        m6_AoverC->Draw("E P Y+");
+        legend.AddEntry(m6_AoverC, "M-6 A/C", "pl");
+        m8_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
+        m8_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m8_AoverC, "M-8 A/C", "pl");
+        m10_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
+        m10_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m10_AoverC, "M-10 A/C", "pl");
+        m12_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
+        m12_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m12_AoverC, "M-12 A/C", "pl");
+        m14_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
+        m14_AoverC->Draw("same E P Y+");
+        legend.AddEntry(m14_AoverC, "M-14 A/C", "pl");
+    }
 
     pad->cd();
     pad->SetTicky(0);
     pad->SetRightMargin(0.07);
     THStack* hists = new THStack("stack", "");
     hists->Add(sample_hist);
-    hists->Add(HNL_hist_quadA);
-    hists->Add(HNL_hist_quadB);
-    hists->Add(HNL_hist_quadC);
-    hists->Add(HNL_hist_quadD);
+    //hists->Add(HNL_hist_quadA);
+    //hists->Add(HNL_hist_quadB);
+    //hists->Add(HNL_hist_quadC);
+    //hists->Add(HNL_hist_quadD);
 
 
-    legend.AddEntry(sample_hist, "Data pred.", "pl");
-    legend.AddEntry(HNL_hist_quadA, adjust_legend("HNL" + mass), "pl");
-    legend.AddEntry(HNL_hist_effA, "signal eff.", "pl");
-    legend.AddEntry(HNL_hist_quadB, "quad B", "pl");
-    legend.AddEntry(HNL_hist_quadC, "quad C", "pl");
-    legend.AddEntry(HNL_hist_quadD, "quad D", "pl");
+    //legend.AddEntry(HNL_hist_quadA, adjust_legend("HNL" + mass), "pl");
+    //legend.AddEntry(HNL_hist_quadB, "quad B", "pl");
+    //legend.AddEntry(HNL_hist_quadC, "quad C", "pl");
+    //legend.AddEntry(HNL_hist_quadD, "quad D", "pl");
 
     hists->Draw("E P hist nostack");
     legend.Draw("same");
@@ -446,4 +511,72 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString general_pathname, T
     pad->SetTicky(1);
     pad->SetRightMargin(0.04);
     pad_eff->Clear();
+}
+
+TH1F* get_HNL_AoverC_ABCD(TString filename, TString histname, TString mass, TString flavor, TString year, int colors)
+{
+    TString full_HNL_name = (TString)filename(0, filename.Index("_analyzer_") + 10) + "HeavyNeutrino_lljj" + mass + "_V-combined" + flavor + "_massiveAndCKM_LO" + year + ".root";
+    if(FILE* file = fopen(full_HNL_name, "r")) fclose(file);
+    else return nullptr;
+    TFile*  HNL_file   = TFile::Open(full_HNL_name);
+
+    TString histname_quadA = histname;
+    histname_quadA.ReplaceAll("BtoAwithCD", "quadA");
+    TH1F* HNL_hist_quadA = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadA->SetMarkerColor(colors[0]);
+    //HNL_hist_quadA->SetLineColor(colors[0]);
+
+    histname_quadA.ReplaceAll("quadA", "quadC");
+    TH1F* HNL_hist_quadC = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadC->SetMarkerColor(colors[3]);
+    //HNL_hist_quadC->SetLineColor(colors[3]);
+
+    TH1F* HNL_hist_effA = (TH1F*)HNL_hist_quadA->Clone();
+    HNL_hist_effA->Add(HNL_hist_quadC);
+
+    HNL_hist_effA->Divide(HNL_hist_quadA, HNL_hist_effA);
+    HNL_hist_effA->SetMarkerColor(colors);
+    HNL_hist_effA->SetLineColor(colors);
+    HNL_hist_effA->GetYaxis()->SetRangeUser(0, 1.1);
+
+    return HNL_hist_effA;
+}
+TH1F* get_HNL_eff_ABCD(TString filename, TString histname, TString mass, TString flavor, TString year, int colors)
+{
+    TString full_HNL_name = (TString)filename(0, filename.Index("_analyzer_") + 10) + "HeavyNeutrino_lljj" + mass + "_V-combined" + flavor + "_massiveAndCKM_LO" + year + ".root";
+    if(FILE* file = fopen(full_HNL_name, "r")) fclose(file);
+    else return nullptr;
+    TFile*  HNL_file   = TFile::Open(full_HNL_name);
+
+    TString histname_quadA = histname;
+    histname_quadA.ReplaceAll("BtoAwithCD", "quadA");
+    TH1F* HNL_hist_quadA = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadA->SetMarkerColor(colors[0]);
+    //HNL_hist_quadA->SetLineColor(colors[0]);
+
+    //getting quadB, C and D as well and calculating percent of events in A
+    histname_quadA.ReplaceAll("quadA", "quadB");
+    TH1F* HNL_hist_quadB = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadB->SetMarkerColor(colors[2]);
+    //HNL_hist_quadB->SetLineColor(colors[2]);
+    histname_quadA.ReplaceAll("quadB", "quadC");
+    TH1F* HNL_hist_quadC = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadC->SetMarkerColor(colors[3]);
+    //HNL_hist_quadC->SetLineColor(colors[3]);
+    histname_quadA.ReplaceAll("quadC", "quadD");
+    TH1F* HNL_hist_quadD = (TH1F*)HNL_file->Get(histname_quadA);
+    //HNL_hist_quadD->SetMarkerColor(colors[4]);
+    //HNL_hist_quadD->SetLineColor(colors[4]);
+
+    TH1F* HNL_hist_effA = (TH1F*)HNL_hist_quadA->Clone();
+    HNL_hist_effA->Add(HNL_hist_quadB);
+    HNL_hist_effA->Add(HNL_hist_quadC);
+    HNL_hist_effA->Add(HNL_hist_quadD);
+
+    HNL_hist_effA->Divide(HNL_hist_quadA, HNL_hist_effA);
+    HNL_hist_effA->SetMarkerColor(colors);
+    HNL_hist_effA->SetLineColor(colors);
+    HNL_hist_effA->GetYaxis()->SetRangeUser(0, 1.1);
+
+    return HNL_hist_effA;
 }
