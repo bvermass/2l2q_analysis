@@ -58,7 +58,7 @@ int main(int argc, char * argv[])
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
 
     TString mass_bkg;
-    if(mass_str.Contains("M-1") or mass_str.Contains("M-2") or mass_str.Contains("M-3") or mass_str.Contains("M-4") or mass_str.Contains("M-5")){
+    if(mass_str.Contains("_M-1_") or mass_str.Contains("_M-2_") or mass_str.Contains("_M-3_") or mass_str.Contains("_M-4_") or mass_str.Contains("_M-5_")){
         mass_bkg = "_M-5_";
     }else {
         mass_bkg = "_M-10_";
@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist_ref->GetName();
 
 
-            if(histname.Contains(flavor) and histname.Contains(mass_str) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -87,7 +87,7 @@ int main(int argc, char * argv[])
                 // get data histogram
                 TString histname_data = histname;
                 histname_data.ReplaceAll("quadA", "BtoAwithCD");
-                histname_data.ReplaceAll(mass_str, mass_bkg);
+                //histname_data.ReplaceAll(mass_str, mass_bkg);
                 histname_data.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
                 std::cout << "data histname: " << histname_data << std::endl;
                 TH1F* hist_data = (TH1F*) files_data[0]->Get(histname_data);
@@ -110,15 +110,18 @@ int main(int argc, char * argv[])
                 std::vector<std::string> systNames;
                 std::vector<std::string> systDist;
 
+                TString outputfilename = histname;
+                outputfilename.ReplaceAll(mass_bkg, mass_str);
+
                 //Shape analysis stuff
                 bool shapeCard = true;
-                std::string shapeFileName = shapeSR_pathname + (std::string)histname + ".root";
+                std::string shapeFileName = shapeSR_pathname + (std::string)outputfilename + ".root";
                 makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg);
 
                 bool autoMCStats = true;
 
                 if(sigYield > 0.1){
-                    printDataCard(general_pathname + (std::string)histname + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, 0, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
+                    printDataCard(general_pathname + (std::string)outputfilename + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, 0, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
                 }else {
                     std::cout << "too low signal yield: " << sigYield << std::endl;
                 }
