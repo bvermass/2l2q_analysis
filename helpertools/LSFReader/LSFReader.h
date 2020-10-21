@@ -11,17 +11,21 @@
 #include <TTree.h>
 #include <TH2.h>
 
+#include <TCanvas.h>
+
 class LSFReader{
     public:
         LSFReader();
-        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString flavor);
+        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString pt_eta_conf, const double pt_mx);
         ~LSFReader();
 
         double get_LSF(const double pt, const double eta);
+        void print_LSF(TString filename);
 
     private:
         TFile* file_LSF;
         TH2F* histo_LSF;
-        TString lepton_flavor;
+        TString pt_eta_config;
+        double pt_max;
 };
 #endif

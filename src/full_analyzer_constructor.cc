@@ -14,50 +14,81 @@ void full_analyzer::SetSampleTypes(TString filename)
 }
 
 
-LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor)
+LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor, TString type_SF)
 {
     TString filename_LSF = local_dir + "data/LeptonScaleFactors/";
     TString histname_LSF;
+    TString pt_eta_conf;
+    double pt_max;
     if(flavor == "e"){
-        if(_is2017){// the 2017 ones are wrong, add the correct ones
-            filename_LSF += "2018_ElectronTight.root";
+        if(_is2017 and isUL){
+            filename_LSF += "UL17_ElectronTight.root";
             histname_LSF =  "EGamma_SF2D";
+            pt_eta_conf  =  "eta_pt";
+            pt_max       = 500;
         }
-        else if(_is2018){
+        else if(_is2018 and isUL){
+            filename_LSF += "UL18_ElectronTight.root";
+            histname_LSF =  "EGamma_SF2D";
+            pt_eta_conf  =  "eta_pt";
+            pt_max       = 500;
+        }
+        else if(_is2018 and !isUL){
             filename_LSF += "2018_ElectronTight.root";
             histname_LSF =  "EGamma_SF2D";
+            pt_eta_conf  =  "eta_pt";
+            pt_max       = 500;
         }
     }else if(flavor == "mu"){
-        if(_is2017){// the 2017 ones are wrong. add the correct ones
-            filename_LSF += "RunABCD_SF_ID.root";
-            histname_LSF =  "NUM_TightID_DEN_TrackerMuons_pt_abseta";
+        if(_is2017 and isUL){
+            if(type_SF == "ID"){
+                filename_LSF += "RunBCDEF_UL_SF_ID.root";
+                histname_LSF =  "NUM_TightID_DEN_genTracks_pt_abseta";
+                pt_eta_conf  =  "pt_abseta";
+                pt_max       =  120;
+            }else if(type_SF == "ISO"){
+                filename_LSF += "RunBCDEF_UL_SF_ISO.root";
+                histname_LSF =  "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta";
+                pt_eta_conf  =  "pt_abseta";
+                pt_max       =  120;
+            }
         }
-        else if(_is2018){
+        else if(_is2018 and isUL){
+            if(type_SF == "ID"){
+                filename_LSF += "RunABCD_UL18_SF_ID.root";
+                histname_LSF =  "NUM_TightID_DEN_TrackerMuons_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }else if(type_SF == "ISO"){
+                filename_LSF += "RunABCD_UL18_SF_ISO.root";
+                histname_LSF =  "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }
+        }
+        else if(_is2018 and !isUL){
             filename_LSF += "RunABCD_SF_ID.root";
             histname_LSF =  "NUM_TightID_DEN_TrackerMuons_pt_abseta";
+            pt_eta_conf  =  "pt_abseta";
+            pt_max       =  120;
         }
     }
 
-    LSFReader lsfreader(filename_LSF, histname_LSF, flavor);
+    LSFReader lsfreader(filename_LSF, histname_LSF, pt_eta_conf, pt_max);
     return lsfreader;
 }
 
-PUWeightReader full_analyzer::get_PUWeightReader(TString local_dir)
-{
-    TString filename_PUWeights;
-    if(isUL){
-        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_UL17_XSecCentral.root";
-        else std::cout << "no PU weights yet for UL from this year" << std::endl;
+PUWeightReader full_analyzer::get_PUWeightReader(TFile* input, TString local_dir){
+    if(!isData){
+        TH1F* nTrueInteractions = (TH1F*) input->Get("blackJackAndHookersGlobal/nTrueInteractions");
+        if(!nTrueInteractions) nTrueInteractions = (TH1F*) input->Get("blackJackAndHookers/nTrueInteractions");
+        PUWeightReader puweightreader(local_dir, _is2017, _is2018, nTrueInteractions);
+        return puweightreader;
     }else{
-        if(_is2016) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2016_XSecCentral.root";
-        if(_is2017) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2017_XSecCentral.root";
-        if(_is2018) filename_PUWeights = local_dir + "data/PUWeights/PUWeights_2018_XSecCentral.root";
+        PUWeightReader puweightreader;
+        return puweightreader;
     }
-    TString histname_PUWeights = "PUWeights";
-    PUWeightReader puweightreader(filename_PUWeights, histname_PUWeights);
-    return puweightreader;
 }
-
 
 full_analyzer::full_analyzer(TTree *tree) : fChain(0) 
 {

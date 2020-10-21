@@ -760,8 +760,8 @@ public :
    // functions
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
-   LSFReader get_LSFReader(TString local_dir, TString flavor);
-   PUWeightReader get_PUWeightReader(TString local_dir);
+   LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
+   PUWeightReader get_PUWeightReader(TFile* input, TString local_dir);
    full_analyzer(TTree *tree=0);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
@@ -791,7 +791,7 @@ public :
     int      find_gen_l2();
     bool     leptonIsGenLepton(int, int);
     double   get_lsource(int);
-    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i);
+    double   get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, LSFReader& lsfreader_mu_iso, int i);
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i);

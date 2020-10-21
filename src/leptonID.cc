@@ -294,10 +294,11 @@ double full_analyzer::get_lsource(int i_gen_lep)
     }
 }
 
-double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, int i){
+double full_analyzer::get_LSF(LSFReader& lsfreader_e, LSFReader& lsfreader_mu, LSFReader& lsfreader_mu_iso, int i){
     if(i == -1) return 1.;
-    if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEta[i]);
-    else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i]);
+    if(_lFlavor[i] == 0) return lsfreader_e.get_LSF(_lPt[i], _lEtaSC[i]);
+    else if(_lFlavor[i] == 1) return lsfreader_mu.get_LSF(_lPt[i], _lEta[i])*lsfreader_mu_iso.get_LSF(_lPt[i], _lEta[i]);
     std::cout << "wrong lepton flavor, returning 1 for scale factor. flavor: " << _lFlavor[i] << std::endl;
+
     return 1.;
 }
