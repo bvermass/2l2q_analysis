@@ -146,13 +146,6 @@ class Skimmer {
         //Int_t           i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
         //Bool_t          i_HLT_TripleMu_12_10_5;
         //Int_t           i_HLT_TripleMu_12_10_5_prescale;
-        //Bool_t          i_Flag_HBHENoiseFilter;
-        //Bool_t          i_Flag_HBHENoiseIsoFilter;
-        //Bool_t          i_Flag_EcalDeadCellTriggerPrimitiveFilter;
-        //Bool_t          i_Flag_goodVertices;
-        //Bool_t          i_Flag_BadPFMuonFilter;
-        //Bool_t          i_Flag_BadChargedCandidateFilter;
-        //Bool_t          i_Flag_globalTightHalo2016Filter;
         //Bool_t          i_HLT_Ele105_CaloIdVT_GsfTrkIdT;
         //Int_t           i_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
         //Bool_t          i_HLT_Ele115_CaloIdVT_GsfTrkIdT;
@@ -502,13 +495,6 @@ class Skimmer {
         //Int_t           o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;
         //Bool_t          o_HLT_TripleMu_12_10_5;
         //Int_t           o_HLT_TripleMu_12_10_5_prescale;
-        //Bool_t          o_Flag_HBHENoiseFilter;
-        //Bool_t          o_Flag_HBHENoiseIsoFilter;
-        //Bool_t          o_Flag_EcalDeadCellTriggerPrimitiveFilter;
-        //Bool_t          o_Flag_goodVertices;
-        //Bool_t          o_Flag_BadPFMuonFilter;
-        //Bool_t          o_Flag_BadChargedCandidateFilter;
-        //Bool_t          o_Flag_globalTightHalo2016Filter;
         //Bool_t          o_HLT_Ele105_CaloIdVT_GsfTrkIdT;
         //Int_t           o_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
         //Bool_t          o_HLT_Ele115_CaloIdVT_GsfTrkIdT;
@@ -855,13 +841,6 @@ class Skimmer {
         //TBranch        *bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale;   //!
         //TBranch        *bi__HLT_TripleMu_12_10_5;   //!
         //TBranch        *bi__HLT_TripleMu_12_10_5_prescale;   //!
-        //TBranch        *bi__Flag_HBHENoiseFilter;   //!
-        //TBranch        *bi__Flag_HBHENoiseIsoFilter;   //!
-        //TBranch        *bi__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
-        //TBranch        *bi__Flag_goodVertices;   //!
-        //TBranch        *bi__Flag_globalTightHalo2016Filter;   //!
-        //TBranch        *bi__Flag_BadPFMuonFilter;   //!
-        //TBranch        *bi__Flag_BadChargedCandidateFilter;   //!
         //TBranch        *bi__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
         //TBranch        *bi__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
         //TBranch        *bi__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!

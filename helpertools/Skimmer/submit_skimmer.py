@@ -66,11 +66,11 @@ def get_run_era( crabdir ):
     startindex_data = crabdir.find('Run201')
     if startindex_data != -1:
         return crabdir[startindex_data:startindex_data+8] + '/'
-    elif crabdir.find('MiniAOD2016') != -1 or crabdir.find('Summer16MiniAOD') != -1 or crabdir.find('dilepton_HNL_2016') != -1:
+    elif crabdir.find('MiniAOD2016') != -1 or crabdir.find('Summer16MiniAOD') != -1 or crabdir.find('dilepton_HNL_2016') != -1 or crabdir.find('Summer19UL16MiniAOD') != -1:
         return 'MiniAOD2016/'
-    elif crabdir.find('MiniAOD2017') != -1 or crabdir.find('Fall17MiniAOD') != -1 or crabdir.find('dilepton_HNL_2017') != -1:
+    elif crabdir.find('MiniAOD2017') != -1 or crabdir.find('Fall17MiniAOD') != -1 or crabdir.find('dilepton_HNL_2017') != -1 or crabdir.find('Summer19UL17MiniAOD') != -1:
         return 'MiniAOD2017/'
-    elif crabdir.find('MiniAOD2018') != -1 or crabdir.find('Autumn18MiniAOD') != -1 or crabdir.find('dilepton_HNL_2018') != -1:
+    elif crabdir.find('MiniAOD2018') != -1 or crabdir.find('Autumn18MiniAOD') != -1 or crabdir.find('dilepton_HNL_2018') != -1 or crabdir.find('Summer19UL18MiniAOD') != -1:
         return 'MiniAOD2018/'
     else:
         return ''
@@ -97,9 +97,7 @@ os.system('touch finished_samples.txt')
 os.system('touch hadded_samples.txt')
 
 output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
-input_base_path = output_base_path
-output_sample_path = output_base_path
-input_crab_path = output_base_path
+input_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
 
 production_version = sys.argv[1]
 dilep_tag = sys.argv[2]

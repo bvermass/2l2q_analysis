@@ -129,13 +129,6 @@ void Skimmer::Init_input_branches(TTree* tree)
     //tree->SetBranchAddress("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &i_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, &bi__HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale);
     //tree->SetBranchAddress("_HLT_TripleMu_12_10_5", &i_HLT_TripleMu_12_10_5, &bi__HLT_TripleMu_12_10_5);
     //tree->SetBranchAddress("_HLT_TripleMu_12_10_5_prescale", &i_HLT_TripleMu_12_10_5_prescale, &bi__HLT_TripleMu_12_10_5_prescale);
-    //tree->SetBranchAddress("_Flag_HBHENoiseFilter", &i_Flag_HBHENoiseFilter, &bi__Flag_HBHENoiseFilter);
-    //tree->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &i_Flag_HBHENoiseIsoFilter, &bi__Flag_HBHENoiseIsoFilter);
-    //tree->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &i_Flag_EcalDeadCellTriggerPrimitiveFilter, &bi__Flag_EcalDeadCellTriggerPrimitiveFilter);
-    //tree->SetBranchAddress("_Flag_goodVertices", &i_Flag_goodVertices, &bi__Flag_goodVertices);
-    //tree->SetBranchAddress("_Flag_globalTightHalo2016Filter", &i_Flag_globalTightHalo2016Filter, &bi__Flag_globalTightHalo2016Filter);
-    //tree->SetBranchAddress("_Flag_BadPFMuonFilter", &i_Flag_BadPFMuonFilter, &bi__Flag_BadPFMuonFilter);
-    //tree->SetBranchAddress("_Flag_BadChargedCandidateFilter", &i_Flag_BadChargedCandidateFilter, &bi__Flag_BadChargedCandidateFilter);
     //tree->SetBranchAddress("_HLT_Ele105_CaloIdVT_GsfTrkIdT", &i_HLT_Ele105_CaloIdVT_GsfTrkIdT, &bi__HLT_Ele105_CaloIdVT_GsfTrkIdT);
     //tree->SetBranchAddress("_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale", &i_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale, &bi__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale);
     //tree->SetBranchAddress("_HLT_Ele115_CaloIdVT_GsfTrkIdT", &i_HLT_Ele115_CaloIdVT_GsfTrkIdT, &bi__HLT_Ele115_CaloIdVT_GsfTrkIdT);
@@ -487,13 +480,6 @@ void Skimmer::Add_branches(TTree* tree)
     //tree->Branch("_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale", &o_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale, "_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_prescale/I");
     //tree->Branch("_HLT_TripleMu_12_10_5", &o_HLT_TripleMu_12_10_5, "_HLT_TripleMu_12_10_5/O");
     //tree->Branch("_HLT_TripleMu_12_10_5_prescale", &o_HLT_TripleMu_12_10_5_prescale, "_HLT_TripleMu_12_10_5_prescale/I");
-    //tree->Branch("_Flag_HBHENoiseFilter", &o_Flag_HBHENoiseFilter, "_Flag_HBHENoiseFilter/O");
-    //tree->Branch("_Flag_HBHENoiseIsoFilter", &o_Flag_HBHENoiseIsoFilter, "_Flag_HBHENoiseIsoFilter/O");
-    //tree->Branch("_Flag_EcalDeadCellTriggerPrimitiveFilter", &o_Flag_EcalDeadCellTriggerPrimitiveFilter, "_Flag_EcalDeadCellTriggerPrimitiveFilter/O");
-    //tree->Branch("_Flag_goodVertices", &o_Flag_goodVertices, "_Flag_goodVertices/O");
-    //tree->Branch("_Flag_globalTightHalo2016Filter", &o_Flag_globalTightHalo2016Filter, "_Flag_globalTightHalo2016Filter/O");
-    //tree->Branch("_Flag_BadPFMuonFilter", &o_Flag_BadPFMuonFilter, "_Flag_BadPFMuonFilter/O");
-    //tree->Branch("_Flag_BadChargedCandidateFilter", &o_Flag_BadChargedCandidateFilter, "_Flag_BadChargedCandidateFilter/O");
     //tree->Branch("_HLT_Ele105_CaloIdVT_GsfTrkIdT", &o_HLT_Ele105_CaloIdVT_GsfTrkIdT, "_HLT_Ele105_CaloIdVT_GsfTrkIdT/O");
     //tree->Branch("_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale", &o_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale, "_HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale/I");
     //tree->Branch("_HLT_Ele115_CaloIdVT_GsfTrkIdT", &o_HLT_Ele115_CaloIdVT_GsfTrkIdT, "_HLT_Ele115_CaloIdVT_GsfTrkIdT/O");
@@ -753,7 +739,6 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
     std::shared_ptr< TH1D > hCounter;
     std::shared_ptr< TH1D > lheCounter;
     std::shared_ptr< TH1D > psCounter;
-    std::shared_ptr< TH1D > tauCounter;
     std::shared_ptr< TH1D > nTrueInteractions;
     if( !isData ){
         hCounter = std::shared_ptr< TH1D >( (TH1D*) input->Get( blackJAH_version + "/hCounter" ) );
@@ -771,7 +756,6 @@ Skimmer::Skimmer(TString inputfilename, TString outputfilename)
         hCounter->Write( "hCounter" );
         lheCounter->Write( "lheCounter" );
         psCounter->Write( "psCounter" );
-        tauCounter->Write( "tauCounter" );
         nTrueInteractions->Write( "nTrueInteractions" );
     }
 

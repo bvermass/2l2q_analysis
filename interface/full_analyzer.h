@@ -135,13 +135,14 @@ public :
    //Bool_t          _HLT_TripleMu_12_10_5;
    //Int_t           _HLT_TripleMu_12_10_5_prescale;
    Bool_t          _passMETFilters;
-   //Bool_t          _Flag_HBHENoiseFilter;
-   //Bool_t          _Flag_HBHENoiseIsoFilter;
-   //Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
-   //Bool_t          _Flag_goodVertices;
-   //Bool_t          _Flag_BadPFMuonFilter;
-   //Bool_t          _Flag_BadChargedCandidateFilter;
-   //Bool_t          _Flag_globalTightHalo2016Filter;
+   Bool_t          _Flag_goodVertices;
+   Bool_t          _Flag_HBHENoiseFilter;
+   Bool_t          _Flag_HBHENoiseIsoFilter;
+   Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
+   Bool_t          _Flag_BadPFMuonFilter;
+   Bool_t          _Flag_BadChargedCandidateFilter;
+   Bool_t          _Flag_globalSuperTightHalo2016Filter;
+   Bool_t          _updated_ecalBadCalibFilter;
    //Bool_t          _HLT_Ele105_CaloIdVT_GsfTrkIdT;
    //Int_t           _HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;
    //Bool_t          _HLT_Ele115_CaloIdVT_GsfTrkIdT;
@@ -468,13 +469,14 @@ public :
    //TBranch        *b__HLT_TripleMu_12_10_5;   //!
    //TBranch        *b__HLT_TripleMu_12_10_5_prescale;   //!
    TBranch        *b__passMETFilters;   //!
-   //TBranch        *b__Flag_HBHENoiseFilter;   //!
-   //TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
-   //TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
-   //TBranch        *b__Flag_goodVertices;   //!
-   //TBranch        *b__Flag_globalTightHalo2016Filter;   //!
-   //TBranch        *b__Flag_BadPFMuonFilter;   //!
-   //TBranch        *b__Flag_BadChargedCandidateFilter;   //!
+   TBranch        *b__Flag_goodVertices;   //!
+   TBranch        *b__Flag_HBHENoiseFilter;   //!
+   TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
+   TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
+   TBranch        *b__Flag_BadPFMuonFilter;   //!
+   TBranch        *b__Flag_BadChargedCandidateFilter;   //!
+   TBranch        *b__Flag_globalSuperTightHalo2016Filter;   //!
+   TBranch        *b__updated_ecalBadCalibFilter;
    //TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT;   //!
    //TBranch        *b__HLT_Ele105_CaloIdVT_GsfTrkIdT_prescale;   //!
    //TBranch        *b__HLT_Ele115_CaloIdVT_GsfTrkIdT;   //!
