@@ -101,7 +101,7 @@ void full_analyzer::signal_regions(){
                                     mll > 80 &&
                                     mll < 100 &&
                                     (nLooseMu + nLooseEle) == 2 &&
-                                    _passMETFilters;
+                                    MET_Filters();
 
     _l1l2_Full_noTrigger          = i_leading != -1 &&
                                     leadptcut(i_leading) &&
@@ -112,7 +112,7 @@ void full_analyzer::signal_regions(){
                                     mll > 80 &&
                                     mll < 100 &&
                                     (nLooseMu + nLooseEle) == 2 &&
-                                    _passMETFilters;
+                                    MET_Filters();
 }
 
 
@@ -158,4 +158,17 @@ double full_analyzer::get_dphill(int i_lead, int i_sublead){
     LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
     return deltaPhi(leadingvec, subleadingvec);
+}
+
+bool full_analyzer::MET_Filters(){
+    if(!_Flag_goodVertices)                         return false;
+    if(!_Flag_HBHENoiseFilter)                      return false;
+    if(!_Flag_HBHENoiseIsoFilter)                   return false;
+    //if(!_Flag_EcalDeadCellTriggerPrimitiveFilter)   return false;
+    if(!_Flag_BadPFMuonFilter)                      return false;
+    if(!_Flag_BadChargedCandidateFilter)            return false;
+    if(!_Flag_globalSuperTightHalo2016Filter)       return false;
+    //if(!_updated_ecalBadCalibFilter)                return false;
+
+    return true;
 }

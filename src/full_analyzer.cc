@@ -75,11 +75,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    PUWeightReader puweightreader = get_PUWeightReader(local_dir);
+    PUWeightReader puweightreader = get_PUWeightReader(input, local_dir);
 
     // Load Lepton Scale Factors for POG Tight IDs
-    LSFReader lsfreader_e = get_LSFReader(local_dir, "e");
-    LSFReader lsfreader_m = get_LSFReader(local_dir, "mu");
+    LSFReader lsfreader_e_ID = get_LSFReader(local_dir, "e", "ID");
+    LSFReader lsfreader_m_ID = get_LSFReader(local_dir, "mu", "ID");
+    LSFReader lsfreader_m_ISO = get_LSFReader(local_dir, "mu", "ISO");
    
     //HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
@@ -96,7 +97,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     double int_lumi;
     if(_is2016) int_lumi = 35.92;
-    if(_is2017) int_lumi = 41.53;
+    if(_is2017) int_lumi = 41.54;
     if(_is2018) int_lumi = 59.74;
 
     // Determine range of events to loop over
@@ -176,7 +177,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         signal_regions();
 
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight(_nTrueInt);// * get_LSF(lsfreader_e, lsfreader_mu, i_leading) * get_LSF(lsfreader_e, lsfreader_mu, i_subleading);
+        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight_Central(_nTrueInt) * get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_leading) * get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_subleading);
         else ev_weight = 1;
 
         fill_histograms(&hists, &hists2D);
@@ -203,13 +204,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     // Add under- and overflow to first and last bins and normalize histograms to correct total weight.
     for(auto const& it : hists){
         TH1* h = it.second;
-        if(!((TString)h->GetName()).Contains("_meanqT")) fix_overflow_and_negative_bins(h);
+        //if(!((TString)h->GetName()).Contains("_meanqT")) fix_overflow_and_negative_bins(h);
+        fix_overflow_and_negative_bins(h);
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight); //this scaling now happens before the plotting stage, since after running, the histograms need to be hadded.
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
     // Normalize 2D histograms to correct total weight and write them
     for(auto const& it2D : hists2D){
         TH2* h = it2D.second;
+        if(((TString)h->GetName()).Contains("_AbsScale_")) fix_2D_overflow_and_negative_bins(h);
         if(((TString)h->GetName()).Index("_eff_") == -1) h->Scale(total_weight);
         h->Write(h->GetName(), TObject::kOverwrite);
     }

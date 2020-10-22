@@ -204,6 +204,36 @@ void filePutContents(const std::string& name, const std::string& content, bool a
     outfile << content;
 }
 
+void fix_2D_overflow_and_negative_bins(TH2* h)
+{
+    int nbx = h->GetNbinsX();
+    int nby = h->GetNbinsY();
+    
+    for(int by = 0.; by <= nby + 1; ++by){
+        double b0  = h->GetBinContent( 0   , by);
+        double e0  = h->GetBinError  ( 0   , by);
+        double b1  = h->GetBinContent( 1   , by);
+        double e1  = h->GetBinError  ( 1   , by);
+        double bn  = h->GetBinContent(nbx  , by);
+        double en  = h->GetBinError  (nbx  , by);
+        double bn1 = h->GetBinContent(nbx+1, by);
+        double en1 = h->GetBinError  (nbx+1, by);
+
+        h->SetBinContent(0    , by , 0.);
+        h->SetBinError  (0    , by , 0.);
+        h->SetBinContent(1    , by , b0+b1);
+        h->SetBinError  (1    , by , std::sqrt(e0*e0 + e1*e1  ));
+        h->SetBinContent(nbx  , by , bn+bn1);
+        h->SetBinError  (nbx  , by , std::sqrt(en*en + en1*en1));
+        h->SetBinContent(nbx+1, by , 0.);
+        h->SetBinError  (nbx+1, by , 0.);
+
+        //if bin content is below zero, set it to 0 (dealing with negative weights)
+        for(int bx = 0; bx < nbx+1; ++bx){
+            if(h->GetBinContent(bx, by) < 0.) h->SetBinContent(bx, by, 0.);
+        }
+    }
+}
 
 void fix_overflow_and_negative_bins(TH1* h)
 {

@@ -714,7 +714,7 @@ public :
    TBranch        *b__metPuppiPhiResUp;
    
    Double_t ev_weight;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
@@ -817,6 +817,7 @@ public :
     double   get_mll(int, int);
     double   get_dRll(int, int);
     double   get_dphill(int, int);
+    bool     MET_Filters();
 
     // in src/print_tables.cc
     void     print_table();
@@ -863,6 +864,7 @@ public :
     bool     usemetv2 = false;
     void     setRunEra(const unsigned long runnb);
     std::pair<double, double> METXYCorr_Met_MetPhi(double uncormet, double uncormet_phi, int npv);
+    std::pair<double, double> METPUPPIXYCorr_Met_MetPhi(double uncormet, double uncormet_phi, int npv);
     void     add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
    

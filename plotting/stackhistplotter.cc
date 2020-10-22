@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
                 // set ratio of data/MC
                 if(withdata){
                     ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "data/MC");
-                    ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Res", "Uncl"}, {"JEC", "JER", "Uncl."}, (TH1F*)hists_bkg->GetStack()->Last());
+                    ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Uncl", "Res"}, {"JEC", "Uncl.", "JER"}, (TH1F*)hists_bkg->GetStack()->Last());
                 }
 
                 // get plot specific pathnames
@@ -240,7 +240,7 @@ int main(int argc, char * argv[])
                 bkgForError->Draw("e2 same");
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
-                hists_bkg->SetMinimum(0.01);
+                hists_bkg->SetMinimum(10);
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");

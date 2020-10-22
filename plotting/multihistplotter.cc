@@ -24,15 +24,23 @@ int main(int argc, char * argv[])
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
     }
     std::vector<TString> legends;
-    int n_columns = 3;
     for(int i = i_legends; i < argc; i++){
         legends.push_back(adjust_legend((TString)argv[i]));
-
-        // adjust number of columns for legend if an entry is too large to fit
-        if(legends[i].Length() > 13) n_columns = 1;
-        else if(legends[i].Length() > 9) n_columns = 2;
-
     }
+
+    int n_columns = 3;
+    for(int i = 0; i < legends.size(); i++){
+        // adjust number of columns for legend if an entry is too large to fit
+        if(legends[i].Length() > 13){
+            n_columns = 1;
+            std::cout << "setting legend to 1 column due to legend " << legends[i] << std::endl;
+        }
+        else if(legends[i].Length() > 9){
+            n_columns = 2;
+            std::cout << "setting legend to 1 column" << std::endl;
+        }
+    }
+    std::cout << "coumns: " << n_columns << std::endl;
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
@@ -127,7 +135,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
 
-                hists->Draw("E P hist nostack");
+                hists->Draw("E nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -141,11 +149,11 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(1);
 
-                hists->Draw("E P hist nostack");
+                hists->Draw("E nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
-                hists->SetMaximum(10*hists->GetMaximum("nostack"));
-                hists->SetMinimum(0.5);
+                hists->SetMaximum(20*hists->GetMaximum("nostack"));
+                hists->SetMinimum(10);
                 legend.Draw("same");
                 CMSandLumi->Draw();
 

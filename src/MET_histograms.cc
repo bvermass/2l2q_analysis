@@ -4,7 +4,13 @@
 
 #include "../interface/full_analyzer.h"
 
-enum TheRunEra{y2016B,y2016C,y2016D,y2016E,y2016F,y2016G,y2016H,y2017B,y2017C,y2017D,y2017E,y2017F,y2018A,y2018B,y2018C,y2018D,y2016MC,y2017MC,y2018MC};
+enum TheRunEra{
+    y2016B,y2016C,y2016D,y2016E,y2016F,y2016G,y2016H,
+    y2017B,y2017C,y2017D,y2017E,y2017F,
+    y2018A,y2018B,y2018C,y2018D,
+    y2016MC,y2017MC,y2018MC,
+    yUL2017B,yUL2017C,yUL2017D,yUL2017E,yUL2017F,yUL2017MC,
+    yUL2018A,yUL2018B,yUL2018C,yUL2018D,yUL2018MC};
 
 void full_analyzer::setRunEra(const unsigned long runnb){
     usemetv2 = false;
@@ -17,23 +23,36 @@ void full_analyzer::setRunEra(const unsigned long runnb){
         else if(runnb >=278820 &&runnb<=280385  ) runera = y2016G;
         else if(runnb >=280919 &&runnb<=284044  ) runera = y2016H;
 
-        else if(runnb >=297020 &&runnb<=299329 ){ runera = y2017B; usemetv2 =true;}
-        else if(runnb >=299337 &&runnb<=302029 ){ runera = y2017C; usemetv2 =true;}
-        else if(runnb >=302030 &&runnb<=303434 ){ runera = y2017D; usemetv2 =true;}
-        else if(runnb >=303435 &&runnb<=304826 ){ runera = y2017E; usemetv2 =true;}
-        else if(runnb >=304911 &&runnb<=306462 ){ runera = y2017F; usemetv2 =true;}
+        else if(runnb >=297020 &&runnb<=299329 && isUL){ runera = yUL2017B; usemetv2 =false;}
+        else if(runnb >=299337 &&runnb<=302029 && isUL){ runera = yUL2017C; usemetv2 =false;}
+        else if(runnb >=302030 &&runnb<=303434 && isUL){ runera = yUL2017D; usemetv2 =false;}
+        else if(runnb >=303435 &&runnb<=304826 && isUL){ runera = yUL2017E; usemetv2 =false;}
+        else if(runnb >=304911 &&runnb<=306462 && isUL){ runera = yUL2017F; usemetv2 =false;}
 
-        else if(runnb >=315252 &&runnb<=316995 ) runera = y2018A;
-        else if(runnb >=316998 &&runnb<=319312 ) runera = y2018B;
-        else if(runnb >=319313 &&runnb<=320393 ) runera = y2018C;
-        else if(runnb >=320394 &&runnb<=325273 ) runera = y2018D;
+        else if(runnb >=297020 &&runnb<=299329 && !isUL){ runera = y2017B; usemetv2 =true;}
+        else if(runnb >=299337 &&runnb<=302029 && !isUL){ runera = y2017C; usemetv2 =true;}
+        else if(runnb >=302030 &&runnb<=303434 && !isUL){ runera = y2017D; usemetv2 =true;}
+        else if(runnb >=303435 &&runnb<=304826 && !isUL){ runera = y2017E; usemetv2 =true;}
+        else if(runnb >=304911 &&runnb<=306462 && !isUL){ runera = y2017F; usemetv2 =true;}
+
+        else if(runnb >=315252 &&runnb<=316995 && !isUL) runera = y2018A;
+        else if(runnb >=316998 &&runnb<=319312 && !isUL) runera = y2018B;
+        else if(runnb >=319313 &&runnb<=320393 && !isUL) runera = y2018C;
+        else if(runnb >=320394 &&runnb<=325273 && !isUL) runera = y2018D;
+
+        else if(runnb >=315252 &&runnb<=316995 && isUL) runera = yUL2018A;
+        else if(runnb >=316998 &&runnb<=319312 && isUL) runera = yUL2018B;
+        else if(runnb >=319313 &&runnb<=320393 && isUL) runera = yUL2018C;
+        else if(runnb >=320394 &&runnb<=325273 && isUL) runera = yUL2018D;
         else {
             //Couldn't find data era => no correction applied
             runera = -1;
         }
     }else {
-        if(_is2017) {runera = y2017MC; usemetv2 =true;}
-        else if(_is2018) runera = y2018MC;
+        if(_is2017 and !isUL) {runera = y2017MC; usemetv2 =true;}
+        else if(_is2018 and !isUL) runera = y2018MC;
+        else if(_is2017 and isUL) runera = yUL2017MC;
+        else if(_is2018 and isUL) runera = yUL2018MC;
         else runera = y2016MC;
     }
 }
@@ -88,6 +107,32 @@ std::pair<double,double> full_analyzer::METXYCorr_Met_MetPhi(double uncormet, do
         if(runera==y2017MC) METycorr = -(0.177058*npv -0.336648);
         if(runera==y2018MC) METxcorr = -(0.296713*npv -0.141506);
         if(runera==y2018MC) METycorr = -(0.115685*npv +0.0128193);
+
+        //UL2017
+        if(runera==yUL2017B) METxcorr = -(-0.211161*npv +0.419333);
+        if(runera==yUL2017B) METycorr = -(0.251789*npv +-1.28089);
+        if(runera==yUL2017C) METxcorr = -(-0.185184*npv +-0.164009);
+        if(runera==yUL2017C) METycorr = -(0.200941*npv +-0.56853);
+        if(runera==yUL2017D) METxcorr = -(-0.201606*npv +0.426502);
+        if(runera==yUL2017D) METycorr = -(0.188208*npv +-0.58313);
+        if(runera==yUL2017E) METxcorr = -(-0.162472*npv +0.176329);
+        if(runera==yUL2017E) METycorr = -(0.138076*npv +-0.250239);
+        if(runera==yUL2017F) METxcorr = -(-0.210639*npv +0.72934);
+        if(runera==yUL2017F) METycorr = -(0.198626*npv +1.028);
+        if(runera==yUL2017MC) METxcorr = -(-0.300155*npv +1.90608);
+        if(runera==yUL2017MC) METycorr = -(0.300213*npv +-2.02232);
+
+        //UL2018
+        if(runera==yUL2018A) METxcorr = -(0.263733*npv +-1.91115);
+        if(runera==yUL2018A) METycorr = -(0.0431304*npv +-0.112043);
+        if(runera==yUL2018B) METxcorr = -(0.400466*npv +-3.05914);
+        if(runera==yUL2018B) METycorr = -(0.146125*npv +-0.533233);
+        if(runera==yUL2018C) METxcorr = -(0.430911*npv +-1.42865);
+        if(runera==yUL2018C) METycorr = -(0.0620083*npv +-1.46021);
+        if(runera==yUL2018D) METxcorr = -(0.457327*npv +-1.56856);
+        if(runera==yUL2018D) METycorr = -(0.0684071*npv +-0.928372);
+        if(runera==yUL2018MC) METxcorr = -(0.183518*npv +0.546754);
+        if(runera==yUL2018MC) METycorr = -(0.192263*npv +-0.42121);
     }
     else {//these are the corrections for v2 MET recipe (currently recommended for 2017)
         if(runera==y2016B) METxcorr = -(-0.0374977*npv +0.00488262);
@@ -147,6 +192,63 @@ std::pair<double,double> full_analyzer::METXYCorr_Met_MetPhi(double uncormet, do
     return TheXYCorr_Met_MetPhi;
 
 }
+std::pair<double,double> full_analyzer::METPUPPIXYCorr_Met_MetPhi(double uncormet, double uncormet_phi, int npv){
+
+    //XY Corrections for PUPPI MET only exist for UL17 conditions currently. The effect is small
+    std::pair<double,double>  TheXYCorr_Met_MetPhi(uncormet,uncormet_phi);
+
+    if(npv>100) npv=100;
+
+    if(runera == -1){ std::cout << "runera incorrectly initialized!" << std::endl; return TheXYCorr_Met_MetPhi;}
+
+    double METxcorr(0.),METycorr(0.);
+
+    if(!usemetv2){//Current recommendation for 2016 and 2018
+        if(runera==yUL2017B) METxcorr = -(-0.00382117*npv +-0.666228);
+        if(runera==yUL2017B) METycorr = -(0.0109034*npv +0.172188);
+        if(runera==yUL2017C) METxcorr = -(-0.00110699*npv +-0.747643);
+        if(runera==yUL2017C) METycorr = -(-0.0012184*npv +0.303817);
+        if(runera==yUL2017D) METxcorr = -(-0.00141442*npv +-0.721382);
+        if(runera==yUL2017D) METycorr = -(-0.0011873*npv +0.21646);
+        if(runera==yUL2017E) METxcorr = -(0.00593859*npv +-0.851999);
+        if(runera==yUL2017E) METycorr = -(-0.00754254*npv +0.245956);
+        if(runera==yUL2017F) METxcorr = -(0.00765682*npv +-0.945001);
+        if(runera==yUL2017F) METycorr = -(-0.0154974*npv +0.804176);
+        if(runera==yUL2017MC) METxcorr = -(-0.0102265*npv +-0.446416);
+        if(runera==yUL2017MC) METycorr = -(0.0198663*npv +0.243182);
+
+        if(runera==yUL2018A) METxcorr = -(-0.0073377*npv +0.0250294);
+        if(runera==yUL2018A) METycorr = -(-0.000406059*npv +0.0417346);
+        if(runera==yUL2018B) METxcorr = -(0.00434261*npv +0.00892927);
+        if(runera==yUL2018B) METycorr = -(0.00234695*npv +0.20381);
+        if(runera==yUL2018C) METxcorr = -(0.00198311*npv +0.37026);
+        if(runera==yUL2018C) METycorr = -(-0.016127*npv +0.402029);
+        if(runera==yUL2018D) METxcorr = -(0.00220647*npv +0.378141);
+        if(runera==yUL2018D) METycorr = -(-0.0160244*npv +0.471053);
+        if(runera==yUL2018MC) METxcorr = -(-0.0214557*npv +0.969428);
+        if(runera==yUL2018MC) METycorr = -(0.0167134*npv +0.199296);
+    }
+    else {//these are the corrections for v2 MET recipe (currently recommended for 2017)
+        return TheXYCorr_Met_MetPhi;
+    }
+
+    double CorrectedMET_x = uncormet *cos( uncormet_phi)+METxcorr;
+    double CorrectedMET_y = uncormet *sin( uncormet_phi)+METycorr;
+
+    double CorrectedMET = sqrt(CorrectedMET_x*CorrectedMET_x+CorrectedMET_y*CorrectedMET_y);
+    double CorrectedMETPhi;
+    if(CorrectedMET_x==0 && CorrectedMET_y>0) CorrectedMETPhi = TMath::Pi();
+    else if(CorrectedMET_x==0 && CorrectedMET_y<0 )CorrectedMETPhi = -TMath::Pi();
+    else if(CorrectedMET_x >0) CorrectedMETPhi = TMath::ATan(CorrectedMET_y/CorrectedMET_x);
+    else if(CorrectedMET_x <0&& CorrectedMET_y>0) CorrectedMETPhi = TMath::ATan(CorrectedMET_y/CorrectedMET_x) + TMath::Pi();
+    else if(CorrectedMET_x <0&& CorrectedMET_y<0) CorrectedMETPhi = TMath::ATan(CorrectedMET_y/CorrectedMET_x) - TMath::Pi();
+    else CorrectedMETPhi =0;
+
+    TheXYCorr_Met_MetPhi.first= CorrectedMET;
+    TheXYCorr_Met_MetPhi.second= CorrectedMETPhi;
+    return TheXYCorr_Met_MetPhi;
+
+}
 
 
 void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix){
@@ -155,17 +257,20 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_metXYcheck"]              = new TH1F(prefix+"_metXYcheck", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metRaw"]                  = new TH1F(prefix+"_metRaw", ";E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppi"]                = new TH1F(prefix+"_metPuppi", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
+    (*hists)[prefix+"_metPuppiXY"]              = new TH1F(prefix+"_metPuppiXY", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_metPuppiRaw"]             = new TH1F(prefix+"_metPuppiRaw", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 300);
     (*hists)[prefix+"_met_zoom"]                = new TH1F(prefix+"_met_zoom", ";E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metXY_zoom"]              = new TH1F(prefix+"_metXY_zoom", ";E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metRaw_zoom"]             = new TH1F(prefix+"_metRaw_zoom", ";E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPuppi_zoom"]           = new TH1F(prefix+"_metPuppi_zoom", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 800);
+    (*hists)[prefix+"_metPuppiXY_zoom"]         = new TH1F(prefix+"_metPuppiXY_zoom", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPuppiRaw_zoom"]        = new TH1F(prefix+"_metPuppiRaw_zoom", ";Puppi E_{T}^{miss} [GeV];Events", 50, 0, 800);
     (*hists)[prefix+"_metPhi"]                  = new TH1F(prefix+"_metPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metXYPhi"]                = new TH1F(prefix+"_metXYPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metXYPhicheck"]           = new TH1F(prefix+"_metXYPhicheck", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metRawPhi"]               = new TH1F(prefix+"_metRawPhi", ";E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPuppiPhi"]             = new TH1F(prefix+"_metPuppiPhi", ";Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+    (*hists)[prefix+"_metPuppiXYPhi"]           = new TH1F(prefix+"_metPuppiXYPhi", ";Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     (*hists)[prefix+"_metPuppiRawPhi"]          = new TH1F(prefix+"_metPuppiRawPhi", ";Puppi E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     
     (*hists)[prefix+"_nPV"]                     = new TH1F(prefix+"_nPV", ";nPV;Events", 100, 0, 100);
@@ -175,51 +280,60 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
     (*hists)[prefix+"_uT_pt_metXY"]             = new TH1F(prefix+"_uT_pt_metXY", ";u_{T} [GeV];Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt_metRaw"]            = new TH1F(prefix+"_uT_pt_metRaw", ";u_{T} [GeV];Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt_metPuppi"]          = new TH1F(prefix+"_uT_pt_metPuppi", ";u_{T} [GeV] (Puppi);Events", 100, 0, 200);
+    (*hists)[prefix+"_uT_pt_metPuppiXY"]        = new TH1F(prefix+"_uT_pt_metPuppiXY", ";u_{T} [GeV] (Puppi);Events", 100, 0, 200);
     (*hists)[prefix+"_uT_pt_metPuppiRaw"]       = new TH1F(prefix+"_uT_pt_metPuppiRaw", ";u_{T} [GeV] (Raw Puppi);Events", 100, 0, 200);
     (*hists)[prefix+"_upara_met"]               = new TH1F(prefix+"_upara_met", ";u_{#parallel} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metXY"]             = new TH1F(prefix+"_upara_metXY", ";u_{#parallel} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metRaw"]            = new TH1F(prefix+"_upara_metRaw", ";u_{#parallel} [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metPuppi"]          = new TH1F(prefix+"_upara_metPuppi", ";u_{#parallel} [GeV] (Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_upara_metPuppiXY"]        = new TH1F(prefix+"_upara_metPuppiXY", ";u_{#parallel} [GeV] (Puppi);Events", 100, -200, 200);
     (*hists)[prefix+"_upara_metPuppiRaw"]       = new TH1F(prefix+"_upara_metPuppiRaw", ";u_{#parallel} [GeV] (Raw Puppi);Events", 100, -200, 200);
     (*hists)[prefix+"_uparaplusq_met"]          = new TH1F(prefix+"_uparaplusq_met", ";u_{#parallel} + q_{T} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uparaplusq_metXY"]        = new TH1F(prefix+"_uparaplusq_metXY", ";u_{#parallel} + q_{T} [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uparaplusq_metRaw"]       = new TH1F(prefix+"_uparaplusq_metRaw", ";u_{#parallel} + q_{T} [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_uparaplusq_metPuppi"]     = new TH1F(prefix+"_uparaplusq_metPuppi", ";u_{#parallel} + q_{T} [GeV] (Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_uparaplusq_metPuppiXY"]   = new TH1F(prefix+"_uparaplusq_metPuppiXY", ";u_{#parallel} + q_{T} [GeV] (Puppi);Events", 100, -200, 200);
     (*hists)[prefix+"_uparaplusq_metPuppiRaw"]  = new TH1F(prefix+"_uparaplusq_metPuppiRaw", ";u_{#parallel} + q_{T} [GeV] (Raw Puppi);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_met"]               = new TH1F(prefix+"_uperp_met", ";u_{#perp}  [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metXY"]             = new TH1F(prefix+"_uperp_metXY", ";u_{#perp}  [GeV];Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metRaw"]            = new TH1F(prefix+"_uperp_metRaw", ";u_{#perp}  [GeV] (Raw MET);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metPuppi"]          = new TH1F(prefix+"_uperp_metPuppi", ";u_{#perp}  [GeV] (Puppi);Events", 100, -200, 200);
+    (*hists)[prefix+"_uperp_metPuppiXY"]        = new TH1F(prefix+"_uperp_metPuppiXY", ";u_{#perp}  [GeV] (Puppi);Events", 100, -200, 200);
     (*hists)[prefix+"_uperp_metPuppiRaw"]       = new TH1F(prefix+"_uperp_metPuppiRaw", ";u_{#perp}  [GeV] (Raw Puppi);Events", 100, -200, 200);
 
-    int nbins = 15;
-    double xbins_vsqT[nbins] = {10, 20, 30, 40, 50, 70, 90, 110, 130, 150, 170, 200, 240, 320, 400, 500};
-    double xbins_vsnPV[nbins] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60};
+    int nbins = 16;
+    double xbins_vsqT[nbins+1] = {10, 20, 30, 40, 50, 70, 90, 110, 130, 150, 170, 200, 240, 320, 400, 500, 600};
+    double xbins_vsnPV[nbins+1] = {0, 4, 8, 12, 16, 20, 23, 25, 29, 32, 36, 40, 44, 48, 52, 56, 65};
 
     (*hists2D)[prefix+"_AbsScale_vsqT_met"]         = new TH2F(prefix+"_AbsScale_vsqT_met", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_metRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]       = new TH2F(prefix+"_AbsScale_vsqT_metXY", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metPuppi"]    = new TH2F(prefix+"_AbsScale_vsqT_metPuppi", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiXY"]  = new TH2F(prefix+"_AbsScale_vsqT_metPuppiXY", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsqT_metPuppiRaw", ";q_{T};u_{#parallel}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_met"]         = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_met", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metRaw"]      = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_metRaw", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metXY"]       = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_metXY", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppi"]    = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_metPuppi", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppiXY"]  = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_metPuppiXY", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsqT_uparaplusq_metPuppiRaw", ";q_{T};u_{#parallel} + q_{T}", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_met"]   = new TH2F(prefix+"_AbsScale_vsqT_uperp_met", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]= new TH2F(prefix+"_AbsScale_vsqT_uperp_metRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metXY", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppi"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metPuppi", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiXY"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metPuppiXY", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsqT_uperp_metPuppiRaw", ";q_{T};u_{#perp} ", nbins, xbins_vsqT, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_met"]        = new TH2F(prefix+"_AbsScale_vsnPV_met", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_metRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]      = new TH2F(prefix+"_AbsScale_vsnPV_metXY", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppi"]   = new TH2F(prefix+"_AbsScale_vsnPV_metPuppi", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiXY"] = new TH2F(prefix+"_AbsScale_vsnPV_metPuppiXY", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsnPV_metPuppiRaw", ";nPV;u_{#parallel}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_met"]        = new TH2F(prefix+"_AbsScale_vsnPV_uperp_met", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metRaw"]     = new TH2F(prefix+"_AbsScale_vsnPV_uperp_metRaw", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metXY"]      = new TH2F(prefix+"_AbsScale_vsnPV_uperp_metXY", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppi"]   = new TH2F(prefix+"_AbsScale_vsnPV_uperp_metPuppi", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppiXY"] = new TH2F(prefix+"_AbsScale_vsnPV_uperp_metPuppiXY", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppiRaw"] = new TH2F(prefix+"_AbsScale_vsnPV_uperp_metPuppiRaw", ";nPV;u_{#perp}", nbins, xbins_vsnPV, 1000, -1000, 1000);
     (*hists)[prefix+"_meanqT_vsqT_num"]             = new TH1F(prefix+"_meanqT_vsqT_num", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
     (*hists)[prefix+"_meanqT_vsqT_den"]             = new TH1F(prefix+"_meanqT_vsqT_den", ";q_{T};q_{T}*event_weight", nbins, xbins_vsqT);
@@ -233,33 +347,44 @@ void full_analyzer::add_MET_histograms(std::map<TString, TH1*>* hists, std::map<
         (*hists)[prefix+"_metPhi"+systunc]                  = new TH1F(prefix+"_metPhi"+systunc, ";"+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
         (*hists)[prefix+"_metXYPhi"+systunc]                = new TH1F(prefix+"_metXYPhi"+systunc, ";"+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
         (*hists)[prefix+"_metPuppi"+systunc]                = new TH1F(prefix+"_metPuppi"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 300);
+        (*hists)[prefix+"_metPuppiXY"+systunc]              = new TH1F(prefix+"_metPuppiXY"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 300);
         (*hists)[prefix+"_metPuppi_zoom"+systunc]           = new TH1F(prefix+"_metPuppi_zoom"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 800);
+        (*hists)[prefix+"_metPuppiXY_zoom"+systunc]         = new TH1F(prefix+"_metPuppiXY_zoom"+systunc, ";Puppi "+systunc+" E_{T}^{miss} [GeV];Events", 50, 0, 800);
         (*hists)[prefix+"_metPuppiPhi"+systunc]             = new TH1F(prefix+"_metPuppiPhi"+systunc, ";Puppi "+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
+        (*hists)[prefix+"_metPuppiXYPhi"+systunc]           = new TH1F(prefix+"_metPuppiXYPhi"+systunc, ";Puppi "+systunc+" E_{T}^{miss} Phi;Events", 50, -3.1415, 3.1415);
     }
 }
 
 void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
 
     // do xy corrections
-    //setRunEra(_runNb);
-    //std::pair<double, double > _metAndPhi_XYCorr = METXYCorr_Met_MetPhi(_met, _metPhi, _nVertex);
-    //if(_metAndPhi_XYCorr.first == 0 and _metAndPhi_XYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
+    setRunEra(_runNb);
+    std::pair<double, double > _metAndPhi_XYCorr = METXYCorr_Met_MetPhi(_metType1, _metType1Phi, _nVertex);
+    if(_metAndPhi_XYCorr.first == 0 and _metAndPhi_XYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
+
+    std::pair<double, double > _metPuppiXYCorr = METPUPPIXYCorr_Met_MetPhi(_metPuppi, _metPuppiPhi, _nVertex);
+    if(_metPuppiXYCorr.first == 0 and _metPuppiXYCorr.second == 0) std::cout << "something went wrong in XY correction!" << std::endl;
+    double _metPuppiXY      = _metPuppiXYCorr.first;
+    double _metPuppiXYPhi   = _metPuppiXYCorr.second;
 
 
     (*hists)[prefix+"_met"]->Fill(_metType1, event_weight);
-    (*hists)[prefix+"_metXY"]->Fill(_met, event_weight);
+    (*hists)[prefix+"_metXY"]->Fill(_metAndPhi_XYCorr.first, event_weight);
     (*hists)[prefix+"_metRaw"]->Fill(_metRaw, event_weight);
     (*hists)[prefix+"_metPuppi"]->Fill(_metPuppi, event_weight);
+    (*hists)[prefix+"_metPuppiXY"]->Fill(_metPuppiXY, event_weight);
     (*hists)[prefix+"_metPuppiRaw"]->Fill(_metPuppiRaw, event_weight);
     (*hists)[prefix+"_met_zoom"]->Fill(_metType1, event_weight);
-    (*hists)[prefix+"_metXY_zoom"]->Fill(_met, event_weight);
+    (*hists)[prefix+"_metXY_zoom"]->Fill(_metAndPhi_XYCorr.first, event_weight);
     (*hists)[prefix+"_metRaw_zoom"]->Fill(_metRaw, event_weight);
     (*hists)[prefix+"_metPuppi_zoom"]->Fill(_metPuppi, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoom"]->Fill(_metPuppiXY, event_weight);
     (*hists)[prefix+"_metPuppiRaw_zoom"]->Fill(_metPuppiRaw, event_weight);
     (*hists)[prefix+"_metPhi"]->Fill(_metType1Phi, event_weight);
-    (*hists)[prefix+"_metXYPhi"]->Fill(_metPhi, event_weight);
+    (*hists)[prefix+"_metXYPhi"]->Fill(_metAndPhi_XYCorr.second, event_weight);
     (*hists)[prefix+"_metRawPhi"]->Fill(_metRawPhi, event_weight);
     (*hists)[prefix+"_metPuppiPhi"]->Fill(_metPuppiPhi, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhi"]->Fill(_metPuppiXYPhi, event_weight);
     (*hists)[prefix+"_metPuppiRawPhi"]->Fill(_metPuppiRawPhi, event_weight);
 
     (*hists)[prefix+"_nPV"]->Fill(_nVertex, event_weight);
@@ -270,13 +395,15 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     LorentzVector q_vec = l1_vec + l2_vec; // q_vec = Z boson
     LorentzVector met_vec(_metType1, 0, _metType1Phi, _metType1); // met is always transverse (eta = 0)
     LorentzVector metRaw_vec(_metRaw, 0, _metRawPhi, _metRaw);
-    LorentzVector metXY_vec(_met, 0, _metPhi, _met);
+    LorentzVector metXY_vec(_metAndPhi_XYCorr.first, 0, _metAndPhi_XYCorr.second, _metAndPhi_XYCorr.first);
     LorentzVector metPuppi_vec(_metPuppi, 0, _metPuppiPhi, _metPuppi);
+    LorentzVector metPuppiXY_vec(_metPuppiXY, 0, _metPuppiXYPhi, _metPuppiXY);
     LorentzVector metPuppiRaw_vec(_metPuppiRaw, 0, _metPuppiRawPhi, _metPuppiRaw);
     LorentzVector uT_vec = -(q_vec + met_vec);  // Hadronic recoil u_T is defined as the sum of all PF particles momenta except for the Z boson. Therefore uT + q + met = 0
     LorentzVector uT_frommetXY_vec = -(q_vec + metXY_vec);
     LorentzVector uT_frommetRaw_vec = -(q_vec + metRaw_vec);
     LorentzVector uT_frommetPuppi_vec = -(q_vec + metPuppi_vec);
+    LorentzVector uT_frommetPuppiXY_vec = -(q_vec + metPuppiXY_vec);
     LorentzVector uT_frommetPuppiRaw_vec = -(q_vec + metPuppiRaw_vec);
 
     // Calculate, in TRANSVERSE PLANE, the parallel and perpendicular component of uT to Z
@@ -288,6 +415,8 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     double uperp_frommetXY = uT_frommetXY_vec.pt() * sin( uT_frommetXY_vec.phi() - q_vec.phi() );
     double upara_frommetPuppi = uT_frommetPuppi_vec.pt() * cos( uT_frommetPuppi_vec.phi() - q_vec.phi() );
     double uperp_frommetPuppi = uT_frommetPuppi_vec.pt() * sin( uT_frommetPuppi_vec.phi() - q_vec.phi() );
+    double upara_frommetPuppiXY = uT_frommetPuppiXY_vec.pt() * cos( uT_frommetPuppiXY_vec.phi() - q_vec.phi() );
+    double uperp_frommetPuppiXY = uT_frommetPuppiXY_vec.pt() * sin( uT_frommetPuppiXY_vec.phi() - q_vec.phi() );
     double upara_frommetPuppiRaw = uT_frommetPuppiRaw_vec.pt() * cos( uT_frommetPuppiRaw_vec.phi() - q_vec.phi() );
     double uperp_frommetPuppiRaw = uT_frommetPuppiRaw_vec.pt() * sin( uT_frommetPuppiRaw_vec.phi() - q_vec.phi() );
 
@@ -296,46 +425,55 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_uT_pt_metXY"]->Fill(uT_frommetXY_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt_metRaw"]->Fill(uT_frommetRaw_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt_metPuppi"]->Fill(uT_frommetPuppi_vec.pt(), event_weight);
+    (*hists)[prefix+"_uT_pt_metPuppiXY"]->Fill(uT_frommetPuppiXY_vec.pt(), event_weight);
     (*hists)[prefix+"_uT_pt_metPuppiRaw"]->Fill(uT_frommetPuppiRaw_vec.pt(), event_weight);
     (*hists)[prefix+"_upara_met"]->Fill(upara, event_weight);
     (*hists)[prefix+"_upara_metXY"]->Fill(upara_frommetXY, event_weight);
     (*hists)[prefix+"_upara_metRaw"]->Fill(upara_frommetRaw, event_weight);
     (*hists)[prefix+"_upara_metPuppi"]->Fill(upara_frommetPuppi, event_weight);
+    (*hists)[prefix+"_upara_metPuppiXY"]->Fill(upara_frommetPuppiXY, event_weight);
     (*hists)[prefix+"_upara_metPuppiRaw"]->Fill(upara_frommetPuppiRaw, event_weight);
     (*hists)[prefix+"_uparaplusq_met"]->Fill(upara + q_vec.pt(), event_weight);
     (*hists)[prefix+"_uparaplusq_metXY"]->Fill(upara_frommetXY + q_vec.pt(), event_weight);
     (*hists)[prefix+"_uparaplusq_metRaw"]->Fill(upara_frommetRaw + q_vec.pt(), event_weight);
     (*hists)[prefix+"_uparaplusq_metPuppi"]->Fill(upara_frommetPuppi + q_vec.pt(), event_weight);
+    (*hists)[prefix+"_uparaplusq_metPuppiXY"]->Fill(upara_frommetPuppiXY + q_vec.pt(), event_weight);
     (*hists)[prefix+"_uparaplusq_metPuppiRaw"]->Fill(upara_frommetPuppiRaw + q_vec.pt(), event_weight);
     (*hists)[prefix+"_uperp_met"]->Fill(uperp, event_weight);
     (*hists)[prefix+"_uperp_metXY"]->Fill(uperp_frommetXY, event_weight);
     (*hists)[prefix+"_uperp_metRaw"]->Fill(uperp_frommetRaw, event_weight);
     (*hists)[prefix+"_uperp_metPuppi"]->Fill(uperp_frommetPuppi, event_weight);
+    (*hists)[prefix+"_uperp_metPuppiXY"]->Fill(uperp_frommetPuppiXY, event_weight);
     (*hists)[prefix+"_uperp_metPuppiRaw"]->Fill(uperp_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_met"]->Fill(q_vec.pt(), upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metXY"]->Fill(q_vec.pt(), upara_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metRaw"]->Fill(q_vec.pt(), upara_frommetRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metPuppi"]->Fill(q_vec.pt(), upara_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiXY"]->Fill(q_vec.pt(), upara_frommetPuppiXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_metPuppiRaw"]->Fill(q_vec.pt(), upara_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_met"]->Fill(q_vec.pt(), upara + q_vec.pt(), event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metXY"]->Fill(q_vec.pt(), upara_frommetXY + q_vec.pt(), event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metRaw"]->Fill(q_vec.pt(), upara_frommetRaw + q_vec.pt(), event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppi"]->Fill(q_vec.pt(), upara_frommetPuppi + q_vec.pt(), event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppiXY"]->Fill(q_vec.pt(), upara_frommetPuppiXY + q_vec.pt(), event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uparaplusq_metPuppiRaw"]->Fill(q_vec.pt(), upara_frommetPuppiRaw + q_vec.pt(), event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_met"]->Fill(q_vec.pt(), uperp, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metXY"]->Fill(q_vec.pt(), uperp_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metRaw"]->Fill(q_vec.pt(), uperp_frommetRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppi"]->Fill(q_vec.pt(), uperp_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiXY"]->Fill(q_vec.pt(), uperp_frommetPuppiXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsqT_uperp_metPuppiRaw"]->Fill(q_vec.pt(), uperp_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_met"]->Fill(_nVertex, upara, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metXY"]->Fill(_nVertex, upara_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metRaw"]->Fill(_nVertex, upara_frommetRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppi"]->Fill(_nVertex, upara_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiXY"]->Fill(_nVertex, upara_frommetPuppiXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_metPuppiRaw"]->Fill(_nVertex, upara_frommetPuppiRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_met"]->Fill(_nVertex, uperp, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metXY"]->Fill(_nVertex, uperp_frommetXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metRaw"]->Fill(_nVertex, uperp_frommetRaw, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppi"]->Fill(_nVertex, uperp_frommetPuppi, event_weight);
+    (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppiXY"]->Fill(_nVertex, uperp_frommetPuppiXY, event_weight);
     (*hists2D)[prefix+"_AbsScale_vsnPV_uperp_metPuppiRaw"]->Fill(_nVertex, uperp_frommetPuppiRaw, event_weight);
     (*hists)[prefix+"_meanqT_vsqT_num"]->Fill(q_vec.pt(), q_vec.pt()*event_weight);
     (*hists)[prefix+"_meanqT_vsqT_den"]->Fill(q_vec.pt(), event_weight);
@@ -379,7 +517,7 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_metPuppiPhiUnclDown"]->Fill(_metPuppiPhiUnclDown, event_weight);
     (*hists)[prefix+"_metPuppiPhiUnclUp"]->Fill(_metPuppiPhiUnclUp, event_weight);
 
-    setRunEra(_runNb);
+    //setRunEra(_runNb);
     std::pair<double, double > _metAndPhiXY = METXYCorr_Met_MetPhi(_metType1, _metType1Phi, _nVertex);
 
     (*hists)[prefix+"_metXYcheck"]->Fill(_metAndPhiXY.first, event_weight);
@@ -410,4 +548,30 @@ void full_analyzer::fill_MET_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_metXYPhiResUp"]->Fill(_metAndPhiXYResUp.second, event_weight);
     (*hists)[prefix+"_metXYPhiUnclDown"]->Fill(_metAndPhiXYUnclDown.second, event_weight);
     (*hists)[prefix+"_metXYPhiUnclUp"]->Fill(_metAndPhiXYUnclUp.second, event_weight);
+    
+    std::pair<double, double> _metPuppiXYJECDown   = METPUPPIXYCorr_Met_MetPhi(_metJECDown, _metPhiJECDown, _nVertex);
+    std::pair<double, double> _metPuppiXYJECUp     = METPUPPIXYCorr_Met_MetPhi(_metJECUp, _metPhiJECUp, _nVertex);
+    std::pair<double, double> _metPuppiXYResDown   = METPUPPIXYCorr_Met_MetPhi(_metResDown, _metPhiResDown, _nVertex);
+    std::pair<double, double> _metPuppiXYResUp     = METPUPPIXYCorr_Met_MetPhi(_metResUp, _metPhiResUp, _nVertex);
+    std::pair<double, double> _metPuppiXYUnclDown  = METPUPPIXYCorr_Met_MetPhi(_metUnclDown, _metPhiUnclDown, _nVertex);
+    std::pair<double, double> _metPuppiXYUnclUp    = METPUPPIXYCorr_Met_MetPhi(_metUnclUp, _metPhiUnclUp, _nVertex);
+
+    (*hists)[prefix+"_metPuppiXYJECDown"]->Fill(_metPuppiXYJECDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYJECUp"]->Fill(_metPuppiXYJECUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYResDown"]->Fill(_metPuppiXYResDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYResUp"]->Fill(_metPuppiXYResUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYUnclDown"]->Fill(_metPuppiXYUnclDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYUnclUp"]->Fill(_metPuppiXYUnclUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomJECDown"]->Fill(_metPuppiXYJECDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomJECUp"]->Fill(_metPuppiXYJECUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomResDown"]->Fill(_metPuppiXYResDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomResUp"]->Fill(_metPuppiXYResUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomUnclDown"]->Fill(_metPuppiXYUnclDown.first, event_weight);
+    (*hists)[prefix+"_metPuppiXY_zoomUnclUp"]->Fill(_metPuppiXYUnclUp.first, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiJECDown"]->Fill(_metPuppiXYJECDown.second, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiJECUp"]->Fill(_metPuppiXYJECUp.second, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiResDown"]->Fill(_metPuppiXYResDown.second, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiResUp"]->Fill(_metPuppiXYResUp.second, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiUnclDown"]->Fill(_metPuppiXYUnclDown.second, event_weight);
+    (*hists)[prefix+"_metPuppiXYPhiUnclUp"]->Fill(_metPuppiXYUnclUp.second, event_weight);
 }

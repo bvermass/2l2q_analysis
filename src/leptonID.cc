@@ -14,7 +14,7 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     if(fabs(_dxy[i]) >= 0.05)                       return false;
     if(fabs(_dz[i]) >= 0.1)                         return false;
     if(_3dIPSig[i] >= 4)                            return false;
-    if(_relIso[i] >= 0.1)                           return false;
+    if(_relIso0p4MuDeltaBeta[i] >= 0.15)            return false;
     if(!_lPOGTight[i])                              return false;
 
     return true;
