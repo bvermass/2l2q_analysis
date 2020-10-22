@@ -1,1 +1,1 @@
-/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/dilep_METResolution_JEC_UL17_V1_ComplexL1.root               5765.4 -1 27
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MiniAOD2017/dilep_METResolution_JEC_UL17_V5.root               5765.4 10000 1

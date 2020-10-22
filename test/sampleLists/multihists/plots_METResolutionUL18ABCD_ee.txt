@@ -1,0 +1,5 @@
+METResolution_UL18ABCD_V4_ee 10
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V4/full_analyzer/hists_full_analyzer_EGamma_Run2018A.root RunA
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V4/full_analyzer/hists_full_analyzer_EGamma_Run2018B.root RunB
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V4/full_analyzer/hists_full_analyzer_EGamma_Run2018C.root RunC
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V4/full_analyzer/hists_full_analyzer_EGamma_Run2018D.root RunD

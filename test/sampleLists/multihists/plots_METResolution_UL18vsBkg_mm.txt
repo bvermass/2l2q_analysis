@@ -1,0 +1,3 @@
+METResolution_UL18_V4_mm_vsBkg 10
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V4/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018.root Data
+/user/bvermass/public/MET_scale_resolution/histograms/METResolution_JEC_UL18_V2/full_analyzer/hists_full_analyzer_Background_UL18_MiniAOD2018.root MC

@@ -1,4 +1,4 @@
-METResolution_Run2018ABCD_mm
+METResolution_Run2018ABCD_mm 10
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018A.root     2018A
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018B.root     2018B
 /user/bvermass/public/MET_scale_resolution/histograms/METResolution_V19/full_analyzer/hists_full_analyzer_DoubleMuon_Run2018C.root     2018C
