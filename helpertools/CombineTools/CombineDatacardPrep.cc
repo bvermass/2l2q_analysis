@@ -52,8 +52,8 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
-    std::string general_pathname = (std::string)make_general_pathname("combine/datacards/", specific_dir + "/");
-    std::string shapeSR_pathname = (std::string)make_general_pathname("combine/Shapefiles/", specific_dir + "/");
+    std::string general_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
+    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
 
@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
                     bkgYield.push_back(hists_bkg[i]->Integral());
                 }
                 //!!!!! temporary fix !!!!! remove !!!!!
-                bkgYield[0] = std::max(bkgYield[0], 0.1);
+                //bkgYield[0] = std::max(bkgYield[0], 0.1);
                 //!!!!!!!!!!!!!!!!!
 
                 //Systematic Uncertainty stuff

@@ -13,6 +13,12 @@ int main(int argc, char * argv[])
     //      plot will be made of signal strength as a function of coupling
     TString txtfilename = (TString)argv[1];
     TString specific_dir = (TString)argv[2];
+
+    TString basedir = txtfilename(0, txtfilename.Index("datacards"));
+    gSystem->Exec("mkdir -p " + basedir + "plots/");
+
+    std::cout << std::endl << "--------------------" << std::endl;
+    std::cout << "Base directory: " << basedir << std::endl;
     std::cout << "flavor and mass: " << specific_dir << std::endl;
     
     //From txtfile, read the combine output root files to be used for the plot
@@ -42,7 +48,7 @@ int main(int argc, char * argv[])
 
     std::cout << "--------------------" << std::endl << "Plotting Signal Strengths vs. coupling for single mass" << std::endl;
     for(auto& sr_M : signal_strengths){
-        PlotSignalStrengths(sr_M.second, "SignalStrength_" + specific_dir + "M-" + std::to_string((int)sr_M.first), "|V|^{2}", "Signal Strength");
+        PlotSignalStrengths(sr_M.second, basedir + "plots/SignalStrength_" + specific_dir + "M-" + std::to_string((int)sr_M.first) + ".png", "|V|^{2}", "Signal Strength");
     }
 
     std::cout << "--------------------" << std::endl << "Getting exclusion limits and plotting final exclusion plot" << std::endl;//ONLY LOWER LIMIT, NO UPPER LIMIT YET
@@ -71,7 +77,8 @@ int main(int argc, char * argv[])
         else if(CheckGoesBelow1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.975] = GetLowerExclusionLimit(sr_M.second, 0.50);
     }
 
-    PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, "ExclusionLimit_" + specific_dir, "M_{HNL} [GeV]", "|V|^{2}");
+    PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, basedir + "plots/ExclusionLimit_" + specific_dir + ".png", "M_{HNL} [GeV]", "|V|^{2}");
+    WriteExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, basedir + "Limits_" + specific_dir + ".txt");
 }
 #endif
 
@@ -129,14 +136,12 @@ double GetLowerExclusionLimit(std::map<double, std::map<float, double>> signal_s
     return (x2 - x1 + y2*x1 - y1*x2) / (y2 - y1);//linear interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1)
 }
 
-void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString specific_dir, TString Xaxistitle, TString Yaxistitle)
+void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString plotfilename, TString Xaxistitle, TString Yaxistitle)
 {
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-
-    TString pathname = "~/public_html/2l2q_analysis/combine_POGTightID_unparametrized_LowAndHighMass/plots/";
-    gSystem->Exec("mkdir -p " + pathname);
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -149,13 +154,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
-    float leftmargin  = pad->GetLeftMargin();
-    float topmargin   = pad->GetTopMargin();
-    float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
 
     std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central;
     for(auto& sr_V2 : lower_exclusion_limit){
@@ -218,24 +217,21 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_upper_1s_graph->Draw("3 same");
     sr_upper_central_graph->Draw("L same");
 
-    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+    CMSandLumi->Draw();
 
     pad->Modified();
-    c->Print(pathname + specific_dir + ".png");
+    c->Print(plotfilename);
     delete c;
     return;
 }
 
 
-void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString specific_dir, TString Xaxistitle, TString Yaxistitle)
+void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString plotfilename, TString Xaxistitle, TString Yaxistitle)
 {
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-
-    TString pathname = "~/public_html/2l2q_analysis/combine_POGTightID_unparametrized_LowAndHighMass/plots/";
-    gSystem->Exec("mkdir -p " + pathname);
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -248,13 +244,7 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
-    float leftmargin  = pad->GetLeftMargin();
-    float topmargin   = pad->GetTopMargin();
-    float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
 
     std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central;
     for(auto& sr_V2 : lower_exclusion_limit){
@@ -324,11 +314,10 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     sr_upper_1s_graph->Draw("3 same");
     sr_upper_central_graph->Draw("L same");
 
-    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+    CMSandLumi->Draw();
 
     pad->Modified();
-    c->Print(pathname + specific_dir + ".png");
+    c->Print(plotfilename);
     delete c;
     return;
     Double_t x[4] = {4.,7.,6.,5.};
@@ -341,14 +330,12 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
 }
 
 
-void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir, TString Xaxistitle, TString Yaxistitle)
+void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString plotfilename, TString Xaxistitle, TString Yaxistitle)
 {
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-
-    TString pathname = "~/public_html/2l2q_analysis/combine_POGTightID_unparametrized_LowAndHighMass/plots/";
-    gSystem->Exec("mkdir -p " + pathname);
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -361,13 +348,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    TString CMStext   = "#bf{CMS} #scale[0.8]{#it{Preliminary}}";
-    TString lumitext  = "35.9 fb^{-1} (13 TeV)";
-    float leftmargin  = pad->GetLeftMargin();
-    float topmargin   = pad->GetTopMargin();
-    float rightmargin = pad->GetRightMargin();
-    TLatex CMSlatex  = get_latex(0.8*topmargin, 11, 42);
-    TLatex lumilatex = get_latex(0.6*topmargin, 31, 42);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
 
     std::vector<double> V2, V2_err, sr_2s_up, sr_2s_down, sr_1s_up, sr_1s_down, sr_central;
     for(auto& sr_V2 : signal_strengths){
@@ -396,17 +377,16 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     TGraphAsymmErrors* sr_central_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
 
     sr_2s_graph->Draw("A3");
-    if(specific_dir.Contains("ExclusionLimit")){
+    if(plotfilename.Contains("ExclusionLimit")){
         sr_2s_graph->GetXaxis()->SetRangeUser(1,13);
         sr_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-1);
     }
     sr_1s_graph->Draw("3 same");
     sr_central_graph->Draw("L same");
-    CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
-    lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+    CMSandLumi->Draw();
 
     pad->Modified();
-    c->Print(pathname + specific_dir + ".png");
+    c->Print(plotfilename);
     delete c;
     return;
 }
@@ -471,5 +451,20 @@ void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, d
                 std::cout << "quantile, limit: " << sr->first << " " << sr->second << std::endl;
             }
         }
+    }
+}
+
+void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename)
+{
+    std::cout << "Writing Limits to " << filename << std::endl;
+    std::ofstream outfile;
+    outfile.open(filename);
+    outfile << "Lower Limits:\n";
+    for(auto& sr_V2 : lower_exclusion_limit){
+        outfile << "M = " << sr_V2.first << " GeV : " << sr_V2.second[0.50] << "\n";
+    }
+    outfile << "Upper Limits:\n";
+    for(auto& sr_V2 : upper_exclusion_limit){
+        outfile << "M = " << sr_V2.first << " GeV : " << sr_V2.second[0.50] << "\n";
     }
 }

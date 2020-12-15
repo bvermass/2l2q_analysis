@@ -48,15 +48,16 @@ class Shape_SR_plottext{
         Shape_SR_plottext(TPad* pad);
         ~Shape_SR_plottext();
         void Draw(TString histname);
-        void Draw_2l();
-        void Draw_ee();
-        void Draw_em();
-        void Draw_me();
-        void Draw_mm();
+        void Draw_2l(TString mass_category);
+        void Draw_ee(TString mass_category);
+        void Draw_em(TString mass_category);
+        void Draw_me(TString mass_category);
+        void Draw_mm(TString mass_category);
+        void Draw_lines_and_generaltext(TString mass_category);
     private:
-        TString mm, em, ee, me, OS, SS;
+        TString mm, em, ee, me, OS, SS, masslessthan2, massmorethan2, masslessthan6, massmorethan6;
         float leftmargin, rightmargin, topmargin, bottommargin;
-        TLatex mmlatex, emlatex, eelatex, melatex, OSlatex, SSlatex;
+        TLatex latex;
         TLine fullLine, dashedLine;
 };
 

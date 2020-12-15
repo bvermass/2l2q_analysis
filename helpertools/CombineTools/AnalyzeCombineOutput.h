@@ -34,6 +34,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
 void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, double>>> signal_strengths);
+void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
 
 class CombineOutput
 {

@@ -43,16 +43,15 @@ Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
     , me( "me" )
     , OS( "OS" )
     , SS( "SS" )
+    , masslessthan2( "M_{lSV} < 2 GeV" )
+    , massmorethan2( "M_{lSV} > 2 GeV" )
+    , masslessthan6( "M_{lSV} < 6 GeV" )
+    , massmorethan6( "M_{lSV} > 6 GeV" )
     , leftmargin( pad->GetLeftMargin() )
     , topmargin( pad->GetTopMargin() )
     , rightmargin( pad->GetRightMargin() )
     , bottommargin( pad->GetBottomMargin() )
-    , mmlatex( get_latex(0.6*topmargin, 21, 42) )
-    , emlatex( get_latex(0.6*topmargin, 21, 42) )
-    , eelatex( get_latex(0.6*topmargin, 21, 42) )
-    , melatex( get_latex(0.6*topmargin, 21, 42) )
-    , OSlatex( get_latex(0.6*topmargin, 21, 42) )
-    , SSlatex( get_latex(0.6*topmargin, 21, 42) )
+    , latex( get_latex(0.6*topmargin, 21, 42) )
     , fullLine()
     , dashedLine()
 {
@@ -64,29 +63,37 @@ Shape_SR_plottext::~Shape_SR_plottext(){}
 
 void Shape_SR_plottext::Draw(TString histname)
 {
-    if(histname.Contains("_2l")) Draw_2l();
-    if(histname.Contains("_ee")) Draw_ee();
-    if(histname.Contains("_em")) Draw_em();
-    if(histname.Contains("_me")) Draw_me();
-    if(histname.Contains("_mm")) Draw_mm();
+    if(histname.Contains("_M-1_") or histname.Contains("_M-2_") or histname.Contains("_M-3_") or histname.Contains("_M-4_") or histname.Contains("_M-5_")){
+        if(histname.Contains("_2l")) Draw_2l("low");
+        if(histname.Contains("_ee")) Draw_ee("low");
+        if(histname.Contains("_em")) Draw_em("low");
+        if(histname.Contains("_me")) Draw_me("low");
+        if(histname.Contains("_mm")) Draw_mm("low");
+    }else if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_")){
+        if(histname.Contains("_2l")) Draw_2l("high");
+        if(histname.Contains("_ee")) Draw_ee("high");
+        if(histname.Contains("_em")) Draw_em("high");
+        if(histname.Contains("_me")) Draw_me("high");
+        if(histname.Contains("_mm")) Draw_mm("high");
+    }
 }
 
-void Shape_SR_plottext::Draw_2l()
+void Shape_SR_plottext::Draw_2l(TString mass_category)
 {
-    mmlatex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
-    emlatex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
-    eelatex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, ee);
-    melatex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, me);
+    latex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
+    latex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
+    latex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, ee);
+    latex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, me);
 
-    OSlatex.DrawLatex(0.0625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
-    OSlatex.DrawLatex(0.3125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
-    OSlatex.DrawLatex(0.5625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
-    OSlatex.DrawLatex(0.8125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    latex.DrawLatex(0.0625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    latex.DrawLatex(0.3125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    latex.DrawLatex(0.5625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
+    latex.DrawLatex(0.8125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, OS);
 
-    SSlatex.DrawLatex(0.1875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
-    SSlatex.DrawLatex(0.4375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
-    SSlatex.DrawLatex(0.6875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
-    SSlatex.DrawLatex(0.9375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    latex.DrawLatex(0.1875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    latex.DrawLatex(0.4375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    latex.DrawLatex(0.6875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
+    latex.DrawLatex(0.9375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.3*topmargin, SS);
 
     fullLine.DrawLineNDC(0.25*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.25*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
     fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
@@ -98,36 +105,51 @@ void Shape_SR_plottext::Draw_2l()
     dashedLine.DrawLineNDC(0.875*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.875*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
 }
 
-void Shape_SR_plottext::Draw_ee()
+void Shape_SR_plottext::Draw_ee(TString mass_category)
 {
-    eelatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
-    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
-    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
-    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
+    Draw_lines_and_generaltext(mass_category);
 }
 
-void Shape_SR_plottext::Draw_em()
+void Shape_SR_plottext::Draw_em(TString mass_category)
 {
-    emlatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
-    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
-    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
-    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
+    Draw_lines_and_generaltext(mass_category);
 }
 
-void Shape_SR_plottext::Draw_me()
+void Shape_SR_plottext::Draw_me(TString mass_category)
 {
-    melatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
-    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
-    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
-    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
+    Draw_lines_and_generaltext(mass_category);
 }
 
-void Shape_SR_plottext::Draw_mm()
+void Shape_SR_plottext::Draw_mm(TString mass_category)
 {
-    mmlatex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
-    OSlatex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
-    SSlatex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
-    dashedLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
+    Draw_lines_and_generaltext(mass_category);
+}
+
+
+void Shape_SR_plottext::Draw_lines_and_generaltext(TString mass_category)
+{
+    latex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, OS);
+    latex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, SS);
+    fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.25*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.25*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.75*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.75*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+
+    if(mass_category == "low"){
+        latex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+        latex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+    }
+    if(mass_category == "high"){
+        latex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+        latex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+    }
 }
 
 

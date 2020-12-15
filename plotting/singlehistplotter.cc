@@ -244,6 +244,10 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         if(normalize_to_1) hist_extra->Scale(1./hist_extra->Integral());
 
         ratioplotter.SetCentralRatio(hist_extra, sample_hist, sample_hist->GetXaxis()->GetTitle(), "obs/pred");
+        if(histname.Contains("Shape_SR")){
+            std::vector<TString> shape_sr_binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+            ratioplotter.SetBinNames(shape_sr_binnames);
+        }
 
         TString plotname = histname;
         plotname.ReplaceAll(tags[0], plot_tag);

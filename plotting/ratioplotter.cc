@@ -24,15 +24,26 @@ RatioPlot::RatioPlot(TPad* pad):
     }
 }
 
-RatioPlot::~RatioPlot(){}
+RatioPlot::~RatioPlot(){
+    delete Central_Ratio;
+}
 
 void RatioPlot::SetLogx(int xlog)
 {
     Pad->SetLogx(xlog);
 }
 
+void RatioPlot::SetBinNames(std::vector<TString> BinNames)
+{
+    Central_Ratio->SetLabelSize(0.14);
+    for(int i = 0; i < BinNames.size(); ++i){
+        Central_Ratio->GetXaxis()->SetBinLabel(i+1, BinNames[i]);
+    }
+}
+
 void RatioPlot::SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TString yaxistitle)
 {
+    Central_Ratio->Reset();
     Central_Ratio->SetBins(num->GetNbinsX(), num->GetXaxis()->GetXmin(), num->GetXaxis()->GetXmax());
     Central_Ratio->Divide(num, den);
 
