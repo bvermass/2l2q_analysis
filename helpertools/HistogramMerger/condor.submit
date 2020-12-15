@@ -1,0 +1,13 @@
+executable = test
+arguments = $(inputtxtfile)
+
+should_transfer_files = YES
+log = condor.log
+output = condor.out
+error = condor.err
+
+request_cpus = 1
+request_disk = 1000
+request_memory = 200
+
+queue inputtxtfile from condorJobList.txt
