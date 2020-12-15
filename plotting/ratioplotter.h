@@ -38,6 +38,8 @@ class RatioPlot{
         std::vector<double> GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central);
         void SetSystUncs_up_and_down(TString histname, std::vector<TFile*> files_bkg, std::vector<TString> systunc_names, std::vector<TString> legends, TH1F* MC_central);
         void draw_systuncs();
+        void ClearSystUncs();
+        void AddStatVariation(TH1* hist, TString statname);
         void dothething();
     private:
         TPad* Pad;

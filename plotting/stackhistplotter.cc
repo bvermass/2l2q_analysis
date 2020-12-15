@@ -27,14 +27,14 @@ int main(int argc, char * argv[])
     for(int i = 0; i < argc - i_legends; i++){
         TString filename = (TString)argv[i_rootfiles + i];
         TString legendname = (TString)argv[i_legends + i];
-        int adjusted_legend_length = legendname.Length() - 3*legendname.Contains("#tau");
-        if(adjusted_legend_length > 13) n_columns = 1;
-        else if(adjusted_legend_length > 9) n_columns = 2;
+        int adjusted_legend_length = legendname.Length() - 3*legendname.Contains("#tau") - 3*legendname.Contains("^{2}");
+        //if(adjusted_legend_length > 13) n_columns = 1;
+        if(adjusted_legend_length > 9) n_columns = 2;
 
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));
             legends_signal.push_back(adjust_legend(legendname));
-        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data") or legendname.Contains("pred")){
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data")){
             files_data.push_back(TFile::Open(filename));
             legends_data.push_back(adjust_legend(legendname));
         }else {
@@ -64,6 +64,15 @@ int main(int argc, char * argv[])
         std::cout << "Making plots without data" << std::endl;
     }
 
+    std::vector<int> linestyle_signal = {10,9,8};
+    std::vector<std::vector<int>> rgb_signal = {{66,129,201}, {60,219,28}, {220,0,115}};
+    std::vector<int> colors_signal = {3,4,7};
+    //for(int i = 0; i < rgb_signal.size(); i++){
+    //    colors_signal.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
+    //}
+
+    std::vector<int> rgb_Pred = {174,71,76};
+    int color_Pred = TColor::GetColor(rgb_Pred[0], rgb_Pred[1], rgb_Pred[2]);
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
@@ -134,9 +143,11 @@ int main(int argc, char * argv[])
                 TH1F* data_hist;
                 if(withdata){
                     TString histname_BtoA = histname;
-                    if(histname.Contains("_quadA_")){
-                        histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
-                    }
+                    //if(histname.Contains("_quadA_")){
+                    //    histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                    //}else if(histname.Contains("_AoverC_")){
+                    //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
+                    //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
                     if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
                     if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
@@ -144,15 +155,17 @@ int main(int argc, char * argv[])
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
                 
+                TString histname_bkg = histname;
+                histname_bkg.ReplaceAll("_quadA_", "_BtoAwithCD_");
                 // get background histograms and fill legend
                 THStack* hists_bkg = new THStack("stack_bkg", ";"  + ((withdata)? "" : xaxistitle) + ";" + yaxistitle);
                 for(int i = 0; i < files_bkg.size(); i++){
-                    TH1* hist = (TH1*)files_bkg[i]->Get(histname);
+                    TH1* hist = (TH1*)files_bkg[i]->Get(histname_bkg);
                     if(hist->GetMaximum() > 0){
-                        int color = get_color(legends_bkg[i]);
+                        //int color = get_color(legends_bkg[i]);
                         hist->SetFillStyle(1001);
-                        hist->SetFillColor(color);
-                        hist->SetLineColor(color);
+                        hist->SetFillColor(color_Pred);
+                        hist->SetLineColor(color_Pred);
                         hists_bkg->Add(hist);
                         legend.AddEntry(hist, legends_bkg[i], "f");
                     }
@@ -160,17 +173,27 @@ int main(int argc, char * argv[])
                 if(hists_bkg->GetMaximum() <= 0) continue;
                 
                 // get signal histograms and fill legend
+                TString histname_signal = histname;
+                histname_signal.ReplaceAll("_BtoAwithCD_", "_quadA_");
                 THStack* hists_signal = new THStack("stack_signal", "");
                 for(int i = 0; i < files_signal.size(); i++){
-                    if(files_signal[i]->GetListOfKeys()->Contains(histname)){
-                        TH1* hist = (TH1*)files_signal[i]->Get(histname);
+                    if(files_signal[i]->GetListOfKeys()->Contains(histname_signal)){
+                        TH1* hist = (TH1*)files_signal[i]->Get(histname_signal);
                         if(hist->GetMaximum() > 0){
-                            int color = get_color(legends_signal[i]);
-                            hist->SetLineColor(color);
-                            hist->SetLineStyle(2);
+                            //int color = get_color(legends_signal[i]);
+                            hist->SetLineColor(colors_signal[i]);
+                            hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
+                            hist->SetMarkerColor(colors_signal[i]);
                             hists_signal->Add(hist);
-                            legend.AddEntry(hist, legends_signal[i], "l");
+                            TString legend_tmp = legends_signal[i];
+                            legend_tmp.ReplaceAll("x",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                            legend_tmp.ReplaceAll("-03", "^{-3}");
+                            legend_tmp.ReplaceAll("-04", "^{-4}");
+                            legend_tmp.ReplaceAll("-05", "^{-5}");
+                            legend_tmp.ReplaceAll("-06", "^{-6}");
+                            legend_tmp.ReplaceAll("-07", "^{-7}");
+                            legend.AddEntry(hist, legend_tmp, "l");
                         }
                     }
                 }
@@ -183,7 +206,9 @@ int main(int argc, char * argv[])
 
                 // set ratio of data/MC
                 if(withdata){
-                    ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "data/MC");
+                    ratioplotter.ClearSystUncs();
+                    ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "Obs/Pred");
+                    ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "stat. unc.");
                     //ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Res", "Uncl"}, {"JEC", "JER", "Uncl."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
                 }
 
@@ -216,11 +241,12 @@ int main(int argc, char * argv[])
 
                 hists_bkg->Draw("hist");
                 bkgForError->Draw("e2 same");
-                if(withdata) hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
-                else hists_bkg->SetMaximum(1.28*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
+                if(withdata) hists_bkg->SetMaximum(1.35*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
+                else hists_bkg->SetMaximum(1.35*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 hists_bkg->SetMinimum(0.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
+                if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
@@ -248,6 +274,7 @@ int main(int argc, char * argv[])
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 hists_bkg->SetMinimum(0.1);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
+                if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();

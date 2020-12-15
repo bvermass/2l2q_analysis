@@ -43,6 +43,16 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     return outputfilename;
 }
 
+TString get_mini_analyzer_outputfilename(TString input)
+{
+    TString outputfilename = input;
+    outputfilename.ReplaceAll("trees", "histograms");
+    outputfilename.ReplaceAll("BkgEstimator/final/full_analyzer/BkgEstimator_", "mini_analyzer/hists_mini_analyzer_");
+    gSystem->Exec("mkdir -p " + outputfilename(0,outputfilename.Index("hists_mini_analyzer")));
+    return outputfilename;
+}
+
+
 
 std::map<TString, double> add_SR_counters()
 {

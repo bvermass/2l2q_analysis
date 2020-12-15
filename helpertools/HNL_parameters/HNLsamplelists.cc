@@ -155,8 +155,7 @@ int main(int argc, char * argv[]){
                 if(HNLfilename.find("trees_POGTightID") != std::string::npos){
                     std::string miniList = "../../test/sampleLists/RewVal/mini_analyzer/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
                     std::cout << miniList << std::endl;
-                    TString HNLfilename_copy = HNLfilename;
-                    HNLfilename_copy.ReplaceAll("trees_POGTightID/BkgEstimator/final/full_analyzer/BkgEstimator_", "histograms_POGTightID/mini_analyzer/hists_mini_analyzer_");
+                    TString HNLfilename_copy = get_mini_analyzer_outputfilename(HNLfilename);
                     std::string mini_outputfilename = (std::string) HNLfilename_copy;
 
                     if(!miniListExists[miniList]){

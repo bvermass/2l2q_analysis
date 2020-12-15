@@ -18,6 +18,7 @@
 
 void        make_logscale(double* xbins, unsigned nbins, double xmin, double xmax);
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer);
+TString     get_mini_analyzer_outputfilename(TString input);
 std::map<TString, double> add_SR_counters();
 void        print_SR_counters(std::map<TString, double> sr, double total_weight);
 void        print_evaluating_points(const std::map<int, std::map<double, double>>& evaluating_ctaus);

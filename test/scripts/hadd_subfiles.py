@@ -159,6 +159,11 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'SingleElectron_Run2016.root', Electron_Run2016_list)) != 0:
             all_good = False
 
+        Lepton_Run2016_list = [basename + 'SingleElectron_Run2016.root',
+                        basename + 'SingleMuon_Run2016.root']
+        if os.system(merge_files(basename + 'SingleLepton_Run2016.root', Lepton_Run2016_list)) != 0:
+            all_good = False
+
         #MiniAOD2017
         WJets_2017_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
                        basename + 'WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
@@ -235,6 +240,11 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'SingleElectron_Run2017.root', Electron_Run2017_list)) != 0:
             all_good = False
 
+        Lepton_Run2017_list = [basename + 'SingleElectron_Run2017.root',
+                        basename + 'SingleMuon_Run2017.root']
+        if os.system(merge_files(basename + 'SingleLepton_Run2017.root', Lepton_Run2017_list)) != 0:
+            all_good = False
+
 
         #MiniAOD2018
         WJets_2018_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
@@ -309,6 +319,11 @@ def merge_similar_samples( base_path ):
                         basename + 'EGamma_Run2018C.root',
                         basename + 'EGamma_Run2018D.root']
         if os.system(merge_files(basename + 'EGamma_Run2018.root', Electron_Run2018_list)) != 0:
+            all_good = False
+
+        Lepton_Run2018_list = [basename + 'EGamma_Run2018.root',
+                        basename + 'SingleMuon_Run2018.root']
+        if os.system(merge_files(basename + 'SingleLepton_Run2018.root', Lepton_Run2018_list)) != 0:
             all_good = False
 
     return all_good

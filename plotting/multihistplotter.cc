@@ -14,7 +14,8 @@ int main(int argc, char * argv[])
     int i_legends   = argc/2 + 2;
 
     std::vector<TFile*>  files;
-    bool is2016 = false, is2017 = false, is2018 = false;
+    bool is2016 = false, is2017 = false, is2018 = false, isData = false;
+    unsigned i_Data = 0;
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
         files.push_back(TFile::Open(filename));
@@ -22,6 +23,10 @@ int main(int argc, char * argv[])
         if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
         else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
+        if(filename.Contains("Run201")){
+            isData = true;
+            i_Data = files.size() - 1;
+        }
     }
     std::vector<TString> legends;
     int n_columns = 3;
@@ -101,8 +106,13 @@ int main(int argc, char * argv[])
                         TH1* hist = (TH1*)files[i]->Get(histname);
                         if(hist->GetMaximum() > 0){
                             hists->Add(hist);
-                            hist->SetMarkerColor(colors[i]);
-                            hist->SetLineColor(colors[i]);
+                            if(legends[i].Contains("Pred")){
+                                hist->SetMarkerColor(kBlack);
+                                hist->SetLineColor(kBlack);
+                            }else{
+                                hist->SetMarkerColor(colors[i]);
+                                hist->SetLineColor(colors[i]);
+                            }
                             if(histname.Contains("_ctau")) hist->Scale(1./hist->Integral());
                             legend.AddEntry(hist, legends[i], "l");
                         }

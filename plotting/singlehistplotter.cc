@@ -69,18 +69,18 @@ int main(int argc, char * argv[])
     TKey* key;
     while(key = (TKey*)next()){
         if(counter >= counter_begin and counter <= counter_end){
-
-            TClass *cl = gROOT->GetClass(key->GetClassName());
-            legend.Clear();
+            std::string cl(key->GetClassName());
 
             // -- TH1 --
-            if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
+            if (cl.find("TH1") != std::string::npos){ // second requirement is because TH2 also inherits from TH1
                 TH1F*   sample_hist = (TH1F*)key->ReadObj();
                 TString histname   = sample_hist->GetName();
 
-                if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
-                if(sample_hist->GetMaximum() == 0) continue;
-                if(!check_identifiers(histname, identifiers)) continue;
+                if(!check_identifiers(histname, identifiers) or sample_hist->GetMaximum() == 0){
+                    delete sample_hist;
+                    continue;
+                }
+                std::cout << "hist passed: " << histname << std::endl;
                 alphanumeric_labels(sample_hist, histname);
 
                 TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -92,6 +92,7 @@ int main(int argc, char * argv[])
                 if(xlog) divide_by_binwidth(sample_hist);
                 sample_hist->GetYaxis()->SetRangeUser(0, 1.25*sample_hist->GetMaximum());
 
+                legend.Clear();
                 if(!is_mini_analyzer) legend.AddEntry(sample_hist, sample_legend);
                 else {
                     if(histname.Contains("_quadABCD")) legend.AddEntry(sample_hist, "Region A+B+C+D");
@@ -145,6 +146,7 @@ int main(int argc, char * argv[])
 
                     pad->Modified();
                     c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
+                    delete efficiency_graph;
                 }
 
                 // Mini analyzer specific plots
@@ -160,15 +162,18 @@ int main(int argc, char * argv[])
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"_cutphill_", "_cutmll_", "_cutphiORmll_", "_cutmlSV_"}, {"#Delta #phi", "m_{ll}", "#Delta #phi or m_{ll}", "m_{l,SV}"}, "_cutAll_", false);
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"_cutTightphill_", "_cutTightmll_", "_cutTightphiORmll_", "_cutTightmlSV_"}, {"#Delta #phi", "m_{ll}", "#Delta #phi or m_{ll}", "m_{l,SV}"}, "_cutTightAll_", false);
 
-                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BtoAwithCD") and !histname.Contains("M-15")) plot_Shape_SR_with_Signal_eff(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
-                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BoverD")) plot_Shape_SR_with_Signal_AoverC(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
+                    if(isData and histname.Contains("Shape_SR") and histname.Contains("BtoAwithCD")) plot_Shape_SR_with_Signal_eff(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
+                    //if(isData and histname.Contains("Shape_SR") and histname.Contains("BoverD")) plot_Shape_SR_with_Signal_AoverC(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
                 }
-            }else if(cl->InheritsFrom("TH2")){
+                delete sample_hist;
+            }else if(cl.find("TH2") != std::string::npos){
                 TH2F *sample_hist = (TH2F*)key->ReadObj();
                 TString histname = sample_hist->GetName();
 
-                if(sample_hist->GetMaximum() == 0) continue;
-                if(!check_identifiers(histname, identifiers)) continue;
+                if(!check_identifiers(histname, identifiers) or sample_hist->GetMaximum() == 0){
+                    delete sample_hist;
+                    continue;
+                }
                 alphanumeric_labels_2D(sample_hist, histname);
 
                 TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -190,6 +195,7 @@ int main(int argc, char * argv[])
                     std::string corstring = (std::string)histname + " correlation factor:" + corstream.str();
                     filePutContents(corfilename, corstring, true);
                 }
+                delete sample_hist;
             }
         }
         ++counter;
@@ -287,6 +293,9 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         //pad_histo.Modified();
         //ratioplotter.dothething();
         //c2.Print(pathname_log + plotname + ".png");
+        
+
+        //delete hists, hist_extra;
     }
 }
 
@@ -382,36 +391,36 @@ void plot_Shape_SR_with_Signal_AoverC(TString filename, TString pathname_lin, TH
     hists->Draw("E P hist nostack");
     legend.AddEntry(sample_hist, "Data pred.", "pl");
 
-    TH1F* m2_eff, *m3_eff, *m4_eff, *m5_eff, *m6_eff, *m8_eff, *m10_eff, *m12_eff, *m14_eff;
+    TH1F *m2_eff, *m3_eff, *m4_eff, *m5_eff, *m6_eff, *m8_eff, *m10_eff, *m12_eff, *m14_eff;
     if(mass == "_M-5" or mass == "_M-2" or mass == "_M-3" or mass == "_M-4"){
-        m2_eff = get_HNL_eff_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
-        m2_eff->Draw("P");
-        legend.AddEntry(m2_eff, "M-2 eff", "pl");
-        m3_eff = get_HNL_eff_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
+        m2_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
+        m2_eff->Draw("same P");
+        legend.AddEntry(m2_eff, "M-2 A/C", "pl");
+        m3_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
         m3_eff->Draw("same P");
-        legend.AddEntry(m3_eff, "M-3 eff", "pl");
-        m4_eff = get_HNL_eff_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
+        legend.AddEntry(m3_eff, "M-3 A/C", "pl");
+        m4_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
         m4_eff->Draw("same P");
-        legend.AddEntry(m4_eff, "M-4 eff", "pl");
-        m5_eff = get_HNL_eff_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
+        legend.AddEntry(m4_eff, "M-4 A/C", "pl");
+        m5_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
         m5_eff->Draw("same P");
-        legend.AddEntry(m5_eff, "M-5 eff", "pl");
+        legend.AddEntry(m5_eff, "M-5 A/C", "pl");
     }else {
-        m6_eff = get_HNL_eff_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
-        m6_eff->Draw("P");
-        legend.AddEntry(m6_eff, "M-6 eff", "pl");
-        m8_eff = get_HNL_eff_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
+        m6_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
+        m6_eff->Draw("same P");
+        legend.AddEntry(m6_eff, "M-6 A/C", "pl");
+        m8_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
         m8_eff->Draw("same P");
-        legend.AddEntry(m8_eff, "M-8 eff", "pl");
-        m10_eff = get_HNL_eff_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
+        legend.AddEntry(m8_eff, "M-8 A/C", "pl");
+        m10_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
         m10_eff->Draw("same P");
-        legend.AddEntry(m10_eff, "M-10 eff", "pl");
-        m12_eff = get_HNL_eff_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
+        legend.AddEntry(m10_eff, "M-10 A/C", "pl");
+        m12_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
         m12_eff->Draw("same P");
-        legend.AddEntry(m12_eff, "M-12 eff", "pl");
-        m14_eff = get_HNL_eff_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
+        legend.AddEntry(m12_eff, "M-12 A/C", "pl");
+        m14_eff = get_HNL_AoverC_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
         m14_eff->Draw("same P");
-        legend.AddEntry(m14_eff, "M-14 eff", "pl");
+        legend.AddEntry(m14_eff, "M-14 A/C", "pl");
     }
 
     legend.Draw("same");
@@ -420,6 +429,8 @@ void plot_Shape_SR_with_Signal_AoverC(TString filename, TString pathname_lin, TH
 
     pad->Modified();
     c->Print(pathname_lin + histname + "_withHNL.png");
+
+    //delete m2_eff, m3_eff, m4_eff, m5_eff, m6_eff, m8_eff, m10_eff, m12_eff, m14_eff;
 }
 
 void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F* sample_hist, TString histname, TCanvas* c, TPad* pad, TLegend legend, std::vector<int> colors, CMSandLuminosity* CMSandLumi, Shape_SR_plottext* shapeSR_text)
@@ -445,7 +456,7 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F*
     if(filename.Contains("2017")) year = "_MiniAOD2017";
     if(filename.Contains("2018")) year = "_MiniAOD2018";
 
-    legend.AddEntry(sample_hist, "Data B/D", "pl");
+    legend.AddEntry(sample_hist, "Data eff", "pl");
 
     // Make the pad that will contain the plot
     c->cd();
@@ -457,36 +468,36 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F*
     pad_eff->SetTicky(0);
     pad_eff->SetRightMargin(0.07);
 
-    TH1F* m2_AoverC, *m3_AoverC, *m4_AoverC, *m5_AoverC, *m6_AoverC, *m8_AoverC, *m10_AoverC, *m12_AoverC, *m14_AoverC;
+    TH1F* m2_eff, *m3_eff, *m4_eff, *m5_eff, *m6_eff, *m8_eff, *m10_eff, *m12_eff, *m14_eff;
     if(mass == "_M-5" or mass == "_M-2" or mass == "_M-3" or mass == "_M-4"){
-        m2_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
-        m2_AoverC->Draw("E P Y+");
-        legend.AddEntry(m2_AoverC, "M-2 A/C", "pl");
-        m3_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
-        m3_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m3_AoverC, "M-3 A/C", "pl");
-        m4_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
-        m4_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m4_AoverC, "M-4 A/C", "pl");
-        m5_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
-        m5_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m5_AoverC, "M-5 A/C", "pl");
+        m2_eff = get_HNL_eff_ABCD(filename, histname, "_M-2", flavor, year, colors[1]);
+        m2_eff->Draw("E P Y+");
+        legend.AddEntry(m2_eff, "M-2 eff", "pl");
+        m3_eff = get_HNL_eff_ABCD(filename, histname, "_M-3", flavor, year, colors[2]);
+        m3_eff->Draw("same E P Y+");
+        legend.AddEntry(m3_eff, "M-3 eff", "pl");
+        m4_eff = get_HNL_eff_ABCD(filename, histname, "_M-4", flavor, year, colors[3]);
+        m4_eff->Draw("same E P Y+");
+        legend.AddEntry(m4_eff, "M-4 eff", "pl");
+        m5_eff = get_HNL_eff_ABCD(filename, histname, "_M-5", flavor, year, colors[4]);
+        m5_eff->Draw("same E P Y+");
+        legend.AddEntry(m5_eff, "M-5 eff", "pl");
     }else {
-        m6_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
-        m6_AoverC->Draw("E P Y+");
-        legend.AddEntry(m6_AoverC, "M-6 A/C", "pl");
-        m8_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
-        m8_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m8_AoverC, "M-8 A/C", "pl");
-        m10_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
-        m10_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m10_AoverC, "M-10 A/C", "pl");
-        m12_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
-        m12_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m12_AoverC, "M-12 A/C", "pl");
-        m14_AoverC = get_HNL_AoverC_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
-        m14_AoverC->Draw("same E P Y+");
-        legend.AddEntry(m14_AoverC, "M-14 A/C", "pl");
+        m6_eff = get_HNL_eff_ABCD(filename, histname, "_M-6", flavor, year, colors[1]);
+        m6_eff->Draw("E P Y+");
+        legend.AddEntry(m6_eff, "M-6 eff", "pl");
+        m8_eff = get_HNL_eff_ABCD(filename, histname, "_M-8", flavor, year, colors[2]);
+        m8_eff->Draw("same E P Y+");
+        legend.AddEntry(m8_eff, "M-8 eff", "pl");
+        m10_eff = get_HNL_eff_ABCD(filename, histname, "_M-10", flavor, year, colors[3]);
+        m10_eff->Draw("same E P Y+");
+        legend.AddEntry(m10_eff, "M-10 eff", "pl");
+        m12_eff = get_HNL_eff_ABCD(filename, histname, "_M-12", flavor, year, colors[4]);
+        m12_eff->Draw("same E P Y+");
+        legend.AddEntry(m12_eff, "M-12 eff", "pl");
+        m14_eff = get_HNL_eff_ABCD(filename, histname, "_M-14", flavor, year, colors[5]);
+        m14_eff->Draw("same E P Y+");
+        legend.AddEntry(m14_eff, "M-14 eff", "pl");
     }
 
     pad->cd();
@@ -520,9 +531,11 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F*
 TH1F* get_HNL_AoverC_ABCD(TString filename, TString histname, TString mass, TString flavor, TString year, int colors)
 {
     TString full_HNL_name = (TString)filename(0, filename.Index("_analyzer_") + 10) + "HeavyNeutrino_lljj" + mass + "_V-combined" + flavor + "_massiveAndCKM_LO" + year + ".root";
-    if(FILE* file = fopen(full_HNL_name, "r")) fclose(file);
-    else return nullptr;
-    TFile*  HNL_file   = TFile::Open(full_HNL_name);
+    if(!gSystem->AccessPathName(full_HNL_name,kFileExists)){
+        std::cout << "HNL file does not exist: " << full_HNL_name << std::endl;
+        return nullptr;
+    }
+    std::unique_ptr<TFile>  HNL_file(new TFile(full_HNL_name, "read"));
 
     TString histname_quadA = histname;
     histname_quadA.ReplaceAll("BtoAwithCD", "quadA");
@@ -543,14 +556,16 @@ TH1F* get_HNL_AoverC_ABCD(TString filename, TString histname, TString mass, TStr
     HNL_hist_effA->SetLineColor(colors);
     HNL_hist_effA->GetYaxis()->SetRangeUser(0, 1.1);
 
+    //HNL_file->Close();
+    //delete HNL_file;
     return HNL_hist_effA;
 }
+
 TH1F* get_HNL_eff_ABCD(TString filename, TString histname, TString mass, TString flavor, TString year, int colors)
 {
     TString full_HNL_name = (TString)filename(0, filename.Index("_analyzer_") + 10) + "HeavyNeutrino_lljj" + mass + "_V-combined" + flavor + "_massiveAndCKM_LO" + year + ".root";
-    if(FILE* file = fopen(full_HNL_name, "r")) fclose(file);
-    else return nullptr;
-    TFile*  HNL_file   = TFile::Open(full_HNL_name);
+    if(gSystem->AccessPathName(full_HNL_name,kFileExists)){ std::cout << "file " << full_HNL_name << " does not exist, returning nullpointer" << std::endl; return nullptr;}
+    std::unique_ptr<TFile>  HNL_file(new TFile(full_HNL_name, "read"));
 
     TString histname_quadA = histname;
     histname_quadA.ReplaceAll("BtoAwithCD", "quadA");
@@ -582,5 +597,7 @@ TH1F* get_HNL_eff_ABCD(TString filename, TString histname, TString mass, TString
     HNL_hist_effA->SetLineColor(colors);
     HNL_hist_effA->GetYaxis()->SetRangeUser(0, 1.1);
 
+    //HNL_file->Close();
+    //delete HNL_file;
     return HNL_hist_effA;
 }

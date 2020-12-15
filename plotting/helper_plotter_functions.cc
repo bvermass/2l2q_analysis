@@ -37,10 +37,10 @@ void CMSandLuminosity::Draw()
 
 // Shape_SR_plottext class functions
 Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
-    mm( "mm" )
-    , em( "em" )
+    mm( "#mu#mu" )
+    , em( "e#mu" )
     , ee( "ee" )
-    , me( "me" )
+    , me( "#{mu}e" )
     , OS( "OS" )
     , SS( "SS" )
     , masslessthan2( "M_{lSV} < 2 GeV" )
@@ -246,6 +246,8 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
     if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
     if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
+    if(histname.Contains("cutMediumCR2mlSV_"))   fullname += "ABCDwithMediumCR2mlSV/";
+    if(histname.Contains("cutMediumCR3mlSV_"))   fullname += "ABCDwithMediumCR3mlSV/";
     if(histname.Contains("cutTightCR2phill_"))  fullname += "ABCDwithTightCR2phill/";
     if(histname.Contains("cutTightCR3phill_"))  fullname += "ABCDwithTightCR3phill/";
     if(histname.Contains("cutAll_"))            fullname += "ABCDwithAllmethods/";

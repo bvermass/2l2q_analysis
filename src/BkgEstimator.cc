@@ -180,6 +180,7 @@ void BkgEstimator::fill_tree()
 void BkgEstimator::write_tree()
 {
     //BkgEstimator_tree->Print();
+    std::cout << "writing BkgEstimator tree" << std::endl;
     BkgEstimator_file->Write();
     BkgEstimator_file->Close();
 }

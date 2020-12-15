@@ -3,7 +3,7 @@
 RatioPlot::RatioPlot(TPad* pad):
     Pad(pad),
     Central_Ratio(new TH1F("Central_Ratio", "", 1, 0, 1)),
-    systunc_legend(get_legend(0.2, 0.3, 0.45, 0.4, 3))
+    systunc_legend(get_legend(0.2, 0.3, 0.55, 0.4, 3))
 {
     Pad->SetTopMargin(0.04);
     Pad->SetBottomMargin(0.3);
@@ -18,10 +18,12 @@ RatioPlot::RatioPlot(TPad* pad):
     Central_Ratio->SetMinimum(0);
     Central_Ratio->SetMaximum(2);
     
-    std::vector<std::vector<int>> rgb = {{186,16,25}, {63,136,197}, {68,187,164}};
+    std::vector<std::vector<int>> rgb = {{63,136,197}, {68,187,164}, {186,16,25}};
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
+
+    systunc_legend.SetTextSize(0.08);
 }
 
 RatioPlot::~RatioPlot(){
@@ -51,6 +53,11 @@ void RatioPlot::SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TStrin
     Central_Ratio->GetYaxis()->SetTitle(yaxistitle);
     Central_Ratio->SetMinimum(0);
     Central_Ratio->SetMaximum(2);
+    if(num->GetXaxis()->IsAlphanumeric()){
+        for(int i = 1; i <= num->GetNbinsX(); i++){
+            Central_Ratio->GetXaxis()->SetBinLabel(i, num->GetXaxis()->GetBinLabel(i));
+        }
+    }
 }
 
 
@@ -86,7 +93,6 @@ std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector
 
 void RatioPlot::SetSystUncs_up_and_down(TString histname, std::vector<TFile*> files_bkg, std::vector<TString> systunc_names, std::vector<TString> legends, TH1F* MC_central)
 {
-    systunc_graphs.clear();
     for(int i_syst = 0; i_syst < systunc_names.size(); i_syst++){
         TString systunc_name_down = histname + systunc_names[i_syst] + "Down";
         TString systunc_name_up   = histname + systunc_names[i_syst] + "Up";
@@ -117,14 +123,46 @@ void RatioPlot::SetSystUncs_up_and_down(TString histname, std::vector<TFile*> fi
             }
 
             systunc_graphs.push_back(new TGraphAsymmErrors(x_central.size(), &x_central[0], &y_central[0], &x_low[0], &x_high[0], &y_low[0], &y_high[0]));
-            systunc_graphs[i_syst]->SetName(histname + systunc_names[i_syst]);
-            systunc_graphs[i_syst]->SetFillColor(colors[i_syst]);
-            systunc_graphs[i_syst]->SetLineColor(colors[i_syst]);
-            systunc_graphs[i_syst]->SetMarkerColor(colors[i_syst]);
+            systunc_graphs.back()->SetName(histname + systunc_names[i_syst]);
+            systunc_graphs.back()->SetFillColor(colors[systunc_graphs.size()-1]);
+            systunc_graphs.back()->SetLineColor(colors[systunc_graphs.size()-1]);
+            systunc_graphs.back()->SetMarkerColor(colors[systunc_graphs.size()-1]);
         }
     }
 
-    systunc_legends = legends;
+    for(const auto& l : legends){
+        systunc_legends.push_back(l);
+    }
+}
+
+void RatioPlot::ClearSystUncs()
+{
+    systunc_graphs.clear();
+    systunc_legends.clear();
+    systunc_legend.Clear();
+    varied_exists = false;
+}
+
+void RatioPlot::AddStatVariation(TH1* hist, TString statname)
+{
+    varied_exists = true;
+    std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
+    for(int i = 1; i <= hist->GetNbinsX(); i++){
+        x_central.push_back((double)hist->GetXaxis()->GetBinCenter(i));
+        x_low.push_back((double)x_central[i-1] - hist->GetXaxis()->GetBinLowEdge(i));
+        x_high.push_back((double)hist->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
+        y_central.push_back(1.);
+        y_low.push_back((double)hist->GetBinError(i) / hist->GetBinContent(i));
+        y_high.push_back((double)hist->GetBinError(i) / hist->GetBinContent(i));
+    }
+
+    systunc_graphs.push_back(new TGraphAsymmErrors(x_central.size(), &x_central[0], &y_central[0], &x_low[0], &x_high[0], &y_low[0], &y_high[0]));
+    systunc_graphs.back()->SetName(hist->GetName() + statname);
+    systunc_graphs.back()->SetFillColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetLineColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetMarkerColor(colors[systunc_graphs.size()-1]);
+    
+    systunc_legends.push_back(statname);
 }
 
 
