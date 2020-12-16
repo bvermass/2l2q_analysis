@@ -196,6 +196,75 @@ int main(int argc, char * argv[])
                     pad->Modified();
                     c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
                 }
+
+
+
+                if(isData and (histname.Contains("_BoverD_") or histname.Contains("_BtoAwithCD_"))){
+
+                    legend.Clear();
+                    TString histname_AoverC = histname;
+                    TString plotname = histname;
+                    histname_AoverC.ReplaceAll("_BoverD_", "_AoverC_");
+                    histname_AoverC.ReplaceAll("_BtoAwithCD_", "_quadA_");
+                    plotname.ReplaceAll("_BoverD_", "_BDvsAC_");
+                    plotname.ReplaceAll("_BtoAwithCD_", "_BtoAwithSig_");
+
+                    THStack* hists_AoverC = new THStack("stack_AoverC", "");
+                    for(int i = 0; i < files.size(); i++){
+                        TString name_to_use;
+                        if(i == i_Data) name_to_use = histname;
+                        else name_to_use = histname_AoverC;
+
+                        if(files[i]->GetListOfKeys()->Contains(name_to_use)){
+                            TH1* hist = (TH1*)files[i]->Get(name_to_use);
+                            if(hist->GetMaximum() > 0){
+                                hists_AoverC->Add(hist);
+                                if(legends[i].Contains("Pred")){
+                                    hist->SetMarkerColor(kBlack);
+                                    hist->SetLineColor(kBlack);
+                                }else{
+                                    hist->SetMarkerColor(colors[i]);
+                                    hist->SetLineColor(colors[i]);
+                                }
+                                legend.AddEntry(hist, legends[i], "l");
+                            }
+                        }
+                    }
+
+                    // Draw lin version
+                    pad->Clear();
+                    pad->SetLogy(0);
+
+                    hists_AoverC->Draw("E P hist nostack");
+                    hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+                    hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
+                    hists_AoverC->SetMaximum(1.25*hists_AoverC->GetMaximum("nostack"));
+                    legend.Draw("same");
+                    CMSandLumi->Draw();
+                    if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
+
+                    pad->Modified();
+                    c->Print(pathname_lin + plotname + ".png");
+
+                    // Draw log version
+                    pad->Clear();
+                    pad->SetLogy(1);
+
+                    hists_AoverC->Draw("E P hist nostack");
+                    hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+                    hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
+                    hists_AoverC->SetMaximum(10*hists_AoverC->GetMaximum("nostack"));
+                    hists_AoverC->SetMinimum(1e-2);
+                    legend.Draw("same");
+                    CMSandLumi->Draw();
+                    if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
+
+                    pad->Modified();
+                    c->Print(pathname_log + plotname + ".png");
+
+                    delete hists_AoverC;
+                    }
+
             }
         }
         ++counter;
