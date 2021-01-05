@@ -54,8 +54,16 @@ int main(int argc, char * argv[])
     std::cout << "specific directory: " << specific_dir << std::endl;
     std::string general_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
     std::string shapeSR_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
+    std::string quadB_pathname   = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
+    gSystem->Exec("mkdir -p " + (TString)quadB_pathname);
+
+    // get year information for year-dependent systematics
+    std::string year;
+    if(specific_dir.Contains("2016")) year = "16";
+    else if(specific_dir.Contains("2017")) year = "17";
+    else if(specific_dir.Contains("2018")) year = "18";
 
     TString mass_bkg;
     if(mass_str.Contains("_M-1_") or mass_str.Contains("_M-2_") or mass_str.Contains("_M-3_") or mass_str.Contains("_M-4_") or mass_str.Contains("_M-5_")){
@@ -76,7 +84,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist_ref->GetName();
 
 
-            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA") and !histname.Contains("ABCDstat")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -106,9 +114,44 @@ int main(int argc, char * argv[])
 
                 //Systematic Uncertainty stuff
                 std::vector<std::vector<double>> systUnc;
-                unsigned nSyst = 0;
                 std::vector<std::string> systNames;
                 std::vector<std::string> systDist;
+
+                systNames.push_back("ABCDstat");
+                systDist.push_back("shapeN");
+                systUnc.push_back({0,1});
+
+                systNames.push_back((std::string)"lumi_"+year);
+                systDist.push_back("lnN");
+                systUnc.push_back({1.025,0});
+
+                std::vector<TH1F*> hists_signal_sys;
+                std::vector<std::vector<TH1F*>> hists_bkg_sys;
+                std::vector<std::string> histnames_signal_sys;
+                std::vector<std::vector<std::string>> histnames_bkg_sys;
+                std::vector<TH1F*> tmp_bkg_sys;
+                std::vector<std::string> tmpnames_bkg_sys;
+                for(unsigned i = 0; i < systNames.size(); i++){
+                    if(systDist[i] != "shapeN") continue;
+                    if(systUnc[i][0] != 0){
+                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname + "_" + systNames[i] + "Up"));
+                        histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
+                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname + "_" + systNames[i] + "Down"));
+                        histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
+                    }
+                    if(systUnc[i][1] != 0){
+                        tmp_bkg_sys.clear();
+                        tmpnames_bkg_sys.clear();
+                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_data + "_" + systNames[i] + "Up"));
+                        tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Up");
+                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_data + "_" + systNames[i] + "Down"));
+                        tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Down");
+                        hists_bkg_sys.push_back(tmp_bkg_sys);
+                        histnames_bkg_sys.push_back(tmpnames_bkg_sys);
+                    }
+                }
+
+                unsigned nSyst = systNames.size();
 
                 TString outputfilename = histname;
                 outputfilename.ReplaceAll(mass_bkg, mass_str);
@@ -116,12 +159,27 @@ int main(int argc, char * argv[])
                 //Shape analysis stuff
                 bool shapeCard = true;
                 std::string shapeFileName = shapeSR_pathname + (std::string)outputfilename + ".root";
-                makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg);
+                makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg, hists_signal_sys, hists_bkg_sys, histnames_signal_sys, histnames_bkg_sys);
+
+
+                //quadB yield stuff, for limit setting with gamma pdfs
+                TString histname_quadB = histname;
+                histname_quadB.ReplaceAll("_quadA", "_quadB");
+                TH1F* hist_signal_quadB = (TH1F*) files_signal[0]->Get(histname_quadB);
+                TString histname_data_quadB = histname_quadB;
+                histname_data_quadB.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
+                TH1F* hist_data_quadB = (TH1F*) files_data[0]->Get(histname_data_quadB);
+                std::vector<TH1F*> hists_bkg_quadB;
+                for(unsigned i = 0; i < files_bkg.size(); i++){
+                    hists_bkg_quadB.push_back((TH1F*)files_bkg[i]->Get(histname_data_quadB));
+                }
+                std::string quadBFileName = quadB_pathname + (std::string)outputfilename + ".root";
+                makequadBFile(quadBFileName, hist_signal_quadB, hist_data_quadB, hists_bkg_quadB, legends_signal[0], legends_data[0], legends_bkg);
 
                 bool autoMCStats = true;
 
                 if(sigYield > 0.1){
-                    printDataCard(general_pathname + (std::string)outputfilename + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, 0, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
+                    printDataCard(general_pathname + (std::string)outputfilename + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, nSyst, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
                 }else {
                     std::cout << "too low signal yield: " << sigYield << std::endl;
                 }
@@ -132,7 +190,21 @@ int main(int argc, char * argv[])
 #endif
 
 
-void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames)
+void makequadBFile(TString quadB_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames)
+{
+    std::cout << "quadB histograms in " << quadB_filename << std::endl;
+    TFile *quadB_file = new TFile(quadB_filename, "recreate");
+
+    hist_signal->Write(sigName.c_str());
+    hist_data->Write("data_obs");
+    for(unsigned i = 0; i < hists_bkg.size(); i++){
+        hists_bkg[i]->Write(bkgNames[i].c_str());
+    }
+
+    quadB_file->Close();
+}
+
+void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys, const std::vector<std::string>& sigName_sys, const std::vector<std::vector<std::string>>& bkgNames_sys)
 {
     std::cout << "Shape histograms in " << shapeSR_filename << std::endl;
     TFile *shapeSR_file = new TFile(shapeSR_filename, "recreate");
@@ -141,7 +213,13 @@ void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_dat
     hist_data->Write("data_obs");
     for(unsigned i = 0; i < hists_bkg.size(); i++){
         hists_bkg[i]->Write(bkgNames[i].c_str());
+        for(unsigned j = 0; j < hists_bkg_sys[i].size(); j++){
+            hists_bkg_sys[i][j]->Write(bkgNames_sys[i][j].c_str());
+        }
     }
+    //for(unsigned i = 0; i < hist_signal_sys.size(); i++){
+    //    hist_signal_sys[i]->Write(sigName_sys[i].c_str());
+    //}
 
     shapeSR_file->Close();
 }
