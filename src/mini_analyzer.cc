@@ -207,6 +207,8 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     
     std::cout << "calculating and applying ABCD method" << std::endl;
     ABCD_ratios();
+    set_quadA_zero_event_bins();
+    add_ABCDstat_variation("Shape_SR");
 
     std::cout << "Add under- and overflow to last bins, then write them" << std::endl;
     for(auto const& it : hists){
@@ -216,6 +218,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     }
     for(auto const& it : hists2D){
         TH2* h = it.second;
+        h->Write(h->GetName(), TObject::kOverwrite);
+    }
+    for(auto const& it : hists_sys){
+        TH1* h = it.second;
+        fix_overflow_and_negative_bins(h);
         h->Write(h->GetName(), TObject::kOverwrite);
     }
     
@@ -292,18 +299,29 @@ void mini_analyzer::calculate_eff()
         if(hname.Contains("_quadA_")){
             TString hname_eff = hname;
             hname_eff.ReplaceAll("_quadA_", "_Aeff_");
-            std::cout << "hname_eff: " << hname_eff << std::endl;
             hists[hname_eff] = (TH1F*)hists[hname]->Clone(hname_eff);
             TH1F* den = (TH1F*)hists[hname]->Clone(hname_eff + "_den");
-            std::cout << "hname_eff: " << hname_eff << std::endl;
             den->Add(hists[hname_eff.ReplaceAll("_Aeff_", "_quadB_")]);
-            std::cout << "hname_eff: " << hname_eff << std::endl;
             den->Add(hists[hname_eff.ReplaceAll("_quadB_", "_quadC_")]);
-            std::cout << "hname_eff: " << hname_eff << std::endl;
             den->Add(hists[hname_eff.ReplaceAll("_quadC_", "_quadD_")]);
-            std::cout << "hname_eff: " << hname_eff << std::endl;
             hists[hname_eff]->Divide(den);
-            std::cout << "eff max: " << hists[hname_eff]->GetMaximum() << std::endl;
+        }
+    }
+}
+
+void mini_analyzer::add_ABCDstat_variation(TString selection_tag)
+{
+    for(auto const& it : hists){
+        TH1* h = it.second;
+        TString hname = it.first;
+
+        if(hname.Contains(selection_tag) and !hname.Contains("_ABCDstat")){
+            hists_sys[hname + "_ABCDstatUp"] = (TH1F*)h->Clone(hname + "_ABCDstatUp");
+            hists_sys[hname + "_ABCDstatDown"] = (TH1F*)h->Clone(hname + "_ABCDstatDown");
+            for(int i = 1; i <= h->GetNbinsX(); i++){
+                hists_sys[hname + "_ABCDstatUp"]->SetBinContent(i, h->GetBinContent(i) + h->GetBinErrorUp(i));
+                hists_sys[hname + "_ABCDstatDown"]->SetBinContent(i, h->GetBinContent(i) - h->GetBinErrorLow(i));
+            }
         }
     }
 }
@@ -665,7 +683,7 @@ void mini_analyzer::add_histograms()
             TString MV2tag = MV2.first;
             for(const TString& cut2region : {"_cutphill"/*, "_cutmll", "_cutphiORmll"*/, "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV", "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill"/*, "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutTightCR2mlSV", "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill", "_cutMediumCR2mlSV", "_cutMediumCR3mlSV"}){
                 for(const TString& quadrant : {"_quadB", "_quadC", "_quadD"/*, "_quadCD", "_quadBD", "_quadBCD"*/,  "_CoverD", "_BoverD"/*, "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
-                    add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
+                    //add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
                     add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
                 }
                 //add_fraction_histograms(lep_region + MV2tag + cut2region);
@@ -673,7 +691,7 @@ void mini_analyzer::add_histograms()
                 // only make region A histograms if we're not running over data
                 if(!isData or cut2region.Contains("CR")){
                     for(const TString & quadrant : {"_quadA"/*, "_quadAB", "_quadAC"*/, "_AoverB", "_AoverC"/*, "_quadABCD"*/}){
-                        add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
+                        //add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
                         add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
                     }
                 }
@@ -741,13 +759,11 @@ void mini_analyzer::add_standard_histograms(TString prefix)
     //hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{l,jet};Events", 6, 0, 1.5);
 
     //hists[prefix+"_PV-SVdxy"]       = new TH1F(prefix+"_PV-SVdxy", ";L_{xy} [cm];Events", 6, 0, 60);
-    hists[prefix+"_PV-SVdxy_zoom"]  = new TH1F(prefix+"_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 10, 0, 20);
     //double PVSVdxybins[3] = {0, 10, 60};
     //hists[prefix+"_PV-SVdxy_zoom2"]  = new TH1F(prefix+"_PV-SVdxy_zoom2", ";L_{xy} [cm];Events", 2, PVSVdxybins);
     //hists[prefix+"_PV-SVdxyz"]      = new TH1F(prefix+"_PV-SVdxyz", ";L_{xyz} [cm];Events", 6, 0, 100);
     //hists[prefix+"_PV-SVdxyz_zoom"] = new TH1F(prefix+"_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 6, 0, 20);
     //hists[prefix+"_ntracks"]        = new TH1F(prefix+"_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
-    hists[prefix+"_SVmass"]         = new TH1F(prefix+"_SVmass", ";SV Mass [GeV];Events", 10, 0, 20);
     //double SVmassbins[3] = {0, 4, 20};
     //hists[prefix+"_SVmass2"]         = new TH1F(prefix+"_SVmass2", ";SV Mass [GeV];Events", 2, SVmassbins);
     hists[prefix+"_SVl1mass"]         = new TH1F(prefix+"_SVl1mass", ";SV + l_{1} Mass [GeV];Events", 6, 0, 150);
@@ -772,7 +788,10 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
     hists2D[prefix+"_PFNvsmlSV"]        = new TH2F(prefix+"_PFNvsmlSV", ";PFN output; M_{l,SV} [GeV]", 40, 0, 1, 40, 0, 150);
     hists[prefix+"_JetTagVal"]          = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value;Events", 10, 0, 1);
     hists[prefix+"_JetTagVal_zoom"]     = new TH1F(prefix+"_JetTagVal_zoom", ";Jet Tag Value;Events", 10, 0.9, 1);
+    hists[prefix+"_PV-SVdxy_zoom"]  = new TH1F(prefix+"_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 10, 0, 20);
+    hists[prefix+"_SVmass"]         = new TH1F(prefix+"_SVmass", ";SV Mass [GeV];Events", 10, 0, 20);
 }
+
 
 void mini_analyzer::add_Shape_SR_histograms(TString prefix)
 {
@@ -805,7 +824,7 @@ void mini_analyzer::fill_histograms()
         //TString mv2tag = ABCDtag(0,ABCDtag.Index("_CP"));//gridscan
         unsigned i_JetTagVal = MV2tags[mv2tag];
 
-        fill_standard_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
+        //fill_standard_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
         fill_pfn_histograms(     sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal], i_JetTagVal);
         //fill_fraction_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
         fill_Shape_SR_histograms(sr_flavor,  ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
@@ -864,12 +883,10 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
     //hists[prefix+"_dRljet"]->Fill(event._dRljet,event_weight);            
                                        
     //hists[prefix+"_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);
-    hists[prefix+"_PV-SVdxy_zoom"]->Fill(event._SV_PVSVdist_2D,event_weight);
     //hists[prefix+"_PV-SVdxy_zoom2"]->Fill(event._SV_PVSVdist_2D,event_weight);
     //hists[prefix+"_PV-SVdxyz"]->Fill(event._SV_PVSVdist,event_weight);
     //hists[prefix+"_PV-SVdxyz_zoom"]->Fill(event._SV_PVSVdist,event_weight);
     //hists[prefix+"_ntracks"]->Fill(event._SV_ntracks,event_weight);
-    hists[prefix+"_SVmass"]->Fill(event._SV_mass,event_weight);
     //hists[prefix+"_SVmass2"]->Fill(event._SV_mass,event_weight);
     hists[prefix+"_SVl1mass"]->Fill(event._SV_l1mass,event_weight);
     //hists[prefix+"_SVpt"]->Fill(event._SV_pt,event_weight);
@@ -893,6 +910,8 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
     hists2D[prefix+"_PFNvsmlSV"]->Fill(event._JetTagVal[i], event._SV_l1mass, event_weight);
     hists[prefix+"_JetTagVal"]->Fill(event._JetTagVal[i], event_weight);
     hists[prefix+"_JetTagVal_zoom"]->Fill(event._JetTagVal[i], event_weight);
+    hists[prefix+"_PV-SVdxy_zoom"]->Fill(event._SV_PVSVdist_2D,event_weight);
+    hists[prefix+"_SVmass"]->Fill(event._SV_mass,event_weight);
 }
 
 void mini_analyzer::fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight)
@@ -1027,12 +1046,28 @@ double mini_analyzer::get_SRShape3bin(double PVSVdist_2D, double SV_mass, TStrin
 void mini_analyzer::set_error_for_zero_event_bins(TString hname_target, TString hname_ratio)
 {
     for(int i = 1; i <= hists[hname_target]->GetNbinsX(); i++){
-        if(hists[hname_target]->GetBinContent(i) == 0){
-            hists[hname_target]->SetBinError(i, 3.09*hists[hname_ratio]->GetBinContent(i));
+        if(hists[hname_target]->GetBinContent(i) < 1e-4){
+            if(hname_ratio != "") hists[hname_target]->SetBinError(i, 3.09*hists[hname_ratio]->GetBinContent(i));
+            else hists[hname_target]->SetBinError(i, 3.09);
         }
     }
 }
 
+void mini_analyzer::set_quadA_zero_event_bins()
+{
+    for(auto const& it : hists){
+        TString hname = it.first;
+        TH1* h = it.second;
+        if(hname.Contains("_quadA_")){
+            for(int i = 1; i <= h->GetNbinsX(); i++){
+                if(h->GetBinContent(i) < 1e-4){
+                    h->SetBinContent(i, 0);
+                }
+            }
+            //set_error_for_zero_event_bins(hname, "");
+        }
+    }
+}
 
 # ifndef __CINT__
 int main(int argc, char * argv[])

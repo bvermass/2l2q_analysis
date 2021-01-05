@@ -36,6 +36,7 @@ class mini_analyzer {
         TString sr_flavor;
         bool isData;
         std::map<TString, TH1*> hists;
+        std::map<TString, TH1*> hists_sys;
         std::map<TString, TH2*> hists2D;
 
         //For ABCD method based on PFN output and dphi
@@ -66,6 +67,7 @@ class mini_analyzer {
         void calculate_ratio(TString numerator_tag, TString denominator_tag, TString ratio_tag);
         void apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag);
         void calculate_eff();
+        void add_ABCDstat_variation(TString selection_tag);
 
         void set_signal_regions();
         void set_signal_regions_gridscan();
@@ -89,6 +91,7 @@ class mini_analyzer {
         double get_SRShape2bin(double PVSVdist_2D, TString tagForMass);
         double get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass);
         void set_error_for_zero_event_bins(TString hname_target, TString hname_ratio);
+        void set_quadA_zero_event_bins();
 };
 
 #endif

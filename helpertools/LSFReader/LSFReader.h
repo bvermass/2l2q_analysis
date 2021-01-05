@@ -14,14 +14,18 @@
 class LSFReader{
     public:
         LSFReader();
-        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString pt_eta_conf, const double pt_mx);
+        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString histoname_sys, const TString pt_eta_conf, const double pt_mx);
         ~LSFReader();
 
         double get_LSF(const double pt, const double eta);
+        double get_LSF_BinError(const double pt, const double eta);
+        double get_sys_as_BinContent(const double pt, const double eta);
+        double get_sys_as_BinError(const double pt, const double eta);
 
     private:
         TFile* file_LSF;
         TH2F* histo_LSF;
+        TH2F* histo_sys;
         TString pt_eta_config;
         double pt_max;
 };

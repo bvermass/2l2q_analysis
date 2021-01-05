@@ -58,12 +58,15 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_l2_selectedTrackMult"]            = new TH1F(prefix+"_l2_selectedTrackMult", ";l_{2} selectedTrackMult;Events", 15, 0, 15);
     (*hists)[prefix+"_l1_3dIPSig"]                      = new TH1F(prefix+"_l1_3dIPSig", ";l_{1} 3dIPSig;Events", 30, 0, 4);
     (*hists)[prefix+"_l2_3dIPSig"]                      = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 30, 0, 40);
+    (*hists)[prefix+"_l2_NumberOfHits"]                 = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Tracker Hits;Events", 20, 0, 20);
+    (*hists)[prefix+"_l2_NumberOfPixelHits"]            = new TH1F(prefix+"_l2_NumberOfPixelHits", ";l_{2} Nr. of Pixel Hits;Events", 15, 0, 15);
     (*hists2D)[prefix+"_lsources"]                      = new TH2F(prefix+"_lsources", ";l1 source;l2 source", 14, -2, 12, 14, -2, 12);
     (*hists2D)[prefix+"_lprovenance"]                   = new TH2F(prefix+"_lprovenance", ";l1 source;l2 source", 19, 0, 19, 19, 0, 19);
     (*hists2D)[prefix+"_lprovenanceCompressed"]         = new TH2F(prefix+"_lprovenanceCompressed", ";l1 source;l2 source", 5, 0, 5, 5, 0, 5);
     (*hists2D)[prefix+"_l2provCompressedvsConversion"]  = new TH2F(prefix+"_l2provCompressedvsConversion", ";l2 Provenance;l2 Conversion", 5, 0, 5, 4, 0, 4);
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 30, 0, 150);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 30, 0, 200);
+    (*hists)[prefix+"_mll_zoomAtLowMll"]                = new TH1F(prefix+"_mll_zoomAtLowMll", ";#it{m}_{ll} [GeV];Events", 100, 0, 30);
     (*hists)[prefix+"_Zpeak"]                           = new TH1F(prefix+"_Zpeak", ";On-Z;Events", 1, 0, 1);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 30, 0, 3.14);
     (*hists)[prefix+"_dRll"]                            = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 30, 0, 6);
@@ -167,8 +170,12 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
         fill_IVF_eff(hists, sr_flavor, ev_weight);
     }
 
+    if(_l1l2SV){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_afterSV", ev_weight * (1 + 99*isSignal));
+    }
+
     if(_Training){
-        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight * (1 + 99*isSignal));
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_HLT_efficiency(hists, "Afterptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, ev_weight);
     }
@@ -184,7 +191,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
             if(_FullNoPFN) fill_pfn_histograms(hists, sr_flavor + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
-            if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
+            //if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2Map.first], MassMap.first, V2Map.first, ev_weight*reweighting_weights[V2Map.first]);
             //if(_TrainingHighPFN[MassMap.first][V2Map.first]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
             if(_Full[MassMap.first][V2Map.first]){
                 fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2Map.first], ev_weight*reweighting_weights[V2Map.first]);
@@ -243,6 +250,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     //(*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
 
     (*hists)[prefix+"_mll"]->Fill(mll, event_weight);
+    (*hists)[prefix+"_mll_zoomAtLowMll"]->Fill(mll, event_weight);
     if(mll > 80 and mll < 100) (*hists)[prefix+"_Zpeak"]->Fill(1, event_weight);
     (*hists)[prefix+"_dphill"]->Fill(dphill, event_weight);
     (*hists)[prefix+"_dRll"]->Fill(dRll, event_weight);
@@ -252,6 +260,8 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
         (*hists)[prefix+"_l2_dxy_zoom"]->Fill(fabs(_dxy[i_subleading]), event_weight);
         (*hists)[prefix+"_l1_3dIP"]->Fill(_3dIP[i_leading], event_weight);
         (*hists)[prefix+"_l2_3dIP"]->Fill(_3dIP[i_subleading], event_weight);
+        (*hists)[prefix+"_l2_NumberOfHits"]->Fill(_lNumberOfValidTrackerHits[i_subleading], event_weight);
+        (*hists)[prefix+"_l2_NumberOfPixelHits"]->Fill(_lNumberOfValidPixelHits[i_subleading], event_weight);
         //LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
         //if(nJets_uncl > 0) (*hists)[prefix+"_dRl2jet1_uncl"]->Fill(deltaR(l2_vec, jets_uncl[0]), event_weight);
         //if(nJets_uncl > 1) (*hists)[prefix+"_dRl2jet2_uncl"]->Fill(deltaR(l2_vec, jets_uncl[1]), event_weight);
@@ -437,9 +447,9 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
                 tmptrack.SetPtEtaPhiE(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
                 tracksum += tmptrack;
             }
-            (*hists)[prefix+"_IVF_pt"]->Fill(tracksum.Pt(), event_weight);
-            (*hists)[prefix+"_IVF_eta"]->Fill(tracksum.Eta(), event_weight);
-            (*hists)[prefix+"_IVF_phi"]->Fill(tracksum.Phi(), event_weight);
+            (*hists)[prefix+"_IVF_pt"]->Fill(SVpt, event_weight);
+            (*hists)[prefix+"_IVF_eta"]->Fill(SVeta, event_weight);
+            (*hists)[prefix+"_IVF_phi"]->Fill(SVphi, event_weight);
             //(*hists)[prefix+"_IVF_mass_check"]->Fill(_IVF_mass[i_subleading], event_weight);
             (*hists)[prefix+"_IVF_ptsum"]->Fill(tracksum.Pt(), event_weight);
             (*hists)[prefix+"_IVF_l1_mass"]->Fill((tracksum+l1vector).M(), event_weight);

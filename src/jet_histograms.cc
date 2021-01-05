@@ -16,6 +16,10 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     (*hists)[prefix+"_jetl2_pt"]                    = new TH1F(prefix+"_jetl2_pt", ";closestJet(l_{2}) #it{p}_{T} [GeV];Events", 30, 0, 140);
     (*hists)[prefix+"_jetl2_eta"]                   = new TH1F(prefix+"_jetl2_eta", ";closestJet(l_{2}) #eta;Events", 20, -3, 3);
     (*hists)[prefix+"_jetl2_l2dR"]                  = new TH1F(prefix+"_jetl2_l2dR", ";closestJet(l_{2}) #Delta R;Events", 30, 0, 1);
+    (*hists)[prefix+"_jetl2_DeepCsv_udsg"]          = new TH1F(prefix+"_jetl2_DeepCsv_udsg", ";closestJet(l_{2}) DeepCsv udsg;Events", 30, -0.1, 1.1);
+    (*hists)[prefix+"_jetl2_DeepCsv_b"]             = new TH1F(prefix+"_jetl2_DeepCsv_b", ";closestJet(l_{2}) DeepCsv b;Events", 30, -0.1, 1.1);
+    (*hists)[prefix+"_jetl2_DeepCsv_c"]             = new TH1F(prefix+"_jetl2_DeepCsv_c", ";closestJet(l_{2}) DeepCsv c;Events", 30, -0.1, 1.1);
+    (*hists)[prefix+"_jetl2_DeepCsv_bb"]            = new TH1F(prefix+"_jetl2_DeepCsv_bb", ";closestJet(l_{2}) DeepCsv bb;Events", 30, -0.1, 1.1);
 
     if(extensive_plots){
         (*hists)[prefix+"_jetl2_index"]                 = new TH1F(prefix+"_jetl2_index", ";closestJet(l_{2}) Index;Events", 15, -1, 14);
@@ -23,10 +27,6 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
         //(*hists)[prefix+"_jetl2_l2dphi"]                = new TH1F(prefix+"_jetl2_l2dphi", ";closestJet(l_{2}) #Delta #phi;Events", 30, 0, 3.14);
         (*hists)[prefix+"_jetl2_IsTightLepVeto"]        = new TH1F(prefix+"_jetl2_IsTightLepVeto", ";closestJet(l_{2}) TightLepVeto ID;Events", 2, 0, 2);
         (*hists)[prefix+"_jetl2_CsvV2"]                 = new TH1F(prefix+"_jetl2_CsvV2", ";closestJet(l_{2}) CsvV2;Events", 30, -0.1, 1.1);
-        (*hists)[prefix+"_jetl2_DeepCsv_udsg"]          = new TH1F(prefix+"_jetl2_DeepCsv_udsg", ";closestJet(l_{2}) DeepCsv udsg;Events", 30, -0.1, 1.1);
-        (*hists)[prefix+"_jetl2_DeepCsv_b"]             = new TH1F(prefix+"_jetl2_DeepCsv_b", ";closestJet(l_{2}) DeepCsv b;Events", 30, -0.1, 1.1);
-        (*hists)[prefix+"_jetl2_DeepCsv_c"]             = new TH1F(prefix+"_jetl2_DeepCsv_c", ";closestJet(l_{2}) DeepCsv c;Events", 30, -0.1, 1.1);
-        (*hists)[prefix+"_jetl2_DeepCsv_bb"]            = new TH1F(prefix+"_jetl2_DeepCsv_bb", ";closestJet(l_{2}) DeepCsv bb;Events", 30, -0.1, 1.1);
         (*hists)[prefix+"_jetl2_HadronFlavor"]          = new TH1F(prefix+"_jetl2_HadronFlavor", ";closestJet(l_{2}) HadronFlavor;Events", 6, 0, 6);
         (*hists)[prefix+"_jetl2_NeutralHadronFraction"] = new TH1F(prefix+"_jetl2_NeutralHadronFraction", ";closestJet(l_{2}) Neutral Hadron Fraction;Events", 30, 0, 1);
         (*hists)[prefix+"_jetl2_NeutralEmFraction"]     = new TH1F(prefix+"_jetl2_NeutralEmFraction", ";closestJet(l_{2}) Neutral Em Fraction;Events", 30, 0, 1);
@@ -41,13 +41,14 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstEta"]              = new TH1F(prefix+jettagvalcut+"_jetl2_ConstEta", ";Jet Constituent #eta;Events", 30, -3, 3);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstPhi"]              = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPhi", ";Jet Constituent #phi;Events", 30, -3.14, 3.14);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstPdgId"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPdgId", ";Jet Constituent PdgId;Events", 220, -1, 220);
+            (*hists)[prefix+jettagvalcut+"_jetl2_ConstPdgId_reduced"]    = new TH1F(prefix+jettagvalcut+"_jetl2_ConstPdgId_reduced", ";Jet Constituent PdgId;Events", 220, -1, 220);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstCharge"]           = new TH1F(prefix+jettagvalcut+"_jetl2_ConstCharge", ";Jet Constituent Charge;Events", 3, -1, 1);
             (*hists)[prefix+jettagvalcut+"_jetl2_Constdxy"]              = new TH1F(prefix+jettagvalcut+"_jetl2_Constdxy", ";Jet Constituent dxy;Events", 30, 0, 20);
             (*hists)[prefix+jettagvalcut+"_jetl2_Constdz"]               = new TH1F(prefix+jettagvalcut+"_jetl2_Constdz", ";Jet Constituent dz;Events", 30, 0, 40);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstdxyErr"]           = new TH1F(prefix+jettagvalcut+"_jetl2_ConstdxyErr", ";Jet Constituent dxyError;Events", 30, 0, 5);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstdzErr"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstdzErr", ";Jet Constituent dzError;Events", 30, 0, 10);
             (*hists)[prefix+jettagvalcut+"_jetl2_ConstNHits"]            = new TH1F(prefix+jettagvalcut+"_jetl2_ConstNHits", ";Jet Constituent Tracker Hits;Events", 30, 0, 30);
-            (*hists)[prefix+jettagvalcut+"_jetl2_ConstNPixHits"]         = new TH1F(prefix+jettagvalcut+"_jetl2_ConstNPixHits", ";Jet Constituent Pixel Hits;Events", 30, 0, 10);
+            (*hists)[prefix+jettagvalcut+"_jetl2_ConstNPixHits"]         = new TH1F(prefix+jettagvalcut+"_jetl2_ConstNPixHits", ";Jet Constituent Pixel Hits;Events", 10, 0, 10);
         }
     }
 }
@@ -70,6 +71,10 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
             (*hists)[prefix+"_jetl2_mass_20b"]->Fill((jet+lep).mass(), event_weight);
             (*hists)[prefix+"_jetl2_mass_40b"]->Fill((jet+lep).mass(), event_weight);
         }
+        (*hists)[prefix+"_jetl2_DeepCsv_udsg"]->Fill(_jetDeepCsv_udsg[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_b"]->Fill(_jetDeepCsv_b[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_c"]->Fill(_jetDeepCsv_c[i_jetl2], event_weight);
+        (*hists)[prefix+"_jetl2_DeepCsv_bb"]->Fill(_jetDeepCsv_bb[i_jetl2], event_weight);
     }
 
     if(extensive_plots){
@@ -78,10 +83,6 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
             (*hists)[prefix+"_jetl2_phi"]->Fill(_jetPhi[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_IsTightLepVeto"]->Fill(_jetIsTightLepVeto[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_CsvV2"]->Fill(_jetCsvV2[i_jetl2], event_weight);
-            (*hists)[prefix+"_jetl2_DeepCsv_udsg"]->Fill(_jetDeepCsv_udsg[i_jetl2], event_weight);
-            (*hists)[prefix+"_jetl2_DeepCsv_b"]->Fill(_jetDeepCsv_b[i_jetl2], event_weight);
-            (*hists)[prefix+"_jetl2_DeepCsv_c"]->Fill(_jetDeepCsv_c[i_jetl2], event_weight);
-            (*hists)[prefix+"_jetl2_DeepCsv_bb"]->Fill(_jetDeepCsv_bb[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_HadronFlavor"]->Fill(_jetHadronFlavor[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_NeutralHadronFraction"]->Fill(_jetNeutralHadronFraction[i_jetl2], event_weight);
             (*hists)[prefix+"_jetl2_NeutralEmFraction"]->Fill(_jetNeutralEmFraction[i_jetl2], event_weight);
@@ -103,6 +104,7 @@ void full_analyzer::fill_jet_constituent_histograms(map<TString, TH1*>* hists, T
         (*hists)[prefix+"_jetl2_ConstEta"]->Fill(_JetConstituentEta[i_jetl2][i_const], event_weight);
         (*hists)[prefix+"_jetl2_ConstPhi"]->Fill(_JetConstituentPhi[i_jetl2][i_const], event_weight);
         (*hists)[prefix+"_jetl2_ConstPdgId"]->Fill(_JetConstituentPdgId[i_jetl2][i_const], event_weight);
+        (*hists)[prefix+"_jetl2_ConstPdgId_reduced"]->Fill(get_reducedPdgId(_JetConstituentPdgId[i_jetl2][i_const]), event_weight);
         (*hists)[prefix+"_jetl2_ConstCharge"]->Fill(_JetConstituentCharge[i_jetl2][i_const], event_weight);
         if(_JetConstituentHasTrack[i_jetl2][i_const]){
             (*hists)[prefix+"_jetl2_Constdxy"]->Fill(_JetConstituentdxy[i_jetl2][i_const], event_weight);

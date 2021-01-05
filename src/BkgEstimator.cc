@@ -12,6 +12,18 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_file = new TFile(BkgEstimator_filename, "recreate");
     BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
     BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
+    BkgEstimator_tree->Branch("_RawWeight",                        &_RawWeight,                        "_RawWeight/D");
+    BkgEstimator_tree->Branch("_l1_IDSF",                          &_l1_IDSF,                          "_l1_IDSF/D");
+    BkgEstimator_tree->Branch("_l1_IDSF_unc_sym",                  &_l1_IDSF_unc_sym,                  "_l1_IDSF_unc_sym/D");
+    BkgEstimator_tree->Branch("_l2_IDSF",                          &_l2_IDSF,                          "_l2_IDSF/D");
+    BkgEstimator_tree->Branch("_l2_IDSF_unc_sym",                  &_l2_IDSF_unc_sym,                  "_l2_IDSF_unc_sym/D");
+    BkgEstimator_tree->Branch("_l1_ISOSF",                         &_l1_ISOSF,                         "_l1_ISOSF/D");
+    BkgEstimator_tree->Branch("_l1_ISOSF_unc_sym",                 &_l1_ISOSF_unc_sym,                 "_l1_ISOSF_unc_sym/D");
+    BkgEstimator_tree->Branch("_TriggerSF",                        &_TriggerSF,                        "_TriggerSF/D");
+    BkgEstimator_tree->Branch("_TriggerSF_unc_sym",                &_TriggerSF_unc_sym,                "_TriggerSF_unc_sym/D");
+    BkgEstimator_tree->Branch("_PileUpSF",                         &_PileUpSF,                         "_PileUpSF/D");
+    BkgEstimator_tree->Branch("_PileUpSF_unc_up",                  &_PileUpSF_unc_up,                  "_PileUpSF_unc_up/D");
+    BkgEstimator_tree->Branch("_PileUpSF_unc_down",                &_PileUpSF_unc_down,                "_PileUpSF_unc_down/D");
     BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
     BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
     BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
@@ -91,6 +103,18 @@ void BkgEstimator::open_file_and_tree(TString filename)
 void BkgEstimator::set_branch_adresses()
 {
     BkgEstimator_tree->SetBranchAddress("_weight", &_weight, &b__weight);
+    BkgEstimator_tree->SetBranchAddress("_RawWeight", &_RawWeight, &b__RawWeight);
+    BkgEstimator_tree->SetBranchAddress("_l1_IDSF", &_l1_IDSF, &b__l1_IDSF);
+    BkgEstimator_tree->SetBranchAddress("_l1_IDSF_unc_sym", &_l1_IDSF_unc_sym, &b__l1_IDSF_unc_sym);
+    BkgEstimator_tree->SetBranchAddress("_l2_IDSF", &_l2_IDSF, &b__l2_IDSF);
+    BkgEstimator_tree->SetBranchAddress("_l2_IDSF_unc_sym", &_l2_IDSF_unc_sym, &b__l2_IDSF_unc_sym);
+    BkgEstimator_tree->SetBranchAddress("_l1_ISOSF", &_l1_ISOSF, &b__l1_ISOSF);
+    BkgEstimator_tree->SetBranchAddress("_l1_ISOSF_unc_sym", &_l1_ISOSF_unc_sym, &b__l1_ISOSF_unc_sym);
+    BkgEstimator_tree->SetBranchAddress("_TriggerSF", &_TriggerSF, &b__TriggerSF);
+    BkgEstimator_tree->SetBranchAddress("_TriggerSF_unc_sym", &_TriggerSF_unc_sym, &b__TriggerSF_unc_sym);
+    BkgEstimator_tree->SetBranchAddress("_PileUpSF", &_PileUpSF, &b__PileUpSF);
+    BkgEstimator_tree->SetBranchAddress("_PileUpSF_unc_up", &_PileUpSF_unc_up, &b__PileUpSF_unc_up);
+    BkgEstimator_tree->SetBranchAddress("_PileUpSF_unc_down", &_PileUpSF_unc_down, &b__PileUpSF_unc_down);
     BkgEstimator_tree->SetBranchAddress("_is2016", &_is2016, &b__is2016);
     BkgEstimator_tree->SetBranchAddress("_is2017", &_is2017, &b__is2017);
     BkgEstimator_tree->SetBranchAddress("_is2018", &_is2018, &b__is2018);

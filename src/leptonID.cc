@@ -19,6 +19,19 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     return true;
 }
 
+bool full_analyzer::IsMediumPromptMuonID(const unsigned i)
+{
+    if(_lFlavor[i] != 1)                            return false;
+    if(fabs(_lEta[i]) >= 2.4)                       return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dz[i]) >= 0.1)                         return false;
+    if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
+    if(!_lPOGMedium[i])                             return false;
+
+    return true;
+}
+
 bool full_analyzer::IsPromptElectronID(const unsigned i)
 {
     if(_lFlavor[i] != 0)                            return false;
@@ -30,6 +43,57 @@ bool full_analyzer::IsPromptElectronID(const unsigned i)
     if(!_lPOGTight[i])                              return false;
 
     return true;
+}
+
+bool full_analyzer::IsMvaPromptElectronID(const unsigned i)
+{
+    if(_lFlavor[i] != 0)                            return false;
+    if(fabs(_lEta[i]) >= 2.5)                       return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.02)                       return false;
+    if(fabs(_dz[i]) >= 0.04)                        return false;
+    if(_relIso[i] >= 0.1)                           return false;
+    if(!_lPOGTight[i])                              return false;
+    if(!passMvaFall17NoIso_WP90(i))                 return false;
+
+    return true;
+}
+
+bool full_analyzer::passMvaFall17NoIso_WP90(const unsigned i)
+{
+    double mvaRaw = convertMvaInRawMva(i);
+    int category = getEleMvaCategory(i);
+    std::cout << "Mva: " << _lElectronMvaFall17NoIso[i] << std::endl;
+    std::cout << "cat and RawMva: " << category << " " << mvaRaw << std::endl;
+    std::cout << "cut0: " << 2.77072387339 - exp(-_lPt[i] / 3.81500912145) * 8.16304860178 << std::endl;
+    std::cout << "cut1: " << 1.85602317813 - exp(-_lPt[i] / 2.18697654938) * 11.8568936824 << std::endl;
+    std::cout << "cut2: " << 1.73489307814 - exp(-_lPt[i] / 2.0163211971) * 17.013880078 << std::endl;
+    std::cout << "cut3: " << 5.9175992258  - exp(-_lPt[i] / 13.4807294538) * 9.31966232685 << std::endl;
+    std::cout << "cut4: " << 5.01598837255 - exp(-_lPt[i] / 13.1280451502) * 8.79418193765 << std::endl;
+    std::cout << "cut5: " << 4.16921343208 - exp(-_lPt[i] / 13.2017224621) * 9.00720913211 << std::endl;
+    if (category == 0) return (mvaRaw > 2.77072387339 - exp(-_lPt[i] / 3.81500912145) * 8.16304860178);
+    if (category == 1) return (mvaRaw > 1.85602317813 - exp(-_lPt[i] / 2.18697654938) * 11.8568936824);
+    if (category == 2) return (mvaRaw > 1.73489307814 - exp(-_lPt[i] / 2.0163211971) * 17.013880078);
+    if (category == 3) return (mvaRaw > 5.9175992258  - exp(-_lPt[i] / 13.4807294538) * 9.31966232685);
+    if (category == 4) return (mvaRaw > 5.01598837255 - exp(-_lPt[i] / 13.1280451502) * 8.79418193765);
+    if (category == 5) return (mvaRaw > 4.16921343208 - exp(-_lPt[i] / 13.2017224621) * 9.00720913211);
+    std::cout << "did not find an electron Mva category!" << std::endl;
+    return false;
+}
+
+int full_analyzer::getEleMvaCategory(const unsigned i)
+{
+    if (_lPt[i] < 10 && fabs(_lEtaSC[i]) < 0.800) return 0;
+    if (_lPt[i] < 10 && fabs(_lEtaSC[i]) >= 0.800 && fabs(_lEtaSC[i]) < 1.479) return 1;
+    if (_lPt[i] < 10 && fabs(_lEtaSC[i]) >= 1.479) return 2;
+    if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) < 0.800) return 3;
+    if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) >= 0.800 && fabs(_lEtaSC[i]) < 1.479) return 4;
+    if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) >= 1.479) return 5;
+}
+
+double full_analyzer::convertMvaInRawMva(const unsigned i)
+{
+    return -0.5 * (std::log((1.-_lElectronMvaFall17NoIso[i])/(1.+_lElectronMvaFall17NoIso[i])));
 }
 
 bool full_analyzer::IsTOPPromptMuonID(const unsigned i)
@@ -370,11 +434,3 @@ double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
     return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
 }
 
-
-double full_analyzer::get_LSF(LSFReader& lsfreader_e_ID, LSFReader& lsfreader_m_ID, LSFReader& lsfreader_m_ISO, int i){
-    if(i == -1) return 1.;
-    if(_lFlavor[i] == 0) return lsfreader_e_ID.get_LSF(_lPt[i], _lEtaSC[i]);
-    else if(_lFlavor[i] == 1) return lsfreader_m_ID.get_LSF(_lPt[i], _lEta[i]) * lsfreader_m_ISO.get_LSF(_lPt[i], _lEta[i]);
-    std::cout << "wrong lepton flavor, returning 1 for scale factor. flavor: " << _lFlavor[i] << std::endl;
-    return 1.;
-}

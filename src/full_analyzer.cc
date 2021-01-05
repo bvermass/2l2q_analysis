@@ -4,7 +4,6 @@
 
 using namespace std;
 
-TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
 
 //  run_over_file		: This is the main function to loop over events of a certain file, it does the main event selection and delegates to other functions
 //  'filename' is the file containing the events over which we will run
@@ -63,7 +62,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_Training", "_TooFar", "_2prompt"}){
+        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
@@ -72,7 +71,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 for(const TString &ev_region : {"_SR"}){//, "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
                     add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
                 }
-                for(const TString &ev_region : {"", "_Training"}){
+                for(const TString &ev_region : {""/*, "_Training"*/}){
                     add_pfn_histograms(&hists, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
                 }
             }
@@ -98,13 +97,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
 
     // Load PU weights
-    PUWeightReader puweightreader = get_PUWeightReader(input, local_dir);
-
-    // Load Lepton Scale Factors
-    LSFReader lsfreader_e_ID = get_LSFReader(local_dir, "e", "ID");
-    LSFReader lsfreader_m_ID = get_LSFReader(local_dir, "mu", "ID");
-    LSFReader lsfreader_m_ISO = get_LSFReader(local_dir, "mu", "ISO");
+    puweightreader = get_PUWeightReader(input);
    
+    // Load Lepton Scale Factors
+    lsfreader_e_trig = get_LSFReader("e", "Trigger");
+    lsfreader_m_trig = get_LSFReader("mu", "Trigger");
+    lsfreader_e_ID   = get_LSFReader("e", "ID");
+    lsfreader_m_ID   = get_LSFReader("mu", "ID");
+    lsfreader_m_IDsys = get_LSFReader("mu", "IDsys");
+    lsfreader_m_ISO  = get_LSFReader("mu", "ISO");
+
+
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
@@ -165,7 +168,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Get muons, electrons and jets that pass ID and cleaning
         std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID;
         for(unsigned i = 0; i < _nLight; i++){
-            if(IsPromptMuonID(i))           promptMuonID.push_back(i);
+            if(IsMediumPromptMuonID(i))           promptMuonID.push_back(i);
             if(IsDisplacedMuonID(i))        displacedMuonID.push_back(i);
             if(IsLooseMuonID(i))            looseMuonID.push_back(i);
         }
@@ -175,7 +178,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(unsigned i = 0; i < _nLight; i++){
             bool CleanElectron = IsCleanElectron(i, promptMuonID) and IsCleanElectron(i, displacedMuonID);
 
-            if(IsPromptElectronID(i)    and CleanElectron) promptElectronID.push_back(i);
+            if(IsMvaPromptElectronID(i)    and CleanElectron) promptElectronID.push_back(i);
             if(IsDisplacedElectronID(i) and CleanElectron) displacedElectronID.push_back(i);
             if(IsLooseElectronID(i)     and CleanElectron) looseElectronID.push_back(i);
         }
@@ -213,8 +216,20 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         if((isSingleElectron and _lFlavor[i_leading] == 1) or (isSingleMuon and _lFlavor[i_leading] == 0)) continue;
 
         //Calculate Event weight
-        if(!isData) ev_weight = _weight * puweightreader.get_PUWeight_Central(_nTrueInt) * get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_leading);
-        else ev_weight = 1.;
+        if(!isData){
+            ev_weight = _weight;
+            ev_weight *= puweightreader->get_PUWeight_Central(_nTrueInt);
+            if(_lFlavor[i_leading] == 0){//electron scale factors
+                ev_weight *= lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+                ev_weight *= lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+            }else if(_lFlavor[i_leading] == 1){//muon scale factors
+                ev_weight *= lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+                ev_weight *= lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+                ev_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            }
+        }else {
+            ev_weight = 1.;
+        }
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
         for(auto& MassMap : evaluating_V2s){
@@ -238,7 +253,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
             }
             additional_signal_regions();
-            if(makeBkgEstimator) fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight);
+            if(makeBkgEstimator) fill_BkgEstimator_tree(bkgestimator, ev_weight*total_weight, total_weight);
 
             SR_counters[sr_flavor]++;
             SR_counters[sr_flavor+"_weighted"] += ev_weight;
@@ -272,7 +287,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         // after everything happened, set subleading lepton to tight prompt lepton to measure 2 lepton prompt performance
         set_leptons(i_subleading_e, i_subleading_mu);
-        if(!isData) ev_weight *= get_LSF(lsfreader_e_ID, lsfreader_m_ID, lsfreader_m_ISO, i_subleading);
+        if(!isData and i_subleading != -1){
+            if(_lFlavor[i_subleading] == 0){//electron scale factors
+                ev_weight *= lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
+            }else if(_lFlavor[i_subleading] == 1){//muon scale factors
+                ev_weight *= lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+                ev_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+            }
+        }
         signal_regions();
         if(_l1l2 and _lPt[i_subleading] > 20){
             fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
@@ -313,6 +335,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID/", "hists_full_analyzer", partition, partitionjobnumber, true);
         cout << "output to: " << outputfilename << endl;
         TFile *output = new TFile(outputfilename, "recreate");
+
+        Combine_PFN_ROC_flavor_states(&hists);
 
         std::cout << "Scale histograms to total_weight and add under- and overflow to last bins, then write them" << std::endl;
         for(auto const& it : hists){

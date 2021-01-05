@@ -855,6 +855,7 @@ public :
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
    
+   TString local_dir;
    Double_t ev_weight;
    bool makeHistograms, makeHNLtagger, makeBkgEstimator;
    bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false, isMET = false;
@@ -903,16 +904,21 @@ public :
    // SV stuff
    double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
    
+   //Scale Factor readers
+   LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO;
+   PUWeightReader *puweightreader;
+
    // functions
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
-   PUWeightReader get_PUWeightReader(TFile* input, TString local_dir);
-   LSFReader get_LSFReader(TString local_dir, TString flavor, TString type_SF);
+   PUWeightReader* get_PUWeightReader(TFile* input);
+   LSFReader* get_LSFReader(TString flavor, TString type_SF);
+   LSFReader* get_LSFReader_old(TString flavor, TString type_SF);
    PFNReader get_PFNReader(int flavor);
    PFNReader get_PFNReader_unparametrized(int flavor);
    PFNReader get_PFNReader_unparametrized_LowMass(int flavor);
    PFNReader get_PFNReader_unparametrized_HighMass(int flavor);
-   full_analyzer(TTree *tree=0, bool mkHistograms = true, bool mkHNLtagger = true, bool mkBkgEstimator = true);
+   full_analyzer(TTree *tree=0, TString local_dr = "", bool mkHistograms = true, bool mkHNLtagger = true, bool mkBkgEstimator = true);
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
     Long64_t LoadTree(Long64_t entry);
@@ -925,6 +931,10 @@ public :
 
    // in src/leptonID.cc
     bool     IsPromptElectronID(const unsigned i);
+    bool     IsMvaPromptElectronID(const unsigned i);
+    bool     passMvaFall17NoIso_WP90(const unsigned i);
+    int      getEleMvaCategory(const unsigned i);
+    double   convertMvaInRawMva(const unsigned i);
     bool     IsTOPPromptElectronID(const unsigned i);
     double   rawElectronMVA(const double electronMVA);
     unsigned electronMVACategory(unsigned i);
@@ -932,6 +942,7 @@ public :
     bool     IsDisplacedElectronID(const unsigned i);
     bool     IsLooseElectronID(const unsigned i);
     bool     IsPromptMuonID(const unsigned i);
+    bool     IsMediumPromptMuonID(const unsigned i);
     bool     IsTOPPromptMuonID(const unsigned i);
     bool     IsDisplacedMuonID(const unsigned i);
     bool     IsLooseMuonID(const unsigned i);
@@ -953,7 +964,6 @@ public :
     double   get_KVF_PVSVdist_2D(int);
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
-    double   get_LSF(LSFReader& lsfreader_e_ID, LSFReader& lsfreader_m_ID, LSFReader& lsfreader_m_ISO, int i);
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i);
@@ -1029,9 +1039,10 @@ public :
     std::map<int, std::map<double, double>> GetJetTagVals_LowAndHighMass(HNLtagger& hnltagger, PFNReader& pfn_lowmass, PFNReader& pfn_highmass);
     void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
+    void     Combine_PFN_ROC_flavor_states(std::map<TString, TH1*>* hists);
 
     // in src/tree_functions.cc
-    void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight);
+    void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight, double total_weight);
 
    // in src/SelectionOptimization.cc
    // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);

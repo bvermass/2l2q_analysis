@@ -343,6 +343,7 @@ int get_color(TString legend)
     else if(legend.Index("t#bar{t}") != -1) return kCyan-3;
     else if(legend.Index("Diboson")  != -1) return kGreen+3;
     else if(legend.Index("Triboson") != -1) return kRed+3;
+    else if(legend.Index("WG")       != -1) return 7;
     else if(legend.Index("Top")      != -1) return kBlue+2;
     else if(legend.Index("M-15")   != -1) return kBlack;
     else if(legend.Index("M-3")    != -1) return kRed-9;

@@ -11,12 +11,14 @@ void mainroot(TString sample, double cross_section, int max_entries, int partiti
     TFile *input = new TFile(sample, "open");
     TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
     
+
     bool makeHistograms = true;
     bool makeHNLtagger = true;
     bool makeBkgEstimator = true;
 
+    TString local_dir = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/";
 
-    full_analyzer b(tree, makeHistograms, makeHNLtagger, makeBkgEstimator);
+    full_analyzer b(tree, local_dir, makeHistograms, makeHNLtagger, makeBkgEstimator);
     b.run_over_file(sample, cross_section, max_entries, partition, partitionjobnumber);
 }
 

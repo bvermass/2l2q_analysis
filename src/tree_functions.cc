@@ -6,9 +6,8 @@
 
 #include "../interface/full_analyzer.h"
 
-void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight)
+void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight, double total_weight)
 {
-    bkgestimator._weight       = event_weight;
     bkgestimator._is2016       = _is2016;
     bkgestimator._is2017       = _is2017;
     bkgestimator._is2018       = _is2018;
@@ -75,6 +74,36 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
             bkgestimator._nMV2++;
         }
     }
+
+    bkgestimator._weight            = event_weight;
+    bkgestimator._RawWeight         = _weight*total_weight;
+    bkgestimator._PileUpSF          = puweightreader->get_PUWeight_Central(_nTrueInt);
+    bkgestimator._PileUpSF_unc_up   = puweightreader->get_PUWeight_Up(_nTrueInt) - puweightreader->get_PUWeight_Central(_nTrueInt);
+    bkgestimator._PileUpSF_unc_down = puweightreader->get_PUWeight_Down(_nTrueInt) - puweightreader->get_PUWeight_Central(_nTrueInt);
+    if(_lFlavor[i_leading] == 0){//electron scale factors
+        bkgestimator._l1_IDSF           = lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+        bkgestimator._l1_IDSF_unc_sym   = lsfreader_e_ID->get_LSF_BinError(_lPt[i_leading], _lEtaSC[i_leading]);
+        bkgestimator._l1_ISOSF          = 1.;
+        bkgestimator._l1_ISOSF_unc_sym  = 0.;
+        bkgestimator._TriggerSF         = lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+        bkgestimator._TriggerSF_unc_sym = lsfreader_e_trig->get_LSF_BinError(_lPt[i_leading], _lEtaSC[i_leading]);
+
+    }
+    if(_lFlavor[i_leading] == 1){//electron scale factors
+        bkgestimator._l1_IDSF           = lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        double l1_IDSF_unc_stat         = lsfreader_m_ID->get_LSF_BinError(_lPt[i_leading], _lEta[i_leading]);
+        double l1_IDSF_unc_syst         = lsfreader_m_IDsys->get_sys_as_BinError(_lPt[i_leading], _lEta[i_leading]);
+        bkgestimator._l1_IDSF_unc_sym   = sqrt(l1_IDSF_unc_stat*l1_IDSF_unc_stat + l1_IDSF_unc_syst*l1_IDSF_unc_syst);//add stat and syst error in uncorrelated way
+        bkgestimator._l1_ISOSF          = lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        double l1_ISOSF_unc_stat        = lsfreader_m_ISO->get_LSF_BinError(_lPt[i_leading], _lEta[i_leading]);
+        double l1_ISOSF_unc_syst        = lsfreader_m_ISO->get_sys_as_BinContent(_lPt[i_leading], _lEta[i_leading]);
+        bkgestimator._l1_ISOSF_unc_sym  = sqrt(l1_ISOSF_unc_stat*l1_ISOSF_unc_stat + l1_ISOSF_unc_syst*l1_ISOSF_unc_syst);
+        bkgestimator._TriggerSF         = lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        bkgestimator._TriggerSF_unc_sym = lsfreader_m_trig->get_LSF_BinError(_lPt[i_leading], _lEta[i_leading]);
+    }
+
+    bkgestimator._l2_IDSF           = 1.;
+    bkgestimator._l2_IDSF_unc_sym   = 0.;
 
     bkgestimator.fill_tree();
 }

@@ -20,7 +20,7 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals_LowAndHighM
 
     double JetTagVal_LowMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 2.);
     double JetTagVal_HighMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 10.);
-    std::cout << "Low and High Mass PFN value: " << JetTagVal_LowMass << " " << JetTagVal_HighMass << std::endl;
+    //std::cout << "Low and High Mass PFN value: " << JetTagVal_LowMass << " " << JetTagVal_HighMass << std::endl;
     for(auto& MassMap : evaluating_ctaus){
         for(auto& V2Map : MassMap.second){
             if(MassMap.first < 6.) values[MassMap.first][V2Map.first] = JetTagVal_LowMass;
@@ -40,6 +40,20 @@ void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString p
     //(*hists)[prefix+"_JetTagVal_BDT"]   = new TH1F(prefix+"_JetTagVal_BDT", ";Jet Tag Value (BDT); Events", 40, -0.1, 2);
     //(*hists)[prefix+"_BDT_ROC"]         = new TH1F(prefix+"_BDT_ROC", ";Jet Tag Value (BDT); Events", 1000, -0.1, 2);
     //(*hists)[prefix+"_BDT_JetIsFromHNL_ROC"] = new TH1F(prefix+"_BDT_JetIsFromHNL_ROC", ";Jet Tag Value (Jet from HNL) (BDT); Events", 1000, -0.1, 2);
+}
+
+void full_analyzer::Combine_PFN_ROC_flavor_states(std::map<TString, TH1*>* hists){
+    for(const auto& it : (*hists)){
+        TString name = it.first;
+        TH1* h = it.second;
+        if(name.Contains("PFN_ROC") and name.Contains("_OS")){
+            TString newname = name;
+            newname.ReplaceAll("_OS","");
+            (*hists)[newname] = (TH1F*)h->Clone(newname);
+            name.ReplaceAll("_OS", "_SS");
+            (*hists)[newname]->Add((*hists)[name]);
+        }
+    }
 }
 
 
