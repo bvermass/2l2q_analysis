@@ -43,6 +43,7 @@ class mini_analyzer {
         std::vector<TString> ABCDtags;
         std::map<TString, unsigned> MV2tags;
         std::map<TString, double> CPtags;
+        std::map<TString, double> variations;
         bool isPrompt;
         bool baseline_cutphill;
         bool baseline_cutmll;
@@ -92,6 +93,9 @@ class mini_analyzer {
         double get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass);
         void set_error_for_zero_event_bins(TString hname_target, TString hname_ratio);
         void set_quadA_zero_event_bins();
+
+        void init_variations();
+        void set_variations(double nominal_weight);
 };
 
 #endif

@@ -23,7 +23,8 @@ int main(int argc, char * argv[])
         if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
         else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
-        if(filename.Contains("Run201")){
+        else if(filename.Contains("MiniAODRun2") or filename.Contains("Run2.")) isRun2 = true;
+        if(filename.Contains("Run201") or filename.Contains("Run2.")){
             isData = true;
             i_Data = files.size() - 1;
         }

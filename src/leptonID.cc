@@ -63,14 +63,6 @@ bool full_analyzer::passMvaFall17NoIso_WP90(const unsigned i)
 {
     double mvaRaw = convertMvaInRawMva(i);
     int category = getEleMvaCategory(i);
-    std::cout << "Mva: " << _lElectronMvaFall17NoIso[i] << std::endl;
-    std::cout << "cat and RawMva: " << category << " " << mvaRaw << std::endl;
-    std::cout << "cut0: " << 2.77072387339 - exp(-_lPt[i] / 3.81500912145) * 8.16304860178 << std::endl;
-    std::cout << "cut1: " << 1.85602317813 - exp(-_lPt[i] / 2.18697654938) * 11.8568936824 << std::endl;
-    std::cout << "cut2: " << 1.73489307814 - exp(-_lPt[i] / 2.0163211971) * 17.013880078 << std::endl;
-    std::cout << "cut3: " << 5.9175992258  - exp(-_lPt[i] / 13.4807294538) * 9.31966232685 << std::endl;
-    std::cout << "cut4: " << 5.01598837255 - exp(-_lPt[i] / 13.1280451502) * 8.79418193765 << std::endl;
-    std::cout << "cut5: " << 4.16921343208 - exp(-_lPt[i] / 13.2017224621) * 9.00720913211 << std::endl;
     if (category == 0) return (mvaRaw > 2.77072387339 - exp(-_lPt[i] / 3.81500912145) * 8.16304860178);
     if (category == 1) return (mvaRaw > 1.85602317813 - exp(-_lPt[i] / 2.18697654938) * 11.8568936824);
     if (category == 2) return (mvaRaw > 1.73489307814 - exp(-_lPt[i] / 2.0163211971) * 17.013880078);
