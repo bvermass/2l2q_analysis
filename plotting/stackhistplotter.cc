@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
     std::vector<TString> legends_bkg;
     std::vector<TString> legends_data;
     bool is_mini_analyzer = false;
-    bool is2016 = false, is2017 = false, is2018 = false;
+    bool is2016 = false, is2017 = false, is2018 = false, isRun2 = false;
     int n_columns = 3;
     for(int i = 0; i < argc - i_legends; i++){
         TString filename = (TString)argv[i_rootfiles + i];
@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));
             legends_signal.push_back(adjust_legend(legendname));
-        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data")){
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data") or legendname.Contains("Top") or legendname.Contains("MC_Bkg")){
             files_data.push_back(TFile::Open(filename));
             legends_data.push_back(adjust_legend(legendname));
         }else {
@@ -49,6 +49,7 @@ int main(int argc, char * argv[])
         if(filename.Contains("MiniAOD2016") or filename.Contains("Run2016")) is2016 = true;
         else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
+        else if(filename.Contains("MiniAODRun2") or filename.Contains("Run2.")) isRun2 = true;
     }
 
     // determine whether the samplelist wants plotting with data, signal or without
@@ -98,7 +99,7 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018, isRun2);
     Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad_histo);
     float leftmargin  = pad_histo->GetLeftMargin();
     float topmargin   = pad_histo->GetTopMargin();
@@ -106,7 +107,7 @@ int main(int argc, char * argv[])
 
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
-    TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0., 1.,std::max(0.05, ymin));
+    TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0., 1.,std::max(0., ymin));
     RatioPlot ratioplotter(pad_ratio);
 
     int partitionjobnumber = std::atoi(argv[2]);
@@ -134,7 +135,7 @@ int main(int argc, char * argv[])
                 TString xaxistitle = sample_hist_ref->GetXaxis()->GetTitle();
                 TString yaxistitle = sample_hist_ref->GetYaxis()->GetTitle();
                 
-                if(histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
+                if(histname.Index("_sys") != -1 or histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
                 if(!check_identifiers(histname, identifiers)) continue;
                 std::cout << histname << std::endl;
@@ -143,14 +144,15 @@ int main(int argc, char * argv[])
                 TH1F* data_hist;
                 if(withdata){
                     TString histname_BtoA = histname;
+                    if(!histname.Contains("_noSR")) histname_BtoA.ReplaceAll("_cutbaselinemlSV", "_cutbaselinemlSV_noSR");
                     //if(histname.Contains("_quadA_")){
                     //    histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
                     //}else if(histname.Contains("_AoverC_")){
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1) continue; // Only print Control region plots for data or Training region with high background
-                    if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1) continue; // Only print Control region plots for data or Training region with high background
+                    //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
@@ -162,10 +164,12 @@ int main(int argc, char * argv[])
                 for(int i = 0; i < files_bkg.size(); i++){
                     TH1* hist = (TH1*)files_bkg[i]->Get(histname_bkg);
                     if(hist->GetMaximum() > 0){
-                        //int color = get_color(legends_bkg[i]);
+                        int color; 
+                        if(legends_bkg[i].Contains("Pred")) color = color_Pred;
+                        else color = get_color(legends_bkg[i]);
                         hist->SetFillStyle(1001);
-                        hist->SetFillColor(color_Pred);
-                        hist->SetLineColor(color_Pred);
+                        hist->SetFillColor(color);
+                        hist->SetLineColor(color);
                         hists_bkg->Add(hist);
                         legend.AddEntry(hist, legends_bkg[i], "f");
                     }
@@ -184,6 +188,8 @@ int main(int argc, char * argv[])
                             hist->SetLineColor(colors_signal[i]);
                             hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
+                            if(histname.Contains("_2prompt") or histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
+                            else hist->Scale(10.);
                             hist->SetMarkerColor(colors_signal[i]);
                             hists_signal->Add(hist);
                             TString legend_tmp = legends_signal[i];
@@ -250,7 +256,7 @@ int main(int argc, char * argv[])
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
-                if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
+                if(histname.Contains("Shape")) shapeSR_text->Draw(histname);
                 
                 pad_histo->Modified();
 
@@ -272,13 +278,13 @@ int main(int argc, char * argv[])
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
-                hists_bkg->SetMinimum(0.1);
+                hists_bkg->SetMinimum(4.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
                 CMSandLumi->Draw();
-                if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
+                if(histname.Contains("Shape")) shapeSR_text->Draw(histname);
                 
                 pad_histo->Modified();
 

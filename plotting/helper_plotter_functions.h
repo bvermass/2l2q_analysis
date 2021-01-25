@@ -30,7 +30,7 @@
 // class CMSandLuminosity helps to draw the CMS and luminosity text relevant for the plot
 class CMSandLuminosity{
     public:
-        CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018);
+        CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018, bool isRun2);
         ~CMSandLuminosity();
         void change_CMStext(TString new_text);
         void change_lumitext(TString new_text);
@@ -54,6 +54,7 @@ class Shape_SR_plottext{
         void Draw_me(TString mass_category);
         void Draw_mm(TString mass_category);
         void Draw_lines_and_generaltext(TString mass_category);
+        void Draw_Shape_alpha_lines_and_generaltext(TString mass_category);
     private:
         TString mm, em, ee, me, OS, SS, masslessthan2, massmorethan2, masslessthan6, massmorethan6;
         float leftmargin, rightmargin, topmargin, bottommargin;

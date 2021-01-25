@@ -1,7 +1,7 @@
 #include "helper_plotter_functions.h"
 
 // CMSandluminosity class functions
-CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018):
+CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2018, bool isRun2 = false):
     CMStext( "#bf{CMS} #scale[0.8]{#it{Preliminary}}" )
     , leftmargin( pad->GetLeftMargin() )
     , topmargin( pad->GetTopMargin() )
@@ -9,13 +9,14 @@ CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2
     , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
     , lumilatex( get_latex(0.6*topmargin, 31, 42) )
 {
-    if((is2016 and is2017) or (is2016 and is2018) or (is2017 and is2018) or (!is2016 and !is2017 and !is2018)){
+    if((is2016 and is2017) or (is2016 and is2018) or (is2017 and is2018) or (!is2016 and !is2017 and !is2018 and !isRun2)){
         std::cout << "not clear which year to use for lumi info" << std::endl;
         lumitext = "(13 TeV)";
     }
     else if(is2016) lumitext = "35.92 fb^{-1} (13 TeV)";
     else if(is2017) lumitext = "41.53 fb^{-1} (13 TeV)";
     else if(is2018) lumitext = "59.74 fb^{-1} (13 TeV)";
+    else if(isRun2) lumitext = "137.2 fb^{-1} (13 TeV)";
     else lumitext = "(13 TeV)";
 }
 
@@ -63,18 +64,22 @@ Shape_SR_plottext::~Shape_SR_plottext(){}
 
 void Shape_SR_plottext::Draw(TString histname)
 {
-    if(histname.Contains("_M-1_") or histname.Contains("_M-2_") or histname.Contains("_M-3_") or histname.Contains("_M-4_") or histname.Contains("_M-5_")){
-        if(histname.Contains("_2l")) Draw_2l("low");
-        if(histname.Contains("_ee")) Draw_ee("low");
-        if(histname.Contains("_em")) Draw_em("low");
-        if(histname.Contains("_me")) Draw_me("low");
-        if(histname.Contains("_mm")) Draw_mm("low");
-    }else if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_")){
-        if(histname.Contains("_2l")) Draw_2l("high");
-        if(histname.Contains("_ee")) Draw_ee("high");
-        if(histname.Contains("_em")) Draw_em("high");
-        if(histname.Contains("_me")) Draw_me("high");
-        if(histname.Contains("_mm")) Draw_mm("high");
+    if(histname.Contains("Shape_SR")){
+        if(histname.Contains("_M-1_") or histname.Contains("_M-2_") or histname.Contains("_M-3_") or histname.Contains("_M-4_") or histname.Contains("_M-5_")){
+            if(histname.Contains("_2l")) Draw_2l("low");
+            if(histname.Contains("_ee")) Draw_ee("low");
+            if(histname.Contains("_em")) Draw_em("low");
+            if(histname.Contains("_me")) Draw_me("low");
+            if(histname.Contains("_mm")) Draw_mm("low");
+        }else if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_")){
+            if(histname.Contains("_2l")) Draw_2l("high");
+            if(histname.Contains("_ee")) Draw_ee("high");
+            if(histname.Contains("_em")) Draw_em("high");
+            if(histname.Contains("_me")) Draw_me("high");
+            if(histname.Contains("_mm")) Draw_mm("high");
+        }
+    }else if(histname.Contains("Shape_alpha")){
+        Draw_Shape_alpha_lines_and_generaltext(histname);
     }
 }
 
@@ -150,6 +155,22 @@ void Shape_SR_plottext::Draw_lines_and_generaltext(TString mass_category)
         latex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
         latex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
     }
+}
+
+void Shape_SR_plottext::Draw_Shape_alpha_lines_and_generaltext(TString mass_category){
+    fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    if(mass_category == "low"){
+        latex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+    }
+    if(mass_category == "high"){
+        latex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.75*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+    }
+    if(histname.Contains("_ee")) latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
+    if(histname.Contains("_em")) latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
+    if(histname.Contains("_me")) latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
+    if(histname.Contains("_mm")) latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
 }
 
 

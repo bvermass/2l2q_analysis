@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
     int i_legends   = argc/2 + 2;
 
     std::vector<TFile*>  files;
-    bool is2016 = false, is2017 = false, is2018 = false, isData = false;
+    bool is2016 = false, is2017 = false, is2018 = false, isRun2 = false, isData = false;
     unsigned i_Data = 0;
     for(int i = i_rootfiles; i < i_legends; i++){
         TString filename = (TString)argv[i];
@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
     TLegend legend = get_legend(0.18, 0.84, 0.95, 0.93, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
     Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad);
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
@@ -226,7 +226,14 @@ int main(int argc, char * argv[])
                                     hist->SetMarkerColor(colors[i]);
                                     hist->SetLineColor(colors[i]);
                                 }
-                                legend.AddEntry(hist, legends[i], "l");
+                                TString legend_tmp = legends[i];
+                                legend_tmp.ReplaceAll("x",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                                legend_tmp.ReplaceAll("-03", "^{-3}");
+                                legend_tmp.ReplaceAll("-04", "^{-4}");
+                                legend_tmp.ReplaceAll("-05", "^{-5}");
+                                legend_tmp.ReplaceAll("-06", "^{-6}");
+                                legend_tmp.ReplaceAll("-07", "^{-7}");
+                                legend.AddEntry(hist, legend_tmp, "l");
                             }
                         }
                     }
