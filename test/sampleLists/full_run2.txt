@@ -140,6 +140,7 @@
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/MiniAOD2018/dilep_final.root                                 18610   -1      1
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MiniAOD2018/dilep_final.root                                    5765.4  -1      44
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MiniAOD2018/dilep_final.root                                     5765.4  -1      22
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8/MiniAOD2018/dilep_final.root                                              874800  -1      1
 
 #TTbar
 /pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MiniAOD2018/dilep_final.root                                                87.315  -1      127

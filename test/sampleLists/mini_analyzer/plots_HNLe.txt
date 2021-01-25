@@ -1,9 +1,0 @@
-mini_HNL_ee 10
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_e_massiveAndCKM_LO.root  HNL_M-10
-#/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-15_V-0.00244948974278_e_massiveAndCKM_LO.root   HNL_M-15
-#/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-2_V-0.0141421356237_e_massiveAndCKM_LO.root     HNL_M-2
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-0.0141421356237_e_massiveAndCKM_LO.root     HNL_M-3
-#/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-4_V-0.00547722557505_e_massiveAndCKM_LO.root    HNL_M-4
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO.root    HNL_M-5
-#/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-6_V-0.00202484567313_e_massiveAndCKM_LO.root    HNL_M-6
-/user/bvermass/public/2l2q_analysis/histograms/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-8_V-0.00151327459504_e_massiveAndCKM_LO.root    HNL_M-8

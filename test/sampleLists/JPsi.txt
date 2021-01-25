@@ -1,0 +1,1 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8/MiniAOD2018/dilep_final.root  874800 -1 1

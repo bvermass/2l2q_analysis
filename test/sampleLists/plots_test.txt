@@ -1,2 +1,2 @@
-2017D 1
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root DY_18
+hnlM12 1
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_SingleElectron_Run2016E.root data

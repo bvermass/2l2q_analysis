@@ -1,9 +1,8 @@
-mini_separateBkgWithData_2016 20
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2016.root                                                                     Diboson
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2016.root                                                                         Top
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2016.root                                                                      DY
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root                          W+Jets
-/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2016.root                                                                  Data_pred.
-#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-0.0141421356237_e_massiveAndCKM_LO_MiniAOD2016.root                 HNL_M-3
-#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-0.00282842712475_e_massiveAndCKM_LO_MiniAOD2016.root                HNL_M-5
-#/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-8_V-0.00151327459504_e_massiveAndCKM_LO_MiniAOD2016.root                HNL_M-8
+mini_separateBkgWithData_ee_2016_split_LowMass 10
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2016.root Diboson
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2016.root     Top
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2016.root  DY
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2016.root Data
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-combined_e_massiveAndCKM_LO_MiniAOD2016.root                 HNL_3GeV_V^2=x
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-combined_e_massiveAndCKM_LO_MiniAOD2016.root                HNL_5GeV_V^2=x

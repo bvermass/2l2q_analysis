@@ -16,9 +16,9 @@ for mass in masses:
             txtfilename = 'M-' + mass + '_' + flavor + '_' + year + '_majorana.txt'
             txtfile = open(txtfilename, 'w')
             txtfile.write('M-' + mass + '_' + flavor + '_' + year + '_majorana\n')
-            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-' + mass + '_V-combined_' + flavor + '_massiveAndCKM_LO_MiniAOD' + year + '.root HNL_M-' + mass + '\n')
-            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run' + year + '.root ABCD\n')
-            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_POGTightID/mini_analyzer/hists_mini_analyzer_SingleLepton_Run' + year + '.root Obs\n')
+            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-' + mass + '_V-combined_' + flavor + '_massiveAndCKM_LO_MiniAOD' + year + '.root HNL_M-' + mass + '\n')
+            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run' + year + '.root ABCD\n')
+            txtfile.write('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run' + year + '.root Obs\n')
             txtfile.close()
 
             run_all_file.write('./test/submit_plots.sh test/sampleLists/Combine/M-' + mass + '_' + flavor + '_' + year + '_majorana.txt 6 M-' + mass + '_' + flavor + '_' + year + '.out\n')

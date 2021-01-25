@@ -1,0 +1,6 @@
+IDcomp_Bkg_data_2016_ee 10
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_SingleElectron_Run2016.root                                                Data_POG
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_SingleElectron_Run2016.root                                                           Data_Mva
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_Background_MiniAOD2016.root                                            Bkg_POG
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_MiniAOD2016.root                                                       Bkg_Mva
+

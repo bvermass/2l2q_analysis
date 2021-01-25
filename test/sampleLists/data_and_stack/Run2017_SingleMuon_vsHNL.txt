@@ -1,0 +1,5 @@
+BDvsAC_data_2017_mm 10
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_SingleMuon_Run2017.root                                                          2017
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2017.root   HNL_3GeV_V^{2}=1e^{-4}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.000716240183179_mu_massiveAndCKM_LO_MiniAOD2017.root  HNL_6GeV_V^{2}=5.1e^{-7}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_mu_massiveAndCKM_LO_MiniAOD2017.root HNL_10GeV_V^{2}=5.7e^{-7}

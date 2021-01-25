@@ -1,0 +1,7 @@
+IDcomp_HNL_2017_mm 10
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2017.root M-3_c#tau-23_POG
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2017.root            M-3_c#tau-23_Mva
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00126095202129_mu_massiveAndCKM_LO_MiniAOD2017.root M-5_c#tau-92_POG
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-5_V-0.00126095202129_mu_massiveAndCKM_LO_MiniAOD2017.root            M-5_c#tau-92_Mva
+/user/bvermass/public/2l2q_analysis/histograms_POGTightID/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.000632455532034_mu_massiveAndCKM_LO_MiniAOD2017.root M-8_c#tau-31_POG
+/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-8_V-0.000632455532034_mu_massiveAndCKM_LO_MiniAOD2017.root            M-8_c#tau-31_Mva
