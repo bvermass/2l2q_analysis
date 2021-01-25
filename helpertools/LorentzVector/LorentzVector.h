@@ -12,6 +12,7 @@ class LorentzVector{
     friend double deltaEta( const LorentzVector&, const LorentzVector& );
     friend double deltaPhi( const LorentzVector&, const LorentzVector& );
     friend double deltaR( const LorentzVector&, const LorentzVector& );
+    friend double cosine3D( const LorentzVector&, const LorentzVector& );
 
     public:
         LorentzVector() = default;
@@ -62,5 +63,6 @@ std::ostream& operator<<( std::ostream&, const LorentzVector& );
 double deltaEta( const LorentzVector&, const LorentzVector& );
 double deltaPhi( const LorentzVector&, const LorentzVector& );
 double deltaR( const LorentzVector&, const LorentzVector& );
+double cosine3D( const LorentzVector&, const LorentzVector& );
 
 #endif

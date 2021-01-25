@@ -17,6 +17,8 @@ BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partit
     BkgEstimator_tree->Branch("_l1_IDSF_unc_sym",                  &_l1_IDSF_unc_sym,                  "_l1_IDSF_unc_sym/D");
     BkgEstimator_tree->Branch("_l2_IDSF",                          &_l2_IDSF,                          "_l2_IDSF/D");
     BkgEstimator_tree->Branch("_l2_IDSF_unc_sym",                  &_l2_IDSF_unc_sym,                  "_l2_IDSF_unc_sym/D");
+    BkgEstimator_tree->Branch("_TrackSF",                          &_TrackSF,                          "_TrackSF/D");
+    BkgEstimator_tree->Branch("_TrackSF_unc_sym",                  &_TrackSF_unc_sym,                  "_TrackSF_unc_sym/D");
     BkgEstimator_tree->Branch("_l1_ISOSF",                         &_l1_ISOSF,                         "_l1_ISOSF/D");
     BkgEstimator_tree->Branch("_l1_ISOSF_unc_sym",                 &_l1_ISOSF_unc_sym,                 "_l1_ISOSF_unc_sym/D");
     BkgEstimator_tree->Branch("_TriggerSF",                        &_TriggerSF,                        "_TriggerSF/D");
@@ -108,6 +110,8 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_l1_IDSF_unc_sym", &_l1_IDSF_unc_sym, &b__l1_IDSF_unc_sym);
     BkgEstimator_tree->SetBranchAddress("_l2_IDSF", &_l2_IDSF, &b__l2_IDSF);
     BkgEstimator_tree->SetBranchAddress("_l2_IDSF_unc_sym", &_l2_IDSF_unc_sym, &b__l2_IDSF_unc_sym);
+    BkgEstimator_tree->SetBranchAddress("_TrackSF", &_TrackSF, &b__TrackSF);
+    BkgEstimator_tree->SetBranchAddress("_TrackSF_unc_sym", &_TrackSF_unc_sym, &b__TrackSF_unc_sym);
     BkgEstimator_tree->SetBranchAddress("_l1_ISOSF", &_l1_ISOSF, &b__l1_ISOSF);
     BkgEstimator_tree->SetBranchAddress("_l1_ISOSF_unc_sym", &_l1_ISOSF_unc_sym, &b__l1_ISOSF_unc_sym);
     BkgEstimator_tree->SetBranchAddress("_TriggerSF", &_TriggerSF, &b__TriggerSF);

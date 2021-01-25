@@ -53,7 +53,7 @@ bool full_analyzer::IsMvaPromptElectronID(const unsigned i)
     if(fabs(_dxy[i]) >= 0.02)                       return false;
     if(fabs(_dz[i]) >= 0.04)                        return false;
     if(_relIso[i] >= 0.1)                           return false;
-    if(!_lPOGTight[i])                              return false;
+    //if(!_lPOGTight[i])                              return false;
     if(!passMvaFall17NoIso_WP90(i))                 return false;
 
     return true;
@@ -434,3 +434,40 @@ double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
     return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
 }
 
+double full_analyzer::get_displEleSF(unsigned missinghits){
+    if(_is2016){
+        if(missinghits == 0) return 1.025;
+        if(missinghits == 1) return 1.036;
+        if(missinghits == 2) return 0.861;
+        if(missinghits == 3) return 0.829;
+        if(missinghits == 4) return 0.795;
+        if(missinghits == 5) return 0.673;
+        if(missinghits == 6) return 0.512;
+        if(missinghits == 7) return 0.923;
+        return 0.923;//for more missinghits, use last value
+    }else if(_is2017){
+        if(missinghits == 0) return 0.980;
+        if(missinghits == 1) return 1.044;
+        if(missinghits == 2) return 1.021;
+        if(missinghits == 3) return 1.119;
+        if(missinghits == 4) return 1.050;
+        if(missinghits == 5) return 1.072;
+        if(missinghits == 6) return 1.243;
+        if(missinghits == 7) return 1.427;
+        return 1.427;//for more missinghits, use last value
+    }else if(_is2018){
+        if(missinghits == 0) return 0.997;
+        if(missinghits == 1) return 1.038;
+        if(missinghits == 2) return 0.983;
+        if(missinghits == 3) return 0.964;
+        if(missinghits == 4) return 1.003;
+        if(missinghits == 5) return 1.020;
+        if(missinghits == 6) return 1.101;
+        if(missinghits == 7) return 1.299;
+        return 1.299;//for more missinghits, use last value
+    }
+}
+
+double full_analyzer::get_displEleSF_unc(unsigned missinghits){
+    return std::abs(1-get_displEleSF(missinghits))/2;
+}

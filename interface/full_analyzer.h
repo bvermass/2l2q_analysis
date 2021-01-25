@@ -235,11 +235,11 @@ public :
    Double_t        _dz[10];   //[_nL]
    Double_t        _3dIP[10];   //[_nL]
    Double_t        _3dIPSig[10];   //[_nL]
-   Double_t        _lElectronSummer16MvaGP[10];
-   Double_t        _lElectronSummer16MvaHZZ[10];
-   Double_t        _lElectronMvaFall17v1NoIso[10];
-   Double_t        _lElectronMvaFall17Iso[10];
-   Double_t        _lElectronMvaFall17NoIso[10];
+   Float_t         _lElectronSummer16MvaGP[10];
+   Float_t         _lElectronSummer16MvaHZZ[10];
+   Float_t         _lElectronMvaFall17v1NoIso[10];
+   Float_t         _lElectronMvaFall17Iso[10];
+   Float_t         _lElectronMvaFall17NoIso[10];
    Bool_t          _lElectronPassEmu[10];   //[_nLight]
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
@@ -393,6 +393,9 @@ public :
    Double_t        _jetPt_JECUp[20];   //[_nJets]
    Double_t        _jetPt_JECDown[20];   //[_nJets]
    Double_t        _jetPt_Uncorrected[20];   //[_nJets]
+   Double_t        _jetSmearedPt[20];
+   Double_t        _jetSmearedPt_JERDown[20];
+   Double_t        _jetSmearedPt_JERUp[20];
    Double_t        _jetPt_L1[20];   //[_nJets]
    Double_t        _jetPt_L2[20];   //[_nJets]
    Double_t        _jetPt_L3[20];   //[_nJets]
@@ -798,6 +801,9 @@ public :
    TBranch        *b__jetPt_JECUp;   //!
    TBranch        *b__jetPt_JECDown;   //!
    TBranch        *b__jetPt_Uncorrected;
+   TBranch        *b__jetSmearedPt;
+   TBranch        *b__jetSmearedPt_JERDown;
+   TBranch        *b__jetSmearedPt_JERUp;
    TBranch        *b__jetPt_L1;
    TBranch        *b__jetPt_L2;
    TBranch        *b__jetPt_L3;
@@ -891,6 +897,9 @@ public :
    int i_thirdleading_jet;
    int i_jetl2;
 
+   // index of lepton in list of tracks
+   unsigned i_subleading_track;
+
    // numbers of leptons
    int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl;
 
@@ -902,10 +911,10 @@ public :
    double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D;
+   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D, highest_trackpt_weight, IVF_costracks;
    
    //Scale Factor readers
-   LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO;
+   LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO, *lsfreader_displ_m_ID, *lsfreader_displ_m_SV;
    PUWeightReader *puweightreader;
 
    // functions
@@ -914,6 +923,7 @@ public :
    PUWeightReader* get_PUWeightReader(TFile* input);
    LSFReader* get_LSFReader(TString flavor, TString type_SF);
    LSFReader* get_LSFReader_old(TString flavor, TString type_SF);
+   LSFReader* get_LSFReader_displ(TString flavor, TString type_SF);
    PFNReader get_PFNReader(int flavor);
    PFNReader get_PFNReader_unparametrized(int flavor);
    PFNReader get_PFNReader_unparametrized_LowMass(int flavor);
@@ -964,6 +974,8 @@ public :
     double   get_KVF_PVSVdist_2D(int);
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
+    double   get_displEleSF(unsigned missinghits);
+    double   get_displEleSF_unc(unsigned missinghits);
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i);

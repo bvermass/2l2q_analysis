@@ -131,8 +131,8 @@ if [[ choice -eq 3 ]]; then
                 done
             fi
         done < "$1"
+        echo "python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}"
         python test/submit_plots_tmp.py $choice $exec_name $subdirectory_name $partition ${samples[@]} ${legends[@]}
-        echo
     else
         echo -e "\n//////////////////////////////////"
         echo -e "//STACK PLOTS COMPILATION FAILED//"

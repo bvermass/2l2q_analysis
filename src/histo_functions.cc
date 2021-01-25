@@ -81,8 +81,9 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_IVF_ntracks"]                     = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_l1mass"]                      = new TH1F(prefix+"_IVF_l1mass", ";l_{1}+SV Mass [GeV];Events", 30, 0, 140);
-    (*hists)[prefix+"_IVF_massminl2"]                   = new TH1F(prefix+"_IVF_massminl2_K0", ";SV mass (without l_{2}) [GeV];Events", 20, 0, 20);
+    (*hists)[prefix+"_IVF_massminl2"]                   = new TH1F(prefix+"_IVF_massminl2", ";SV mass (without l_{2}) [GeV];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_massminl2_K0"]                = new TH1F(prefix+"_IVF_massminl2_K0", ";SV mass (without l_{2}) [GeV];Events", 20, 0.4, 0.6);
+    (*hists)[prefix+"_IVF_costracks"]                   = new TH1F(prefix+"_IVF_costracks", ";cos(PV-SV, SV tracks);Events", 40, 0.9, 1.0);
 
     if(extensive_plots){
         (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, 0, 3.14);
@@ -422,6 +423,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     (*hists)[prefix+"_IVF_l1mass"]->Fill(SVl1mass, event_weight);
     (*hists)[prefix+"_IVF_massminl2"]->Fill(SVmassminl2, event_weight);
     (*hists)[prefix+"_IVF_massminl2_K0"]->Fill(SVmassminl2, event_weight);
+    (*hists)[prefix+"_IVF_costracks"]->Fill(IVF_costracks, event_weight);
     
     if(extensive_plots){
         (*hists)[prefix+"_IVF_chi2"]->Fill(_IVF_chi2[i_subleading], event_weight);

@@ -190,3 +190,10 @@ double deltaR( const LorentzVector& lhs, const LorentzVector& rhs ){
     double dPhi = deltaPhi( lhs, rhs );
     return std::sqrt( dEta*dEta + dPhi*dPhi );
 }
+
+double cosine3D( const LorentzVector& lhs, const LorentzVector& rhs ){
+    double dotproduct = lhs.px()*rhs.px() + lhs.py()*rhs.py() + lhs.pz()*rhs.pz();
+    double lhsnorm    = sqrt(lhs.px()*lhs.px() + lhs.py()*lhs.py() + lhs.pz()*lhs.pz());
+    double rhsnorm    = sqrt(rhs.px()*rhs.px() + rhs.py()*rhs.py() + rhs.pz()*rhs.pz());
+    return dotproduct/(lhsnorm*rhsnorm);
+}

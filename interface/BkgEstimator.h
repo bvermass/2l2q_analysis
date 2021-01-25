@@ -32,6 +32,8 @@ class BkgEstimator
         double   _l1_IDSF_unc_sym;
         double   _l2_IDSF;
         double   _l2_IDSF_unc_sym;
+        double   _TrackSF;
+        double   _TrackSF_unc_sym;
         double   _l1_ISOSF;
         double   _l1_ISOSF_unc_sym;
         double   _TriggerSF;
@@ -105,6 +107,8 @@ class BkgEstimator
         TBranch     *b__l1_IDSF_unc_sym;
         TBranch     *b__l2_IDSF;
         TBranch     *b__l2_IDSF_unc_sym;
+        TBranch     *b__TrackSF;
+        TBranch     *b__TrackSF_unc_sym;
         TBranch     *b__l1_ISOSF;
         TBranch     *b__l1_ISOSF_unc_sym;
         TBranch     *b__TriggerSF;

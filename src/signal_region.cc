@@ -37,10 +37,28 @@ void full_analyzer::set_relevant_lepton_variables(){
             LorentzVector tracksum(0,0,0,0);
             LorentzVector l1_vec(_lPt[i_leading], _lEta[i_leading], _lPhi[i_leading], _lE[i_leading]);
             LorentzVector l2_vec(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
+            LorentzVector PVSV_vec;
+            PVSV_vec.setCartesianCoords(_IVF_x[i_subleading] - _PV_x, _IVF_y[i_subleading] - _PV_y, _IVF_z[i_subleading] - _PV_z, 0);
+            i_subleading_track = 0;
+            double mindR = 0.6;
             if(_IVF_ntracks[i_subleading] > 1){
                 for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
                     LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
                     tracksum += tmptrack;
+
+                    if(deltaR(tmptrack, l2_vec) < mindR){
+                        i_subleading_track = i_track;
+                        mindR = deltaR(tmptrack, l2_vec);
+                    }
+                }
+                double highest_trackpt = -1;
+                highest_trackpt_weight = 1.;
+                for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
+                    if(i_subleading_track == i_track) continue;
+                    if(_IVF_trackpt[i_subleading][i_track] > highest_trackpt){
+                        highest_trackpt_weight = sqrt(lsfreader_displ_m_SV->get_LSF(_IVF_trackpt[i_subleading][i_track]*2, IVF_PVSVdist_2D));
+                        highest_trackpt = _IVF_trackpt[i_subleading][i_track];
+                    }
                 }
             }
             SVmass          = tracksum.mass();
@@ -49,6 +67,7 @@ void full_analyzer::set_relevant_lepton_variables(){
             SVpt            = tracksum.pt();
             SVeta           = tracksum.eta();
             SVphi           = tracksum.phi();
+            IVF_costracks   = cosine3D(tracksum, PVSV_vec);
             IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_subleading);
             IVF_PVSVdist    = get_IVF_PVSVdist(i_subleading);
             if(!isData){
@@ -112,9 +131,12 @@ void full_analyzer::signal_regions(){
     if(_is2016){
         _trige                  = _HLT_Ele27_WPTight_Gsf;
         _trigmu                 = _HLT_IsoMu24 || _HLT_IsoTkMu24;
-    }else if(_is2017 or _is2018){
+    }else if(_is2018){
         _trige                  = _HLT_Ele32_WPTight_Gsf;
         _trigmu                 = _HLT_IsoMu24;
+    }else if(_is2017){
+        _trige                  = _HLT_Ele32_WPTight_Gsf;
+        _trigmu                 = _HLT_IsoMu24 || _HLT_IsoMu27 || _HLT_IsoMu24_eta2p1;
     }else{
         std::cout << "signal_regions.cc: did not correctly register data taking year!" << std::endl;
         _trige                  = false;

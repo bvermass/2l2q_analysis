@@ -8,9 +8,9 @@ void Skimmer::get_TightelectronID(bool* ID)
 			            i_lPt[i] > 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
-			            i_3dIPSig[i]   < 8 &&
+			            //i_3dIPSig[i]   < 8 &&
 			            //i_relIso[i]    < 0.1 &&
-                        (i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]) &&
+                        //(i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]) &&
 			            //i_lPOGMedium[i] && old ID, move to MVAtZqTTV16
 			            i_lElectronPassConvVeto[i] &&
 			            i_lElectronMissingHits[i] < 1;
@@ -53,7 +53,7 @@ void Skimmer::get_TightmuonID(bool* ID)
 			            i_lPt[i] > 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
-			            i_3dIPSig[i]   < 4 &&
+			            //i_3dIPSig[i]   < 4 &&
 			            //i_relIso[i]    < 0.1 &&
                         (i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]);
                         //i_lPOGMedium[i]; old ID, move to MVAtZqTTV16

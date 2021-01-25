@@ -62,7 +62,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt"}){
+        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt", "_2promptwithMll"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
@@ -106,6 +106,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     lsfreader_m_ID   = get_LSFReader("mu", "ID");
     lsfreader_m_IDsys = get_LSFReader("mu", "IDsys");
     lsfreader_m_ISO  = get_LSFReader("mu", "ISO");
+
+    lsfreader_displ_m_ID = get_LSFReader_displ("mu", "IDISO");
+    lsfreader_displ_m_SV = get_LSFReader_displ("mu", "SV");
 
 
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);
@@ -218,6 +221,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //Calculate Event weight
         if(!isData){
             ev_weight = _weight;
+            if(isSignal) ev_weight *= 1.089;//HNL LO xsec uncertainty
             ev_weight *= puweightreader->get_PUWeight_Central(_nTrueInt);
             if(_lFlavor[i_leading] == 0){//electron scale factors
                 ev_weight *= lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
@@ -227,6 +231,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 ev_weight *= lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
                 ev_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
             }
+            if(_lFlavor[i_subleading] == 0){//displaced electron scale factors
+                ev_weight *= get_displEleSF(_lElectronMissingHits[i_subleading]);
+            }else if(_lFlavor[i_subleading] == 1){//displaced muon scale factors
+                ev_weight *= lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+                ev_weight *= sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
+            }
+            ev_weight *= highest_trackpt_weight;//displaced tracks scale factor (in src/signal_regions.cc)
         }else {
             ev_weight = 1.;
         }
@@ -298,6 +309,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         signal_regions();
         if(_l1l2 and _lPt[i_subleading] > 20){
             fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
+            if(mll > 10) fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2promptwithMll", ev_weight);
         }
 
         ++loop_counter;

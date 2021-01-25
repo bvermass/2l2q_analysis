@@ -326,6 +326,22 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'SingleLepton_Run2018.root', Lepton_Run2018_list)) != 0:
             all_good = False
 
+        Lepton_Run2_list = [basename + 'SingleLepton_Run2016.root',
+                        basename + 'SingleLepton_Run2017.root',
+                        basename + 'SingleLepton_Run2018.root']
+        if os.system(merge_files(basename + 'SingleLepton_Run2.root', Lepton_Run2_list)) != 0:
+            all_good = False
+        Lepton_Run2_list = [basename + 'Top_MiniAOD2016.root',
+                        basename + 'Top_MiniAOD2017.root',
+                        basename + 'Top_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Top_MiniAODRun2.root', Lepton_Run2_list)) != 0:
+            all_good = False
+        Lepton_Run2_list = [basename + 'Background_MiniAOD2016.root',
+                        basename + 'Background_MiniAOD2017.root',
+                        basename + 'Background_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Background_MiniAODRun2.root', Lepton_Run2_list)) != 0:
+            all_good = False
+
     return all_good
 
 
@@ -339,10 +355,10 @@ n_hadds = 10
 
 
 base_paths = []
-base_paths.append('/user/bvermass/public/2l2q_analysis/histograms/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees/HNLtagger_electron/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees/HNLtagger_muon/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_electron/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_muon/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/')
 
 hadd_counter = 0
 

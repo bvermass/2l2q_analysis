@@ -129,6 +129,33 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
     return lsfreader;
 }
 
+LSFReader* full_analyzer::get_LSFReader_displ(TString flavor, TString type_SF)
+{
+    TString filename_LSF = local_dir + "data/LeptonScaleFactors/displacedSF/";
+    TString histname_LSF = "", histname_sys = "";
+    TString pt_eta_config;
+    double pt_max;
+    if(flavor == "mu" and type_SF == "SV"){
+        if(_is2016) filename_LSF += "SV_SF_16.root";
+        if(_is2017) filename_LSF += "SV_SF_17.root";
+        if(_is2018) filename_LSF += "SV_SF_18.root";
+        histname_LSF  = "SV_SF_lxy_pt";
+        histname_sys  = "";
+        pt_eta_config = "lxy_pt";
+        pt_max        = 20;
+    }else if(flavor == "mu" and type_SF == "IDISO"){
+        if(_is2016) filename_LSF += "NUM_displacedIso_DEN_trackerMuons_abseta_pt_16.root";
+        if(_is2017) filename_LSF += "NUM_displacedIso_DEN_trackerMuons_abseta_pt_17.root";
+        if(_is2018) filename_LSF += "NUM_displacedIso_DEN_trackerMuons_abseta_pt_18.root";
+        histname_LSF  = "NUM_displacedIso_DEN_trackerMuons_abseta_pt";
+        histname_sys  = "NUM_displacedIso_DEN_trackerMuons_abseta_pt_combined_syst";
+        pt_eta_config = "abseta_pt";
+        pt_max        = 120;
+    }
+    LSFReader *lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config, pt_max);
+    return lsfreader;
+}
+
 PFNReader full_analyzer::get_PFNReader(int flavor)
 {
     unsigned highlevel_shape = 25;
@@ -615,6 +642,9 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_jetPt_JECUp", _jetPt_JECUp, &b__jetPt_JECUp);
    fChain->SetBranchAddress("_jetPt_JECDown", _jetPt_JECDown, &b__jetPt_JECDown);
    fChain->SetBranchAddress("_jetPt_Uncorrected", _jetPt_Uncorrected, &b__jetPt_Uncorrected);
+   fChain->SetBranchAddress("_jetSmearedPt", _jetSmearedPt, &b__jetSmearedPt);
+   fChain->SetBranchAddress("_jetSmearedPt_JERDown", _jetSmearedPt_JERDown, &b__jetSmearedPt_JERDown);
+   fChain->SetBranchAddress("_jetSmearedPt_JERUp", _jetSmearedPt_JERUp, &b__jetSmearedPt_JERUp);
    fChain->SetBranchAddress("_jetPt_L1", _jetPt_L1, &b__jetPt_L1);
    fChain->SetBranchAddress("_jetPt_L2", _jetPt_L2, &b__jetPt_L2);
    fChain->SetBranchAddress("_jetPt_L3", _jetPt_L3, &b__jetPt_L3);
