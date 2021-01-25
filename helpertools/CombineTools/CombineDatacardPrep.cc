@@ -52,9 +52,9 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
-    std::string general_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
-    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
-    std::string quadB_pathname   = (std::string)make_general_pathname("combine_POGTightID_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
+    std::string general_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
+    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
+    std::string quadB_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
     gSystem->Exec("mkdir -p " + (TString)quadB_pathname);
@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist_ref->GetName();
 
 
-            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA") and !histname.Contains("ABCDstat")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA") and !histname.Contains("ABCDstat") and !histname.Contains("_sys")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -123,7 +123,28 @@ int main(int argc, char * argv[])
 
                 systNames.push_back((std::string)"lumi_"+year);
                 systDist.push_back("lnN");
-                systUnc.push_back({1.025,0});
+                if(year == "16" or year == "18") systUnc.push_back({1.025,0});
+                else if(year == "17") systUnc.push_back({1.023,0});
+
+                systNames.push_back("xsecNorm");
+                systDist.push_back("lnN");
+                systUnc.push_back({1.0386, 0});
+
+                systNames.push_back("Trigger_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("PileUp_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("l1ID_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("l2ID_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("Track_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
 
                 std::vector<TH1F*> hists_signal_sys;
                 std::vector<std::vector<TH1F*>> hists_bkg_sys;
@@ -133,18 +154,39 @@ int main(int argc, char * argv[])
                 std::vector<std::string> tmpnames_bkg_sys;
                 for(unsigned i = 0; i < systNames.size(); i++){
                     if(systDist[i] != "shapeN") continue;
-                    if(systUnc[i][0] != 0){
-                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname + "_" + systNames[i] + "Up"));
+                    if(systUnc[i][0] != 0){//signal systs
+                        TString histname_up = histname;
+                        TString histname_down = histname;
+                        histname_up.ReplaceAll("Shape_SR", systNames[i] + "Up_Shape_SR");
+                        histname_down.ReplaceAll("Shape_SR", systNames[i] + "Down_Shape_SR");
+                        if(systNames[i].find("PileUp") != std::string::npos){
+                            systNames[i].replace(systNames[i].find("PileUp_"), systNames[i].find("sys"), "PileUp_"+year);
+                        }
+                        std::cout << "systnames: " << systNames[i] << std::endl;
+                        std::cout << "histname: " << histname_up << std::endl;
+                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_up));
+                        std::cout << "address: " << hists_signal_sys.back() << std::endl;
                         histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
-                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname + "_" + systNames[i] + "Down"));
+                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_down));
                         histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                     }
-                    if(systUnc[i][1] != 0){
+                    if(systUnc[i][1] != 0){//data-driven prediction systs
                         tmp_bkg_sys.clear();
                         tmpnames_bkg_sys.clear();
-                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_data + "_" + systNames[i] + "Up"));
+                        TString histname_up = histname_data;
+                        TString histname_down = histname_data;
+                        histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up");
+                        histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");
+                        //if(systNames[i].find("ABCDstat") != std::string::npos){
+                        //    histname_up.ReplaceAll("TightmlSV", "CR1mlSV");
+                        //    histname_down.ReplaceAll("TightmlSV", "CR1mlSV");
+                        //}
+                        std::cout << "systnames: " << systNames[i] << std::endl;
+                        std::cout << "histname: " << histname_up << std::endl;
+                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_up));
+                        std::cout << "address: " << tmp_bkg_sys.back() << std::endl;
                         tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Up");
-                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_data + "_" + systNames[i] + "Down"));
+                        tmp_bkg_sys.push_back((TH1F*)files_bkg[0]->Get(histname_down));
                         tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Down");
                         hists_bkg_sys.push_back(tmp_bkg_sys);
                         histnames_bkg_sys.push_back(tmpnames_bkg_sys);
@@ -213,13 +255,15 @@ void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_dat
     hist_data->Write("data_obs");
     for(unsigned i = 0; i < hists_bkg.size(); i++){
         hists_bkg[i]->Write(bkgNames[i].c_str());
-        for(unsigned j = 0; j < hists_bkg_sys[i].size(); j++){
-            hists_bkg_sys[i][j]->Write(bkgNames_sys[i][j].c_str());
+        if(hists_bkg_sys.size() > 0){
+            for(unsigned j = 0; j < hists_bkg_sys[i].size(); j++){
+                hists_bkg_sys[i][j]->Write(bkgNames_sys[i][j].c_str());
+            }
         }
     }
-    //for(unsigned i = 0; i < hist_signal_sys.size(); i++){
-    //    hist_signal_sys[i]->Write(sigName_sys[i].c_str());
-    //}
+    for(unsigned i = 0; i < hist_signal_sys.size(); i++){
+        hist_signal_sys[i]->Write(sigName_sys[i].c_str());
+    }
 
     shapeSR_file->Close();
 }

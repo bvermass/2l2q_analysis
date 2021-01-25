@@ -4,8 +4,8 @@ bool verbose = false;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    if(argc != 3){
-        std::cout << "Command should be ./test [combine_rootfile_sampleList] [flavor_mass_otherId]" << std::endl;
+    if(argc < 3){
+        std::cout << "Command should be ./test [combine_rootfile_sampleList] [flavor_mass_otherId] [extra_subdir=""]" << std::endl;
         return 1;
     }
     //Argument 1: text file containing all necessary combine rootfiles to analyze
@@ -13,12 +13,19 @@ int main(int argc, char * argv[])
     //      plot will be made of signal strength as a function of coupling
     TString txtfilename = (TString)argv[1];
     TString specific_dir = (TString)argv[2];
+    TString extra_subdir = "";
+    if(argc > 3) extra_subdir = ((TString)argv[3]) + "/";
 
-    TString basedir = txtfilename(0, txtfilename.Index("datacards"));
-    gSystem->Exec("mkdir -p " + basedir + "plots/");
+    TString basedir = "";
+    if(txtfilename.Contains("datacards")) basedir = txtfilename(0, txtfilename.Index("datacards"));
+    else if(txtfilename.Contains("combine_output")) basedir = txtfilename(0, txtfilename.Index("combine_output"));
+
+    TString plotbasedir = basedir + "plots/" + extra_subdir;
+    gSystem->Exec("mkdir -p " + plotbasedir);
 
     std::cout << std::endl << "--------------------" << std::endl;
     std::cout << "Base directory: " << basedir << std::endl;
+    std::cout << "Base plot directory: " << plotbasedir << std::endl;
     std::cout << "flavor and mass: " << specific_dir << std::endl;
     
     //From txtfile, read the combine output root files to be used for the plot
@@ -41,14 +48,17 @@ int main(int argc, char * argv[])
     std::map<double, std::map<double, std::map<float, double>>> signal_strengths; //<M, <V2, <quantile, limit>>
     for(unsigned i = 0; i < combine_outputs.size(); i++){
         if(verbose) std::cout << "processing " << combine_outputs[i]->combine_filename << std::endl;
-        signal_strengths[combine_outputs[i]->M][combine_outputs[i]->V2] = combine_outputs[i]->GetSignalStrengths();
+        std::map<float, double> sigstr = combine_outputs[i]->GetSignalStrengths();
+        if(sigstr.size() == 5){
+            signal_strengths[combine_outputs[i]->M][combine_outputs[i]->V2] = sigstr;
+        }
     }
     if(verbose) PrintAllSignalStrengths(signal_strengths);
 
 
     std::cout << "--------------------" << std::endl << "Plotting Signal Strengths vs. coupling for single mass" << std::endl;
     for(auto& sr_M : signal_strengths){
-        PlotSignalStrengths(sr_M.second, basedir + "plots/SignalStrength_" + specific_dir + "M-" + std::to_string((int)sr_M.first) + ".png", "|V|^{2}", "Signal Strength");
+        PlotSignalStrengths(sr_M.second, plotbasedir + "SignalStrength_" + specific_dir + "M-" + std::to_string((int)sr_M.first) + ".png", "|V|^{2}", "Signal Strength");
     }
 
     std::cout << "--------------------" << std::endl << "Getting exclusion limits and plotting final exclusion plot" << std::endl;//ONLY LOWER LIMIT, NO UPPER LIMIT YET
@@ -66,19 +76,30 @@ int main(int argc, char * argv[])
     }
     std::map<double, std::map<float, double>> upper_exclusion_limits;//<mass, <quantile, V2(where limit is 1, approached from below)>>
     for(auto& sr_M : signal_strengths){
-        if(CheckGoesBelow1(sr_M.second, 0.025))     upper_exclusion_limits[sr_M.first][0.025] = GetUpperExclusionLimit(sr_M.second, 0.025);
-        else if(CheckGoesBelow1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.025] = GetLowerExclusionLimit(sr_M.second, 0.50);
-        if(CheckGoesBelow1(sr_M.second, 0.16))      upper_exclusion_limits[sr_M.first][0.16] = GetUpperExclusionLimit(sr_M.second, 0.16);
-        else if(CheckGoesBelow1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.16] = GetLowerExclusionLimit(sr_M.second, 0.50);
-        if(CheckGoesBelow1(sr_M.second, 0.50))      upper_exclusion_limits[sr_M.first][0.50] = GetUpperExclusionLimit(sr_M.second, 0.50);
-        if(CheckGoesBelow1(sr_M.second, 0.84))      upper_exclusion_limits[sr_M.first][0.84] = GetUpperExclusionLimit(sr_M.second, 0.84);
-        else if(CheckGoesBelow1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.84] = GetLowerExclusionLimit(sr_M.second, 0.50);
-        if(CheckGoesBelow1(sr_M.second, 0.975))     upper_exclusion_limits[sr_M.first][0.975] = GetUpperExclusionLimit(sr_M.second, 0.975);
-        else if(CheckGoesBelow1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.975] = GetLowerExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, 0.025))     upper_exclusion_limits[sr_M.first][0.025] = GetUpperExclusionLimit(sr_M.second, 0.025);
+        else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.025] = GetUpperExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, 0.16))      upper_exclusion_limits[sr_M.first][0.16] = GetUpperExclusionLimit(sr_M.second, 0.16);
+        else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.16] = GetUpperExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, 0.50))      upper_exclusion_limits[sr_M.first][0.50] = GetUpperExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, 0.84))      upper_exclusion_limits[sr_M.first][0.84] = GetUpperExclusionLimit(sr_M.second, 0.84);
+        else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.84] = GetUpperExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, 0.975))     upper_exclusion_limits[sr_M.first][0.975] = GetUpperExclusionLimit(sr_M.second, 0.975);
+        else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.975] = GetUpperExclusionLimit(sr_M.second, 0.50);
     }
 
-    PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, basedir + "plots/ExclusionLimit_" + specific_dir + ".png", "M_{HNL} [GeV]", "|V|^{2}");
-    WriteExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, basedir + "Limits_" + specific_dir + ".txt");
+    if(verbose){
+        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975}){
+            std::cout << "Lower Exclusion Line " << q << ": ";
+            PrintExclusionLine(lower_exclusion_limits, q);
+        }
+        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975}){
+            std::cout << "Upper Exclusion Line " << q << ": ";
+            PrintExclusionLine(upper_exclusion_limits, q);
+        }
+    }
+
+    PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "ExclusionLimit_" + specific_dir + ".png", "M_{HNL} [GeV]", "|V|^{2}");
+    WriteExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_" + specific_dir + ".txt");
 }
 #endif
 
@@ -86,6 +107,15 @@ int main(int argc, char * argv[])
 bool CheckGoesBelow1(std::map<double, std::map<float, double>> signal_strengths, float quantile){
     for(auto& sr_V2 : signal_strengths){
         if(sr_V2.second[quantile] < 1) return true;
+    }
+    return false;
+}
+
+bool CheckGoesBackAbove1(std::map<double, std::map<float, double>> signal_strengths, float quantile){
+    bool passed_lowerlimit = false;
+    for(auto& sr_V2 : signal_strengths){
+        if(sr_V2.second[quantile] < 1) passed_lowerlimit = true;
+        if(passed_lowerlimit and sr_V2.second[quantile] > 1) return true;
     }
     return false;
 }
@@ -114,8 +144,8 @@ double GetUpperExclusionLimit(std::map<double, std::map<float, double>> signal_s
         }
     }
 
-    if(passed_upperlimit) return (x2 - x1 + y2*x1 - y1*x2) / (y2 - y1);//linear interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1)
-    else return x1;
+    if(passed_upperlimit) return (x2 - x1 + y2*x1 - y1*x2) / (y2 - y1);//linear interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1sSection(directory)
+    else return 0.09;
 }
 
 double GetLowerExclusionLimit(std::map<double, std::map<float, double>> signal_strengths, float quantile)
@@ -141,20 +171,24 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
 
-    TCanvas* c = new TCanvas("c","",700,700);
+    if(plotfilename.Contains("_mm_")) Yaxistitle.ReplaceAll("V","V_{#{mu}N}");
+    else if(plotfilename.Contains("_ee_")) Yaxistitle.ReplaceAll("V","V_{eN}");
+    else if(plotfilename.Contains("_2l_")) Yaxistitle.ReplaceAll("V","V_{lN}");
+
+    TCanvas* c = new TCanvas("c","",1000,1000);
     c->cd();
 
     // Make the pad that will contain the plot
     TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
     pad->Draw();
     pad->cd();
-    pad->SetLogx(1);
+    pad->SetLogx(0);
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
 
     std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central;
     for(auto& sr_V2 : lower_exclusion_limit){
@@ -185,8 +219,11 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_lower_2s_graph->SetFillStyle(1001);
     sr_lower_2s_graph->GetXaxis()->SetTitle(Xaxistitle);
     sr_lower_2s_graph->GetYaxis()->SetTitle(Yaxistitle);
-    sr_lower_2s_graph->GetXaxis()->SetMoreLogLabels();
-    sr_lower_2s_graph->GetYaxis()->SetMoreLogLabels();
+    sr_lower_2s_graph->GetYaxis()->SetTitleOffset(1.4);
+    sr_lower_2s_graph->GetYaxis()->SetLabelSize(0.042);
+    sr_lower_2s_graph->GetXaxis()->SetLabelSize(0.042);
+    //sr_lower_2s_graph->GetXaxis()->SetMoreLogLabels();
+    //sr_lower_2s_graph->GetYaxis()->SetMoreLogLabels();
 
     TGraphAsymmErrors* sr_lower_1s_graph = new TGraphAsymmErrors(V2_lower.size(), &V2_lower[0], &sr_lower_central[0], &V2_lower_err[0], &V2_lower_err[0], &sr_lower_1s_down[0], &sr_lower_1s_up[0]);
     sr_lower_1s_graph->SetFillColor(kGreen+1);
@@ -207,8 +244,8 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
 
 
     sr_lower_2s_graph->Draw("A3");
-    sr_lower_2s_graph->GetXaxis()->SetRangeUser(1,13);
-    sr_lower_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-1);
+    sr_lower_2s_graph->GetXaxis()->SetRangeUser(0,15);
+    sr_lower_2s_graph->GetYaxis()->SetRangeUser(2e-8, 0.3);
 
     sr_lower_1s_graph->Draw("3 same");
     sr_lower_central_graph->Draw("L same");
@@ -218,6 +255,62 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_upper_central_graph->Draw("L same");
 
     CMSandLumi->Draw();
+    double ymin = 0.78, xmin = 0.17;
+    if(plotfilename.Contains("_mm_")) ymin = 0.76;
+    if(plotfilename.Contains("_2l_")) xmin = 0.6;
+    TLegend legend(xmin, ymin, 0.93, 0.95);
+    if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.SetNColumns(2);
+    legend.SetTextSize(0.025);
+    legend.SetFillStyle(0);
+    
+    //Add external limits from other/older analyses
+    TGraphAsymmErrors* delphi_prompt                    = get_external_limit("delphi_prompt", kBlue, 10, 3);
+    TGraphAsymmErrors* delphi_displaced                 = get_external_limit("delphi_displaced", kBlue+2, 9, 3);
+    TGraphAsymmErrors* atlas_prompt_muon                = get_external_limit("atlas_prompt_muon", kGreen+3, 7, 3);
+    TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
+    TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
+    TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
+    TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kRed, 4, 3);
+    TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kRed, 3, 3);
+    TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kRed+2, 10, 3);
+    TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kRed+2, 10, 3);
+    
+    if(plotfilename.Contains("_mm_")){
+        delphi_prompt->Draw("L same");
+        delphi_displaced->Draw("L same");
+        atlas_prompt_muon->Draw("L same");
+        atlas_displaced_muon_LNV->Draw("L same");
+        atlas_displaced_muon_LNC->Draw("L same");
+        cms_trilepton_prompt_muon->Draw("L same");
+        cms_trilepton_displaced_muon->Draw("L same");
+    }else if(plotfilename.Contains("_ee_")){
+        delphi_prompt->Draw("L same");
+        delphi_displaced->Draw("L same");
+        atlas_prompt_electron->Draw("L same");
+        cms_trilepton_prompt_electron->Draw("L same");
+        cms_trilepton_displaced_electron->Draw("L same");
+    }
+
+    if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
+    legend.AddEntry(sr_lower_central_graph, "Expected", "l");
+    if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_displaced, "DELPHI displaced", "l");
+    legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
+    if(plotfilename.Contains("_mm_"))      legend.AddEntry(atlas_prompt_muon, "ATLAS 3l prompt (2016)", "l");
+    else if(plotfilename.Contains("_ee_")) legend.AddEntry(atlas_prompt_electron, "ATLAS 3l prompt (2016)", "l");
+
+    legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
+
+    if(plotfilename.Contains("_mm_")){
+        legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
+        legend.AddEntry(cms_trilepton_prompt_muon, "CMS 3l prompt (2016)", "l");
+        legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
+        legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
+    }else if(plotfilename.Contains("_ee_")){
+        legend.AddEntry(cms_trilepton_prompt_electron, "CMS 3l prompt (2016)", "l");
+        legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
+    }
+    legend.Draw("same");
+
 
     pad->Modified();
     c->Print(plotfilename);
@@ -231,9 +324,9 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
 
-    TCanvas* c = new TCanvas("c","",700,700);
+    TCanvas* c = new TCanvas("c","",1000,1000);
     c->cd();
 
     // Make the pad that will contain the plot
@@ -244,7 +337,7 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
 
     std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central;
     for(auto& sr_V2 : lower_exclusion_limit){
@@ -304,8 +397,8 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
 
 
     sr_lower_2s_graph->Draw("A3");
-    sr_lower_2s_graph->GetXaxis()->SetRangeUser(1,13);
-    sr_lower_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-1);
+    sr_lower_2s_graph->GetXaxis()->SetRangeUser(0,15);
+    sr_lower_2s_graph->GetYaxis()->SetRangeUser(2e-8, 0.3);
 
     sr_lower_1s_graph->Draw("3 same");
     sr_lower_central_graph->Draw("L same");
@@ -378,7 +471,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
 
     sr_2s_graph->Draw("A3");
     if(plotfilename.Contains("ExclusionLimit")){
-        sr_2s_graph->GetXaxis()->SetRangeUser(1,13);
+        sr_2s_graph->GetXaxis()->SetRangeUser(0,15);
         sr_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-1);
     }
     sr_1s_graph->Draw("3 same");
@@ -438,6 +531,14 @@ CombineOutput::~CombineOutput()
     delete combine_tree;
     combine_file->Close();
     delete combine_file;
+}
+
+void PrintExclusionLine(std::map<double, std::map<float, double>> exclusion_line, double quantile)
+{
+    std::cout << "M - V2: ";
+    for(auto& line_M : exclusion_line){
+        std::cout << line_M.first << " - " << line_M.second[quantile] << " | ";
+    }std::cout << std::endl;
 }
 
 void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, double>>> signal_strengths)

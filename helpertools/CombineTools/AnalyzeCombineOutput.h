@@ -30,9 +30,11 @@ int main(int argc, char * argv[]);
 double GetUpperExclusionLimit(std::map<double, std::map<float, double>> signal_strengths, float quantile);
 double GetLowerExclusionLimit(std::map<double, std::map<float, double>> signal_strengths, float quantile);
 bool CheckGoesBelow1(std::map<double, std::map<float, double>> signal_strengths, float quantile);
+bool CheckGoesBackAbove1(std::map<double, std::map<float, double>> signal_strengths, float quantile);
 void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
+void PrintExclusionLine(std::map<double, std::map<float, double>> exclusion_line, double quantile);
 void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, double>>> signal_strengths);
 void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
 
@@ -66,4 +68,19 @@ class CombineOutput
         TBranch *b_iSeed;
         TBranch *b_quantileExpected;
 };
+
+//In ExternalLimits.cc
+TGraphAsymmErrors* get_external_limit(TString identifier, Color_t lcolor, Style_t lstyle, Width_t lwidth);
+std::vector<std::vector<double>> get_limitpoints(TString identifier);
+std::vector<std::vector<double>> get_delphi_prompt();
+std::vector<std::vector<double>> get_delphi_displaced();
+std::vector<std::vector<double>> get_atlas_prompt_electron();
+std::vector<std::vector<double>> get_atlas_prompt_muon();
+std::vector<std::vector<double>> get_atlas_displaced_muon_LNV();
+std::vector<std::vector<double>> get_atlas_displaced_muon_LNC();
+std::vector<std::vector<double>> get_cms_trilepton_prompt_muon();
+std::vector<std::vector<double>> get_cms_trilepton_prompt_electron();
+std::vector<std::vector<double>> get_cms_trilepton_displaced_muon();
+std::vector<std::vector<double>> get_cms_trilepton_displaced_electron();
+
 #endif

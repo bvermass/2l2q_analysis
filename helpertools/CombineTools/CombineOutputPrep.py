@@ -1,14 +1,15 @@
 import os,sys
 
-if len(sys.argv) != 4:
-    print('Wrong number of arguments, input should be: python CombineOutputPrep.py [abs_path_combine_output] [tag_flavor] [tag_year]')
+if len(sys.argv) != 5:
+    print('Wrong number of arguments, input should be: python CombineOutputPrep.py [abs_path_combine_output] [tag_flavor] [tag_year] [outputname]')
     sys.exit()
 
 
 combine_files_path = sys.argv[1]
 tag_flavor = sys.argv[2]
 tag_year   = sys.argv[3]
-txtfilename = combine_files_path + tag_flavor + tag_year + '.txt'
+outputname = sys.argv[4]
+txtfilename = combine_files_path + outputname + '.txt'
 #txtfilename = combine_files_path + combine_files_path.split('/')[-2] + '.txt'
 print 'Filling text file: {}'.format(txtfilename)
 txtfile = open(txtfilename, 'w')

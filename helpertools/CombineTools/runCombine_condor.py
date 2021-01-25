@@ -20,7 +20,7 @@ if len(sys.argv) != 2:
     print 'command should be: python runCombine.py [filesperJob]'
     sys.exit()
 
-datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_POGTightID_unparametrized_LowAndHighMass/datacards/'
+datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
 filesperJob = int(sys.argv[1])
 file_counter    = 0
 script_counter  = 0
