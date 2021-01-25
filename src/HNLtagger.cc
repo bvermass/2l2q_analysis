@@ -8,7 +8,7 @@
 HNLtagger::HNLtagger(TString filename, TString type_and_flavor, int partition, int partitionjobnumber)
 {
     //HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
-    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_POGTightID/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
+    HNLtagger_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/" + type_and_flavor + "/", type_and_flavor, partition, partitionjobnumber, true);
     HNLtagger_file = new TFile(HNLtagger_filename, "recreate");
     HNLtagger_tree = new TTree("HNLtagger_tree", "Jetl2 constituent information for HNL tagger");
     HNLtagger_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");

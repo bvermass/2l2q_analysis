@@ -85,7 +85,7 @@ int main(int argc, char * argv[]){
     }
 
     //booleans to decide which lists I want to make
-    bool make_full_analyzer_lists = false;
+    bool make_full_analyzer_lists = true;
     bool make_mini_analyzer_lists = false;
     bool make_HNLtagger_list = false;
     bool make_full_analyzer_input_list = false;
@@ -137,8 +137,8 @@ int main(int argc, char * argv[]){
             if(make_full_analyzer_lists){
                 add_HNLfile_to_BkgEstimator_HNLsampleList(HNLfilename);
 
-                std::string RewValList = "../../test/sampleLists/RewVal/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
-                std::string outputfilename = (std::string)make_outputfilename(HNLfilename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID/", "hists_full_analyzer", 1, 0, true);
+                std::string RewValList = "../../test/sampleLists/RewVal/POGTightID_unparametrized_LowAndHighMass/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
+                std::string outputfilename = (std::string)make_outputfilename(HNLfilename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID_unparametrized_LowAndHighMass/", "hists_full_analyzer", 1, 0, true);
 
                 if(!RewValListExists[RewValList]){
                     RewValListExists[RewValList] = true;
@@ -153,7 +153,7 @@ int main(int argc, char * argv[]){
             // mini_analyzer output
             if(make_mini_analyzer_lists){
                 if(HNLfilename.find("trees_POGTightID") != std::string::npos){
-                    std::string miniList = "../../test/sampleLists/RewVal/mini_analyzer/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
+                    std::string miniList = "../../test/sampleLists/RewVal/mini_analyzer/POGTightID_unparametrized_LowAndHighMass/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
                     std::cout << miniList << std::endl;
                     TString HNLfilename_copy = get_mini_analyzer_outputfilename(HNLfilename);
                     std::string mini_outputfilename = (std::string) HNLfilename_copy;
