@@ -272,8 +272,8 @@ def merge_similar_samples( base_path ):
         ST_2018_list = [basename + 'ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-madgraph-pythia8_MiniAOD2018.root',
                    basename + 'ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8_MiniAOD2018.root',
                    basename + 'ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8_MiniAOD2018.root',
-                   basename + 'ST_t-channel_top_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
-                   basename + 'ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                   #basename + 'ST_t-channel_top_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
+                   #basename + 'ST_t-channel_antitop_5f_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
                    basename + 'ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root',
                    basename + 'ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8_MiniAOD2018.root']
         if os.system(merge_files(basename + 'ST_MiniAOD2018.root', ST_2018_list)) != 0:

@@ -173,7 +173,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     gROOT->ForceStyle();
     bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
 
-    if(plotfilename.Contains("_mm_")) Yaxistitle.ReplaceAll("V","V_{#{mu}N}");
+    if(plotfilename.Contains("_mm_")) Yaxistitle.ReplaceAll("V","V_{#mu N}");
     else if(plotfilename.Contains("_ee_")) Yaxistitle.ReplaceAll("V","V_{eN}");
     else if(plotfilename.Contains("_2l_")) Yaxistitle.ReplaceAll("V","V_{lN}");
 
@@ -428,7 +428,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018");
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -441,7 +441,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     pad->SetLogy(1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
 
     std::vector<double> V2, V2_err, sr_2s_up, sr_2s_down, sr_1s_up, sr_1s_down, sr_central;
     for(auto& sr_V2 : signal_strengths){

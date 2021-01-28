@@ -64,22 +64,16 @@ Shape_SR_plottext::~Shape_SR_plottext(){}
 
 void Shape_SR_plottext::Draw(TString histname)
 {
+    TString mass_category = "low";
+    if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_") or histname.Contains("_M-15_")) mass_category = "high";
     if(histname.Contains("Shape_SR")){
-        if(histname.Contains("_M-1_") or histname.Contains("_M-2_") or histname.Contains("_M-3_") or histname.Contains("_M-4_") or histname.Contains("_M-5_")){
-            if(histname.Contains("_2l")) Draw_2l("low");
-            if(histname.Contains("_ee")) Draw_ee("low");
-            if(histname.Contains("_em")) Draw_em("low");
-            if(histname.Contains("_me")) Draw_me("low");
-            if(histname.Contains("_mm")) Draw_mm("low");
-        }else if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_")){
-            if(histname.Contains("_2l")) Draw_2l("high");
-            if(histname.Contains("_ee")) Draw_ee("high");
-            if(histname.Contains("_em")) Draw_em("high");
-            if(histname.Contains("_me")) Draw_me("high");
-            if(histname.Contains("_mm")) Draw_mm("high");
-        }
+        if(histname.Contains("_2l")) Draw_2l(mass_category);
+        if(histname.Contains("_ee")) Draw_ee(mass_category);
+        if(histname.Contains("_em")) Draw_em(mass_category);
+        if(histname.Contains("_me")) Draw_me(mass_category);
+        if(histname.Contains("_mm")) Draw_mm(mass_category);
     }else if(histname.Contains("Shape_alpha")){
-        Draw_Shape_alpha_lines_and_generaltext(histname);
+        Draw_Shape_alpha_lines_and_generaltext(histname, mass_category);
     }
 }
 
@@ -157,7 +151,7 @@ void Shape_SR_plottext::Draw_lines_and_generaltext(TString mass_category)
     }
 }
 
-void Shape_SR_plottext::Draw_Shape_alpha_lines_and_generaltext(TString mass_category){
+void Shape_SR_plottext::Draw_Shape_alpha_lines_and_generaltext(TString histname, TString mass_category){
     fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
     if(mass_category == "low"){
         latex.DrawLatex(0.25*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);

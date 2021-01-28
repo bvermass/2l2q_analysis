@@ -4,14 +4,19 @@
 #include <TString.h>
 #include <TFile.h>
 #include <TTree.h>
+#include <TH1.h>
 
-Long64_t get_nentries_from_file(TString filename, TString treename)
+std::map<TString, double> get_nentries_from_file(TString filename, TString treename)
 {
     TFile *input = new TFile(filename, "open");
     TTree *tree  = (TTree*) input->Get(treename);
-    Long64_t entries = tree->GetEntries();
+    std::map<TString, double> values;
+    values["entries"] = tree->GetEntries();
+    TH1F*  h = (TH1F*)input->Get("blackJackAndHookersGlobal/hCounter");
+    if(!h) h = (TH1F*)input->Get("blackJackAndHookers/hCounter");
+    values["hCounter"] = h->GetBinContent(1);
     input->Close();
-    return entries;
+    return values;
 }
 
 #ifndef __CINT__
@@ -23,8 +28,9 @@ int main(int argc, char * argv[])
     }
     TString file = (TString) argv[1];
     TString treename = (TString) argv[2];
-    Long64_t entries = get_nentries_from_file(file, treename);
-    std::cout << 1000*floor(0.001*entries) << " entries in " << file << "(" << entries << ")" << std::endl;
+    std::cout << file << ": ";
+    std::map<TString, double> values = get_nentries_from_file(file, treename);
+    std::cout << values["entries"] << " entries, from " << values["hCounter"] << ")" << std::endl;
     return 0;
 }
 #endif

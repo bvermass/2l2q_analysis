@@ -54,7 +54,7 @@ class Shape_SR_plottext{
         void Draw_me(TString mass_category);
         void Draw_mm(TString mass_category);
         void Draw_lines_and_generaltext(TString mass_category);
-        void Draw_Shape_alpha_lines_and_generaltext(TString mass_category);
+        void Draw_Shape_alpha_lines_and_generaltext(TString histname, TString mass_category);
     private:
         TString mm, em, ee, me, OS, SS, masslessthan2, massmorethan2, masslessthan6, massmorethan6;
         float leftmargin, rightmargin, topmargin, bottommargin;

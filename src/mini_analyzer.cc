@@ -12,6 +12,8 @@ mini_analyzer::mini_analyzer(TString filename) :
     init_variations();
     add_histograms();
     //add_histograms_gridscan();
+    std::cout << "number of histograms: " << hists.size() << std::endl;
+    std::cout << "number of MV2tags: " << MV2tags.size() << std::endl;
 }
 
 mini_analyzer::~mini_analyzer()
