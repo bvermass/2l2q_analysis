@@ -282,13 +282,13 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         atlas_displaced_muon_LNV->Draw("L same");
         atlas_displaced_muon_LNC->Draw("L same");
         cms_trilepton_prompt_muon->Draw("L same");
-        cms_trilepton_displaced_muon->Draw("L same");
+        //if(isRun2) cms_trilepton_displaced_muon->Draw("L same");
     }else if(plotfilename.Contains("_ee_")){
         delphi_prompt->Draw("L same");
         delphi_displaced->Draw("L same");
         atlas_prompt_electron->Draw("L same");
         cms_trilepton_prompt_electron->Draw("L same");
-        cms_trilepton_displaced_electron->Draw("L same");
+        //if(isRun2) cms_trilepton_displaced_electron->Draw("L same");
     }
 
     if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
@@ -304,10 +304,10 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
         legend.AddEntry(cms_trilepton_prompt_muon, "CMS 3l prompt (2016)", "l");
         legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
-        legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
+        //if(isRun2) legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
     }else if(plotfilename.Contains("_ee_")){
         legend.AddEntry(cms_trilepton_prompt_electron, "CMS 3l prompt (2016)", "l");
-        legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
+        //if(isRun2) legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
     }
     legend.Draw("same");
 

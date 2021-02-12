@@ -14,7 +14,8 @@ std::map<TString, double> get_nentries_from_file(TString filename, TString treen
     values["entries"] = tree->GetEntries();
     TH1F*  h = (TH1F*)input->Get("blackJackAndHookersGlobal/hCounter");
     if(!h) h = (TH1F*)input->Get("blackJackAndHookers/hCounter");
-    values["hCounter"] = h->GetBinContent(1);
+    if(!h) values["hCounter"] = -1.;
+    else values["hCounter"] = h->GetBinContent(1);
     input->Close();
     return values;
 }

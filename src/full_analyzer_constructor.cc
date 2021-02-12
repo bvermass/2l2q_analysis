@@ -33,7 +33,6 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
     TString filename_LSF = local_dir + "data/LeptonScaleFactors/";
     TString histname_LSF = "", histname_sys = "";
     TString pt_eta_config;
-    double pt_max;
     if(flavor == "e" and type_SF == "ID"){
         if(_is2016) filename_LSF += "ID_egammaEffi.txt_EGM2D_16.root";
         if(_is2017) filename_LSF += "ID_egammaEffi.txt_EGM2D_17.root";
@@ -41,28 +40,24 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
         histname_LSF  = "EGamma_SF2D";
         histname_sys  = "";
         pt_eta_config = "eta_pt";
-        pt_max        = 500;
     }else if(flavor == "mu" and type_SF == "ID"){
         if(_is2016){
             filename_LSF += "EfficienciesStudies_2016_legacy_rereco_rootfiles_RunBCDEF_SYS_ID.root";
             histname_LSF  = "NUM_MediumID_DEN_genTracks_eta_pt";
             histname_sys  = "";
             pt_eta_config = "eta_pt";
-            pt_max        = 120;
         }
         if(_is2017){
             filename_LSF += "RunBCDEF_SF_ID_syst.root";
             histname_LSF  = "NUM_MediumID_DEN_genTracks_pt_abseta";
             histname_sys  = "NUM_MediumID_DEN_genTracks_pt_abseta_syst";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
         if(_is2018){
             filename_LSF += "EfficienciesStudies_2018_rootfiles_RunABCD_SF_ID.root";
             histname_LSF  = "NUM_MediumID_DEN_TrackerMuons_pt_abseta";
             histname_sys  = "NUM_MediumID_DEN_TrackerMuons_pt_abseta_syst";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
     }else if(flavor == "mu" and type_SF == "IDsys"){
         if(_is2016){
@@ -70,21 +65,18 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
             histname_LSF  = "";
             histname_sys  = "NUM_MediumID_DEN_genTracks_eta_pt";
             pt_eta_config = "eta_pt";
-            pt_max        = 120;
         }
         if(_is2017){
             filename_LSF += "RunBCDEF_SF_ID_syst.root";
             histname_LSF  = "NUM_MediumID_DEN_genTracks_pt_abseta";
             histname_sys  = "NUM_MediumID_DEN_genTracks_pt_abseta_syst";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
         if(_is2018){
             filename_LSF += "EfficienciesStudies_2018_rootfiles_RunABCD_SF_ID.root";
             histname_LSF  = "NUM_MediumID_DEN_TrackerMuons_pt_abseta";
             histname_sys  = "NUM_MediumID_DEN_TrackerMuons_pt_abseta_syst";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
     }else if(flavor == "mu" and type_SF == "ISO"){
         if(_is2016) filename_LSF += "Iso_ip_NUM_displacedIsoIP_DEN_displaced_abseta_pt_16.root";
@@ -93,7 +85,6 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
         histname_LSF  = "NUM_displacedIsoIP_DEN_displaced_abseta_pt";
         histname_sys  = "NUM_displacedIsoIP_DEN_displaced_abseta_pt_combined_syst";
         pt_eta_config = "abseta_pt";
-        pt_max        = 120;
     }else if(flavor == "e" and type_SF == "Trigger"){
         if(_is2016) filename_LSF += "trigger_egammaEffi.txt_EGM2D_16.root";
         if(_is2017) filename_LSF += "trigger_egammaEffi.txt_EGM2D_17.root";
@@ -101,31 +92,27 @@ LSFReader* full_analyzer::get_LSFReader(TString flavor, TString type_SF)
         histname_LSF  = "EGamma_SF2D";
         histname_sys  = "";
         pt_eta_config = "eta_pt";
-        pt_max        = 500;
     }else if(flavor == "mu" and type_SF == "Trigger"){
         if(_is2016){
             filename_LSF += "EfficienciesStudies_2016_trigger_EfficienciesAndSF_RunBtoF.root";
             histname_LSF  = "IsoMu24_OR_IsoTkMu24_PtEtaBins/abseta_pt_ratio";
             histname_sys  = "";
             pt_eta_config = "abseta_pt";
-            pt_max        = 500;
         }
         if(_is2017){
             filename_LSF += "EfficienciesStudies_2017_trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
             histname_LSF  = "IsoMu27_PtEtaBins/abseta_pt_ratio";
             histname_sys  = "";
             pt_eta_config = "abseta_pt";
-            pt_max        = 1200;
         }
         if(_is2018){
             filename_LSF += "EfficienciesStudies_2018_trigger_EfficienciesAndSF_2018Data_AfterMuonHLTUpdate.root";
             histname_LSF  = "IsoMu24_PtEtaBins/abseta_pt_ratio";
             histname_sys  = "";
             pt_eta_config = "abseta_pt";
-            pt_max        = 1200;
         }
     }
-    LSFReader *lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config, pt_max);
+    LSFReader *lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config);
     return lsfreader;
 }
 
@@ -134,7 +121,6 @@ LSFReader* full_analyzer::get_LSFReader_displ(TString flavor, TString type_SF)
     TString filename_LSF = local_dir + "data/LeptonScaleFactors/displacedSF/";
     TString histname_LSF = "", histname_sys = "";
     TString pt_eta_config;
-    double pt_max;
     if(flavor == "mu" and type_SF == "SV"){
         if(_is2016) filename_LSF += "SV_SF_16.root";
         if(_is2017) filename_LSF += "SV_SF_17.root";
@@ -142,7 +128,6 @@ LSFReader* full_analyzer::get_LSFReader_displ(TString flavor, TString type_SF)
         histname_LSF  = "SV_SF_lxy_pt";
         histname_sys  = "";
         pt_eta_config = "lxy_pt";
-        pt_max        = 20;
     }else if(flavor == "mu" and type_SF == "IDISO"){
         if(_is2016) filename_LSF += "NUM_displacedIso_DEN_trackerMuons_abseta_pt_16.root";
         if(_is2017) filename_LSF += "NUM_displacedIso_DEN_trackerMuons_abseta_pt_17.root";
@@ -150,9 +135,8 @@ LSFReader* full_analyzer::get_LSFReader_displ(TString flavor, TString type_SF)
         histname_LSF  = "NUM_displacedIso_DEN_trackerMuons_abseta_pt";
         histname_sys  = "NUM_displacedIso_DEN_trackerMuons_abseta_pt_combined_syst";
         pt_eta_config = "abseta_pt";
-        pt_max        = 120;
     }
-    LSFReader *lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config, pt_max);
+    LSFReader *lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config);
     return lsfreader;
 }
 
@@ -716,66 +700,56 @@ LSFReader* full_analyzer::get_LSFReader_old(TString flavor, TString type_SF)
     TString filename_LSF = local_dir + "data/LeptonScaleFactors/POG/";
     TString histname_LSF, histname_sys = "";
     TString pt_eta_config;
-    double pt_max;
     if(flavor == "e"){
         if(_is2016){
             filename_LSF += "Electron/2016LegacyReReco_ElectronTight_Fall17V2.root";
             histname_LSF  = "EGamma_SF2D";
             pt_eta_config = "eta_pt";
-            pt_max        = 500;
         }
         if(_is2017){
             filename_LSF += "Electron/2017_ElectronTight.root";
             histname_LSF  = "EGamma_SF2D";
             pt_eta_config = "eta_pt";
-            pt_max        = 500;
         }
         if(_is2018){
             filename_LSF += "Electron/2018_ElectronTight.root";
             histname_LSF  = "EGamma_SF2D";
             pt_eta_config = "eta_pt";
-            pt_max        = 500;
         }
     }else if(flavor == "mu" and type_SF == "ID"){
         if(_is2016){
             filename_LSF += "Muon/2016_RunBCDEFGH_SF_ID.root";
             histname_LSF  = "NUM_TightID_DEN_genTracks_eta_pt";
             pt_eta_config = "eta_pt";
-            pt_max        = 120;
         }
         if(_is2017){
             filename_LSF += "Muon/2017_RunBCDEF_SF_ID.root";
             histname_LSF  = "NUM_TightID_DEN_genTracks_pt_abseta";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
         if(_is2018){
             filename_LSF += "Muon/2018_RunABCD_SF_ID.root";
             histname_LSF  = "NUM_TightID_DEN_TrackerMuons_pt_abseta";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
     }else if(flavor == "mu" and type_SF == "ISO"){
         if(_is2016){
             filename_LSF += "Muon/2016_RunBCDEFGH_SF_ISO.root";
             histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt";
             pt_eta_config = "eta_pt";
-            pt_max        = 120;
         }
         if(_is2017){
             filename_LSF += "Muon/2017_RunBCDEF_SF_ISO.root";
             histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
         if(_is2018){
             filename_LSF += "Muon/2018_RunABCD_SF_ISO.root";
             histname_LSF  = "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta";
             pt_eta_config = "pt_abseta";
-            pt_max        = 120;
         }
     }
-    LSFReader* lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config, pt_max);
+    LSFReader* lsfreader = new LSFReader(filename_LSF, histname_LSF, histname_sys, pt_eta_config);
     return lsfreader;
 }
 

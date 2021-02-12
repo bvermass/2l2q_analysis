@@ -14,7 +14,7 @@
 class LSFReader{
     public:
         LSFReader();
-        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString histoname_sys, const TString pt_eta_conf, const double pt_mx);
+        LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString histoname_sys, const TString pt_eta_conf);
         ~LSFReader();
 
         double get_LSF(const double pt, const double eta);
@@ -27,6 +27,6 @@ class LSFReader{
         TH2F* histo_LSF;
         TH2F* histo_sys;
         TString pt_eta_config;
-        double pt_max;
+        double pt_max_LSF, pt_min_LSF, pt_max_sys, pt_min_sys;
 };
 #endif
