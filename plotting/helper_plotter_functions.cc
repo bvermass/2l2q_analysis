@@ -44,10 +44,10 @@ Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
     , me( "#{mu}e" )
     , OS( "OS" )
     , SS( "SS" )
-    , masslessthan2( "M_{lSV} < 2 GeV" )
-    , massmorethan2( "M_{lSV} > 2 GeV" )
-    , masslessthan6( "M_{lSV} < 6 GeV" )
-    , massmorethan6( "M_{lSV} > 6 GeV" )
+    , masslessthan2( "M_{SV} < 2 GeV" )
+    , massmorethan2( "M_{SV} > 2 GeV" )
+    , masslessthan6( "M_{SV} < 6 GeV" )
+    , massmorethan6( "M_{SV} > 6 GeV" )
     , leftmargin( pad->GetLeftMargin() )
     , topmargin( pad->GetTopMargin() )
     , rightmargin( pad->GetRightMargin() )
@@ -259,6 +259,8 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutTightmll_"))       fullname += "ABCDwithTightmll/";
     if(histname.Contains("cutTightphiORmll_"))  fullname += "ABCDwithTightDeltaPhiORmll/";
     if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
+    if(histname.Contains("cutMediummlSV_"))     fullname += "ABCDwithMediummlSV/";
+    if(histname.Contains("cutTightCR1mlSV_"))   fullname += "ABCDwithTightCR1mlSV/";
     if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
     if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
     if(histname.Contains("cutMediumCR2mlSV_"))   fullname += "ABCDwithMediumCR2mlSV/";
@@ -359,6 +361,8 @@ int get_color(TString legend)
     else if(legend.Index("Diboson")  != -1) return kGreen+3;
     else if(legend.Index("Triboson") != -1) return kRed+3;
     else if(legend.Index("WG")       != -1) return 7;
+    else if(legend.Index("ZG")       != -1) return 8;
+    else if(legend.Index("JPsi")     != -1) return 2;
     else if(legend.Index("Top")      != -1) return kBlue+2;
     else if(legend.Index("M-15")   != -1) return kBlack;
     else if(legend.Index("M-3")    != -1) return kRed-9;

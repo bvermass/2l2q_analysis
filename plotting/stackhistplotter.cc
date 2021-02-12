@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));
             legends_signal.push_back(adjust_legend(legendname));
-        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data") or legendname.Contains("Top") or legendname.Contains("MC_Bkg")){
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data")/* or legendname.Contains("Top") or legendname.Contains("MC_Bkg")*/){
             files_data.push_back(TFile::Open(filename));
             legends_data.push_back(adjust_legend(legendname));
         }else {
@@ -96,7 +96,10 @@ int main(int argc, char * argv[])
     pad_histo->Draw();
     pad_histo->cd();
 
-    TLegend legend = get_legend(0.2, 0.80, 0.95, 0.91, n_columns);
+    double lgnd_lowerbound = 0.80;
+    if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 6) lgnd_lowerbound = 0.76;
+    if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 8) lgnd_lowerbound = 0.73;
+    TLegend legend = get_legend(0.2, lgnd_lowerbound, 0.95, 0.91, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018, isRun2);
