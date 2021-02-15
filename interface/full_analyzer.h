@@ -91,6 +91,7 @@ public :
    Bool_t          _gen_lIsPrompt[20];   //[_gen_nL]
    Double_t        _gen_lMinDeltaR[20];   //[_gen_nL]
    Bool_t          _gen_lPassParentage[20];   //[_gen_nL]
+   Bool_t          _hasInternalConversion;   //[_gen_nL]
    Double_t        _gen_HT;
    unsigned        _gen_nN;
    Double_t        _gen_NPt;
@@ -392,6 +393,8 @@ public :
    Double_t        _jetPt[20];   //[_nJets]
    Double_t        _jetPt_JECUp[20];   //[_nJets]
    Double_t        _jetPt_JECDown[20];   //[_nJets]
+   Double_t        _jetPt_JERUp[20];
+   Double_t        _jetPt_JERDown[20];
    Double_t        _jetPt_Uncorrected[20];   //[_nJets]
    Double_t        _jetSmearedPt[20];
    Double_t        _jetSmearedPt_JERDown[20];
@@ -499,6 +502,7 @@ public :
    TBranch        *b__gen_lIsPrompt;   //!
    TBranch        *b__gen_lMinDeltaR;   //!
    TBranch        *b__gen_lPassParentage;   //!
+   TBranch        *b__hasInternalConversion;   //!
    TBranch        *b__gen_HT;   //!
    TBranch        *b__gen_nN;   //!
    TBranch        *b__gen_NPt;

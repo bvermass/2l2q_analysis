@@ -68,6 +68,7 @@ void Skimmer::Init_input_branches(TTree* tree)
          tree->SetBranchAddress("_gen_lDecayedHadr", i_gen_lDecayedHadr, &bi__gen_lDecayedHadr);
          tree->SetBranchAddress("_gen_lMinDeltaR", i_gen_lMinDeltaR, &bi__gen_lMinDeltaR);
          tree->SetBranchAddress("_gen_lPassParentage", i_gen_lPassParentage, &bi__gen_lPassParentage);
+         tree->SetBranchAddress("_hasInternalConversion", &i_hasInternalConversion, &bi__hasInternalConversion);
          tree->SetBranchAddress("_gen_nN", &i_gen_nN, &bi__gen_nN);
          tree->SetBranchAddress("_gen_NPt", &i_gen_NPt, &bi__gen_NPt);
          tree->SetBranchAddress("_gen_NEta", &i_gen_NEta, &bi__gen_NEta);
@@ -506,6 +507,7 @@ void Skimmer::Add_branches(TTree* tree)
         tree->Branch("_gen_lDecayedHadr",               &o_gen_lDecayedHadr,             "_gen_lDecayedHadr[_gen_nL]/O");
         tree->Branch("_gen_lMinDeltaR",                 &o_gen_lMinDeltaR,               "_gen_lMinDeltaR[_gen_nL]/D");
         tree->Branch("_gen_lPassParentage",             &o_gen_lPassParentage,           "_gen_lPassParentage[_gen_nL]/O");
+        tree->Branch("_hasInternalConversion",          &o_hasInternalConversion,        "_hasInternalConversion/O");
 
         //jet stuff
         tree->Branch("_gen_nN",		                    &o_gen_nN,			            "_gen_nN/i");
@@ -998,6 +1000,7 @@ void Skimmer::Skim(TString skimcondition)
                     o_gen_lMinDeltaR[i] = i_gen_lMinDeltaR[i];   
                     o_gen_lPassParentage[i] = i_gen_lPassParentage[i];   
                 }
+                o_hasInternalConversion = i_hasInternalConversion;
                 o_gen_nN = i_gen_nN;
                 o_gen_NPt = i_gen_NPt;
                 o_gen_NEta = i_gen_NEta;

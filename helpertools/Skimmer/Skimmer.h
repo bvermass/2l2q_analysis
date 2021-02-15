@@ -86,6 +86,7 @@ class Skimmer {
         Bool_t          i_gen_lDecayedHadr[20];
         Double_t        i_gen_lMinDeltaR[20];   //[_gen_nL]
         Bool_t          i_gen_lPassParentage[20];   //[_gen_nL]
+        Bool_t          i_hasInternalConversion;   //[_gen_nL]
         unsigned        i_gen_nN;
         Double_t        i_gen_NPt;
         Double_t        i_gen_NEta;
@@ -513,6 +514,7 @@ class Skimmer {
         Bool_t          o_gen_lDecayedHadr[20];
         Double_t        o_gen_lMinDeltaR[20];   //[_gen_nL]
         Bool_t          o_gen_lPassParentage[20];   //[_gen_nL]
+        Bool_t          o_hasInternalConversion;   //[_gen_nL]
         unsigned        o_gen_nN;
         Double_t        o_gen_NPt;
         Double_t        o_gen_NEta;
@@ -938,6 +940,7 @@ class Skimmer {
         TBranch        *bi__gen_lDecayedHadr;   //!
         TBranch        *bi__gen_lMinDeltaR;   //!
         TBranch        *bi__gen_lPassParentage;   //!
+        TBranch        *bi__hasInternalConversion;   //!
         TBranch        *bi__gen_nN;   //!
         TBranch        *bi__gen_NPt;
         TBranch        *bi__gen_NEta;

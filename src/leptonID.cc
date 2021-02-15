@@ -81,6 +81,7 @@ int full_analyzer::getEleMvaCategory(const unsigned i)
     if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) < 0.800) return 3;
     if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) >= 0.800 && fabs(_lEtaSC[i]) < 1.479) return 4;
     if (_lPt[i] >= 10 && fabs(_lEtaSC[i]) >= 1.479) return 5;
+    return 0;
 }
 
 double full_analyzer::convertMvaInRawMva(const unsigned i)
@@ -457,7 +458,7 @@ double full_analyzer::get_displEleSF(unsigned missinghits){
         if(missinghits == 6) return 1.101;
         if(missinghits == 7) return 1.299;
         return 1.299;//for more missinghits, use last value
-    }
+    }else return 1.;
 }
 
 double full_analyzer::get_displEleSF_unc(unsigned missinghits){

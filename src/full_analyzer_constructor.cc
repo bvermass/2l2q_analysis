@@ -321,6 +321,7 @@ void full_analyzer::Init(TTree *tree)
         fChain->SetBranchAddress("_gen_lIsPrompt", _gen_lIsPrompt, &b__gen_lIsPrompt);
         fChain->SetBranchAddress("_gen_lMinDeltaR", _gen_lMinDeltaR, &b__gen_lMinDeltaR);
         fChain->SetBranchAddress("_gen_lPassParentage", _gen_lPassParentage, &b__gen_lPassParentage);
+        fChain->SetBranchAddress("_hasInternalConversion", &_hasInternalConversion, &b__hasInternalConversion);
         fChain->SetBranchAddress("_gen_HT", &_gen_HT, &b__gen_HT);
         fChain->SetBranchAddress("_gen_nN", &_gen_nN, &b__gen_nN);
         fChain->SetBranchAddress("_gen_NPt", &_gen_NPt, &b__gen_NPt);
