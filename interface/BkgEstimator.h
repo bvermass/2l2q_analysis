@@ -172,7 +172,8 @@ class BkgEstimator
         TBranch     *b__reweighting_weight;
 
         //Functions
-        BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber);//Constructor meant to create file and write events
+        BkgEstimator();//empty constructor
+        BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber, TString fileoption = "recreate");//Constructor meant to create file and write events
         BkgEstimator(TString filename);//Constructor meant to read existing file and access events
         void open_file_and_tree(TString filename);
         void set_branch_adresses();

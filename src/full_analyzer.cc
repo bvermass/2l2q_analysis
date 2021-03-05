@@ -24,7 +24,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     Init(tree);
     tree->GetEntry(0);
 
-    extensive_plots = false;
+    extensive_plots = true;
+    bool makeJECvariations = true;
 
     SetSampleTypes(filename);
     HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
@@ -117,10 +118,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
-    BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber);
+    TString bkgestimator_fileoption = "recreate";
+    BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber, bkgestimator_fileoption);
+    BkgEstimator bkgestimator_JECDown(filename, "BkgEstimator_JECDown", partition, partitionjobnumber, bkgestimator_fileoption);
+    BkgEstimator bkgestimator_JECUp(filename, "BkgEstimator_JECUp", partition, partitionjobnumber, bkgestimator_fileoption);
+    BkgEstimator bkgestimator_JERDown(filename, "BkgEstimator_JERDown", partition, partitionjobnumber, bkgestimator_fileoption);
+    BkgEstimator bkgestimator_JERUp(filename, "BkgEstimator_JERUp", partition, partitionjobnumber, bkgestimator_fileoption);
 
-    //HNLBDTtagger hnlbdttagger_e(filename, "HNLBDTtagger_electron", partition, partitionjobnumber);
-    //HNLBDTtagger hnlbdttagger_mu(filename, "HNLBDTtagger_muon", partition, partitionjobnumber);
 
     PFNReader pfn_e_LowMass = get_PFNReader_unparametrized_LowMass(0);
     PFNReader pfn_e_HighMass = get_PFNReader_unparametrized_HighMass(0);
@@ -341,6 +345,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         hnltagger_mu.write_HNLtagger_tree();
     }
     if(makeBkgEstimator) bkgestimator.write_tree();
+    if(isSignal and makeJECvariations){
+        bkgestimator_JECDown.write_tree();
+        bkgestimator_JECUp.write_tree();
+        bkgestimator_JERDown.write_tree();
+        bkgestimator_JERUp.write_tree();
+    }else if(!isSignal){
+        bkgestimator_JECDown.delete_tree();
+        bkgestimator_JECUp.delete_tree();
+        bkgestimator_JERDown.delete_tree();
+        bkgestimator_JERUp.delete_tree();
+    }
 
     if(makeHistograms){
         //TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms/", "hists_full_analyzer", partition, partitionjobnumber, true);
