@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.27, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
+    TLegend legend = get_legend(0.47, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
@@ -170,7 +170,7 @@ int main(int argc, char * argv[])
                 TString sig_eff_str = std::to_string(0.01 * round(100*std::get<0>(cp))).substr(0,4);
                 TString bkg_eff_str = std::to_string(0.0001 * round(10000*std::get<1>(cp))).substr(0,6);
                 TString cut_eff_str = std::to_string(0.001 * round(1000*std::get<2>(cp))).substr(0,5);
-                legend.AddEntry(roc, legends[i] + ": " + auc_str + " - " + bkg_eff_str + " - " + cut_eff_str, "l");
+                legend.AddEntry(roc, legends[i] + ": " + auc_str/* + " - " + bkg_eff_str + " - " + cut_eff_str*/, "l");
             }
 
 

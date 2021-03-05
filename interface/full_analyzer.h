@@ -908,7 +908,7 @@ public :
    int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl;
 
    //Signal region booleans
-   bool _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _Training, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
+   bool _genOverlap, _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _bkgestimator, _Training, _Training2Jets, _Training2JetsNoZ, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
    std::map<int, std::map<double, bool>> _TrainingHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
 
    // relevant lepton variables

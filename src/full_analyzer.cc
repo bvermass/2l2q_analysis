@@ -63,7 +63,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt", "_2promptwithMll"}){
+        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt", "_2promptwithMll", "_2Jets", "_2JetsNoZ"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
@@ -257,14 +257,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             }
         }
 
-        if(_Training){
+        if(_bkgestimator){
             if(_lFlavor[i_subleading] == 0){
                 if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_e);
-                //fill_HNLBDTtagger_tree(hnlbdttagger_e, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
             }else if(_lFlavor[i_subleading] == 1){
                 if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_mu);
-                //fill_HNLBDTtagger_tree(hnlbdttagger_mu, ev_weight*total_weight);
                 JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
             }
             additional_signal_regions();

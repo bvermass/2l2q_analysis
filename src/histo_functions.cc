@@ -67,11 +67,11 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_met"]                             = new TH1F(prefix+"_met", ";MET [GeV];Events", 30, 0, 150);
     (*hists)[prefix+"_mll"]                             = new TH1F(prefix+"_mll", ";#it{m}_{ll} [GeV];Events", 30, 0, 200);
     (*hists)[prefix+"_mll_zoomAtLowMll"]                = new TH1F(prefix+"_mll_zoomAtLowMll", ";#it{m}_{ll} [GeV];Events", 100, 0, 30);
-    (*hists)[prefix+"_Zpeak"]                           = new TH1F(prefix+"_Zpeak", ";On-Z;Events", 1, 0, 1);
+    (*hists)[prefix+"_integral"]                        = new TH1F(prefix+"_integral", ";Integral Yield;Events", 1, 0, 1);
     (*hists)[prefix+"_dphill"]                          = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 30, 0, 3.14);
     (*hists)[prefix+"_dRll"]                            = new TH1F(prefix+"_dRll", ";#it{#Delta R}_{ll};Events", 30, 0, 6);
-    (*hists)[prefix+"_l1_IVF_match"]                    = new TH1F(prefix+"_l1_IVF_match", ";l1 IVF match (IVF);Events", 2, 0, 2);
-    (*hists)[prefix+"_l2_IVF_match"]                    = new TH1F(prefix+"_l2_IVF_match", ";l2 IVF match (IVF);Events", 2, 0, 2);
+    //(*hists)[prefix+"_l1_IVF_match"]                    = new TH1F(prefix+"_l1_IVF_match", ";l1 IVF match (IVF);Events", 2, 0, 2);
+    //(*hists)[prefix+"_l2_IVF_match"]                    = new TH1F(prefix+"_l2_IVF_match", ";l2 IVF match (IVF);Events", 2, 0, 2);
     
     (*hists)[prefix+"_IVF_normchi2"]                    = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2} (IVF);Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy"]                    = new TH1F(prefix+"_IVF_PV-SVdxy", ";L_{xy} [cm];Events", 20, 0, 60);
@@ -86,8 +86,8 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_IVF_costracks"]                   = new TH1F(prefix+"_IVF_costracks", ";cos(PV-SV, SV tracks);Events", 40, 0.9, 1.0);
 
     if(extensive_plots){
-        (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, 0, 3.14);
-        (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, 0, 3.14);
+        (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, -3.14, 3.14);
+        (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, -3.14, 3.14);
         (*hists)[prefix+"_l2_dxy_zoom"]                     = new TH1F(prefix+"_l2_dxy_zoom", ";l_{2} dxy [cm];Events", 30, 0, 0.05);
         (*hists)[prefix+"_l1_3dIP"]                         = new TH1F(prefix+"_l1_3dIP", ";l_{1} 3dIP;Events", 30, 0, 0.02);
         (*hists)[prefix+"_l2_3dIP"]                         = new TH1F(prefix+"_l2_3dIP", ";l_{2} 3dIP;Events", 30, 0, 0.5);
@@ -172,13 +172,19 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     }
 
     if(_l1l2SV){
-        fill_relevant_histograms(hists, hists2D, sr_flavor + "_afterSV", ev_weight * (1 + 99*isSignal));
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_afterSV", ev_weight);
     }
 
     if(_Training){
-        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight * (1 + 99*isSignal));
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight);
         fill_HLT_efficiency(hists, "Afterptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, ev_weight);
+    }
+    if(_Training2Jets){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_2Jets", ev_weight);
+    }
+    if(_Training2JetsNoZ){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_2JetsNoZ", ev_weight);
     }
 
     if(_FullNoPFN){
@@ -225,6 +231,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_nJets_cl"]->Fill(nTightJet, event_weight);
 
     (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
+    //std::cout << "l2 pt: " << _lPt[i_subleading] << " weight: " << event_weight << std::endl;
     (*hists)[prefix+"_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
     (*hists)[prefix+"_l1_eta"]->Fill(_lEta[i_leading], event_weight);
     (*hists)[prefix+"_l2_eta"]->Fill(_lEta[i_subleading], event_weight);
@@ -250,9 +257,15 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_met"]->Fill(_met, event_weight);
     //(*hists)[prefix+"_KVF_valid"]->Fill(_lKVF_valid[i_subleading], event_weight);
 
+    //if(mll < 15){
+    //    std::cout << "mll lower than 15!" << mll << std::endl;
+    //    std::cout << "l1 pt eta phi: " << _lPt[i_leading] << " " << _lEta[i_leading] << " " << _lPhi[i_leading] << std::endl;
+    //    std::cout << "l2 pt eta phi: " << _lPt[i_subleading] << " " << _lEta[i_subleading] << " " << _lPhi[i_subleading] << std::endl;
+    //}
+
     (*hists)[prefix+"_mll"]->Fill(mll, event_weight);
     (*hists)[prefix+"_mll_zoomAtLowMll"]->Fill(mll, event_weight);
-    if(mll > 80 and mll < 100) (*hists)[prefix+"_Zpeak"]->Fill(1, event_weight);
+    (*hists)[prefix+"_integral"]->Fill(1, event_weight);
     (*hists)[prefix+"_dphill"]->Fill(dphill, event_weight);
     (*hists)[prefix+"_dRll"]->Fill(dRll, event_weight);
     if(extensive_plots){
@@ -368,10 +381,10 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
     /*
      * Is l1 or l2 matched to a vertex?
      */
-    if(_l1l2){
-        (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
-        (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
-    }
+    //if(_l1l2){
+    //    (*hists)[prefix+"_l1_IVF_match"]->Fill(_lIVF_match[i_leading], event_weight);
+    //    (*hists)[prefix+"_l2_IVF_match"]->Fill(_lIVF_match[i_subleading], event_weight);
+    //}
 }
 
 

@@ -20,6 +20,7 @@ void        make_logscale(double* xbins, unsigned nbins, double xmin, double xma
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer);
 TString     get_mini_analyzer_outputfilename(TString input);
 std::map<TString, double> add_SR_counters();
+void        fill_SR_counters_badleptons(std::map<TString, double> SR_counters, TString sr_flavor, int i_leading, int i_subleading, double gen_PVSVdist_2D, double ev_weight);
 void        print_SR_counters(std::map<TString, double> sr, double total_weight);
 void        print_evaluating_points(const std::map<int, std::map<double, double>>& evaluating_ctaus);
 double      calc_betagamma(int particle_mass, double particle_energy);

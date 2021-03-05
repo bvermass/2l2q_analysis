@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
     if(inputfilename.Contains("MiniAOD2016") or inputfilename.Contains("Run2016")) is2016 = true;
     else if(inputfilename.Contains("MiniAOD2017") or inputfilename.Contains("Run2017")) is2017 = true;
     else if(inputfilename.Contains("MiniAOD2018") or inputfilename.Contains("Run2018")) is2018 = true;
-    else if(filename.Contains("MiniAODRun2") or filename.Contains("Run2.")) isRun2 = true;
+    else if(inputfilename.Contains("MiniAODRun2") or inputfilename.Contains("Run2.")) isRun2 = true;
     bool is_mini_analyzer = inputfilename.Contains("hists_mini_analyzer");
     bool isData           = inputfilename.Contains("Run201");
     TFile*  sample_file   = TFile::Open(inputfilename);

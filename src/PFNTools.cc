@@ -32,6 +32,7 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals_LowAndHighM
 
 void full_analyzer::add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix){
     (*hists)[prefix+"_JetTagVal"]             = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 20, 0, 1);
+    //(*hists)[prefix+"_JetTagVal_noSR"]        = new TH1F(prefix+"_JetTagVal", ";Jet Tag Value; Events", 20, 0, 1);
     (*hists)[prefix+"_PFN_ROC"]               = new TH1F(prefix+"_PFN_ROC", ";Jet Tag Value; Events", 10000, 0, 1);
     (*hists)[prefix+"_JetTagValzm"]           = new TH1F(prefix+"_JetTagValzm", ";Jet Tag Value; Events", 10, 0.9, 1);
     (*hists)[prefix+"_JetTagValzm2"]          = new TH1F(prefix+"_JetTagValzm2", ";Jet Tag Value; Events", 10, 0.96, 1);
@@ -59,6 +60,7 @@ void full_analyzer::Combine_PFN_ROC_flavor_states(std::map<TString, TH1*>* hists
 
 void full_analyzer::fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight){
     (*hists)[prefix+"_JetTagVal"]->Fill(JetTagVal[mass][V2], event_weight);
+    //if(JetTagVal[mass][V2] < 0.8) (*hists)[prefix+"_JetTagVal_noSR"]->Fill(JetTagVal[mass][V2], event_weight);
     (*hists)[prefix+"_JetTagValzm"]->Fill(JetTagVal[mass][V2], event_weight);
     (*hists)[prefix+"_JetTagValzm2"]->Fill(JetTagVal[mass][V2], event_weight);
     (*hists)[prefix+"_PFN_ROC"]->Fill(JetTagVal[mass][V2], event_weight);

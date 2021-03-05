@@ -3,7 +3,8 @@
 
 mini_analyzer::mini_analyzer(TString filename) :
     event(filename),
-    isData(filename.Contains("Run201") or filename.Contains("SingleLepton"))
+    isData(filename.Contains("Run201") or filename.Contains("SingleLepton")),
+    isSignal(filename.Contains("HeavyNeutrino_lljj_"))
 {
     TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
     event.BkgEstimator_tree->GetEntry(0);

@@ -34,7 +34,7 @@ class mini_analyzer {
     public :
         BkgEstimator event;
         TString sr_flavor;
-        bool isData;
+        bool isData, isSignal;
         std::map<TString, TH1*> hists;
         std::map<TString, TH1*> hists_sys;
         std::map<TString, TH2*> hists2D;
@@ -49,6 +49,7 @@ class mini_analyzer {
         bool baseline_cutmll;
         bool baseline_cutphiORmll;
         bool baseline_cutmlSV;
+        bool baseline_cutmlSV_CR2Jets;
         bool baseline_cutCR3phill;
 
         //General functions

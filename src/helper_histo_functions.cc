@@ -62,7 +62,43 @@ std::map<TString, double> add_SR_counters()
             sr[lep_region + weight] = 0;
         }
     }
+    sr["noSel"] = 0;
+    sr["Triggermuon"] = 0;
+    sr["l1muon"] = 0;
+    sr["genOverlap"] = 0;
+    sr["isSingleMuon"] = 0;
+    sr["l2muon"] = 0;
+    sr["SV"] = 0;
+    sr["jetl2"] = 0;
+    sr["nTightJet"] = 0;
+    sr["nTightLep"] = 0;
+    sr["mll"] = 0;
+    sr["dphill"] = 0;
+    sr["PVSVdist"] = 0;
     return sr;
+}
+
+void fill_SR_counters_badleptons(std::map<TString, double> SR_counters, TString sr_flavor, int i_leading, int i_subleading, double gen_PVSVdist_2D, double ev_weight)
+{
+    if(sr_flavor == ""){
+        if(i_leading == -1){
+            SR_counters["no_l1"]++;
+            SR_counters["no_l1_weighted"] += ev_weight;
+        }else if(i_subleading == -1){
+            if(gen_PVSVdist_2D > 30){
+                SR_counters["no_l2_far"]++;
+                SR_counters["no_l2_far_weighted"] += ev_weight;
+            }else if(gen_PVSVdist_2D < 0.1) {
+                SR_counters["no_l2_cl"]++;
+                SR_counters["no_l2_cl_weighted"]++;
+            }else {
+                SR_counters["no_l2_ot"]++;
+                SR_counters["no_l2_ot_weighted"]++;
+            }
+        }else {
+            SR_counters["unid."]++;
+        }
+    }
 }
 
 

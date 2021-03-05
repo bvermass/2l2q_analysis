@@ -242,6 +242,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_CR"))                fullname += "CR/";
     if(histname.Contains("_SR"))                fullname += "SR/";
     if(histname.Contains("_2prompt"))           fullname += "2prompt/";
+    if(histname.Contains("_2Jets"))             fullname += "2Jets/";
     if(histname.Contains("_TooFar"))            fullname += "TooFar/";
 
     //related to ABCD method
@@ -363,6 +364,7 @@ int get_color(TString legend)
     else if(legend.Index("WG")       != -1) return 7;
     else if(legend.Index("ZG")       != -1) return 8;
     else if(legend.Index("JPsi")     != -1) return 2;
+    else if(legend.Index("QCD")      != -1) return 2;
     else if(legend.Index("Top")      != -1) return kBlue+2;
     else if(legend.Index("M-15")   != -1) return kBlack;
     else if(legend.Index("M-3")    != -1) return kRed-9;
