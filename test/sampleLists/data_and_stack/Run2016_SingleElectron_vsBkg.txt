@@ -2,8 +2,13 @@ final_data_2016_ee 10
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_SingleElectron_Run2016.root                                                      2016
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2016.root                                                         Diboson
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2016.root                                                             Top
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2016.root                                                          DY
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root                WG
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root                 ZG
+#/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2016.root                                                          DY
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root      DY50
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root DY10-50
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root              W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_QCD_EMEnriched_MiniAOD2016.root                                                  QCD
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_e_massiveAndCKM_LO_MiniAOD2016.root    HNL_3GeV_V^{2}=1e^{-4}
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.000716240183179_e_massiveAndCKM_LO_MiniAOD2016.root   HNL_6GeV_V^{2}=5.1e^{-7}
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_e_massiveAndCKM_LO_MiniAOD2016.root  HNL_10GeV_V^{2}=5.7e^{-7}
