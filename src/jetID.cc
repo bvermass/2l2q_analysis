@@ -4,11 +4,15 @@
 
 #include "../interface/full_analyzer.h"
 
-bool full_analyzer::IsTightJetID(const unsigned i)
+bool full_analyzer::IsTightJetID(const unsigned i, const TString JetPt_Version)
 {
     if(fabs(_jetEta[i]) > 2.4)  return false;
-    if(_jetPt[i] < 20)          return false;
     if(!_jetIsTight[i])         return false;
+    if(JetPt_Version == "_jetPt"            and _jetPt[i] < 20)          return false;
+    if(JetPt_Version == "_jetPt_JECUp"      and _jetPt_JECUp[i] < 20)    return false;
+    if(JetPt_Version == "_jetPt_JECDown"    and _jetPt_JECDown[i] < 20)  return false;
+    if(JetPt_Version == "_jetPt_JERUp"      and _jetPt_JERUp[i] < 20)    return false;
+    if(JetPt_Version == "_jetPt_JERDown"    and _jetPt_JERDown[i] < 20)  return false;
 
     return true;
 }
@@ -32,7 +36,7 @@ int full_analyzer::find_leading_jet(const std::vector<unsigned>& jetcollection)
 
     for(const auto& index_jet : jetcollection){
         if(index_leading == -1) index_leading = (int)index_jet;
-        else if(_lPt[index_jet] > _lPt[index_leading]) index_leading = (int)index_jet;
+        else if(_jetPt[index_jet] > _jetPt[index_leading]) index_leading = (int)index_jet;
     }
 
     return index_leading;
@@ -47,7 +51,7 @@ int full_analyzer::find_subleading_jet(const std::vector<unsigned>& jetcollectio
         if((int)index_jet == index_leading) continue;
 
         if(index_subleading == -1) index_subleading = (int)index_jet;
-        else if(_lPt[index_jet] > _lPt[index_subleading]) index_subleading = (int)index_jet;
+        else if(_jetPt[index_jet] > _jetPt[index_subleading]) index_subleading = (int)index_jet;
     }
 
     return index_subleading;
@@ -62,13 +66,13 @@ int full_analyzer::find_thirdleading_jet(const std::vector<unsigned>& jetcollect
         if((int)index_jet == index_leading or (int)index_jet == index_subleading) continue;
 
         if(index_thirdleading == -1) index_thirdleading = (int)index_jet;
-        else if(_lPt[index_jet] > _lPt[index_thirdleading]) index_thirdleading = (int)index_jet;
+        else if(_jetPt[index_jet] > _jetPt[index_thirdleading]) index_thirdleading = (int)index_jet;
     }
 
     return index_thirdleading;
 }
 
-int full_analyzer::find_jet_closest_to_lepton(int i_lep)
+int full_analyzer::find_jet_closest_to_lepton(int i_lep, const TString JetPt_Version)
 {
     int index_jet = -1;
     if(i_lep == -1) return index_jet;
@@ -77,7 +81,7 @@ int full_analyzer::find_jet_closest_to_lepton(int i_lep)
     double mindR = 0.7;
 
     for(unsigned i_jet = 0; i_jet < _nJets; i_jet++){
-        if(IsTightJetID(i_jet)){
+        if(IsTightJetID(i_jet, JetPt_Version)){
             dR = get_dR_lepton_jet(i_lep, i_jet);
             if(dR < mindR){ index_jet = (int)i_jet; mindR = dR;}
         }
@@ -102,4 +106,12 @@ bool full_analyzer::get_JetIsFromHNL(int i_jet){
         }
     }
     return JetIsFromHNL;
+}
+
+void full_analyzer::set_jetPt_JERvariations()
+{
+    for(unsigned i = 0; i < _nJets; i++){
+        _jetPt_JERUp[i]   = _jetPt[i] * (_jetSmearedPt_JERUp[i] / _jetSmearedPt[i]);
+        _jetPt_JERDown[i] = _jetPt[i] * (_jetSmearedPt_JERDown[i] / _jetSmearedPt[i]);
+    }
 }

@@ -6,20 +6,20 @@
 
 using namespace std;
 
-void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu){
+void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu, const TString JetPt_Version){
     i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
 
     sr_flavor = get_signal_region_flavor();
     sr_charge = sr_flavor(0,3);
     sr_lflavor = sr_flavor(3,3);
 
-    set_relevant_lepton_variables();
+    set_relevant_lepton_variables(JetPt_Version);
 }
 
 
-void full_analyzer::set_relevant_lepton_variables(){
+void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
 
-    i_jetl2             = find_jet_closest_to_lepton(i_subleading); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
+    i_jetl2             = find_jet_closest_to_lepton(i_subleading, JetPt_Version); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
     i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
     i_gen_subleading    = find_gen_lep(i_subleading);
     i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton

@@ -219,7 +219,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         float topmargin   = pad_histo.GetTopMargin();
         float rightmargin = pad_histo.GetRightMargin();
 
-        CMSandLuminosity CMSandLumi(&pad_histo, is2016, is2017, is2018);
+        CMSandLuminosity CMSandLumi(&pad_histo, is2016, is2017, is2018, false);
         Shape_SR_plottext shapeSR_text(&pad_histo);
         TLegend legend = get_legend(0.2, 0.84, 0.95, 0.9, 4);
 

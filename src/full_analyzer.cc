@@ -171,80 +171,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             loop_counter = 0;
 	    }
 
-
-        //Get muons, electrons and jets that pass ID and cleaning
-        std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID;
-        for(unsigned i = 0; i < _nLight; i++){
-            if(IsMediumPromptMuonID(i))           promptMuonID.push_back(i);
-            if(IsDisplacedMuonID(i))        displacedMuonID.push_back(i);
-            if(IsLooseMuonID(i))            looseMuonID.push_back(i);
-        }
-        nTightMu = promptMuonID.size();
-        nDisplMu = displacedMuonID.size();
-
-        for(unsigned i = 0; i < _nLight; i++){
-            bool CleanElectron = IsCleanElectron(i, promptMuonID) and IsCleanElectron(i, displacedMuonID);
-
-            if(IsMvaPromptElectronID(i)    and CleanElectron) promptElectronID.push_back(i);
-            if(IsDisplacedElectronID(i) and CleanElectron) displacedElectronID.push_back(i);
-            if(IsLooseElectronID(i)     and CleanElectron) looseElectronID.push_back(i);
-        }
-        nTightEle = promptElectronID.size();
-        nDisplEle = displacedElectronID.size();
-
-        std::vector<unsigned> jetID, jetID_uncl;
-        for(unsigned i = 0; i < _nJets; i++){
-            if(IsTightJetID(i) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID) and IsCleanJet(i, displacedMuonID) and IsCleanJet(i, displacedElectronID)) jetID.push_back(i);
-            if(IsTightJetID(i)) jetID_uncl.push_back(i);
-        }
-        nTightJet       = jetID.size();
-        nTightJet_uncl  = jetID_uncl.size();
-
-        //Find leptons and jets with leading pt
-	    int i_leading_e     		    = find_leading_lepton(promptElectronID);
-	    int i_leading_mu    		    = find_leading_lepton(promptMuonID);
-
-        i_leading = select_leading_lepton(i_leading_e, i_leading_mu);
-
-	    int i_subleading_e  		    = find_subleading_lepton(promptElectronID, i_leading);
-	    int i_subleading_displ_e  	    = find_subleading_lepton(displacedElectronID, i_leading);
-	    int i_subleading_mu 		    = find_subleading_lepton(promptMuonID, i_leading);
-	    int i_subleading_displ_mu 	    = find_subleading_lepton(displacedMuonID, i_leading);
-
-	    i_leading_jet                   = find_leading_jet(jetID);
-	    i_subleading_jet	            = find_subleading_jet(jetID, i_leading_jet);
-        i_thirdleading_jet              = find_thirdleading_jet(jetID, i_leading_jet, i_subleading_jet);
-
-
-        set_leptons(i_subleading_displ_e, i_subleading_displ_mu);
-        signal_regions();
+        ////TString JetPt_Version = "_jetPt";
+        Set_Objects_And_Relevant_Variables("_jetPt");
+        ev_weight = Get_Event_weight();
+        fill_SR_counters_cutflow(SR_counters);
 
         // Skip data events that have the wrong leading lepton flavor, making SingleMuon and SingleElectron datasets fully orthogonal
         if((isSingleElectron and _lFlavor[i_leading] == 1) or (isSingleMuon and _lFlavor[i_leading] == 0)) continue;
-
-        //Calculate Event weight
-        if(!isData){
-            ev_weight = _weight;
-            if(isSignal) ev_weight *= 1.089;//HNL LO xsec uncertainty
-            ev_weight *= puweightreader->get_PUWeight_Central(_nTrueInt);
-            if(_lFlavor[i_leading] == 0){//electron scale factors
-                ev_weight *= lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-                ev_weight *= lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            }else if(_lFlavor[i_leading] == 1){//muon scale factors
-                ev_weight *= lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-                ev_weight *= lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-                ev_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            }
-            if(_lFlavor[i_subleading] == 0){//displaced electron scale factors
-                ev_weight *= get_displEleSF(_lElectronMissingHits[i_subleading]);
-            }else if(_lFlavor[i_subleading] == 1){//displaced muon scale factors
-                ev_weight *= lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-                ev_weight *= sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
-            }
-            ev_weight *= highest_trackpt_weight;//displaced tracks scale factor (in src/signal_regions.cc)
-        }else {
-            ev_weight = 1.;
-        }
 
         //Reweighting weights for HNL V2s, map: <V2, weight>
         for(auto& MassMap : evaluating_V2s){
@@ -276,42 +209,58 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
 
         if(makeHistograms) fill_histograms(&hists, &hists2D);
+        fill_SR_counters_badleptons(SR_counters, sr_flavor, i_leading, i_subleading, gen_PVSVdist_2D, ev_weight);
 
-
-        if(sr_flavor == ""){
-            if(i_leading == -1){
-                SR_counters["no_l1"]++;
-                SR_counters["no_l1_weighted"] += ev_weight;
-            }else if(i_subleading == -1){
-                if(gen_PVSVdist_2D > 30){
-                    SR_counters["no_l2_far"]++;
-                    SR_counters["no_l2_far_weighted"] += ev_weight;
-                }else if(gen_PVSVdist_2D < 0.1) {
-                    SR_counters["no_l2_cl"]++;
-                    SR_counters["no_l2_cl_weighted"]++;
-                }else {
-                    SR_counters["no_l2_ot"]++;
-                    SR_counters["no_l2_ot_weighted"]++;
-                }
+        if(isSignal and makeJECvariations){
+            Set_Objects_And_Relevant_Variables("_jetPt_JECDown");
+            ev_weight = Get_Event_weight();
+            if(_bkgestimator){
+                if(_lFlavor[i_subleading] == 0) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
+                else if(_lFlavor[i_subleading] == 1) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
+                fill_BkgEstimator_tree(bkgestimator_JECDown, ev_weight*total_weight, total_weight);
             }else {
-                SR_counters["unid."]++;
+                JetTagVal.clear();
+            }
+
+            Set_Objects_And_Relevant_Variables("_jetPt_JECUp");
+            ev_weight = Get_Event_weight();
+            if(_bkgestimator){
+                if(_lFlavor[i_subleading] == 0) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
+                else if(_lFlavor[i_subleading] == 1) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
+                fill_BkgEstimator_tree(bkgestimator_JECUp, ev_weight*total_weight, total_weight);
+            }else {
+                JetTagVal.clear();
+            }
+
+            Set_Objects_And_Relevant_Variables("_jetPt_JERDown");
+            ev_weight = Get_Event_weight();
+            if(_bkgestimator){
+                if(_lFlavor[i_subleading] == 0) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
+                else if(_lFlavor[i_subleading] == 1) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
+                fill_BkgEstimator_tree(bkgestimator_JERDown, ev_weight*total_weight, total_weight);
+            }else {
+                JetTagVal.clear();
+            }
+
+            Set_Objects_And_Relevant_Variables("_jetPt_JERUp");
+            ev_weight = Get_Event_weight();
+            if(_bkgestimator){
+                if(_lFlavor[i_subleading] == 0) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
+                else if(_lFlavor[i_subleading] == 1) JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
+                fill_BkgEstimator_tree(bkgestimator_JERUp, ev_weight*total_weight, total_weight);
+            }else {
+                JetTagVal.clear();
             }
         }
 
-        // after everything happened, set subleading lepton to tight prompt lepton to measure 2 lepton prompt performance
-        set_leptons(i_subleading_e, i_subleading_mu);
-        if(!isData and i_subleading != -1){
-            if(_lFlavor[i_subleading] == 0){//electron scale factors
-                ev_weight *= lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
-            }else if(_lFlavor[i_subleading] == 1){//muon scale factors
-                ev_weight *= lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-                ev_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-            }
-        }
-        signal_regions();
-        if(_l1l2 and _lPt[i_subleading] > 20){
-            fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
-            if(mll > 10) fill_relevant_histograms(&hists, &hists2D, sr_flavor + "_2promptwithMll", ev_weight);
+
+
+
+        Set_Objects_And_Relevant_Variables_2prompt("_jetPt");
+        ev_weight = Get_Event_weight_2prompt();
+        if(_l1l2 and (_lFlavor[i_leading] == 0 or _lPt[i_leading] > 30) and ((_lFlavor[i_subleading] == 1 and _lPt[i_subleading] > 20) or (_lFlavor[i_subleading] == 0 and _lPt[i_subleading] > 25))){
+            fill_general_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
+            if(mll > 15) fill_general_histograms(&hists, &hists2D, sr_flavor + "_2promptwithMll", ev_weight);
         }
 
         ++loop_counter;

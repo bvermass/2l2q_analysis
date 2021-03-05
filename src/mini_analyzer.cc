@@ -205,6 +205,13 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     }
     //sum_quad_histograms();
 
+    //Get the JEC variations for signal MC
+    std::map<TString, TH1*> hists_JEC;
+    if(isSignal){
+        hists_JEC = get_hists_JECvariations(event.BkgEstimator_filename);
+        set_correct_sysUp_sysDown(&hists_JEC, {"JEC_", "JER_"});
+    }
+
     TString outputfilename = get_mini_analyzer_outputfilename(event.BkgEstimator_filename);
     std::cout << "output to: " << outputfilename << std::endl;
     TFile *output = new TFile(outputfilename, "recreate");
@@ -226,6 +233,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         h->Write(h->GetName(), TObject::kOverwrite);
     }
     for(auto const& it : hists_sys){
+        TH1* h = it.second;
+        fix_overflow_and_negative_bins(h);
+        h->Write(h->GetName(), TObject::kOverwrite);
+    }
+    for(auto const& it : hists_JEC){
         TH1* h = it.second;
         fix_overflow_and_negative_bins(h);
         h->Write(h->GetName(), TObject::kOverwrite);

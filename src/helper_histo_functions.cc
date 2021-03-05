@@ -23,6 +23,11 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
         if(filename.Contains("dilep_")) outputfilename += filename(filename.Index("dilep_") + 6, filename.Index(".root") - 6 - filename.Index("dilep_")) + "/full_analyzer/";
         else outputfilename += "full_analyzer/";
     }
+
+    if(base_filename.Contains("JECDown")) outputfilename += "JECDown/";
+    if(base_filename.Contains("JECUp")) outputfilename += "JECUp/";
+    if(base_filename.Contains("JERDown")) outputfilename += "JERDown/";
+    if(base_filename.Contains("JERUp")) outputfilename += "JERUp/";
     
     if(partition != 1) {
         TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 

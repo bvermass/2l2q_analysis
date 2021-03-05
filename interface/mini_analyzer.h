@@ -97,6 +97,18 @@ class mini_analyzer {
 
         void init_variations();
         void set_variations(double nominal_weight);
+
+        //in src/mini_analyzer_JEC.cc
+        std::map<TString, TH1*> get_hists_JECvariations(TString base_filename);
+        void add_histograms_JEC(std::map<TString, TH1*>* hists_JEC, TString JECvar);
+        void add_Shape_SR_histograms_JEC(std::map<TString, TH1*>* hists_JEC, TString prefix);
+        void run_JECvariation(std::map<TString, TH1*>* hists_JEC, TString JECvar, TString JECvarsys, TString base_filename);
+        std::vector<TString> set_signal_regions_JEC(BkgEstimator& eventJEC, TString JECvarsys);
+        TString get_sr_flavor(BkgEstimator& eventJEC);
+        void fill_histograms_JEC(BkgEstimator& eventJEC, std::map<TString, TH1*>* hists_JEC, std::vector<TString> JECtags, TString sr_flavor_JEC);
+        void fill_Shape_SR_histograms_JEC(BkgEstimator& eventJEC, std::map<TString, TH1*>* hists_JEC, TString sr_flavor, TString JECtag, double event_weight);
+        void set_correct_sysUp_sysDown(std::map<TString, TH1*>* hists_JEC, std::vector<TString> syslabels);
+
 };
 
 #endif

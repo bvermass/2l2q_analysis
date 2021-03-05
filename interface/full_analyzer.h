@@ -943,6 +943,13 @@ public :
    // in src/full_analyzer.cc, the main code body
     void     run_over_file(TString, double, int, int, int);
 
+    // in src/event.cc
+    void     Set_Objects_And_Relevant_Variables(const TString JetPt_Version);
+    double   Get_Event_weight();
+    void     Set_Objects_And_Relevant_Variables_2prompt(const TString JetPt_Version);
+    double   Get_Event_weight_2prompt();
+    void     fill_SR_counters_cutflow(std::map<TString, double>& SR_counters);
+
    // in src/leptonID.cc
     bool     IsPromptElectronID(const unsigned i);
     bool     IsMvaPromptElectronID(const unsigned i);
@@ -982,18 +989,19 @@ public :
     double   get_displEleSF_unc(unsigned missinghits);
 
    // in src/jetID.cc
-    bool     IsTightJetID(const unsigned i);
+    bool     IsTightJetID(const unsigned i, const TString JetPt_Version);
     bool     IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection);
     int      find_leading_jet(const std::vector<unsigned>& jetcollection);
     int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
     int      find_thirdleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading, const int index_subleading);
-    int      find_jet_closest_to_lepton(const int index_lepton);
+    int      find_jet_closest_to_lepton(const int index_lepton, const TString JetPt_Version);
     double   get_dR_lepton_jet(int, int);
     bool     get_JetIsFromHNL(int i_jet);
+    void     set_jetPt_JERvariations();
 
    // in src/signal_regions.cc
-    void     set_leptons(int i_subleading_displ_e, int i_subleading_displ_mu);
-    void     set_relevant_lepton_variables();
+    void     set_leptons(int i_subleading_displ_e, int i_subleading_displ_mu, const TString JetPt_Version);
+    void     set_relevant_lepton_variables(const TString JetPt_Version);
     TString  get_signal_region_flavor();
     int      select_subleading_lepton(int i_subleading_e, int i_subleading_mu);
     int      select_leading_lepton(int i_leading_e, int i_leading_mu);
