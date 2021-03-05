@@ -34,7 +34,7 @@ def copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths ):
         os.system('gfal-copy -p -f -t 5000 srm://maite.iihe.ac.be:8443{}{}.root srm://maite.iihe.ac.be:8443{}{}_old.root'.format(output_path, dilep_tag, output_path, dilep_tag))
 
     if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}{}.root'.format(output_path, dilep_tag)) == 0:
-        print 'successfully copied dilep_skim to pnfs to {}{}'.format(output_path, dilep_tag)
+        print 'successfully copied dilep_skim to pnfs to {}{}.root'.format(output_path, dilep_tag)
         os.system('rm ~/public/heavyNeutrino/dilep_skim.root')
         for input_crab_path in input_crab_paths:
             os.system('echo {} >> finished_samples.txt'.format(input_crab_path))
@@ -97,6 +97,7 @@ os.system('touch hadded_samples.txt')
 
 output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
 input_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
+#input_base_path = "/user/bvermass/public/heavyNeutrino/"
 
 production_version = sys.argv[1]
 dilep_tag = sys.argv[2]
