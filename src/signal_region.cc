@@ -127,6 +127,12 @@ int full_analyzer::select_leading_lepton(int i_leading_e, int i_leading_mu){
 
 void full_analyzer::signal_regions(){
 
+    //genOverlap is true if event has to be removed. Goal is to get external conversions from ZG and WG, but internal conversions from WJets and DY
+    _genOverlap                 = (isDY and _zgEventType >= 3) or
+                                  (isZG and _hasInternalConversion) or
+                                  (isWJets and _zgEventType >= 3) or
+                                  (isWG and _hasInternalConversion);
+
     //signal region method: sequential booleans so that I can make histograms between each step if I want
     if(_is2016){
         _trige                  = _HLT_Ele27_WPTight_Gsf;
@@ -145,7 +151,8 @@ void full_analyzer::signal_regions(){
     
      _l1                        = i_leading != -1 &&
                                   ((_trige && _lFlavor[i_leading] == 0) || (_trigmu && _lFlavor[i_leading] == 1)) &&
-                                  leadptcut(i_leading);
+                                  leadptcut(i_leading) &&
+                                  !_genOverlap;
 
      _l1l2                      = _l1 &&
                                   i_subleading != -1;

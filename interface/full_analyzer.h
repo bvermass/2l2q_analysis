@@ -868,7 +868,7 @@ public :
    TString local_dir;
    Double_t ev_weight;
    bool makeHistograms, makeHNLtagger, makeBkgEstimator;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false, isMET = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isSingleElectron = false, isSingleMuon = false, isMET = false, isDY = false, isZG = false, isWG = false, isWJets = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses;

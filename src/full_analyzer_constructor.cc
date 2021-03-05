@@ -12,6 +12,10 @@ void full_analyzer::SetSampleTypes(TString filename)
     isMET            = isData and filename.Contains("MET");
     isBackground = (!isSignal and !isData);
     isUL         = filename.Contains("_UL");
+    isDY         = filename.Contains("DY");
+    isZG         = filename.Contains("ZGTo");
+    isWG         = filename.Contains("WGTo");
+    isWJets      = filename.Contains("WJetsToLNu");
 
     std::cout << "This is " << (isUL? "UL " : "") << (isData? (isSingleMuon? "Muon Data" : (isSingleElectron? "Electron Data" : (isMET? "MET Data" : "Unid. Data"))) : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
