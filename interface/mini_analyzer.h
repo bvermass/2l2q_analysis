@@ -59,6 +59,7 @@ class mini_analyzer {
         double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
         double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
         double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+        double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017);
         unsigned get_PFNevaluation_index(int mass, unsigned flavor);
         void init_MV2_parametrization();
         void init_CP();
