@@ -119,8 +119,11 @@ int main(int argc, char * argv[])
     int counter_begin = floor(1.0 * partitionjobnumber / partition * files_bkg.back()->GetNkeys());
     int counter_end   = floor(1.0 * (partitionjobnumber + 1) / partition * files_bkg.back()->GetNkeys());
 
+    TList *keylist;
+    if(withdata) keylist = files_data.front()->GetListOfKeys();
+    else keylist = files_bkg.back()->GetListOfKeys();
 
-    TIter next(files_bkg.back()->GetListOfKeys()); //last file in the list is the largest bkg
+    TIter next(keylist); //last file in the list is the largest bkg
     TKey* key;
     while(key = (TKey*)next()){
         if(counter >= counter_begin and counter <= counter_end){
