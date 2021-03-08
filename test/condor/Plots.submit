@@ -1,10 +1,10 @@
-executable = execMiniAnalyzer
+executable = execPlots
 arguments = $(inputfile) $(max_entries) 1 0
 
 should_transfer_files = YES
-log = MiniAnalyzer.log
-output = MiniAnalyzer.out
-error = MiniAnalyzer.err
+log = test/condor/log/Plot_$(ProcId).log
+output = test/condor/log/Plot_$(ProcId).out
+error = test/condor/log/Plot_$(ProcId).err
 
 request_cpus = 1
 request_disk = 1000

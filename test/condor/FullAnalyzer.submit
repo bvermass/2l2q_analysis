@@ -1,0 +1,13 @@
+executable = execFullAnalyzer
+arguments = $(inputfile) $(cross_section) $(max_entries) $(partition) $(partitionjobnumber)
+
+should_transfer_files = YES
+log = test/condor/log/FullAnalyzer_$(ProcId).log
+output = test/condor/log/FullAnalyzer_$(ProcId).out
+error = test/condor/log/FullAnalyzer_$(ProcId).err
+
+request_cpus = 1
+request_disk = 1000
+request_memory = 2000
+
+queue inputfile,cross_section,max_entries,partition,partitionjobnumber from test/condor/FullAnalyzerJobList.txt

@@ -1,0 +1,13 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+PYTHONFLAGS= -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/include/python2.7 -L/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpbe4/lib -lpython2.7  -lboost_python
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= src/event.cc helpertools/HNL_parameters/HNL_parameters.cc src/bTagWP.cc src/tree_functions.cc src/BkgEstimator.cc helpertools/LSFReader/LSFReader.cc helpertools/PUWeightReader/PUWeightReader.cc helpertools/LorentzVector/LorentzVector.cc helpertools/PFNEvaluation/PFNReader.cc src/PFNTools.cc src/HNLtagger.cc src/jet_histograms.cc src/helper_histo_functions.cc src/gen_histograms.cc src/signal_region.cc src/HLT_eff.cc src/jetID.cc src/leptonID.cc src/histo_functions.cc src/full_analyzer_constructor.cc src/full_analyzer.cc src/print_table.cc test/mainroot.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execFullAnalyzer
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) $(PYTHONFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)

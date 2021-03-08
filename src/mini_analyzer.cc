@@ -682,7 +682,6 @@ void mini_analyzer::set_signal_regions()
         //}
         // mlSV Inverted Jets CR
         if(baseline_cutmlSV_CR2Jets){
-            std::cout << "check!" << std::endl;
             if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
                 if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightmlSV_CR2Jets_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightmlSV_CR2Jets_quadC");
