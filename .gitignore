@@ -15,3 +15,4 @@ helpertools/CombineTools/datacardprep
 helpertools/HistogramMerger/identifiers.txt
 execMiniAnalyzer
 execFullAnalyzer
+helpertools/getTreeEntries/*.txt
