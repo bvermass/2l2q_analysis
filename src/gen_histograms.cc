@@ -16,7 +16,7 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_l1_flavor"]                       = new TH1F("gen_l1_flavor", ";l_{1}^{gen} flavor; Events", 32, -16, 16);
     (*hists)["gen_l2_flavor"]                       = new TH1F("gen_l2_flavor", ";l_{2}^{gen} flavor; Events", 32, -16, 16);
     (*hists)["gen_N_pt"]                            = new TH1F("gen_N_pt", ";HNL #it{p}_{T} [GeV]; Events", 40, 0, 80);
-    (*hists)["gen_M_l1_N"]                          = new TH1F("gen_M_l1_N", ";M_{Nl1} [GeV]; Events", 40, 0, 150);
+    (*hists)["gen_M_l1_N"]                          = new TH1F("gen_M_l1_N", ";M_{Nl1} [GeV]; Events", 40, 60, 110);
     (*hists)["gen_l2_tracks_dR"]                    = new TH1F("gen_l2_tracks_dR", ";#Delta R (l_{2}, tracks); Events", 40, 0, 1.5);
     (*hists)["gen_PV_Nvertex_dxyz"]                 = new TH1F("gen_PV_Nvertex_dxyz", ";#Delta_{3D} (PV^{reco} - Nvtx^{gen}) [cm]; Events", 40, 0, 0.05);
     (*hists)["gen_NPackedDtrs"]                     = new TH1F("gen_NPackedDtrs", ";N. of HNL Ch. Daughters^{gen}; Events", 30, 0, 30);
@@ -29,6 +29,46 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["gen_l1fromtau_ptfrac"]                = new TH1F("gen_l1fromtau_ptfrac", ";l_{1}^{gen} from #tau_{1} #it{p}_{T}^{l}/#it{p}_{T}^{#tau}; Events", 40, 0, 1);
     (*hists)["gen_l2fromtau_ptfrac"]                = new TH1F("gen_l2fromtau_ptfrac", ";l_{2}^{gen} from #tau_{2} #it{p}_{T}^{l}/#it{p}_{T}^{#tau}; Events", 40, 0, 1);
     (*hists)["gen_nTrueInteractions"]               = new TH1F("gen_nTrueInteractions", ";N(true interactions);Events", 50, 0, 100);
+    (*hists2D)["gen_ntracks_genvsreco"]             = new TH2F("gen_ntracks_genvsreco", ";HNL tracks^{gen};SV tracks", 10, 0, 10, 10, 0, 10);
+
+    (*hists)["l1reco_pt_eff_num"]                   = new TH1F("l1reco_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1reco_pt_eff_den"]                   = new TH1F("l1reco_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1reco_eta_eff_num"]                  = new TH1F("l1reco_eta_eff_num", ";eta;Events", 40, -3, 3);
+    (*hists)["l1reco_eta_eff_den"]                  = new TH1F("l1reco_eta_eff_den", ";eta;Events", 40, -3, 3);
+    (*hists)["l1id_pt_eff_num"]                   = new TH1F("l1id_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1id_pt_eff_den"]                   = new TH1F("l1id_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1id_eta_eff_num"]                  = new TH1F("l1id_eta_eff_num", ";eta;Events", 40, -3, 3);
+    (*hists)["l1id_eta_eff_den"]                  = new TH1F("l1id_eta_eff_den", ";eta;Events", 40, -3, 3);
+    //(*hists)["l1reco_dxy_eff_num"]                  = new TH1F("l1reco_dxy_eff_num", ";dxy;Events", 40, 0, 0.1);
+    //(*hists)["l1reco_dxy_eff_den"]                  = new TH1F("l1reco_dxy_eff_den", ";dxy;Events", 40, 0, 0.1);
+    //(*hists)["l1reco_dz_eff_num"]                   = new TH1F("l1reco_dz_eff_num", ";dz;Events", 40, 0, 0.1);
+    //(*hists)["l1reco_dz_eff_den"]                   = new TH1F("l1reco_dz_eff_den", ";dz;Events", 40, 0, 0.1);
+    (*hists)["l1reco_ctau_eff_num"]                 = new TH1F("l1reco_ctau_eff_num", ";c#tau [mm];Events", 40, 0, 60);
+    (*hists)["l1reco_ctau_eff_den"]                 = new TH1F("l1reco_ctau_eff_den", ";c#tau [mm];Events", 40, 0, 60);
+    (*hists)["l2reco_pt_eff_num"]                   = new TH1F("l2reco_pt_eff_num", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2reco_pt_eff_den"]                   = new TH1F("l2reco_pt_eff_den", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2reco_eta_eff_num"]                  = new TH1F("l2reco_eta_eff_num", ";eta;Events", 20, -3, 3);
+    (*hists)["l2reco_eta_eff_den"]                  = new TH1F("l2reco_eta_eff_den", ";eta;Events", 20, -3, 3);
+    //(*hists)["l2reco_dxy_eff_num"]                  = new TH1F("l2reco_dxy_eff_num", ";dxy;Events", 20, 0, 0.1);
+    //(*hists)["l2reco_dxy_eff_den"]                  = new TH1F("l2reco_dxy_eff_den", ";dxy;Events", 20, 0, 0.1);
+    //(*hists)["l2reco_dz_eff_num"]                   = new TH1F("l2reco_dz_eff_num", ";dz;Events", 20, 0, 0.1);
+    //(*hists)["l2reco_dz_eff_den"]                   = new TH1F("l2reco_dz_eff_den", ";dz;Events", 20, 0, 0.1);
+    (*hists)["l2reco_ctau_eff_num"]                 = new TH1F("l2reco_ctau_eff_num", ";c#tau [mm];Events", 20, 0, 60);
+    (*hists)["l2reco_ctau_eff_den"]                 = new TH1F("l2reco_ctau_eff_den", ";c#tau [mm];Events", 20, 0, 60);
+    (*hists)["l2reco_Lxyz_eff_num"]                 = new TH1F("l2reco_Lxyz_eff_num", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
+    (*hists)["l2reco_Lxyz_eff_den"]                 = new TH1F("l2reco_Lxyz_eff_den", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
+    (*hists)["PVNvtxdist"]                          = new TH1F("PVNvtxdist", ";PVNvtxdist;Events", 30, 0, 10);
+    //(*hists)["l2reco_SVgen-reco_eff_num"]           = new TH1F("l2reco_SVgen-reco_eff_num", ";|SV_{fit} - SV_{gen}| [cm];Events", 20, -1.5, 10);
+    //(*hists)["l2reco_SVgen-reco_eff_den"]           = new TH1F("l2reco_SVgen-reco_eff_den", ";|SV_{fit} - SV_{gen}| [cm];Events", 20, -1.5, 10);
+
+    (*hists)["l2id_pt_eff_num"]                   = new TH1F("l2id_pt_eff_num", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2id_pt_eff_den"]                   = new TH1F("l2id_pt_eff_den", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2id_eta_eff_num"]                  = new TH1F("l2id_eta_eff_num", ";eta;Events", 20, -3, 3);
+    (*hists)["l2id_eta_eff_den"]                  = new TH1F("l2id_eta_eff_den", ";eta;Events", 20, -3, 3);
+    (*hists)["l2id_ctau_eff_num"]                 = new TH1F("l2id_ctau_eff_num", ";c#tau [mm];Events", 20, 0, 200);
+    (*hists)["l2id_ctau_eff_den"]                 = new TH1F("l2id_ctau_eff_den", ";c#tau [mm];Events", 20, 0, 200);
+    (*hists)["l2id_Lxyz_eff_num"]                 = new TH1F("l2id_Lxyz_eff_num", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
+    (*hists)["l2id_Lxyz_eff_den"]                 = new TH1F("l2id_Lxyz_eff_den", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
 
     //log scale
     double xmin = 0.8;
@@ -82,6 +122,10 @@ void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
         (*hists)["gen_M_l1_N"]->Fill((lepton1_vec + HNL_vec).mass(), event_weight);
         (*hists)["gen_PV_Nvertex_dxyz"]->Fill(sqrt((_PV_x - _gen_Nvertex_x)*(_PV_x - _gen_Nvertex_x) + (_PV_y - _gen_Nvertex_y)*(_PV_y - _gen_Nvertex_y) + (_PV_z - _gen_Nvertex_z)*(_PV_z - _gen_Nvertex_z)), event_weight);
         (*hists)["gen_PV-SVdist_xlog"]->Fill(get_PVSVdist_gen(i_gen_l2), event_weight);
+
+        if(_l1l2SV){
+            (*hists2D)["gen_ntracks_genvsreco"]->Fill(ch_count, _IVF_ntracks[i_subleading], event_weight);
+        }
 
         LorentzVector l2_vector(_gen_lPt[i_gen_l2], _gen_lEta[i_gen_l2], _gen_lPhi[i_gen_l2], _gen_lE[i_gen_l2]);
         for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){

@@ -26,7 +26,8 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     //(*hists)[prefix+"_PVSVdxyz_categories"]             = new TH1F(prefix+"_PVSVdxyz_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_PVSVdxy_categories"]              = new TH1F(prefix+"_PVSVdxy_categories", ";;Events", 8, 0, 8);
     //(*hists)[prefix+"_MVAvsPOGMedium_categories"]       = new TH1F(prefix+"_MVAvsPOGMedium_categories", ";;Events", 4, 0, 4);
-    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 8, 0, 8);
+    (*hists)[prefix+"_cutflow"]                         = new TH1F(prefix+"_cutflow", ";;Events", 9, 0, 9);
+    (*hists)[prefix+"_cutflow2"]                         = new TH1F(prefix+"_cutflow2", ";;Events", 7, 0, 7);
     (*hists)[prefix+"_dxy_cutflow"]                     = new TH1F(prefix+"_dxy_cutflow", ";;Events", 3, 0, 3);
     //(*hists)[prefix+"_deltaphivsR_categories"]          = new TH1F(prefix+"_deltaphivsR_categories", ";;Events", 4, 0, 4);
 
@@ -37,10 +38,12 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_nDisplMu"]                        = new TH1F(prefix+"_nDisplMu", ";N_{displ muon};Events", 10, 0, 10);
     (*hists)[prefix+"_nDispl"]                          = new TH1F(prefix+"_nDispl", ";N_{displ e,mu};Events", 10, 0, 10);
     (*hists)[prefix+"_nTightDispl"]                     = new TH1F(prefix+"_nTightDispl", ";N_{e,mu};Events", 10, 0, 10);
+    (*hists)[prefix+"_nDispleAndmu"]                     = new TH1F(prefix+"_nDispleAndmu", ";;Events", 3, 0, 3);
     (*hists)[prefix+"_nJets_uncl"]                      = new TH1F(prefix+"_nJets_uncl", ";N_{jets(uncl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_cl"]                        = new TH1F(prefix+"_nJets_cl", ";N_{jets(cl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_l1_pt"]                           = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 30, 0, 100);
     (*hists)[prefix+"_l2_pt"]                           = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 30, 0, 50);
+    (*hists)[prefix+"_llptdiff"]                        = new TH1F(prefix+"_llptdiff", ";l_{1} #it{p}_{T} - l_{2} #it{p}_{T} [GeV];Events", 30, -50, 50);
     (*hists)[prefix+"_l1_eta"]                          = new TH1F(prefix+"_l1_eta", ";l_{1} #eta;Events", 30, -3, 3);
     (*hists)[prefix+"_l2_eta"]                          = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 30, -3, 3);
     (*hists)[prefix+"_l1_dxy"]                          = new TH1F(prefix+"_l1_dxy", ";l_{1} dxy [cm];Events", 30, 0, 0.02);
@@ -60,6 +63,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_l2_3dIPSig"]                      = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 30, 0, 40);
     (*hists)[prefix+"_l2_NumberOfHits"]                 = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Tracker Hits;Events", 20, 0, 20);
     (*hists)[prefix+"_l2_NumberOfPixelHits"]            = new TH1F(prefix+"_l2_NumberOfPixelHits", ";l_{2} Nr. of Pixel Hits;Events", 15, 0, 15);
+    (*hists2D)[prefix+"_l2_ptvsctau"]                   = new TH2F(prefix+"_l2_ptvsctau", ";l_{2} #it{p}_{T} [GeV]; c#tau [mm]", 20, 0, 60, 20, 0, 100);
     (*hists2D)[prefix+"_lsources"]                      = new TH2F(prefix+"_lsources", ";l1 source;l2 source", 14, -2, 12, 14, -2, 12);
     (*hists2D)[prefix+"_lprovenance"]                   = new TH2F(prefix+"_lprovenance", ";l1 source;l2 source", 19, 0, 19, 19, 0, 19);
     (*hists2D)[prefix+"_lprovenanceCompressed"]         = new TH2F(prefix+"_lprovenanceCompressed", ";l1 source;l2 source", 5, 0, 5, 5, 0, 5);
@@ -161,6 +165,7 @@ void full_analyzer::fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TSt
 
 void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D){
     fill_HNL_MC_check(hists, hists2D, ev_weight);
+    fill_leptonreco_eff(hists);
     if(i_leading != -1) fill_HLT_efficiency(hists, "Beforeptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, 1);
     //fill_HLT_efficiency(hists, "Afterptcut", (i_leading_e != -1 && leadptcut(i_leading_e)), (i_leading_mu != -1 && leadptcut(i_leading_mu)));
 
@@ -227,12 +232,14 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_nDisplMu"]->Fill(nDisplMu, event_weight);
     (*hists)[prefix+"_nDispl"]->Fill(nDisplEle + nDisplMu, event_weight);
     (*hists)[prefix+"_nTightDispl"]->Fill(nTightEle + nDisplEle + nTightMu + nDisplMu, event_weight);
+    (*hists)[prefix+"_nDispleAndmu"]->Fill(((nDisplEle > 0)? 1 : 0) + ((nDisplMu > 0)? 1 : 0), event_weight);
     (*hists)[prefix+"_nJets_uncl"]->Fill(nTightJet_uncl, event_weight);
     (*hists)[prefix+"_nJets_cl"]->Fill(nTightJet, event_weight);
 
     (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
     //std::cout << "l2 pt: " << _lPt[i_subleading] << " weight: " << event_weight << std::endl;
     (*hists)[prefix+"_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
+    (*hists)[prefix+"_llptdiff"]->Fill(_lPt[i_leading] - _lPt[i_subleading], event_weight);
     (*hists)[prefix+"_l1_eta"]->Fill(_lEta[i_leading], event_weight);
     (*hists)[prefix+"_l2_eta"]->Fill(_lEta[i_subleading], event_weight);
     (*hists)[prefix+"_l1_dxy"]->Fill(fabs(_dxy[i_leading]), event_weight);
@@ -249,6 +256,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_l2_selectedTrackMult"]->Fill(_selectedTrackMult[i_subleading], event_weight);
     (*hists)[prefix+"_l1_3dIPSig"]->Fill(_3dIPSig[i_leading], event_weight);
     (*hists)[prefix+"_l2_3dIPSig"]->Fill(_3dIPSig[i_subleading], event_weight);
+    (*hists2D)[prefix+"_l2_ptvsctau"]->Fill(_lPt[i_subleading], _ctauHN, event_weight);
     (*hists2D)[prefix+"_lsources"]->Fill(get_lsource(i_gen_leading), get_lsource(i_gen_subleading), event_weight);
     (*hists2D)[prefix+"_lprovenance"]->Fill(_lProvenance[i_leading], _lProvenance[i_subleading], event_weight);
     (*hists2D)[prefix+"_lprovenanceCompressed"]->Fill(_lProvenanceCompressed[i_leading], _lProvenanceCompressed[i_subleading], event_weight);
@@ -303,19 +311,44 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
 }
 
 void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
-    if(i_subleading == -1) return;
+    if(i_leading == -1 or i_subleading == -1) return;
     /*
      * Cutflow
      */
-    if(_lFlavor[i_leading] == 0 and _trige) (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
-    if(_lFlavor[i_leading] == 1 and _trigmu) (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
-    if(_l1)                     (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
-    if(_l1l2)                   (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
-    if(_l1l2SV)                 (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
-    if(_Training)               (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
-    if(_FullNoPFN)              (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
-    if(_CR_FullNoPFN_invdphi)   (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
-    if(_CR_FullNoPFN_invmll)    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
+    if((_lFlavor[i_leading] == 0 and _trige) or (_lFlavor[i_leading] == 1 and _trigmu)){
+        (*hists)[prefix+"_cutflow"]->Fill(0., event_weight);
+        if(_l1){
+            (*hists)[prefix+"_cutflow"]->Fill(1., event_weight);
+            if(_l1l2){
+                (*hists)[prefix+"_cutflow"]->Fill(2., event_weight);
+                (*hists)[prefix+"_cutflow2"]->Fill(0., event_weight);
+                if(_l1l2SV){
+                    (*hists)[prefix+"_cutflow"]->Fill(3., event_weight);
+                    (*hists)[prefix+"_cutflow2"]->Fill(1., event_weight);
+                    if(dphill > 0.4){
+                        (*hists)[prefix+"_cutflow"]->Fill(4., event_weight);
+                        (*hists)[prefix+"_cutflow2"]->Fill(2., event_weight);
+                        if(mll > 10){
+                            (*hists)[prefix+"_cutflow"]->Fill(5., event_weight);
+                            (*hists)[prefix+"_cutflow2"]->Fill(3., event_weight);
+                            if(i_jetl2 != -1){
+                                (*hists)[prefix+"_cutflow"]->Fill(6., event_weight);
+                                (*hists)[prefix+"_cutflow2"]->Fill(4., event_weight);
+                                if(nTightJet <= 1){
+                                    (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
+                                    (*hists)[prefix+"_cutflow2"]->Fill(5., event_weight);
+                                    if(nTightEle + nTightMu == 1){
+                                        (*hists)[prefix+"_cutflow"]->Fill(8., event_weight);
+                                        (*hists)[prefix+"_cutflow2"]->Fill(6., event_weight);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /*
      * MVA ID versus cutbased medium prompt ID
@@ -487,6 +520,64 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
     }
 }
 
+void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
+    if(i_gen_l1 != -1 and ((_gen_lFlavor[i_gen_l1] == 0 and _gen_lPt[i_gen_l1] > 30 and fabs(_gen_lEta[i_gen_l1]) < 2.5) or (_gen_lFlavor[i_gen_l1] == 1 and _gen_lPt[i_gen_l1] > 25 and fabs(_gen_lEta[i_gen_l1]) < 2.4))){
+        (*hists)["l1reco_pt_eff_den"]->Fill(_gen_lPt[i_gen_l1]);
+        (*hists)["l1reco_eta_eff_den"]->Fill(_gen_lEta[i_gen_l1]);
+        //(*hists)["l1reco_dxy_eff_den"]->Fill(_gen_[i_gen_l1]);
+        //(*hists)["l1reco_dz_eff_den"]->Fill(_gen_[i_gen_l1]);
+        (*hists)["l1reco_ctau_eff_den"]->Fill(_ctauHN);
+
+        if(l1hasreco){
+            (*hists)["l1reco_pt_eff_num"]->Fill(_gen_lPt[i_gen_l1]);
+            (*hists)["l1reco_eta_eff_num"]->Fill(_gen_lEta[i_gen_l1]);
+            //(*hists)["l1reco_dxy_eff_num"]->Fill(_gen_[i_gen_l1]);
+            //(*hists)["l1reco_dz_eff_num"]->Fill(_gen_[i_gen_l1]);
+            (*hists)["l1reco_ctau_eff_num"]->Fill(_ctauHN);
+
+            (*hists)["l1id_pt_eff_den"]->Fill(_gen_lPt[i_gen_l1]);
+            (*hists)["l1id_eta_eff_den"]->Fill(_gen_lEta[i_gen_l1]);
+
+            if(leadingIsl1){
+                (*hists)["l1id_pt_eff_num"]->Fill(_gen_lPt[i_gen_l1]);
+                (*hists)["l1id_eta_eff_num"]->Fill(_gen_lEta[i_gen_l1]);
+            }
+        }
+    }
+
+    if(i_gen_l2 != -1 and _l1 and ((_gen_lFlavor[i_gen_l2] == 0 and _gen_lPt[i_gen_l2] > 7 and fabs(_gen_lEta[i_gen_l2]) < 2.5) or (_gen_lFlavor[i_gen_l2] == 1 and _gen_lPt[i_gen_l2] > 5 and fabs(_gen_lEta[i_gen_l2]) < 2.4)) and get_PVSVdist_gen_2D(i_gen_l2) < 50){
+        (*hists)["l2reco_pt_eff_den"]->Fill(_gen_lPt[i_gen_l2]);
+        (*hists)["l2reco_eta_eff_den"]->Fill(_gen_lEta[i_gen_l2]);
+        //(*hists)["l2reco_dxy_eff_den"]->Fill(_gen_[i_gen_l2]);
+        //(*hists)["l2reco_dz_eff_den"]->Fill(_gen_[i_gen_l2]);
+        (*hists)["l2reco_ctau_eff_den"]->Fill(_ctauHN);
+        (*hists)["PVNvtxdist"]->Fill(PVNvtxdist);
+        (*hists)["l2reco_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+        //(*hists)["l2reco_SVgen-reco_eff_den"]
+
+        if(l2hasreco){
+            (*hists)["l2reco_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
+            (*hists)["l2reco_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
+            //(*hists)["l2reco_dxy_eff_num"]->Fill(_gen_[i_gen_l2]);
+            //(*hists)["l2reco_dz_eff_num"]->Fill(_gen_[i_gen_l2]);
+            (*hists)["l2reco_ctau_eff_num"]->Fill(_ctauHN);
+            (*hists)["l2reco_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+            //(*hists)["l2reco_PVSVdist_eff_num"]->Fill(_gen_);
+
+            (*hists)["l2id_pt_eff_den"]->Fill(_gen_lPt[i_gen_l2]);
+            (*hists)["l2id_eta_eff_den"]->Fill(_gen_lEta[i_gen_l2]);
+            (*hists)["l2id_ctau_eff_den"]->Fill(_ctauHN);
+            (*hists)["l2id_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+
+            if(subleadingIsl2){
+                (*hists)["l2id_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
+                (*hists)["l2id_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
+                (*hists)["l2id_ctau_eff_num"]->Fill(_ctauHN);
+                (*hists)["l2id_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+            }
+        }
+    }
+}
 
 void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix){
     if(isData) return;
@@ -656,10 +747,15 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //for(int i = 0; i < nx_jets; i++){ 
     //    (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     //}
-    int nx_cutflow = 8;
-    const char *cutflow_labels[nx_cutflow] = {"trig", "l1", "l1+l2", "SV", "jetl2", "FullNoPFN", "CR dphi", "CR mll"};
+    int nx_cutflow = 9;
+    const char *cutflow_labels[nx_cutflow] = {"trig.", "l1", "l2", "SV", "#{Delta}#{phi}_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
+    }
+    int nx_cutflow2 = 7;
+    const char *cutflow2_labels[nx_cutflow2] = {"l1+l2", "SV", "#{Delta}#{phi}_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
+    for(int i = 0; i < nx_cutflow2; i++){
+        (*hists)[prefix+"_cutflow2"]->GetXaxis()->SetBinLabel(i+1, cutflow2_labels[i]);
     }
     int nx_dxy = 3;
     const char *dxy_labels[nx_dxy] = {"No dxy cut", "dxy(l2) > 0.01cm", "dxy(l2) > 0.02cm"};
@@ -672,6 +768,11 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
         for(int i = 0; i < nx_IVF; i++){
             (*hists)[prefix+"_IVF_cutflow"]->GetXaxis()->SetBinLabel(i+1, IVF_labels[i]);
         }
+    }
+    int nx_nDispl = 3;
+    const char *nDispl_labels[nx_nDispl] = {"No l2", "e OR #mu", "e AND #mu"};
+    for(int i = 0; i < nx_nDispl; i++){
+        (*hists)[prefix+"_nDispleAndmu"]->GetXaxis()->SetBinLabel(i+1, nDispl_labels[i]);
     }
 }
 

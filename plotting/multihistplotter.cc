@@ -3,6 +3,7 @@
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
+    bool normalize_to_unity = true;
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
@@ -42,9 +43,9 @@ int main(int argc, char * argv[])
 
     }
 
-    //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
-    //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {20, 30, 190}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
+    //this color scheme comes from the coolors.co app: https://coolors.co/2e72cc-560e76-1db600-e8a400-ef201d
+    std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
+    //std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {20, 30, 190}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -114,7 +115,8 @@ int main(int argc, char * argv[])
                                 hist->SetMarkerColor(colors[i]);
                                 hist->SetLineColor(colors[i]);
                             }
-                            if(histname.Contains("_ctau")) hist->Scale(1./hist->Integral());
+                            if(normalize_to_unity and !histname.Contains("_eff_")) hist->Scale(1./hist->Integral());
+                            else if(histname.Contains("_ctau") and !histname.Contains("_eff_")) hist->Scale(1./hist->Integral());
                             legend.AddEntry(hist, legends[i], "l");
                         }
                     }

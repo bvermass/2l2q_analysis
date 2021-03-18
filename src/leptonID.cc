@@ -24,7 +24,7 @@ bool full_analyzer::IsMediumPromptMuonID(const unsigned i)
     if(_lFlavor[i] != 1)                            return false;
     if(fabs(_lEta[i]) >= 2.4)                       return false;
     if(_lPt[i] <= 10)                               return false;
-    if(fabs(_dxy[i]) >= 0.05)                       return false;
+    if(fabs(_dxy[i]) >= 0.01)                       return false;
     if(fabs(_dz[i]) >= 0.1)                         return false;
     if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
     if(!_lPOGMedium[i])                             return false;
@@ -249,6 +249,7 @@ bool full_analyzer::IsDisplacedMuonID(const unsigned i)
     if(fabs(_lEta[i]) > 2.4)                            return false;
     if(_lPt[i] < 5)                                     return false;
     if(fabs(_dxy[i]) < 0.02)                            return false;
+    if(fabs(_dz[i]) > 10)                               return false;
     if(!_lPOGLoose[i])                                  return false;
     if(_lMuonSegComp[i] < 0.303)                        return false;
     if(_lMuonSegComp[i] < 0.451 and !goodglobalmuon)    return false;
@@ -288,6 +289,7 @@ int full_analyzer::find_subleading_lepton(const std::vector<unsigned>& leptoncol
     int index_subleading = -1;
 
     for(const auto& index_lepton : leptoncollection){
+        //if((int)index_lepton == index_leading or _lPt[index_lepton] >= _lPt[index_leading]) continue;
         if((int)index_lepton == index_leading) continue;
 
         if(index_subleading == -1) index_subleading = (int)index_lepton;
@@ -352,6 +354,18 @@ bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
     double deta = fabs(_lEta[i_lep] - _gen_lEta[i_gen_lep]);
     if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
     else return false;
+}
+
+bool full_analyzer::gen_l_has_reco(int i_gen_lep)
+{
+    if(i_gen_lep == -1) return false;
+    for(unsigned i = 0; i < _nLight; i++){
+        if(_gen_lFlavor[i_gen_lep] != _lFlavor[i]) continue;
+        double dR = get_dR(_lEta[i], _lPhi[i], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
+        double deta = fabs(_lEta[i] - _gen_lEta[i_gen_lep]);
+        if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
+    }
+    return false;
 }
 
 double full_analyzer::get_lsource(int i_gen_lep)
@@ -425,6 +439,10 @@ double full_analyzer::get_PVSVdist_gen(int i_gen_l){
 double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
     if(i_gen_l == -1) return -1; 
     return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
+}
+
+double full_analyzer::get_PVNvtxdist(){
+    return sqrt((_PV_x - _gen_Nvertex_x)*(_PV_x - _gen_Nvertex_x) + (_PV_y - _gen_Nvertex_y)*(_PV_y - _gen_Nvertex_y) + (_PV_z - _gen_Nvertex_z)*(_PV_z - _gen_Nvertex_z));
 }
 
 double full_analyzer::get_displEleSF(unsigned missinghits){

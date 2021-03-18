@@ -234,6 +234,8 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     TString fullname = pathname + linorlog;
 
     if(histname.Contains("gen_"))               fullname += "gen/";
+    if(histname.Contains("l1reco_") or histname.Contains("l1id_"))            fullname += "l1reco/";
+    if(histname.Contains("l2reco_") or histname.Contains("l2id_"))            fullname += "l2reco/";
     if(histname.Contains("HLT_"))               fullname += "HLT/";
     fullname += get_lflavor(histname);
     if(histname.Contains("_OS_"))               fullname += "OS/";

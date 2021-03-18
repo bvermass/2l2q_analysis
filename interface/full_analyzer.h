@@ -885,6 +885,7 @@ public :
    int i_gen_l2;
    bool leadingIsl1;
    bool subleadingIsl2; 
+   bool l1hasreco, l2hasreco;
 
    // signal region lepton indices 
    int i_leading;
@@ -915,7 +916,7 @@ public :
    double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D, highest_trackpt_weight, IVF_costracks;
+   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D, highest_trackpt_weight, IVF_costracks, PVNvtxdist;
    
    //Scale Factor readers
    LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO, *lsfreader_displ_m_ID, *lsfreader_displ_m_SV;
@@ -973,6 +974,7 @@ public :
     int      find_gen_lep(int i_lep);
     int      find_gen_l1();
     int      find_gen_l2();
+    bool     gen_l_has_reco(int i_gen_lep);
     bool     leptonIsGenLepton(int, int);
     double   get_lsource(int);
     double   get_IVF_SVgenreco(int, int);
@@ -985,6 +987,7 @@ public :
     double   get_KVF_PVSVdist_2D(int);
     double   get_PVSVdist_gen(int);
     double   get_PVSVdist_gen_2D(int);
+    double   get_PVNvtxdist();
     double   get_displEleSF(unsigned missinghits);
     double   get_displEleSF_unc(unsigned missinghits);
 
@@ -1000,11 +1003,12 @@ public :
     void     set_jetPt_JERvariations();
 
    // in src/signal_regions.cc
-    void     set_leptons(int i_subleading_displ_e, int i_subleading_displ_mu, const TString JetPt_Version);
+    void     set_leptons(const TString JetPt_Version);
     void     set_relevant_lepton_variables(const TString JetPt_Version);
     TString  get_signal_region_flavor();
-    int      select_subleading_lepton(int i_subleading_e, int i_subleading_mu);
-    int      select_leading_lepton(int i_leading_e, int i_leading_mu);
+    int      select_subleading_lepton_withSV(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID);
+    int      select_subleading_lepton_highestpt(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID);
+    int      select_leading_lepton(std::vector<unsigned> promptElectronID, std::vector<unsigned> promptMuonID);
     void     signal_regions();
     void     additional_signal_regions();
     bool     leadptcut(int);
@@ -1026,6 +1030,7 @@ public :
     void     fill_cutflow(std::map<TString, TH1*>*, TString, double);
     void     fill_KVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
     void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
+    void     fill_leptonreco_eff(std::map<TString, TH1*>* hists);
     void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
     void     fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);

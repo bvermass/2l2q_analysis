@@ -6,9 +6,7 @@
 
 using namespace std;
 
-void full_analyzer::set_leptons(int i_subleading_e, int i_subleading_mu, const TString JetPt_Version){
-    i_subleading = select_subleading_lepton(i_subleading_e, i_subleading_mu);
-
+void full_analyzer::set_leptons(const TString JetPt_Version){
     sr_flavor = get_signal_region_flavor();
     sr_charge = sr_flavor(0,3);
     sr_lflavor = sr_flavor(3,3);
@@ -26,6 +24,8 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
     i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
     leadingIsl1         = leptonIsGenLepton(i_leading, i_gen_l1);
     subleadingIsl2      = leptonIsGenLepton(i_subleading, i_gen_l2);
+    l1hasreco           = gen_l_has_reco(i_gen_l1);
+    l2hasreco           = gen_l_has_reco(i_gen_l2);
 
 
     if(i_leading != -1 and i_subleading != -1){
@@ -74,6 +74,7 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
                 IVF_SVgenreco   = get_IVF_SVgenreco(i_gen_subleading, i_subleading);
                 gen_PVSVdist_2D = get_PVSVdist_gen_2D(i_gen_subleading);
                 gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
+                PVNvtxdist = get_PVNvtxdist();
             }
         }
     }
@@ -97,7 +98,31 @@ TString full_analyzer::get_signal_region_flavor(){
     return signal_region_flavor;
 }
 
-int full_analyzer::select_subleading_lepton(int i_subleading_e, int i_subleading_mu){
+int full_analyzer::select_subleading_lepton_withSV(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID){
+    //step 1: keep leptons with an SV
+    std::vector<unsigned> l2_withSV;
+    for(const auto& i_ele : displacedElectronID){
+        if(_lIVF_match[i_ele] and _lPt[i_ele] + 5 < _lPt[i_leading]) l2_withSV.push_back(i_ele);
+    }
+    for(const auto& i_mu : displacedMuonID){
+        if(_lIVF_match[i_mu] and _lPt[i_mu] < _lPt[i_leading]) l2_withSV.push_back(i_mu);
+    }
+    if(l2_withSV.size() == 0) return -1;
+
+    //step 2: select lepton with highest SV pt (sum of track pts)
+    unsigned i_l2_SVpt = l2_withSV.front();
+    for(const auto& i_l : l2_withSV){
+        if(_IVF_pt[i_l] > _IVF_pt[i_l2_SVpt]){
+            i_l2_SVpt = i_l;
+        }
+    }
+
+    return i_l2_SVpt;
+}
+int full_analyzer::select_subleading_lepton_highestpt(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID){
+	int i_subleading_e  	    = find_subleading_lepton(displacedElectronID, i_leading);
+	int i_subleading_mu 	    = find_subleading_lepton(displacedMuonID, i_leading);
+
     if(i_subleading_mu == -1){
         return i_subleading_e;
     }else if(i_subleading_e == -1){
@@ -111,7 +136,10 @@ int full_analyzer::select_subleading_lepton(int i_subleading_e, int i_subleading
 }
 
 
-int full_analyzer::select_leading_lepton(int i_leading_e, int i_leading_mu){
+int full_analyzer::select_leading_lepton(std::vector<unsigned> promptElectronID, std::vector<unsigned> promptMuonID){
+	int i_leading_e     		    = find_leading_lepton(promptElectronID);
+	int i_leading_mu    		    = find_leading_lepton(promptMuonID);
+
     if(i_leading_mu == -1){
         return i_leading_e;
     }else if(i_leading_e == -1){
