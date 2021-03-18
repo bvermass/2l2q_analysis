@@ -183,6 +183,19 @@ int main(int argc, char * argv[])
                 pad->SetLogy(0);
 
                 sample_hist->SetMinimum(0);
+
+                //for PFNvsmlSV 2D plot for ABCDscheme
+                //if(histname.Contains("_quadB_")){
+                //    TString histname_quadA = histname;
+                //    TH2F* hist_quadA = (TH2F*)sample_file->Get(histname_quadA.ReplaceAll("quadB", "quadA").ReplaceAll("cutTightmlSV", "cutTightCR1mlSV"));
+                //    TString histname_quadC = histname;
+                //    TH2F* hist_quadC = (TH2F*)sample_file->Get(histname_quadC.ReplaceAll("quadB", "quadC").ReplaceAll("cutTightmlSV", "cutTightCR1mlSV"));
+                //    TString histname_quadD = histname;
+                //    TH2F* hist_quadD = (TH2F*)sample_file->Get(histname_quadD.ReplaceAll("quadB", "quadD"));
+                //    sample_hist->Add(hist_quadA);
+                //    sample_hist->Add(hist_quadC);
+                //    sample_hist->Add(hist_quadD);
+                //}
                 sample_hist->Draw(get_2D_draw_options(sample_hist));
                 CMSandLumi->Draw();
 

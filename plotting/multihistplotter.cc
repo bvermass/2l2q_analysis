@@ -6,6 +6,8 @@ int main(int argc, char * argv[])
     bool normalize_to_unity = true;
     // set general plot style
     setTDRStyle();
+    auto style = gROOT->GetStyle("tdrStyle");
+    style->SetMarkerSize(0.01);
     gROOT->ForceStyle();
 
     // Argument 1: specific directory for plots (related to x in dilep_x.root or specific set of plots)
@@ -141,7 +143,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(0);
 
-                hists->Draw("E P hist nostack");
+                hists->Draw("hist E nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -156,7 +158,7 @@ int main(int argc, char * argv[])
                 pad->Clear();
                 pad->SetLogy(1);
 
-                hists->Draw("E P hist nostack");
+                hists->Draw("hist E nostack");
                 hists->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));
@@ -245,7 +247,7 @@ int main(int argc, char * argv[])
                     pad->Clear();
                     pad->SetLogy(0);
 
-                    hists_AoverC->Draw("E P hist nostack");
+                    hist Es_AoverC->Draw("hist E nostack");
                     hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                     hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                     hists_AoverC->SetMaximum(1.25*hists_AoverC->GetMaximum("nostack"));
@@ -260,7 +262,7 @@ int main(int argc, char * argv[])
                     pad->Clear();
                     pad->SetLogy(1);
 
-                    hists_AoverC->Draw("E P hist nostack");
+                    hists_AoverC->Draw("hist E nostack");
                     hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                     hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                     hists_AoverC->SetMaximum(10*hists_AoverC->GetMaximum("nostack"));

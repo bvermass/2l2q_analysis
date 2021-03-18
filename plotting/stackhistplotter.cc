@@ -194,8 +194,8 @@ int main(int argc, char * argv[])
                             hist->SetLineColor(colors_signal[i]);
                             hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
-                            if(histname.Contains("_2prompt") or histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
-                            else hist->Scale(10.);
+                            if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
+                            //else hist->Scale(10.);
                             hist->SetMarkerColor(colors_signal[i]);
                             hists_signal->Add(hist);
                             TString legend_tmp = legends_signal[i];
