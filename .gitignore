@@ -18,3 +18,4 @@ execFullAnalyzer
 helpertools/getTreeEntries/*.txt
 helpertools/getTreeEntries/execIntegralEff
 test/condor/log
+test/scripts/get_taus.py
