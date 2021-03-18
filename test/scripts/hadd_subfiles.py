@@ -129,6 +129,40 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'Top_MiniAOD2016.root', Top_2016_list)) != 0:
             all_good = False
 
+        QCD_MuEnriched_2016_list = [basename + 'QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root']
+        if os.system(merge_files(basename + 'QCD_MuEnriched_MiniAOD2016.root', QCD_MuEnriched_2016_list)) != 0:
+            all_good = False
+
+        QCD_EMEnriched_2016_list = [basename + 'QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                                    basename + 'QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root']
+        if os.system(merge_files(basename + 'QCD_EMEnriched_MiniAOD2016.root', QCD_EMEnriched_2016_list)) != 0:
+            all_good = False
+
+        QCD_bcToE_2016_list = [basename + 'QCD_Pt_15to20_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                               basename + 'QCD_Pt_20to30_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                               basename + 'QCD_Pt_30to80_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                               basename + 'QCD_Pt_80to170_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                               basename + 'QCD_Pt_170to250_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root',
+                               basename + 'QCD_Pt_250toInf_bcToE_TuneCUETP8M1_13TeV_pythia8_MiniAOD2016.root']
+        if os.system(merge_files(basename + 'QCD_bcToE_MiniAOD2016.root', QCD_bcToE_2016_list)) != 0:
+            all_good = False
+
         Bkg_2016_list = [basename + 'DYJets_MiniAOD2016.root',
                     basename + 'Diboson_MiniAOD2016.root',
                     basename + 'TTJets_MiniAOD2016.root',
@@ -211,6 +245,41 @@ def merge_similar_samples( base_path ):
                         basename + 'ZZTo2Q2Nu_TuneCP5_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2017.root',
                         basename + 'ZZTo4L_13TeV_powheg_pythia8_MiniAOD2017.root']
         if os.system(merge_files(basename + 'Diboson_MiniAOD2017.root', Diboson_2017_list)) != 0:
+            all_good = False
+
+        QCD_MuEnriched_2017_list = [basename + 'QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2017.root']
+        if os.system(merge_files(basename + 'QCD_MuEnriched_MiniAOD2017.root', QCD_MuEnriched_2017_list)) != 0:
+            all_good = False
+
+        QCD_EMEnriched_2017_list = [basename + 'QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    #basename + 'QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                                    basename + 'QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2017.root']
+        if os.system(merge_files(basename + 'QCD_EMEnriched_MiniAOD2017.root', QCD_EMEnriched_2017_list)) != 0:
+            all_good = False
+
+        QCD_bcToE_2017_list = [#basename + 'QCD_Pt_15to20_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                               basename + 'QCD_Pt_20to30_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                               basename + 'QCD_Pt_30to80_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                               basename + 'QCD_Pt_80to170_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                               basename + 'QCD_Pt_170to250_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root',
+                               basename + 'QCD_Pt_250toInf_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2017.root']
+        if os.system(merge_files(basename + 'QCD_bcToE_MiniAOD2017.root', QCD_bcToE_2017_list)) != 0:
             all_good = False
 
 
@@ -297,6 +366,42 @@ def merge_similar_samples( base_path ):
         if os.system(merge_files(basename + 'Diboson_MiniAOD2018.root', Diboson_2018_list)) != 0:
             all_good = False
 
+        QCD_MuEnriched_2018_list = [basename + 'QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_MuEnriched_MiniAOD2018.root', QCD_MuEnriched_2018_list)) != 0:
+            all_good = False
+
+        QCD_EMEnriched_2018_list = [basename + 'QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                                    basename + 'QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_EMEnriched_MiniAOD2018.root', QCD_EMEnriched_2018_list)) != 0:
+            all_good = False
+
+        QCD_bcToE_2018_list = [basename + 'QCD_Pt_15to20_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                               basename + 'QCD_Pt_20to30_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                               basename + 'QCD_Pt_30to80_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                               basename + 'QCD_Pt_80to170_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                               basename + 'QCD_Pt_170to250_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root',
+                               basename + 'QCD_Pt_250toInf_bcToE_TuneCP5_13TeV_pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_bcToE_MiniAOD2018.root', QCD_bcToE_2018_list)) != 0:
+            all_good = False
+
+
         Bkg_2018_list = [basename + 'DYJets_MiniAOD2018.root',
                     basename + 'Diboson_MiniAOD2018.root',
                     basename + 'TTJets_MiniAOD2018.root',
@@ -351,13 +456,13 @@ def merge_similar_samples( base_path ):
 
 #customizable parameters
 tag = 'final'
-n_hadds = 10
+n_hadds = 8
 
 
 base_paths = []
 base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_electron/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_muon/' + tag + '/full_analyzer/')
+#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_electron/' + tag + '/full_analyzer/')
+#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_muon/' + tag + '/full_analyzer/')
 base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/')
 
 hadd_counter = 0

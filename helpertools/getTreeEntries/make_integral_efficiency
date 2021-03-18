@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= get_integral_efficiency.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execIntegralEff
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)
