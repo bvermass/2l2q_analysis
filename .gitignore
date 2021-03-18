@@ -17,3 +17,4 @@ execMiniAnalyzer
 execFullAnalyzer
 helpertools/getTreeEntries/*.txt
 helpertools/getTreeEntries/execIntegralEff
+test/condor/log

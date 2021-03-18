@@ -338,7 +338,7 @@ TLegend get_legend(double xmin, double ymin, double xmax, double ymax, int Ncolu
 
 TString adjust_legend(TString legend)
 {
-    TString adjusted_legend = legend.ReplaceAll("_", " ");
+    TString adjusted_legend = legend.ReplaceAll("x", " ");
     return adjusted_legend;
 }
 
