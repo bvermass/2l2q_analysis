@@ -84,6 +84,12 @@ void Skimmer::Init_input_branches(TTree* tree)
          tree->SetBranchAddress("_gen_NPackedDtrsE", &i_gen_NPackedDtrsE, &bi__gen_NPackedDtrsE);
          tree->SetBranchAddress("_gen_NPackedDtrsPdgId", &i_gen_NPackedDtrsPdgId, &bi__gen_NPackedDtrsPdgId);
          tree->SetBranchAddress("_gen_NPackedDtrsCharge", &i_gen_NPackedDtrsCharge, &bi__gen_NPackedDtrsCharge);
+         tree->SetBranchAddress("_gen_NPackedDtrsRecoPt", &i_gen_NPackedDtrsRecoPt, &bi__gen_NPackedDtrsRecoPt);
+         tree->SetBranchAddress("_gen_NPackedDtrsRecoEta", &i_gen_NPackedDtrsRecoEta, &bi__gen_NPackedDtrsRecoEta);
+         tree->SetBranchAddress("_gen_NPackedDtrsRecoPhi", &i_gen_NPackedDtrsRecoPhi, &bi__gen_NPackedDtrsRecoPhi);
+         tree->SetBranchAddress("_gen_NPackedDtrsRecoE", &i_gen_NPackedDtrsRecoE, &bi__gen_NPackedDtrsRecoE);
+         tree->SetBranchAddress("_gen_NPackedDtrsRecoPdgId", &i_gen_NPackedDtrsRecoPdgId, &bi__gen_NPackedDtrsRecoPdgId);
+         tree->SetBranchAddress("_gen_NPackedDtrsHasReco", &i_gen_NPackedDtrsHasReco, &bi__gen_NPackedDtrsHasReco);
          tree->SetBranchAddress("_gen_nNdaughters", &i_gen_nNdaughters, &bi__gen_nNdaughters);
          tree->SetBranchAddress("_gen_Ndaughters_pdg", i_gen_Ndaughters_pdg, &bi__gen_Ndaughters_pdg);
          tree->SetBranchAddress("_gen_Ndaughters_Pt", &i_gen_Ndaughters_Pt, &bi__gen_Ndaughters_Pt);
@@ -523,9 +529,15 @@ void Skimmer::Add_branches(TTree* tree)
         tree->Branch("_gen_NPackedDtrsPt",		        &o_gen_NPackedDtrsPt,			"_gen_NPackedDtrsPt[_gen_nNPackedDtrs]/D");
         tree->Branch("_gen_NPackedDtrsEta",		        &o_gen_NPackedDtrsEta,		    "_gen_NPackedDtrsEta[_gen_nNPackedDtrs]/D");
         tree->Branch("_gen_NPackedDtrsPhi",		        &o_gen_NPackedDtrsPhi,		    "_gen_NPackedDtrsPhi[_gen_nNPackedDtrs]/D");
-        tree->Branch("_gen_NPackedDtrsE",		        &o_gen_NPackedDtrsE,			    "_gen_NPackedDtrsE[_gen_nNPackedDtrs]/D");
-        tree->Branch("_gen_NPackedDtrsPdgId",           &o_gen_NPackedDtrsPdgId,	        "_gen_NPackedDtrsPdgId[_gen_nNPackedDtrs]/I");
+        tree->Branch("_gen_NPackedDtrsE",		        &o_gen_NPackedDtrsE,		    "_gen_NPackedDtrsE[_gen_nNPackedDtrs]/D");
+        tree->Branch("_gen_NPackedDtrsPdgId",           &o_gen_NPackedDtrsPdgId,        "_gen_NPackedDtrsPdgId[_gen_nNPackedDtrs]/I");
         tree->Branch("_gen_NPackedDtrsCharge",          &o_gen_NPackedDtrsCharge,	    "_gen_NPackedDtrsCharge[_gen_nNPackedDtrs]/I");
+        tree->Branch("_gen_NPackedDtrsRecoPt",		    &o_gen_NPackedDtrsRecoPt,		"_gen_NPackedDtrsRecoPt[_gen_nNPackedDtrs]/D");
+        tree->Branch("_gen_NPackedDtrsRecoEta",		    &o_gen_NPackedDtrsRecoEta,	    "_gen_NPackedDtrsRecoEta[_gen_nNPackedDtrs]/D");
+        tree->Branch("_gen_NPackedDtrsRecoPhi",		    &o_gen_NPackedDtrsRecoPhi,	    "_gen_NPackedDtrsRecoPhi[_gen_nNPackedDtrs]/D");
+        tree->Branch("_gen_NPackedDtrsRecoE",		    &o_gen_NPackedDtrsRecoE,	    "_gen_NPackedDtrsRecoE[_gen_nNPackedDtrs]/D");
+        tree->Branch("_gen_NPackedDtrsRecoPdgId",       &o_gen_NPackedDtrsRecoPdgId,    "_gen_NPackedDtrsRecoPdgId[_gen_nNPackedDtrs]/I");
+        tree->Branch("_gen_NPackedDtrsHasReco",         &o_gen_NPackedDtrsHasReco,	    "_gen_NPackedDtrsHasReco[_gen_nNPackedDtrs]/O");
         
         tree->Branch("_gen_nNdaughters",	            &o_gen_nNdaughters,		        "_gen_nNdaughters/i");
         tree->Branch("_gen_Ndaughters_pdg",   	        &o_gen_Ndaughters_pdg,	        "_gen_Ndaughters_pdg[_gen_nNdaughters]/I");
@@ -1017,6 +1029,12 @@ void Skimmer::Skim(TString skimcondition)
                     o_gen_NPackedDtrsE[i] = i_gen_NPackedDtrsE[i];
                     o_gen_NPackedDtrsPdgId[i] = i_gen_NPackedDtrsPdgId[i];
                     o_gen_NPackedDtrsCharge[i] = i_gen_NPackedDtrsCharge[i];
+                    o_gen_NPackedDtrsRecoPt[i] = i_gen_NPackedDtrsRecoPt[i];
+                    o_gen_NPackedDtrsRecoEta[i] = i_gen_NPackedDtrsRecoEta[i];
+                    o_gen_NPackedDtrsRecoPhi[i] = i_gen_NPackedDtrsRecoPhi[i];
+                    o_gen_NPackedDtrsRecoE[i] = i_gen_NPackedDtrsRecoE[i];
+                    o_gen_NPackedDtrsRecoPdgId[i] = i_gen_NPackedDtrsRecoPdgId[i];
+                    o_gen_NPackedDtrsHasReco[i] = i_gen_NPackedDtrsHasReco[i];
                 }
                 o_gen_nNdaughters = i_gen_nNdaughters;
                 for(unsigned i = 0; i < i_gen_nNdaughters; i++){ 

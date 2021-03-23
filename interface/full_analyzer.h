@@ -108,17 +108,12 @@ public :
    Double_t        _gen_NPackedDtrsE[20];
    Int_t           _gen_NPackedDtrsPdgId[20];
    Int_t           _gen_NPackedDtrsCharge[20];
-   Int_t           matches[20];
-   Double_t        _gen_NPackedDtrsmineta[20];
-   Double_t        _gen_NPackedDtrsminphi[20];
-   Double_t        _gen_NPackedDtrsminpt[20];
-   Double_t        _gen_NPackedDtrs_matchPt[20];
-   Double_t        _gen_NPackedDtrs_matchEta[20];
-   Double_t        _gen_NPackedDtrs_matchPhi[20];
-   Double_t        _gen_NPackedDtrs_matchE[20];
-   Double_t        _gen_NPackedDtrs_matchdxy[20];
-   Double_t        _gen_NPackedDtrs_matchdz[20];
-   Int_t           _gen_NPackedDtrs_matchcharge[20];
+   Double_t        _gen_NPackedDtrsRecoPt[20];
+   Double_t        _gen_NPackedDtrsRecoEta[20];
+   Double_t        _gen_NPackedDtrsRecoPhi[20];
+   Double_t        _gen_NPackedDtrsRecoE[20];
+   Int_t           _gen_NPackedDtrsRecoPdgId[20];
+   Bool_t          _gen_NPackedDtrsHasReco[20];
    unsigned        _gen_nNdaughters;
    unsigned        _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
    //UChar_t         _gen_nstatus23;
@@ -519,17 +514,12 @@ public :
    TBranch        *b__gen_NPackedDtrsE;
    TBranch        *b__gen_NPackedDtrsPdgId;
    TBranch        *b__gen_NPackedDtrsCharge;
-   TBranch        *b_matches;
-   TBranch        *b__gen_NPackedDtrsmineta;
-   TBranch        *b__gen_NPackedDtrsminphi;
-   TBranch        *b__gen_NPackedDtrsminpt;
-   TBranch        *b__gen_NPackedDtrs_matchPt;
-   TBranch        *b__gen_NPackedDtrs_matchEta;
-   TBranch        *b__gen_NPackedDtrs_matchPhi;
-   TBranch        *b__gen_NPackedDtrs_matchE;
-   TBranch        *b__gen_NPackedDtrs_matchdxy;
-   TBranch        *b__gen_NPackedDtrs_matchdz;
-   TBranch        *b__gen_NPackedDtrs_matchcharge;
+   TBranch        *b__gen_NPackedDtrsRecoPt;
+   TBranch        *b__gen_NPackedDtrsRecoEta;
+   TBranch        *b__gen_NPackedDtrsRecoPhi;
+   TBranch        *b__gen_NPackedDtrsRecoE;
+   TBranch        *b__gen_NPackedDtrsRecoPdgId;
+   TBranch        *b__gen_NPackedDtrsHasReco;
    TBranch        *b__gen_nNdaughters;   //!
    TBranch        *b__gen_Ndaughters_pdg;   //!
    //TBranch        *b__gen_nstatus23;   //!

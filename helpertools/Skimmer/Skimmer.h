@@ -102,6 +102,12 @@ class Skimmer {
         Double_t        i_gen_NPackedDtrsE[20];
         Int_t           i_gen_NPackedDtrsPdgId[20];
         Int_t           i_gen_NPackedDtrsCharge[20];
+        Double_t        i_gen_NPackedDtrsRecoPt[20];
+        Double_t        i_gen_NPackedDtrsRecoEta[20];
+        Double_t        i_gen_NPackedDtrsRecoPhi[20];
+        Double_t        i_gen_NPackedDtrsRecoE[20];
+        Int_t           i_gen_NPackedDtrsRecoPdgId[20];
+        bool            i_gen_NPackedDtrsHasReco[20];
         unsigned        i_gen_nNdaughters;
         unsigned        i_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
         Double_t        i_gen_Ndaughters_Pt[30];
@@ -530,6 +536,12 @@ class Skimmer {
         Double_t        o_gen_NPackedDtrsE[20];
         Int_t           o_gen_NPackedDtrsPdgId[20];
         Int_t           o_gen_NPackedDtrsCharge[20];
+        Double_t        o_gen_NPackedDtrsRecoPt[20];
+        Double_t        o_gen_NPackedDtrsRecoEta[20];
+        Double_t        o_gen_NPackedDtrsRecoPhi[20];
+        Double_t        o_gen_NPackedDtrsRecoE[20];
+        Int_t           o_gen_NPackedDtrsRecoPdgId[20];
+        bool            o_gen_NPackedDtrsHasReco[20];
         unsigned        o_gen_nNdaughters;
         unsigned        o_gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
         Double_t        o_gen_Ndaughters_Pt[30];
@@ -956,6 +968,12 @@ class Skimmer {
         TBranch        *bi__gen_NPackedDtrsE;
         TBranch        *bi__gen_NPackedDtrsPdgId;
         TBranch        *bi__gen_NPackedDtrsCharge;
+        TBranch        *bi__gen_NPackedDtrsRecoPt;
+        TBranch        *bi__gen_NPackedDtrsRecoEta;
+        TBranch        *bi__gen_NPackedDtrsRecoPhi;
+        TBranch        *bi__gen_NPackedDtrsRecoE;
+        TBranch        *bi__gen_NPackedDtrsRecoPdgId;
+        TBranch        *bi__gen_NPackedDtrsHasReco;
         TBranch        *bi__gen_nNdaughters;   //!
         TBranch        *bi__gen_Ndaughters_pdg;   //!
         TBranch        *bi__gen_Ndaughters_Pt;   //!
