@@ -189,6 +189,7 @@ bool full_analyzer::IsDisplacedElectronID(const unsigned i)  //basically medium 
     if(fabs(_lEta[i]) > 2.5)        return false;
     if(_lPt[i] < 7)                 return false;
     if(fabs(_dxy[i]) < 0.02)        return false;
+    if(fabs(_dz[i]) > 10)           return false;
     if(!_lElectronPassConvVeto[i])  return false;
     if(!( (_lElectronIsEB[i] &&
          _lElectronSigmaIetaIeta[i] <= 0.11 &&
