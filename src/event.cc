@@ -70,19 +70,6 @@ double full_analyzer::Get_Event_weight()
             tmp_weight *= sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
         }
         tmp_weight *= highest_trackpt_weight;//displaced tracks scale factor (in src/signal_regions.cc)
-        if(tmp_weight == 0 and _Training){
-            std::cout << "Weight 0: ";
-            std::cout << " PU" << puweightreader->get_PUWeight_Central(_nTrueInt);
-            std::cout << " etrig" << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            std::cout << " eID" << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            std::cout << " mtrig" << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            std::cout << " mID" << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            std::cout << " mISO" << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            std::cout << " e2SF" << get_displEleSF(_lElectronMissingHits[i_subleading]);
-            std::cout << " m2ID" << lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-            std::cout << " m2SV" << sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
-            std::cout << " SV" << highest_trackpt_weight;
-        }
         return tmp_weight;
     }else {
         return 1.;
@@ -129,35 +116,47 @@ double full_analyzer::Get_Event_weight_2prompt()
 {
     if(!isData){
         double tmp_weight = _weight;
-        //std::cout << "_weight: " << _weight;
         tmp_weight *= puweightreader->get_PUWeight_Central(_nTrueInt);
-        //std::cout << " PU: " << puweightreader->get_PUWeight_Central(_nTrueInt);
         if(i_leading != -1 and _lFlavor[i_leading] == 0){//electron scale factors
             tmp_weight *= lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
             tmp_weight *= lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            //std::cout << " etrig: " << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            //std::cout << " eID: " << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
         }else if(i_leading != -1 and _lFlavor[i_leading] == 1){//muon scale factors
             tmp_weight *= lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
             tmp_weight *= lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
             tmp_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            //std::cout << " mtrig: " << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            //std::cout << " mID: " << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            //std::cout << " mISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
         }
         if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//second electron scale factors
             tmp_weight *= lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
-            //std::cout << " e2ID: " << lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
         }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//second muon scale factors
             tmp_weight *= lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
             tmp_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-            //std::cout << " m2ID: " << lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-            //std::cout << " m2ISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
         }
-        //std::cout << std::endl;
         return tmp_weight;
     }else {
         return 1.;
+    }
+}
+
+void full_analyzer::Print_Event_weight_2prompt()
+{
+    if(!isData){
+        std::cout << "_weight: " << _weight;
+        std::cout << " PU: " << puweightreader->get_PUWeight_Central(_nTrueInt);
+        if(i_leading != -1 and _lFlavor[i_leading] == 0){//electron scale factors
+            std::cout << " etrig: " << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+            std::cout << " eID: " << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+        }else if(i_leading != -1 and _lFlavor[i_leading] == 1){//muon scale factors
+            std::cout << " mtrig: " << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mID: " << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        }
+        if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//second electron scale factors
+            std::cout << " e2ID: " << lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
+        }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//second muon scale factors
+            std::cout << " m2ID: " << lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+            std::cout << " m2ISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+        }
+        std::cout << std::endl;
     }
 }
 
@@ -201,3 +200,49 @@ void full_analyzer::fill_SR_counters_cutflow(std::map<TString, double>& sr)
         }
     }
 }
+
+void full_analyzer::Print_Event_weight()
+{
+    if(!isData){
+        std::cout << " PU" << puweightreader->get_PUWeight_Central(_nTrueInt);
+        if(i_leading != -1 and _lFlavor[i_leading] == 0){//electron scale factors
+            std::cout << " etrig" << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+            std::cout << " eID" << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+        }else if(i_leading != -1 and _lFlavor[i_leading] == 1){//muon scale factors
+            std::cout << " mtrig" << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mID" << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mISO" << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        }
+        if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//displaced electron scale factors
+            std::cout << " e2SF" << get_displEleSF(_lElectronMissingHits[i_subleading]);
+        }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//displaced muon scale factors
+            std::cout << " m2ID" << lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+            std::cout << " m2SV" << sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
+        }
+        std::cout << " SV" << highest_trackpt_weight;
+    }
+}
+
+void full_analyzer::Print_Event_weight_2prompt()
+{
+    if(!isData){
+        std::cout << "_weight: " << _weight;
+        std::cout << " PU: " << puweightreader->get_PUWeight_Central(_nTrueInt);
+        if(i_leading != -1 and _lFlavor[i_leading] == 0){//electron scale factors
+            std::cout << " etrig: " << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+            std::cout << " eID: " << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
+        }else if(i_leading != -1 and _lFlavor[i_leading] == 1){//muon scale factors
+            std::cout << " mtrig: " << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mID: " << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+            std::cout << " mISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
+        }
+        if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//second electron scale factors
+            std::cout << " e2ID: " << lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
+        }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//second muon scale factors
+            std::cout << " m2ID: " << lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+            std::cout << " m2ISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
+        }
+        std::cout << std::endl;
+    }
+}
+

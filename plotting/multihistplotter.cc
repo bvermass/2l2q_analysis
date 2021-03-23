@@ -247,7 +247,7 @@ int main(int argc, char * argv[])
                     pad->Clear();
                     pad->SetLogy(0);
 
-                    hist Es_AoverC->Draw("hist E nostack");
+                    hists_AoverC->Draw("hist E nostack");
                     hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                     hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                     hists_AoverC->SetMaximum(1.25*hists_AoverC->GetMaximum("nostack"));

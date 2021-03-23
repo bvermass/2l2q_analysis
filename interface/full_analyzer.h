@@ -940,6 +940,8 @@ public :
     void     Set_Objects_And_Relevant_Variables_2prompt(const TString JetPt_Version);
     double   Get_Event_weight_2prompt();
     void     fill_SR_counters_cutflow(std::map<TString, double>& SR_counters);
+    void     Print_Event_weight();
+    void     Print_Event_weight_2prompt();
 
    // in src/leptonID.cc
     bool     IsPromptElectronID(const unsigned i);

@@ -20,6 +20,7 @@ std::map<int, std::map<double, double>> full_analyzer::GetJetTagVals_LowAndHighM
 
     double JetTagVal_LowMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 2.);
     double JetTagVal_HighMass = hnltagger.predict_PFN_v8_unparametrized_LowAndHighMass(pfn_lowmass, pfn_highmass, 10.);
+    //if(i_subleading_track == 37) std::cout << "i_subleading_track is still -1! ntracks: " << _IVF_ntracks[i_subleading] << " lFlavor: " << _lFlavor[i_subleading] << " PFN low and high: " << JetTagVal_LowMass << " " << JetTagVal_HighMass <<  std::endl;
     //std::cout << "Low and High Mass PFN value: " << JetTagVal_LowMass << " " << JetTagVal_HighMass << std::endl;
     for(auto& MassMap : evaluating_ctaus){
         for(auto& V2Map : MassMap.second){
