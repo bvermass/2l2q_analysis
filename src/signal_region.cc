@@ -18,15 +18,15 @@ void full_analyzer::set_leptons(const TString JetPt_Version){
 void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
 
     i_jetl2             = find_jet_closest_to_lepton(i_subleading, JetPt_Version); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
-    i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
-    i_gen_subleading    = find_gen_lep(i_subleading);
+    //i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
+    //i_gen_subleading    = find_gen_lep(i_subleading);
     i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton
     i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
     leadingIsl1         = leptonIsGenLepton(i_leading, i_gen_l1);
     subleadingIsl2      = leptonIsGenLepton(i_subleading, i_gen_l2);
-    l1hasreco           = gen_l_has_reco(i_gen_l1);
-    l2hasreco           = gen_l_has_reco(i_gen_l2);
-
+    HNLadditionaltracks = HNL_additional_reco_tracks();
+    i_l1_fromgen        = find_reco_l_fromgen(i_gen_l1);
+    i_l2_fromgen        = find_reco_l_fromgen(i_gen_l2);
 
     if(i_leading != -1 and i_subleading != -1){
         mll = get_mll(i_leading, i_subleading);
@@ -68,13 +68,25 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
             SVeta           = tracksum.eta();
             SVphi           = tracksum.phi();
             IVF_costracks   = cosine3D(tracksum, PVSV_vec);
-            IVF_PVSVdist_2D = get_IVF_PVSVdist_2D(i_subleading);
-            IVF_PVSVdist    = get_IVF_PVSVdist(i_subleading);
+            IVF_PVSVdist_2D = get_xy_distance(_PV_x, _PV_y, _IVF_x[i_subleading], _IVF_y[i_subleading]);
+            IVF_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
             if(!isData){
-                IVF_SVgenreco   = get_IVF_SVgenreco(i_gen_subleading, i_subleading);
-                gen_PVSVdist_2D = get_PVSVdist_gen_2D(i_gen_subleading);
-                gen_PVSVdist    = get_PVSVdist_gen(i_gen_subleading);
-                PVNvtxdist = get_PVNvtxdist();
+                IVF_SVgenreco   = get_xyz_distance(_gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2], _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
+                gen_PVSVdist_2D = get_xy_distance(_PV_x, _PV_y, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2]);
+                gen_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
+                gen_SVntracks   = 0;
+                LorentzVector gentracksum(0,0,0,0);
+                for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+                    if(_gen_NPackedDtrsCharge[i] != 0){
+                        LorentzVector tmptrack(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
+                        gentracksum += tmptrack;
+                        gen_SVntracks++;
+                    }
+                }
+                gen_SVmass = gentracksum.mass();
+                PVNvtxdist = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_Nvertex_x, _gen_Nvertex_y, _gen_Nvertex_z);
+                HNLrecotracks_KVF_SVgenreco = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
+                //HNLrecotracks_KVF_PVSVdist_2D  = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _PV_x, _PV_y, _PV_z);
             }
         }
     }
@@ -304,4 +316,31 @@ double full_analyzer::get_dphill(int i_lead, int i_sublead){
     LorentzVector leadingvec(_lPt[i_lead], _lEta[i_lead], _lPhi[i_lead], _lE[i_lead]);
     LorentzVector subleadingvec(_lPt[i_sublead], _lEta[i_sublead], _lPhi[i_sublead], _lE[i_sublead]);
     return deltaPhi(leadingvec, subleadingvec);
+}
+
+int full_analyzer::HNL_additional_reco_tracks(){
+    int ntracks = 0;
+    for(unsigned i_dtr = 0; i_dtr < _gen_nNPackedDtrs; i_dtr++){
+        if(_gen_NPackedDtrsCharge[i_dtr] == 0) continue;
+        if(fabs(_gen_NPackedDtrsPdgId[i_dtr]) == 11) continue;
+        if(fabs(_gen_NPackedDtrsPdgId[i_dtr]) == 13) continue;
+        if(!_gen_NPackedDtrsHasReco[i_dtr]) continue;
+        if(fabs(_gen_NPackedDtrsRecoPdgId[i_dtr]) == 11) continue;
+        if(fabs(_gen_NPackedDtrsRecoPdgId[i_dtr]) == 13) continue;
+        if(fabs(_gen_NPackedDtrsRecoPdgId[i_dtr]) == 22) continue;
+
+        ntracks++;
+
+        //std::cout << "gen and reco PdgId: " << _gen_NPackedDtrsPdgId[i_dtr];
+        //if(_gen_NPackedDtrsHasReco[i_dtr]) std::cout << " " << _gen_NPackedDtrsRecoPdgId[i_dtr];
+        //std::cout << std::endl;
+        //std::cout << "gen and reco Pt: " << _gen_NPackedDtrsPt[i_dtr];
+        //if(_gen_NPackedDtrsHasReco[i_dtr]) std::cout << " " << _gen_NPackedDtrsRecoPt[i_dtr];
+        //std::cout << std::endl;
+        //std::cout << "gen and reco Eta: " << _gen_NPackedDtrsEta[i_dtr];
+        //if(_gen_NPackedDtrsHasReco[i_dtr]) std::cout << " " << _gen_NPackedDtrsRecoEta[i_dtr];
+        //std::cout << std::endl;
+    }
+    //std::cout << std::endl;
+    return ntracks;
 }

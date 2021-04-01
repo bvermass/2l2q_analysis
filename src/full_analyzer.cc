@@ -80,6 +80,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         //add_Bool_hists(&hists, lep_region);
     }
     for(const TString &lep_region : {"_mm", "_ee", "_me", "_em"}){
+        add_IVF_eff_histograms(&hists, &hists2D, lep_region);
+        add_HNLrecotracks_KVF_eff_histograms(&hists, &hists2D, lep_region);
         for(auto& MassMap : evaluating_ctaus){
             for(auto& V2Map : MassMap.second){
                 add_Shape_SR_histograms(&hists, lep_region + MV2name[MassMap.first][V2Map.first]);

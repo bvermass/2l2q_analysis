@@ -114,6 +114,19 @@ public :
    Double_t        _gen_NPackedDtrsRecoE[20];
    Int_t           _gen_NPackedDtrsRecoPdgId[20];
    Bool_t          _gen_NPackedDtrsHasReco[20];
+   bool            _gen_NPackedDtrsHasKVFvertex;
+   double          _gen_NPackedDtrs_KVF_x;
+   double          _gen_NPackedDtrs_KVF_y;
+   double          _gen_NPackedDtrs_KVF_z;
+   double          _gen_NPackedDtrs_KVF_cxx;
+   double          _gen_NPackedDtrs_KVF_cyy;
+   double          _gen_NPackedDtrs_KVF_czz;
+   double          _gen_NPackedDtrs_KVF_cyx;
+   double          _gen_NPackedDtrs_KVF_czy;
+   double          _gen_NPackedDtrs_KVF_czx;
+   double          _gen_NPackedDtrs_KVF_df;
+   double          _gen_NPackedDtrs_KVF_chi2;
+   unsigned        _gen_NPackedDtrs_KVF_ntracks;
    unsigned        _gen_nNdaughters;
    unsigned        _gen_Ndaughters_pdg[30];   //[_gen_nNdaughters]
    //UChar_t         _gen_nstatus23;
@@ -520,6 +533,19 @@ public :
    TBranch        *b__gen_NPackedDtrsRecoE;
    TBranch        *b__gen_NPackedDtrsRecoPdgId;
    TBranch        *b__gen_NPackedDtrsHasReco;
+   TBranch        *b__gen_NPackedDtrsHasKVFvertex;
+   TBranch        *b__gen_NPackedDtrs_KVF_x;
+   TBranch        *b__gen_NPackedDtrs_KVF_y;
+   TBranch        *b__gen_NPackedDtrs_KVF_z;
+   TBranch        *b__gen_NPackedDtrs_KVF_cxx;
+   TBranch        *b__gen_NPackedDtrs_KVF_cyy;
+   TBranch        *b__gen_NPackedDtrs_KVF_czz;
+   TBranch        *b__gen_NPackedDtrs_KVF_cyx;
+   TBranch        *b__gen_NPackedDtrs_KVF_czy;
+   TBranch        *b__gen_NPackedDtrs_KVF_czx;
+   TBranch        *b__gen_NPackedDtrs_KVF_df;
+   TBranch        *b__gen_NPackedDtrs_KVF_chi2;
+   TBranch        *b__gen_NPackedDtrs_KVF_ntracks;
    TBranch        *b__gen_nNdaughters;   //!
    TBranch        *b__gen_Ndaughters_pdg;   //!
    //TBranch        *b__gen_nstatus23;   //!
@@ -875,7 +901,8 @@ public :
    int i_gen_l2;
    bool leadingIsl1;
    bool subleadingIsl2; 
-   bool l1hasreco, l2hasreco;
+   int i_l1_fromgen, i_l2_fromgen;
+   int HNLadditionaltracks;
 
    // signal region lepton indices 
    int i_leading;
@@ -906,7 +933,7 @@ public :
    double mll, dRll, dphill, dRljet;
 
    // SV stuff
-   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D, highest_trackpt_weight, IVF_costracks, PVNvtxdist;
+   double SVmass, SVl1mass, SVmassminl2, SVpt, SVeta, SVphi, IVF_PVSVdist_2D, IVF_PVSVdist, IVF_SVgenreco, gen_PVSVdist, gen_PVSVdist_2D, gen_SVntracks, gen_SVmass, highest_trackpt_weight, IVF_costracks, PVNvtxdist, HNLrecotracks_KVF_SVgenreco;
    
    //Scale Factor readers
    LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO, *lsfreader_displ_m_ID, *lsfreader_displ_m_SV;
@@ -966,20 +993,11 @@ public :
     int      find_gen_lep(int i_lep);
     int      find_gen_l1();
     int      find_gen_l2();
-    bool     gen_l_has_reco(int i_gen_lep);
+    int      find_reco_l_fromgen(int i_gen_lep);
     bool     leptonIsGenLepton(int, int);
     double   get_lsource(int);
-    double   get_IVF_SVgenreco(int, int);
-    double   get_IVF_SVgenreco_2D(int, int);
-    double   get_IVF_PVSVdist(int);
-    double   get_IVF_PVSVdist_2D(int);
-    double   get_KVF_SVgenreco(int, int);
-    double   get_KVF_SVgenreco_2D(int, int);
-    double   get_KVF_PVSVdist(int);
-    double   get_KVF_PVSVdist_2D(int);
-    double   get_PVSVdist_gen(int);
-    double   get_PVSVdist_gen_2D(int);
-    double   get_PVNvtxdist();
+    double   get_xy_distance(double x1, double y1, double x2, double y2);
+    double   get_xyz_distance(double x1, double y1, double z1, double x2, double y2, double z2);
     double   get_displEleSF(unsigned missinghits);
     double   get_displEleSF_unc(unsigned missinghits);
 
@@ -1007,6 +1025,7 @@ public :
     double   get_mll(int, int);
     double   get_dRll(int, int);
     double   get_dphill(int, int);
+    int      HNL_additional_reco_tracks();
 
    // in src/print_tables.cc
     void     print_table();
@@ -1025,7 +1044,8 @@ public :
     void     fill_leptonreco_eff(std::map<TString, TH1*>* hists);
     void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
-    void     fill_IVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
+    void     fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
+    void     fill_HNLrecotracks_KVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
    // void     fill_ID_histos(std::map<TString, TH1*>*, TString);
     void     give_alphanumeric_labels(std::map<TString, TH1*>*, TString);
    
@@ -1049,7 +1069,8 @@ public :
     void     fill_HNL_MC_check(std::map<TString, TH1*>*, std::map<TString, TH2*>*, double);
     void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     add_HNLrecotracks_KVF_eff_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);

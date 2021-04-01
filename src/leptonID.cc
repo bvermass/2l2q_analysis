@@ -357,16 +357,16 @@ bool full_analyzer::leptonIsGenLepton(int i_lep, int i_gen_lep)
     else return false;
 }
 
-bool full_analyzer::gen_l_has_reco(int i_gen_lep)
+int full_analyzer::find_reco_l_fromgen(int i_gen_lep)
 {
-    if(i_gen_lep == -1) return false;
+    if(i_gen_lep == -1) return -1;
     for(unsigned i = 0; i < _nLight; i++){
         if(_gen_lFlavor[i_gen_lep] != _lFlavor[i]) continue;
         double dR = get_dR(_lEta[i], _lPhi[i], _gen_lEta[i_gen_lep], _gen_lPhi[i_gen_lep]);
         double deta = fabs(_lEta[i] - _gen_lEta[i_gen_lep]);
-        if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return true;
+        if(dR < 0.03 or (dR < 0.1 and deta < 0.03)) return i;
     }
-    return false;
+    return -1;
 }
 
 double full_analyzer::get_lsource(int i_gen_lep)
@@ -392,58 +392,14 @@ double full_analyzer::get_lsource(int i_gen_lep)
     }
 }
 
-double full_analyzer::get_IVF_SVgenreco(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _IVF_z[i_lepton])); 
+double full_analyzer::get_xy_distance(double x1, double y1, double x2, double y2)
+{
+    return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
 }
 
-double full_analyzer::get_IVF_SVgenreco_2D(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _IVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _IVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_IVF_PVSVdist(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton]) + (_PV_z - _IVF_z[i_lepton])*(_PV_z - _IVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_IVF_PVSVdist_2D(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _IVF_x[i_lepton])*(_PV_x - _IVF_x[i_lepton]) + (_PV_y - _IVF_y[i_lepton])*(_PV_y - _IVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_SVgenreco(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton]) + (_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])*(_gen_vertex_z[i_gen_l] - _lKVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_SVgenreco_2D(int i_gen_l, int i_lepton){
-    if(i_gen_l == -1 or i_lepton == -1) return -1; 
-    return sqrt((_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton])*(_gen_vertex_x[i_gen_l] - _lKVF_x[i_lepton]) + (_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])*(_gen_vertex_y[i_gen_l] - _lKVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_PVSVdist(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton]) + (_PV_z - _lKVF_z[i_lepton])*(_PV_z - _lKVF_z[i_lepton])); 
-}
-
-double full_analyzer::get_KVF_PVSVdist_2D(int i_lepton){
-    if(i_lepton == -1) return -1; 
-    return sqrt((_PV_x - _lKVF_x[i_lepton])*(_PV_x - _lKVF_x[i_lepton]) + (_PV_y - _lKVF_y[i_lepton])*(_PV_y - _lKVF_y[i_lepton])); 
-}
-
-double full_analyzer::get_PVSVdist_gen(int i_gen_l){
-    if(i_gen_l == -1) return -1; 
-    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]) + (_gen_Nvertex_z - _gen_vertex_z[i_gen_l])*(_gen_Nvertex_z - _gen_vertex_z[i_gen_l]));
-}
-
-double full_analyzer::get_PVSVdist_gen_2D(int i_gen_l){
-    if(i_gen_l == -1) return -1; 
-    return sqrt((_gen_Nvertex_x - _gen_vertex_x[i_gen_l])*(_gen_Nvertex_x - _gen_vertex_x[i_gen_l]) + (_gen_Nvertex_y - _gen_vertex_y[i_gen_l])*(_gen_Nvertex_y - _gen_vertex_y[i_gen_l]));
-}
-
-double full_analyzer::get_PVNvtxdist(){
-    return sqrt((_PV_x - _gen_Nvertex_x)*(_PV_x - _gen_Nvertex_x) + (_PV_y - _gen_Nvertex_y)*(_PV_y - _gen_Nvertex_y) + (_PV_z - _gen_Nvertex_z)*(_PV_z - _gen_Nvertex_z));
+double full_analyzer::get_xyz_distance(double x1, double y1, double z1, double x2, double y2, double z2)
+{
+    return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2));
 }
 
 double full_analyzer::get_displEleSF(unsigned missinghits){
