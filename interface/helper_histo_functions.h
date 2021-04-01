@@ -35,6 +35,7 @@ double      get_truncated_ctau(bool is2016, double mass, double ctau_true);
 std::vector<double> get_evaluating_V2s_all();
 std::vector<double> get_evaluating_V2s(double mass);
 std::vector<double> get_evaluating_V2s_short(double mass);
+std::vector<double> get_evaluating_V2s_minimal();
 TString     get_MV2name(int mass, double V2);
 void        filePutContents(const std::string& name, const std::string& content, bool append = false);
 void        fix_overflow_and_negative_bins(TH1* h);

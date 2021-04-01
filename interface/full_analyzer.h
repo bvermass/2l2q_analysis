@@ -889,6 +889,7 @@ public :
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses;
    std::map<int, std::vector<double>> evaluating_V2s;//<M, V2's>
+   std::map<int, std::vector<double>> evaluating_V2s_plots;//<M, V2's> for making plots
    std::map<int, std::map<double, double>> evaluating_ctaus;//<M, <V2, ctau>> -> to use in parametrized training that takes ctau as parameter
    std::map<int, std::map<double, double>> JetTagVal; //<M, <V2, JetTagVal>>
    std::map<int, std::map<double, TString>> MV2name;

@@ -280,6 +280,11 @@ std::vector<double> get_evaluating_V2s_short(double mass)
     return {};
 }
 
+std::vector<double> get_evaluating_V2s_minimal()
+{
+    return {1e-4, 7e-5, 2e-6, 9e-7};
+}
+
 
 TString get_MV2name(int mass, double V2)
 {

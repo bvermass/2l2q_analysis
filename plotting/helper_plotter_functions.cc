@@ -305,6 +305,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_invVtx_"))           fullname += "invVtx/";
     if(histname.Contains("_eff"))               fullname += "eff/";
     if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
+    if(histname.Contains("_projection"))        fullname += "projection/";
 
     while(gSystem->Exec("mkdir -p " + fullname) != 0){
         std::cout << "command \"mkdir -p " << fullname << "\" failed, checking" << std::endl;

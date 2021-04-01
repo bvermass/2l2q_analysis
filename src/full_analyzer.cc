@@ -42,6 +42,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     for(const int& mass : evaluating_masses){
         evaluating_V2s[mass] = get_evaluating_V2s_all();
+        evaluating_V2s_plots[mass] = get_evaluating_V2s_minimal();
         for(const double& V2 : evaluating_V2s[mass]){
             evaluating_ctaus[mass][V2] = get_evaluating_ctau(mass, V2, isSignal? HNL_param->flavor : "e");
             MV2name[mass][V2] = get_MV2name(mass, V2);
@@ -67,13 +68,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
-        for(auto& MassMap : evaluating_ctaus){
-            for(auto& V2Map : MassMap.second){
+        for(auto& MassMap : evaluating_V2s_plots){
+            for(auto& V2 : MassMap.second){
                 for(const TString &ev_region : {"_SR"}){//, "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
-                    add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
+                    add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2]);
                 }
                 for(const TString &ev_region : {""/*, "_Training"*/}){
-                    add_pfn_histograms(&hists, lep_region + ev_region + MV2name[MassMap.first][V2Map.first]);
+                    add_pfn_histograms(&hists, lep_region + ev_region + MV2name[MassMap.first][V2]);
                 }
             }
         }
@@ -82,9 +83,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     for(const TString &lep_region : {"_mm", "_ee", "_me", "_em"}){
         add_IVF_eff_histograms(&hists, &hists2D, lep_region);
         add_HNLrecotracks_KVF_eff_histograms(&hists, &hists2D, lep_region);
-        for(auto& MassMap : evaluating_ctaus){
-            for(auto& V2Map : MassMap.second){
-                add_Shape_SR_histograms(&hists, lep_region + MV2name[MassMap.first][V2Map.first]);
+        for(auto& MassMap : evaluating_V2s_plots){
+            for(auto& V2 : MassMap.second){
+                add_Shape_SR_histograms(&hists, lep_region + MV2name[MassMap.first][V2]);
             }
         }
     }
@@ -98,6 +99,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         TH2* h = it2D.second;
         h->Sumw2();
     }
+    std::cout << "Total amount of plots: " << hists.size() << ", 2D: " << hists2D.size() << std::endl;
 
     // Load PU weights
     puweightreader = get_PUWeightReader(input);
