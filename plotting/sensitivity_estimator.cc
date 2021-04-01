@@ -112,8 +112,8 @@ int main(int argc, char * argv[])
     TString sigreg[4] = {"_OS_mu", "_SS_mu", "_OS_e", "_SS_e"};
 
     while(key = (TKey*)next()){
-        TClass *cl = gROOT->GetClass(key->GetClassName());
-        if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
+        std::string cl(key->GetClassName());
+        if(cl.find("TH1") != std::string::npos){
             // Get a reference histogram for the name, then get all histograms in  a vector
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname   = sample_hist_ref->GetName();

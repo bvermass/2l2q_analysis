@@ -73,7 +73,7 @@ int main(int argc, char * argv[])
             std::string cl(key->GetClassName());
 
             // -- TH1 --
-            if (cl.find("TH1") != std::string::npos){ // second requirement is because TH2 also inherits from TH1
+            if (cl.find("TH1") != std::string::npos){
                 TH1F*   sample_hist = (TH1F*)key->ReadObj();
                 TString histname   = sample_hist->GetName();
 
@@ -176,6 +176,7 @@ int main(int argc, char * argv[])
                     continue;
                 }
                 alphanumeric_labels_2D(sample_hist, histname);
+                std::cout << "hist passed: " << histname << std::endl;
 
                 TString pathname_lin = make_plotspecific_pathname(histname, general_pathname, "lin/");
 

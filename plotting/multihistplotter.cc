@@ -90,10 +90,10 @@ int main(int argc, char * argv[])
         if(counter >= counter_begin and counter <= counter_end){
             legend.Clear();
 
-            TClass *cl = gROOT->GetClass(key->GetClassName());
+            std::string cl(key->GetClassName());
 
             // -- TH1 --
-            if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
+            if(cl.find("TH1") != std::string::npos){
 
                 // Get a reference histogram for the name, then get all histograms in  a vector
                 TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
@@ -275,8 +275,84 @@ int main(int argc, char * argv[])
                     c->Print(pathname_log + plotname + ".png");
 
                     delete hists_AoverC;
-                    }
+                }
+            }
+            if(cl.find("TH2") != std::string::npos){
+                TH2F*   sample_hist_ref = (TH2F*)key->ReadObj();
+                TString histname   = sample_hist_ref->GetName();
+                if(!(histname.Contains("_OS_mm_Training_IVF_ctauHN_gen_PV-SVdxyz") or histname.Contains("_OS_mm_IVF_gen_PV-SVdxyz_ctauHN_eff") or histname == "gen_PV-SVdxyz_ctauHN" or histname == "gen_l2pt_ctauHN")) continue;
+                if(!check_identifiers(histname, identifiers)) continue;
+                std::cout << histname << std::endl;
 
+                std::vector<TH2*> hists;
+                for(int i = 0; i < files.size(); i++){
+                    hists.push_back((TH2*)files[i]->Get(histname));
+                }
+
+                for(TString projectionAxis : {"projectionX_", "projectionY_"}){
+                    int nbins = 0;
+                    if(projectionAxis.Contains("projectionX")) nbins = hists[0]->GetNbinsX();
+                    if(projectionAxis.Contains("projectionY")) nbins = hists[0]->GetNbinsY();
+                    //print projections of the 2D histogram along each axis
+                    for(int i_bin = 1; i_bin <= nbins; i_bin++){
+                        legend.Clear();
+                        THStack* histstack = new THStack("stack", "");
+                        for(int i = 0; i < hists.size(); i++){
+                            TH1D* projection;
+                            if(projectionAxis.Contains("projectionX")) projection = hists[i]->ProjectionX(histname + "_" + legends[i] + "_" + projectionAxis + std::to_string(i_bin), i_bin, i_bin, "e");
+                            if(projectionAxis.Contains("projectionY")) projection = hists[i]->ProjectionY(histname + "_" + legends[i] + "_" + projectionAxis + std::to_string(i_bin), i_bin, i_bin, "e");
+                            histstack->Add(projection);
+                            projection->Scale(1./projection->Integral());
+                            projection->Rebin(2);
+                            projection->SetLineColor(colors[i]);
+                            projection->SetMarkerColor(colors[i]);
+                            legend.AddEntry(projection, legends[i], "pl");
+                        }
+                        pad->Clear();
+                        pad->SetLogy(0);
+                        TString pathname_lin = make_plotspecific_pathname(histname + "_projection", general_pathname, "lin/");
+                        histstack->Draw("hist E nostack");
+                        if(projectionAxis.Contains("projectionX")) histstack->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
+                        if(projectionAxis.Contains("projectionY")) histstack->GetXaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
+                        histstack->GetYaxis()->SetTitle("A.U.");
+                        histstack->SetMaximum(1.25*histstack->GetMaximum("nostack"));
+                        legend.Draw("same");
+                        CMSandLumi->Draw();
+
+                        pad->Modified();
+                        if(projectionAxis.Contains("projectionX")) c->Print(pathname_lin + histname + "_" + projectionAxis + std::to_string((int)hists[0]->GetXaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[0]->GetXaxis()->GetBinUpEdge(i_bin)) + ".png");
+                        if(projectionAxis.Contains("projectionY")) c->Print(pathname_lin + histname + "_" + projectionAxis + std::to_string((int)hists[0]->GetYaxis()->GetBinLowEdge(i_bin)) + "to" + std::to_string((int)hists[0]->GetYaxis()->GetBinUpEdge(i_bin)) + ".png");
+
+                        //if(histname.Contains("eff_num")){
+                        //    pad->Clear();
+                        //    legend.Clear();
+
+                        //    TMultiGraph* multigraph = new TMultiGraph();
+                        //    if(projectionAxis.Contains("projectionX")) multigraph->SetTitle((TString)";"+sample_hist_ref->GetXaxis()->GetTitle() + ";Efficiency");
+                        //    if(projectionAxis.Contains("projectionY")) multigraph->SetTitle((TString)";"+sample_hist_ref->GetYaxis()->GetTitle() + ";Efficiency");
+                        //    for(int i = 0; i < files.size(); i++){
+                        //        if(files[i]->GetListOfKeys()->Contains(histname) and files[i]->GetListOfKeys()->Contains(histname(0, histname.Index("eff_num")+4) + "den")){
+                        //            TGraphAsymmErrors* graph = new TGraphAsymmErrors((TH1F*) files[i]->Get(histname), (TH1F*) files[i]->Get(histname(0, histname.Index("eff_num")+4) + "den"), "cp");
+                        //            multigraph->Add(graph);
+                        //            graph->SetMarkerColor(colors[i]);
+                        //            graph->SetLineColor(colors[i]);
+                        //            legend.AddEntry(graph, legends[i], "pl");
+                        //        }
+                        //    }
+
+                        //    multigraph->Draw("AP");
+                        //    multigraph->SetMinimum(0.);
+                        //    multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
+
+                        //    legend.Draw("same");
+                        //    CMSandLumi->Draw();
+
+                        //    pad->Modified();
+                        //    c->Print(pathname_lin + histname(0, histname.Index("eff_num") + 3) + ".png");
+
+                        //}
+                    }
+                }
             }
         }
         ++counter;

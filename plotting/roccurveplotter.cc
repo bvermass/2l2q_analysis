@@ -120,10 +120,10 @@ int main(int argc, char * argv[])
     TKey* key;
     while(key = (TKey*)next()){
         legend.Clear();
-        TClass *cl = gROOT->GetClass(key->GetClassName());
+        std::string cl(key->GetClassName());
 
         // -- TH1 --
-        if (cl->InheritsFrom("TH1") and ! cl->InheritsFrom("TH2")){ // second requirement is because TH2 also inherits from TH1
+        if(cl.find("TH1") != std::string::npos){
             
             // Get a reference histogram for the name, then get all histograms in  a vector
             TH1F*   sample_hist_ref = (TH1F*)key->ReadObj();
