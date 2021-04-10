@@ -2,8 +2,7 @@ final_data_2018_ee 10
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_EGamma_Run2018.root                                                              2018
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2018.root                                                         Diboson
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2018.root                                                             Top
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root              WG
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root               ZG
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_VG_MiniAOD2018.root                                                              V#gamma
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2018.root                                                          DY
 #/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJets_012J_MiniAOD2018.root                                                      W+Jets
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root                    W+Jets

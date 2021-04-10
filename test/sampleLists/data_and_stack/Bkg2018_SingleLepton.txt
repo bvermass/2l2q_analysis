@@ -1,9 +1,9 @@
-final_bkg_2018_ee 10
+final_bkg_2018_2l 10
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2018.root                                                         Diboson
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2018.root                                                             Top
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_VG_MiniAOD2018.root                                                              V#gamma
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2018.root                                                          DY
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJets_012J_MiniAOD2018.root                                                      W+Jets
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_e_massiveAndCKM_LO_MiniAOD2018.root    HNLx3GeVxV^{2}=1e^{-4}
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.000716240183179_e_massiveAndCKM_LO_MiniAOD2018.root   HNLx6GeVxV^{2}=5e^{-7}
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_e_massiveAndCKM_LO_MiniAOD2018.root  HNLx10GeVxV^{2}=6e^{-7}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00547722557505_2l_massiveAndCKM_LO_MiniAOD2018.root    HNLx3GeVxV^{2}=3e^{-5}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.00059160797831_2l_massiveAndCKM_LO_MiniAOD2018.root   HNLx6GeVxV^{2}=3.5e^{-7}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000574456264654_2l_massiveAndCKM_LO_MiniAOD2018.root  HNLx10GeVxV^{2}=3e^{-7}

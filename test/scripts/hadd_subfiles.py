@@ -91,6 +91,12 @@ def merge_similar_samples( base_path ):
 
 
         #MiniAOD2016
+        VG_2016_list = [basename + 'WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root',
+                       basename + 'ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root']
+        if os.system(merge_files(basename + 'VG_MiniAOD2016.root', VG_2016_list)) != 0:
+            print 'VG 2016 failed'
+            all_good = False
+
         TTJets_2016_list = [basename + 'TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root',
                        basename + 'TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root',
                        basename + 'TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_MiniAOD2016.root']
@@ -109,7 +115,7 @@ def merge_similar_samples( base_path ):
                         basename + 'WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2016.root',
                         basename + 'ZZTo4L_13TeV_powheg_pythia8_ext1_MiniAOD2016.root',
                         basename + 'ZZTo2L2Q_13TeV_powheg_pythia8_MiniAOD2016.root',
-                        basename + 'ZZTo2L2Nu_13TeV_powheg_pythia8_MiniAOD2016.root',
+                        basename + 'ZZTo2L2Nu_13TeV_powheg_pythia8_ext1_MiniAOD2016.root',
                         basename + 'WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root',
                         basename + 'WZToLNu2Q_13TeV_powheg_pythia8_MiniAOD2016.root',
                         basename + 'WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_MiniAOD2016.root']
@@ -199,10 +205,16 @@ def merge_similar_samples( base_path ):
             all_good = False
 
         #MiniAOD2017
-        WJets_2017_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
+        VG_2017_list = [basename + 'ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
+                       basename + 'WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root']
+        if os.system(merge_files(basename + 'VG_MiniAOD2017.root', VG_2017_list)) != 0:
+            print 'VG 2017 failed'
+            all_good = False
+
+        WJets_012J_2017_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
                        basename + 'WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root',
                        basename + 'WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root']
-        if os.system(merge_files(basename + 'WJets_012J_MiniAOD2017.root', WJets_2017_list)) != 0:
+        if os.system(merge_files(basename + 'WJets_012J_MiniAOD2017.root', WJets_012J_2017_list)) != 0:
             print 'WJets 012J 2017 failed'
             all_good = False
 
@@ -316,10 +328,16 @@ def merge_similar_samples( base_path ):
 
 
         #MiniAOD2018
-        WJets_2018_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
+        VG_2018_list = [basename + 'ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
+                       basename + 'WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'VG_MiniAOD2018.root', VG_2018_list)) != 0:
+            print 'VG 2018 failed'
+            all_good = False
+
+        WJets_012J_2018_list = [basename + 'WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
                        basename + 'WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root',
                        basename + 'WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2018.root']
-        if os.system(merge_files(basename + 'WJets_012J_MiniAOD2018.root', WJets_2018_list)) != 0:
+        if os.system(merge_files(basename + 'WJets_012J_MiniAOD2018.root', WJets_012J_2018_list)) != 0:
             print 'WJets 012J 2018 failed'
             all_good = False
 

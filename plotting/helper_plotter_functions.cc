@@ -41,7 +41,7 @@ Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
     mm( "#mu#mu" )
     , em( "e#mu" )
     , ee( "ee" )
-    , me( "#{mu}e" )
+    , me( "#mu e" )
     , OS( "OS" )
     , SS( "SS" )
     , masslessthan2( "M_{SV} < 2 GeV" )
@@ -298,7 +298,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
 
     if(histname.Contains("before") or histname.Contains("after") or histname.Contains("_Training")) fullname += "partialcuts/";
     if(histname.Contains("_M-") and histname.Contains("_V2-")) fullname += (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/";
-    if(histname.Contains("_KVF_"))              fullname += "KVF/";
+    if(histname.Contains("KVF_"))              fullname += "KVF/";
     if(histname.Contains("_IVF_"))              fullname += "IVF/";
     if(histname.Contains("_jetl2_"))            fullname += "jetl2/";
     if(histname.Contains("_oldID_"))            fullname += "oldID/";
@@ -365,6 +365,7 @@ int get_color(TString legend)
     else if(legend.Index("Diboson")  != -1) return kGreen+3;
     else if(legend.Index("Triboson") != -1) return kRed+3;
     else if(legend.Index("WG")       != -1) return 7;
+    else if(legend.Index("V#gamma")  != -1) return 7;
     else if(legend.Index("ZG")       != -1) return 8;
     else if(legend.Index("JPsi")     != -1) return 2;
     else if(legend.Index("QCD")      != -1) return 2;

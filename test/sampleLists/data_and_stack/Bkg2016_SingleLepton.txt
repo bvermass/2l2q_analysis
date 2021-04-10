@@ -1,5 +1,4 @@
-final_data_2016_2l 10
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_SingleLepton_Run2016.root                                            2016
+final_bkg_2016_2l 10
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Diboson_MiniAOD2016.root                                             Diboson
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2016.root                                                 Top
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_VG_MiniAOD2016.root                                                  V#gamma
