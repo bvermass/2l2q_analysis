@@ -4,9 +4,7 @@ final_data_2018_mm 10
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Top_MiniAOD2018.root                                                             Top
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_VG_MiniAOD2018.root                                                              V#gamma
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_DYJets_MiniAOD2018.root                                                          DY
-#/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJets_012J_MiniAOD2018.root                                                      W+Jets
-#/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8_MiniAOD2018.root                      JPsi
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2018.root                    W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_WJets_012J_MiniAOD2018.root                                                      W+Jets
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_QCD_MuEnriched_MiniAOD2018.root                                                  QCD
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAOD2018.root   HNLx3GeVxV^{2}=1e^{-4}
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-6_V-0.000716240183179_mu_massiveAndCKM_LO_MiniAOD2018.root  HNLx6GeVxV^{2}=5e^{-7}
