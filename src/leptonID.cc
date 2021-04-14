@@ -11,8 +11,8 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     if(_lFlavor[i] != 1)                            return false;
     if(fabs(_lEta[i]) >= 2.4)                       return false;
     if(_lPt[i] <= 10)                               return false;
-    if(fabs(_dxy[i]) >= 0.005)                      return false;
-    if(fabs(_dz[i]) >= 0.1)                         return false;
+    if(fabs(_dxy[i]) > 0.01)                       return false;
+    if(fabs(_dz[i]) > 0.1)                         return false;
     if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
     if(!_lPOGTight[i])                              return false;
 
@@ -290,8 +290,7 @@ int full_analyzer::find_subleading_lepton(const std::vector<unsigned>& leptoncol
     int index_subleading = -1;
 
     for(const auto& index_lepton : leptoncollection){
-        //if((int)index_lepton == index_leading or _lPt[index_lepton] >= _lPt[index_leading]) continue;
-        if((int)index_lepton == index_leading) continue;
+        if((int)index_lepton == index_leading or _lPt[index_lepton] >= _lPt[index_leading]) continue;
 
         if(index_subleading == -1) index_subleading = (int)index_lepton;
         else if(_lPt[index_lepton] > _lPt[index_subleading]) index_subleading = (int)index_lepton;

@@ -4,16 +4,16 @@ void Skimmer::get_TightelectronID(bool* ID)
 {
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)   =   i_lFlavor[i] == 0 &&
-			            fabs(i_lEta[i]) < 2.5 &&
-			            i_lPt[i] > 10 &&
+			            fabs(i_lEta[i]) <= 2.5 &&
+			            i_lPt[i] >= 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
-			            fabs(i_dz[i])  < 0.1 &&
+			            fabs(i_dz[i])  < 0.1;
 			            //i_3dIPSig[i]   < 8 &&
 			            //i_relIso[i]    < 0.1 &&
                         //(i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]) &&
 			            //i_lPOGMedium[i] && old ID, move to MVAtZqTTV16
-			            i_lElectronPassConvVeto[i] &&
-			            i_lElectronMissingHits[i] < 1;
+			            //i_lElectronPassConvVeto[i] &&
+			            //i_lElectronMissingHits[i] < 1;
     }
 }
 
@@ -22,8 +22,8 @@ void Skimmer::get_DisplelectronID(bool* ID)  //basically medium POG cut-based ID
 {
     for(unsigned i = 0; i < i_nL; i++){
         *(ID + i)   =   i_lFlavor[i] == 0 &&
-                        fabs(i_lEta[i]) < 2.5 &&
-                        i_lPt[i] > 7 &&
+                        fabs(i_lEta[i]) <= 2.5 &&
+                        i_lPt[i] >= 7 &&
                         //fabs(i_dxy[i]) > 0.01 && for now, require this as a separate condition
                         i_lElectronPassConvVeto[i] &&
                         (   (i_lElectronIsEB[i] &&
@@ -49,8 +49,8 @@ void Skimmer::get_TightmuonID(bool* ID)
 {
     for(unsigned i = 0; i < i_nL; ++i){
 	    *(ID + i)    = 	i_lFlavor[i] == 1 &&
-			            fabs(i_lEta[i]) < 2.4 &&
-			            i_lPt[i] > 10 &&
+			            fabs(i_lEta[i]) <= 2.4 &&
+			            i_lPt[i] >= 10 &&
 			            fabs(i_dxy[i]) < 0.05 &&
 			            fabs(i_dz[i])  < 0.1 &&
 			            //i_3dIPSig[i]   < 4 &&
@@ -70,8 +70,8 @@ void Skimmer::get_DisplmuonID(bool* ID)
                                 i_lCQChi2Position[i] < 12 &&
                                 i_lCQTrackKink[i] < 20;
 	    bool fullID = 	i_lFlavor[i] == 1 &&
-			            fabs(i_lEta[i]) < 2.4 &&
-			            i_lPt[i] > 5 &&
+			            fabs(i_lEta[i]) <= 2.4 &&
+			            i_lPt[i] >= 5 &&
 			            //fabs(_dxy[i]) > 0.01 && for now, require this as a separate condition
                         i_lPOGLoose[i] &&
                         (   (goodglobalmuon &&
@@ -154,13 +154,25 @@ bool Skimmer::dileptonSkim(){
         ele_cleaned_both[i] = ele_cleaned_tight[i] and ele_cleaned_displ[i];
     }
 
-    int Tightleptons = 0;
-    int Displleptons = 0;
+    //find leading prompt lepton
+    int i_leading_lepton = -1;
     for(unsigned i = 0; i < i_nL; i++){
-        if((TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) and i_lPt[i] > 20) Tightleptons++;
-        if((DisplmuonID[i] or (DisplelectronID[i] and ele_cleaned_both[i])) and i_lIVF_match[i]) Displleptons++;
+        if((TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) and i_lPt[i] > 20){
+            i_leading_lepton = i;
+            break;
+        }
     }
-    return (Tightleptons >= 1 and Displleptons >= 1);
+    //find subleading loose lepton
+    int i_subleading_lepton = -1;
+    for(unsigned i = 0; i < i_nL; i++){
+        if((int)i == i_leading_lepton) continue;
+        if((DisplmuonID[i] or (DisplelectronID[i] and ele_cleaned_both[i]))){
+            i_subleading_lepton = i;
+            break;
+        }
+    }
+
+    return (i_leading_lepton != -1 and i_subleading_lepton != -1);
 }
 
 
