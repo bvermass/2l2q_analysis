@@ -17,7 +17,7 @@ void full_analyzer::set_leptons(const TString JetPt_Version){
 
 void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
 
-    i_jetl2             = find_jet_closest_to_lepton(i_subleading, JetPt_Version); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
+    i_jetl2             = find_jet_closest_to_lepton(i_subleading, JetPt_Version, 0.7); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
     //i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
     //i_gen_subleading    = find_gen_lep(i_subleading);
     i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton

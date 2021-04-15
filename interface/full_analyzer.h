@@ -1046,7 +1046,7 @@ public :
     int      find_leading_jet(const std::vector<unsigned>& jetcollection);
     int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
     int      find_thirdleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading, const int index_subleading);
-    int      find_jet_closest_to_lepton(const int index_lepton, const TString JetPt_Version);
+    int      find_jet_closest_to_lepton(const int index_lepton, const TString JetPt_Version, double mindR);
     double   get_dR_lepton_jet(int, int);
     bool     get_JetIsFromHNL(int i_jet);
     void     set_jetPt_JERvariations();

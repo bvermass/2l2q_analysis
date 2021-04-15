@@ -72,13 +72,12 @@ int full_analyzer::find_thirdleading_jet(const std::vector<unsigned>& jetcollect
     return index_thirdleading;
 }
 
-int full_analyzer::find_jet_closest_to_lepton(int i_lep, const TString JetPt_Version)
+int full_analyzer::find_jet_closest_to_lepton(int i_lep, const TString JetPt_Version, double mindR)
 {
     int index_jet = -1;
     if(i_lep == -1) return index_jet;
 
     double dR;
-    double mindR = 0.7;
 
     for(unsigned i_jet = 0; i_jet < _nJets; i_jet++){
         if(IsTightJetID(i_jet, JetPt_Version)){

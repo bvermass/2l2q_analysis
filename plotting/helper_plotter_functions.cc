@@ -213,7 +213,7 @@ TString make_general_pathname(const TString& plottype, TString specific_dir)
     // or plots/singlehists/final/WJets/ and then plotspecific stuff
     if(plottype == "plots/singlehists/"){
         TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
-        specific_dir = filename(filename.Index("histograms/") + 11, filename.Index("full_analyzer/") - 11 - filename.Index("histograms/"));
+        specific_dir = "";
         if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
         else if(filename.Index("Run") != -1){
             specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));

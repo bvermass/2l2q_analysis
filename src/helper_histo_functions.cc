@@ -6,14 +6,17 @@
 
 //move histo bin naming etc. to here!
 
-void make_logscale(double* xbins, unsigned nbins, double xmin, double xmax)
+std::vector<double> make_logscale(unsigned nbins, double xmin, double xmax)
 {
+    if(xmin <= 0 or xmax <= 0) std::cout << "making log axis with 0 or negative value as boundary will not work!" << std::endl;
     double logxmin = TMath::Log10(xmin);
     double logxmax = TMath::Log10(xmax);
     double binwidth = (logxmax - logxmin)/nbins;
+    std::vector<double> xbins;
     for(unsigned i = 0; i <= nbins; ++i){
-        *(xbins+i) = TMath::Power(10, logxmin + i*binwidth);
+        xbins.push_back(TMath::Power(10, logxmin + i*binwidth));
     }
+    return xbins;
 }
 
 TString make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer)

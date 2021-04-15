@@ -76,9 +76,8 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     double xmin = 0.8;
     double xmax = 300;
     int nbins   = 25;
-    double xbins[nbins+1];
-    make_logscale(&xbins[0], nbins, xmin, xmax);
-    (*hists)["gen_PV-SVdist_xlog"]   = new TH1F("gen_PV-SVdist_xlog", ";#Delta_{xyz} (PV_{gen}, SV_{gen}) [cm]; Events", nbins, xbins);
+    std::vector<double> xbins = make_logscale(nbins, xmin, xmax);
+    (*hists)["gen_PV-SVdist_xlog"]   = new TH1F("gen_PV-SVdist_xlog", ";#Delta_{xyz} (PV_{gen}, SV_{gen}) [cm]; Events", nbins, &xbins[0]);
 }
 
 void full_analyzer::fill_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, double event_weight)
