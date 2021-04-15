@@ -208,11 +208,14 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     for(auto& MassMap : evaluating_V2s_plots){
         for(auto& V2 : MassMap.second){
-            if(_FullNoPFN) fill_pfn_histograms(hists, sr_flavor + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            if(_FullNoPFN){
+                fill_pfn_histograms(hists, sr_flavor + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+                fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
+            }
+            if(_Training2Jets) fill_pfn_histograms(hists, sr_flavor + "_2Jets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
             //if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
             //if(_TrainingHighPFN[MassMap.first][V2]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
-            if(_Full[MassMap.first][V2]){
-                fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
+            if(_FullNoPFN and _Full[MassMap.first][V2]){
                 fill_Shape_SR_histograms(hists, MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
             }
             //if(_CR_Full_invdphi[MassMap.first][V2]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_CRdphi" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
