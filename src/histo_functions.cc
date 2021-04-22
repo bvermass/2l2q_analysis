@@ -567,6 +567,7 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
         (*hists)["l2reco_ctau_eff_den"]->Fill(_ctauHN);
         (*hists)["PVNvtxdist"]->Fill(PVNvtxdist);
         (*hists)["l2reco_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+        (*hists)["l2reco_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
         //(*hists)["l2reco_SVgen-reco_eff_den"]
 
         if(i_l2_fromgen != -1){
@@ -576,18 +577,21 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
             //(*hists)["l2reco_dz_eff_num"]->Fill(_gen_[i_gen_l2]);
             (*hists)["l2reco_ctau_eff_num"]->Fill(_ctauHN);
             (*hists)["l2reco_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+            (*hists)["l2reco_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
             //(*hists)["l2reco_PVSVdist_eff_num"]->Fill(_gen_);
 
             (*hists)["l2id_pt_eff_den"]->Fill(_gen_lPt[i_gen_l2]);
             (*hists)["l2id_eta_eff_den"]->Fill(_gen_lEta[i_gen_l2]);
             (*hists)["l2id_ctau_eff_den"]->Fill(_ctauHN);
             (*hists)["l2id_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+            (*hists)["l2id_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
 
-            if(subleadingIsl2){
+            if(subleadinghighestptIsl2){
                 (*hists)["l2id_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
                 (*hists)["l2id_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
                 (*hists)["l2id_ctau_eff_num"]->Fill(_ctauHN);
                 (*hists)["l2id_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+                (*hists)["l2id_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
             }
         }
     }
@@ -598,7 +602,7 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
     (*hists)[prefix+"_l2_pt_eff_den"]->Fill(_lPt[i_subleading]);
     (*hists)[prefix+"_l2_ctau_eff_den"]->Fill(_ctauHN);
     if(_lIVF_match[i_subleading] and i_gen_l2 != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_den"]->Fill(IVF_SVgenreco);
-    if(subleadingIsl2){
+    if(subleadinghighestptIsl2){
         (*hists)[prefix+"_l2_pt_eff_num"]->Fill(_lPt[i_subleading]);
         (*hists)[prefix+"_l2_ctau_eff_num"]->Fill(_ctauHN);
         if(_lIVF_match[i_subleading] and i_gen_l2 != -1) (*hists)[prefix+"_l2_SVgen-reco_eff_num"]->Fill(IVF_SVgenreco);
@@ -613,8 +617,8 @@ void full_analyzer::fill_lepton_eff(std::map<TString, TH1*>* hists, TString pref
 
 void full_analyzer::fill_HNLrecotracks_KVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight)
 {
-    if(isData) return;
-    if(i_gen_l2 == -1 or !(leadingIsl1 and subleadingIsl2)) return;
+    if(!isSignal) return;
+    if(i_gen_l2 == -1 or !(leadingIsl1 and subleadinghighestptIsl2)) return;
     if(HNLadditionaltracks < 1) return;
     
     (*hists)[prefix+"_HNLrecotracks_KVF_PV-SVdxyz_eff_den"]->Fill(gen_PVSVdist);
@@ -634,7 +638,7 @@ void full_analyzer::fill_HNLrecotracks_KVF_eff(std::map<TString, TH1*>* hists, s
 
 void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight){
     if(isData) return;
-    if(i_gen_l2 == -1 or !(leadingIsl1 and subleadingIsl2)) return;
+    if(i_gen_l2 == -1 or !(leadingIsl1 and subleadinghighestptIsl2)) return;
 
 
     if(HNLadditionaltracks >= 1){
@@ -696,6 +700,11 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
     
     if(_lIVF_match[i_subleading]){
         (*hists)[prefix+"_IVF_cutflow"]->Fill(1., event_weight);
+        (*hists2D)[prefix+"_IVF_gen_PV-SVdxy_residual_xlog"]->Fill(gen_PVSVdist_2D, gen_PVSVdist_2D - IVF_PVSVdist_2D, event_weight);
+        (*hists2D)[prefix+"_IVF_gen_PV-SVdxyz_residual_xlog"]->Fill(gen_PVSVdist, gen_PVSVdist - IVF_PVSVdist, event_weight);
+        (*hists2D)[prefix+"_IVF_gen_SVmass_residual"]->Fill(gen_SVmass, gen_SVmass - SVmass, event_weight);
+        (*hists2D)[prefix+"_IVF_gen_SVmasstontracks_residual"]->Fill(gen_SVmass, gen_SVntracks - _IVF_ntracks[i_subleading], event_weight);
+        (*hists2D)[prefix+"_IVF_gen_ntracks_residual"]->Fill(gen_SVntracks, gen_SVntracks - _IVF_ntracks[i_subleading], event_weight);
         if(extensive_plots){
             (*hists)[prefix+"_IVF_PV-SVdxy_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist_2D);
             (*hists)[prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist);

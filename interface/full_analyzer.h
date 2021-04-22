@@ -940,12 +940,14 @@ public :
    int i_gen_l2;
    bool leadingIsl1;
    bool subleadingIsl2; 
+   bool subleadinghighestptIsl2;
    int i_l1_fromgen, i_l2_fromgen;
    int HNLadditionaltracks;
 
    // signal region lepton indices 
    int i_leading;
    int i_subleading;
+   int i_subleading_highestpt;
    TString sr_flavor, sr_charge, sr_lflavor;
    
    // gen indices corresponding to signal region leptons (geometric)

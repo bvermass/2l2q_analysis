@@ -38,6 +38,7 @@ void full_analyzer::Set_Objects_And_Relevant_Variables(const TString JetPt_Versi
     //Find leptons and jets with leading pt
     i_leading = select_leading_lepton(promptElectronID, promptMuonID);
     i_subleading = select_subleading_lepton_withSV(displacedElectronID, displacedMuonID);
+    i_subleading_highestpt = select_subleading_lepton_highestpt(displacedElectronID, displacedMuonID);
 
 	i_leading_jet                   = find_leading_jet(jetID);
 	i_subleading_jet	            = find_subleading_jet(jetID, i_leading_jet);

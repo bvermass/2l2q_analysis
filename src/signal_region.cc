@@ -24,6 +24,7 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
     i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
     leadingIsl1         = leptonIsGenLepton(i_leading, i_gen_l1);
     subleadingIsl2      = leptonIsGenLepton(i_subleading, i_gen_l2);
+    subleadinghighestptIsl2 = leptonIsGenLepton(i_subleading_highestpt, i_gen_l2);
     HNLadditionaltracks = HNL_additional_reco_tracks();
     i_l1_fromgen        = find_reco_l_fromgen(i_gen_l1);
     i_l2_fromgen        = find_reco_l_fromgen(i_gen_l2);
@@ -72,23 +73,25 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
             IVF_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
             if(!isData){
                 IVF_SVgenreco   = get_xyz_distance(_gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2], _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
-                gen_PVSVdist_2D = get_xy_distance(_PV_x, _PV_y, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2]);
-                gen_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
-                gen_SVntracks   = 0;
-                LorentzVector gentracksum(0,0,0,0);
-                for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
-                    if(_gen_NPackedDtrsCharge[i] != 0){
-                        LorentzVector tmptrack(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
-                        gentracksum += tmptrack;
-                        gen_SVntracks++;
-                    }
-                }
-                gen_SVmass = gentracksum.mass();
-                PVNvtxdist = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_Nvertex_x, _gen_Nvertex_y, _gen_Nvertex_z);
-                HNLrecotracks_KVF_SVgenreco = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
-                //HNLrecotracks_KVF_PVSVdist_2D  = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _PV_x, _PV_y, _PV_z);
             }
         }
+    }
+    if(!isData){
+        gen_PVSVdist_2D = get_xy_distance(_PV_x, _PV_y, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2]);
+        gen_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
+        gen_SVntracks   = 0;
+        LorentzVector gentracksum(0,0,0,0);
+        for(unsigned i = 0; i < _gen_nNPackedDtrs; i++){
+            if(_gen_NPackedDtrsCharge[i] != 0){
+                LorentzVector tmptrack(_gen_NPackedDtrsPt[i], _gen_NPackedDtrsEta[i], _gen_NPackedDtrsPhi[i], _gen_NPackedDtrsE[i]);
+                gentracksum += tmptrack;
+                gen_SVntracks++;
+            }
+        }
+        gen_SVmass = gentracksum.mass();
+        PVNvtxdist = get_xyz_distance(_PV_x, _PV_y, _PV_z, _gen_Nvertex_x, _gen_Nvertex_y, _gen_Nvertex_z);
+        HNLrecotracks_KVF_SVgenreco = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2]);
+        //HNLrecotracks_KVF_PVSVdist_2D  = get_xyz_distance(_gen_NPackedDtrs_KVF_x, _gen_NPackedDtrs_KVF_y, _gen_NPackedDtrs_KVF_z, _PV_x, _PV_y, _PV_z);
     }
 }
 
