@@ -7,7 +7,7 @@
 using namespace std;
 
 void full_analyzer::set_leptons(const TString JetPt_Version){
-    sr_flavor = get_signal_region_flavor();
+    sr_flavor = get_signal_region_flavor(i_leading, i_subleading);
     sr_charge = sr_flavor(0,3);
     sr_lflavor = sr_flavor(3,3);
 
@@ -96,19 +96,19 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
 }
 
 
-TString full_analyzer::get_signal_region_flavor(){
+TString full_analyzer::get_signal_region_flavor(int index_leading, int index_subleading){
     TString signal_region_flavor = "";
     
-    if(i_leading == -1 or i_subleading == -1) return signal_region_flavor;
+    if(index_leading == -1 or index_subleading == -1) return signal_region_flavor;
 
-    if(_lCharge[i_leading] == _lCharge[i_subleading]) signal_region_flavor += "_SS";
+    if(_lCharge[index_leading] == _lCharge[index_subleading]) signal_region_flavor += "_SS";
     else signal_region_flavor += "_OS";
 
-    if(_lFlavor[i_leading] == 0) signal_region_flavor += "_e";
-    else if(_lFlavor[i_leading] == 1) signal_region_flavor += "_m";
+    if(_lFlavor[index_leading] == 0) signal_region_flavor += "_e";
+    else if(_lFlavor[index_leading] == 1) signal_region_flavor += "_m";
 
-    if(_lFlavor[i_subleading] == 0) signal_region_flavor += "e";
-    else if(_lFlavor[i_subleading] == 1) signal_region_flavor += "m";
+    if(_lFlavor[index_subleading] == 0) signal_region_flavor += "e";
+    else if(_lFlavor[index_subleading] == 1) signal_region_flavor += "m";
 
     return signal_region_flavor;
 }
@@ -268,16 +268,16 @@ void full_analyzer::additional_signal_regions(){
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
             _TrainingHighPFN[MassMap.first][V2Map.first]            = _Training &&
-                                                               (V2Map.second > 0.98);
+                                                               (V2Map.second > 0.9);
 
             _Full[MassMap.first][V2Map.first]                = _FullNoPFN &&
-                                                               (V2Map.second > 0.98);
+                                                               (V2Map.second > 0.9);
 
             _CR_Full_invdphi[MassMap.first][V2Map.first]     = _CR_FullNoPFN_invdphi &&
-                                                               (V2Map.second > 0.98);
+                                                               (V2Map.second > 0.9);
 
             _CR_Full_invmll[MassMap.first][V2Map.first]      = _CR_FullNoPFN_invmll &&
-                                                               (V2Map.second > 0.98);
+                                                               (V2Map.second > 0.9);
         }
     }
 

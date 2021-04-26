@@ -1056,7 +1056,7 @@ public :
    // in src/signal_regions.cc
     void     set_leptons(const TString JetPt_Version);
     void     set_relevant_lepton_variables(const TString JetPt_Version);
-    TString  get_signal_region_flavor();
+    TString  get_signal_region_flavor(int index_leading, int index_subleading);
     int      select_subleading_lepton_withSV(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID);
     int      select_subleading_lepton_highestpt(std::vector<unsigned> displacedElectronID, std::vector<unsigned> displacedMuonID);
     int      select_leading_lepton(std::vector<unsigned> promptElectronID, std::vector<unsigned> promptMuonID);
@@ -1075,6 +1075,7 @@ public :
     void     add_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     add_general_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString);
     void     add_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    void     add_cutflow_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_Shape_SR_histograms(std::map<TString, TH1*>* hists, TString MV2, double event_weight);
     void     fill_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*);
     void     fill_relevant_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);

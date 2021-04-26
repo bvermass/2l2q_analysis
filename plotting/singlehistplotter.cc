@@ -26,11 +26,14 @@ int main(int argc, char * argv[])
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {20, 30, 190}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
+    std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
+
+    gStyle->SetPalette(kDeepSea);
+    TColor::InvertPalette();
 
     // Name of directory where plots will end up
     TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
@@ -166,6 +169,10 @@ int main(int argc, char * argv[])
                     if(isData and histname.Contains("Shape_SR") and histname.Contains("BtoAwithCD")) plot_Shape_SR_with_Signal_eff(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
                     //if(isData and histname.Contains("Shape_SR") and histname.Contains("BoverD")) plot_Shape_SR_with_Signal_AoverC(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
                 }
+                if(inputfilename.Contains("hists_full_analyzer")){
+                    plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"noKVF_2trPCA", "yesKVF_2trPCA"}, {"SV found", "SV not found"}, "compKVF_2trPCA", true);
+                    plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"TrainingHighPFN", "Training"}, {"PFN > 0.9", "All events"}, "TrainingvsHighPFN", true);
+                }
                 delete sample_hist;
             }else if(cl.find("TH2") != std::string::npos){
                 TH2F *sample_hist = (TH2F*)key->ReadObj();
@@ -182,6 +189,9 @@ int main(int argc, char * argv[])
 
                 pad->Clear();
                 pad->SetLogy(0);
+                pad->SetRightMargin(0.12);
+                pad->SetLogx(histname.Contains("xlog")? 1 : 0);// set x range to log if necessary
+
 
                 sample_hist->SetMinimum(0);
 
@@ -198,10 +208,19 @@ int main(int argc, char * argv[])
                 //    sample_hist->Add(hist_quadD);
                 //}
                 sample_hist->Draw(get_2D_draw_options(sample_hist));
+                //sample_hist->GetYaxis()->SetRangeUser(-0.2, 0.2);
+                if(histname.Contains("residual")){
+                    TProfile* profile = sample_hist->ProfileX(histname + "_profile", 1, -1, "s");
+                    profile->SetLineColor(kRed);
+                    profile->SetMarkerColor(kRed);
+                    profile->Draw("E same");
+                }
+
                 CMSandLumi->Draw();
 
                 pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
+                c->Print(pathname_lin + histname + ".pdf");
 
                 if(is_mini_analyzer and (histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs"))){
                     double cor = sample_hist->GetCorrelationFactor();
@@ -278,7 +297,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         pad_histo.Clear();
         pad_histo.SetLogy(0);
 
-        hists->Draw("E P hist nostack");
+        hists->Draw("E hist nostack");
         hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
         hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -296,7 +315,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         //pad_histo.Clear();
         //pad_histo.SetLogy(1);
 
-        //hists->Draw("E P hist nostack");
+        //hists->Draw("E hist nostack");
         //hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         //hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
         //hists->SetMaximum(10*hists->GetMaximum("nostack"));
@@ -347,7 +366,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         pad->Clear();
         pad->SetLogy(0);
 
-        hists->Draw("E P hist nostack");
+        hists->Draw("E hist nostack");
         hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
         hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
@@ -364,7 +383,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         //pad->Clear();
         //pad->SetLogy(1);
 
-        //hists->Draw("E P hist nostack");
+        //hists->Draw("E hist nostack");
         //hists->GetXaxis()->SetTitle(sample_hist->GetXaxis()->GetTitle());
         //hists->GetYaxis()->SetTitle(sample_hist->GetYaxis()->GetTitle());
         //hists->SetMaximum(10*hists->GetMaximum("nostack"));
@@ -403,7 +422,7 @@ void plot_Shape_SR_with_Signal_AoverC(TString filename, TString pathname_lin, TH
 
     THStack* hists = new THStack("stack", "");
     hists->Add(sample_hist);
-    hists->Draw("E P hist nostack");
+    hists->Draw("E hist nostack");
     legend.AddEntry(sample_hist, "Data pred.", "pl");
 
     TH1F *m2_eff, *m3_eff, *m4_eff, *m5_eff, *m6_eff, *m8_eff, *m10_eff, *m12_eff, *m14_eff;
@@ -531,7 +550,7 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F*
     //legend.AddEntry(HNL_hist_quadC, "quad C", "pl");
     //legend.AddEntry(HNL_hist_quadD, "quad D", "pl");
 
-    hists->Draw("E P hist nostack");
+    hists->Draw("E hist nostack");
     legend.Draw("same");
     CMSandLumi->Draw();
     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);

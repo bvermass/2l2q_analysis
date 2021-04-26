@@ -157,7 +157,7 @@ int main(int argc, char * argv[])
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1) continue; // Only print Control region plots for data or Training region with high background
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
@@ -284,7 +284,8 @@ int main(int argc, char * argv[])
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
-                hists_bkg->SetMinimum(4.);
+                if(std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(40.);
+                else hists_bkg->SetMinimum(4.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");

@@ -16,6 +16,7 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
     (*hists)[prefix+"_jetl2_pt"]                    = new TH1F(prefix+"_jetl2_pt", ";closestJet(l_{2}) #it{p}_{T} [GeV];Events", 30, 0, 140);
     (*hists)[prefix+"_jetl2_eta"]                   = new TH1F(prefix+"_jetl2_eta", ";closestJet(l_{2}) #eta;Events", 20, -3, 3);
     (*hists)[prefix+"_jetl2_l2dR"]                  = new TH1F(prefix+"_jetl2_l2dR", ";closestJet(l_{2}) #Delta R;Events", 30, 0, 1);
+    (*hists)[prefix+"_jetl2_l2dR_largedR"]            = new TH1F(prefix+"_jetl2_l2dR_largedR", ";#Delta R(l_{2}, jet closest to l_{2});Events", 30, 0, 1.5);
     (*hists)[prefix+"_jetl2_DeepCsv_udsg"]          = new TH1F(prefix+"_jetl2_DeepCsv_udsg", ";closestJet(l_{2}) DeepCsv udsg;Events", 30, -0.1, 1.1);
     (*hists)[prefix+"_jetl2_DeepCsv_b"]             = new TH1F(prefix+"_jetl2_DeepCsv_b", ";closestJet(l_{2}) DeepCsv b;Events", 30, -0.1, 1.1);
     (*hists)[prefix+"_jetl2_DeepCsv_c"]             = new TH1F(prefix+"_jetl2_DeepCsv_c", ";closestJet(l_{2}) DeepCsv c;Events", 30, -0.1, 1.1);
@@ -60,6 +61,8 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_eta"]->Fill(_jetEta[i_jetl2], event_weight);
         double jetl2dR = get_dR_lepton_jet(i_subleading, i_jetl2);
         (*hists)[prefix+"_jetl2_l2dR"]->Fill(jetl2dR, event_weight);
+        double jetl2dR_largedR = get_dR_lepton_jet(i_subleading, find_jet_closest_to_lepton(i_subleading, "_jetPt", 3.14));
+        (*hists)[prefix+"_jetl2_l2dR_largedR"]->Fill(jetl2dR_largedR, event_weight);
         LorentzVector jet(_jetPt[i_jetl2], _jetEta[i_jetl2], _jetPhi[i_jetl2], _jetE[i_jetl2]);
         LorentzVector lep(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
         if(jetl2dR < 0.4){

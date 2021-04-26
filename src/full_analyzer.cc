@@ -64,16 +64,18 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     init_HNL_MC_check(&hists, &hists2D);
 
     for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
-        for(const TString &ev_region : {"", "_afterSV", "_Training", "_TooFar", "_2prompt", "_2promptwithMll", "_2Jets", "_2JetsNoZ"}){
+        add_cutflow_histograms(&hists, lep_region);
+        for(const TString &ev_region : {"", "_afterSV", "_Training", /*"_TooFar", */"_2prompt", "_2promptwithMll", "_2Jets", "_2JetsNoZ"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
             give_alphanumeric_labels(&hists, lep_region);
         }
         for(auto& MassMap : evaluating_V2s_plots){
+            add_histograms(&hists, &hists2D, lep_region + "_TrainingHighPFN_M-" + std::to_string(MassMap.first));
             for(auto& V2 : MassMap.second){
                 for(const TString &ev_region : {"_SR"}){//, "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
                     add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2]);
                 }
-                for(const TString &ev_region : {""/*, "_Training"*/}){
+                for(const TString &ev_region : {"", "_2Jets"}){
                     add_pfn_histograms(&hists, lep_region + ev_region + MV2name[MassMap.first][V2]);
                 }
             }
@@ -209,6 +211,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             SR_counters[sr_flavor+"_weighted"] += ev_weight;
         }else {
             JetTagVal.clear();
+            _TrainingHighPFN.clear();
+            _Full.clear();
+            _CR_Full_invdphi.clear();
+            _CR_Full_invmll.clear();
         }
 
 

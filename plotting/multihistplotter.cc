@@ -88,6 +88,7 @@ int main(int argc, char * argv[])
     TKey* key;
     while(key = (TKey*)next()){
         if(counter >= counter_begin and counter <= counter_end){
+            TString plotname_addition = "";
             legend.Clear();
 
             std::string cl(key->GetClassName());
@@ -107,7 +108,17 @@ int main(int argc, char * argv[])
                 THStack* hists = new THStack("stack", "");
                 for(int i = 0; i < files.size(); i++){
                     if(files[i]->GetListOfKeys()->Contains(histname)){
-                        TH1* hist = (TH1*)files[i]->Get(histname);
+                        TString histname_to_use = histname;
+                        if(histname.Contains("_Training_") and legends[i].Contains("PFN > 0.9")){
+                            if(specific_dir.Contains("LowMass")){
+                                histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-5_");
+                                plotname_addition = "_vsLowMassPFN";
+                            }else if(specific_dir.Contains("HighMass")){
+                                histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-10_");
+                                plotname_addition = "_vsHighMassPFN";
+                            }
+                        }
+                        TH1* hist = (TH1*)files[i]->Get(histname_to_use);
                         if(hist->GetMaximum() > 0){
                             hists->Add(hist);
                             if(legends[i].Contains("Pred")){
@@ -152,7 +163,7 @@ int main(int argc, char * argv[])
                 if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
                 pad->Modified();
-                c->Print(pathname_lin + histname + ".png");
+                c->Print(pathname_lin + histname + plotname_addition + ".png");
 
                 // Draw log version
                 pad->Clear();
@@ -168,7 +179,7 @@ int main(int argc, char * argv[])
                 if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
                 pad->Modified();
-                c->Print(pathname_log + histname + ".png");
+                c->Print(pathname_log + histname + plotname_addition + ".png");
 
 
 
