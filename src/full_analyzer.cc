@@ -141,7 +141,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     std::map<TString, double> SR_counters = add_SR_counters();
 
     double int_lumi;
-    if(_is2016) int_lumi = 35.92;
+    if(_is2016) int_lumi = 36.33;
     if(_is2017) int_lumi = 41.53;
     if(_is2018) int_lumi = 59.74;
 
