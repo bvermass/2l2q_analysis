@@ -219,8 +219,8 @@ def merge_similar_samples( base_path ):
             all_good = False
 
         DYJets_2017_list = [basename + 'DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root',
-                       #basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root']
-                       basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root']
+                       basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_MiniAOD2017.root']
+                       #basename + 'DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_MiniAOD2017.root']
         if os.system(merge_files(basename + 'DYJets_MiniAOD2017.root', DYJets_2017_list)) != 0:
             print 'DY 2017 failed'
             all_good = False
