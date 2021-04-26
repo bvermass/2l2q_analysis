@@ -207,6 +207,7 @@ void full_analyzer::signal_regions(){
      _bkgestimator              = _l1l2SV &&
                                   i_jetl2 != -1 &&
                                   (nTightEle + nTightMu == 1) &&
+                                  (nDisplEle + nDisplMu == 1) &&
                                   dphill > 0.4 &&
                                   mll > 10 &&
                                   IVF_PVSVdist_2D < 50;
@@ -215,6 +216,7 @@ void full_analyzer::signal_regions(){
                                   i_jetl2 != -1 &&
                                   nTightJet <= 1 &&
                                   (nTightEle + nTightMu == 1) &&
+                                  (nDisplEle + nDisplMu == 1) &&
                                   dphill > 0.4 &&
                                   mll > 10 &&
                                   IVF_PVSVdist_2D < 50;
@@ -224,6 +226,7 @@ void full_analyzer::signal_regions(){
                                   i_jetl2 != -1 &&
                                   nTightJet > 1 &&
                                   (nTightEle + nTightMu == 1) &&
+                                  (nDisplEle + nDisplMu == 1) &&
                                   dphill > 0.4 &&
                                   mll > 10 &&
                                   IVF_PVSVdist_2D < 50;
@@ -232,6 +235,7 @@ void full_analyzer::signal_regions(){
                                   i_jetl2 != -1 &&
                                   nTightJet > 1 &&
                                   (nTightEle + nTightMu == 1) &&
+                                  (nDisplEle + nDisplMu == 1) &&
                                   dphill > 0.4 &&
                                   (mll > 100 || mll < 80) &&
                                   mll > 10 &&
