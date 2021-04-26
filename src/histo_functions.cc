@@ -639,7 +639,19 @@ void full_analyzer::fill_HNLrecotracks_KVF_eff(std::map<TString, TH1*>* hists, s
     if(_gen_NPackedDtrsHasKVFvertex){
         (*hists)[prefix+"_HNLrecotracks_KVF_PV-SVdxyz_onlylIVFmatch_eff_num"]->Fill(gen_PVSVdist);
         (*hists)[prefix+"_HNLrecotracks_KVF_ctau_onlylIVFmatch_eff_num"]->Fill(_ctauHN);
-        
+        if(HNLadditionaltracks == 1 and _gen_nNPackedDtrsPCA == 1){
+            (*hists)[prefix+"_HNLrecotracks_yesKVF_2trPCA"]->Fill(_gen_NPackedDtrsPCADist[0], event_weight);
+        }
+    }else{
+        (*hists)[prefix+"_HNLrecotracks_noKVF_l2_pt"]->Fill(_lPt[i_subleading], event_weight);
+        (*hists)[prefix+"_HNLrecotracks_noKVF_l2_eta"]->Fill(_lEta[i_subleading], event_weight);
+        (*hists)[prefix+"_HNLrecotracks_noKVF_l2_dxy"]->Fill(fabs(_dxy[i_subleading]), event_weight);
+        (*hists)[prefix+"_HNLrecotracks_noKVF_l2_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
+        (*hists)[prefix+"_HNLrecotracks_noKVF_l2_reliso"]->Fill(_relIso[i_subleading], event_weight);
+        (*hists)[prefix+"_HNLrecotracks_noKVF_ntracks"]->Fill(HNLadditionaltracks + 1, event_weight);
+        if(HNLadditionaltracks == 1 and _gen_nNPackedDtrsPCA == 1){
+            (*hists)[prefix+"_HNLrecotracks_noKVF_2trPCA"]->Fill(_gen_NPackedDtrsPCADist[0], event_weight);
+        }
     }
     if(_gen_NPackedDtrsHasKVFvertex && HNLrecotracks_KVF_SVgenreco / gen_PVSVdist < 0.1){
         (*hists)[prefix+"_HNLrecotracks_KVF_PV-SVdxyz_eff_num"]->Fill(gen_PVSVdist);

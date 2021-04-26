@@ -242,6 +242,15 @@ void full_analyzer::add_HNLrecotracks_KVF_eff_histograms(std::map<TString, TH1*>
     (*hists)[prefix+"_HNLrecotracks_KVF_PV-SVdxyz_onlylIVFmatch_eff_den"] = new TH1F(prefix+"_HNLrecotracks_KVF_PV-SVdxyz_onlylIVFmatch_eff_den", ";#Delta_{xy}(PV, SV_{fit}) [cm] (KVF);Events", 10, 0, 60);
     (*hists)[prefix+"_HNLrecotracks_KVF_ctau_onlylIVFmatch_eff_num"] = new TH1F(prefix+"_HNLrecotracks_KVF_ctau_onlylIVFmatch_eff_num", ";c#tau [cm] (KVF);Events", 10, 0, 60);
     (*hists)[prefix+"_HNLrecotracks_KVF_ctau_onlylIVFmatch_eff_den"] = new TH1F(prefix+"_HNLrecotracks_KVF_ctau_onlylIVFmatch_eff_den", ";c#tau [cm] (KVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_l2_pt"]                           = new TH1F(prefix+"_HNLrecotracks_noKVF_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 30, 0, 50);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_l2_eta"]                          = new TH1F(prefix+"_HNLrecotracks_noKVF_l2_eta", ";l_{2} #eta;Events", 30, -3, 3);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_l2_dxy"]                          = new TH1F(prefix+"_HNLrecotracks_noKVF_l2_dxy", ";l_{2} dxy [cm];Events", 30, 0, 0.5);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_l2_dz"]                           = new TH1F(prefix+"_HNLrecotracks_noKVF_l2_dz", ";l_{2} dz [cm];Events", 30, 0, 2);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_l2_reliso"]                       = new TH1F(prefix+"_HNLrecotracks_noKVF_l2_reliso", ";l_{2} Rel Iso;Events", 30, 0, 3.5);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_ntracks"]                         = new TH1F(prefix+"_HNLrecotracks_noKVF_ntracks", ";HNL reco tracks;Events", 7,0,7);
+    (*hists)[prefix+"_HNLrecotracks_noKVF_2trPCA"]                         = new TH1F(prefix+"_HNLrecotracks_noKVF_2trPCA", ";PCA distance[cm];Events", 20,0,20);
+
+    (*hists)[prefix+"_HNLrecotracks_yesKVF_2trPCA"]                         = new TH1F(prefix+"_HNLrecotracks_yesKVF_2trPCA", ";PCA distance[cm];Events", 20,0,20);
 }
 
 

@@ -485,7 +485,7 @@ TString get_2D_draw_options(TH2F* h)
 {
     int nbinsx = h->GetNbinsX();
     int nbinsy = h->GetNbinsY();
-    if(nbinsx > 30 or nbinsy > 30) return "colz";
+    if(nbinsx > 10 or nbinsy > 10) return "colz";
     else return "colz text";
 }
 
