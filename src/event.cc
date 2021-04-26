@@ -10,6 +10,7 @@ void full_analyzer::Set_Objects_And_Relevant_Variables(const TString JetPt_Versi
     std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID;
     for(unsigned i = 0; i < _nLight; i++){
         if(IsMediumPromptMuonID(i)) promptMuonID.push_back(i);
+        //if(IsPromptMuonID(i))       promptMuonID.push_back(i);
         if(IsDisplacedMuonID(i))    displacedMuonID.push_back(i);
         if(IsLooseMuonID(i))        looseMuonID.push_back(i);
     }
@@ -85,6 +86,7 @@ void full_analyzer::Set_Objects_And_Relevant_Variables_2prompt(const TString Jet
         if(IsMediumPromptMuonID(i)) promptMuonID.push_back(i);
     }
     nTightMu = promptMuonID.size();
+    nDisplMu = 0;
 
     for(unsigned i = 0; i < _nLight; i++){
         bool CleanElectron = IsCleanElectron(i, promptMuonID);
@@ -92,6 +94,7 @@ void full_analyzer::Set_Objects_And_Relevant_Variables_2prompt(const TString Jet
         if(IsMvaPromptElectronID(i) and CleanElectron) promptElectronID.push_back(i);
     }
     nTightEle = promptElectronID.size();
+    nDisplEle = 0;
     
     std::vector<unsigned> jetID, jetID_uncl;
     for(unsigned i = 0; i < _nJets; i++){
@@ -138,57 +141,31 @@ double full_analyzer::Get_Event_weight_2prompt()
     }
 }
 
-void full_analyzer::Print_Event_weight_2prompt()
-{
-    if(!isData){
-        std::cout << "_weight: " << _weight;
-        std::cout << " PU: " << puweightreader->get_PUWeight_Central(_nTrueInt);
-        if(i_leading != -1 and _lFlavor[i_leading] == 0){//electron scale factors
-            std::cout << " etrig: " << lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-            std::cout << " eID: " << lsfreader_e_ID->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
-        }else if(i_leading != -1 and _lFlavor[i_leading] == 1){//muon scale factors
-            std::cout << " mtrig: " << lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            std::cout << " mID: " << lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-            std::cout << " mISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
-        }
-        if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//second electron scale factors
-            std::cout << " e2ID: " << lsfreader_e_ID->get_LSF(_lPt[i_subleading], _lEtaSC[i_subleading]);
-        }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//second muon scale factors
-            std::cout << " m2ID: " << lsfreader_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-            std::cout << " m2ISO: " << lsfreader_m_ISO->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
-        }
-        std::cout << std::endl;
-    }
-}
-
 void full_analyzer::fill_SR_counters_cutflow(std::map<TString, double>& sr)
 {
-    sr["noSel"]++;
+    sr["1_noSel"]++;
     if(_trigmu){
-        sr["Triggermuon"]++;
+        sr["2_Triggermuon"]++;
         if(i_leading != -1 && leadptcut(i_leading)){
-            sr["l1muon"]++;
+            sr["3_l1muon"]++;
             if(!_genOverlap){
-                sr["genOverlap"]++;
-                if(isSingleMuon and _lFlavor[i_leading] == 1){
-                    sr["isSingleMuon"]++;
-                    if(i_subleading != -1){
-                        sr["l2muon"]++;
-                        if(_lIVF_match[i_subleading] != -1){
-                            sr["SV"]++;
-                            if(i_jetl2 != -1){
-                                sr["jetl2"]++;
-                                if(nTightJet <= 1){
-                                    sr["nTightJet"]++;
-                                    if(nTightEle + nTightMu == 1){
-                                        sr["nTightLep"]++;
-                                        if(mll > 10){
-                                            sr["mll"]++;
-                                            if(dphill > 0.4){
-                                                sr["dphill"]++;
-                                                if(IVF_PVSVdist_2D < 50){
-                                                    sr["PVSVdist"]++;
-                                                }
+                sr["4_genOverlap"]++;
+                if(i_subleading != -1){
+                    sr["5_l2muon"]++;
+                    if(_lIVF_match[i_subleading]){
+                        sr["6_SV"]++;
+                        if(i_jetl2 != -1){
+                            sr["7_jetl2"]++;
+                            if(nTightJet <= 1){
+                                sr["8_nTightJet"]++;
+                                if(nTightEle + nTightMu == 1){
+                                    sr["9_nTightLep"]++;
+                                    if(mll > 10){
+                                        sr["10_mll"]++;
+                                        if(dphill > 0.4){
+                                            sr["11_dphill"]++;
+                                            if(IVF_PVSVdist_2D < 50){
+                                                sr["12_PVSVdist"]++;
                                             }
                                         }
                                     }

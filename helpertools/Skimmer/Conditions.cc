@@ -6,10 +6,10 @@ void Skimmer::get_TightelectronID(bool* ID)
 	    *(ID + i)   =   i_lFlavor[i] == 0 &&
 			            fabs(i_lEta[i]) <= 2.5 &&
 			            i_lPt[i] >= 10 &&
-			            fabs(i_dxy[i]) < 0.05 &&
-			            fabs(i_dz[i])  < 0.1;
+                        fabs(i_dxy[i]) <= 0.02 &&
+                        fabs(i_dz[i])  <= 0.04 &&
+                        i_relIso[i] <= 0.1;
 			            //i_3dIPSig[i]   < 8 &&
-			            //i_relIso[i]    < 0.1 &&
                         //(i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]) &&
 			            //i_lPOGMedium[i] && old ID, move to MVAtZqTTV16
 			            //i_lElectronPassConvVeto[i] &&
@@ -51,10 +51,10 @@ void Skimmer::get_TightmuonID(bool* ID)
 	    *(ID + i)    = 	i_lFlavor[i] == 1 &&
 			            fabs(i_lEta[i]) <= 2.4 &&
 			            i_lPt[i] >= 10 &&
-			            fabs(i_dxy[i]) < 0.05 &&
+			            fabs(i_dxy[i]) < 0.01 &&
 			            fabs(i_dz[i])  < 0.1 &&
+                        i_relIso0p4MuDeltaBeta[i] <= 0.1 &&
 			            //i_3dIPSig[i]   < 4 &&
-			            //i_relIso[i]    < 0.1 &&
                         (i_leptonMvatZq[i] > 0.7 or i_leptonMvaTTH[i] > 0.7 or i_leptonMvaTOP[i] > -0.5 or i_lPOGMedium[i]);
                         //i_lPOGMedium[i]; old ID, move to MVAtZqTTV16
 			            // innertrack, PFmuon and global or tracker muon conditions are executed at ntuplizer level and not stored
@@ -157,7 +157,7 @@ bool Skimmer::dileptonSkim(){
     //find leading prompt lepton
     int i_leading_lepton = -1;
     for(unsigned i = 0; i < i_nL; i++){
-        if((TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) and i_lPt[i] > 20){
+        if((TightmuonID[i] or (TightelectronID[i] and ele_cleaned_both[i])) and i_lPt[i] > 25){
             i_leading_lepton = i;
             break;
         }

@@ -290,7 +290,7 @@ int full_analyzer::find_subleading_lepton(const std::vector<unsigned>& leptoncol
     int index_subleading = -1;
 
     for(const auto& index_lepton : leptoncollection){
-        if((int)index_lepton == index_leading or _lPt[index_lepton] >= _lPt[index_leading]) continue;
+        if((int)index_lepton == index_leading/* or _lPt[index_lepton] >= _lPt[index_leading]*/) continue;
 
         if(index_subleading == -1) index_subleading = (int)index_lepton;
         else if(_lPt[index_lepton] > _lPt[index_subleading]) index_subleading = (int)index_lepton;

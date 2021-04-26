@@ -70,19 +70,18 @@ std::map<TString, double> add_SR_counters()
             sr[lep_region + weight] = 0;
         }
     }
-    sr["noSel"] = 0;
-    sr["Triggermuon"] = 0;
-    sr["l1muon"] = 0;
-    sr["genOverlap"] = 0;
-    sr["isSingleMuon"] = 0;
-    sr["l2muon"] = 0;
-    sr["SV"] = 0;
-    sr["jetl2"] = 0;
-    sr["nTightJet"] = 0;
-    sr["nTightLep"] = 0;
-    sr["mll"] = 0;
-    sr["dphill"] = 0;
-    sr["PVSVdist"] = 0;
+    sr["1_noSel"] = 0;
+    sr["2_Triggermuon"] = 0;
+    sr["3_l1muon"] = 0;
+    sr["4_genOverlap"] = 0;
+    sr["5_l2muon"] = 0;
+    sr["6_SV"] = 0;
+    sr["7_jetl2"] = 0;
+    sr["8_nTightJet"] = 0;
+    sr["9_nTightLep"] = 0;
+    sr["10_mll"] = 0;
+    sr["11_dphill"] = 0;
+    sr["12_PVSVdist"] = 0;
     return sr;
 }
 
