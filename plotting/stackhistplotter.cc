@@ -284,7 +284,7 @@ int main(int argc, char * argv[])
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
-                if(std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(40.);
+                if(withdata and std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(40.);
                 else hists_bkg->SetMinimum(4.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
