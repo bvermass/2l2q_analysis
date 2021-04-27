@@ -56,13 +56,14 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
 
 void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefix, double event_weight){
     if(i_leading_jet != -1) (*hists)[prefix+"_jet1_pt"]->Fill(_jetPt[i_leading_jet], event_weight);
+    double jetl2dR_largedR = get_dR_lepton_jet(i_subleading, find_jet_closest_to_lepton(i_subleading, "_jetPt", 3.14));
+    (*hists)[prefix+"_jetl2_l2dR_largedR"]->Fill(jetl2dR_largedR, event_weight);
+
     if(i_jetl2 != -1){
         (*hists)[prefix+"_jetl2_pt"]->Fill(_jetPt[i_jetl2], event_weight);
         (*hists)[prefix+"_jetl2_eta"]->Fill(_jetEta[i_jetl2], event_weight);
         double jetl2dR = get_dR_lepton_jet(i_subleading, i_jetl2);
         (*hists)[prefix+"_jetl2_l2dR"]->Fill(jetl2dR, event_weight);
-        double jetl2dR_largedR = get_dR_lepton_jet(i_subleading, find_jet_closest_to_lepton(i_subleading, "_jetPt", 3.14));
-        (*hists)[prefix+"_jetl2_l2dR_largedR"]->Fill(jetl2dR_largedR, event_weight);
         LorentzVector jet(_jetPt[i_jetl2], _jetEta[i_jetl2], _jetPhi[i_jetl2], _jetE[i_jetl2]);
         LorentzVector lep(_lPt[i_subleading], _lEta[i_subleading], _lPhi[i_subleading], _lE[i_subleading]);
         if(jetl2dR < 0.4){

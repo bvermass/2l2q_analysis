@@ -856,7 +856,7 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
         (*hists)[prefix+"_cutflow2"]->GetXaxis()->SetBinLabel(i+1, cutflow2_labels[i]);
     }
     (*hists)[prefix+"_cutflow2"]->SetCanExtend(false);
-    int nx_dxy = 3;
+    //int nx_dxy = 3;
     //if(!isData){
     //    int nx_IVF = 3;
     //    const char *IVF_labels[nx_IVF] = {"Preselection", "Vertex", "|SV-SVgen| < 0.2cm"};
