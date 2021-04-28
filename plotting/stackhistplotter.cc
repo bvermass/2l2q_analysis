@@ -157,7 +157,7 @@ int main(int argc, char * argv[])
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel")) continue; // Only print Control region plots for data or Training region with high background
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
@@ -194,7 +194,8 @@ int main(int argc, char * argv[])
                             hist->SetLineColor(colors_signal[i]);
                             hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
-                            if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
+                            if(histname.Contains("_cutflow2")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(1)/hist->GetBinContent(1));
+                            else if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
                             //else hist->Scale(10.);
                             hist->SetMarkerColor(colors_signal[i]);
                             hists_signal->Add(hist);

@@ -307,9 +307,9 @@ void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, std::
     std::vector<double> xbins = make_logscale(nbins, xmin, xmax);
     (*hists2D)[prefix+"_IVF_gen_PV-SVdxy_residual_xlog"]     = new TH2F(prefix+"_IVF_gen_PV-SVdxy_residual_xlog", ";L_{xy}^{gen}[cm];#Delta (L_{xy}^{gen} - L_{xy}) [cm]", nbins, &xbins[0], 100, -5, 5);
     (*hists2D)[prefix+"_IVF_gen_PV-SVdxyz_residual_xlog"]    = new TH2F(prefix+"_IVF_gen_PV-SVdxyz_residual_xlog", ";L_{xyz}^{gen}[cm];#Delta (L_{xyz}^{gen} - L_{xyz}) [cm]", nbins, &xbins[0], 100, -5, 5);
-    (*hists2D)[prefix+"_IVF_gen_SVmass_residual"]       = new TH2F(prefix+"_IVF_gen_SVmass_residual", ";M_{SV}^{gen} [GeV];#Delta (M_{SV}^{gen} - M_{SV}) [cm]", 12, 0, 12, 100, -5, 5);
+    (*hists2D)[prefix+"_IVF_gen_SVmass_residual"]       = new TH2F(prefix+"_IVF_gen_SVmass_residual", ";M_{SV}^{gen} [GeV];#Delta (M_{SV}^{gen} - M_{SV}) [GeV]", 12, 0, 12, 100, -5, 5);
     (*hists2D)[prefix+"_IVF_gen_SVmasstontracks_residual"]       = new TH2F(prefix+"_IVF_gen_SVmasstontracks_residual", ";M_{SV}^{gen} [GeV];#Delta (N_{tracks}^{gen} - N_{tracks})", 12, 0, 12, 11, -5.5, 5.5);
-    (*hists2D)[prefix+"_IVF_gen_ntracks_residual"]       = new TH2F(prefix+"_IVF_gen_ntracks_residual", ";N_{tracks}^{gen} in SV [GeV];#Delta (N_{tracks}^{gen} - N_{tracks})", 6, 0.5, 6.5, 11, -5.5, 5.5);
+    (*hists2D)[prefix+"_IVF_gen_ntracks_residual"]       = new TH2F(prefix+"_IVF_gen_ntracks_residual", ";N_{tracks}^{gen} in SV;#Delta (N_{tracks}^{gen} - N_{tracks})", 6, 0.5, 6.5, 11, -5.5, 5.5);
     if(extensive_plots){
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);

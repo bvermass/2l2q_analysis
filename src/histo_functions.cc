@@ -352,7 +352,7 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
                                 if(nTightJet <= 1){
                                     (*hists)[prefix+"_cutflow"]->Fill(7., event_weight);
                                     (*hists)[prefix+"_cutflow2"]->Fill(5., event_weight);
-                                    if(nTightEle + nTightMu == 1){
+                                    if((nTightEle + nTightMu == 1) and (nDisplEle + nDisplMu == 1)){
                                         (*hists)[prefix+"_cutflow"]->Fill(8., event_weight);
                                         (*hists)[prefix+"_cutflow2"]->Fill(6., event_weight);
                                     }
@@ -845,13 +845,13 @@ void full_analyzer::give_alphanumeric_labels(std::map<TString, TH1*>* hists, TSt
     //    (*hists)[prefix+"_jets_categories"]->GetXaxis()->SetBinLabel(i+1,jets_labels[i]);
     //}
     int nx_cutflow = 9;
-    const char *cutflow_labels[nx_cutflow] = {"trig.", "l1", "l2", "SV", "#{Delta}#{phi}_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
+    const char *cutflow_labels[nx_cutflow] = {"trig.", "l1", "l2", "SV", "#Delta#phi_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
     for(int i = 0; i < nx_cutflow; i++){
         (*hists)[prefix+"_cutflow"]->GetXaxis()->SetBinLabel(i+1, cutflow_labels[i]);
     }
     (*hists)[prefix+"_cutflow"]->SetCanExtend(false);
     int nx_cutflow2 = 7;
-    const char *cutflow2_labels[nx_cutflow2] = {"l1+l2", "SV", "#{Delta}#{phi}_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
+    const char *cutflow2_labels[nx_cutflow2] = {"l1+l2", "SV", "#Delta#phi_{ll}>0.4", "M_{ll}>10", "jetl2", "N_{jet}<2", "N_{l}=2"};
     for(int i = 0; i < nx_cutflow2; i++){
         (*hists)[prefix+"_cutflow2"]->GetXaxis()->SetBinLabel(i+1, cutflow2_labels[i]);
     }

@@ -454,15 +454,61 @@ def merge_similar_samples( base_path ):
                         basename + 'SingleLepton_Run2018.root']
         if os.system(merge_files(basename + 'SingleLepton_Run2.root', Lepton_Run2_list)) != 0:
             all_good = False
-        Lepton_Run2_list = [basename + 'Top_MiniAOD2016.root',
+        Top_Run2_list = [basename + 'Top_MiniAOD2016.root',
                         basename + 'Top_MiniAOD2017.root',
                         basename + 'Top_MiniAOD2018.root']
-        if os.system(merge_files(basename + 'Top_MiniAODRun2.root', Lepton_Run2_list)) != 0:
+        if os.system(merge_files(basename + 'Top_MiniAODRun2.root', Top_Run2_list)) != 0:
             all_good = False
-        Lepton_Run2_list = [basename + 'Background_MiniAOD2016.root',
+        Background_Run2_list = [basename + 'Background_MiniAOD2016.root',
                         basename + 'Background_MiniAOD2017.root',
                         basename + 'Background_MiniAOD2018.root']
-        if os.system(merge_files(basename + 'Background_MiniAODRun2.root', Lepton_Run2_list)) != 0:
+        if os.system(merge_files(basename + 'Background_MiniAODRun2.root', Background_Run2_list)) != 0:
+            all_good = False
+
+        #2017+2018
+        Lepton_Run1718_list = [basename + 'SingleLepton_Run2017.root',
+                        basename + 'SingleLepton_Run2018.root']
+        if os.system(merge_files(basename + 'SingleLepton_Run1718.root', Lepton_Run1718_list)) != 0:
+            all_good = False
+        Electron_Run1718_list = [basename + 'SingleElectron_Run2017.root',
+                        basename + 'EGamma_Run2018.root']
+        if os.system(merge_files(basename + 'SingleElectron_Run1718.root', Electron_Run1718_list)) != 0:
+            all_good = False
+        Muon_Run1718_list = [basename + 'SingleMuon_Run2017.root',
+                        basename + 'SingleMuon_Run2018.root']
+        if os.system(merge_files(basename + 'SingleMuon_Run1718.root', Muon_Run1718_list)) != 0:
+            all_good = False
+        Top_Run1718_list = [basename + 'Top_MiniAOD2017.root',
+                        basename + 'Top_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Top_MiniAOD1718.root', Top_Run1718_list)) != 0:
+            all_good = False
+        DYJets_Run1718_list = [basename + 'DYJets_MiniAOD2017.root',
+                        basename + 'DYJets_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'DYJets_MiniAOD1718.root', DYJets_Run1718_list)) != 0:
+            all_good = False
+        VG_Run1718_list = [basename + 'VG_MiniAOD2017.root',
+                        basename + 'VG_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'VG_MiniAOD1718.root', VG_Run1718_list)) != 0:
+            all_good = False
+        WJets_012J_Run1718_list = [basename + 'WJets_012J_MiniAOD2017.root',
+                        basename + 'WJets_012J_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'WJets_012J_MiniAOD1718.root', WJets_012J_Run1718_list)) != 0:
+            all_good = False
+        Diboson_Run1718_list = [basename + 'Diboson_MiniAOD2017.root',
+                        basename + 'Diboson_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Diboson_MiniAOD1718.root', Diboson_Run1718_list)) != 0:
+            all_good = False
+        QCD_MuEnriched_Run1718_list = [basename + 'QCD_MuEnriched_MiniAOD2017.root',
+                        basename + 'QCD_MuEnriched_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_MuEnriched_MiniAOD1718.root', QCD_MuEnriched_Run1718_list)) != 0:
+            all_good = False
+        QCD_EMEnriched_Run1718_list = [basename + 'QCD_EMEnriched_MiniAOD2017.root',
+                        basename + 'QCD_EMEnriched_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_EMEnriched_MiniAOD1718.root', QCD_EMEnriched_Run1718_list)) != 0:
+            all_good = False
+        QCD_bcToE_Run1718_list = [basename + 'QCD_bcToE_MiniAOD2017.root',
+                        basename + 'QCD_bcToE_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_bcToE_MiniAOD1718.root', QCD_bcToE_Run1718_list)) != 0:
             all_good = False
 
     return all_good
