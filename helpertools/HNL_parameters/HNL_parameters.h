@@ -30,8 +30,12 @@ class HNL_parameters
         std::string recommended, type, year, directory, flavor;
         double mass, V2, ctau, ctauRatioToTheory, cross_section, cross_section_unc;
         int events;
+        std::vector<unsigned> Ntot_vec;
+        std::vector<double> ctau_vec, xsec_vec, V2_vec;
 
         //Functions
         HNL_parameters(TString parameters_filename, TString HNL_sample_filename);//Constructor meant to read existing file and access events
+        void Get_Merging_parameters(TString HNL_merged_sample_filename);
+        double get_reweighting_weight_merged(double V2_new, double ct);
 };
 #endif

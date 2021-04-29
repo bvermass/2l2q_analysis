@@ -91,3 +91,40 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
     }
 }
 
+void HNL_parameters::Get_Merging_parameters(TString HNL_merged_sample_filename)
+{
+    std::cout << "check" << std::endl;
+    TString HNL_merged_parameters_filename = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/helpertools/HNL_parameters/example.txt";
+    std::ifstream file(HNL_merged_parameters_filename);
+    if(file.is_open()){
+        std::cout << "Getting HNL parameters from " << HNL_merged_parameters_filename << std::endl;
+        std::string line;
+        while (std::getline(file, line))
+        {
+            std::istringstream iss(line);
+            std::string Ntot_i, ctau_i, V2_i, xsec_i;
+            iss >> Ntot_i >> ctau_i >> V2_i >> xsec_i;
+
+            Ntot_vec.push_back(std::stoi(Ntot_i));
+            ctau_vec.push_back(std::stod(ctau_i));
+            V2_vec.push_back(std::stod(V2_i));
+            xsec_vec.push_back(std::stod(xsec_i));
+        }
+        for(unsigned i = 0; i < Ntot_vec.size(); i++){
+            std::cout << Ntot_vec[i] << " " << ctau_vec[i] << " " << V2_vec[i] << " " << xsec_vec[i] << std::endl;
+        }
+        file.close();
+    }
+}
+
+double HNL_parameters::get_reweighting_weight_merged(double V2_new, double ct)
+{
+    //for all initial samples we need: Ntot_i, ctau_i, V2_i, xsec_i
+    double ctau_new = ctau_vec[0] * V2_vec[0] / V2_new;
+    double xsec_new = xsec_vec[0] * V2_new / V2_vec[0];
+    double exp_sum = 0.;
+    for(unsigned i = 0; i < Ntot_vec.size(); i++){
+        exp_sum += Ntot_vec[i] / ctau_vec[i] * exp( -ct / ctau_vec[i] );
+    }
+    return xsec_new / ctau_new * exp(- ct / ctau_new) / exp_sum;
+}
