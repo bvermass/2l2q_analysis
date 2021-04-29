@@ -26,13 +26,14 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
                 
             // check conditions
             int position = directory_str.find("HeavyNeutrino_lljj_");
+            int position_LO = directory_str.find("_LO");
             bool correctyear = ((year_str == "2016v3" and HNL_sample_filename.Contains("MiniAOD2016")) or
                                 (year_str == "2017" and HNL_sample_filename.Contains("MiniAOD2017")) or
                                 (year_str == "2018" and HNL_sample_filename.Contains("MiniAOD2018")));
             if(recommended_str != "*" or position == -1 or !correctyear) continue;
             
             // find HNL param match
-            std::string HeavyNeutrino_lljj_param = directory_str.substr(position);
+            std::string HeavyNeutrino_lljj_param = directory_str.substr(position, position_LO - position + 3);
             if(HNL_sample_filename.Contains(HeavyNeutrino_lljj_param)){
 
                 // store parameters
