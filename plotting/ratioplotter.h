@@ -35,6 +35,7 @@ class RatioPlot{
         void SetLogx(int xlog);
         void SetBinNames(std::vector<TString> BinNames);
         void SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TString yaxistitle);
+        void SetConstantFit();
         std::vector<double> GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central);
         void SetSystUncs_up_and_down(TString histname, std::vector<TFile*> files_bkg, std::vector<TString> systunc_names, std::vector<TString> legends, TH1F* MC_central);
         void draw_systuncs();
@@ -48,6 +49,9 @@ class RatioPlot{
         std::vector<TGraphAsymmErrors*> systunc_graphs;
         std::vector<TString> systunc_legends;
         TLegend systunc_legend;
+        bool fit_exists;
+        TF1* fit;
+        TLatex fittext;
 
         std::vector<int> colors;
 };

@@ -222,6 +222,7 @@ int main(int argc, char * argv[])
                     ratioplotter.ClearSystUncs();
                     ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "Obs/Pred");
                     ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "stat. unc.");
+                    if(histname.Contains("Shape")) ratioplotter.SetConstantFit();
                     //ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Res", "Uncl"}, {"JEC", "JER", "Uncl."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
                 }
 

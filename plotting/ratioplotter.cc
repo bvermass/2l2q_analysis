@@ -3,7 +3,9 @@
 RatioPlot::RatioPlot(TPad* pad):
     Pad(pad),
     Central_Ratio(new TH1F("Central_Ratio", "", 1, 0, 1)),
-    systunc_legend(get_legend(0.2, 0.3, 0.55, 0.4, 3))
+    systunc_legend(get_legend(0.18, 0.32, 0.55, 0.42, 3)),
+    fit_exists(false),
+    fittext(get_latex(0.08, 11, 42))
 {
     Pad->SetTopMargin(0.04);
     Pad->SetBottomMargin(0.3);
@@ -60,6 +62,13 @@ void RatioPlot::SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TStrin
     }
 }
 
+void RatioPlot::SetConstantFit()
+{
+    fit_exists = true;
+    fit = new TF1("fit", "[0]", Central_Ratio->GetXaxis()->GetXmin(), Central_Ratio->GetXaxis()->GetXmin());
+    fit->SetParameters(0, 1.);
+    Central_Ratio->Fit(fit, "0");
+}
 
 std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central)
 {
@@ -198,6 +207,12 @@ void RatioPlot::dothething()
     if(varied_exists) draw_systuncs();
     draw_line_at_1(Central_Ratio->GetXaxis()->GetXmin(), Central_Ratio->GetXaxis()->GetXmax());
     Central_Ratio->Draw("E0 X0 P same");
+    if(fit_exists){
+        Central_Ratio->SetStats(0);
+        std::ostringstream fitt;
+        fitt << std::setprecision(3) << "Avg. ratio: " << fit->GetParameter(0) << "#pm " << fit->GetParError(0);
+        fittext.DrawLatex(0.18, 0.85,(TString) fitt.str());
+    }
     
     Pad->Modified();
 }
