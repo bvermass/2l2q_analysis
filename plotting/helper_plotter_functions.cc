@@ -9,10 +9,13 @@ CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2
     , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
     , lumilatex( get_latex(0.6*topmargin, 31, 42) )
 {
-    if((is2016 and is2017) or (is2016 and is2018) or (is2017 and is2018) or (!is2016 and !is2017 and !is2018 and !isRun2)){
+    if(!is2016 and !is2017 and !is2018 and !isRun2){
         std::cout << "not clear which year to use for lumi info" << std::endl;
         lumitext = "(13 TeV)";
     }
+    if(is2016 and is2017 and !is2018 and !isRun2) lumitext = "77.8 fb^{-1} (13 TeV)";
+    else if(is2016 and !is2017 and is2018 and !isRun2) lumitext = "96.0 fb^{-1} (13 TeV)";
+    else if(!is2016 and is2017 and is2018 and !isRun2) lumitext = "101 fb^{-1} (13 TeV)";
     else if(is2016) lumitext = "36.3 fb^{-1} (13 TeV)";
     else if(is2017) lumitext = "41.5 fb^{-1} (13 TeV)";
     else if(is2018) lumitext = "59.7 fb^{-1} (13 TeV)";

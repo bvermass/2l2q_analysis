@@ -27,6 +27,9 @@ int main(int argc, char * argv[])
         else if(filename.Contains("MiniAOD2017") or filename.Contains("Run2017")) is2017 = true;
         else if(filename.Contains("MiniAOD2018") or filename.Contains("Run2018")) is2018 = true;
         else if(filename.Contains("MiniAODRun2") or filename.Contains("Run2.")) isRun2 = true;
+        else if(filename.Contains("MiniAOD1617") or filename.Contains("Run1617")){ is2016 = true; is2017 = true; }
+        else if(filename.Contains("MiniAOD1618") or filename.Contains("Run1618")){ is2016 = true; is2018 = true; }
+        else if(filename.Contains("MiniAOD1718") or filename.Contains("Run1718")){ is2017 = true; is2018 = true; }
         if(filename.Contains("Run201") or filename.Contains("Run2.")){
             isData = true;
             i_Data = files.size() - 1;

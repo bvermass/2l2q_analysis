@@ -78,6 +78,9 @@ int main(int argc, char * argv[])
         if(argument.Contains("MiniAOD2016") or argument.Contains("Run2016")) is2016 = true;
         else if(argument.Contains("MiniAOD2017") or argument.Contains("Run2017")) is2017 = true;
         else if(argument.Contains("MiniAOD2018") or argument.Contains("Run2018")) is2018 = true;
+        else if(filename.Contains("MiniAOD1617") or filename.Contains("Run1617")){ is2016 = true; is2017 = true; }
+        else if(filename.Contains("MiniAOD1618") or filename.Contains("Run1618")){ is2016 = true; is2018 = true; }
+        else if(filename.Contains("MiniAOD1718") or filename.Contains("Run1718")){ is2017 = true; is2018 = true; }
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
