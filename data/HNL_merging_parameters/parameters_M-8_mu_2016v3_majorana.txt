@@ -1,0 +1,12 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.000151327459504_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 98918 546.698400 2.300000e-08 2.102000e-04
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.000294108823397_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 199826 144.733700 8.600000e-08 7.943000e-04
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.000339116499156_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 96922 108.864100 1.100000e-07 1.057000e-03
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.0004472135955_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 99918 62.596700 2.000000e-07 1.836000e-03
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.000632455532034_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 99918 31.298500 4.000000e-07 3.669000e-03
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00151327459504_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 96924 5.467000 2.300000e-06 2.102000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00257293606605_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 199834 1.891100 6.600000e-06 6.080000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00282842712475_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 148874 1.564900 8.000000e-06 7.215000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00316227766017_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 60954 1.251900 1.000000e-05 9.322000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0.00547722557505_mu_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 61948 0.417300 3.000000e-05 2.708000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0p00257293606605_mu_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8/MiniAOD2016/dilep_final_official.root 299872 1.891100 6.600000e-06 5.779000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-8_V-0p000294108823397_mu_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8/MiniAOD2016/dilep_final_official.root 299880 144.733700 8.600000e-08 7.558000e-04

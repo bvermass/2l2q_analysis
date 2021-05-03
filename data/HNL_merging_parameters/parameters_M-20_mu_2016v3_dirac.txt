@@ -1,0 +1,2 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-20_V-1p22474487139e-05_mu_Dirac_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8/MiniAOD2016/dilep_final_official.root 299794 1503.559300 1.500000e-10 6.678000e-07
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-20_V-2p73495886624e-05_mu_Dirac_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8/MiniAOD2016/dilep_final_official.root 299810 301.519400 7.500000e-10 3.335000e-06

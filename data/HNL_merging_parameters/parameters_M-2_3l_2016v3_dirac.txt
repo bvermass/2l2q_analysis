@@ -1,0 +1,11 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00244948974278_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 2754.969400 6.000000e-06 7.037000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00282842712475_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 2066.226100 8.000000e-06 9.405000e-02
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00316227766017_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 1652.993900 1.000000e-05 1.173000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.004472135955_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 826.492100 2.000000e-05 2.350000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00547722557505_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 550.994300 3.000000e-05 3.527000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00707106781187_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 330.593600 5.000000e-05 5.868000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.00836660026534_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 236.138500 7.000000e-05 8.222000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.0141421356237_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 82.649200 2.000000e-04 2.346000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.0173205080757_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 55.099400 3.000000e-04 3.523000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.01_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 165.299400 1.000000e-04 1.173000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.022360679775_3l_Dirac_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 1000 33.059400 5.000000e-04 5.879000e+00

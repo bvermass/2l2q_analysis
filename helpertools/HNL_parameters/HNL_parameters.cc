@@ -91,19 +91,28 @@ HNL_parameters::HNL_parameters(TString parameters_filename, TString sample_filen
     }
 }
 
-void HNL_parameters::Get_Merging_parameters(TString HNL_merged_sample_filename)
+void HNL_parameters::Set_Merging_parameters()
 {
-    std::cout << "check" << std::endl;
-    TString HNL_merged_parameters_filename = "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/helpertools/HNL_parameters/example.txt";
+    if(!HNL_sample_filename.Contains("V-combined")){
+        std::cout << "--HNL parameters-- Dealing with a non-merged sample" << std::endl;
+        merged = false;
+        return;
+    }
+    std::cout << "--HNL parameters-- Dealing with a merged sample" << std::endl;
+    merged = true;
+    std::ostringstream mass_stream;
+    mass_stream << mass;
+    TString file_path = __FILE__;
+    TString HNL_merged_parameters_filename = file_path(0, file_path.Index("/helpertools/")) + "/data/HNL_merging_parameters/parameters_M-" + mass_stream.str() + "_" + flavor + "_" + year + "_" + type + ".txt";
     std::ifstream file(HNL_merged_parameters_filename);
     if(file.is_open()){
-        std::cout << "Getting HNL parameters from " << HNL_merged_parameters_filename << std::endl;
+        std::cout << "--HNL parameters-- Getting merged info from " << HNL_merged_parameters_filename << std::endl;
         std::string line;
         while (std::getline(file, line))
         {
             std::istringstream iss(line);
-            std::string Ntot_i, ctau_i, V2_i, xsec_i;
-            iss >> Ntot_i >> ctau_i >> V2_i >> xsec_i;
+            std::string name, Ntot_i, ctau_i, V2_i, xsec_i;
+            iss >> name >> Ntot_i >> ctau_i >> V2_i >> xsec_i;
 
             Ntot_vec.push_back(std::stoi(Ntot_i));
             ctau_vec.push_back(std::stod(ctau_i));
@@ -114,12 +123,15 @@ void HNL_parameters::Get_Merging_parameters(TString HNL_merged_sample_filename)
             std::cout << Ntot_vec[i] << " " << ctau_vec[i] << " " << V2_vec[i] << " " << xsec_vec[i] << std::endl;
         }
         file.close();
+    }else {
+        std::cout << "--HNL parameters-- Unable to get merged info from " << HNL_merged_parameters_filename << std::endl;
     }
 }
 
 double HNL_parameters::get_reweighting_weight_merged(double V2_new, double ct)
 {
     //for all initial samples we need: Ntot_i, ctau_i, V2_i, xsec_i
+    if(ctau_vec.size() < 1) std::cout << "vectors are empty!" << std::endl;
     double ctau_new = ctau_vec[0] * V2_vec[0] / V2_new;
     double xsec_new = xsec_vec[0] * V2_new / V2_vec[0];
     double exp_sum = 0.;

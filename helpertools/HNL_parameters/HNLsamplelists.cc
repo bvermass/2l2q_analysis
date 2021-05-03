@@ -125,7 +125,7 @@ int main(int argc, char * argv[]){
                 filePutContents(HNLtagger_sampleList, HNLfilename + "\n", true);
             }
 
-            if(!goodsample(HNL_param)) continue;
+            //if(!goodsample(HNL_param)) continue;
 
             // full_analyzer input
             if(make_full_analyzer_input_list){
@@ -135,18 +135,32 @@ int main(int argc, char * argv[]){
 
             // full_analyzer output
             if(make_full_analyzer_lists){
-                add_HNLfile_to_BkgEstimator_HNLsampleList(HNLfilename);
+                //add_HNLfile_to_BkgEstimator_HNLsampleList(HNLfilename);
 
-                std::string RewValList = "../../test/sampleLists/RewVal/POGTightID_unparametrized_LowAndHighMass/comb_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
-                std::string outputfilename = (std::string)make_outputfilename(HNLfilename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID_unparametrized_LowAndHighMass/", "hists_full_analyzer", 1, 0, true);
+                std::string RewValList = "../../data/HNL_merging_parameters/parameters_M-" + mass_stream.str() + "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + ".txt";
+                TFile* input = new TFile((TString)HNLfilename, "open");
+                TH1F* h = (TH1F*)input->Get("blackJackAndHookersGlobal/hCounter");
+                if(!h) h = (TH1F*)input->Get("blackJackAndHookers/hCounter");
+                unsigned nevents = h->GetBinContent(1);
+                delete h;
+                input->Close();
+                delete input;
+                double ctau = HNL_param.ctau;
+                double V2 = HNL_param.V2;
+                std::ostringstream V2stream;
+                V2stream << std::scientific << V2;
+                double xsec = HNL_param.cross_section;
+                std::ostringstream xsecstream;
+                xsecstream << std::scientific << xsec;
+                //std::string outputfilename = (std::string)make_outputfilename(HNLfilename, "/user/bvermass/public/2l2q_analysis/histograms_POGTightID_unparametrized_LowAndHighMass/", "hists_full_analyzer", 1, 0, true);
 
-                if(!RewValListExists[RewValList]){
-                    RewValListExists[RewValList] = true;
-                    filePutContents(RewValList, "RewVal_comb_M-" + mass_stream.str()+ "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + " 2\n", false);
-                    combinedSampleNames[RewValList] = outputfilename.substr(0, outputfilename.find("V-")+2) + "combined" + outputfilename.substr(outputfilename.find("_" + HNL_param.flavor + "_")) + " combined\n"; 
-                }
+                //if(!RewValListExists[RewValList]){
+                //    RewValListExists[RewValList] = true;
+                //    filePutContents(RewValList, "RewVal_comb_M-" + mass_stream.str()+ "_" + HNL_param.flavor + "_" + HNL_param.year + "_" + HNL_param.type + " 2\n", false);
+                //    combinedSampleNames[RewValList] = outputfilename.substr(0, outputfilename.find("V-")+2) + "combined" + outputfilename.substr(outputfilename.find("_" + HNL_param.flavor + "_")) + " combined\n";
+                //}
 
-                filePutContents(RewValList, outputfilename + " c#tau-" + ctau_stream.str() + "\n", true);
+                filePutContents(RewValList, HNLfilename + " " + std::to_string(nevents) + " " + std::to_string(ctau) + " " + V2stream.str() + " " + xsecstream.str() + "\n", true);
             }
 
 
@@ -170,11 +184,11 @@ int main(int argc, char * argv[]){
         }
 
         // comment these 3 lines out if you want to make sampleLists for reweighting validation plots without the combined HNL sample
-        if(make_full_analyzer_lists){
-            for(const auto& combinedSampleName : combinedSampleNames){
-                filePutContents(combinedSampleName.first, combinedSampleName.second, true);
-            }
-        }
+        //if(make_full_analyzer_lists){
+        //    for(const auto& combinedSampleName : combinedSampleNames){
+        //        filePutContents(combinedSampleName.first, combinedSampleName.second, true);
+        //    }
+        //}
         // mini
         if(make_mini_analyzer_lists){
             for(const auto& combinedSampleName : mini_combinedSampleNames){

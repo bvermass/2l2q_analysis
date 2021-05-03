@@ -1,0 +1,2 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-1_V-0.0894427191_2l_Dirac_massiveAndCKM_LO/MiniAOD2018/dilep_final.root 99988 81.709600 8.000000e-03 7.163000e+01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-1_V-0.2_2l_Dirac_massiveAndCKM_LO/MiniAOD2018/dilep_final.root 92990 16.342100 4.000000e-02 3.577000e+02

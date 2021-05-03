@@ -1,0 +1,5 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.000208566536146_e_Dirac_massiveAndCKM_LO/MiniAOD2018/dilep_final.root 199944 182.033800 4.300000e-08 2.303000e-04
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.00107238052948_e_Dirac_massiveAndCKM_LO/MiniAOD2018/dilep_final.root 161954 6.885600 1.200000e-06 6.091000e-03
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0.00112249721603_e_Dirac_massiveAndCKM_LO/MiniAOD2018/dilep_final.root 148960 6.284500 1.300000e-06 6.675000e-03
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0p000208566536146_e_Dirac_massiveAndCKM_LO_TuneCP5_madgraph-pythia8/MiniAOD2018/dilep_final_official.root 299912 182.033800 4.300000e-08 2.278000e-04
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-10_V-0p00112249721603_e_Dirac_massiveAndCKM_LO_TuneCP5_madgraph-pythia8/MiniAOD2018/dilep_final_official.root 299942 6.284500 1.300000e-06 6.603000e-03

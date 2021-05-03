@@ -1,0 +1,1 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-2_V-0.0173205080757_2l_massiveAndCKM_LO/MiniAOD2017/dilep_final.root 219000 32.210000 3.000000e-04 4.746000e+00

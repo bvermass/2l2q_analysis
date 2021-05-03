@@ -1,0 +1,10 @@
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00244948974278_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 87924 160.893600 6.000000e-06 1.347000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00282842712475_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 148862 120.670300 8.000000e-06 1.795000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00316227766017_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 112894 96.536400 1.000000e-05 2.240000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.004472135955_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 48.268000 2.000000e-05 4.519000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00547722557505_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 32.178700 3.000000e-05 6.826000e-01
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00707106781187_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 19.307300 5.000000e-05 1.134000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.00836660026534_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 13.790900 7.000000e-05 1.591000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.0141421356237_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 4.826800 2.000000e-04 4.521000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.0173205080757_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 3.217900 3.000000e-04 6.813000e+00
+/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/HeavyNeutrino_lljj_M-3_V-0.01_3l_massiveAndCKM_LO/MiniAOD2016/dilep_final.root 998 9.653600 1.000000e-04 2.267000e+00

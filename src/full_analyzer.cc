@@ -29,6 +29,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     SetSampleTypes(filename);
     HNL_param = new HNL_parameters(local_dir + "data/HNL_parameters/availableHeavyNeutrinoSamples.txt", filename);
+    HNL_param->Set_Merging_parameters();
+
     if(isSignal){
         filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
         filePutContents("/user/bvermass/public/2l2q_analysis/log/Mctau_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->ctau) + "\n", true);
@@ -153,9 +155,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(!hCounter) hCounter = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
-    if(!isData){
+    if(!isData and !(isSignal and HNL_param->merged)){
         std::cout << "xsec: " << cross_section << " nentries: " << nentries << " max_entries: " << max_entries << " hCounter: " << hCounter->GetBinContent(1) << std::endl;
         total_weight = (cross_section * int_lumi * 1000. * (double)nentries / (double)max_entries) / hCounter->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+    }else if(isSignal and HNL_param->merged){
+        total_weight = int_lumi * 1000. * (double)nentries / (double)max_entries;
     }
     std::cout << "flavor and total weight: " << HNL_param->flavor << " " << total_weight << std::endl;
     print_evaluating_points(evaluating_ctaus);
@@ -189,12 +193,15 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(auto& MassMap : evaluating_V2s){
             for(double V2 : MassMap.second){
                 if(isSignal){
-                    reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN);
+                    if(HNL_param->merged) reweighting_weights[V2] = HNL_param->get_reweighting_weight_merged(V2, _ctauHN);
+                    else reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN);
                 }else {
                     reweighting_weights[V2] = 1.;
                 }
             }
         }
+        if(isSignal and HNL_param->merged) ev_weight *= reweighting_weights[6e-6];
+
 
         if(_bkgestimator){
             if(_lFlavor[i_subleading] == 0){
