@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
     TColor::InvertPalette();
 
     // Name of directory where plots will end up
-    TString general_pathname = make_general_pathname("plots/singlehists/", inputfilename);
+    TString general_pathname = make_general_pathname("plots/singlehists/", subdirectory_name + "/");
     std::string corfilename = (std::string)(general_pathname + "correlations.txt");
     gSystem->Exec("rm -f " + (TString)corfilename);
 

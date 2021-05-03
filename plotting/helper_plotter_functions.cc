@@ -212,21 +212,21 @@ bool check_identifiers(TString histname, std::vector<std::vector<TString>> ident
 
 TString make_general_pathname(const TString& plottype, TString specific_dir)
 {
-    // pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow
-    // or plots/singlehists/final/WJets/ and then plotspecific stuff
-    if(plottype == "plots/singlehists/"){
-        TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
-        specific_dir = "";
-        if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
-        else if(filename.Index("Run") != -1){
-            specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
-            if(filename.Contains("Muon")) specific_dir += "_mm/";
-            else if(filename.Contains("Electron") or filename.Contains("EGamma")) specific_dir += "_ee/";
-            else specific_dir += "/";
-        }
-        else if(filename.Index("hists_full_analyzer") != -1) specific_dir += filename(filename.Index("hists_full_analyzer") + 20, filename.Index(".root") - filename.Index("hists_full_analyzer") - 20) + "/";
-        else if(filename.Index("hists_mini_analyzer") != -1) specific_dir += filename(filename.Index("hists_mini_analyzer") + 20, filename.Index(".root") - filename.Index("hists_mini_analyzer") - 20) + "/";
-    }
+    //// pathname structure example: plots/multihists/HNL_358e/ and after this plot specific directories can follow
+    //// or plots/singlehists/final/WJets/ and then plotspecific stuff
+    //if(plottype == "plots/singlehists/"){
+    //    TString filename = specific_dir; // specific_dir is actually the full filename in 'singlehists' case
+    //    specific_dir = "";
+    //    if(filename.Index("HeavyNeutrino") != -1) specific_dir += filename(filename.Index("HeavyNeutrino") + 14, filename.Index(".root") - filename.Index("HeavyNeutrino") - 14) + "/";
+    //    else if(filename.Index("Run") != -1){
+    //        specific_dir += filename(filename.Index("Run"), filename.Index(".root") - filename.Index("Run"));
+    //        if(filename.Contains("Muon")) specific_dir += "_mm/";
+    //        else if(filename.Contains("Electron") or filename.Contains("EGamma")) specific_dir += "_ee/";
+    //        else specific_dir += "/";
+    //    }
+    //    else if(filename.Index("hists_full_analyzer") != -1) specific_dir += filename(filename.Index("hists_full_analyzer") + 20, filename.Index(".root") - filename.Index("hists_full_analyzer") - 20) + "/";
+    //    else if(filename.Index("hists_mini_analyzer") != -1) specific_dir += filename(filename.Index("hists_mini_analyzer") + 20, filename.Index(".root") - filename.Index("hists_mini_analyzer") - 20) + "/";
+    //}
 
     return "/user/bvermass/public_html/2l2q_analysis/" + plottype + specific_dir;
 }

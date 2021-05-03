@@ -280,7 +280,7 @@ int main(int argc, char * argv[])
                     hists_AoverC->GetXaxis()->SetTitle(sample_hist_ref->GetXaxis()->GetTitle());
                     hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                     hists_AoverC->SetMaximum(10*hists_AoverC->GetMaximum("nostack"));
-                    hists_AoverC->SetMinimum(1e-2);
+                    hists_AoverC->SetMinimum(1e-4);
                     legend.Draw("same");
                     CMSandLumi->Draw();
                     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);

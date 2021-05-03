@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
         if(legendname.Contains("HNL")){
             files_signal.push_back(TFile::Open(filename));
             legends_signal.push_back(adjust_legend(legendname));
-        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data")/* or legendname.Contains("Top") or legendname.Contains("MC_Bkg")*/){
+        }else if(legendname.Contains("201") or legendname.Contains("Data") or legendname.Contains("data")/* or legendname.Contains("Top")*/ or legendname.Contains("MCxBkg")){
             files_data.push_back(TFile::Open(filename));
             legends_data.push_back(adjust_legend(legendname));
         }else {
@@ -153,7 +153,6 @@ int main(int argc, char * argv[])
                 TH1F* data_hist;
                 if(withdata){
                     TString histname_BtoA = histname;
-                    if(!histname.Contains("_noSR")) histname_BtoA.ReplaceAll("_cutbaselinemlSV", "_cutbaselinemlSV_noSR");
                     //if(histname.Contains("_quadA_")){
                     //    histname_BtoA.ReplaceAll("_quadA_", "_BtoAwithCD_");
                     //}else if(histname.Contains("_AoverC_")){
@@ -168,6 +167,7 @@ int main(int argc, char * argv[])
                 
                 TString histname_bkg = histname;
                 histname_bkg.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                histname_bkg.ReplaceAll("_noSR", "");
                 // get background histograms and fill legend
                 THStack* hists_bkg = new THStack("stack_bkg", ";"  + ((withdata)? "" : xaxistitle) + ";" + yaxistitle);
                 for(int i = 0; i < files_bkg.size(); i++){
@@ -188,6 +188,7 @@ int main(int argc, char * argv[])
                 // get signal histograms and fill legend
                 TString histname_signal = histname;
                 histname_signal.ReplaceAll("_BtoAwithCD_", "_quadA_");
+                histname_signal.ReplaceAll("_noSR", "");
                 THStack* hists_signal = new THStack("stack_signal", "");
                 for(int i = 0; i < files_signal.size(); i++){
                     if(files_signal[i]->GetListOfKeys()->Contains(histname_signal)){
