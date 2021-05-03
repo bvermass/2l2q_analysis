@@ -203,7 +203,7 @@ int main(int argc, char * argv[])
                             hist->SetMarkerColor(colors_signal[i]);
                             hists_signal->Add(hist);
                             TString legend_tmp = legends_signal[i];
-                            legend_tmp.ReplaceAll("x",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                            legend_tmp.ReplaceAll("z",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
                             legend_tmp.ReplaceAll("-03", "^{-3}");
                             legend_tmp.ReplaceAll("-04", "^{-4}");
                             legend_tmp.ReplaceAll("-05", "^{-5}");

@@ -4,5 +4,5 @@ mini_separateBkgWithData_mm_2018_split_HighMass 2
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2018.root  DY
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_WJets_012J_MiniAOD2018.root W+Jets
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root Data
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-6_V-combined_mu_massiveAndCKM_LO_MiniAOD2018.root                 HNL_6GeV_V^{2}=x
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-10_V-combined_mu_massiveAndCKM_LO_MiniAOD2018.root                HNL_10GeV_V^{2}=x
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-6_V-combined_mu_massiveAndCKM_LO_MiniAOD2018.root                 HNLx6GeVxV^{2}=z
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-10_V-combined_mu_massiveAndCKM_LO_MiniAOD2018.root                HNLx10GeVxV^{2}=z
