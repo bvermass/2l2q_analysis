@@ -59,7 +59,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_l2_3dIPSig"]                      = new TH1F(prefix+"_l2_3dIPSig", ";l_{2} 3dIPSig;Events", 30, 0, 40);
     (*hists)[prefix+"_l2_NumberOfHits"]                 = new TH1F(prefix+"_l2_NumberOfHits", ";l_{2} Nr. of Tracker Hits;Events", 20, 0, 20);
     (*hists)[prefix+"_l2_NumberOfPixelHits"]            = new TH1F(prefix+"_l2_NumberOfPixelHits", ";l_{2} Nr. of Pixel Hits;Events", 15, 0, 15);
-    (*hists2D)[prefix+"_l2_ptvsctau"]                   = new TH2F(prefix+"_l2_ptvsctau", ";l_{2} #it{p}_{T} [GeV]; c#tau [mm]", 20, 0, 60, 20, 0, 100);
+    (*hists2D)[prefix+"_l2_ptvsctau"]                   = new TH2F(prefix+"_l2_ptvsctau", ";l_{2} #it{p}_{T} [GeV]; ct [mm]", 20, 0, 60, 20, 0, 100);
     (*hists2D)[prefix+"_lsources"]                      = new TH2F(prefix+"_lsources", ";l1 source;l2 source", 14, -2, 12, 14, -2, 12);
     (*hists2D)[prefix+"_lprovenance"]                   = new TH2F(prefix+"_lprovenance", ";l1 source;l2 source", 19, 0, 19, 19, 0, 19);
     (*hists2D)[prefix+"_lprovenanceCompressed"]         = new TH2F(prefix+"_lprovenanceCompressed", ";l1 source;l2 source", 5, 0, 5, 5, 0, 5);
