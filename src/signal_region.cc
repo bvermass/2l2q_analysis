@@ -242,8 +242,8 @@ void full_analyzer::signal_regions(){
                                   IVF_PVSVdist_2D < 50;
 
      _FullNoPFN                 = _Training &&
-                                  mll < 80 &&
-                                  dphill > 2.3;
+                                  SVl1mass > 40 &&
+                                  SVl1mass < 90;
                                   //i_subleading_jet == -1 &&
                                   //(nTightEle + nTightMu == 1);
 

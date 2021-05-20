@@ -77,9 +77,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 for(const TString &ev_region : {"_SR"}){//, "_TrainingHighPFN", "_CRdphi", "_CRmll"}){
                     add_histograms(&hists, &hists2D, lep_region + ev_region + MV2name[MassMap.first][V2]);
                 }
-                for(const TString &ev_region : {"", "_2Jets"}){
-                    add_pfn_histograms(&hists, lep_region + ev_region + MV2name[MassMap.first][V2]);
-                }
             }
         }
         //add_Bool_hists(&hists, lep_region);
@@ -90,6 +87,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(auto& MassMap : evaluating_V2s_plots){
             for(auto& V2 : MassMap.second){
                 add_Shape_SR_histograms(&hists, lep_region + MV2name[MassMap.first][V2]);
+            }
+        }
+        for(auto& MassMap : evaluating_V2s){
+            for(auto& V2 : MassMap.second){
+                for(const TString& selection : {"", "_2Jets"}){
+                    add_pfn_histograms(&hists, lep_region + selection + MV2name[MassMap.first][V2]);
+                }
             }
         }
     }
@@ -200,8 +204,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 }
             }
         }
-        if(isSignal and HNL_param->merged) ev_weight *= reweighting_weights[6e-6];
-
 
         if(_bkgestimator){
             if(_lFlavor[i_subleading] == 0){
