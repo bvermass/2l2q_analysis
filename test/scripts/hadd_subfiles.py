@@ -170,6 +170,7 @@ def merge_similar_samples( base_path ):
             all_good = False
 
         Bkg_2016_list = [basename + 'DYJets_MiniAOD2016.root',
+                    basename + 'VG_MiniAOD2016.root',
                     basename + 'Diboson_MiniAOD2016.root',
                     basename + 'TTJets_MiniAOD2016.root',
                     basename + 'ST_MiniAOD2016.root',
@@ -296,6 +297,7 @@ def merge_similar_samples( base_path ):
 
 
         Bkg_2017_list = [basename + 'DYJets_MiniAOD2017.root',
+                    basename + 'VG_MiniAOD2017.root',
                     basename + 'Diboson_MiniAOD2017.root',
                     basename + 'TTJets_MiniAOD2017.root',
                     basename + 'ST_MiniAOD2017.root',
@@ -421,6 +423,7 @@ def merge_similar_samples( base_path ):
 
 
         Bkg_2018_list = [basename + 'DYJets_MiniAOD2018.root',
+                    basename + 'VG_MiniAOD2018.root',
                     basename + 'Diboson_MiniAOD2018.root',
                     basename + 'TTJets_MiniAOD2018.root',
                     basename + 'ST_MiniAOD2018.root',
