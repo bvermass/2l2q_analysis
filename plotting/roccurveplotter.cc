@@ -185,6 +185,7 @@ int main(int argc, char * argv[])
                 multigraph->SetMaximum(1.02);
 
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
 
                 pad->Modified();
@@ -207,6 +208,7 @@ int main(int argc, char * argv[])
                 }
 
                 if(plot_extra_hists_with_different_names(c, multigraph, &legend, files_signal, files_bkg, legendsV2, histnamesV2, colors)){
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
 
                     histname.ReplaceAll("_V2-3e-05", "_vsV2");
@@ -230,6 +232,7 @@ int main(int argc, char * argv[])
             // Plot PFN vs BDT
             //if(histname.Index("PFN") != -1){ 
             //    if(plot_PFNvsBDT(c, multigraph, &legend, histname, files_signal, files_bkg, legends)){
+            //        CMSandLumi->add_flavor(histname);
             //        CMSandLumi->Draw();
 
             //        histname.ReplaceAll("PFN", "PFNvsBDT");
@@ -285,6 +288,7 @@ int main(int argc, char * argv[])
                 auc_graph->Draw("AP");
                 auc_graph->SetMaximum(100);
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
 
                 pad->Modified();

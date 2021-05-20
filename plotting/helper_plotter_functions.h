@@ -34,13 +34,17 @@ class CMSandLuminosity{
         ~CMSandLuminosity();
         void change_CMStext(TString new_text);
         void change_lumitext(TString new_text);
+        void add_flavor(TString histname);
         void Draw();
     private:
         TString CMStext;
         TString lumitext;
+        TString flavortext;
         float leftmargin, rightmargin, topmargin;
         TLatex CMSlatex;
         TLatex lumilatex;
+        bool drawflavor;
+        TLatex flavorlatex;
 };
 
 class Shape_SR_plottext{

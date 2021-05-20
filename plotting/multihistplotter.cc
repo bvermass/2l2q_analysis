@@ -162,6 +162,7 @@ int main(int argc, char * argv[])
                 hists->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                 hists->SetMaximum(1.25*hists->GetMaximum("nostack"));
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
                 if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -178,6 +179,7 @@ int main(int argc, char * argv[])
                 hists->SetMaximum(10*hists->GetMaximum("nostack"));
                 hists->SetMinimum(1e-2);
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
                 if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -210,6 +212,7 @@ int main(int argc, char * argv[])
                     multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                     legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
 
                     pad->Modified();
@@ -266,6 +269,7 @@ int main(int argc, char * argv[])
                     hists_AoverC->GetYaxis()->SetTitle(sample_hist_ref->GetYaxis()->GetTitle());
                     hists_AoverC->SetMaximum(1.25*hists_AoverC->GetMaximum("nostack"));
                     legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
                     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -282,6 +286,7 @@ int main(int argc, char * argv[])
                     hists_AoverC->SetMaximum(10*hists_AoverC->GetMaximum("nostack"));
                     hists_AoverC->SetMinimum(1e-4);
                     legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
                     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -331,6 +336,7 @@ int main(int argc, char * argv[])
                         histstack->GetYaxis()->SetTitle("A.U.");
                         histstack->SetMaximum(1.25*histstack->GetMaximum("nostack"));
                         legend.Draw("same");
+                        CMSandLumi->add_flavor(histname);
                         CMSandLumi->Draw();
 
                         pad->Modified();
@@ -359,6 +365,7 @@ int main(int argc, char * argv[])
                         //    multigraph->SetMaximum((multigraph->GetHistogram()->GetMaximum() > 0.2)? 1.25 : 0.225);
 
                         //    legend.Draw("same");
+                        //    CMSandLumi->add_flavor(histname);
                         //    CMSandLumi->Draw();
 
                         //    pad->Modified();

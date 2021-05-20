@@ -127,6 +127,7 @@ int main(int argc, char * argv[])
                 sample_hist->SetLineColor(colors[0]);
                 sample_hist->Draw("E0 P");
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
                 if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -149,6 +150,7 @@ int main(int argc, char * argv[])
 
                     efficiency_graph->Draw("AP");
                     legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
 
                     pad->Modified();
@@ -219,6 +221,7 @@ int main(int argc, char * argv[])
                     profile->Draw("E same");
                 }
 
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
 
                 pad->Modified();
@@ -307,6 +310,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         if(plot_tag.Contains("AoverB")) hists->SetMaximum(std::min((1.25*hists->GetMaximum("nostack")), 10.));
         hists->SetMinimum(0);
         legend.Draw("same");
+        CMSandLumi.add_flavor(histname);
         CMSandLumi.Draw();
         if(histname.Contains("Shape_SR")) shapeSR_text.Draw(histname);
 
@@ -324,6 +328,7 @@ void plot_2_hists_with_ratio(TFile* sample_file, TString general_pathname, TH1F*
         //hists->SetMaximum(10*hists->GetMaximum("nostack"));
         //hists->SetMinimum(std::max(1e-6, 0.5*hists->GetMinimum("nostack")));
         //legend.Draw("same");
+        //CMSandLumi.add_flavor(histname);
         //CMSandLumi.Draw();
         //if(histname.Contains("Shape_SR")) shapeSR_text.Draw(histname);
 
@@ -376,6 +381,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         if(plot_tag.Contains("AoverB")) hists->SetMaximum(std::min((1.25*hists->GetMaximum("nostack")), 10.));
         hists->SetMinimum(0);
         legend.Draw("same");
+        CMSandLumi->add_flavor(histname);
         CMSandLumi->Draw();
         if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -392,6 +398,7 @@ void plot_normalized_hists(TFile* sample_file, TString general_pathname, TH1F* s
         //hists->SetMaximum(10*hists->GetMaximum("nostack"));
         //hists->SetMinimum(std::max(1e-6, 0.5*hists->GetMinimum("nostack")));
         //legend.Draw("same");
+        //CMSandLumi->add_flavor(histname);
         //CMSandLumi->Draw();
         //if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -461,6 +468,7 @@ void plot_Shape_SR_with_Signal_AoverC(TString filename, TString pathname_lin, TH
     }
 
     legend.Draw("same");
+    CMSandLumi->add_flavor(histname);
     CMSandLumi->Draw();
     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 
@@ -555,6 +563,7 @@ void plot_Shape_SR_with_Signal_eff(TString filename, TString pathname_lin, TH1F*
 
     hists->Draw("E hist nostack");
     legend.Draw("same");
+    CMSandLumi->add_flavor(histname);
     CMSandLumi->Draw();
     if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
 

@@ -267,6 +267,7 @@ int main(int argc, char * argv[])
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
                 if(histname.Contains("Shape")) shapeSR_text->Draw(histname);
                 
@@ -296,6 +297,7 @@ int main(int argc, char * argv[])
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");
                 if(withdata) data_hist->Draw("E0 X0 P same");
                 legend.Draw("same");
+                CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
                 if(histname.Contains("Shape")) shapeSR_text->Draw(histname);
                 
@@ -339,6 +341,7 @@ int main(int argc, char * argv[])
                     multigraph->SetMaximum(1.25);
 
                     legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
                     CMSandLumi->Draw();
 
                     pad_histo->Modified();

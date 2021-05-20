@@ -8,6 +8,8 @@ CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2
     , rightmargin( pad->GetRightMargin() )
     , CMSlatex( get_latex(0.8*topmargin, 11, 42) )
     , lumilatex( get_latex(0.6*topmargin, 31, 42) )
+    , flavorlatex( get_latex(0.6*topmargin, 21, 42) )
+    , drawflavor( false )
 {
     if(!is2016 and !is2017 and !is2018 and !isRun2){
         std::cout << "not clear which year to use for lumi info" << std::endl;
@@ -33,10 +35,32 @@ void CMSandLuminosity::change_lumitext(TString new_text){
     lumitext = new_text;
 }
 
+void CMSandLuminosity::add_flavor(TString histname){
+    drawflavor = true;
+    if(histname.Contains("_OS_ee")) flavortext = "OS ee";
+    else if(histname.Contains("_SS_ee")) flavortext = "SS ee";
+    else if(histname.Contains("_OS_mm")) flavortext = "OS #mu#mu";
+    else if(histname.Contains("_SS_mm")) flavortext = "SS #mu#mu";
+    else if(histname.Contains("_OS_me")) flavortext = "OS #mu e";
+    else if(histname.Contains("_SS_me")) flavortext = "SS #mu e";
+    else if(histname.Contains("_OS_em")) flavortext = "OS e#mu";
+    else if(histname.Contains("_SS_em")) flavortext = "SS e#mu";
+    else if(histname.Contains("_ee")) flavortext = "ee";
+    else if(histname.Contains("_mm")) flavortext = "#mu#mu";
+    else if(histname.Contains("_me")) flavortext = "#mu e";
+    else if(histname.Contains("_em")) flavortext = "e#mu";
+    else flavortext = "";
+}
+
 void CMSandLuminosity::Draw()
 {
     CMSlatex.DrawLatex(leftmargin, 1-0.8*topmargin, CMStext);
     lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
+
+    if(drawflavor){
+        flavorlatex.DrawLatex(0.5, 1-0.8*topmargin, flavortext);
+        drawflavor = false;
+    }
 }
 
 // Shape_SR_plottext class functions
