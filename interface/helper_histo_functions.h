@@ -16,6 +16,7 @@
 #include <TString.h>
 #include <TH1.h>
 
+bool        equals(double x, double y, double precision = 1e-12);
 std::vector<double> make_logscale(unsigned nbins, double xmin, double xmax);
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer);
 TString     get_mini_analyzer_outputfilename(TString input);
@@ -36,6 +37,7 @@ std::vector<double> get_evaluating_V2s_all();
 std::vector<double> get_evaluating_V2s(double mass);
 std::vector<double> get_evaluating_V2s_short(double mass);
 std::vector<double> get_evaluating_V2s_minimal();
+double      get_favorite_V2(double mass, std::string flavor);
 TString     get_MV2name(int mass, double V2);
 void        filePutContents(const std::string& name, const std::string& content, bool append = false);
 void        fix_overflow_and_negative_bins(TH1* h);

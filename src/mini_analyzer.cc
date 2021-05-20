@@ -20,7 +20,7 @@ mini_analyzer::mini_analyzer(TString filename) :
 mini_analyzer::~mini_analyzer()
 {}
 
-double mini_analyzer::get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
@@ -47,7 +47,7 @@ double mini_analyzer::get_MediumPFNcut(int mass, unsigned flavor, bool is2016, b
     }
 }
 
-double mini_analyzer::get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
@@ -74,7 +74,7 @@ double mini_analyzer::get_looserPFNcut(int mass, unsigned flavor, bool is2016, b
     }
 }
 
-double mini_analyzer::get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
@@ -101,7 +101,7 @@ double mini_analyzer::get_PFNcut(int mass, unsigned flavor, bool is2016, bool is
     }
 }
 
-double mini_analyzer::get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
@@ -128,7 +128,7 @@ double mini_analyzer::get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bo
     }
 }
 
-double mini_analyzer::get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
@@ -288,7 +288,7 @@ void mini_analyzer::ABCD_ratios()
     calculate_eff();
 
     //apply_ratio("_CoverD_", "_quadD_", "_DtoCwithCD_");
-    apply_ratio("_CoverD_", "_quadB_", "_BtoAwithCD_");
+    apply_ratio("_CoverD_", "_quadB_", "_BtoAwithCD_", "_CoverD_");
     //apply_ratio("_BoverD_", "_quadC_", "_CtoAwithBD_");
 }
 
@@ -313,22 +313,23 @@ void mini_analyzer::calculate_ratio(TString numerator_tag, TString denominator_t
 }
 
 
-void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag)
+void mini_analyzer::apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag, TString ratio_tag_for_error)
 {
     for(auto const& it : hists){
         TH1* h = it.second;
         TString hname = h->GetName();
 
         if(hname.Contains(histo_tag) and !hname.Contains("_sys")){
-            TString hname_ratio(hname), hname_target(hname);
+            TString hname_ratio(hname), hname_target(hname), hname_ratio_for_error(hname);
             hname_ratio.ReplaceAll(histo_tag, ratio_tag);
             hname_target.ReplaceAll(histo_tag, target_tag);
+            hname_ratio_for_error.ReplaceAll(histo_tag, ratio_tag_for_error);
 
             if(hists[hname]->GetMaximum() > 0 and hists[hname_ratio]->GetMaximum() > 0){
                 hists[hname_target] = (TH1F*)hists[hname]->Clone(hname_target);
                 //hists[hname_target]->Scale(hists[hname_ratio]->GetBinContent(1));//use this in case of using a full ratio for ABCD prediction
                 hists[hname_target]->Multiply(hists[hname_ratio]);
-                set_error_for_zero_event_bins(hname_target, hname_ratio);//sets bin error for 0 event bins to (3.09 * central value of ratio in that bin, this assumes ratio =/= 0!)
+                set_error_for_zero_event_bins(hname_target, hname_ratio_for_error);//sets bin error for 0 event bins to (central value of C/D ratio in that bin, this assumes ratio =/= 0!)
             }
         }
     }
@@ -1226,8 +1227,8 @@ void mini_analyzer::set_error_for_zero_event_bins(TString hname_target, TString 
 {
     for(int i = 1; i <= hists[hname_target]->GetNbinsX(); i++){
         if(hists[hname_target]->GetBinContent(i) < 1e-4){
-            if(hname_ratio != "") hists[hname_target]->SetBinError(i, 3.09*hists[hname_ratio]->GetBinContent(i));
-            else hists[hname_target]->SetBinError(i, 3.09);
+            if(hname_ratio != "") hists[hname_target]->SetBinError(i, hists[hname_ratio]->GetBinContent(i));
+            else hists[hname_target]->SetBinError(i, 1.);
         }
     }
 }

@@ -246,7 +246,7 @@ int main(int argc, char * argv[])
                                     hist->SetLineColor(colors[i]);
                                 }
                                 TString legend_tmp = legends[i];
-                                legend_tmp.ReplaceAll("x",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                                legend_tmp.ReplaceAll("z",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
                                 legend_tmp.ReplaceAll("-03", "^{-3}");
                                 legend_tmp.ReplaceAll("-04", "^{-4}");
                                 legend_tmp.ReplaceAll("-05", "^{-5}");

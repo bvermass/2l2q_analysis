@@ -6,6 +6,10 @@
 
 //move histo bin naming etc. to here!
 
+bool equals(double x, double y, double precision){
+    return (std::fabs(x-y) < precision);
+}
+
 std::vector<double> make_logscale(unsigned nbins, double xmin, double xmax)
 {
     if(xmin <= 0 or xmax <= 0) std::cout << "making log axis with 0 or negative value as boundary will not work!" << std::endl;
@@ -254,7 +258,7 @@ double get_truncated_ctau(bool is2016, double mass, double ctau_true)
 
 std::vector<double> get_evaluating_V2s_all()
 {
-    return {4e-8, 6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3, 3e-3, 5e-3, 7e-3, 9e-3, 1e-2, 3e-2, 5e-2, 7e-2, 9e-2};
+    return {6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3, 3e-3, 5e-3, 7e-3, 9e-3, 1e-2, 3e-2, 5e-2, 7e-2, 9e-2};
 }
 
 
@@ -285,6 +289,51 @@ std::vector<double> get_evaluating_V2s_short(double mass)
 std::vector<double> get_evaluating_V2s_minimal()
 {
     return {1e-4, 7e-5, 2e-6, 9e-7};
+}
+
+double get_favorite_V2(double mass, std::string flavor)
+{
+    if(flavor.find("e") != std::string::npos){
+        if(equals(mass, 1.)) return 9e-4;
+        if(equals(mass, 2.)) return 1e-4;
+        if(equals(mass, 3.)) return 3e-5;
+        if(equals(mass, 4.)) return 1e-5;
+        if(equals(mass, 5.)) return 6e-6;
+        if(equals(mass, 6.)) return 6e-6;
+        if(equals(mass, 8.)) return 2e-6;
+        if(equals(mass, 10.)) return 9e-7;
+        if(equals(mass, 12.)) return 9e-7;
+        if(equals(mass, 14.)) return 9e-7;
+        if(equals(mass, 15.)) return 9e-7;
+    }else if(flavor.find("mu") != std::string::npos){
+        if(equals(mass, 1.)) return 5e-4;
+        if(equals(mass, 2.)) return 1e-4;
+        if(equals(mass, 3.)) return 3e-5;
+        if(equals(mass, 4.)) return 4e-6;
+        if(equals(mass, 5.)) return 2e-6;
+        if(equals(mass, 6.)) return 9e-7;
+        if(equals(mass, 8.)) return 7e-7;
+        if(equals(mass, 10.)) return 3e-7;
+        if(equals(mass, 12.)) return 3e-7;
+        if(equals(mass, 14.)) return 3e-7;
+        if(equals(mass, 15.)) return 5e-7;
+    }else if(flavor.find("2l") != std::string::npos){
+        if(equals(mass, 1.)) return 5e-4;
+        if(equals(mass, 2.)) return 5e-5;
+        if(equals(mass, 3.)) return 1e-5;
+        if(equals(mass, 4.)) return 4e-6;
+        if(equals(mass, 5.)) return 2e-6;
+        if(equals(mass, 6.)) return 9e-7;
+        if(equals(mass, 8.)) return 7e-7;
+        if(equals(mass, 10.)) return 3e-7;
+        if(equals(mass, 12.)) return 3e-7;
+        if(equals(mass, 14.)) return 3e-7;
+        if(equals(mass, 15.)) return 5e-7;
+    }else{
+        std::cout << "violation: could not recognize HNL flavor" << std::endl;
+        return 6e-6;
+    }
+    return 6e-6;
 }
 
 

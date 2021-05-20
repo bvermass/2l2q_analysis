@@ -77,6 +77,8 @@ void        draw_line_at_1(double xmin, double xmax);
 void        divide_by_binwidth(TH1F* h);
 std::vector< double > computeEfficiencyForROC(TH1F* hist);
 double      computeAUC(TGraph* roc);
+TGraph*     get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg);
+std::tuple<double, double, double> computeCuttingPointEfficiency(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double cutting_point, TString general_pathname, TString histname);
 std::tuple<double, double, double> computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname);
 
 // 2D histograms

@@ -447,6 +447,22 @@ double computeAUC(TGraph* roc)
     return  fabs(round(area*10000)/100);
 }
 
+TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg)
+{
+    TGraph* roc = new TGraph(eff_signal.size(), &(eff_bkg[0]), &(eff_signal[0]));
+    roc->SetLineWidth(2);
+    return roc;
+}
+
+
+std::tuple<double, double, double> computeCuttingPointEfficiency(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double cutting_point, TString general_pathname, TString histname)
+{
+    unsigned bin_number  = hist_signal->FindBin(cutting_point);
+    double cp_eff_signal = eff_signal[bin_number-1];
+    double cp_eff_bkg    = eff_bkg[bin_number-1];
+    return std::make_tuple(cp_eff_signal, cp_eff_bkg, cutting_point);
+}
+
 std::tuple<double,double, double> computeCuttingPoint(std::vector<double> eff_signal, std::vector<double> eff_bkg, TH1F* hist_signal, TH1F* hist_bkg, double required_signal_eff, TString general_pathname, TString histname)
 {
     double cp = 0, cp_eff_signal = 0, cp_eff_bkg = 0, cp_eff_signal_unc = 0, cp_eff_bkg_unc = 0;

@@ -13,13 +13,6 @@ std::vector<TString> get_V2s(double mass)
 }
 
 
-TGraph* get_roc(std::vector< double > eff_signal, std::vector< double > eff_bkg)
-{
-    TGraph* roc = new TGraph(eff_signal.size(), &(eff_bkg[0]), &(eff_signal[0]));
-    roc->SetLineWidth(2);
-    return roc;
-}
-
 
 bool plot_extra_hists_with_different_names(TCanvas* c, TMultiGraph* multigraph, TLegend* legend, std::vector<TFile*> files_signal, std::vector<TFile*> files_bkg, std::vector<TString> legends, std::vector<TString> histnames, std::vector<int> colors)
 {
@@ -67,7 +60,7 @@ int main(int argc, char * argv[])
     std::vector<TFile*> files_signal;
     std::vector<TFile*> files_bkg;
     std::vector<TString> legends;
-    bool is2016 = false, is2017 = false, is2018 = false;
+    bool is2016 = false, is2017 = false, is2018 = false, isRun2 = true;
     for(int i = 2; i < argc; i++){
         std::cout << argv[i] << std::endl;
         TString argument = (TString)argv[i];
@@ -78,14 +71,16 @@ int main(int argc, char * argv[])
         if(argument.Contains("MiniAOD2016") or argument.Contains("Run2016")) is2016 = true;
         else if(argument.Contains("MiniAOD2017") or argument.Contains("Run2017")) is2017 = true;
         else if(argument.Contains("MiniAOD2018") or argument.Contains("Run2018")) is2018 = true;
-        else if(filename.Contains("MiniAOD1617") or filename.Contains("Run1617")){ is2016 = true; is2017 = true; }
-        else if(filename.Contains("MiniAOD1618") or filename.Contains("Run1618")){ is2016 = true; is2018 = true; }
-        else if(filename.Contains("MiniAOD1718") or filename.Contains("Run1718")){ is2017 = true; is2018 = true; }
+        else if(argument.Contains("MiniAODRun2") or argument.Contains("Run2.")) isRun2 = true;
+        else if(argument.Contains("MiniAOD1617") or argument.Contains("Run1617")){ is2016 = true; is2017 = true; }
+        else if(argument.Contains("MiniAOD1618") or argument.Contains("Run1618")){ is2016 = true; is2018 = true; }
+        else if(argument.Contains("MiniAOD1718") or argument.Contains("Run1718")){ is2017 = true; is2018 = true; }
     }
 
     //this color scheme comes from the coolors.co app: https://coolors.co/4281ae-0a5a50-4b4237-d4b483-c1666b
     //maybe this combo is better: https://coolors.co/4281ae-561643-4b4237-d4b483-c1666b?
-    std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
+    //std::vector<std::vector<int>> rgb = {{66, 129, 174}, {212, 180, 131}, {193, 102, 107}, {10, 90, 80}, {75, 66, 65}, {86, 22, 67}, {247, 135, 100}};
+    std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
     std::vector<int> colors;
     for(int i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
@@ -108,10 +103,10 @@ int main(int argc, char * argv[])
     pad->Draw();
     pad->cd();
 
-    TLegend legend = get_legend(0.47, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
+    TLegend legend = get_legend(0.57, 0.15, 1, 0.075 + 0.075*legends.size(), 1);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
-    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018);
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
     float leftmargin  = pad->GetLeftMargin();
     float topmargin   = pad->GetTopMargin();
     float rightmargin = pad->GetRightMargin();
@@ -140,7 +135,8 @@ int main(int argc, char * argv[])
             TString pathname_log    = make_plotspecific_pathname(histname, general_pathname, "log/");
 
             // for parametrized PFN, put evaluated mass and V2 in legend
-            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(((TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " ") + " [AUC] - [Bkg eff] - [cut]");
+            //if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(((TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3)).ReplaceAll("_", " ") + " [AUC] - [Bkg eff] - [cut]");
+            if(histname.Contains("_M-") and histname.Contains("_V2-")) legend.SetHeader(histname.Contains("M-5")? "Low Mass PFN: AUC" : "High Mass PFN: AUC");
 
             TMultiGraph* multigraph = new TMultiGraph();
             multigraph->SetTitle((TString)";Bkg Eff.;Signal Eff.");

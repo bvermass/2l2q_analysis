@@ -30,6 +30,12 @@
 #include "../interface/bTagWP.h"
 #include "../helpertools/LorentzVector/LorentzVector.h"
 
+double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017);
+
 class mini_analyzer {
     public :
         BkgEstimator event;
@@ -55,11 +61,6 @@ class mini_analyzer {
         //General functions
         mini_analyzer(TString filename);
         ~mini_analyzer();
-        double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-        double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-        double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-        double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-        double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017);
         unsigned get_PFNevaluation_index(int mass, unsigned flavor);
         void init_MV2_parametrization();
         void init_CP();
@@ -68,7 +69,7 @@ class mini_analyzer {
 
         void ABCD_ratios();
         void calculate_ratio(TString numerator_tag, TString denominator_tag, TString ratio_tag);
-        void apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag);
+        void apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag, TString ratio_tag_for_error);
         void calculate_eff();
         void add_ABCDstat_variation(TString selection_tag);
 
