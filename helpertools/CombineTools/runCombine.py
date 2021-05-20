@@ -19,6 +19,7 @@ def submit_script( script, scriptname ):
         time.sleep(2)
 
 def run_combine_fromOwn_datacards(filesperJob):
+    print('running combine with my own datacards')
     datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
     file_counter    = 0
     script_counter  = 0
@@ -56,6 +57,7 @@ def run_combine_fromOwn_datacards(filesperJob):
         file_counter = 0
 
 def run_combine_fromKirills_datacards(filesperJob):
+    print('running combine with Kirills datacards')
     datacardDir = '/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/input/2L_cards/'
     file_counter    = 0
     script_counter  = 0

@@ -10,3 +10,6 @@ make -f makeAnalyzeOutput
 ./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_mm__2018_.txt mm_2018
 ./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_ee__2018_.txt ee_2018
 ./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_2l__2018_.txt 2l_2018
+./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_mm__run2_.txt mm_run2
+./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_ee__run2_.txt ee_run2
+./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_2l__run2_.txt 2l_run2

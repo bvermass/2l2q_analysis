@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist_ref->GetName();
 
 
-            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA") and !histname.Contains("ABCDstat") and !histname.Contains("_sys")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA_") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -143,6 +143,12 @@ int main(int argc, char * argv[])
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
                 systNames.push_back("Track_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("JEC_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
+                systNames.push_back("JER_sys");
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
 
@@ -216,7 +222,7 @@ int main(int argc, char * argv[])
                     hists_bkg_quadB.push_back((TH1F*)files_bkg[i]->Get(histname_data_quadB));
                 }
                 std::string quadBFileName = quadB_pathname + (std::string)outputfilename + ".root";
-                makequadBFile(quadBFileName, hist_signal_quadB, hist_data_quadB, hists_bkg_quadB, legends_signal[0], legends_data[0], legends_bkg);
+                makequadFile(quadBFileName, hist_signal_quadB, hist_data_quadB, hists_bkg_quadB, legends_signal[0], legends_data[0], legends_bkg);
 
                 bool autoMCStats = true;
 
@@ -232,10 +238,10 @@ int main(int argc, char * argv[])
 #endif
 
 
-void makequadBFile(TString quadB_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames)
+void makequadFile(TString quad_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames)
 {
-    std::cout << "quadB histograms in " << quadB_filename << std::endl;
-    TFile *quadB_file = new TFile(quadB_filename, "recreate");
+    std::cout << "quad histograms in " << quad_filename << std::endl;
+    TFile *quad_file = new TFile(quad_filename, "recreate");
 
     hist_signal->Write(sigName.c_str());
     hist_data->Write("data_obs");
@@ -243,7 +249,7 @@ void makequadBFile(TString quadB_filename, TH1F* hist_signal, TH1F* hist_data, s
         hists_bkg[i]->Write(bkgNames[i].c_str());
     }
 
-    quadB_file->Close();
+    quad_file->Close();
 }
 
 void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_data, std::vector<TH1F*> hists_bkg, const std::string& sigName, const std::string& dataName, const std::vector<std::string>& bkgNames, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys, const std::vector<std::string>& sigName_sys, const std::vector<std::vector<std::string>>& bkgNames_sys)
@@ -335,7 +341,7 @@ void printDataCard(const std::string& cardName, const double obsYield, const dou
 
     //add line to automatically include statistical uncertainties from the MC shape histograms 
     if( autoMCStats ){
-        card << "* autoMCStats 0\n";
+        card << "* autoMCStats 10\n";
     }
     
     card.close();       

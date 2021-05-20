@@ -9,3 +9,6 @@ python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unp
 python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _2018_ _mm__2018_
 python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _2018_ _ee__2018_
 python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _2l_ _2018_ _2l__2018_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _run2_ _mm__run2_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _run2_ _ee__run2_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _2l_ _run2_ _2l__run2_
