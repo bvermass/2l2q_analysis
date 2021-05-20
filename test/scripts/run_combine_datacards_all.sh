@@ -95,3 +95,9 @@
 ./test/submit_plots.sh test/sampleLists/Combine/M-15_e_2016_majorana.txt 6 M-15_e_2016.out
 ./test/submit_plots.sh test/sampleLists/Combine/M-15_e_2017_majorana.txt 6 M-15_e_2017.out
 ./test/submit_plots.sh test/sampleLists/Combine/M-15_e_2018_majorana.txt 6 M-15_e_2018.out
+
+./test/scripts/wait_until_jobs_are_finished.sh
+cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_8_1_0/src/HiggsAnalysis/CombinedLimit && eval `scram runtime -sh`
+cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis
+python helpertools/CombineTools/merge_datacards_for_run2.py
+eval `scram runtime -sh`

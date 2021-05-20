@@ -1,50 +1,20 @@
-import os,sys
-if(len(sys.argv) != 3):
-    print('wrong number of arguments: python hadd_based_on_sampleList.py [sampleList] [outputfile]')
-    sys.exit()
+import os,sys,glob
+samplelists = glob.glob("/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/data/HNL_merging_parameters/*majorana.txt")
 
-sampleList = sys.argv[1]
-outputfile = sys.argv[2]
+for sampleList in samplelists:
+    files = [line.strip() for line in open(sampleList)]
+    files = [line.split()[0] for line in files if line and not line.startswith('#')] # Clean empty and comment lines
 
-files = [line.strip() for line in open(sampleList)]
-files = [line.split()[0] for line in files if line and not line.startswith('#')] # Clean empty and comment lines
+    file0 = files[0]
+    outputfile = "/user/bvermass/public/heavyNeutrino/" + file0[file0.find("HeavyNeutrino_lljj"):file0.find("V-")+2] + "combined" + file0[file0.find("_", file0.find("V-")+3):file0.find("/dilep")]
+    pnfsfile = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/" + file0[file0.find("HeavyNeutrino_lljj"):file0.find("V-")+2] + "combined" + file0[file0.find("_", file0.find("V-")+3):file0.find("/dilep")]
+    print(outputfile)
+    os.system("mkdir -p {}".format(outputfile))
 
-commandline = 'hadd -f {}'.format(outputfile)
-for f in files: 
-    commandline += ' {}'.format(f)
+    commandline = 'hadd -f {}/dilep_final.root'.format(outputfile)
+    for f in files:
+        commandline += ' {}'.format(f)
 
-os.system(commandline)
-#commandline_M1 = 'hadd -f M-1.root'
-#commandline_M2 = 'hadd -f M-2.root'
-#commandline_M3 = 'hadd -f M-3.root'
-#commandline_M4 = 'hadd -f M-4.root'
-#commandline_M5 = 'hadd -f M-5.root'
-#commandline_M6 = 'hadd -f M-6.root'
-#commandline_M8 = 'hadd -f M-8.root'
-#commandline_M10 = 'hadd -f M-10.root'
-#for f in files:
-#    if 'M-1_' in f:
-#        commandline_M1 += ' {}'.format(f)
-#    if 'M-2' in f:
-#        commandline_M2 += ' {}'.format(f)
-#    if 'M-3' in f:
-#        commandline_M3 += ' {}'.format(f)
-#    if 'M-4' in f:
-#        commandline_M4 += ' {}'.format(f)
-#    if 'M-5' in f:
-#        commandline_M5 += ' {}'.format(f)
-#    if 'M-6' in f:
-#        commandline_M6 += ' {}'.format(f)
-#    if 'M-8' in f:
-#        commandline_M8 += ' {}'.format(f)
-#    if 'M-10' in f:
-#        commandline_M10 += ' {}'.format(f)
-#
-#os.system(commandline_M1)
-#os.system(commandline_M2)
-#os.system(commandline_M3)
-#os.system(commandline_M4)
-#os.system(commandline_M5)
-#os.system(commandline_M6)
-#os.system(commandline_M8)
-#os.system(commandline_M10)
+    os.system(commandline)
+    os.system('gfal-copy -p -f -t 5000 file://{}/dilep_final.root srm://maite.iihe.ac.be:8443{}/dilep_final.root'.format(outputfile, pnfsfile))
+    os.system('rm {}/dilep_final.root'.format(outputfile))

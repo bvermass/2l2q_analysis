@@ -17,10 +17,10 @@ if [[ option -eq 2 || option -eq 0 ]]; then
     python test/submit_mini_analyzer.py test/sampleLists/mini_analyzer/HNL.txt 8
     ./test/scripts/wait_until_jobs_are_finished.sh
 
-    cd helpertools/HistogramMerger/
-    #python submit_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
-    python run_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
-    cd ../../
+    #cd helpertools/HistogramMerger/
+    ##python submit_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
+    #python run_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
+    #cd ../../
     #./test/scripts/wait_until_jobs_are_finished.sh
     ./quickminiscript.sh
     #./test/scripts/run_full_combine_workflow.sh
