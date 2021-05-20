@@ -15,6 +15,7 @@ helpertools/CombineTools/datacardprep
 helpertools/HistogramMerger/identifiers.txt
 execMiniAnalyzer
 execFullAnalyzer
+execPFNEfficiency
 helpertools/getTreeEntries/*.txt
 helpertools/getTreeEntries/execIntegralEff
 test/condor/log

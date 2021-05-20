@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= test/scripts/PFN_efficiency.cc src/helper_histo_functions.cc src/BkgEstimator.cc src/bTagWP.cc helpertools/LorentzVector/LorentzVector.cc src/mini_analyzer.cc src/mini_analyzer_JEC.cc plotting/tdrStyle.cc plotting/helper_plotter_functions.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execPFNEfficiency
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)
