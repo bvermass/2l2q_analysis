@@ -2,6 +2,47 @@
 
 //limits come from /user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/plotLimits.py
 
+TGraphAsymmErrors* get_legacy_limit(TString filename, float sigma, bool lower, Color_t lcolor, Style_t lstyle, Width_t lwidth)
+{
+    std::vector<double> masses, V2, err;
+
+    std::cout << "Getting Legacy Limits from " << filename << std::endl;
+    std::ifstream file(filename);
+    if(file.is_open()){
+        std::string line;
+        while (std::getline(file, line))
+        {
+            if(line.find("M") != std::string::npos) continue;
+            std::istringstream iss(line);
+            double mass;
+            std::map<double, std::map<float, double>> lower_limit, upper_limit;
+            iss >> mass >> lower_limit[mass][0.50] >> lower_limit[mass][0.975] >> lower_limit[mass][0.84] >> lower_limit[mass][0.16] >> lower_limit[mass][0.025] >> upper_limit[mass][0.50] >> upper_limit[mass][0.975] >> upper_limit[mass][0.84] >> upper_limit[mass][0.16] >> upper_limit[mass][0.025];
+            if(lower){
+                if(lower_limit[mass][sigma] != 0){
+                    masses.push_back(mass);
+                    V2.push_back(lower_limit[mass][sigma]);
+                    err.push_back(0.);
+                }
+            }else {
+                if(upper_limit[mass][sigma] != 0){
+                    masses.push_back(mass);
+                    V2.push_back(upper_limit[mass][sigma]);
+                    err.push_back(0.);
+                }
+            }
+        }
+    }
+    file.close();
+
+    TGraphAsymmErrors* graph = new TGraphAsymmErrors(masses.size(), &masses[0], &V2[0], &err[0], &err[0], &err[0], &err[0]);
+
+    graph->SetLineColor(lcolor);
+    graph->SetLineStyle(lstyle);
+    graph->SetLineWidth(lwidth);
+
+    return graph;
+}
+
 TGraphAsymmErrors* get_external_limit(TString identifier, Color_t lcolor, Style_t lstyle, Width_t lwidth)
 {
     std::vector<std::vector<double>> limitpoints = get_limitpoints(identifier);

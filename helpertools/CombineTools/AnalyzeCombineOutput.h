@@ -37,6 +37,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
 void PrintExclusionLine(std::map<double, std::map<float, double>> exclusion_line, double quantile);
 void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, double>>> signal_strengths);
 void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
+void WriteExclusionLimit_with_Bands(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
 
 class CombineOutput
 {
@@ -70,6 +71,7 @@ class CombineOutput
 };
 
 //In ExternalLimits.cc
+TGraphAsymmErrors* get_legacy_limit(TString filename, float sigma, bool lower, Color_t lcolor, Style_t lstyle, Width_t lwidth);
 TGraphAsymmErrors* get_external_limit(TString identifier, Color_t lcolor, Style_t lstyle, Width_t lwidth);
 std::vector<std::vector<double>> get_limitpoints(TString identifier);
 std::vector<std::vector<double>> get_delphi_prompt();

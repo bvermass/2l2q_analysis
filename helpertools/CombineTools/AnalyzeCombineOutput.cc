@@ -1,6 +1,8 @@
 #include "AnalyzeCombineOutput.h"
 
 bool verbose = false;
+bool addExternalLimits = false;
+bool addLegacyLimits = true;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
@@ -100,6 +102,7 @@ int main(int argc, char * argv[])
 
     PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "ExclusionLimit_" + specific_dir + ".png", "M_{HNL} [GeV]", "|V|^{2}");
     WriteExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_" + specific_dir + ".txt");
+    //WriteExclusionLimit_with_Bands(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_Legacy_AN_v5_" + specific_dir + ".txt");
 }
 #endif
 
@@ -264,51 +267,71 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     legend.SetFillStyle(0);
     
     //Add external limits from other/older analyses
-    TGraphAsymmErrors* delphi_prompt                    = get_external_limit("delphi_prompt", kBlue, 10, 3);
-    TGraphAsymmErrors* delphi_displaced                 = get_external_limit("delphi_displaced", kBlue+2, 9, 3);
-    TGraphAsymmErrors* atlas_prompt_muon                = get_external_limit("atlas_prompt_muon", kGreen+3, 7, 3);
-    TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
-    TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
-    TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
-    TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kRed, 4, 3);
-    TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kRed, 3, 3);
-    TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kRed+2, 10, 3);
-    TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kRed+2, 10, 3);
-    
-    if(plotfilename.Contains("_mm_")){
-        delphi_prompt->Draw("L same");
-        delphi_displaced->Draw("L same");
-        atlas_prompt_muon->Draw("L same");
-        atlas_displaced_muon_LNV->Draw("L same");
-        atlas_displaced_muon_LNC->Draw("L same");
-        cms_trilepton_prompt_muon->Draw("L same");
-        if(isRun2) cms_trilepton_displaced_muon->Draw("L same");
-    }else if(plotfilename.Contains("_ee_")){
-        delphi_prompt->Draw("L same");
-        delphi_displaced->Draw("L same");
-        atlas_prompt_electron->Draw("L same");
-        cms_trilepton_prompt_electron->Draw("L same");
-        if(isRun2) cms_trilepton_displaced_electron->Draw("L same");
+    if(addExternalLimits){
+        TGraphAsymmErrors* delphi_prompt                    = get_external_limit("delphi_prompt", kBlue, 10, 3);
+        TGraphAsymmErrors* delphi_displaced                 = get_external_limit("delphi_displaced", kBlue+2, 9, 3);
+        TGraphAsymmErrors* atlas_prompt_muon                = get_external_limit("atlas_prompt_muon", kGreen+3, 7, 3);
+        TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
+        TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
+        TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
+        TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kRed, 4, 3);
+        TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kRed, 3, 3);
+        TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kRed+2, 10, 3);
+        TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kRed+2, 10, 3);
+
+        if(plotfilename.Contains("_mm_")){
+            delphi_prompt->Draw("L same");
+            delphi_displaced->Draw("L same");
+            atlas_prompt_muon->Draw("L same");
+            atlas_displaced_muon_LNV->Draw("L same");
+            atlas_displaced_muon_LNC->Draw("L same");
+            cms_trilepton_prompt_muon->Draw("L same");
+            if(isRun2) cms_trilepton_displaced_muon->Draw("L same");
+        }else if(plotfilename.Contains("_ee_")){
+            delphi_prompt->Draw("L same");
+            delphi_displaced->Draw("L same");
+            atlas_prompt_electron->Draw("L same");
+            cms_trilepton_prompt_electron->Draw("L same");
+            if(isRun2) cms_trilepton_displaced_electron->Draw("L same");
+        }
+
+        if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
+        legend.AddEntry(sr_lower_central_graph, "Expected", "l");
+        if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_displaced, "DELPHI displaced", "l");
+        legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
+        if(plotfilename.Contains("_mm_"))      legend.AddEntry(atlas_prompt_muon, "ATLAS 3l prompt (2016)", "l");
+        else if(plotfilename.Contains("_ee_")) legend.AddEntry(atlas_prompt_electron, "ATLAS 3l prompt (2016)", "l");
+
+        legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
+
+        if(plotfilename.Contains("_mm_")){
+            legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
+            legend.AddEntry(cms_trilepton_prompt_muon, "CMS 3l prompt (2016)", "l");
+            legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
+            if(isRun2) legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
+        }else if(plotfilename.Contains("_ee_")){
+            legend.AddEntry(cms_trilepton_prompt_electron, "CMS 3l prompt (2016)", "l");
+            if(isRun2) legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
+        }
+    }
+    if(addLegacyLimits){
+        TString legacy_limit_file = "/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/plots/Limits_Legacy_AN_v5_" + plotfilename(plotfilename.Index("ExclusionLimit_")+15, plotfilename.Index(".png") - plotfilename.Index("ExclusionLimit_")-15) + ".txt";
+
+        TGraphAsymmErrors* legacy_lower_V2_central = get_legacy_limit(legacy_limit_file, 0.50, true, kBlue, 5, 3);
+        TGraphAsymmErrors* legacy_upper_V2_central = get_legacy_limit(legacy_limit_file, 0.50, false, kBlue, 5, 3);
+
+        legacy_lower_V2_central->Draw("L same");
+        legacy_upper_V2_central->Draw("L same");
+
+        legend.AddEntry(legacy_lower_V2_central, "Old Limit", "l");
+        legend.AddEntry(sr_lower_central_graph, "Expected", "l");
+        legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
+        legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
     }
 
-    if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
-    legend.AddEntry(sr_lower_central_graph, "Expected", "l");
-    if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_displaced, "DELPHI displaced", "l");
-    legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
-    if(plotfilename.Contains("_mm_"))      legend.AddEntry(atlas_prompt_muon, "ATLAS 3l prompt (2016)", "l");
-    else if(plotfilename.Contains("_ee_")) legend.AddEntry(atlas_prompt_electron, "ATLAS 3l prompt (2016)", "l");
 
-    legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
 
-    if(plotfilename.Contains("_mm_")){
-        legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
-        legend.AddEntry(cms_trilepton_prompt_muon, "CMS 3l prompt (2016)", "l");
-        legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
-        if(isRun2) legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
-    }else if(plotfilename.Contains("_ee_")){
-        legend.AddEntry(cms_trilepton_prompt_electron, "CMS 3l prompt (2016)", "l");
-        if(isRun2) legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
-    }
+
     legend.Draw("same");
 
 
@@ -324,7 +347,7 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2") or plotfilename.Contains("run2");
 
     TCanvas* c = new TCanvas("c","",1000,1000);
     c->cd();
@@ -428,7 +451,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
-    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2");
+    bool is2016 = plotfilename.Contains("2016"), is2017 = plotfilename.Contains("2017"), is2018 = plotfilename.Contains("2018"), isRun2 = plotfilename.Contains("Run2") or plotfilename.Contains("run2");
 
     TCanvas* c = new TCanvas("c","",700,700);
     c->cd();
@@ -567,5 +590,17 @@ void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusi
     outfile << "Upper Limits:\n";
     for(auto& sr_V2 : upper_exclusion_limit){
         outfile << "M = " << sr_V2.first << " GeV : " << sr_V2.second[0.50] << "\n";
+    }
+}
+
+void WriteExclusionLimit_with_Bands(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename)
+{
+    std::cout << "Writing Limits to " << filename << std::endl;
+    std::ofstream outfile;
+    outfile.open(filename);
+    outfile << "M - Lower_V2_central - Lower_V2_2sup - Lower_V2_1sup - Lower_V2_1sdown - Lower_V2_2sdown - Upper_V2_central - Upper_V2_2sup - Upper_V2_1sup - Upper_V2_1sdown - Upper_V2_2sdown\n";
+    for(auto& sr_V2 : lower_exclusion_limit){
+        outfile << sr_V2.first << " " << sr_V2.second[0.50] << " " << sr_V2.second[0.975] << " " << sr_V2.second[0.84] << " " << sr_V2.second[0.16] << " " << sr_V2.second[0.025] << " ";
+        outfile << upper_exclusion_limit[sr_V2.first][0.50] << " " << upper_exclusion_limit[sr_V2.first][0.975] << " " << upper_exclusion_limit[sr_V2.first][0.84] << " " << upper_exclusion_limit[sr_V2.first][0.16] << " " << upper_exclusion_limit[sr_V2.first][0.025] << "\n";
     }
 }
