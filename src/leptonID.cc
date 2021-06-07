@@ -401,7 +401,7 @@ double full_analyzer::get_xyz_distance(double x1, double y1, double z1, double x
     return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2));
 }
 
-double full_analyzer::get_displEleSF(unsigned missinghits){
+double full_analyzer::get_displEleSF(unsigned missinghits){//Older version for displaced electron SF made by Tom, parametrized in missinghits
     if(_is2016){
         if(missinghits == 0) return 1.025;
         if(missinghits == 1) return 1.036;
@@ -438,3 +438,124 @@ double full_analyzer::get_displEleSF(unsigned missinghits){
 double full_analyzer::get_displEleSF_unc(unsigned missinghits){
     return std::abs(1-get_displEleSF(missinghits))/2;
 }
+
+double full_analyzer::get_displEleSF(double ele_pt, double ele_dxy){//Newer version for displaced electron SF made by Kirill, parametrized in displacement of the electron
+    double displacement = sqrt(2.*ele_pt/0.3/3.8*std::abs(ele_dxy) + ele_dxy*ele_dxy);
+    if(displacement > 0.0 and displacement < 8.0) return json_displ_e_ID["0.0_8.0"]["sf_lle"];
+    if(displacement > 8.0 and displacement < 15.0) return json_displ_e_ID["8.0_15.0"]["sf_lle"];
+    if(displacement > 15.0 and displacement < 20.0) return json_displ_e_ID["15.0_20.0"]["sf_lle"];
+    if(displacement > 20.0 and displacement < 25.0) return json_displ_e_ID["20.0_25.0"]["sf_lle"];
+    if(displacement > 25.0 and displacement < 30.0) return json_displ_e_ID["25.0_30.0"]["sf_lle"];
+    if(displacement > 30.0 and displacement < 37.0) return json_displ_e_ID["30.0_37.0"]["sf_lle"];
+    if(displacement > 37.0 and displacement < 50.0) return json_displ_e_ID["37.0_50.0"]["sf_lle"];
+    if(displacement > 50.0 and displacement < 80.0) return json_displ_e_ID["50.0_80.0"]["sf_lle"];
+    std::cout << "no displ ele SF! pt, dxy, displacement: " << ele_pt << " " << ele_dxy << " " << displacement << std::endl;
+    return 1.;
+}
+double full_analyzer::get_displEleSF_unc(double ele_pt, double ele_dxy){//Newer version for displaced electron SF made by Kirill, parametrized in displacement of the electron
+    double displacement = sqrt(2.*ele_pt/0.3/3.8*std::abs(ele_dxy) + ele_dxy*ele_dxy);
+    if(displacement > 0.0 and displacement < 8.0) return json_displ_e_ID["0.0_8.0"]["sferr_lle"];
+    if(displacement > 8.0 and displacement < 15.0) return json_displ_e_ID["8.0_15.0"]["sferr_lle"];
+    if(displacement > 15.0 and displacement < 20.0) return json_displ_e_ID["15.0_20.0"]["sferr_lle"];
+    if(displacement > 20.0 and displacement < 25.0) return json_displ_e_ID["20.0_25.0"]["sferr_lle"];
+    if(displacement > 25.0 and displacement < 30.0) return json_displ_e_ID["25.0_30.0"]["sferr_lle"];
+    if(displacement > 30.0 and displacement < 37.0) return json_displ_e_ID["30.0_37.0"]["sferr_lle"];
+    if(displacement > 37.0 and displacement < 50.0) return json_displ_e_ID["37.0_50.0"]["sferr_lle"];
+    if(displacement > 50.0 and displacement < 80.0) return json_displ_e_ID["50.0_80.0"]["sferr_lle"];
+    std::cout << "no displ ele SF unc! pt, dxy, displacement: " << ele_pt << " " << ele_dxy << " " << displacement << std::endl;
+    return 1.;
+}
+
+double full_analyzer::get_displMuonSF(double muon_displ, double muon_pt) //displaced Muon ID scale factors from Riccardo, based on study of JPsi decays
+{
+  double ieff = 1.0;
+  // 2016
+  if(_is2016) {
+    if     (muon_displ<0.2) {
+      if     (muon_pt< 6.) ieff = 0.995;
+      else if(muon_pt<10.) ieff = 0.995;
+      else if(muon_pt<20.) ieff = 1.000;
+      else             ieff = 0.987;
+    }
+    else if(muon_displ<0.5) {
+      if     (muon_pt< 6.) ieff = 1.005;
+      else if(muon_pt<10.) ieff = 1.002;
+      else if(muon_pt<20.) ieff = 1.002;
+      else             ieff = 0.991;
+    }
+    else if(muon_displ<1.0) {
+      if     (muon_pt< 6.) ieff = 1.018;
+      else if(muon_pt<10.) ieff = 1.007;
+      else if(muon_pt<20.) ieff = 0.985;
+      else             ieff = 1.013;
+    }
+    else {
+      if     (muon_pt< 6.) ieff = 1.008;
+      else if(muon_pt<10.) ieff = 1.021;
+      else if(muon_pt<20.) ieff = 0.976;
+      else             ieff = 1.012;
+    }
+  }
+  // 2017
+  else if(_is2017) {
+    if     (muon_displ<0.2) {
+      if     (muon_pt< 6.) ieff = 0.995;
+      else if(muon_pt<10.) ieff = 0.995;
+      else if(muon_pt<20.) ieff = 1.000;
+      else             ieff = 0.987;
+    }
+    else if(muon_displ<0.5) {
+      if     (muon_pt< 6.) ieff = 1.005;
+      else if(muon_pt<10.) ieff = 1.002;
+      else if(muon_pt<20.) ieff = 1.002;
+      else             ieff = 0.991;
+    }
+    else if(muon_displ<1.0) {
+      if     (muon_pt< 6.) ieff = 1.018;
+      else if(muon_pt<10.) ieff = 1.007;
+      else if(muon_pt<20.) ieff = 0.985;
+      else             ieff = 1.013;
+    }
+    else {
+      if     (muon_pt< 6.) ieff = 1.008;
+      else if(muon_pt<10.) ieff = 1.021;
+      else if(muon_pt<20.) ieff = 0.976;
+      else             ieff = 1.012;
+    }
+  }
+  // 2018
+  else {
+    if     (muon_displ<0.2) {
+      if     (muon_pt< 6.) ieff = 0.994;
+      else if(muon_pt<10.) ieff = 0.996;
+      else if(muon_pt<20.) ieff = 0.991;
+      else             ieff = 0.986;
+    }
+    else if(muon_displ<0.5) {
+      if     (muon_pt< 6.) ieff = 0.993;
+      else if(muon_pt<10.) ieff = 0.996;
+      else if(muon_pt<20.) ieff = 0.997;
+      else             ieff = 1.003;
+    }
+    else if(muon_displ<1.0) {
+      if     (muon_pt< 6.) ieff = 0.992;
+      else if(muon_pt<10.) ieff = 0.994;
+      else if(muon_pt<20.) ieff = 1.009;
+      else             ieff = 0.999;
+    }
+    else {
+      if     (muon_pt< 6.) ieff = 1.011;
+      else if(muon_pt<10.) ieff = 1.023;
+      else if(muon_pt<20.) ieff = 0.997;
+      else             ieff = 0.995;
+    }
+  }
+
+  return ieff;
+}
+
+double full_analyzer::get_displMuonSF_unc(double muon_displ, double muon_pt)
+{
+    return std::abs(1. - get_displMuonSF(muon_displ, muon_pt))/2;
+}
+

@@ -120,8 +120,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     lsfreader_m_IDsys = get_LSFReader("mu", "IDsys");
     lsfreader_m_ISO  = get_LSFReader("mu", "ISO");
 
-    lsfreader_displ_m_ID = get_LSFReader_displ("mu", "IDISO");
+    //lsfreader_displ_m_ID = get_LSFReader_displ("mu", "IDISO");
     lsfreader_displ_m_SV = get_LSFReader_displ("mu", "SV");
+    set_json_displ_e_ID();
 
 
     HNLtagger hnltagger_e(filename, "HNLtagger_electron", partition, partitionjobnumber);

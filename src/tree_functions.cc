@@ -89,10 +89,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
         bkgestimator._l1_ISOSF_unc_sym  = 0.;
         bkgestimator._TriggerSF         = lsfreader_e_trig->get_LSF(_lPt[i_leading], _lEtaSC[i_leading]);
         bkgestimator._TriggerSF_unc_sym = lsfreader_e_trig->get_LSF_BinError(_lPt[i_leading], _lEtaSC[i_leading]);
-        bkgestimator._l2_IDSF           = get_displEleSF(_lElectronMissingHits[i_subleading]);
-        bkgestimator._l2_IDSF_unc_sym   = get_displEleSF_unc(_lElectronMissingHits[i_subleading]);
-    }
-    if(_lFlavor[i_leading] == 1){//electron scale factors
+    }else if(_lFlavor[i_leading] == 1){//muon scale factors
         bkgestimator._l1_IDSF           = lsfreader_m_ID->get_LSF(_lPt[i_leading], _lEta[i_leading]);
         double l1_IDSF_unc_stat         = lsfreader_m_ID->get_LSF_BinError(_lPt[i_leading], _lEta[i_leading]);
         double l1_IDSF_unc_syst         = lsfreader_m_IDsys->get_sys_as_BinError(_lPt[i_leading], _lEta[i_leading]);
@@ -103,8 +100,15 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
         bkgestimator._l1_ISOSF_unc_sym  = sqrt(l1_ISOSF_unc_stat*l1_ISOSF_unc_stat + l1_ISOSF_unc_syst*l1_ISOSF_unc_syst);
         bkgestimator._TriggerSF         = lsfreader_m_trig->get_LSF(_lPt[i_leading], _lEta[i_leading]);
         bkgestimator._TriggerSF_unc_sym = lsfreader_m_trig->get_LSF_BinError(_lPt[i_leading], _lEta[i_leading]);
-        bkgestimator._l2_IDSF           = lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading])*sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
-        double l2_IDSF_unc_syst         = lsfreader_displ_m_ID->get_sys_as_BinContent(_lPt[i_subleading], _lEta[i_subleading]);
+    }
+    //l2
+    if(_lFlavor[i_subleading] == 0){//electron
+        bkgestimator._l2_IDSF           = get_displEleSF(_lPt[i_subleading], _dxy[i_subleading]);
+        bkgestimator._l2_IDSF_unc_sym   = get_displEleSF_unc(_lPt[i_subleading], _dxy[i_subleading]);
+    }else if(_lFlavor[i_subleading] == 1){//muon
+        //bkgestimator._l2_IDSF           = lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading])*sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
+        bkgestimator._l2_IDSF           = 1.;
+        double l2_IDSF_unc_syst         = get_displMuonSF_unc(IVF_PVSVdist_2D, _lPt[i_subleading]);
         double l2_SVSF_unc_syst         = std::abs(1. - sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D))) / 2;
         bkgestimator._l2_IDSF_unc_sym   = sqrt(l2_IDSF_unc_syst*l2_IDSF_unc_syst + l2_SVSF_unc_syst*l2_SVSF_unc_syst);
     }

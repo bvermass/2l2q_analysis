@@ -67,9 +67,8 @@ double full_analyzer::Get_Event_weight()
             tmp_weight *= lsfreader_m_ISO->get_LSF(_lPt[i_leading], _lEta[i_leading]);
         }
         if(i_subleading != -1 and _lFlavor[i_subleading] == 0){//displaced electron scale factors
-            tmp_weight *= get_displEleSF(_lElectronMissingHits[i_subleading]);
+            tmp_weight *= get_displEleSF(_lPt[i_subleading], _dxy[i_subleading]);
         }else if(i_subleading != -1 and _lFlavor[i_subleading] == 1){//displaced muon scale factors
-            tmp_weight *= lsfreader_displ_m_ID->get_LSF(_lPt[i_subleading], _lEta[i_subleading]);
             tmp_weight *= sqrt(lsfreader_displ_m_SV->get_LSF(_lPt[i_subleading]*2, IVF_PVSVdist_2D));
         }
         tmp_weight *= highest_trackpt_weight;//displaced tracks scale factor (in src/signal_regions.cc)

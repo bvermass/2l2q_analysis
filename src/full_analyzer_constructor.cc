@@ -144,6 +144,16 @@ LSFReader* full_analyzer::get_LSFReader_displ(TString flavor, TString type_SF)
     return lsfreader;
 }
 
+void full_analyzer::set_json_displ_e_ID()
+{
+    std::string jsonfilename = (std::string)local_dir + "data/LeptonScaleFactors/displacedSF/displacedElectronConversions/";
+    if(_is2016) jsonfilename += "displ_2016.json";
+    if(_is2017) jsonfilename += "displ_2017.json";
+    if(_is2018) jsonfilename += "displ_2018.json";
+    std::ifstream jsonstr(jsonfilename);
+    json_displ_e_ID = json::parse(jsonstr);
+}
+
 PFNReader full_analyzer::get_PFNReader(int flavor)
 {
     unsigned highlevel_shape = 25;

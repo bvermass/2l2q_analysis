@@ -37,6 +37,8 @@
 #include "../helpertools/LorentzVector/LorentzVector.h"
 #include "../helpertools/PUWeightReader/PUWeightReader.h"
 #include "../helpertools/LSFReader/LSFReader.h"
+#include "../helpertools/JSON/json.hpp"
+using json = nlohmann::json;
 
 class full_analyzer {
 public :
@@ -978,6 +980,7 @@ public :
    
    //Scale Factor readers
    LSFReader *lsfreader_e_trig, *lsfreader_m_trig, *lsfreader_e_ID, *lsfreader_m_ID, *lsfreader_m_IDsys, *lsfreader_m_ISO, *lsfreader_displ_m_ID, *lsfreader_displ_m_SV;
+   json json_displ_e_ID;
    PUWeightReader *puweightreader;
 
    // functions
@@ -987,6 +990,7 @@ public :
    LSFReader* get_LSFReader(TString flavor, TString type_SF);
    LSFReader* get_LSFReader_old(TString flavor, TString type_SF);
    LSFReader* get_LSFReader_displ(TString flavor, TString type_SF);
+   void       set_json_displ_e_ID();
    PFNReader get_PFNReader(int flavor);
    PFNReader get_PFNReader_unparametrized(int flavor);
    PFNReader get_PFNReader_unparametrized_LowMass(int flavor);
@@ -1041,6 +1045,10 @@ public :
     double   get_xyz_distance(double x1, double y1, double z1, double x2, double y2, double z2);
     double   get_displEleSF(unsigned missinghits);
     double   get_displEleSF_unc(unsigned missinghits);
+    double   get_displEleSF(double ele_pt, double ele_dxy);
+    double   get_displEleSF_unc(double ele_pt, double ele_dxy);
+    double   get_displMuonSF(double muon_displ, double muon_pt);
+    double   get_displMuonSF_unc(double muon_displ, double muon_pt);
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i, const TString JetPt_Version);
