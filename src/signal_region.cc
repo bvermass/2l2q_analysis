@@ -198,7 +198,8 @@ void full_analyzer::signal_regions(){
                                   !_genOverlap;
 
      _l1l2                      = _l1 &&
-                                  i_subleading != -1;
+                                  i_subleading != -1 &&
+                                  ((_lFlavor[i_subleading] == 0 and _lPt[i_subleading] + 5 < _lPt[i_leading]) || (_lFlavor[i_subleading] == 1 and _lPt[i_subleading] < _lPt[i_leading]));
                                   //fabs(_dxy[i_subleading]) > 0.02;
 
      _l1l2SV                    = _l1l2 &&

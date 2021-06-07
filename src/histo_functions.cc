@@ -48,7 +48,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_l2_dz"]                           = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 30, 0, 2);
     (*hists)[prefix+"_l1_reliso"]                       = new TH1F(prefix+"_l1_reliso", ";l_{1} Rel Iso;Events", 30, 0, 0.05);
     (*hists)[prefix+"_l2_reliso"]                       = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 30, 0, 3.5);
-    (*hists)[prefix+"_l2_reliso_zoom"]                  = new TH1F(prefix+"_l2_reliso_zoom", ";l_{2} Rel Iso;Events", 30, 0, 0.5);
+    (*hists)[prefix+"_l2_reliso_zoom"]                  = new TH1F(prefix+"_l2_reliso_zoom", ";l_{2} Rel Iso;Events", 30, 0, 1.5);
     (*hists)[prefix+"_l1_ptrel"]                        = new TH1F(prefix+"_l1_ptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 30, 0, 40);
     (*hists)[prefix+"_l2_ptrel"]                        = new TH1F(prefix+"_l2_ptrel", ";l_{2} #it{p}_{T}^{rel} [GeV];Events", 30, 0, 10);
     (*hists)[prefix+"_l1_ptratio"]                      = new TH1F(prefix+"_l1_ptratio", ";l_{1} #it{p}_{T}^{ratio} [GeV];Events", 30, 0.75, 1);
@@ -75,12 +75,14 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     
     (*hists)[prefix+"_IVF_normchi2"]                    = new TH1F(prefix+"_IVF_normchi2", ";Normalized #Chi^{2} (IVF);Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_PV-SVdxy"]                    = new TH1F(prefix+"_IVF_PV-SVdxy", ";L_{xy} [cm];Events", 20, 0, 60);
+    (*hists)[prefix+"_IVF_PV-SVdxy_60b"]                = new TH1F(prefix+"_IVF_PV-SVdxy_60b", ";L_{xy} [cm];Events", 60, 0, 60);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom"]               = new TH1F(prefix+"_IVF_PV-SVdxy_zoom", ";L_{xy} [cm];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_PV-SVdxyz"]                   = new TH1F(prefix+"_IVF_PV-SVdxyz", ";L_{xyz} [cm];Events", 20, 0, 100);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom"]              = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_ntracks"]                     = new TH1F(prefix+"_IVF_ntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     (*hists)[prefix+"_IVF_mass"]                        = new TH1F(prefix+"_IVF_mass", ";SV Mass [GeV];Events", 30, 0, 10);
     (*hists)[prefix+"_IVF_l1mass"]                      = new TH1F(prefix+"_IVF_l1mass", ";l_{1}+SV Mass [GeV];Events", 30, 0, 140);
+    (*hists)[prefix+"_IVF_l1mass_14b"]                  = new TH1F(prefix+"_IVF_l1mass_14b", ";l_{1}+SV Mass [GeV];Events", 14, 0, 140);
     (*hists)[prefix+"_IVF_massminl2"]                   = new TH1F(prefix+"_IVF_massminl2", ";SV mass (without l_{2}) [GeV];Events", 20, 0, 20);
     (*hists)[prefix+"_IVF_massminl2_K0"]                = new TH1F(prefix+"_IVF_massminl2_K0", ";SV mass (without l_{2}) [GeV];Events", 20, 0.4, 0.6);
     (*hists)[prefix+"_IVF_costracks"]                   = new TH1F(prefix+"_IVF_costracks", ";cos(PV-SV, SV tracks);Events", 40, 0.9, 1.0);
@@ -489,12 +491,14 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 
     (*hists)[prefix+"_IVF_normchi2"]->Fill(_IVF_chi2[i_subleading]/_IVF_df[i_subleading], event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxy"]->Fill(IVF_PVSVdist_2D, event_weight);
+    (*hists)[prefix+"_IVF_PV-SVdxy_60b"]->Fill(IVF_PVSVdist_2D, event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxy_zoom"]->Fill(IVF_PVSVdist_2D, event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxyz"]->Fill(IVF_PVSVdist, event_weight);
     (*hists)[prefix+"_IVF_PV-SVdxyz_zoom"]->Fill(IVF_PVSVdist, event_weight);
     (*hists)[prefix+"_IVF_ntracks"]->Fill(_IVF_ntracks[i_subleading], event_weight);
     (*hists)[prefix+"_IVF_mass"]->Fill(SVmass, event_weight);
     (*hists)[prefix+"_IVF_l1mass"]->Fill(SVl1mass, event_weight);
+    (*hists)[prefix+"_IVF_l1mass_14b"]->Fill(SVl1mass, event_weight);
     (*hists)[prefix+"_IVF_massminl2"]->Fill(SVmassminl2, event_weight);
     (*hists)[prefix+"_IVF_massminl2_K0"]->Fill(SVmassminl2, event_weight);
     (*hists)[prefix+"_IVF_costracks"]->Fill(IVF_costracks, event_weight);
