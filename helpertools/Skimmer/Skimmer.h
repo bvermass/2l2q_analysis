@@ -1063,9 +1063,15 @@ class Skimmer {
         void Skim(TString skimcondition);
 
         //Skim conditions related stuff
-        void get_TightelectronID(bool* ID);
-        void get_TightmuonID(bool* ID);
-        void get_clean_ele(bool* cleaned, bool* muonID);
+        bool IsPromptMuonID(const unsigned i);
+        bool IsPromptElectronID(const unsigned i);
+        bool passMvaFall17NoIso_WP90(const unsigned i);
+        bool passMvaFall17Iso_WP90(const unsigned i);
+        int getEleMvaCategory(const unsigned i);
+        double convertMvaInRawMva(const double mva);
+        bool IsCleanElectron(const unsigned i, const std::vector<unsigned>& muoncollection);
+        int find_leading_lepton(const std::vector<unsigned>& leptoncollection);
+        int find_subleading_lepton(const std::vector<unsigned>& leptoncollection, const int index_leading);
         bool ElectronTriggerSkim();
         bool MuonTriggerSkim();
         bool dileptonSkim();

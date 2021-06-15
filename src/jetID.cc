@@ -7,7 +7,7 @@
 bool full_analyzer::IsTightJetID(const unsigned i)
 {
     if(fabs(_jetEta[i]) > 2.4)  return false;
-    if(_jetPt[i] < 20)          return false;
+    if(_jetPt[i] < 30)          return false;
     if(!_jetIsTightLepVeto[i])  return false;
 
     return true;

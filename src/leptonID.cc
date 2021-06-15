@@ -10,12 +10,11 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
 {
     if(_lFlavor[i] != 1)                            return false;
     if(fabs(_lEta[i]) >= 2.4)                       return false;
-    if(_lPt[i] <= 20)                               return false;
-    if(fabs(_dxy[i]) >= 0.05)                       return false;
-    if(fabs(_dz[i]) >= 0.1)                         return false;
-    if(_3dIPSig[i] >= 4)                            return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.045)                      return false;
+    if(fabs(_dz[i]) >= 0.2)                         return false;
     if(_relIso0p4MuDeltaBeta[i] >= 0.15)            return false;
-    if(!_lPOGTight[i])                              return false;
+    if(!_lPOGMedium[i])                             return false;
 
     return true;
 }
@@ -24,12 +23,12 @@ bool full_analyzer::IsPromptElectronID(const unsigned i)
 {
     if(_lFlavor[i] != 0)                            return false;
     if(fabs(_lEta[i]) >= 2.5)                       return false;
-    if(_lPt[i] <= 20)                               return false;
-    if(fabs(_dxy[i]) >= 0.05)                       return false;
-    if(fabs(_dz[i]) >= 0.1)                         return false;
-    if(_3dIPSig[i] >= 4)                            return false;
-    if(_relIso[i] >= 0.1)                           return false;
-    if(_lElectronNumberInnerHitsMissing[i] >= 2)    return false;
+    if(fabs(_lEta[i]) >= 1.4442 and fabs(_lEta[i]) <= 1.5660) return false;
+    if(_lPt[i] <= 10)                               return false;
+    if(fabs(_dxy[i]) >= 0.045)                      return false;
+    if(fabs(_dz[i]) >= 0.2)                         return false;
+    if(_relIso[i] >= 0.15)                          return false;
+    if(_lElectronNumberInnerHitsMissing[i] >= 1)    return false;
     if(!_lElectronPassConvVeto[i])                  return false;
     if(!_lPOGTight[i])                              return false;
 
