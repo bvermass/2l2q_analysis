@@ -194,14 +194,14 @@ bool full_analyzer::IsDisplacedElectronID(const unsigned i)  //basically medium 
     if(!( (_lElectronIsEB[i] &&
          _lElectronSigmaIetaIeta[i] <= 0.11 &&
          _lElectronDEtaInSeed[i] <= 0.00477 &&
-         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.222 &&
+         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.05 &&
          _lElectronHOverE[i] <= 0.298 &&
          _lElectronEInvMinusPInv[i] <= 0.241)
         ||
         (_lElectronIsEE[i] &&
          _lElectronSigmaIetaIeta[i] <= 0.0314 &&
          _lElectronDEtaInSeed[i] <= 0.00868 &&
-         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.213 &&
+         _lElectronDeltaPhiSuperClusterTrack[i] <= 0.1 &&
          _lElectronHOverE[i] <= 0.101 &&
          _lElectronEInvMinusPInv[i] <= 0.14)
     )) return false;
