@@ -42,6 +42,7 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
             PVSV_vec.setCartesianCoords(_IVF_x[i_subleading] - _PV_x, _IVF_y[i_subleading] - _PV_y, _IVF_z[i_subleading] - _PV_z, 0);
             i_subleading_track = 0;
             double mindR = 0.6;
+            double highest_trackpt = -1;
             if(_IVF_ntracks[i_subleading] > 1){
                 for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
                     LorentzVector tmptrack(_IVF_trackpt[i_subleading][i_track], _IVF_tracketa[i_subleading][i_track], _IVF_trackphi[i_subleading][i_track], _IVF_trackE[i_subleading][i_track]);
@@ -52,12 +53,9 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
                         mindR = deltaR(tmptrack, l2_vec);
                     }
                 }
-                double highest_trackpt = -1;
-                highest_trackpt_weight = 1.;
                 for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
                     if(i_subleading_track == i_track) continue;
                     if(_IVF_trackpt[i_subleading][i_track] > highest_trackpt){
-                        highest_trackpt_weight = sqrt(lsfreader_displ_m_SV->get_LSF(_IVF_trackpt[i_subleading][i_track]*2, IVF_PVSVdist_2D));
                         highest_trackpt = _IVF_trackpt[i_subleading][i_track];
                     }
                 }
@@ -71,6 +69,8 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
             IVF_costracks   = cosine3D(tracksum, PVSV_vec);
             IVF_PVSVdist_2D = get_xy_distance(_PV_x, _PV_y, _IVF_x[i_subleading], _IVF_y[i_subleading]);
             IVF_PVSVdist    = get_xyz_distance(_PV_x, _PV_y, _PV_z, _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
+            if(highest_trackpt != -1) highest_trackpt_weight = sqrt(lsfreader_displ_m_SV->get_LSF(highest_trackpt*2, IVF_PVSVdist_2D));
+            else highest_trackpt_weight = 1.;
             if(!isData){
                 IVF_SVgenreco   = get_xyz_distance(_gen_vertex_x[i_gen_l2], _gen_vertex_y[i_gen_l2], _gen_vertex_z[i_gen_l2], _IVF_x[i_subleading], _IVF_y[i_subleading], _IVF_z[i_subleading]);
             }

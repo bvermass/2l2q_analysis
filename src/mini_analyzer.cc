@@ -214,6 +214,7 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
     unsigned loop_counter = 0;
 
+    unsigned cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0, cnt5 = 0, cnt6 = 0, cnt7 = 0, cnt8 = 0;
     //main loop
     std::cout << "Running over " << j_begin << " - " << j_end-1 << " out of " << max_entries << " events from " << event.BkgEstimator_filename << std::endl;
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
@@ -228,16 +229,54 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         //set_signal_regions_gridscan();
         fill_histograms();
 
+        if( event._SV_l1mass > 10){
+            cnt1++;
+            if(event._nTightLep == 1){
+                cnt2++;
+                if(event._nTightJet <= 1){
+                    cnt3++;
+                    if(event._SV_l1mass > 50){
+                        cnt4++;
+                        if(event._SV_l1mass < 85){
+                            cnt5++;
+                            int i_MV2      = get_PFNevaluation_index(4, 1);
+                            double PFNcut  = get_NewPFNcut(4, event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
+                            if(event._JetTagVal[i_MV2] > PFNcut){
+                                cnt6++;
+                                avg_svmass += event._SV_mass;
+                                avg_lxy += event._SV_PVSVdist_2D;
+                                if(event._SV_mass < 2){
+                                    cnt7++;
+                                    if(event._SV_PVSVdist_2D < 4){
+                                        cnt8++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         ++loop_counter;
     }
+    std::cout << "selection counter values: " << std::endl;
+    std::cout << "counter 1: " << cnt1 << std::endl;
+    std::cout << "counter 2: " << cnt2 << std::endl;
+    std::cout << "counter 3: " << cnt3 << std::endl;
+    std::cout << "counter 4: " << cnt4 << std::endl;
+    std::cout << "counter 5: " << cnt5 << std::endl;
+    std::cout << "counter 6: " << cnt6 << std::endl;
+    std::cout << "counter 7: " << cnt7 << std::endl;
+    std::cout << "counter 8: " << cnt8 << std::endl;
     sum_quad_histograms();
 
     //Get the JEC variations for signal MC
-    std::map<TString, TH1*> hists_JEC;
-    if(isSignal){
-        hists_JEC = get_hists_JECvariations(event.BkgEstimator_filename);
-        set_correct_sysUp_sysDown(&hists_JEC, {"JEC_", "JER_"});
-    }
+    //std::map<TString, TH1*> hists_JEC;
+    //if(isSignal){
+    //    hists_JEC = get_hists_JECvariations(event.BkgEstimator_filename);
+    //    set_correct_sysUp_sysDown(&hists_JEC, {"JEC_", "JER_"});
+    //}
 
     TString outputfilename = get_mini_analyzer_outputfilename(event.BkgEstimator_filename);
     std::cout << "output to: " << outputfilename << std::endl;
@@ -264,11 +303,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         fix_overflow_and_negative_bins(h);
         h->Write(h->GetName(), TObject::kOverwrite);
     }
-    for(auto const& it : hists_JEC){
-        TH1* h = it.second;
-        fix_overflow_and_negative_bins(h);
-        h->Write(h->GetName(), TObject::kOverwrite);
-    }
+    //for(auto const& it : hists_JEC){
+    //    TH1* h = it.second;
+    //    fix_overflow_and_negative_bins(h);
+    //    h->Write(h->GetName(), TObject::kOverwrite);
+    //}
     
     TH1F* hadd_counter = new TH1F("hadd_counter", "nr. of files hadded together;;", 1, 0, 1);
     hadd_counter->Fill(0);
@@ -727,6 +766,13 @@ void mini_analyzer::set_signal_regions()
 
     if(event._lFlavor == 0) sr_flavor += "e";
     else if(event._lFlavor == 1) sr_flavor += "m";
+
+    if(event.BkgEstimator_filename.Contains("JECDown") or event.BkgEstimator_filename.Contains("JECUp") or event.BkgEstimator_filename.Contains("JERDown") or event.BkgEstimator_filename.Contains("JERUp")){
+        for(auto it = ABCDtags.begin(); it != ABCDtags.end(); ){
+            if(!(*it).Contains("_cutTightmlSV_quadA")) it = ABCDtags.erase(it);
+            else ++it;
+        }
+    }
 
 }
 

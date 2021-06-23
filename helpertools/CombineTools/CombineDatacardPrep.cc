@@ -1,8 +1,12 @@
 #include "CombineDatacardPrep.h"
 
+
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
+    setTDRStyle();
+    gROOT->ForceStyle();
+
     //Requirements for datacard to be made:
     // - Signal Yield > 0.1
     // - only histograms with correct flavor in their name, 'SS', '_M-', '_V2-', '_SR', '_IVF_mass'
@@ -14,6 +18,7 @@ int main(int argc, char * argv[])
     int i_legends = argc/2 + 1;
 
     std::vector<TFile*>  files_signal;
+    TFile*  files_signal_JECUp, *files_signal_JECDown, *files_signal_JERUp, *files_signal_JERDown;
     std::vector<TFile*>  files_bkg;
     std::vector<TFile*>  files_data;
     TString flavor, mass_str;
@@ -26,6 +31,22 @@ int main(int argc, char * argv[])
             mass_str = filename(filename.Index("_M-"), filename.Index("_V-") + 1 - filename.Index("_M-"));
             std::cout << "mass of signal: " << mass_str << std::endl;
             files_signal.push_back(TFile::Open(filename));
+
+            // Get JEC and JER histogram files
+            TString filename_JECDown = filename;
+            filename_JECDown.ReplaceAll("hists_mini_analyzer", "JECDown/hists_mini_analyzer_JECDown");
+            std::cout << "JECDown: " << filename_JECDown << std::endl;
+            files_signal_JECDown = TFile::Open(filename_JECDown);
+            TString filename_JECUp = filename;
+            filename_JECUp.ReplaceAll("hists_mini_analyzer", "JECUp/hists_mini_analyzer_JECUp");
+            std::cout << "JECUp: " << filename_JECUp << std::endl;
+            files_signal_JECUp = TFile::Open(filename_JECUp);
+            TString filename_JERDown = filename;
+            filename_JERDown.ReplaceAll("hists_mini_analyzer", "JERDown/hists_mini_analyzer_JERDown");
+            files_signal_JERDown = TFile::Open(filename_JERDown);
+            TString filename_JERUp = filename;
+            filename_JERUp.ReplaceAll("hists_mini_analyzer", "JERUp/hists_mini_analyzer_JERUp");
+            files_signal_JERUp = TFile::Open(filename_JERUp);
         }
         else if(i == (argc + 1)/2){
             std::cout << "obs: " << filename << std::endl;
@@ -49,21 +70,27 @@ int main(int argc, char * argv[])
         else{ std::cout << "bkg: " << legendname << std::endl; legends_bkg.push_back(legendname); }
     }
 
+
+
+
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
     std::string general_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
     std::string shapeSR_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
     std::string quadB_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
+    std::string sysEffect_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/SysEffects/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
     gSystem->Exec("mkdir -p " + (TString)quadB_pathname);
+    gSystem->Exec("mkdir -p " + (TString)sysEffect_pathname);
 
     // get year information for year-dependent systematics
     std::string year;
     if(specific_dir.Contains("2016")) year = "16";
     else if(specific_dir.Contains("2017")) year = "17";
     else if(specific_dir.Contains("2018")) year = "18";
+    else if(specific_dir.Contains("1718")) year = "1718";
 
     TString mass_bkg;
     if(mass_str.Contains("_M-1_") or mass_str.Contains("_M-2_") or mass_str.Contains("_M-3_") or mass_str.Contains("_M-4_") or mass_str.Contains("_M-5_")){
@@ -125,6 +152,7 @@ int main(int argc, char * argv[])
                 systDist.push_back("lnN");
                 if(year == "16" or year == "18") systUnc.push_back({1.025,0});
                 else if(year == "17") systUnc.push_back({1.023,0});
+                else if(year == "1718") systUnc.push_back({1.025,0});
 
                 systNames.push_back("xsecNorm");
                 systDist.push_back("lnN");
@@ -163,18 +191,39 @@ int main(int argc, char * argv[])
                     if(systUnc[i][0] != 0){//signal systs
                         TString histname_up = histname;
                         TString histname_down = histname;
-                        histname_up.ReplaceAll("Shape_SR", systNames[i] + "Up_Shape_SR");
-                        histname_down.ReplaceAll("Shape_SR", systNames[i] + "Down_Shape_SR");
-                        if(systNames[i].find("PileUp") != std::string::npos){
-                            systNames[i].replace(systNames[i].find("PileUp_"), systNames[i].find("sys"), "PileUp_"+year);
+
+                        if(systNames[i].find("JEC") != std::string::npos){
+                            std::cout << "systnames: " << systNames[i] << std::endl;
+                            std::cout << "histname: " << histname_up << std::endl;
+                            hists_signal_sys.push_back((TH1F*)files_signal_JECUp->Get(histname_up));
+                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
+                            hists_signal_sys.push_back((TH1F*)files_signal_JECDown->Get(histname_down));
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
+                            //set_UpAndDown_correctly(hist_signal, hists_signal_sys[hists_signal_sys.size()-2], hists_signal_sys.back());
+                        }else if(systNames[i].find("JER") != std::string::npos){
+                            std::cout << "systnames: " << systNames[i] << std::endl;
+                            std::cout << "histname: " << histname_up << std::endl;
+                            hists_signal_sys.push_back((TH1F*)files_signal_JERUp->Get(histname_up));
+                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
+                            hists_signal_sys.push_back((TH1F*)files_signal_JERDown->Get(histname_down));
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
+                            //set_UpAndDown_correctly(hist_signal, hists_signal_sys[hists_signal_sys.size()-2], hists_signal_sys.back());
+                        }else{
+                            histname_up.ReplaceAll("Shape_SR", systNames[i] + "Up_Shape_SR");
+                            histname_down.ReplaceAll("Shape_SR", systNames[i] + "Down_Shape_SR");
+                            if(systNames[i].find("PileUp") != std::string::npos){
+                                systNames[i].replace(systNames[i].find("PileUp_"), systNames[i].find("sys"), "PileUp_"+year);
+                            }
+                            std::cout << "systnames: " << systNames[i] << std::endl;
+                            std::cout << "histname: " << histname_up << std::endl;
+                            hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_up));
+                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
+                            hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_down));
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                         }
-                        std::cout << "systnames: " << systNames[i] << std::endl;
-                        std::cout << "histname: " << histname_up << std::endl;
-                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_up));
-                        std::cout << "address: " << hists_signal_sys.back() << std::endl;
-                        histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
-                        hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_down));
-                        histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                     }
                     if(systUnc[i][1] != 0){//data-driven prediction systs
                         tmp_bkg_sys.clear();
@@ -208,6 +257,8 @@ int main(int argc, char * argv[])
                 bool shapeCard = true;
                 std::string shapeFileName = shapeSR_pathname + (std::string)outputfilename + ".root";
                 makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg, hists_signal_sys, hists_bkg_sys, histnames_signal_sys, histnames_bkg_sys);
+                TString sysEffectFilename = sysEffect_pathname + outputfilename + ".png";
+                plotSysEffects(sysEffectFilename, hist_signal, hists_signal_sys, histnames_signal_sys);
 
 
                 //quadB yield stuff, for limit setting with gamma pdfs
@@ -272,6 +323,68 @@ void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_dat
     }
 
     shapeSR_file->Close();
+
+}
+
+void plotSysEffects(TString plotname, TH1F* hist_signal, std::vector<TH1F*> hist_signal_sys, const std::vector<std::string>& sigName_sys)
+{
+    bool is2016 = plotname.Contains("2016");
+    bool is2017 = plotname.Contains("2017") or plotname.Contains("1718");
+    bool is2018 = plotname.Contains("2018") or plotname.Contains("1718");
+    bool isRun2 = plotname.Contains("Run2");
+
+    TCanvas* c = new TCanvas("c","",700,700);
+    c->cd();
+
+    // Make the pad that will contain the plot
+    TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
+    pad->Clear();
+    pad->Draw();
+    pad->cd();
+
+    std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
+    std::vector<int> colors;
+    for(int i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
+    }
+
+    TLegend legend = TLegend(0.18, 0.84, 0.95, 0.93);
+    legend.SetNColumns(2);
+    legend.SetFillStyle(0);
+
+    // Get margins and make the CMS and lumi basic latex to print on top of the figure
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
+    Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad);
+
+    std::cout << "calculating relative systematic effects" << std::endl;
+    TMultiGraph* hists = new TMultiGraph();
+    int icount = 0;
+    for(unsigned i = 0; i < hist_signal_sys.size(); i++){
+        if(sigName_sys[i].find("JEC") == std::string::npos and sigName_sys[i].find("JER") == std::string::npos) continue;
+        TH1F* hist_rel = (TH1F*)hist_signal->Clone((TString)sigName_sys[i]);
+        TH1F* hist_rel_sys = (TH1F*)hist_signal_sys[i]->Clone((TString)sigName_sys[i] + "sys");
+        std::cout << "+ " << sigName_sys[i] << ": " << hist_rel << std::endl;
+        TGraphAsymmErrors* graph = new TGraphAsymmErrors(hist_rel_sys, hist_rel, "pois");
+        graph->SetLineColor(colors[icount]);
+        graph->SetMarkerColor(colors[icount]);
+        hists->Add(graph);
+        icount++;
+        TString legendname = sigName_sys[i];
+        legendname.ReplaceAll("HNL_", "");
+        legend.AddEntry(graph, legendname, "l");
+    }
+
+    hists->Draw("AP");
+    hists->SetMaximum(1.15);
+    hists->SetMinimum(0.9);
+    hists->GetXaxis()->SetRangeUser(0,12);
+    legend.Draw("same");
+    CMSandLumi->add_flavor(plotname);
+    CMSandLumi->Draw();
+    shapeSR_text->Draw(plotname);
+
+    pad->Modified();
+    c->Print(plotname);
 }
 
 
@@ -345,4 +458,18 @@ void printDataCard(const std::string& cardName, const double obsYield, const dou
     }
     
     card.close();       
+}
+
+
+void set_UpAndDown_correctly(TH1F* nominal, TH1F* up, TH1F* down)
+{
+    for(int i = 1; i <= nominal->GetNbinsX(); i++){
+        double bc_sysDown = down->GetBinContent(i);
+        double bc_sysUp = up->GetBinContent(i);
+        double bc_nominal = nominal->GetBinContent(i);
+        double bc_sysUp_max = std::max(std::max(bc_sysUp, bc_sysDown), bc_nominal);
+        double bc_sysDown_min = std::min(std::min(bc_sysUp, bc_sysDown), bc_nominal);
+        down->SetBinContent(i, bc_sysDown_min);
+        up->SetBinContent(i, bc_sysUp_max);
+    }
 }

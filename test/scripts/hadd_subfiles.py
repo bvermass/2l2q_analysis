@@ -66,6 +66,63 @@ def add_Dirac_cc( path, n_hadds):
         submit_script( script, scriptname )
         hadd_counter = 0
 
+def add_Signal_1718( path, n_hadds):
+    hadd_counter = 0
+    script_counter = 0
+    for filename in os.listdir(path):
+        if 'HeavyNeutrino_lljj' in filename and 'MiniAOD2017' in filename:
+            filename = os.path.join(path, filename)
+            filename_2018 = filename.replace('MiniAOD2017', 'MiniAOD2018')
+            filename_combined = filename.replace('MiniAOD2017', 'MiniAOD1718')
+
+            if hadd_counter == 0:
+                scriptname = 'haddscript_signal_1718_{}.sh'.format( script_counter )
+                print 'making next {}'.format( scriptname )
+                script = init_script( scriptname )
+                script_counter += 1
+
+            hadd_counter += 1
+            script.write('hadd -f {} {} {}\n'.format(filename_combined, filename, filename_2018))
+
+            if hadd_counter == n_hadds:
+                submit_script( script, scriptname )
+                hadd_counter = 0
+
+
+    #submit last job if we end on a number of subfiles smaller than n_hadds
+    if hadd_counter != 0:
+        submit_script( script, scriptname )
+        hadd_counter = 0
+
+def add_Signal_161718( path, n_hadds):
+    hadd_counter = 0
+    script_counter = 0
+    for filename in os.listdir(path):
+        if 'HeavyNeutrino_lljj' in filename and 'MiniAOD2016' in filename:
+            filename = os.path.join(path, filename)
+            filename_2017 = filename.replace('MiniAOD2016', 'MiniAOD2017')
+            filename_2018 = filename.replace('MiniAOD2016', 'MiniAOD2018')
+            filename_combined = filename.replace('MiniAOD2016', 'MiniAODRun2')
+
+            if hadd_counter == 0:
+                scriptname = 'haddscript_signal_161718_{}.sh'.format( script_counter )
+                print 'making next {}'.format( scriptname )
+                script = init_script( scriptname )
+                script_counter += 1
+
+            hadd_counter += 1
+            script.write('hadd -f {} {} {} {}\n'.format(filename_combined, filename, filename_2017, filename_2018))
+
+            if hadd_counter == n_hadds:
+                submit_script( script, scriptname )
+                hadd_counter = 0
+
+
+    #submit last job if we end on a number of subfiles smaller than n_hadds
+    if hadd_counter != 0:
+        submit_script( script, scriptname )
+        hadd_counter = 0
+
 
 
 
@@ -457,6 +514,41 @@ def merge_similar_samples( base_path ):
                         basename + 'SingleLepton_Run2018.root']
         if os.system(merge_files(basename + 'SingleLepton_Run2.root', Lepton_Run2_list)) != 0:
             all_good = False
+        WJets_012J_Run2_list = [basename + 'WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_MiniAOD2016.root',
+                        basename + 'WJets_012J_MiniAOD2017.root',
+                        basename + 'WJets_012J_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'WJets_012J_MiniAODRun2.root', WJets_012J_Run2_list)) != 0:
+            all_good = False
+        DYJets_Run2_list = [basename + 'DYJets_MiniAOD2016.root',
+                        basename + 'DYJets_MiniAOD2017.root',
+                        basename + 'DYJets_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'DYJets_MiniAODRun2.root', DYJets_Run2_list)) != 0:
+            all_good = False
+        Diboson_Run2_list = [basename + 'Diboson_MiniAOD2016.root',
+                        basename + 'Diboson_MiniAOD2017.root',
+                        basename + 'Diboson_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'Diboson_MiniAODRun2.root', Diboson_Run2_list)) != 0:
+            all_good = False
+        VG_Run2_list = [basename + 'VG_MiniAOD2016.root',
+                        basename + 'VG_MiniAOD2017.root',
+                        basename + 'VG_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'VG_MiniAODRun2.root', VG_Run2_list)) != 0:
+            all_good = False
+        QCD_bcToE_Run2_list = [basename + 'QCD_bcToE_MiniAOD2016.root',
+                        basename + 'QCD_bcToE_MiniAOD2017.root',
+                        basename + 'QCD_bcToE_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_bcToE_MiniAODRun2.root', QCD_bcToE_Run2_list)) != 0:
+            all_good = False
+        QCD_MuEnriched_Run2_list = [basename + 'QCD_MuEnriched_MiniAOD2016.root',
+                        basename + 'QCD_MuEnriched_MiniAOD2017.root',
+                        basename + 'QCD_MuEnriched_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_MuEnriched_MiniAODRun2.root', QCD_MuEnriched_Run2_list)) != 0:
+            all_good = False
+        QCD_EMEnriched_Run2_list = [basename + 'QCD_EMEnriched_MiniAOD2016.root',
+                        basename + 'QCD_EMEnriched_MiniAOD2017.root',
+                        basename + 'QCD_EMEnriched_MiniAOD2018.root']
+        if os.system(merge_files(basename + 'QCD_EMEnriched_MiniAODRun2.root', QCD_EMEnriched_Run2_list)) != 0:
+            all_good = False
         Top_Run2_list = [basename + 'Top_MiniAOD2016.root',
                         basename + 'Top_MiniAOD2017.root',
                         basename + 'Top_MiniAOD2018.root']
@@ -559,7 +651,9 @@ if hadd_counter != 0:
     hadd_counter = 0
 
 for base_path in base_paths:
-    add_Dirac_cc( base_path, n_hadds)
+    add_Signal_1718( base_path, n_hadds)
+    add_Signal_161718( base_path, n_hadds)
+    #add_Dirac_cc( base_path, n_hadds)
 
 os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
 

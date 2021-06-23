@@ -14,7 +14,8 @@ fi
 if [[ option -eq 2 || option -eq 0 ]]; then
     make -f test/make_mini_analyzer
     python test/submit_mini_analyzer.py test/sampleLists/mini_analyzer/mini_run2.txt 1
-    python test/submit_mini_analyzer.py test/sampleLists/mini_analyzer/HNL.txt 8
+    python test/submit_mini_analyzer.py test/sampleLists/mini_analyzer/HNL.txt 4
+    python test/submit_mini_analyzer.py test/sampleLists/mini_analyzer/HNL_JECJER.txt 4
     ./test/scripts/wait_until_jobs_are_finished.sh
 
     #cd helpertools/HistogramMerger/
