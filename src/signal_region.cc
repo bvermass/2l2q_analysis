@@ -300,7 +300,7 @@ bool full_analyzer::leadptcut(int i_lep){
     double ptcutval;
     if(_lFlavor[i_lep]      == 0 and _is2016) ptcutval = 30; //electron
     else if(_lFlavor[i_lep] == 0) ptcutval = 34;
-    else if(_lFlavor[i_lep] == 1) ptcutval = 25; //muon
+    else if(_lFlavor[i_lep] == 1) ptcutval = 28; //muon
     
     if(_lPt[i_lep] >= ptcutval) return true;
     else return false;
