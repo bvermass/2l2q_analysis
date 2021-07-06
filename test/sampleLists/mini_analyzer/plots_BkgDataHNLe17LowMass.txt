@@ -1,8 +1,10 @@
 mini_separateBkgWithData_ee_2017_split_LowMass 2
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Diboson_MiniAOD2017.root Diboson
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_VG_MiniAOD2017.root     V#gamma
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Top_MiniAOD2017.root     Top
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_DYJets_MiniAOD2017.root  DY
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_WJets_012J_MiniAOD2017.root W+Jets
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_QCD_bcToE_MiniAOD2017.root  QCD
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2017.root Data
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-3_V-combined_e_massiveAndCKM_LO_MiniAOD2017.root                 HNLx3GeVxV^{2}=z
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_HeavyNeutrino_lljj_M-5_V-combined_e_massiveAndCKM_LO_MiniAOD2017.root                HNLx5GeVxV^{2}=z

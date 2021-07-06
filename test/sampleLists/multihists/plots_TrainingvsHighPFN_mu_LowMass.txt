@@ -1,4 +1,4 @@
 Background_Run2_TrainingvsHighPFN_mu_LowMass 10
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-0.00992975326985_mu_massiveAndCKM_LO_MiniAODRun2.root   HNLx3GeVxV^{2}=1e^{-4}
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-3_V-combined_mu_massiveAndCKM_LO_MiniAODRun2.root   HNLx3GeVxV^{2}=3e^{-5}
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Background_MiniAODRun2.root Bkg:xAllxevents
 /user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_Background_MiniAODRun2.root Bkg:xPFNx>x0.9
