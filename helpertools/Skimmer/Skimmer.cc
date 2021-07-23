@@ -75,6 +75,9 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &i_Flag_HBHENoiseIsoFilter, &bi__Flag_HBHENoiseIsoFilter);
     tree->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &i_Flag_EcalDeadCellTriggerPrimitiveFilter, &bi__Flag_EcalDeadCellTriggerPrimitiveFilter);
     tree->SetBranchAddress("_Flag_BadPFMuonFilter", &i_Flag_BadPFMuonFilter, &bi__Flag_BadPFMuonFilter);
+    tree->SetBranchAddress("_Flag_BadPFMuonDzFilter", &i_Flag_BadPFMuonDzFilter, &bi__Flag_BadPFMuonDzFilter);
+    tree->SetBranchAddress("_Flag_eeBadScFilter", &i_Flag_eeBadScFilter, &bi__Flag_eeBadScFilter);
+    tree->SetBranchAddress("_Flag_hfNoisyHitsFilter", &i_Flag_hfNoisyHitsFilter, &bi__Flag_hfNoisyHitsFilter);
     tree->SetBranchAddress("_Flag_BadChargedCandidateFilter", &i_Flag_BadChargedCandidateFilter, &bi__Flag_BadChargedCandidateFilter);
     tree->SetBranchAddress("_Flag_globalSuperTightHalo2016Filter", &i_Flag_globalSuperTightHalo2016Filter, &bi__Flag_globalSuperTightHalo2016Filter);
     tree->SetBranchAddress("_updated_ecalBadCalibFilter", &i_updated_ecalBadCalibFilter, &bi__updated_ecalBadCalibFilter);
@@ -172,6 +175,11 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_lElectronPassConvVeto", i_lElectronPassConvVeto, &bi__lElectronPassConvVeto);
     tree->SetBranchAddress("_lElectronChargeConst", i_lElectronChargeConst, &bi__lElectronChargeConst);
     tree->SetBranchAddress("_lElectronMissingHits", i_lElectronMissingHits, &bi__lElectronMissingHits);
+    tree->SetBranchAddress("_lElectronPassMVAFall17NoIsoWP80", i_lElectronPassMVAFall17NoIsoWP80, &bi__lElectronPassMVAFall17NoIsoWP80);
+    tree->SetBranchAddress("_lElectronPassMVAFall17NoIsoWP90", i_lElectronPassMVAFall17NoIsoWP90, &bi__lElectronPassMVAFall17NoIsoWP90);
+    tree->SetBranchAddress("_lElectronPassMVAFall17NoIsoWPLoose", i_lElectronPassMVAFall17NoIsoWPLoose, &bi__lElectronPassMVAFall17NoIsoWPLoose);
+    tree->SetBranchAddress("_lElectronPassMVAFall17IsoWP80", i_lElectronPassMVAFall17IsoWP80, &bi__lElectronPassMVAFall17IsoWP80);
+    tree->SetBranchAddress("_lElectronPassMVAFall17IsoWP90", i_lElectronPassMVAFall17IsoWP90, &bi__lElectronPassMVAFall17IsoWP90);
     tree->SetBranchAddress("_lElectronIsEB", i_lElectronIsEB, &bi__lElectronIsEB);
     tree->SetBranchAddress("_lElectronIsEE", i_lElectronIsEE, &bi__lElectronIsEE);
     tree->SetBranchAddress("_lElectronSuperClusterOverP", i_lElectronSuperClusterOverP, &bi__lElectronSuperClusterOverP);
@@ -426,6 +434,9 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_Flag_HBHENoiseIsoFilter", &o_Flag_HBHENoiseIsoFilter, "_Flag_HBHENoiseIsoFilter/O");
     tree->Branch("_Flag_EcalDeadCellTriggerPrimitiveFilter", &o_Flag_EcalDeadCellTriggerPrimitiveFilter, "_Flag_EcalDeadCellTriggerPrimitiveFilter/O");
     tree->Branch("_Flag_BadPFMuonFilter", &o_Flag_BadPFMuonFilter, "_Flag_BadPFMuonFilter/O");
+    tree->Branch("_Flag_BadPFMuonDzFilter", &o_Flag_BadPFMuonDzFilter, "_Flag_BadPFMuonDzFilter/O");
+    tree->Branch("_Flag_eeBadScFilter", &o_Flag_eeBadScFilter, "_Flag_eeBadScFilter/O");
+    tree->Branch("_Flag_hfNoisyHitsFilter", &o_Flag_hfNoisyHitsFilter, "_Flag_hfNoisyHitsFilter/O");
     tree->Branch("_Flag_BadChargedCandidateFilter", &o_Flag_BadChargedCandidateFilter, "_Flag_BadChargedCandidateFilter/O");
     tree->Branch("_Flag_globalSuperTightHalo2016Filter", &o_Flag_globalSuperTightHalo2016Filter, "_Flag_globalSuperTightHalo2016Filter/O");
     tree->Branch("_updated_ecalBadCalibFilter", &o_updated_ecalBadCalibFilter, "_updated_ecalBadCalibFilter/O");
@@ -524,6 +535,11 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch("_lElectronPassConvVeto",              &o_lElectronPassConvVeto,                "_lElectronPassConvVeto[_nLight]/O");
     tree->Branch("_lElectronChargeConst",               &o_lElectronChargeConst,                 "_lElectronChargeConst[_nLight]/O");
     tree->Branch("_lElectronMissingHits",               &o_lElectronMissingHits,                 "_lElectronMissingHits[_nLight]/i");
+    tree->Branch("_lElectronPassMVAFall17NoIsoWP80",               &o_lElectronPassMVAFall17NoIsoWP80,                 "_lElectronPassMVAFall17NoIsoWP80[_nLight]/i");
+    tree->Branch("_lElectronPassMVAFall17NoIsoWP90",               &o_lElectronPassMVAFall17NoIsoWP90,                 "_lElectronPassMVAFall17NoIsoWP90[_nLight]/i");
+    tree->Branch("_lElectronPassMVAFall17NoIsoWPLoose",               &o_lElectronPassMVAFall17NoIsoWPLoose,                 "_lElectronPassMVAFall17NoIsoWPLoose[_nLight]/i");
+    tree->Branch("_lElectronPassMVAFall17IsoWP80",               &o_lElectronPassMVAFall17IsoWP80,                 "_lElectronPassMVAFall17IsoWP80[_nLight]/i");
+    tree->Branch("_lElectronPassMVAFall17IsoWP90",               &o_lElectronPassMVAFall17IsoWP90,                 "_lElectronPassMVAFall17IsoWP90[_nLight]/i");
     tree->Branch("_lElectronIsEB",                      &o_lElectronIsEB,                        "_lElectronIsEB[_nLight]/O");
     tree->Branch("_lElectronIsEE",                      &o_lElectronIsEE,                        "_lElectronIsEE[_nLight]/O");
     tree->Branch("_lElectronSuperClusterOverP",         &o_lElectronSuperClusterOverP,           "_lElectronSuperClusterOverP[_nLight]/D");
@@ -852,6 +868,9 @@ void Skimmer::Skim(TString skimcondition)
             o_Flag_HBHENoiseIsoFilter = i_Flag_HBHENoiseIsoFilter;
             o_Flag_EcalDeadCellTriggerPrimitiveFilter = i_Flag_EcalDeadCellTriggerPrimitiveFilter;
             o_Flag_BadPFMuonFilter = i_Flag_BadPFMuonFilter;
+            o_Flag_BadPFMuonDzFilter = i_Flag_BadPFMuonDzFilter;
+            o_Flag_eeBadScFilter = i_Flag_eeBadScFilter;
+            o_Flag_hfNoisyHitsFilter = i_Flag_hfNoisyHitsFilter;
             o_Flag_BadChargedCandidateFilter = i_Flag_BadChargedCandidateFilter;
             o_Flag_globalSuperTightHalo2016Filter = i_Flag_globalSuperTightHalo2016Filter;
             o_updated_ecalBadCalibFilter = i_updated_ecalBadCalibFilter;
@@ -892,10 +911,6 @@ void Skimmer::Skim(TString skimcondition)
                 o_dz[i] = i_dz[i];   
                 o_3dIP[i] = i_3dIP[i];   
                 o_3dIPSig[i] = i_3dIPSig[i];   
-                o_lElectronPassEmu[i] = i_lElectronPassEmu[i];
-                o_lElectronPassConvVeto[i] = i_lElectronPassConvVeto[i];
-                o_lElectronChargeConst[i] = i_lElectronChargeConst[i];   
-                o_lElectronMissingHits[i] = i_lElectronMissingHits[i];
                 o_lPOGVeto[i] = i_lPOGVeto[i];   
                 o_lPOGLoose[i] = i_lPOGLoose[i];   
                 o_lPOGMedium[i] = i_lPOGMedium[i];   
@@ -937,6 +952,11 @@ void Skimmer::Skim(TString skimcondition)
                 o_lElectronPassConvVeto[i] = i_lElectronPassConvVeto[i];   
                 o_lElectronChargeConst[i] = i_lElectronChargeConst[i];   
                 o_lElectronMissingHits[i] = i_lElectronMissingHits[i];   
+                o_lElectronPassMVAFall17NoIsoWP80[i] = i_lElectronPassMVAFall17NoIsoWP80[i];
+                o_lElectronPassMVAFall17NoIsoWP90[i] = i_lElectronPassMVAFall17NoIsoWP90[i];
+                o_lElectronPassMVAFall17NoIsoWPLoose[i] = i_lElectronPassMVAFall17NoIsoWPLoose[i];
+                o_lElectronPassMVAFall17IsoWP80[i] = i_lElectronPassMVAFall17IsoWP80[i];
+                o_lElectronPassMVAFall17IsoWP90[i] = i_lElectronPassMVAFall17IsoWP90[i];
                 o_lElectronIsEB[i] = i_lElectronIsEB[i];
                 o_lElectronIsEE[i] = i_lElectronIsEE[i];
                 o_lElectronSuperClusterOverP[i] = i_lElectronSuperClusterOverP[i];

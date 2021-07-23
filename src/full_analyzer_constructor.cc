@@ -9,6 +9,7 @@ void full_analyzer::SetSampleTypes(TString filename)
     isData       = filename.Contains("Run201");
     isBackground = (!isSignal and !isData);
     isUL         = filename.Contains("_UL");
+    isHIPM       = filename.Contains("_HIPM_");
 
     std::cout << "This is " << (isUL? "UL " : "") << (isData? "Data" : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << std::endl;
 }
@@ -29,6 +30,18 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor, TStrin
         }
         else if(_is2018 and isUL){
             filename_LSF += "UL18_ElectronTight.root";
+            histname_LSF =  "EGamma_SF2D";
+            pt_eta_conf  =  "eta_pt";
+            pt_max       = 500;
+        }
+        else if(_is2016 and isUL and isHIPM){
+            filename_LSF += "UL16_preVFP_ElectronMVAWP90Iso.root";
+            histname_LSF =  "EGamma_SF2D";
+            pt_eta_conf  =  "eta_pt";
+            pt_max       = 500;
+        }
+        else if(_is2016 and isUL and !isHIPM){
+            filename_LSF += "UL16_postVFP_ElectronMVAWP90Iso.root";
             histname_LSF =  "EGamma_SF2D";
             pt_eta_conf  =  "eta_pt";
             pt_max       = 500;
@@ -61,6 +74,32 @@ LSFReader full_analyzer::get_LSFReader(TString local_dir, TString flavor, TStrin
                 pt_max       =  120;
             }else if(type_SF == "ISO"){
                 filename_LSF += "RunABCD_UL18_SF_ISO.root";
+                histname_LSF =  "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }
+        }
+        else if(_is2016 and isUL and isHIPM){
+            if(type_SF == "ID"){
+                filename_LSF += "Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root";
+                histname_LSF =  "NUM_TightID_DEN_TrackerMuons_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }else if(type_SF == "ISO"){
+                filename_LSF += "Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO.root";
+                histname_LSF =  "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }
+        }
+        else if(_is2016 and isUL and !isHIPM){
+            if(type_SF == "ID"){
+                filename_LSF += "Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root";
+                histname_LSF =  "NUM_TightID_DEN_TrackerMuons_abseta_pt";
+                pt_eta_conf  =  "abseta_pt";
+                pt_max       =  120;
+            }else if(type_SF == "ISO"){
+                filename_LSF += "Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root";
                 histname_LSF =  "NUM_TightRelIso_DEN_TightIDandIPCut_abseta_pt";
                 pt_eta_conf  =  "abseta_pt";
                 pt_max       =  120;
@@ -245,6 +284,9 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_Flag_HBHENoiseIsoFilter", &_Flag_HBHENoiseIsoFilter, &b__Flag_HBHENoiseIsoFilter);
    fChain->SetBranchAddress("_Flag_EcalDeadCellTriggerPrimitiveFilter", &_Flag_EcalDeadCellTriggerPrimitiveFilter, &b__Flag_EcalDeadCellTriggerPrimitiveFilter);
    fChain->SetBranchAddress("_Flag_BadPFMuonFilter", &_Flag_BadPFMuonFilter, &b__Flag_BadPFMuonFilter);
+   fChain->SetBranchAddress("_Flag_BadPFMuonDzFilter", &_Flag_BadPFMuonDzFilter, &b__Flag_BadPFMuonDzFilter);
+   fChain->SetBranchAddress("_Flag_eeBadScFilter", &_Flag_eeBadScFilter, &b__Flag_eeBadScFilter);
+   fChain->SetBranchAddress("_Flag_hfNoisyHitsFilter", &_Flag_hfNoisyHitsFilter, &b__Flag_hfNoisyHitsFilter);
    fChain->SetBranchAddress("_Flag_BadChargedCandidateFilter", &_Flag_BadChargedCandidateFilter, &b__Flag_BadChargedCandidateFilter);
    fChain->SetBranchAddress("_Flag_globalSuperTightHalo2016Filter", &_Flag_globalSuperTightHalo2016Filter, &b__Flag_globalSuperTightHalo2016Filter);
    fChain->SetBranchAddress("_updated_ecalBadCalibFilter", &_updated_ecalBadCalibFilter, &b__updated_ecalBadCalibFilter);
@@ -291,6 +333,11 @@ void full_analyzer::Init(TTree *tree)
    fChain->SetBranchAddress("_lElectronPassConvVeto", _lElectronPassConvVeto, &b__lElectronPassConvVeto);
    fChain->SetBranchAddress("_lElectronChargeConst", _lElectronChargeConst, &b__lElectronChargeConst);
    fChain->SetBranchAddress("_lElectronMissingHits", _lElectronMissingHits, &b__lElectronMissingHits);
+   fChain->SetBranchAddress("_lElectronPassMVAFall17NoIsoWP80", _lElectronPassMVAFall17NoIsoWP80, &b__lElectronPassMVAFall17NoIsoWP80);
+   fChain->SetBranchAddress("_lElectronPassMVAFall17NoIsoWP90", _lElectronPassMVAFall17NoIsoWP90, &b__lElectronPassMVAFall17NoIsoWP90);
+   fChain->SetBranchAddress("_lElectronPassMVAFall17NoIsoWPLoose", _lElectronPassMVAFall17NoIsoWPLoose, &b__lElectronPassMVAFall17NoIsoWPLoose);
+   fChain->SetBranchAddress("_lElectronPassMVAFall17IsoWP80", _lElectronPassMVAFall17IsoWP80, &b__lElectronPassMVAFall17IsoWP80);
+   fChain->SetBranchAddress("_lElectronPassMVAFall17IsoWP90", _lElectronPassMVAFall17IsoWP90, &b__lElectronPassMVAFall17IsoWP90);
    fChain->SetBranchAddress("_lElectronIsEB", _lElectronIsEB, &b__lElectronIsEB);
    fChain->SetBranchAddress("_lElectronIsEE", _lElectronIsEE, &b__lElectronIsEE);
    fChain->SetBranchAddress("_lElectronSuperClusterOverP", _lElectronSuperClusterOverP, &b__lElectronSuperClusterOverP);

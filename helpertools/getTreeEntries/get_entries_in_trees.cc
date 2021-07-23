@@ -21,7 +21,8 @@ int main(int argc, char * argv[])
     TString file = (TString) argv[1];
     TString treename = "blackJackAndHookers/blackJackAndHookersTree";
     Long64_t entries = get_nentries_from_file(file, treename);
-    std::cout << 1000*floor(0.001*entries) << " entries in " << file << "(" << entries << ")" << std::endl;
+    Long64_t partition = entries / 600000;
+    std::cout << file << " 1 -1 " << partition << std::endl;
     return 0;
 }
 #endif

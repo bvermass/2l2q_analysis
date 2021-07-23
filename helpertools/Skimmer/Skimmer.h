@@ -92,6 +92,9 @@ class Skimmer {
         Bool_t          i_Flag_HBHENoiseIsoFilter;
         Bool_t          i_Flag_EcalDeadCellTriggerPrimitiveFilter;
         Bool_t          i_Flag_BadPFMuonFilter;
+        Bool_t          i_Flag_BadPFMuonDzFilter;
+        Bool_t          i_Flag_eeBadScFilter;
+        Bool_t          i_Flag_hfNoisyHitsFilter;
         Bool_t          i_Flag_BadChargedCandidateFilter;
         Bool_t          i_Flag_globalSuperTightHalo2016Filter;
         Bool_t          i_updated_ecalBadCalibFilter;
@@ -189,6 +192,11 @@ class Skimmer {
         Bool_t          i_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          i_lElectronChargeConst[10];   //[_nLight]
         unsigned        i_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          i_lElectronPassMVAFall17NoIsoWP80[10];
+        Bool_t          i_lElectronPassMVAFall17NoIsoWP90[10];
+        Bool_t          i_lElectronPassMVAFall17NoIsoWPLoose[10];
+        Bool_t          i_lElectronPassMVAFall17IsoWP80[10];
+        Bool_t          i_lElectronPassMVAFall17IsoWP90[10];
         Bool_t          i_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
         Bool_t          i_lElectronIsEE[10];
         Double_t        i_lElectronSuperClusterOverP[10];
@@ -441,6 +449,9 @@ class Skimmer {
         Bool_t          o_Flag_HBHENoiseIsoFilter;
         Bool_t          o_Flag_EcalDeadCellTriggerPrimitiveFilter;
         Bool_t          o_Flag_BadPFMuonFilter;
+        Bool_t          o_Flag_BadPFMuonDzFilter;
+        Bool_t          o_Flag_eeBadScFilter;
+        Bool_t          o_Flag_hfNoisyHitsFilter;
         Bool_t          o_Flag_BadChargedCandidateFilter;
         Bool_t          o_Flag_globalSuperTightHalo2016Filter;
         Bool_t          o_updated_ecalBadCalibFilter;
@@ -538,6 +549,11 @@ class Skimmer {
         Bool_t          o_lElectronPassConvVeto[10];   //[_nLight]
         Bool_t          o_lElectronChargeConst[10];   //[_nLight]
         unsigned        o_lElectronMissingHits[10];   //[_nLight]
+        Bool_t          o_lElectronPassMVAFall17NoIsoWP80[10];
+        Bool_t          o_lElectronPassMVAFall17NoIsoWP90[10];
+        Bool_t          o_lElectronPassMVAFall17NoIsoWPLoose[10];
+        Bool_t          o_lElectronPassMVAFall17IsoWP80[10];
+        Bool_t          o_lElectronPassMVAFall17IsoWP90[10];
         Bool_t          o_lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
         Bool_t          o_lElectronIsEE[10];
         Double_t        o_lElectronSuperClusterOverP[10];
@@ -787,6 +803,9 @@ class Skimmer {
         TBranch        *bi__Flag_HBHENoiseIsoFilter;   //!
         TBranch        *bi__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
         TBranch        *bi__Flag_BadPFMuonFilter;   //!
+        TBranch        *bi__Flag_BadPFMuonDzFilter;   //!
+        TBranch        *bi__Flag_eeBadScFilter;   //!
+        TBranch        *bi__Flag_hfNoisyHitsFilter;   //!
         TBranch        *bi__Flag_BadChargedCandidateFilter;   //!
         TBranch        *bi__Flag_globalSuperTightHalo2016Filter;   //!
         TBranch        *bi__updated_ecalBadCalibFilter;
@@ -884,6 +903,11 @@ class Skimmer {
         TBranch        *bi__lElectronPassConvVeto;   //!
         TBranch        *bi__lElectronChargeConst;   //!
         TBranch        *bi__lElectronMissingHits;   //!
+        TBranch        *bi__lElectronPassMVAFall17NoIsoWP80;
+        TBranch        *bi__lElectronPassMVAFall17NoIsoWP90;
+        TBranch        *bi__lElectronPassMVAFall17NoIsoWPLoose;
+        TBranch        *bi__lElectronPassMVAFall17IsoWP80;
+        TBranch        *bi__lElectronPassMVAFall17IsoWP90;
         TBranch        *bi__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
         TBranch        *bi__lElectronIsEE;
         TBranch        *bi__lElectronSuperClusterOverP;

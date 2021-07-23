@@ -140,6 +140,9 @@ public :
    Bool_t          _Flag_HBHENoiseIsoFilter;
    Bool_t          _Flag_EcalDeadCellTriggerPrimitiveFilter;
    Bool_t          _Flag_BadPFMuonFilter;
+   Bool_t          _Flag_BadPFMuonDzFilter;
+   Bool_t          _Flag_eeBadScFilter;
+   Bool_t          _Flag_hfNoisyHitsFilter;
    Bool_t          _Flag_BadChargedCandidateFilter;
    Bool_t          _Flag_globalSuperTightHalo2016Filter;
    Bool_t          _updated_ecalBadCalibFilter;
@@ -186,6 +189,11 @@ public :
    Bool_t          _lElectronPassConvVeto[10];   //[_nLight]
    Bool_t          _lElectronChargeConst[10];   //[_nLight]
    unsigned        _lElectronMissingHits[10];   //[_nLight]
+   Bool_t          _lElectronPassMVAFall17NoIsoWP80[10];
+   Bool_t          _lElectronPassMVAFall17NoIsoWP90[10];
+   Bool_t          _lElectronPassMVAFall17NoIsoWPLoose[10];
+   Bool_t          _lElectronPassMVAFall17IsoWP80[10];
+   Bool_t          _lElectronPassMVAFall17IsoWP90[10];
    Bool_t          _lElectronIsEB[10];                                                                         //electron specific variables for displaced electron ID
    Bool_t          _lElectronIsEE[10];
    Double_t        _lElectronSuperClusterOverP[10];
@@ -474,6 +482,9 @@ public :
    TBranch        *b__Flag_HBHENoiseIsoFilter;   //!
    TBranch        *b__Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
    TBranch        *b__Flag_BadPFMuonFilter;   //!
+   TBranch        *b__Flag_BadPFMuonDzFilter;   //!
+   TBranch        *b__Flag_eeBadScFilter;   //!
+   TBranch        *b__Flag_hfNoisyHitsFilter;   //!
    TBranch        *b__Flag_BadChargedCandidateFilter;   //!
    TBranch        *b__Flag_globalSuperTightHalo2016Filter;   //!
    TBranch        *b__updated_ecalBadCalibFilter;
@@ -520,6 +531,11 @@ public :
    TBranch        *b__lElectronPassConvVeto;   //!
    TBranch        *b__lElectronChargeConst;   //!
    TBranch        *b__lElectronMissingHits;   //!
+   TBranch        *b__lElectronPassMVAFall17NoIsoWP80;
+   TBranch        *b__lElectronPassMVAFall17NoIsoWP90;
+   TBranch        *b__lElectronPassMVAFall17NoIsoWPLoose;
+   TBranch        *b__lElectronPassMVAFall17IsoWP80;
+   TBranch        *b__lElectronPassMVAFall17IsoWP90;
    TBranch        *b__lElectronIsEB;                                                                         //electron specific variables for displaced electron ID
    TBranch        *b__lElectronIsEE;
    TBranch        *b__lElectronSuperClusterOverP;
@@ -714,7 +730,7 @@ public :
    TBranch        *b__metPuppiPhiResUp;
    
    Double_t ev_weight;
-   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false;
+   bool isSignal = false, isBackground = false, isData = false, _is2016 = false, isUL = false, isHIPM = false;
    bool extensive_plots = false;
    std::map<double, double> reweighting_weights;//<V2, weight>
    std::vector<int> evaluating_masses = {2, 3, 4, 5, 6, 8, 10, 15};
