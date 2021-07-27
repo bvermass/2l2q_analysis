@@ -212,6 +212,7 @@ int main(int argc, char * argv[])
                 //    sample_hist->Add(hist_quadC);
                 //    sample_hist->Add(hist_quadD);
                 //}
+                if(histname.Contains("residual")) sample_hist->Scale(1./sample_hist->Integral());
                 sample_hist->Draw(get_2D_draw_options(sample_hist));
                 //sample_hist->GetYaxis()->SetRangeUser(-0.2, 0.2);
                 if(histname.Contains("residual")){

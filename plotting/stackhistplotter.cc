@@ -122,6 +122,13 @@ int main(int argc, char * argv[])
     int counter_begin = floor(1.0 * partitionjobnumber / partition * files_bkg.back()->GetNkeys());
     int counter_end   = floor(1.0 * (partitionjobnumber + 1) / partition * files_bkg.back()->GetNkeys());
 
+    double KshortSF = 1.;
+    if(withdata){
+        if(files_data.front()->Get("_mm_Kshort_V0Mass") and files_bkg.front()->Get("_mm_Kshort_V0Mass")){
+            KshortSF = ((TH1F*)files_data.front()->Get("_mm_Kshort_V0Mass"))->Integral() / ((TH1F*)files_bkg.front()->Get("_mm_Kshort_V0Mass"))->Integral();
+        }
+    }
+
     TList *keylist;
     if(withdata) keylist = files_data.front()->GetListOfKeys();
     else keylist = files_bkg.back()->GetListOfKeys();
@@ -144,7 +151,7 @@ int main(int argc, char * argv[])
                 TString xaxistitle = sample_hist_ref->GetXaxis()->GetTitle();
                 TString yaxistitle = sample_hist_ref->GetYaxis()->GetTitle();
                 
-                if(histname.Index("_sys") != -1 or histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
+                if(histname.Index("_sys") != -1 or histname.Index("_ABCDstat") != -1 or histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
                 if(!check_identifiers(histname, identifiers)) continue;
                 std::cout << histname << std::endl;
@@ -159,7 +166,7 @@ int main(int argc, char * argv[])
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2")) continue; // Only print Control region plots for data or Training region with high background
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
                     legend.AddEntry(data_hist, legends_data[0], "pl");
@@ -172,16 +179,16 @@ int main(int argc, char * argv[])
                 THStack* hists_bkg = new THStack("stack_bkg", ";"  + ((withdata)? "" : xaxistitle) + ";" + yaxistitle);
                 for(int i = 0; i < files_bkg.size(); i++){
                     TH1* hist = (TH1*)files_bkg[i]->Get(histname_bkg);
-                    if(hist->GetMaximum() > 0){
-                        int color; 
-                        if(legends_bkg[i].Contains("Pred")) color = color_Pred;
-                        else color = get_color(legends_bkg[i]);
-                        hist->SetFillStyle(1001);
-                        hist->SetFillColor(color);
-                        hist->SetLineColor(color);
-                        hists_bkg->Add(hist);
-                        legend.AddEntry(hist, legends_bkg[i], "f");
-                    }
+                    if(hist == 0 or hist->GetMaximum() <= 0) continue;
+                    int color;
+                    if(legends_bkg[i].Contains("Pred") or histname_bkg.Contains("Kshort")) color = color_Pred;
+                    else color = get_color(legends_bkg[i]);
+                    if(histname_bkg.Contains("Kshort") and !histname_bkg.Contains("_mll")) hist->Scale(KshortSF);
+                    hist->SetFillStyle(1001);
+                    hist->SetFillColor(color);
+                    hist->SetLineColor(color);
+                    hists_bkg->Add(hist);
+                    legend.AddEntry(hist, legends_bkg[i], "f");
                 }
                 if(hists_bkg->GetMaximum() <= 0) continue;
                 
@@ -196,7 +203,7 @@ int main(int argc, char * argv[])
                         if(hist->GetMaximum() > 0){
                             //int color = get_color(legends_signal[i]);
                             hist->SetLineColor(colors_signal[i]);
-                            hist->SetLineStyle(linestyle_signal[i]);
+                            //hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
                             if(histname.Contains("_cutflow2")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(1)/hist->GetBinContent(1));
                             else if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
@@ -224,10 +231,10 @@ int main(int argc, char * argv[])
                 // set ratio of data/MC
                 if(withdata){
                     ratioplotter.ClearSystUncs();
-                    ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "Obs/Pred");
-                    ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "stat. unc.");
+                    ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "Obs./pred.");
+                    ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "Stat. unc.");
                     if(histname.Contains("Shape")) ratioplotter.SetConstantFit();
-                    //ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"JEC", "Res", "Uncl"}, {"JEC", "JER", "Uncl."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
+                    if(histname.Contains("TightmlSV_quadA_Shape") and !histname.Contains("CR")) ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"_ABCDstat"}, {"Syst. unc."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
                 }
 
                 // get plot specific pathnames

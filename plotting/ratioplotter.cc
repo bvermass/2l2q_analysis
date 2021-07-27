@@ -12,11 +12,11 @@ RatioPlot::RatioPlot(TPad* pad):
     Pad->Draw();
     Pad->cd();
     
-    Central_Ratio->GetXaxis()->SetLabelSize(0.09);
+    Central_Ratio->GetXaxis()->SetLabelSize(0.11);
     Central_Ratio->GetYaxis()->SetLabelSize(0.09);
     Central_Ratio->GetXaxis()->SetTitleSize(0.09);
     Central_Ratio->GetYaxis()->SetTitleSize(0.09);
-    Central_Ratio->GetYaxis()->SetTitleOffset(0.7);
+    Central_Ratio->GetYaxis()->SetTitleOffset(0.3);
     Central_Ratio->SetMinimum(0);
     Central_Ratio->SetMaximum(2);
     
@@ -73,7 +73,6 @@ void RatioPlot::SetConstantFit()
 std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central)
 {
     THStack* MC_varied = new THStack("MC_varied", ";;Events");
-    varied_exists = false;
     for(int i = 0; i < files_bkg.size(); i++){
         TH1F* varied_hist = (TH1F*) files_bkg[i]->Get(variation_name);
         if(varied_hist){
@@ -83,7 +82,7 @@ std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector
     }
 
     std::vector<double> variations;
-    if(varied_exists){
+    if(varied_exists and MC_varied->GetNhists() > 0){
         for(int i = 1; i <= MC_central->GetNbinsX(); i++){
             TH1F* fullstack = (TH1F*)MC_varied->GetStack()->Last();
             variations.push_back((fullstack->GetBinContent(i) - MC_central->GetBinContent(i)) / MC_central->GetBinContent(i));

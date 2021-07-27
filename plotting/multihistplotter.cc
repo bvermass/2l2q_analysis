@@ -112,7 +112,11 @@ int main(int argc, char * argv[])
                 for(int i = 0; i < files.size(); i++){
                     if(files[i]->GetListOfKeys()->Contains(histname)){
                         TString histname_to_use = histname;
-                        if(histname.Contains("_Training_") and legends[i].Contains("PFN > 0.9")){
+                        if(histname.Contains("_Training_") and legends[i].Contains("Low Mass PFN > 0.9")){
+                                histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-5_");
+                                plotname_addition = "_vsLowMassPFN";
+                        }else if(histname.Contains("_Training_") and legends[i].Contains("High Mass PFN > 0.9")) histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-10_");
+                        else if(histname.Contains("_Training_") and legends[i].Contains("PFN > 0.9")){
                             if(specific_dir.Contains("LowMass")){
                                 histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-5_");
                                 plotname_addition = "_vsLowMassPFN";
@@ -120,9 +124,12 @@ int main(int argc, char * argv[])
                                 histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-10_");
                                 plotname_addition = "_vsHighMassPFN";
                             }
+                        }else if(histname.Contains("cutoutsidemlSV_CR2Jets") and legends[i].Contains("mlSV = [50,85]")){
+                            histname_to_use.ReplaceAll("cutoutsidemlSV_CR2Jets", "cutinsidemlSV_CR2Jets");
+                            plotname_addition = "_VSinside";
                         }
                         TH1* hist = (TH1*)files[i]->Get(histname_to_use);
-                        if(hist->GetMaximum() > 0){
+                        if(hist and hist->GetMaximum() > 0){
                             hists->Add(hist);
                             if(legends[i].Contains("Pred")){
                                 hist->SetMarkerColor(kBlack);

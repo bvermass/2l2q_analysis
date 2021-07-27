@@ -52,6 +52,7 @@ class Shape_SR_plottext{
         Shape_SR_plottext(TPad* pad);
         ~Shape_SR_plottext();
         void Draw(TString histname);
+        void Draw_OSorSS_2l(TString histname);
         void Draw_2l(TString mass_category);
         void Draw_ee(TString mass_category);
         void Draw_em(TString mass_category);

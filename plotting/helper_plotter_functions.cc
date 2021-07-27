@@ -41,10 +41,12 @@ void CMSandLuminosity::add_flavor(TString histname){
     else if(histname.Contains("_SS_ee")) flavortext = "SS ee";
     else if(histname.Contains("_OS_mm")) flavortext = "OS #mu#mu";
     else if(histname.Contains("_SS_mm")) flavortext = "SS #mu#mu";
-    else if(histname.Contains("_OS_me")) flavortext = "OS #mu e";
-    else if(histname.Contains("_SS_me")) flavortext = "SS #mu e";
+    else if(histname.Contains("_OS_me")) flavortext = "OS #mue";
+    else if(histname.Contains("_SS_me")) flavortext = "SS #mue";
     else if(histname.Contains("_OS_em")) flavortext = "OS e#mu";
     else if(histname.Contains("_SS_em")) flavortext = "SS e#mu";
+    else if(histname.Contains("_OS_2l")) flavortext = "OS";
+    else if(histname.Contains("_SS_2l")) flavortext = "SS";
     else if(histname.Contains("_ee")) flavortext = "ee";
     else if(histname.Contains("_mm")) flavortext = "#mu#mu";
     else if(histname.Contains("_me")) flavortext = "#mu e";
@@ -58,7 +60,7 @@ void CMSandLuminosity::Draw()
     lumilatex.DrawLatex(1-rightmargin, 1-0.8*topmargin, lumitext);
 
     if(drawflavor){
-        flavorlatex.DrawLatex(0.5, 1-0.8*topmargin, flavortext);
+        flavorlatex.DrawLatex(0.5*(1 + leftmargin - rightmargin), 1-0.8*topmargin, flavortext);
         drawflavor = false;
     }
 }
@@ -68,7 +70,7 @@ Shape_SR_plottext::Shape_SR_plottext(TPad* pad):
     mm( "#mu#mu" )
     , em( "e#mu" )
     , ee( "ee" )
-    , me( "#mu e" )
+    , me( "#mue" )
     , OS( "OS" )
     , SS( "SS" )
     , masslessthan2( "M_{SV} < 2 GeV" )
@@ -94,13 +96,52 @@ void Shape_SR_plottext::Draw(TString histname)
     TString mass_category = "low";
     if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_") or histname.Contains("_M-15_")) mass_category = "high";
     if(histname.Contains("Shape_SR")){
-        if(histname.Contains("_2l")) Draw_2l(mass_category);
+        if(histname.Contains("_OS_2l") or histname.Contains("_SS_2l")) Draw_OSorSS_2l(histname);
+        else if(histname.Contains("_2l")) Draw_2l(mass_category);
         if(histname.Contains("_ee")) Draw_ee(mass_category);
         if(histname.Contains("_em")) Draw_em(mass_category);
         if(histname.Contains("_me")) Draw_me(mass_category);
         if(histname.Contains("_mm")) Draw_mm(mass_category);
     }else if(histname.Contains("Shape_alpha")){
         Draw_Shape_alpha_lines_and_generaltext(histname, mass_category);
+    }
+}
+
+void Shape_SR_plottext::Draw_OSorSS_2l(TString histname)
+{
+    latex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
+    latex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
+    latex.DrawLatex(0.625*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, ee);
+    latex.DrawLatex(0.875*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, me);
+    
+    fullLine.DrawLineNDC(0.25*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.25*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+    fullLine.DrawLineNDC(0.5*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.5*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+    fullLine.DrawLineNDC(0.75*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.75*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3*topmargin);
+    
+    dashedLine.DrawLineNDC(0.125*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.125*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.375*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.375*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.625*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.625*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    dashedLine.DrawLineNDC(0.875*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 0.875*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+    
+    if(histname.Contains("_M-5_")){
+        latex.DrawLatex(0.0625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.1875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+        latex.DrawLatex(0.3125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.4375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+        latex.DrawLatex(0.5625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.6875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+        latex.DrawLatex(0.8125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(0.9375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+    }
+    if(histname.Contains("_M-10_")){
+        latex.DrawLatex(0.0625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.1875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+        latex.DrawLatex(0.3125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.4375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+        latex.DrawLatex(0.5625*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.6875*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+        latex.DrawLatex(0.8125*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(0.9375*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
     }
 }
 
@@ -133,25 +174,25 @@ void Shape_SR_plottext::Draw_2l(TString mass_category)
 
 void Shape_SR_plottext::Draw_ee(TString mass_category)
 {
-    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
+    //latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, ee);
     Draw_lines_and_generaltext(mass_category);
 }
 
 void Shape_SR_plottext::Draw_em(TString mass_category)
 {
-    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
+    //latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, em);
     Draw_lines_and_generaltext(mass_category);
 }
 
 void Shape_SR_plottext::Draw_me(TString mass_category)
 {
-    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
+    //latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, me);
     Draw_lines_and_generaltext(mass_category);
 }
 
 void Shape_SR_plottext::Draw_mm(TString mass_category)
 {
-    latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
+    //latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
     Draw_lines_and_generaltext(mass_category);
 }
 
@@ -333,6 +374,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_eff"))               fullname += "eff/";
     if(histname.Contains("_invIVFSVgenreco"))   fullname += "invIVFSVgenreco/";
     if(histname.Contains("_projection"))        fullname += "projection/";
+    if(histname.Contains("_outsideMSV"))        fullname += "outsideMSV/";
 
     while(gSystem->Exec("mkdir -p " + fullname) != 0){
         std::cout << "command \"mkdir -p " << fullname << "\" failed, checking" << std::endl;
@@ -350,6 +392,8 @@ TString get_lflavor(const TString& histname){
     else if(histname.Index("_em_") != -1) return "em/";
     else if(histname.Index("_me_") != -1) return "me/";
     else if(histname.Index("_2l_") != -1) return "2l/";
+    else if(histname.Index("_l2e_") != -1) return "l2e/";
+    else if(histname.Index("_l2m_") != -1) return "l2m/";
     else return "";
 }
 
