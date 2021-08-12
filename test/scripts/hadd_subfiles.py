@@ -623,6 +623,10 @@ base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized
 #base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_electron/' + tag + '/full_analyzer/')
 #base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_muon/' + tag + '/full_analyzer/')
 base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECUp/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECDown/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JERUp/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JERDown/')
 
 hadd_counter = 0
 
