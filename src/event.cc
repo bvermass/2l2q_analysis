@@ -96,11 +96,13 @@ void full_analyzer::Set_Objects_And_Relevant_Variables_2prompt(const TString Jet
     nTightEle = promptElectronID.size();
     nDisplEle = 0;
     
-    std::vector<unsigned> jetID, jetID_uncl;
+    std::vector<unsigned> jetID, jetID_uncl, bjetID;
     for(unsigned i = 0; i < _nJets; i++){
         if(IsTightJetID(i,JetPt_Version) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID)) jetID.push_back(i);
         if(IsTightJetID(i, JetPt_Version)) jetID_uncl.push_back(i);
+        if(IsTightJetID(i, JetPt_Version) and IsLooseBJetID(i)) bjetID.push_back(i);
     }
+    nLooseBJet      = bjetID.size();
     nTightJet       = jetID.size();
     nTightJet_uncl  = jetID_uncl.size();
     

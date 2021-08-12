@@ -485,6 +485,58 @@ public :
    Double_t        _metPhiUnclUp;
    Double_t        _metSignificance;
 
+   //unsigned _nV0s;
+   //double _V0InvMass[50];
+   //unsigned _V0Type[50];
+   //double _V0X[50];
+   //double _V0Y[50];
+   //double _V0Z[50];
+   //double _V0RPV[50];
+   //double _V0RBS[50];
+   //double _V0Px[50];
+   //double _V0Py[50];
+   //double _V0Pz[50];
+   //double _V0Pt[50];
+   //double _V0Eta[50];
+   //double _V0Phi[50];
+   //double _V0DCA[50];
+   //double _V0PCAX[50];
+   //double _V0PCAY[50];
+   //double _V0PCAZ[50];
+   //double _V0VtxNormChi2[50];
+   //double _V0RSigPV[50];
+   //double _V0RSigBS[50];
+   //double _V0PxPos[50];
+   //double _V0PyPos[50];
+   //double _V0PzPos[50];
+   //double _V0PtPos[50];
+   //double _V0PxNeg[50];
+   //double _V0PyNeg[50];
+   //double _V0PzNeg[50];
+   //double _V0PtNeg[50];
+   //double _V0EtaPos[50];
+   //double _V0EtaNeg[50];
+   //double _V0PhiPos[50];
+   //double _V0PhiNeg[50];
+   //double _V0NHitsPos[50];
+   //double _V0NHitsNeg[50];
+   //double _V0NPixHitsPos[50];
+   //double _V0NPixHitsNeg[50];
+   //double _V0D0Pos[50];
+   //double _V0DzPos[50];
+   //double _V0D0Neg[50];
+   //double _V0DzNeg[50];
+   //double _V0IsoPos[50];
+   //double _V0IsoNeg[50];
+   //double _V0LooseQualityPos[50];
+   //double _V0LooseQualityNeg[50];
+   //double _V0TransIPSigPos[50];
+   //double _V0TransIPSigNeg[50];
+   //double _V0PtRatioPos[50];
+   //double _V0PtRatioNeg[50];
+   //double _V0PtRelPos[50];
+   //double _V0PtRelNeg[50];
+
    // List of branches
    TBranch        *b__runNb;   //!
    TBranch        *b__lumiBlock;   //!
@@ -921,6 +973,58 @@ public :
    TBranch        *b__metPhiUnclUp;   //!
    TBranch        *b__metSignificance;   //!
    
+   //TBranch* b__nV0s;
+   //TBranch* b__V0InvMass;
+   //TBranch* b__V0Type;
+   //TBranch* b__V0X;
+   //TBranch* b__V0Y;
+   //TBranch* b__V0Z;
+   //TBranch* b__V0RPV;
+   //TBranch* b__V0RBS;
+   //TBranch* b__V0Px;
+   //TBranch* b__V0Py;
+   //TBranch* b__V0Pz;
+   //TBranch* b__V0Pt;
+   //TBranch* b__V0Eta;
+   //TBranch* b__V0Phi;
+   //TBranch* b__V0DCA;
+   //TBranch* b__V0PCAX;
+   //TBranch* b__V0PCAY;
+   //TBranch* b__V0PCAZ;
+   //TBranch* b__V0VtxNormChi2;
+   //TBranch* b__V0RSigPV;
+   //TBranch* b__V0RSigBS;
+   //TBranch* b__V0PxPos;
+   //TBranch* b__V0PyPos;
+   //TBranch* b__V0PzPos;
+   //TBranch* b__V0PtPos;
+   //TBranch* b__V0PxNeg;
+   //TBranch* b__V0PyNeg;
+   //TBranch* b__V0PzNeg;
+   //TBranch* b__V0PtNeg;
+   //TBranch* b__V0EtaPos;
+   //TBranch* b__V0EtaNeg;
+   //TBranch* b__V0PhiPos;
+   //TBranch* b__V0PhiNeg;
+   //TBranch* b__V0NHitsPos;
+   //TBranch* b__V0NHitsNeg;
+   //TBranch* b__V0NPixHitsPos;
+   //TBranch* b__V0NPixHitsNeg;
+   //TBranch* b__V0D0Pos;
+   //TBranch* b__V0DzPos;
+   //TBranch* b__V0D0Neg;
+   //TBranch* b__V0DzNeg;
+   //TBranch* b__V0IsoPos;
+   //TBranch* b__V0IsoNeg;
+   //TBranch* b__V0LooseQualityPos;
+   //TBranch* b__V0LooseQualityNeg;
+   //TBranch* b__V0TransIPSigPos;
+   //TBranch* b__V0TransIPSigNeg;
+   //TBranch* b__V0PtRatioPos;
+   //TBranch* b__V0PtRatioNeg;
+   //TBranch* b__V0PtRelPos;
+   //TBranch* b__V0PtRelNeg;
+
    TString local_dir;
    Double_t ev_weight;
    bool makeHistograms, makeHNLtagger, makeBkgEstimator;
@@ -966,7 +1070,7 @@ public :
    unsigned i_subleading_track;
 
    // numbers of leptons
-   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl;
+   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl, nLooseBJet, nKshort;
 
    //Signal region booleans
    bool _genOverlap, _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _bkgestimator, _Training, _Training2Jets, _Training2JetsNoZ, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
@@ -1052,6 +1156,7 @@ public :
 
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i, const TString JetPt_Version);
+    bool     IsLooseBJetID(const unsigned i);
     bool     IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection);
     int      find_leading_jet(const std::vector<unsigned>& jetcollection);
     int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
@@ -1135,6 +1240,15 @@ public :
 
     // in src/tree_functions.cc
     void     fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight, double total_weight);
+
+    ////in src/Kshort.cc
+    //void     Kshort_study(std::map<TString, TH1*>* hists, HNLtagger& hnltagger_Kshort, PFNReader& pfn_e_LowMass, PFNReader& pfn_e_HighMass, PFNReader& pfn_mu_LowMass, PFNReader& pfn_mu_HighMass, double ev_weight);
+    //int      find_jet_closest_to_Kshort_pion(double mindR, unsigned i_V0);
+    //void     add_Kshort_histograms(std::map<TString, TH1*>* hists, TString prefix);
+    //void     fill_Kshort_EvSel_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
+    //void     fill_Kshort_histograms(std::map<TString, TH1*>* hists, TString prefix, double event_weight, unsigned i_V0, unsigned i_jetKshort, std::map<int, std::map<double, double>> JetTagVal_Kshort_e, std::map<int, std::map<double, double>> JetTagVal_Kshort_mu);
+    //void     fill_Kshort_HNLtagger_tree(HNLtagger& hnltagger, unsigned i_v0, unsigned i_jetKshort);
+    //int      is_track_in_sv_Kshort(unsigned i_V0, int i_jet, int i_const);
 
    // in src/SelectionOptimization.cc
    // bool     create_sigreg_bool(int i_leading, int i_subleading, bool base_selection, double l2_dxy, double l2_reliso, double dphi, double dR, double upperdR, double mll, double lowermll, bool applyLepVeto, bool applyOneJet, double jettagval);

@@ -98,6 +98,12 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
     }
 
+    ////Kshort histograms
+    //add_Kshort_histograms(&hists, "_mm_Kshort");
+    //add_Kshort_histograms(&hists, "_mm_Kshort_outsideMSV");
+    //add_Kshort_histograms(&hists, "_mm_Kshort_2GeV");
+    //add_Kshort_histograms(&hists, "_mm_Kshort_2GeV_outsideMSV");
+
     //assures statistical errors are dealt with correctly
     for(auto const& it : hists){
         TH1* h = it.second;
@@ -129,6 +135,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLtagger hnltagger_mu(filename, "HNLtagger_muon", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
+
+    ////Kshort HNLtagger files
+    //HNLtagger hnltagger_Kshort(filename, "HNLtagger_Kshort", partition, partitionjobnumber);
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
     TString bkgestimator_fileoption = "recreate";

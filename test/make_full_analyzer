@@ -3,7 +3,7 @@ PYTHONFLAGS= -I/cvmfs/cms.cern.ch/slc6_amd64_gcc700/external/python/2.7.14-omkpb
 CFLAGS= -Wl,--no-as-needed
 LDFLAGS=`root-config --glibs --cflags`
 dir=$(shell pwd)
-SOURCES= $(dir)/src/event.cc $(dir)/helpertools/HNL_parameters/HNL_parameters.cc $(dir)/src/bTagWP.cc $(dir)/src/tree_functions.cc $(dir)/src/BkgEstimator.cc $(dir)/helpertools/LSFReader/LSFReader.cc $(dir)/helpertools/PUWeightReader/PUWeightReader.cc $(dir)/helpertools/LorentzVector/LorentzVector.cc $(dir)/helpertools/PFNEvaluation/PFNReader.cc $(dir)/src/PFNTools.cc $(dir)/src/HNLtagger.cc $(dir)/src/jet_histograms.cc $(dir)/src/helper_histo_functions.cc $(dir)/src/gen_histograms.cc $(dir)/src/signal_region.cc $(dir)/src/HLT_eff.cc $(dir)/src/jetID.cc $(dir)/src/leptonID.cc $(dir)/src/histo_functions.cc $(dir)/src/full_analyzer_constructor.cc $(dir)/src/full_analyzer.cc $(dir)/src/print_table.cc $(dir)/test/mainroot.cc
+SOURCES= $(dir)/src/Kshort.cc $(dir)/src/event.cc $(dir)/helpertools/HNL_parameters/HNL_parameters.cc $(dir)/src/bTagWP.cc $(dir)/src/tree_functions.cc $(dir)/src/BkgEstimator.cc $(dir)/helpertools/LSFReader/LSFReader.cc $(dir)/helpertools/PUWeightReader/PUWeightReader.cc $(dir)/helpertools/LorentzVector/LorentzVector.cc $(dir)/helpertools/PFNEvaluation/PFNReader.cc $(dir)/src/PFNTools.cc $(dir)/src/HNLtagger.cc $(dir)/src/jet_histograms.cc $(dir)/src/helper_histo_functions.cc $(dir)/src/gen_histograms.cc $(dir)/src/signal_region.cc $(dir)/src/HLT_eff.cc $(dir)/src/jetID.cc $(dir)/src/leptonID.cc $(dir)/src/histo_functions.cc $(dir)/src/full_analyzer_constructor.cc $(dir)/src/full_analyzer.cc $(dir)/src/print_table.cc $(dir)/test/mainroot.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE= execFullAnalyzer
 

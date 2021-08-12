@@ -35,6 +35,7 @@ void full_analyzer::add_jet_histograms(map<TString, TH1*>* hists, TString prefix
         (*hists)[prefix+"_jetl2_ChargedEmFraction"]     = new TH1F(prefix+"_jetl2_ChargedEmFraction", ";closestJet(l_{2}) Charged Em Fraction;Events", 30, 0, 1);
         (*hists)[prefix+"_jetl2_HFHadronFraction"]      = new TH1F(prefix+"_jetl2_HFHadronFraction", ";closestJet(l_{2}) HF Hadron Fraction;Events", 30, 0, 1);
         (*hists)[prefix+"_jetl2_HFEmFraction"]          = new TH1F(prefix+"_jetl2_HFEmFraction", ";closestJet(l_{2}) HF Em Fraction;Events", 30, 0, 1);
+        (*hists)[prefix+"_jetl2_MuonFraction"]          = new TH1F(prefix+"_jetl2_MuonFraction", ";closestJet(l_{2}) Muon Fraction;Events", 30, 0, 1);
 
         for(const TString &jettagvalcut : {""}){//, "_JetTagVal0p95"}){
             (*hists)[prefix+jettagvalcut+"_jetl2_nConstituents"]         = new TH1F(prefix+jettagvalcut+"_jetl2_nConstituents", ";N. jet Constituents;Events", 50, 0, 50);
@@ -79,6 +80,7 @@ void full_analyzer::fill_jet_histograms(map<TString, TH1*>* hists, TString prefi
         (*hists)[prefix+"_jetl2_DeepCsv_b"]->Fill(_jetDeepCsv_b[i_jetl2], event_weight);
         (*hists)[prefix+"_jetl2_DeepCsv_c"]->Fill(_jetDeepCsv_c[i_jetl2], event_weight);
         (*hists)[prefix+"_jetl2_DeepCsv_bb"]->Fill(_jetDeepCsv_bb[i_jetl2], event_weight);
+        if(jetl2dR < 0.4) (*hists)[prefix+"_jetl2_MuonFraction"]->Fill(_lPt[i_subleading]/_jetPt[i_jetl2], event_weight);
     }
 
     if(extensive_plots){

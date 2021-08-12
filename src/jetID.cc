@@ -17,6 +17,16 @@ bool full_analyzer::IsTightJetID(const unsigned i, const TString JetPt_Version)
     return true;
 }
 
+bool full_analyzer::IsLooseBJetID(const unsigned i)
+{
+    double threshold = 0;
+    if(_is2016) threshold = 0.2217;
+    else if(_is2017) threshold = 0.1522;
+    else if(_is2018) threshold = 0.1241;
+
+    return _jetDeepCsv[i] > threshold;
+}
+
 bool full_analyzer::IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection)
 {
 	LorentzVector jet(_jetPt[i], _jetEta[i], _jetPhi[i], _jetE[i]);
