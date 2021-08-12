@@ -10,6 +10,8 @@ void full_analyzer::set_leptons(const TString JetPt_Version){
     sr_flavor = get_signal_region_flavor(i_leading, i_subleading);
     sr_charge = sr_flavor(0,3);
     sr_lflavor = sr_flavor(3,3);
+    sr_l2flavor = "_l2" + sr_flavor(5,1);
+    sr_l1flavor = "_l1" + sr_flavor(4,1);
 
     set_relevant_lepton_variables(JetPt_Version);
 }
@@ -272,6 +274,15 @@ void full_analyzer::signal_regions(){
 void full_analyzer::additional_signal_regions(){
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
+            double pfncutvalue = 0.9;
+            if(sr_flavor.Contains("mm")){
+                if(MassMap.first == 5) pfncutvalue = 0.996;
+                else pfncutvalue = 0.998;
+            }else if(sr_flavor.Contains("ee")){
+                if(MassMap.first == 5) pfncutvalue = 0.98;
+                else pfncutvalue = 0.97;
+            }
+            //std::cout << "flavor, mass, pfncutvalue: " << sr_flavor << " " << MassMap.first << " " << pfncutvalue << std::endl;
             _TrainingHighPFN[MassMap.first][V2Map.first]            = _Training &&
                                                                (V2Map.second > 0.9);
 

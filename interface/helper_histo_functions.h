@@ -40,6 +40,7 @@ std::vector<double> get_evaluating_V2s_minimal();
 double      get_favorite_V2(double mass, std::string flavor);
 TString     get_MV2name(int mass, double V2);
 void        filePutContents(const std::string& name, const std::string& content, bool append = false);
+void        divide_stat_errors(TH1* h);
 void        fix_overflow_and_negative_bins(TH1* h);
 
 #endif

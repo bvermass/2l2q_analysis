@@ -93,6 +93,24 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_gen_SVntracks"]                   = new TH1F(prefix+"_gen_SVntracks", ";# of tracks used in SVfit;Events", 15, 0, 15);
     (*hists)[prefix+"_gen_SVmass"]                      = new TH1F(prefix+"_gen_SVmass", ";SV Mass [GeV];Events", 30, 0, 10);
 
+    (*hists)[prefix+"_e2_SigmaIetaIeta"]                = new TH1F(prefix+"_e2_SigmaIetaIeta", ";e_{2} #sigma_{i#eta i#eta};Events", 30, 0, 0.11);
+    (*hists)[prefix+"_e2_DEtaInSeed"]                   = new TH1F(prefix+"_e2_DEtaInSeed", ";e_{2} #Delta#eta in Seed;Events", 30, 0.004, 0.0088);
+    (*hists)[prefix+"_e2_DPhiIn"]                       = new TH1F(prefix+"_e2_DPhiIn", ";e_{2} #Delta#phi SC Track;Events", 30, 0, 0.23);
+    (*hists)[prefix+"_e2_HOverE"]                       = new TH1F(prefix+"_e2_HOverE", ";e_{2} H/E;Events", 30, 0, 0.3);
+    (*hists)[prefix+"_e2_EInvMinusPInv"]                = new TH1F(prefix+"_e2_EInvMinusPInv", ";e_{2} 1/E - 1/P;Events", 30, 0, 0.25);
+
+    (*hists)[prefix+"_e2_EB_SigmaIetaIeta"]             = new TH1F(prefix+"_e2_EB_SigmaIetaIeta", ";e_{2} #sigma_{i#eta i#eta}(Barrel);Events", 30, 0, 0.11);
+    (*hists)[prefix+"_e2_EB_DEtaInSeed"]                = new TH1F(prefix+"_e2_EB_DEtaInSeed", ";e_{2} #Delta#eta in Seed(Barrel);Events", 30, 0.004, 0.0088);
+    (*hists)[prefix+"_e2_EB_DPhiIn"]                    = new TH1F(prefix+"_e2_EB_DPhiIn", ";e_{2} #Delta#phi SC Track(Barrel);Events", 30, 0, 0.23);
+    (*hists)[prefix+"_e2_EB_HOverE"]                    = new TH1F(prefix+"_e2_EB_HOverE", ";e_{2} H/E(Barrel);Events", 30, 0, 0.3);
+    (*hists)[prefix+"_e2_EB_EInvMinusPInv"]             = new TH1F(prefix+"_e2_EB_EInvMinusPInv", ";e_{2} 1/E - 1/P(Barrel);Events", 30, 0, 0.25);
+
+    (*hists)[prefix+"_e2_EE_SigmaIetaIeta"]             = new TH1F(prefix+"_e2_EE_SigmaIetaIeta", ";e_{2} #sigma_{i#eta i#eta}(Endcap);Events", 30, 0, 0.11);
+    (*hists)[prefix+"_e2_EE_DEtaInSeed"]                = new TH1F(prefix+"_e2_EE_DEtaInSeed", ";e_{2} #Delta#eta in Seed(Endcap);Events", 30, 0.004, 0.0088);
+    (*hists)[prefix+"_e2_EE_DPhiIn"]                    = new TH1F(prefix+"_e2_EE_DPhiIn", ";e_{2} #Delta#phi SC Track(Endcap);Events", 30, 0, 0.23);
+    (*hists)[prefix+"_e2_EE_HOverE"]                    = new TH1F(prefix+"_e2_EE_HOverE", ";e_{2} H/E(Endcap);Events", 30, 0, 0.3);
+    (*hists)[prefix+"_e2_EE_EInvMinusPInv"]             = new TH1F(prefix+"_e2_EE_EInvMinusPInv", ";e_{2} 1/E - 1/P(Endcap);Events", 30, 0, 0.25);
+
     if(extensive_plots){
         (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, -3.14, 3.14);
         (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, -3.14, 3.14);
@@ -184,15 +202,18 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
 
     if(_l1l2SV){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_afterSV", ev_weight*rew_weight);
+        fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_afterSV", ev_weight*rew_weight);
     }
 
     if(_Training){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight*rew_weight);
+        fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_Training", ev_weight*rew_weight);
         fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight*rew_weight);
         fill_HLT_efficiency(hists, "Afterptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, ev_weight*rew_weight);
     }
     if(_Training2Jets){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_2Jets", ev_weight*rew_weight);
+        fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2Jets", ev_weight*rew_weight);
     }
     if(_Training2JetsNoZ){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_2JetsNoZ", ev_weight*rew_weight);
@@ -219,6 +240,7 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     for(auto& MassMap : evaluating_V2s_plots){
         if(_TrainingHighPFN[MassMap.first][7e-5]){
             fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
+            fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_TrainingHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
         }
         for(auto& V2 : MassMap.second){
             if(_FullNoPFN){
@@ -269,6 +291,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_l2_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
     (*hists)[prefix+"_l1_reliso"]->Fill(_relIso[i_leading], event_weight);
     (*hists)[prefix+"_l2_reliso"]->Fill(_relIso[i_subleading], event_weight);
+    (*hists)[prefix+"_l2_reliso_zoom"]->Fill(_relIso[i_subleading], event_weight);
     (*hists)[prefix+"_l1_ptrel"]->Fill(_ptRel[i_leading], event_weight);
     (*hists)[prefix+"_l2_ptrel"]->Fill(_ptRel[i_subleading], event_weight);
     (*hists)[prefix+"_l1_ptratio"]->Fill(_ptRatio[i_leading], event_weight);
@@ -297,6 +320,32 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_integral"]->Fill(1, event_weight);
     (*hists)[prefix+"_dphill"]->Fill(dphill, event_weight);
     (*hists)[prefix+"_dRll"]->Fill(dRll, event_weight);
+
+    if(_lFlavor[i_subleading] == 0){
+        (*hists)[prefix+"_e2_SigmaIetaIeta"]->Fill(_lElectronSigmaIetaIeta[i_subleading], event_weight);
+        (*hists)[prefix+"_e2_DEtaInSeed"]->Fill(_lElectronDEtaInSeed[i_subleading], event_weight);
+        (*hists)[prefix+"_e2_DPhiIn"]->Fill(_lElectronDeltaPhiSuperClusterTrack[i_subleading], event_weight);
+        (*hists)[prefix+"_e2_HOverE"]->Fill(_lElectronHOverE[i_subleading], event_weight);
+        (*hists)[prefix+"_e2_EInvMinusPInv"]->Fill(_lElectronEInvMinusPInv[i_subleading], event_weight);
+
+        if(_lElectronIsEB[i_subleading]){
+            (*hists)[prefix+"_e2_EB_SigmaIetaIeta"]->Fill(_lElectronSigmaIetaIeta[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EB_DEtaInSeed"]->Fill(_lElectronDEtaInSeed[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EB_DPhiIn"]->Fill(_lElectronDeltaPhiSuperClusterTrack[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EB_HOverE"]->Fill(_lElectronHOverE[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EB_EInvMinusPInv"]->Fill(_lElectronEInvMinusPInv[i_subleading], event_weight);
+        }
+        if(_lElectronIsEE[i_subleading]){
+            (*hists)[prefix+"_e2_EE_SigmaIetaIeta"]->Fill(_lElectronSigmaIetaIeta[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EE_DEtaInSeed"]->Fill(_lElectronDEtaInSeed[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EE_DPhiIn"]->Fill(_lElectronDeltaPhiSuperClusterTrack[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EE_HOverE"]->Fill(_lElectronHOverE[i_subleading], event_weight);
+            (*hists)[prefix+"_e2_EE_EInvMinusPInv"]->Fill(_lElectronEInvMinusPInv[i_subleading], event_weight);
+        }
+    }
+
+
+
     if(extensive_plots){
         (*hists)[prefix+"_l1_phi"]->Fill(_lPhi[i_leading], event_weight);
         (*hists)[prefix+"_l2_phi"]->Fill(_lPhi[i_subleading], event_weight);
@@ -560,7 +609,7 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
 }
 
 void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
-    if(i_gen_l1 != -1 and ((_gen_lFlavor[i_gen_l1] == 0 and _gen_lPt[i_gen_l1] > 30 and fabs(_gen_lEta[i_gen_l1]) < 2.5) or (_gen_lFlavor[i_gen_l1] == 1 and _gen_lPt[i_gen_l1] > 25 and fabs(_gen_lEta[i_gen_l1]) < 2.4))){
+    if(i_gen_l1 != -1 and ((_gen_lFlavor[i_gen_l1] == 0 and _gen_lPt[i_gen_l1] > 30 and fabs(_gen_lEta[i_gen_l1]) < 2.5) or (_gen_lFlavor[i_gen_l1] == 1 and _gen_lPt[i_gen_l1] > 27 and fabs(_gen_lEta[i_gen_l1]) < 2.4))){
         (*hists)["l1reco_pt_eff_den"]->Fill(_gen_lPt[i_gen_l1]);
         (*hists)["l1reco_eta_eff_den"]->Fill(_gen_lEta[i_gen_l1]);
         //(*hists)["l1reco_dxy_eff_den"]->Fill(_gen_[i_gen_l1]);
@@ -595,6 +644,17 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
         (*hists)["l2reco_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
         //(*hists)["l2reco_SVgen-reco_eff_den"]
 
+        (*hists)["l2full_pt_eff_den"]->Fill(_gen_lPt[i_gen_l2]);
+        (*hists)["l2full_eta_eff_den"]->Fill(_gen_lEta[i_gen_l2]);
+        (*hists)["l2full_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+        (*hists)["l2full_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
+
+        if(_gen_lPt[i_gen_l2] > 35){
+            (*hists)["l2high_l1_pt"]->Fill(_gen_lPt[i_gen_l1]);
+            (*hists)["l2high_N_pt"]->Fill(_gen_NPt);
+            (*hists)["l2high_Lxy"]->Fill(gen_PVSVdist_2D);
+        }
+
         if(i_l2_fromgen != -1){
             (*hists)["l2reco_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
             (*hists)["l2reco_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
@@ -617,6 +677,11 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
                 (*hists)["l2id_ctau_eff_num"]->Fill(_ctauHN);
                 (*hists)["l2id_Lxyz_eff_num"]->Fill(gen_PVSVdist);
                 (*hists)["l2id_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
+
+                (*hists)["l2full_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
+                (*hists)["l2full_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
+                (*hists)["l2full_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+                (*hists)["l2full_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
             }
         }
     }
@@ -742,6 +807,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
         (*hists2D)[prefix+"_IVF_gen_SVmass_residual"]->Fill(gen_SVmass, gen_SVmass - SVmass, event_weight);
         (*hists2D)[prefix+"_IVF_gen_SVmasstontracks_residual"]->Fill(gen_SVmass, gen_SVntracks - _IVF_ntracks[i_subleading], event_weight);
         (*hists2D)[prefix+"_IVF_gen_ntracks_residual"]->Fill(gen_SVntracks, gen_SVntracks - _IVF_ntracks[i_subleading], event_weight);
+        (*hists2D)[prefix+"_IVF_gen_ntracksrecovsinSV_residual"]->Fill(HNLadditionaltracks + 1, HNLadditionaltracks + 1 - _IVF_ntracks[i_subleading], event_weight);
         if(extensive_plots){
             (*hists)[prefix+"_IVF_PV-SVdxy_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist_2D);
             (*hists)[prefix+"_IVF_PV-SVdxyz_onlySVgen-reco_eff_den"]->Fill(IVF_PVSVdist);

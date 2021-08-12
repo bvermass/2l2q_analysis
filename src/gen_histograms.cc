@@ -41,6 +41,10 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["l1id_pt_eff_den"]                   = new TH1F("l1id_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
     (*hists)["l1id_eta_eff_num"]                  = new TH1F("l1id_eta_eff_num", ";eta;Events", 40, -3, 3);
     (*hists)["l1id_eta_eff_den"]                  = new TH1F("l1id_eta_eff_den", ";eta;Events", 40, -3, 3);
+    (*hists)["l1full_pt_eff_num"]                   = new TH1F("l1full_pt_eff_num", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1full_pt_eff_den"]                   = new TH1F("l1full_pt_eff_den", ";#it{p}_{T} [GeV];Events", 40, 0, 80);
+    (*hists)["l1full_eta_eff_num"]                  = new TH1F("l1full_eta_eff_num", ";eta;Events", 40, -3, 3);
+    (*hists)["l1full_eta_eff_den"]                  = new TH1F("l1full_eta_eff_den", ";eta;Events", 40, -3, 3);
     //(*hists)["l1reco_dxy_eff_num"]                  = new TH1F("l1reco_dxy_eff_num", ";dxy;Events", 40, 0, 0.1);
     //(*hists)["l1reco_dxy_eff_den"]                  = new TH1F("l1reco_dxy_eff_den", ";dxy;Events", 40, 0, 0.1);
     //(*hists)["l1reco_dz_eff_num"]                   = new TH1F("l1reco_dz_eff_num", ";dz;Events", 40, 0, 0.1);
@@ -57,8 +61,8 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     //(*hists)["l2reco_dz_eff_den"]                   = new TH1F("l2reco_dz_eff_den", ";dz;Events", 20, 0, 0.1);
     (*hists)["l2reco_ctau_eff_num"]                 = new TH1F("l2reco_ctau_eff_num", ";c#tau [mm];Events", 20, 0, 100);
     (*hists)["l2reco_ctau_eff_den"]                 = new TH1F("l2reco_ctau_eff_den", ";c#tau [mm];Events", 20, 0, 100);
-    (*hists)["l2reco_Lxy_eff_num"]                 = new TH1F("l2reco_Lxy_eff_num", ";L_{xy}^{gen}[cm];Events", 20, 0, 60);
-    (*hists)["l2reco_Lxy_eff_den"]                 = new TH1F("l2reco_Lxy_eff_den", ";L_{xy}^{gen}[cm];Events", 20, 0, 60);
+    (*hists)["l2reco_Lxy_eff_num"]                 = new TH1F("l2reco_Lxy_eff_num", ";L_{xy}^{gen}[cm];Events", 20, 0, 40);
+    (*hists)["l2reco_Lxy_eff_den"]                 = new TH1F("l2reco_Lxy_eff_den", ";L_{xy}^{gen}[cm];Events", 20, 0, 40);
     (*hists)["l2reco_Lxyz_eff_num"]                 = new TH1F("l2reco_Lxyz_eff_num", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
     (*hists)["l2reco_Lxyz_eff_den"]                 = new TH1F("l2reco_Lxyz_eff_den", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
     (*hists)["PVNvtxdist"]                          = new TH1F("PVNvtxdist", ";PVNvtxdist;Events", 30, 0, 1);
@@ -71,11 +75,23 @@ void full_analyzer::init_HNL_MC_check(std::map<TString, TH1*>* hists, std::map<T
     (*hists)["l2id_eta_eff_den"]                  = new TH1F("l2id_eta_eff_den", ";eta;Events", 20, -3, 3);
     (*hists)["l2id_ctau_eff_num"]                 = new TH1F("l2id_ctau_eff_num", ";c#tau [mm];Events", 20, 0, 100);
     (*hists)["l2id_ctau_eff_den"]                 = new TH1F("l2id_ctau_eff_den", ";c#tau [mm];Events", 20, 0, 100);
-    (*hists)["l2id_Lxy_eff_num"]                 = new TH1F("l2id_Lxy_eff_num", ";L_{xy}^{gen}[cm];Events", 20, 0, 60);
-    (*hists)["l2id_Lxy_eff_den"]                 = new TH1F("l2id_Lxy_eff_den", ";L_{xy}^{gen}[cm];Events", 20, 0, 60);
+    (*hists)["l2id_Lxy_eff_num"]                 = new TH1F("l2id_Lxy_eff_num", ";L_{xy}^{gen}[cm];Events", 20, 0, 40);
+    (*hists)["l2id_Lxy_eff_den"]                 = new TH1F("l2id_Lxy_eff_den", ";L_{xy}^{gen}[cm];Events", 20, 0, 40);
     (*hists)["l2id_Lxyz_eff_num"]                 = new TH1F("l2id_Lxyz_eff_num", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
     (*hists)["l2id_Lxyz_eff_den"]                 = new TH1F("l2id_Lxyz_eff_den", ";L_{xyz}^{gen}[cm];Events", 20, 0, 60);
 
+    (*hists)["l2full_pt_eff_num"]                   = new TH1F("l2full_pt_eff_num", ";#it{p}_{T} [GeV];Events", 10, 0, 50);
+    (*hists)["l2full_pt_eff_den"]                   = new TH1F("l2full_pt_eff_den", ";#it{p}_{T} [GeV];Events", 10, 0, 50);
+    (*hists)["l2full_eta_eff_num"]                  = new TH1F("l2full_eta_eff_num", ";eta;Events", 10, -3, 3);
+    (*hists)["l2full_eta_eff_den"]                  = new TH1F("l2full_eta_eff_den", ";eta;Events", 10, -3, 3);
+    (*hists)["l2full_Lxy_eff_num"]                 = new TH1F("l2full_Lxy_eff_num", ";L_{xy}^{gen}[cm];Events", 10, 0, 40);
+    (*hists)["l2full_Lxy_eff_den"]                 = new TH1F("l2full_Lxy_eff_den", ";L_{xy}^{gen}[cm];Events", 10, 0, 40);
+    (*hists)["l2full_Lxyz_eff_num"]                 = new TH1F("l2full_Lxyz_eff_num", ";L_{xyz}^{gen}[cm];Events", 10, 0, 60);
+    (*hists)["l2full_Lxyz_eff_den"]                 = new TH1F("l2full_Lxyz_eff_den", ";L_{xyz}^{gen}[cm];Events", 10, 0, 60);
+
+    (*hists)["l2high_l1_pt"]                        = new TH1F("l2high_l1_pt", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2high_N_pt"]                         = new TH1F("l2high_N_pt", ";#it{p}_{T} [GeV];Events", 20, 0, 60);
+    (*hists)["l2high_Lxy"]                          = new TH1F("l2high_Lxy", ";L_{xy}^{gen}[cm];Events", 20, 0, 60);
     //log scale
     double xmin = 0.8;
     double xmax = 300;
@@ -270,8 +286,8 @@ void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, std::
     //(*hists)[prefix+"_IVF_PV-SVdxyz_zoom_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 10, 0, 20);
     //(*hists)[prefix+"_IVF_PV-SVdxyz_zoom2_eff_num"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2_eff_num", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 10, 0, 2);
     //(*hists)[prefix+"_IVF_PV-SVdxyz_zoom2_eff_den"]      = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2_eff_den", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 10, 0, 2);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
-    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_num"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 40);
+    (*hists)[prefix+"_IVF_gen_PV-SVdxy_eff_den"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 40);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_onlylIVFmatch_eff_num"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_onlylIVFmatch_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_onlylIVFmatch_eff_den"]        = new TH1F(prefix+"_IVF_gen_PV-SVdxy_onlylIVFmatch_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
     (*hists)[prefix+"_IVF_gen_PV-SVdxy_tr_eff_num"]     = new TH1F(prefix+"_IVF_gen_PV-SVdxy_tr_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 60);
@@ -310,6 +326,7 @@ void full_analyzer::add_IVF_eff_histograms(std::map<TString, TH1*>* hists, std::
     (*hists2D)[prefix+"_IVF_gen_SVmass_residual"]       = new TH2F(prefix+"_IVF_gen_SVmass_residual", ";M_{SV}^{gen} [GeV];#Delta (M_{SV}^{gen} - M_{SV}) [GeV]", 12, 0, 12, 100, -5, 5);
     (*hists2D)[prefix+"_IVF_gen_SVmasstontracks_residual"]       = new TH2F(prefix+"_IVF_gen_SVmasstontracks_residual", ";M_{SV}^{gen} [GeV];#Delta (N_{tracks}^{gen} - N_{tracks})", 12, 0, 12, 11, -5.5, 5.5);
     (*hists2D)[prefix+"_IVF_gen_ntracks_residual"]       = new TH2F(prefix+"_IVF_gen_ntracks_residual", ";N_{tracks}^{gen} in SV;#Delta (N_{tracks}^{gen} - N_{tracks})", 6, 0.5, 6.5, 11, -5.5, 5.5);
+    (*hists2D)[prefix+"_IVF_gen_ntracksrecovsinSV_residual"]       = new TH2F(prefix+"_IVF_gen_ntracksrecovsinSV_residual", ";N_{tracks}^{reco} from HNL;#Delta (N_{tracks}^{reco} - N_{tracks}^{SV})", 6, 0.5, 6.5, 11, -5.5, 5.5);
     if(extensive_plots){
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_num", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);
         (*hists)[prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den"]  = new TH1F(prefix+"_IVF_gen_PV-SVdxy_zoom2_eff_den", ";#Delta_{xy}(PV, SV_{gen}) [cm] (IVF);Events", 10, 0, 2);

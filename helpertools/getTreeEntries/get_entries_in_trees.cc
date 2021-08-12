@@ -29,9 +29,11 @@ int main(int argc, char * argv[])
     }
     TString file = (TString) argv[1];
     TString treename = (TString) argv[2];
-    std::cout << file << ": ";
+    //std::cout << file << ": ";
     std::map<TString, double> values = get_nentries_from_file(file, treename);
-    std::cout << values["entries"] << " entries, from " << values["hCounter"] << ")" << std::endl;
+    //std::cout << values["entries"] << " entries, from " << values["hCounter"] << ")" << std::endl;
+    int partition = round(values["entries"] / 400000);
+    std::cout << file << " 1 -1 " << partition << std::endl;
     return 0;
 }
 #endif

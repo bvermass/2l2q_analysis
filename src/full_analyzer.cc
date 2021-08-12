@@ -65,11 +65,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //init_HLT_allevents_efficiency(&hists, "");
     init_HNL_MC_check(&hists, &hists2D);
 
-    for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
+    for(const TString &lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me", "_l2e", "_l2m"}){
         add_cutflow_histograms(&hists, lep_region);
         for(const TString &ev_region : {"", "_afterSV", "_Training", /*"_TooFar", */"_2prompt", "_2promptwithMll", "_2Jets", "_2JetsNoZ"}){
             add_histograms(&hists, &hists2D, lep_region + ev_region);
-            give_alphanumeric_labels(&hists, lep_region);
+            //give_alphanumeric_labels(&hists, lep_region);
         }
         for(auto& MassMap : evaluating_V2s_plots){
             add_histograms(&hists, &hists2D, lep_region + "_TrainingHighPFN_M-" + std::to_string(MassMap.first));
@@ -208,10 +208,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         if(_bkgestimator){
             if(_lFlavor[i_subleading] == 0){
-                if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_e);
+                if(makeHNLtagger and _Training) fill_HNLtagger_tree(hnltagger_e);
                 JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_e, pfn_e_LowMass, pfn_e_HighMass);
             }else if(_lFlavor[i_subleading] == 1){
-                if(makeHNLtagger) fill_HNLtagger_tree(hnltagger_mu);
+                if(makeHNLtagger and _Training) fill_HNLtagger_tree(hnltagger_mu);
                 JetTagVal = GetJetTagVals_LowAndHighMass(hnltagger_mu, pfn_mu_LowMass, pfn_mu_HighMass);
             }
             additional_signal_regions();
@@ -278,10 +278,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
         Set_Objects_And_Relevant_Variables_2prompt("_jetPt");
         ev_weight = Get_Event_weight_2prompt();
-        if(_l1l2 and (_lFlavor[i_leading] == 0 or _lPt[i_leading] > 30) and ((_lFlavor[i_subleading] == 1 and _lPt[i_subleading] > 20) or (_lFlavor[i_subleading] == 0 and _lPt[i_subleading] > 25))){
+        if(_l1l2 and (_lFlavor[i_leading] == 0 or _lPt[i_leading] > 30) and ((_lFlavor[i_subleading] == 1 and _lPt[i_subleading] > 20) or (_lFlavor[i_subleading] == 0 and _lPt[i_subleading] > 27))){
             fill_general_histograms(&hists, &hists2D, sr_flavor + "_2prompt", ev_weight);
             if(mll > 15) fill_general_histograms(&hists, &hists2D, sr_flavor + "_2promptwithMll", ev_weight);
         }
+        //Kshort_study(&hists, hnltagger_Kshort, pfn_e_LowMass, pfn_e_HighMass, pfn_mu_LowMass, pfn_mu_HighMass, ev_weight);
 
         ++loop_counter;
     }

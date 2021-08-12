@@ -59,7 +59,8 @@ TString get_mini_analyzer_outputfilename(TString input)
 {
     TString outputfilename = input;
     outputfilename.ReplaceAll("trees", "histograms");
-    outputfilename.ReplaceAll("BkgEstimator/final/full_analyzer/BkgEstimator_", "mini_analyzer/hists_mini_analyzer_");
+    outputfilename.ReplaceAll("BkgEstimator/final/full_analyzer/", "mini_analyzer/");
+    outputfilename.ReplaceAll("BkgEstimator_", "hists_mini_analyzer_");
     gSystem->Exec("mkdir -p " + outputfilename(0,outputfilename.Index("hists_mini_analyzer")));
     return outputfilename;
 }
@@ -353,6 +354,13 @@ void filePutContents(const std::string& name, const std::string& content, bool a
     outfile << content;
 }
 
+void divide_stat_errors(TH1* h)
+{
+    int nb = h->GetNbinsX();
+    for(int i = 1; i <= nb; i++){
+        h->SetBinError(i, h->GetBinError(i)/5.);
+    }
+}
 
 void fix_overflow_and_negative_bins(TH1* h)
 {

@@ -950,7 +950,7 @@ public :
    int i_leading;
    int i_subleading;
    int i_subleading_highestpt;
-   TString sr_flavor, sr_charge, sr_lflavor;
+   TString sr_flavor, sr_charge, sr_lflavor, sr_l2flavor, sr_l1flavor;
    
    // gen indices corresponding to signal region leptons (geometric)
    int i_gen_leading;
