@@ -29,7 +29,7 @@
 
 class RatioPlot{
     public:
-        RatioPlot(TPad* pad);
+        RatioPlot(TPad* pad, bool widepl = false);
         ~RatioPlot();
         
         void SetLogx(int xlog);
@@ -53,6 +53,7 @@ class RatioPlot{
         bool fit_exists;
         TF1* fit;
         TLatex fittext;
+        bool wideplots = false;
 
         std::vector<int> colors;
 };

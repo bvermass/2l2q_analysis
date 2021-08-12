@@ -4,9 +4,10 @@
 int main(int argc, char * argv[])
 {
     bool sum_em_me = false;
+    bool wideplots = false;
 
     // set general plot style
-    setTDRStyle();
+    setTDRStyle(wideplots);
     gROOT->ForceStyle();
 
     // Argument 1: specific directory for plots (related to x in dilep_x.root or specific set of plots)
@@ -88,7 +89,7 @@ int main(int argc, char * argv[])
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
 
-    TCanvas* c = new TCanvas("c","",700,700);
+    TCanvas* c = new TCanvas("c","",wideplots? 1200 : 700,700);
     c->cd();
 
     // Make the pad that will contain the plot
@@ -104,7 +105,7 @@ int main(int argc, char * argv[])
     double lgnd_lowerbound = 0.80;
     if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 6) lgnd_lowerbound = 0.76;
     if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 8) lgnd_lowerbound = 0.73;
-    TLegend legend = get_legend(0.2, lgnd_lowerbound, 0.95, 0.91, n_columns);
+    TLegend legend = get_legend(wideplots? 0.1 : 0.2, lgnd_lowerbound, wideplots? 0.5 : 0.95, 0.91, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad_histo, is2016, is2017, is2018, isRun2);
@@ -116,7 +117,7 @@ int main(int argc, char * argv[])
     // Make the pad that will contain the ratio data/MC
     c->cd(); // first return to canvas so that second pad will be drawn in here and not in pad_histo
     TPad* pad_ratio = new TPad("pad_ratio", "", 0., 0., 1.,std::max(0., ymin));
-    RatioPlot ratioplotter(pad_ratio);
+    RatioPlot ratioplotter(pad_ratio, wideplots);
 
     int partitionjobnumber = std::atoi(argv[2]);
     int partition = std::atoi(argv[3]);

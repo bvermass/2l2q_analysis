@@ -1,11 +1,12 @@
 #include "ratioplotter.h"
 
-RatioPlot::RatioPlot(TPad* pad):
+RatioPlot::RatioPlot(TPad* pad, bool widepl):
     Pad(pad),
     Central_Ratio(new TH1F("Central_Ratio", "", 1, 0, 1)),
-    systunc_legend(get_legend(0.18, 0.32, 0.55, 0.42, 3)),
+    systunc_legend(get_legend((widepl)? 0.10 : 0.18, 0.32, 0.55, 0.42, 3)),
     fit_exists(false),
-    fittext(get_latex(0.08, 11, 42))
+    fittext(get_latex(0.08, 11, 42)),
+    wideplots(widepl)
 {
     Pad->SetTopMargin(0.04);
     Pad->SetBottomMargin(0.3);
@@ -242,7 +243,8 @@ void RatioPlot::dothething()
         Central_Ratio->SetStats(0);
         std::ostringstream fitt;
         fitt << std::setprecision(3) << "Avg. ratio: " << fit->GetParameter(0) << "#pm " << fit->GetParError(0);
-        fittext.DrawLatex(0.18, 0.85,(TString) fitt.str());
+        if(wideplots) fittext.DrawLatex(0.1, 0.85,(TString) fitt.str());
+        else fittext.DrawLatex(0.18, 0.85,(TString) fitt.str());
     }
     
     Pad->Modified();

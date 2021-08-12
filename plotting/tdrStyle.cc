@@ -7,7 +7,7 @@ void fixOverlay() {
 }
 */
 
-void setTDRStyle() {
+void setTDRStyle(bool wideplots) {
   TStyle *tdrStyle = new TStyle("tdrStyle","Style for P-TDR");
 
 // For the canvas:
@@ -87,7 +87,8 @@ void setTDRStyle() {
 // Margins:
   tdrStyle->SetPadTopMargin(0.05);
   tdrStyle->SetPadBottomMargin(0.13);
-  tdrStyle->SetPadLeftMargin(0.16);//0.14
+  if(wideplots) tdrStyle->SetPadLeftMargin(0.08);//0.14
+  else tdrStyle->SetPadLeftMargin(0.16);//0.14
   tdrStyle->SetPadRightMargin(0.04);
 
 // For the Global title:
@@ -112,9 +113,9 @@ void setTDRStyle() {
   tdrStyle->SetTitleSize(0.05, "XYZ");
   // tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
   // tdrStyle->SetTitleYSize(Float_t size = 0.02);
-  tdrStyle->SetTitleXOffset(1.1);
-  //tdrStyle->SetTitleYOffset(1.25);
-  tdrStyle->SetTitleYOffset(1.3);    //0.9
+  tdrStyle->SetTitleXOffset(1.2);
+  if(wideplots) tdrStyle->SetTitleYOffset(0.7);    //0.9
+  else tdrStyle->SetTitleYOffset(1.25);
   // tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 // For the axis labels:
