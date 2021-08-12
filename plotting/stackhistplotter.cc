@@ -3,6 +3,8 @@
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
+    bool sum_em_me = false;
+
     // set general plot style
     setTDRStyle();
     gROOT->ForceStyle();
@@ -129,6 +131,8 @@ int main(int argc, char * argv[])
         }
     }
 
+    TFile* DataRun2File = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2.root");
+
     TList *keylist;
     if(withdata) keylist = files_data.front()->GetListOfKeys();
     else keylist = files_bkg.back()->GetListOfKeys();
@@ -169,6 +173,13 @@ int main(int argc, char * argv[])
                     if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
+
+                    //add em and me final states together if wanted (use flag)
+                    if(sum_em_me and histname_BtoA.Contains("_em_")){
+                        TString histname_me = histname_BtoA; histname_me.ReplaceAll("_em_", "_me_");
+                        data_hist->Add((TH1F*)files_data[0]->Get(histname_me));
+                    }
+
                     legend.AddEntry(data_hist, legends_data[0], "pl");
                 }
                 
@@ -187,6 +198,13 @@ int main(int argc, char * argv[])
                     hist->SetFillStyle(1001);
                     hist->SetFillColor(color);
                     hist->SetLineColor(color);
+
+                    //add em and me final states together if wanted (use flag)
+                    if(sum_em_me and histname_bkg.Contains("_em_")){
+                        TString histname_me = histname_bkg; histname_me.ReplaceAll("_em_", "_me_");
+                        hist->Add((TH1F*)files_bkg[i]->Get(histname_me));
+                    }
+
                     hists_bkg->Add(hist);
                     legend.AddEntry(hist, legends_bkg[i], "f");
                 }
@@ -209,6 +227,13 @@ int main(int argc, char * argv[])
                             else if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
                             //else hist->Scale(10.);
                             hist->SetMarkerColor(colors_signal[i]);
+
+                            // get signal histograms and fill legend
+                            if(sum_em_me and histname_signal.Contains("_em_")){
+                                TString histname_me = histname_signal; histname_me.ReplaceAll("_em_", "_me_");
+                                hist->Add((TH1F*)files_signal[i]->Get(histname_me));
+                            }
+
                             hists_signal->Add(hist);
                             TString legend_tmp = legends_signal[i];
                             legend_tmp.ReplaceAll("z",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
@@ -234,7 +259,8 @@ int main(int argc, char * argv[])
                     ratioplotter.SetCentralRatio(data_hist, (TH1F*)hists_bkg->GetStack()->Last(), xaxistitle, "Obs./pred.");
                     ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "Stat. unc.");
                     if(histname.Contains("Shape")) ratioplotter.SetConstantFit();
-                    if(histname.Contains("TightmlSV_quadA_Shape") and !histname.Contains("CR")) ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"_ABCDstat"}, {"Syst. unc."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
+                    //if(histname.Contains("TightmlSV_quadA_Shape") and !histname.Contains("CR")) ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"_ABCDstat"}, {"Syst. unc."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
+                    if(histname.Contains("TightmlSV_BtoAwithCD_Shape") and !histname.Contains("CR")) ratioplotter.Add_CR2_SystVariation(DataRun2File, histname, "Syst. unc.", (TH1F*)hists_bkg->GetStack()->Last());
                 }
 
                 // get plot specific pathnames

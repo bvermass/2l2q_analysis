@@ -175,6 +175,7 @@ int main(int argc, char * argv[])
                     //if(isData and histname.Contains("Shape_SR") and histname.Contains("BoverD")) plot_Shape_SR_with_Signal_AoverC(inputfilename, pathname_lin, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text);
                 }
                 if(inputfilename.Contains("hists_full_analyzer")){
+                    plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"l2high_Lxy", "l2full_Lxy_eff_den"}, {"l2 pt > 35GeV", "l2 pt > 7GeV"}, "l2highvsfull_Lxy", true);
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"noKVF_2trPCA", "yesKVF_2trPCA"}, {"SV found", "SV not found"}, "compKVF_2trPCA", true);
                     plot_normalized_hists(sample_file, general_pathname, sample_hist, histname, c, pad, legend, colors, CMSandLumi, shapeSR_text, {"TrainingHighPFN", "Training"}, {"PFN > 0.9", "All events"}, "TrainingvsHighPFN", true);
                 }

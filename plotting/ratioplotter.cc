@@ -173,6 +173,36 @@ void RatioPlot::AddStatVariation(TH1* hist, TString statname)
     systunc_legends.push_back(statname);
 }
 
+void RatioPlot::Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TString legendname, TH1F* MC_central)
+{
+    TString histname_CR2 = histname;
+    histname_CR2.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
+
+    TH1F* hist_CR2 = (TH1F*)DataRun2File->Get(histname_CR2);
+    std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
+    for(int i = 1; i <= hist_CR2->GetNbinsX(); i++){
+        x_central.push_back((double)hist_CR2->GetXaxis()->GetBinCenter(i));
+        x_low.push_back((double)x_central[i-1] - hist_CR2->GetXaxis()->GetBinLowEdge(i));
+        x_high.push_back((double)hist_CR2->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
+        y_central.push_back(1.);
+        if(hist_CR2->GetBinContent(i) == 0 or hist_CR2->GetBinErrorUp(i) == 0){
+            y_low.push_back(0.);
+            y_high.push_back(2.);
+        }else{
+            y_low.push_back((double)hist_CR2->GetBinError(i) / hist_CR2->GetBinContent(i));
+            y_high.push_back((double)hist_CR2->GetBinError(i) / hist_CR2->GetBinContent(i));
+        }
+    }
+
+    systunc_graphs.push_back(new TGraphAsymmErrors(x_central.size(), &x_central[0], &y_central[0], &x_low[0], &x_high[0], &y_low[0], &y_high[0]));
+    systunc_graphs.back()->SetName(hist_CR2->GetName() + legendname);
+    systunc_graphs.back()->SetFillColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetLineColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetMarkerColor(colors[systunc_graphs.size()-1]);
+
+    systunc_legends.push_back(legendname);
+}
+
 
 void RatioPlot::draw_systuncs()
 {
@@ -185,8 +215,10 @@ void RatioPlot::draw_systuncs()
             double xh = systunc_graphs[i]->GetErrorXhigh(bin);
             double yl = 0, yh = 0;
             for(int j = 0; j <= i; j++){
-                yl += systunc_graphs[j]->GetErrorYlow(bin);
-                yh += systunc_graphs[j]->GetErrorYhigh(bin);
+                //yl += systunc_graphs[j]->GetErrorYlow(bin);
+                //yh += systunc_graphs[j]->GetErrorYhigh(bin);
+                yl = sqrt(yl*yl + systunc_graphs[j]->GetErrorYlow(bin)*systunc_graphs[j]->GetErrorYlow(bin));
+                yh = sqrt(yh*yh + systunc_graphs[j]->GetErrorYhigh(bin)*systunc_graphs[j]->GetErrorYhigh(bin));
             }
             grtodraw.back()->SetPointError(bin, xl, xh, yl, yh);
         }
