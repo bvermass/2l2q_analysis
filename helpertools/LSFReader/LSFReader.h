@@ -17,10 +17,10 @@ class LSFReader{
         LSFReader(const TString filename_LSF, const TString histoname_LSF, const TString histoname_sys, const TString pt_eta_conf);
         ~LSFReader();
 
-        double get_LSF(const double pt, const double eta);
-        double get_LSF_BinError(const double pt, const double eta);
-        double get_sys_as_BinContent(const double pt, const double eta);
-        double get_sys_as_BinError(const double pt, const double eta);
+        double get_LSF(double pt, double eta);
+        double get_LSF_BinError(double pt, double eta);
+        double get_sys_as_BinContent(double pt, double eta);
+        double get_sys_as_BinError(double pt, double eta);
 
     private:
         TFile* file_LSF;
@@ -28,5 +28,6 @@ class LSFReader{
         TH2F* histo_sys;
         TString pt_eta_config;
         double pt_max_LSF, pt_min_LSF, pt_max_sys, pt_min_sys;
+        double eta_max_LSF, eta_min_LSF, eta_max_sys, eta_min_sys;
 };
 #endif
