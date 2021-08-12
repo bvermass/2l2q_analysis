@@ -24,3 +24,5 @@ test/condor/FullAnalyzerJobList.txt
 test/condor/MiniAnalyzerJobList.txt
 test/sampleLists/plots_test.txt
 test/sampleLists/test.txt
+*.out
+mini_*

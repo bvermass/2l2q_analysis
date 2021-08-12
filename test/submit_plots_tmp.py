@@ -12,7 +12,7 @@ def init_script( scriptname ):
 def submit_script( script, scriptname ):
     print 'submitting {}'.format( scriptname )
     script.close()
-    while os.system('qsub {} -l walltime=20:00:00'.format(scriptname)) != 0:
+    while os.system('qsub {} -l walltime=4:00:00'.format(scriptname)) != 0:
         print 'qsub error caught, resubmitting'
         time.sleep(2)
     os.system('rm {}'.format(scriptname))

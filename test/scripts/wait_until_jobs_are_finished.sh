@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ $# -eq 1 ] ; then
+    tag="bvermass"
+else
+    tag=$2
+fi
+
 qstatoutput="qstatoutput.txt"
 jobsrunning=true
 njobs=0
@@ -13,7 +19,7 @@ while $jobsrunning; do
     nrunning=0
     nwaiting=0
     while IFS='' read -r line || [[ -n "$line" ]]; do
-        if echo "$line" | grep -q "bvermass"; then
+        if echo "$line" | grep -q "$tag"; then
             RorQ=$(echo ${line:86:1}) #86 is position of R or Q indicating if job is running
             if echo "$RorQ" | grep -q "Q"; then
                 ((nwaiting+=1))
