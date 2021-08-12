@@ -478,6 +478,61 @@ void Skimmer::Init_input_branches(TTree* tree)
     tree->SetBranchAddress("_metPhiUnclDown", &i_metPhiUnclDown, &bi__metPhiUnclDown);
     tree->SetBranchAddress("_metPhiUnclUp", &i_metPhiUnclUp, &bi__metPhiUnclUp);
     tree->SetBranchAddress("_metSignificance", &i_metSignificance, &bi__metSignificance);
+    //tree->SetBranchAddress("_nV0s", &i_nV0s, &bi__nV0s);
+    //tree->SetBranchAddress("_V0InvMass", &i_V0InvMass, &bi__V0InvMass);
+    //tree->SetBranchAddress("_V0Type", &i_V0Type, &bi__V0Type);
+    //tree->SetBranchAddress("_V0X", &i_V0X, &bi__V0X);
+    //tree->SetBranchAddress("_V0Y", &i_V0Y, &bi__V0Y);
+    //tree->SetBranchAddress("_V0Z", &i_V0Z, &bi__V0Z);
+    //tree->SetBranchAddress("_V0RPV", &i_V0RPV, &bi__V0RPV);
+    //tree->SetBranchAddress("_V0RBS", &i_V0RBS, &bi__V0RBS);
+    //tree->SetBranchAddress("_V0Px", &i_V0Px, &bi__V0Px);
+    //tree->SetBranchAddress("_V0Py", &i_V0Py, &bi__V0Py);
+    //tree->SetBranchAddress("_V0Pz", &i_V0Pz, &bi__V0Pz);
+    //tree->SetBranchAddress("_V0Pt", &i_V0Pt, &bi__V0Pt);
+    //tree->SetBranchAddress("_V0Eta", &i_V0Eta, &bi__V0Eta);
+    //tree->SetBranchAddress("_V0Phi", &i_V0Phi, &bi__V0Phi);
+    //tree->SetBranchAddress("_V0DCA", &i_V0DCA, &bi__V0DCA);
+    //tree->SetBranchAddress("_V0PCAX", &i_V0PCAX, &bi__V0PCAX);
+    //tree->SetBranchAddress("_V0PCAY", &i_V0PCAY, &bi__V0PCAY);
+    //tree->SetBranchAddress("_V0PCAZ", &i_V0PCAZ, &bi__V0PCAZ);
+    //tree->SetBranchAddress("_V0VtxNormChi2", &i_V0VtxNormChi2, &bi__V0VtxNormChi2);
+    //tree->SetBranchAddress("_V0RSigPV", &i_V0RSigPV, &bi__V0RSigPV);
+    //tree->SetBranchAddress("_V0RSigBS", &i_V0RSigBS, &bi__V0RSigBS);
+    //tree->SetBranchAddress("_V0PxPos", &i_V0PxPos, &bi__V0PxPos);
+    //tree->SetBranchAddress("_V0PyPos", &i_V0PyPos, &bi__V0PyPos);
+    //tree->SetBranchAddress("_V0PzPos", &i_V0PzPos, &bi__V0PzPos);
+    //tree->SetBranchAddress("_V0PtPos", &i_V0PtPos, &bi__V0PtPos);
+    //tree->SetBranchAddress("_V0PxNeg", &i_V0PxNeg, &bi__V0PxNeg);
+    //tree->SetBranchAddress("_V0PyNeg", &i_V0PyNeg, &bi__V0PyNeg);
+    //tree->SetBranchAddress("_V0PzNeg", &i_V0PzNeg, &bi__V0PzNeg);
+    //tree->SetBranchAddress("_V0PtNeg", &i_V0PtNeg, &bi__V0PtNeg);
+    //tree->SetBranchAddress("_V0EtaPos", &i_V0EtaPos, &bi__V0EtaPos);
+    //tree->SetBranchAddress("_V0EtaNeg", &i_V0EtaNeg, &bi__V0EtaNeg);
+    //tree->SetBranchAddress("_V0PhiPos", &i_V0PhiPos, &bi__V0PhiPos);
+    //tree->SetBranchAddress("_V0PhiNeg", &i_V0PhiNeg, &bi__V0PhiNeg);
+    //tree->SetBranchAddress("_V0NHitsPos", &i_V0NHitsPos, &bi__V0NHitsPos);
+    //tree->SetBranchAddress("_V0NHitsNeg", &i_V0NHitsNeg, &bi__V0NHitsNeg);
+    //tree->SetBranchAddress("_V0NPixHitsPos", &i_V0NPixHitsPos, &bi__V0NPixHitsPos);
+    //tree->SetBranchAddress("_V0NPixHitsNeg", &i_V0NPixHitsNeg, &bi__V0NPixHitsNeg);
+    //tree->SetBranchAddress("_V0D0Pos", &i_V0D0Pos, &bi__V0D0Pos);
+    //tree->SetBranchAddress("_V0DzPos", &i_V0DzPos, &bi__V0DzPos);
+    //tree->SetBranchAddress("_V0D0Neg", &i_V0D0Neg, &bi__V0D0Neg);
+    //tree->SetBranchAddress("_V0DzNeg", &i_V0DzNeg, &bi__V0DzNeg);
+    //tree->SetBranchAddress("_V0D0ErrPos", &i_V0D0ErrPos, &bi__V0D0ErrPos);
+    //tree->SetBranchAddress("_V0DzErrPos", &i_V0DzErrPos, &bi__V0DzErrPos);
+    //tree->SetBranchAddress("_V0D0ErrNeg", &i_V0D0ErrNeg, &bi__V0D0ErrNeg);
+    //tree->SetBranchAddress("_V0DzErrNeg", &i_V0DzErrNeg, &bi__V0DzErrNeg);
+    //tree->SetBranchAddress("_V0IsoPos", &i_V0IsoPos, &bi__V0IsoPos);
+    //tree->SetBranchAddress("_V0IsoNeg", &i_V0IsoNeg, &bi__V0IsoNeg);
+    //tree->SetBranchAddress("_V0LooseQualityPos", &i_V0LooseQualityPos, &bi__V0LooseQualityPos);
+    //tree->SetBranchAddress("_V0LooseQualityNeg", &i_V0LooseQualityNeg, &bi__V0LooseQualityNeg);
+    //tree->SetBranchAddress("_V0TransIPSigPos", &i_V0TransIPSigPos, &bi__V0TransIPSigPos);
+    //tree->SetBranchAddress("_V0TransIPSigNeg", &i_V0TransIPSigNeg, &bi__V0TransIPSigNeg);
+    //tree->SetBranchAddress("_V0PtRatioPos", &i_V0PtRatioPos, &bi__V0PtRatioPos);
+    //tree->SetBranchAddress("_V0PtRatioNeg", &i_V0PtRatioNeg, &bi__V0PtRatioNeg);
+    //tree->SetBranchAddress("_V0PtRelPos", &i_V0PtRelPos, &bi__V0PtRelPos);
+    //tree->SetBranchAddress("_V0PtRelNeg", &i_V0PtRelNeg, &bi__V0PtRelNeg);
 }
 
 
@@ -945,6 +1000,68 @@ void Skimmer::Add_branches(TTree* tree)
     tree->Branch( "_JetConstituentHasTrack",            &o_JetConstituentHasTrack,               std::string("_JetConstituentHasTrack" + jetConstituentsArraySize + "/O").c_str() );
     
     //tree->Branch("_jetIsLoose",                         &o_jetIsLoose,                           "_jetIsLoose[_nJets]/O"); // WARNING, not recommended to be used, only exists for 2016
+
+    //tree->Branch("_nV0s", &o_nV0s, "_nV0s/i");
+    //tree->Branch("_V0InvMass", &o_V0InvMass, "_V0InvMass[_nV0s]/D");
+    //tree->Branch("_V0Type", &o_V0Type, "_V0Type[_nV0s]/i");
+    //// - vertex position and distance
+    //tree->Branch("_V0X", &o_V0X, "_V0X[_nV0s]/D");
+    //tree->Branch("_V0Y", &o_V0Y, "_V0Y[_nV0s]/D");
+    //tree->Branch("_V0Z", &o_V0Z, "_V0Z[_nV0s]/D");
+    //tree->Branch("_V0RPV", &o_V0RPV, "_V0RPV[_nV0s]/D");
+    //tree->Branch("_V0RBS", &o_V0RBS, "_V0RBS[_nV0s]/D");
+    //// - momentum and direction
+    //tree->Branch("_V0Px", &o_V0Px, "_V0Px[_nV0s]/D");
+    //tree->Branch("_V0Py", &o_V0Py, "_V0Py[_nV0s]/D");
+    //tree->Branch("_V0Pz", &o_V0Pz, "_V0Pz[_nV0s]/D");
+    //tree->Branch("_V0Pt", &o_V0Pt, "_V0Pt[_nV0s]/D");
+    //tree->Branch("_V0Eta", &o_V0Eta, "_V0Eta[_nV0s]/D");
+    //tree->Branch("_V0Phi", &o_V0Phi, "_V0Phi[_nV0s]/D");
+    //// - other
+    //tree->Branch("_V0DCA", &o_V0DCA, "_V0DCA[_nV0s]/D");
+    //tree->Branch("_V0PCAX", &o_V0PCAX, "_V0PCAX[_nV0s]/D");
+    //tree->Branch("_V0PCAY", &o_V0PCAY, "_V0PCAY[_nV0s]/D");
+    //tree->Branch("_V0PCAZ", &o_V0PCAZ, "_V0PCAZ[_nV0s]/D");
+    //tree->Branch("_V0VtxNormChi2", &o_V0VtxNormChi2, "_V0VtxNormChi2[_nV0s]/D");
+    //tree->Branch("_V0RSigPV", &o_V0RSigPV, "_V0RSigPV[_nV0s]/D");
+    //tree->Branch("_V0RSigBS", &o_V0RSigBS, "_V0RSigBS[_nV0s]/D");
+    //// V0 decay track variables
+    //// - momentum and direction
+    //tree->Branch("_V0PxPos", &o_V0PxPos, "_V0PxPos[_nV0s]/D");
+    //tree->Branch("_V0PyPos", &o_V0PyPos, "_V0PyPos[_nV0s]/D");
+    //tree->Branch("_V0PzPos", &o_V0PzPos, "_V0PzPos[_nV0s]/D");
+    //tree->Branch("_V0PtPos", &o_V0PtPos, "_V0PtPos[_nV0s]/D");
+    //tree->Branch("_V0PxNeg", &o_V0PxNeg, "_V0PxNeg[_nV0s]/D");
+    //tree->Branch("_V0PyNeg", &o_V0PyNeg, "_V0PyNeg[_nV0s]/D");
+    //tree->Branch("_V0PzNeg", &o_V0PzNeg, "_V0PzNeg[_nV0s]/D");
+    //tree->Branch("_V0PtNeg", &o_V0PtNeg, "_V0PtNeg[_nV0s]/D");
+    //tree->Branch("_V0EtaPos", &o_V0EtaPos, "_V0EtaPos[_nV0s]/D");
+    //tree->Branch("_V0EtaNeg", &o_V0EtaNeg, "_V0EtaNeg[_nV0s]/D");
+    //tree->Branch("_V0PhiPos", &o_V0PhiPos, "_V0PhiPos[_nV0s]/D");
+    //tree->Branch("_V0PhiNeg", &o_V0PhiNeg, "_V0PhiNeg[_nV0s]/D");
+    //// - track quality variables
+    //tree->Branch("_V0NHitsPos", &o_V0NHitsPos, "_V0NHitsPos[_nV0s]/D");
+    //tree->Branch("_V0NHitsNeg", &o_V0NHitsNeg, "_V0NHitsNeg[_nV0s]/D");
+    //tree->Branch("_V0NPixHitsPos", &o_V0NPixHitsPos, "_V0NPixHitsPos[_nV0s]/D");
+    //tree->Branch("_V0NPixHitsNeg", &o_V0NPixHitsNeg, "_V0NPixHitsNeg[_nV0s]/D");
+    //tree->Branch("_V0D0Pos", &o_V0D0Pos, "_V0D0Pos[_nV0s]/D");
+    //tree->Branch("_V0DzPos", &o_V0DzPos, "_V0DzPos[_nV0s]/D");
+    //tree->Branch("_V0D0Neg", &o_V0D0Neg, "_V0D0Neg[_nV0s]/D");
+    //tree->Branch("_V0DzNeg", &o_V0DzNeg, "_V0DzNeg[_nV0s]/D");
+    //tree->Branch("_V0D0ErrPos", &o_V0D0ErrPos, "_V0D0ErrPos[_nV0s]/D");
+    //tree->Branch("_V0DzErrPos", &o_V0DzErrPos, "_V0DzErrPos[_nV0s]/D");
+    //tree->Branch("_V0D0ErrNeg", &o_V0D0ErrNeg, "_V0D0ErrNeg[_nV0s]/D");
+    //tree->Branch("_V0DzErrNeg", &o_V0DzErrNeg, "_V0DzErrNeg[_nV0s]/D");
+    //tree->Branch("_V0IsoPos", &o_V0IsoPos, "_V0IsoPos[_nV0s]/D");
+    //tree->Branch("_V0IsoNeg", &o_V0IsoNeg, "_V0IsoNeg[_nV0s]/D");
+    //tree->Branch("_V0LooseQualityPos", &o_V0LooseQualityPos, "_V0LooseQualityPos[_nV0s]/D");
+    //tree->Branch("_V0LooseQualityNeg", &o_V0LooseQualityNeg, "_V0LooseQualityNeg[_nV0s]/D");
+    //tree->Branch("_V0TransIPSigPos", &o_V0TransIPSigPos, "_V0TransIPSigPos[_nV0s]/D");
+    //tree->Branch("_V0TransIPSigNeg", &o_V0TransIPSigNeg, "_V0TransIPSigNeg[_nV0s]/D");
+    //tree->Branch("_V0PtRatioPos", &o_V0PtRatioPos, "_V0PtRatioPos[_nV0s]/D");
+    //tree->Branch("_V0PtRatioNeg", &o_V0PtRatioNeg, "_V0PtRatioNeg[_nV0s]/D");
+    //tree->Branch("_V0PtRelPos", &o_V0PtRelPos, "_V0PtRelPos[_nV0s]/D");
+    //tree->Branch("_V0PtRelNeg", &o_V0PtRelNeg, "_V0PtRelNeg[_nV0s]/D");
 }
 
 
@@ -1427,6 +1544,63 @@ void Skimmer::Skim(TString skimcondition)
             o_metPhiUnclDown = i_metPhiUnclDown;
             o_metPhiUnclUp = i_metPhiUnclUp;
             o_metSignificance = i_metSignificance;
+            //o_nV0s = i_nV0s;
+            //for(unsigned i = 0; i < i_nV0s; i++){
+            //    o_V0InvMass[i] = i_V0InvMass[i];
+            //    o_V0Type[i] = i_V0Type[i];
+            //    o_V0X[i] = i_V0X[i];
+            //    o_V0Y[i] = i_V0Y[i];
+            //    o_V0Z[i] = i_V0Z[i];
+            //    o_V0RPV[i] = i_V0RPV[i];
+            //    o_V0RBS[i] = i_V0RBS[i];
+            //    o_V0Px[i] = i_V0Px[i];
+            //    o_V0Py[i] = i_V0Py[i];
+            //    o_V0Pz[i] = i_V0Pz[i];
+            //    o_V0Pt[i] = i_V0Pt[i];
+            //    o_V0Eta[i] = i_V0Eta[i];
+            //    o_V0Phi[i] = i_V0Phi[i];
+            //    o_V0DCA[i] = i_V0DCA[i];
+            //    o_V0PCAX[i] = i_V0PCAX[i];
+            //    o_V0PCAY[i] = i_V0PCAY[i];
+            //    o_V0PCAZ[i] = i_V0PCAZ[i];
+            //    o_V0VtxNormChi2[i] = i_V0VtxNormChi2[i];
+            //    o_V0RSigPV[i] = i_V0RSigPV[i];
+            //    o_V0RSigBS[i] = i_V0RSigBS[i];
+            //    o_V0PxPos[i] = i_V0PxPos[i];
+            //    o_V0PyPos[i] = i_V0PyPos[i];
+            //    o_V0PzPos[i] = i_V0PzPos[i];
+            //    o_V0PtPos[i] = i_V0PtPos[i];
+            //    o_V0PxNeg[i] = i_V0PxNeg[i];
+            //    o_V0PyNeg[i] = i_V0PyNeg[i];
+            //    o_V0PzNeg[i] = i_V0PzNeg[i];
+            //    o_V0PtNeg[i] = i_V0PtNeg[i];
+            //    o_V0EtaPos[i] = i_V0EtaPos[i];
+            //    o_V0EtaNeg[i] = i_V0EtaNeg[i];
+            //    o_V0PhiPos[i] = i_V0PhiPos[i];
+            //    o_V0PhiNeg[i] = i_V0PhiNeg[i];
+            //    o_V0NHitsPos[i] = i_V0NHitsPos[i];
+            //    o_V0NHitsNeg[i] = i_V0NHitsNeg[i];
+            //    o_V0NPixHitsPos[i] = i_V0NPixHitsPos[i];
+            //    o_V0NPixHitsNeg[i] = i_V0NPixHitsNeg[i];
+            //    o_V0D0Pos[i] = i_V0D0Pos[i];
+            //    o_V0DzPos[i] = i_V0DzPos[i];
+            //    o_V0D0Neg[i] = i_V0D0Neg[i];
+            //    o_V0DzNeg[i] = i_V0DzNeg[i];
+            //    o_V0D0ErrPos[i] = i_V0D0ErrPos[i];
+            //    o_V0DzErrPos[i] = i_V0DzErrPos[i];
+            //    o_V0D0ErrNeg[i] = i_V0D0ErrNeg[i];
+            //    o_V0DzErrNeg[i] = i_V0DzErrNeg[i];
+            //    o_V0IsoPos[i] = i_V0IsoPos[i];
+            //    o_V0IsoNeg[i] = i_V0IsoNeg[i];
+            //    o_V0LooseQualityPos[i] = i_V0LooseQualityPos[i];
+            //    o_V0LooseQualityNeg[i] = i_V0LooseQualityNeg[i];
+            //    o_V0TransIPSigPos[i] = i_V0TransIPSigPos[i];
+            //    o_V0TransIPSigNeg[i] = i_V0TransIPSigNeg[i];
+            //    o_V0PtRatioPos[i] = i_V0PtRatioPos[i];
+            //    o_V0PtRatioNeg[i] = i_V0PtRatioNeg[i];
+            //    o_V0PtRelPos[i] = i_V0PtRelPos[i];
+            //    o_V0PtRelNeg[i] = i_V0PtRelNeg[i];
+            //}
             outputtree->Fill();
         }
 
