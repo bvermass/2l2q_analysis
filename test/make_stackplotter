@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= plotting/stackhistplotter.cc plotting/tdrStyle.cc src/helper_histo_functions.cc plotting/helper_plotter_functions.cc plotting/ratioplotter.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execStackPlotter
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)

@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra -std=c++11
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES= test/mainroot_PFNcutStudy.cc src/helper_histo_functions.cc src/BkgEstimator.cc src/bTagWP.cc helpertools/LorentzVector/LorentzVector.cc src/PFNcutStudy.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE= execPFNcutStudy
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)
