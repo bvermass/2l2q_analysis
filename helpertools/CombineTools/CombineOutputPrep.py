@@ -41,6 +41,6 @@ for root, dirs, files in os.walk(combine_files_path):
     for f in files:
         f_abspath = os.path.abspath(os.path.join(root, f))
         if 'higgsCombine' in f_abspath and '.root' in f_abspath and tag_flavor in f_abspath and tag_year in f_abspath:
-            if goodMV2(f_abspath):
+            #if goodMV2(f_abspath):
                 txtfile.write('{}\n'.format(f_abspath))
 txtfile.close()
