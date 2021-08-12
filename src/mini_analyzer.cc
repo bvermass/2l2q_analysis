@@ -74,6 +74,103 @@ double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
     }
 }
 
+double get_NewPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017)
+{
+    //special cuts for bins that otherwise have 0 prediction
+    if(isOS){
+        if(is2016){
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 2 and Lxy >= 10)                       return 0.957;//OS me LowMass 2016
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.990;//OS em HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.987;//OS ee HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.933;//OS ee HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass <  6 and Lxy >= 5)                        return 0.982;//OS me HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.952;//OS me HighMass 2016
+            }
+        }else{
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.995;//OS mm LowMass 1718
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 2 and Lxy >= 10)                       return 0.979;//OS me LowMass 1718
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.986;//OS em HighMass 1718
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.917;//OS me HighMass 1718
+            }
+        }
+    }else{
+        if(is2016){
+            if(mass <= 5){
+                //all bins fine
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.987;//SS em HighMass 2016
+                //!!!if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.053;//SS em HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.988;//SS ee HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.913;//SS ee HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.968;//OS me HighMass 2016
+            }
+        }else{
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.994;//SS mm LowMass 1718
+                if(l1flavor == 0 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.990;//SS me LowMass 1718
+            }else{
+                if(l1flavor == 1 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.991;//SS mm HighMass 1718
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.510;//SS me HighMass 1718
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.956;//SS me HighMass 1718
+            }
+        }
+    }
+
+    // Normal overall PFN cuts
+    if(l1flavor == 0 and l2flavor == 0){//ee
+        if(is2016){
+            if(mass <= 5)   return 0.98;
+            else            return 0.99;
+        }else if(is2017){
+            if(mass <= 5)   return 0.98;
+            else            return 0.97;
+        }else {
+            if(mass <= 5)   return 0.98;
+            else            return 0.97;
+        }
+    }else if(l1flavor == 1 and l2flavor == 0){//me
+        if(is2016){
+            if(mass <= 5)   return 0.98;
+            else            return 0.99;
+        }else if(is2017){
+            if(mass <= 5)   return 0.98;
+            else            return 0.97;
+        }else {
+            if(mass <= 5)   return 0.98;
+            else            return 0.97;
+        }
+    }else if(l1flavor == 1 and l2flavor == 1){//mm
+        if(is2016){
+            if(mass <= 5)   return 0.9994;
+            else            return 0.998;
+        }else if(is2017){
+            if(mass <= 5)   return 0.996;
+            else            return 0.998;
+        }else {
+            if(mass <= 5)   return 0.996;
+            else            return 0.998;
+        }
+    }else if(l1flavor == 0 and l2flavor == 1){//em
+        if(is2016){
+            if(mass <= 5)   return 0.999;
+            else            return 0.998;
+        }else if(is2017){
+            if(mass <= 5)   return 0.996;
+            else            return 0.996;
+        }else {
+            if(mass <= 5)   return 0.996;
+            else            return 0.996;
+        }
+    }else{
+        std::cout << "Error: Reaching end of get_NewPFNcut without specifying a cut" << std::endl;
+        return 0.;
+    }
+}
+
 double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
@@ -225,6 +322,7 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
             loop_counter = 0;
         }
 
+
         set_signal_regions();
         //set_signal_regions_gridscan();
         fill_histograms();
@@ -239,13 +337,11 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
                         cnt4++;
                         if(event._SV_l1mass < 85){
                             cnt5++;
-                            int i_MV2      = get_PFNevaluation_index(4, 1);
-                            double PFNcut  = get_NewPFNcut(4, event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
+                            int i_MV2      = get_PFNevaluation_index(10, 1);
+                            double PFNcut  = get_NewPFNcut(10, event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
                             if(event._JetTagVal[i_MV2] > PFNcut){
                                 cnt6++;
-                                avg_svmass += event._SV_mass;
-                                avg_lxy += event._SV_PVSVdist_2D;
-                                if(event._SV_mass < 2){
+                                if(event._SV_mass > 2){
                                     cnt7++;
                                     if(event._SV_PVSVdist_2D < 4){
                                         cnt8++;
@@ -287,11 +383,13 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     std::cout << "setting quadA quasi-zero bins to zero" << std::endl;
     set_quadA_zero_event_bins();
     add_ABCDstat_variation("cutTightmlSV_BtoAwithCD_Shape_SR");
+    //add_NonClosureSys_variation("cutTightmlSV_BtoAwithCD_Shape_SR");
 
     std::cout << "Add under- and overflow to last bins, then write them" << std::endl;
     for(auto const& it : hists){
         TH1* h = it.second;
         fix_overflow_and_negative_bins(h);
+        //divide_stat_errors(h);
 	    h->Write(h->GetName(), TObject::kOverwrite);
     }
     for(auto const& it : hists2D){
@@ -393,6 +491,32 @@ void mini_analyzer::calculate_eff()
     }
 }
 
+void mini_analyzer::add_NonClosureSys_variation(TString selection_tag)
+{
+    for(auto const& it : hists){
+        TH1* h = it.second;
+        TString hname = it.first;
+        if(!hname.Contains(selection_tag)) continue;
+
+        TString hname_CR1 = hname;
+        hname_CR1.ReplaceAll("TightmlSV", "CR1mlSV");
+        TString hname_CR1_quadA = hname_CR1;
+        hname_CR1_quadA.ReplaceAll("BtoAwithCD", "quadA");
+        // ABCD statistical variation
+        hists_sys[hname + "_NonClosureUp"] = (TH1F*)h->Clone(hname + "_NonClosureUp");
+        hists_sys[hname + "_NonClosureDown"] = (TH1F*)h->Clone(hname + "_NonClosureDown");
+        for(int i = 1; i <= h->GetNbinsX(); i++){
+            if(hists[hname_CR1_quadA]->GetBinContent(i) == 0 or hists[hname_CR1]->GetBinContent(i) == 0){
+                hists_sys[hname + "_NonClosureUp"]->SetBinContent(i, h->GetBinContent(i)*2);
+                hists_sys[hname + "_NonClosureDown"]->SetBinContent(i, h->GetBinContent(i)*0.5);
+            }else{
+                hists_sys[hname + "_NonClosureUp"]->SetBinContent(i, h->GetBinContent(i)*(1 + hists[hname_CR1_quadA]->GetBinContent(i)/hists[hname_CR1]->GetBinContent(i)));
+                hists_sys[hname + "_NonClosureDown"]->SetBinContent(i, h->GetBinContent(i)*(1 - hists[hname_CR1_quadA]->GetBinContent(i)/hists[hname_CR1]->GetBinContent(i)));
+            }
+        }
+    }
+}
+
 void mini_analyzer::add_ABCDstat_variation(TString selection_tag)
 {
     for(auto const& it : hists){
@@ -406,8 +530,15 @@ void mini_analyzer::add_ABCDstat_variation(TString selection_tag)
         hists_sys[hname + "_ABCDstatUp"] = (TH1F*)h->Clone(hname + "_ABCDstatUp");
         hists_sys[hname + "_ABCDstatDown"] = (TH1F*)h->Clone(hname + "_ABCDstatDown");
         for(int i = 1; i <= h->GetNbinsX(); i++){
-            hists_sys[hname + "_ABCDstatUp"]->SetBinContent(i, h->GetBinContent(i)*(1 + hists[hname_CR1]->GetBinErrorUp(i)/hists[hname_CR1]->GetBinContent(i)));
-            hists_sys[hname + "_ABCDstatDown"]->SetBinContent(i, h->GetBinContent(i)*(1 - hists[hname_CR1]->GetBinErrorLow(i)/hists[hname_CR1]->GetBinContent(i)));
+            if(hists[hname_CR1]->GetBinContent(i) == 0){
+                hists_sys[hname + "_ABCDstatUp"]->SetBinContent(i, h->GetBinContent(i)*2);
+                hists_sys[hname + "_ABCDstatDown"]->SetBinContent(i, h->GetBinContent(i)*0);
+            }else{
+                hists_sys[hname + "_ABCDstatUp"]->SetBinContent(i, h->GetBinContent(i)*(1 + hists[hname_CR1]->GetBinErrorUp(i)/hists[hname_CR1]->GetBinContent(i)));
+                hists_sys[hname + "_ABCDstatDown"]->SetBinContent(i, h->GetBinContent(i)*(1 - hists[hname_CR1]->GetBinErrorLow(i)/hists[hname_CR1]->GetBinContent(i)));
+                //hists_sys[hname + "_ABCDstatUp"]->SetBinContent(i, h->GetBinContent(i)*(1 + hists[hname_CR1]->GetBinErrorUp(i)/hists[hname_CR1]->GetBinContent(i)/5.));
+                //hists_sys[hname + "_ABCDstatDown"]->SetBinContent(i, h->GetBinContent(i)*(1 - hists[hname_CR1]->GetBinErrorLow(i)/hists[hname_CR1]->GetBinContent(i)/5.));
+            }
         }
     }
 }
@@ -430,7 +561,7 @@ void mini_analyzer::set_signal_regions_gridscan()
             int i_MV2      = get_PFNevaluation_index(event._evaluating_mass[MV2.second], event._lFlavor);
             
             if(baseline_cutmlSV){
-                if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+                if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                     if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + CPtag + "_cutTightmlSV_quadA");
                     else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + CPtag + "_cutTightmlSV_quadC");
                 }else {
@@ -478,8 +609,11 @@ void mini_analyzer::set_signal_regions()
                        event._nTightLep == 1 &&
                        event._nTightJet <= 1;
 
+    baseline_cutmlSV_nojetveto = event._SV_l1mass > 10 &&
+                                 event._nTightLep == 1;
+
     baseline_cutCR3phill = event._SV_l1mass > 10 &&
-                           (event._SV_l1mass < 40 || event._SV_l1mass > 90) &&
+                           (event._SV_l1mass < 50 || event._SV_l1mass > 85) &&
                            event._dphill > 0.4 &&
                            event._nTightLep == 1 &&
                            event._nTightJet <= 1;
@@ -491,9 +625,11 @@ void mini_analyzer::set_signal_regions()
     for(auto const& MV2 : MV2tags){
         TString MV2tag = MV2.first;
         int i_MV2      = get_PFNevaluation_index(event._evaluating_mass[MV2.second], event._lFlavor);
-        double PFNcut  = get_PFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
-        double LoosePFNcut = get_LoosePFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2018);
-        double LoosePFNcut2 = get_LoosePFNcut2(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2018);
+        //int i_MV2      = get_PFNevaluation_index(ceil(event._SV_mass), event._lFlavor);
+        //double PFNcut  = get_PFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
+        double PFNcut  = get_NewPFNcut(event._evaluating_mass[MV2.second], event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
+        double LoosePFNcut = get_LoosePFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
+        double LoosePFNcut2 = get_LoosePFNcut2(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
         double MediumPFNcut  = get_MediumPFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
         // Determine quadrant (in PFN output and dphi)
         //// dphill
@@ -558,7 +694,7 @@ void mini_analyzer::set_signal_regions()
         //}
         // mlSV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > LoosePFNcut) ABCDtags.push_back(MV2tag + "_cutmlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutmlSV_quadC");
             }else {
@@ -568,7 +704,7 @@ void mini_analyzer::set_signal_regions()
         }
         // control region 1: mlSV with PFN below LoosePFNcut
         if(baseline_cutmlSV and event._JetTagVal[i_MV2] < LoosePFNcut){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > 0.6) ABCDtags.push_back(MV2tag + "_cutCR1mlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR1mlSV_quadC");
             }else {
@@ -578,7 +714,7 @@ void mini_analyzer::set_signal_regions()
         }
         // control region 1 Tight: mlSV with PFN below LoosePFNcut2
         if(baseline_cutmlSV and event._JetTagVal[i_MV2] < LoosePFNcut2){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > 0.7) ABCDtags.push_back(MV2tag + "_cutTightCR1mlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR1mlSV_quadC");
             }else {
@@ -586,22 +722,22 @@ void mini_analyzer::set_signal_regions()
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR1mlSV_quadD");
             }
         }
-        // control region 2: mlSV with signal region between 90 - 110 GeV
+        // control region 2: mlSV with signal region between 85 - 110 GeV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 90 and event._SV_l1mass < 110){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
                 if(event._JetTagVal[i_MV2] > LoosePFNcut) ABCDtags.push_back(MV2tag + "_cutCR2mlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR2mlSV_quadC");
-            }else if(event._SV_l1mass < 40 or event._SV_l1mass > 110){
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
                 if(event._JetTagVal[i_MV2] > LoosePFNcut) ABCDtags.push_back(MV2tag + "_cutCR2mlSV_quadB");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR2mlSV_quadD");
             }
         }
-        //// control region 3: mlSV with signal region between 10 - 40 Gev
+        //// control region 3: mlSV with signal region between 10 - 50 Gev
         //if(baseline_cutmlSV){
-        //    if(event._SV_l1mass < 40){
+        //    if(event._SV_l1mass < 50){
         //        if(event._JetTagVal[i_MV2] > LoosePFNcut) ABCDtags.push_back(MV2tag + "_cutCR3mlSV_quadA");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR3mlSV_quadC");
-        //    }else if(event._SV_l1mass > 90){
+        //    }else if(event._SV_l1mass > 85){
         //        if(event._JetTagVal[i_MV2] > LoosePFNcut) ABCDtags.push_back(MV2tag + "_cutCR3mlSV_quadB");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR3mlSV_quadD");
         //    }
@@ -662,7 +798,7 @@ void mini_analyzer::set_signal_regions()
         //}
         // mlSV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightmlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightmlSV_quadC");
             }else {
@@ -672,7 +808,7 @@ void mini_analyzer::set_signal_regions()
         }
         // Medium mlSV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediummlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediummlSV_quadC");
             }else {
@@ -680,49 +816,59 @@ void mini_analyzer::set_signal_regions()
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediummlSV_quadD");
             }
         }
-        // control region 2: mlSV with signal region between 90 - 110 GeV
+        // control region 2: mlSV with signal region between 85 - 110 GeV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 90 and event._SV_l1mass < 110){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
                 if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_quadC");
-            }else if(event._SV_l1mass < 40 or event._SV_l1mass > 110){
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
                 if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_quadB");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_quadD");
             }
         }
-        //// control region 3: mlSV with signal region between 10 - 40 Gev
+        // control region 2: mlSV with signal region between 85 - 110 GeV without jet veto
+        if(baseline_cutmlSV_nojetveto){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
+                if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2NoJetVetomlSV_quadA");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2NoJetVetomlSV_quadC");
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
+                if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2NoJetVetomlSV_quadB");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2NoJetVetomlSV_quadD");
+            }
+        }
+        //// control region 3: mlSV with signal region between 10 - 50 Gev
         //if(baseline_cutmlSV){
-        //    if(event._SV_l1mass < 40){
+        //    if(event._SV_l1mass < 50){
         //        if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR3mlSV_quadA");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR3mlSV_quadC");
-        //    }else if(event._SV_l1mass > 90){
+        //    }else if(event._SV_l1mass > 85){
         //        if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR3mlSV_quadB");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR3mlSV_quadD");
         //    }
         //}
-        // control region 2: mlSV with signal region between 90 - 110 GeV
+        // control region 2: mlSV with signal region between 85 - 110 GeV
         if(baseline_cutmlSV){
-            if(event._SV_l1mass > 90 and event._SV_l1mass < 110){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
                 if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR2mlSV_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR2mlSV_quadC");
-            }else if(event._SV_l1mass < 40 or event._SV_l1mass > 110){
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
                 if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR2mlSV_quadB");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR2mlSV_quadD");
             }
         }
-        //// control region 3: mlSV with signal region between 10 - 40 Gev
+        //// control region 3: mlSV with signal region between 10 - 50 Gev
         //if(baseline_cutmlSV){
-        //    if(event._SV_l1mass < 40){
+        //    if(event._SV_l1mass < 50){
         //        if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR3mlSV_quadA");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR3mlSV_quadC");
-        //    }else if(event._SV_l1mass > 90){
+        //    }else if(event._SV_l1mass > 85){
         //        if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR3mlSV_quadB");
         //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR3mlSV_quadD");
         //    }
         //}
         // mlSV Inverted Jets CR
         if(baseline_cutmlSV_CR2Jets){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightmlSV_CR2Jets_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightmlSV_CR2Jets_quadC");
             }else {
@@ -732,12 +878,22 @@ void mini_analyzer::set_signal_regions()
         }
         // Medium mlSV Inverted Jets CR
         if(baseline_cutmlSV_CR2Jets){
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediummlSV_CR2Jets_quadA");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediummlSV_CR2Jets_quadC");
             }else {
                 if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediummlSV_CR2Jets_quadB");
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediummlSV_CR2Jets_quadD");
+            }
+        }
+        // control region 2 in Inverted Jets CR: mlSV with signal region between 85 - 110 GeV
+        if(baseline_cutmlSV_CR2Jets){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
+                if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_CR2Jets_quadA");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_CR2Jets_quadC");
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
+                if(event._JetTagVal[i_MV2] > PFNcut) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_CR2Jets_quadB");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutTightCR2mlSV_CR2Jets_quadD");
             }
         }
 
@@ -746,11 +902,18 @@ void mini_analyzer::set_signal_regions()
             if(!isData) ABCDtags.push_back(MV2tag + "_cutbaselinemlSV");
             if(event._JetTagVal[i_MV2] < 0.8) ABCDtags.push_back(MV2tag + "_cutbaselinemlSV_noSR");
 
-            if(event._SV_l1mass > 40 and event._SV_l1mass < 90){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(!isData) ABCDtags.push_back(MV2tag + "_cutinsidemlSV");
                 if(event._JetTagVal[i_MV2] < 0.8) ABCDtags.push_back(MV2tag + "_cutinsidemlSV_noSR");
             }else{
                 ABCDtags.push_back(MV2tag + "_cutoutsidemlSV");
+            }
+        }
+        if(baseline_cutmlSV_CR2Jets){
+            if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
+                if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutinsidemlSV_CR2Jets");
+            }else{
+                if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutoutsidemlSV_CR2Jets");
             }
         }
     }
@@ -833,25 +996,25 @@ void mini_analyzer::add_histograms()
         for(const auto& MV2 : MV2tags){
             TString MV2tag = MV2.first;
             if(!(MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06") or MV2tag.Contains("7e-05"))) continue;
-            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
+            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
                 for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD"/*, "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
                     add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
-                    add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
+    //                add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
                 }
-                //add_fraction_histograms(lep_region + MV2tag + cut2region);
+    //            //add_fraction_histograms(lep_region + MV2tag + cut2region);
 
-                // only make region A histograms if we're not running over data
+    //            // only make region A histograms if we're not running over data
                 if(!isData or cut2region.Contains("CR")){
                     for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_AoverC", "_quadABCD"}){
                         add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
-                        add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
+    //                    add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
                     }
                 }
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV"};
-            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV"};
+            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_standard_histograms(lep_region + MV2tag + cutregion);
                 add_pfn_histograms(lep_region + MV2tag + cutregion);
@@ -862,25 +1025,31 @@ void mini_analyzer::add_histograms()
     for(const TString& lep_region : {"_mm", "_ee", "_em", "_me", "_2l"}){
         for(const auto& MV2 : MV2tags){
             TString MV2tag = MV2.first;
-            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
+            bool TagExtraPlots = MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06") or MV2tag.Contains("7e-05");
+            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
                 for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD"/*, "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
                     add_Shape_SR_histograms(lep_region + MV2tag + cut2region + quadrant);
+                    if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cut2region + quadrant);
                 }
                 if(!isData or cut2region.Contains("CR")){
                     for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_AoverC", "_quadABCD"}){
                         add_Shape_SR_histograms(lep_region + MV2tag + cut2region + quadrant);
+                        if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cut2region + quadrant);
                     }
-                    for(const auto& var : variations){
-                        add_Shape_SR_histograms(lep_region + MV2tag + cut2region + "_quadA" + var.first);
-                    }
+                }
+            }
+            if(!isData){
+                for(const auto& var : variations){
+                    add_Shape_SR_histograms(lep_region + MV2tag + "_cutTightmlSV_quadA" + var.first);
                 }
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV"};
-            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV"};
+            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_Shape_SR_histograms(lep_region + MV2tag + cutregion);
+                if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cutregion);
             }
         }
     }
@@ -928,8 +1097,8 @@ void mini_analyzer::add_standard_histograms(TString prefix)
     //hists[prefix+"_dphill"]             = new TH1F(prefix+"_dphill", ";#it{#Delta #phi}_{ll};Events", 6, 0, 3.14);
     //hists[prefix+"_dRljet"]             = new TH1F(prefix+"_dRljet", ";#it{#Delta R}_{l,jet};Events", 6, 0, 1.5);
 
-    //hists[prefix+"_PV-SVdxy"]       = new TH1F(prefix+"_PV-SVdxy", ";L_{xy} [cm];Events", 6, 0, 60);
     //double PVSVdxybins[3] = {0, 10, 60};
+    hists[prefix+"_PV-SVdxy"]       = new TH1F(prefix+"_PV-SVdxy", ";L_{xy} [cm];Events", 40, 0, 40);
     //hists[prefix+"_PV-SVdxy_zoom2"]  = new TH1F(prefix+"_PV-SVdxy_zoom2", ";L_{xy} [cm];Events", 2, PVSVdxybins);
     //hists[prefix+"_PV-SVdxyz"]      = new TH1F(prefix+"_PV-SVdxyz", ";L_{xyz} [cm];Events", 6, 0, 100);
     //hists[prefix+"_PV-SVdxyz_zoom"] = new TH1F(prefix+"_PV-SVdxyz_zoom", ";L_{xyz} [cm];Events", 6, 0, 20);
@@ -966,28 +1135,105 @@ void mini_analyzer::add_pfn_histograms(TString prefix)
 void mini_analyzer::add_Shape_SR_histograms(TString prefix)
 {
     if(prefix.Contains("_mm") or prefix.Contains("_ee") or prefix.Contains("_em") or prefix.Contains("_me")){
-        for(const TString& weighted : {"","_unw"}){
-            TString Shape_SRname    = prefix+"_Shape_SR"+weighted;
-            TString Shape_alphaname = prefix+"_Shape_alpha"+weighted;
-            hists[Shape_SRname]     = new TH1F(Shape_SRname, ";#Delta (PV-SV)_{2D} [cm];Events", 12, 0, 12);
-            hists[Shape_alphaname]  = new TH1F(Shape_alphaname, ";#Delta (PV-SV)_{2D} [cm];Events", 6, 0, 6);
+        TString Shape_SRname    = prefix+"_Shape_SR";
+        int nbins = 12;
+        if(prefix.Contains("_SS") and prefix.Contains("_M-10_")) nbins = 11;
+        hists[Shape_SRname]     = new TH1F(Shape_SRname, ";#Delta (PV-SV)_{2D} [cm];Events", nbins, 0, nbins);
 
-            std::vector<TString> binnames;
-            if(prefix.Contains("_M-1_") or prefix.Contains("_M-2_") or prefix.Contains("_M-3_") or prefix.Contains("_M-4_") or prefix.Contains("_M-5_")){
-                binnames = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
-            }else if(prefix.Contains("_M-6_") or prefix.Contains("_M-8_") or prefix.Contains("_M-10_") or prefix.Contains("_M-12_") or prefix.Contains("_M-14_")){
-                binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
-            }
-            for(unsigned i = 1; i <= binnames.size(); ++i){
-                hists[Shape_SRname]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
-                if(i < 7) hists[Shape_alphaname]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
-            }
-            hists[Shape_SRname]->SetCanExtend(false);
-            hists[Shape_alphaname]->SetCanExtend(false);
+        std::vector<TString> binnames;
+        if(prefix.Contains("_M-5_")){
+            binnames = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+        }else if(prefix.Contains("_SS") and prefix.Contains("_M-10_")){
+            binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", ">1"};
+        }else if(prefix.Contains("_M-10_")){
+            binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
         }
+        for(unsigned i = 1; i <= binnames.size(); ++i){
+            hists[Shape_SRname]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
+        }
+        hists[Shape_SRname]->SetCanExtend(false);
     }
     else if(prefix.Contains("_2l")){
-        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", 48, 0, 48);
+        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", 46, 0, 46);
+        hists["_OS"+prefix+"_Shape_SR"]       = new TH1F("_OS"+prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
+        int nbins = 24;
+        if(prefix.Contains("_M-10_")) nbins = 22;
+        hists["_SS"+prefix+"_Shape_SR"]       = new TH1F("_SS"+prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", nbins, 0, nbins);
+        std::vector<TString> binnames_OS, binnames_SS;
+        if(prefix.Contains("_M-5_")){
+            binnames_OS = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+            binnames_SS = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+        }else if(prefix.Contains("_M-10_")){
+            binnames_OS = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+            binnames_SS = {"0-1", "1-5", ">5", "0-1", ">1", "0-1", "1-5", ">5", "0-1", ">1", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+        }
+        for(unsigned i = 1; i <= binnames_OS.size(); ++i){
+            hists["_OS"+prefix+"_Shape_SR"]->GetXaxis()->SetBinLabel(i, binnames_OS[i-1]);
+        }
+        for(unsigned i = 1; i <= binnames_SS.size(); ++i){
+            hists["_SS"+prefix+"_Shape_SR"]->GetXaxis()->SetBinLabel(i, binnames_SS[i-1]);
+        }
+        hists["_OS"+prefix+"_Shape_SR"]->SetCanExtend(false);
+        hists["_SS"+prefix+"_Shape_SR"]->SetCanExtend(false);
+    }
+}
+
+void mini_analyzer::add_Shape_SR_extra_histograms(TString prefix)
+{
+    if(prefix.Contains("_mm") or prefix.Contains("_ee") or prefix.Contains("_em") or prefix.Contains("_me")){
+        TString Shape_SRname    = prefix+"_Shape_SR_unw";
+        TString Shape_alphaname = prefix+"_Shape_alpha";
+        TString Shape_alphaname_unw = prefix+"_Shape_alpha_unw";
+        int nbins = 12;
+        if(prefix.Contains("_SS") and prefix.Contains("_M-10_")) nbins = 11;
+        hists[Shape_SRname]     = new TH1F(Shape_SRname, ";#Delta (PV-SV)_{2D} [cm];Events", nbins, 0, nbins);
+        hists[Shape_alphaname]  = new TH1F(Shape_alphaname, ";#Delta (PV-SV)_{2D} [cm];Events", 6, 0, 6);
+        hists[Shape_alphaname_unw]  = new TH1F(Shape_alphaname_unw, ";#Delta (PV-SV)_{2D} [cm];Events", 6, 0, 6);
+
+        std::vector<TString> binnames;
+        if(prefix.Contains("_M-5_")){
+            binnames = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+        }else if(prefix.Contains("_SS") and prefix.Contains("_M-10_")){
+            binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", ">1"};
+        }else if(prefix.Contains("_M-10_")){
+            binnames = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+        }
+        for(unsigned i = 1; i <= binnames.size(); ++i){
+            hists[Shape_SRname]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
+            if(i < 7) hists[Shape_alphaname]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
+            if(i < 7) hists[Shape_alphaname_unw]->GetXaxis()->SetBinLabel(i, binnames[i-1]);
+        }
+        hists[Shape_SRname]->SetCanExtend(false);
+        hists[Shape_alphaname]->SetCanExtend(false);
+        hists[Shape_alphaname_unw]->SetCanExtend(false);
+    }
+    else if(prefix.Contains("_2l")){
+        hists[prefix+"_Shape_alpha"]       = new TH1F(prefix+"_Shape_alpha", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
+        hists[prefix+"_Shape_alpha_unw"]       = new TH1F(prefix+"_Shape_alpha_unw", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
+        hists2D["_OS"+prefix+"_Shape_PFN"]    = new TH2F("_OS"+prefix+"_Shape_PFN", ";#Delta (PV-SV)_{2D} [cm];PFN output", 24, 0, 24, 10000, 0, 1);
+        hists2D["_SS"+prefix+"_Shape_PFN"]    = new TH2F("_SS"+prefix+"_Shape_PFN", ";#Delta (PV-SV)_{2D} [cm];PFN output", 24, 0, 24, 10000, 0, 1);
+        hists["_OS"+prefix+"_Shape_SR_unw"]       = new TH1F("_OS"+prefix+"_Shape_SR_unw", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
+        hists["_SS"+prefix+"_Shape_SR_unw"]       = new TH1F("_SS"+prefix+"_Shape_SR_unw", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
+        std::vector<TString> binnames_OS, binnames_SS;
+        if(prefix.Contains("_M-5_")){
+            binnames_OS = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+            binnames_SS = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
+        }else if(prefix.Contains("_M-10_")){
+            binnames_OS = {"0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+            binnames_SS = {"0-1", "1-5", ">5", "0-1", ">1", "0-1", "1-5", ">5", "0-1", ">1", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5", "0-1", "1-5", ">5"};
+        }
+        for(unsigned i = 1; i <= binnames_OS.size(); ++i){
+            hists[prefix+"_Shape_alpha"]->GetXaxis()->SetBinLabel(i, binnames_OS[i-1]);
+            hists[prefix+"_Shape_alpha_unw"]->GetXaxis()->SetBinLabel(i, binnames_OS[i-1]);
+            hists["_OS"+prefix+"_Shape_SR_unw"]->GetXaxis()->SetBinLabel(i, binnames_OS[i-1]);
+        }
+        for(unsigned i = 1; i <= binnames_SS.size(); ++i){
+            hists["_SS"+prefix+"_Shape_SR_unw"]->GetXaxis()->SetBinLabel(i, binnames_SS[i-1]);
+        }
+        hists[prefix+"_Shape_alpha"]->SetCanExtend(false);
+        hists[prefix+"_Shape_alpha_unw"]->SetCanExtend(false);
+        hists["_OS"+prefix+"_Shape_SR_unw"]->SetCanExtend(false);
+        hists["_SS"+prefix+"_Shape_SR_unw"]->SetCanExtend(false);
     }
 }
 
@@ -1003,7 +1249,10 @@ void mini_analyzer::fill_histograms()
 
         if(mv2tag.Contains("2e-06") or mv2tag.Contains("4e-06") or mv2tag.Contains("7e-05")){
             fill_standard_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
-            fill_pfn_histograms(     sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal], i_JetTagVal);
+            if(ABCDtag.Contains("cutbaselinemlSV") or ABCDtag.Contains("cutinsidemlSV") or ABCDtag.Contains("cutoutsidemlSV")){
+                fill_pfn_histograms(     sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal], i_JetTagVal);
+            }
+            fill_Shape_SR_extra_histograms(sr_flavor,  ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal], i_JetTagVal);
         }
         //fill_fraction_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
         fill_Shape_SR_histograms(sr_flavor,  ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
@@ -1100,7 +1349,7 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
     //hists[prefix+"_dphill"]->Fill(event._dphill,event_weight);
     //hists[prefix+"_dRljet"]->Fill(event._dRljet,event_weight);            
                                        
-    //hists[prefix+"_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);
+    hists[prefix + "_PV-SVdxy"]->Fill(event._SV_PVSVdist_2D,event_weight);
     //hists[prefix+"_PV-SVdxy_zoom2"]->Fill(event._SV_PVSVdist_2D,event_weight);
     //hists[prefix+"_PV-SVdxyz"]->Fill(event._SV_PVSVdist,event_weight);
     //hists[prefix+"_PV-SVdxyz_zoom"]->Fill(event._SV_PVSVdist,event_weight);
@@ -1134,9 +1383,9 @@ void mini_analyzer::fill_pfn_histograms(TString prefix, double event_weight, uns
 
 void mini_analyzer::fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight)
 {
-    double SRShape2bin = get_SRShape3bin(event._SV_PVSVdist_2D, event._SV_mass, ABCDtag);//gives 0,1,2,3,4,5 based on L_xy and SVmass
-    double SRShape2bin_OSSS = SRShape2bin;
-    if(sr_flavor.Contains("_SS")) SRShape2bin += 6.;
+    double SRShapebin = get_SRShape3bin(event._SV_PVSVdist_2D, event._SV_mass, ABCDtag, sr_flavor);//gives 0,1,2,3,4,5 based on L_xy and SVmass
+    double SRShapebin_OSSS = SRShapebin;
+    if(sr_flavor.Contains("_SS")) SRShapebin += 6.;
 
     TString fl;
     if(sr_flavor.Contains("_mm")) fl = "_mm";
@@ -1145,17 +1394,57 @@ void mini_analyzer::fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag,
     if(sr_flavor.Contains("_em")) fl = "_em";
 
 
-    hists[fl + ABCDtag + "_Shape_SR"]->Fill(SRShape2bin, event_weight);
-    hists[fl + ABCDtag + "_Shape_alpha"]->Fill(SRShape2bin_OSSS, event_weight);
-    hists[fl + ABCDtag + "_Shape_SR_unw"]->Fill(SRShape2bin);
-    hists[fl + ABCDtag + "_Shape_alpha_unw"]->Fill(SRShape2bin_OSSS);
+    hists[fl + ABCDtag + "_Shape_SR"]->Fill(SRShapebin, event_weight);
 
 
-    double _2lbin = 0.;
-    if(sr_flavor.Contains("_em"))      _2lbin += 12.;
-    else if(sr_flavor.Contains("_ee")) _2lbin += 24.;
-    else if(sr_flavor.Contains("_me")) _2lbin += 36.;
-    hists["_2l" + ABCDtag + "_Shape_SR"]->Fill(SRShape2bin + _2lbin, event_weight);
+    double _2lbin = 0., _2lbin_OSSS = 0.;
+    if(sr_flavor.Contains("_SS") and ABCDtag.Contains("M-10")){
+        if(sr_flavor.Contains("_em")){      _2lbin += 11.; _2lbin_OSSS += 5.;}
+        else if(sr_flavor.Contains("_ee")){ _2lbin += 22.; _2lbin_OSSS += 10.;}
+        else if(sr_flavor.Contains("_me")){ _2lbin += 34.; _2lbin_OSSS += 16.;}
+    }else{
+        if(sr_flavor.Contains("_em")){      _2lbin += 12.; _2lbin_OSSS += 6.;}
+        else if(sr_flavor.Contains("_ee")){ _2lbin += 24.; _2lbin_OSSS += 12.;}
+        else if(sr_flavor.Contains("_me")){ _2lbin += 36.; _2lbin_OSSS += 18.;}
+    }
+    hists["_2l" + ABCDtag + "_Shape_SR"]->Fill(SRShapebin + _2lbin, event_weight);
+    hists[sr_flavor(0,3) + "_2l" + ABCDtag + "_Shape_SR"]->Fill(SRShapebin_OSSS + _2lbin_OSSS, event_weight);
+
+}
+
+void mini_analyzer::fill_Shape_SR_extra_histograms(TString sr_flavor, TString ABCDtag, double event_weight, unsigned i)
+{
+    double SRShapebin = get_SRShape3bin(event._SV_PVSVdist_2D, event._SV_mass, ABCDtag, sr_flavor);//gives 0,1,2,3,4,5 based on L_xy and SVmass
+    double SRShapebin_OSSS = SRShapebin;
+    if(sr_flavor.Contains("_SS")) SRShapebin += 6.;
+
+    TString fl;
+    if(sr_flavor.Contains("_mm")) fl = "_mm";
+    if(sr_flavor.Contains("_ee")) fl = "_ee";
+    if(sr_flavor.Contains("_me")) fl = "_me";
+    if(sr_flavor.Contains("_em")) fl = "_em";
+
+
+    hists[fl + ABCDtag + "_Shape_alpha"]->Fill(SRShapebin_OSSS, event_weight);
+    hists[fl + ABCDtag + "_Shape_SR_unw"]->Fill(SRShapebin);
+    hists[fl + ABCDtag + "_Shape_alpha_unw"]->Fill(SRShapebin_OSSS);
+
+
+    double _2lbin = 0., _2lbin_OSSS = 0.;
+    if(sr_flavor.Contains("_SS") and ABCDtag.Contains("M-10")){
+        if(sr_flavor.Contains("_em")){      _2lbin += 11.; _2lbin_OSSS += 5.;}
+        else if(sr_flavor.Contains("_ee")){ _2lbin += 22.; _2lbin_OSSS += 10.;}
+        else if(sr_flavor.Contains("_me")){ _2lbin += 34.; _2lbin_OSSS += 16.;}
+    }else{
+        if(sr_flavor.Contains("_em")){      _2lbin += 12.; _2lbin_OSSS += 6.;}
+        else if(sr_flavor.Contains("_ee")){ _2lbin += 24.; _2lbin_OSSS += 12.;}
+        else if(sr_flavor.Contains("_me")){ _2lbin += 36.; _2lbin_OSSS += 18.;}
+    }
+    hists["_2l" + ABCDtag + "_Shape_alpha"]->Fill(SRShapebin_OSSS + _2lbin_OSSS, event_weight);
+    hists["_2l" + ABCDtag + "_Shape_alpha_unw"]->Fill(SRShapebin_OSSS + _2lbin_OSSS);
+    hists2D[sr_flavor(0,3) + "_2l" + ABCDtag + "_Shape_PFN"]->Fill(SRShapebin_OSSS + _2lbin_OSSS, event._JetTagVal[i], event_weight);
+    hists[sr_flavor(0,3) + "_2l" + ABCDtag + "_Shape_SR_unw"]->Fill(SRShapebin_OSSS + _2lbin_OSSS);
+
 }
 
 
@@ -1185,12 +1474,15 @@ void mini_analyzer::sum_histograms_based_on_tags(TString base_tag, TString secon
             histname_second.ReplaceAll(base_tag, second_tag);
             histname_combined.ReplaceAll(base_tag, target_tag);
 
-            hists[histname_combined]->Add(h, hists[histname_second]);
+            if(hists[histname_combined] and hists[histname_second]){
+                hists[histname_combined]->Add(h, hists[histname_second]);
+            }
         }
     }
 
     for(const auto& hist : hists2D){
         TString histname = hist.first;
+        if(histname.Contains("sys")) continue;
         TH2* h           = hist.second;
         if(histname.Contains(base_tag)){
             TString histname_second = histname;
@@ -1198,7 +1490,9 @@ void mini_analyzer::sum_histograms_based_on_tags(TString base_tag, TString secon
             histname_second.ReplaceAll(base_tag, second_tag);
             histname_combined.ReplaceAll(base_tag, target_tag);
 
-            hists2D[histname_combined]->Add(h, hists2D[histname_second]);
+            if(hists2D[histname_combined] and hists2D[histname_second]){
+                hists2D[histname_combined]->Add(h, hists2D[histname_second]);
+            }
         }
     }
 }
@@ -1231,10 +1525,10 @@ double mini_analyzer::get_SRShape2bin(double PVSVdist_2D, TString tagForMass)
     }
 }
 
-double mini_analyzer::get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass)
+double mini_analyzer::get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass, TString sr_flavor)
 {
     //Low Mass
-    if(tagForMass.Contains("M-2") or tagForMass.Contains("M-3") or tagForMass.Contains("M-4") or tagForMass.Contains("M-5")){
+    if(tagForMass.Contains("M-1_") or tagForMass.Contains("M-2_") or tagForMass.Contains("M-3") or tagForMass.Contains("M-4") or tagForMass.Contains("M-5")){
         if(SV_mass < 2.){
             if(PVSVdist_2D < 4)  return 0.;
             if(PVSVdist_2D < 10) return 1.;
@@ -1245,14 +1539,15 @@ double mini_analyzer::get_SRShape3bin(double PVSVdist_2D, double SV_mass, TStrin
             else return 5.;
         }
     //High Mass
-    }else if(tagForMass.Contains("M-6") or tagForMass.Contains("M-8") or tagForMass.Contains("M-10") or tagForMass.Contains("M-12") or tagForMass.Contains("M-14")){
+    }else if(tagForMass.Contains("M-6") or tagForMass.Contains("M-7") or tagForMass.Contains("M-8") or tagForMass.Contains("M-9") or tagForMass.Contains("M-10") or tagForMass.Contains("M-11") or tagForMass.Contains("M-12") or tagForMass.Contains("M-13") or tagForMass.Contains("M-14") or tagForMass.Contains("M-15")){
         if(SV_mass < 6.){
             if(PVSVdist_2D < 1) return 0.;
             if(PVSVdist_2D < 5) return 1.;
             else return 2.;
         }else {
             if(PVSVdist_2D < 1) return 3.;
-            if(PVSVdist_2D < 5) return 4.;
+            if(sr_flavor == "_SS_em" or sr_flavor == "_SS_mm") return 4.; //For HighMass SS em and SS mm both in 2016 as in 1718 for bins with SVmass > 6GeV, we have no prediction in bin > 5cm, therefore we merge it with bin 1-5cm
+            else if(PVSVdist_2D < 5) return 4.;
             else return 5.;
         }
     }else {
@@ -1266,6 +1561,19 @@ double mini_analyzer::get_SRShape3bin(double PVSVdist_2D, double SV_mass, TStrin
             if(PVSVdist_2D < 10) return 4.;
             else return 5.;
         }
+    }
+}
+
+double mini_analyzer::get_SRShape4bin(double PVSVdist_2D, double SV_mass)
+{
+    if(SV_mass < 5.){
+        if(PVSVdist_2D < 4.) return 0.;
+        else if(PVSVdist_2D < 10.) return 1.;
+        else return 2.;
+    }else {
+        if(PVSVdist_2D < 1.) return 3.;
+        else if(PVSVdist_2D < 5.) return 4.;
+        else return 5.;
     }
 }
 
@@ -1288,6 +1596,7 @@ void mini_analyzer::set_quadA_zero_event_bins()
             for(int i = 1; i <= h->GetNbinsX(); i++){
                 if(h->GetBinContent(i) < 1e-4){
                     h->SetBinContent(i, 0);
+                    h->SetBinError(i, 0);
                 }
             }
             //set_error_for_zero_event_bins(hname, "");

@@ -83,10 +83,10 @@ std::vector<TString> mini_analyzer::set_signal_regions_JEC(BkgEstimator& eventJE
     for(auto const& MV2 : MV2tags){
         TString MV2tag = MV2.first;
         int i_MV2      = get_PFNevaluation_index(eventJEC._evaluating_mass[MV2.second], eventJEC._lFlavor);
-        double PFNcut  = get_PFNcut(eventJEC._evaluating_mass[MV2.second], eventJEC._lFlavor, eventJEC._is2016, eventJEC._is2017);
+        double PFNcut  = get_NewPFNcut(eventJEC._evaluating_mass[MV2.second], eventJEC._l1Flavor, eventJEC._lFlavor, eventJEC._SV_mass, eventJEC._SV_PVSVdist_2D, eventJEC._l1Charge != eventJEC._lCharge, eventJEC._is2016, eventJEC._is2017);
 
         if(baseline_cutmlSV_JEC){
-            if(eventJEC._SV_l1mass > 40 and eventJEC._SV_l1mass < 90){
+            if(eventJEC._SV_l1mass > 50 and eventJEC._SV_l1mass < 85){
                 if(eventJEC._JetTagVal[i_MV2] > PFNcut) JECtags.push_back(MV2tag + "_cutTightmlSV_quadA_" + JECvarsys);
             }
         }
@@ -120,7 +120,7 @@ void mini_analyzer::fill_histograms_JEC(BkgEstimator& eventJEC, std::map<TString
 
 void mini_analyzer::fill_Shape_SR_histograms_JEC(BkgEstimator& eventJEC, std::map<TString, TH1*>* hists_JEC, TString sr_flavor_JEC, TString JECtag, double event_weight)
 {
-    double SRShape2bin = get_SRShape3bin(eventJEC._SV_PVSVdist_2D, eventJEC._SV_mass, JECtag);//gives 0,1,2,3,4,5 based on L_xy and SVmass
+    double SRShape2bin = get_SRShape3bin(eventJEC._SV_PVSVdist_2D, eventJEC._SV_mass, JECtag, sr_flavor);//gives 0,1,2,3,4,5 based on L_xy and SVmass
     double SRShape2bin_OSSS = SRShape2bin;
     if(sr_flavor_JEC.Contains("_SS")) SRShape2bin += 6.;
 

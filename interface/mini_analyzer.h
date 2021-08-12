@@ -31,6 +31,7 @@
 #include "../helpertools/LorentzVector/LorentzVector.h"
 
 double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_NewPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
 double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
@@ -56,6 +57,7 @@ class mini_analyzer {
         bool baseline_cutphiORmll;
         bool baseline_cutmlSV;
         bool baseline_cutmlSV_CR2Jets;
+        bool baseline_cutmlSV_nojetveto;
         bool baseline_cutCR3phill;
 
         //General functions
@@ -71,6 +73,7 @@ class mini_analyzer {
         void calculate_ratio(TString numerator_tag, TString denominator_tag, TString ratio_tag);
         void apply_ratio(TString ratio_tag, TString histo_tag, TString target_tag, TString ratio_tag_for_error);
         void calculate_eff();
+        void add_NonClosureSys_variation(TString selection_tag);
         void add_ABCDstat_variation(TString selection_tag);
 
         void set_signal_regions();
@@ -82,18 +85,21 @@ class mini_analyzer {
         void add_standard_histograms(TString prefix);
         void add_pfn_histograms(TString prefix);
         void add_Shape_SR_histograms(TString prefix);
+        void add_Shape_SR_extra_histograms(TString prefix);
 
         void fill_histograms();
         void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
         void fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight);
+        void fill_Shape_SR_extra_histograms(TString sr_flavor, TString ABCDtag, double event_weight, unsigned i);
 
         void sum_quad_histograms();
         void sum_histograms_based_on_tags(TString base_tag, TString second_tags, TString target_tag);
         double get_SRShapebin(double PVSVdist_2D, double SV_mass);
         double get_SRShape2bin(double PVSVdist_2D, TString tagForMass);
-        double get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass);
+        double get_SRShape3bin(double PVSVdist_2D, double SV_mass, TString tagForMass, TString sr_flavor);
+        double get_SRShape4bin(double PVSVdist_2D, double SV_mass);
         void set_error_for_zero_event_bins(TString hname_target, TString hname_ratio);
         void set_quadA_zero_event_bins();
 
