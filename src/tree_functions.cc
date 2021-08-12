@@ -79,7 +79,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._RawWeight         = _weight*total_weight;
     bkgestimator._PileUpSF          = puweightreader->get_PUWeight_Central(_nTrueInt);
     bkgestimator._PileUpSF_unc_up   = puweightreader->get_PUWeight_Up(_nTrueInt) - puweightreader->get_PUWeight_Central(_nTrueInt);
-    bkgestimator._PileUpSF_unc_down = puweightreader->get_PUWeight_Down(_nTrueInt) - puweightreader->get_PUWeight_Central(_nTrueInt);
+    bkgestimator._PileUpSF_unc_down = puweightreader->get_PUWeight_Central(_nTrueInt) - puweightreader->get_PUWeight_Down(_nTrueInt);
     bkgestimator._TrackSF           = highest_trackpt_weight;
     bkgestimator._TrackSF_unc_sym   = std::abs(1. - highest_trackpt_weight)/2;
     if(_lFlavor[i_leading] == 0){//electron scale factors
