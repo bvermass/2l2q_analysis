@@ -160,7 +160,7 @@ void setTDRStyle(bool wideplots) {
   //tdrStyle->SetHatchesSpacing(0.05);
 
   tdrStyle->SetLegendBorderSize(0);
-  tdrStyle->SetLegendTextSize(0.04);
+  tdrStyle->SetLegendTextSize(0.038);
 
 	
 

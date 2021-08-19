@@ -103,8 +103,14 @@ int main(int argc, char * argv[])
     pad_histo->cd();
 
     double lgnd_lowerbound = 0.80;
-    if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 6) lgnd_lowerbound = 0.76;
-    if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 8) lgnd_lowerbound = 0.73;
+    if(withdata){
+        if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 6) lgnd_lowerbound = 0.76;
+        if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 8) lgnd_lowerbound = 0.73;
+    }else{
+        lgnd_lowerbound = 0.83;
+        if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 6) lgnd_lowerbound = 0.8;
+        if(legends_signal.size() + legends_bkg.size() + legends_data.size() > 8) lgnd_lowerbound = 0.76;
+    }
     TLegend legend = get_legend(wideplots? 0.1 : 0.2, lgnd_lowerbound, wideplots? 0.5 : 0.95, 0.91, n_columns);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
@@ -326,6 +332,7 @@ int main(int argc, char * argv[])
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
                 if(withdata and std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(40.);
+                else if(std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")) > 1000) hists_bkg->SetMinimum(40.);
                 else hists_bkg->SetMinimum(4.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("E nostack same");

@@ -12,5 +12,5 @@
 // fixOverlay: Redraws the axis
 
 void fixOverlay();
-void setTDRStyle(bool wideplots);
+void setTDRStyle(bool wideplots = false);
 #endif
