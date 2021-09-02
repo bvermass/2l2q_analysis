@@ -156,11 +156,15 @@ int main(int argc, char * argv[])
                 systDist.push_back("shapeN");
                 systUnc.push_back({0,1});
 
+                systNames.push_back("lumi_correlated");
+                systDist.push_back("lnN");
+                if(year == "16") systUnc.push_back({1.006, 0});
+                else if(year == "1718") systUnc.push_back({1.0155, 0});
+
                 systNames.push_back((std::string)"lumi_"+year);
                 systDist.push_back("lnN");
-                if(year == "16" or year == "18") systUnc.push_back({1.025,0});
-                else if(year == "17") systUnc.push_back({1.023,0});
-                else if(year == "1718") systUnc.push_back({1.025,0});
+                if(year == "16") systUnc.push_back({1.01,0});
+                else if(year == "1718") systUnc.push_back({1.0126,0});
 
                 systNames.push_back("xsecNorm");
                 systDist.push_back("lnN");
@@ -181,10 +185,10 @@ int main(int argc, char * argv[])
                 systNames.push_back("Track_sys");
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
-                systNames.push_back("JEC_sys");
+                systNames.push_back("JEC_"+year+"_sys");
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
-                systNames.push_back("JER_sys");
+                systNames.push_back("JER_"+year+"_sys");
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
 
