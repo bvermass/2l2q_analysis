@@ -239,25 +239,30 @@ int main(int argc, char * argv[])
                     }
                     if(systUnc[i][1] != 0){//data-driven prediction systs
                         if(systNames[i].find("ABCDsys") != std::string::npos){
-                            TString histname_up = histname_data;
-                            histname_up.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
+                            TString histname_up_pred = histname_data;
+                            histname_up_pred.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
+                            TString histname_up_obs = histname_up_pred;
+                            histname_up_obs.ReplaceAll("BtoAwithCD", "quadA");
                             //histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up"); //used to be the method from CR1
                             //histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");//used to be the method from CR1
                             std::cout << "systnames: " << systNames[i] << std::endl;
-                            std::cout << "histname: " << histname_up << std::endl;
+                            std::cout << "histname: " << histname_up_pred << std::endl;
 
                             //Get CR2NojetVeto prediction histograms from full run 2 data files
-                            TH1F* hist_CR2 = (TH1F*)files_bkg_ABCDsys->Get(histname_up);
+                            TH1F* hist_CR2_pred = (TH1F*)files_bkg_ABCDsys->Get(histname_up_pred);
+                            TH1F* hist_CR2_obs = (TH1F*)files_bkg_ABCDsys->Get(histname_up_obs);
                             //Create ABCDsys histograms based on variation of SR histograms with relative stat unc from CR2 histograms
                             TH1F* hist_ABCDsys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
                             TH1F* hist_ABCDsys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
                             for(int i = 1; i <= hist_ABCDsys_up->GetNbinsX(); i++){
-                                if(hist_CR2->GetBinContent(i) == 0 or hist_CR2->GetBinErrorUp(i) == 0){
+                                if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
                                     hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*2);
                                     hist_ABCDsys_down->SetBinContent(i, 0.);
                                 }else{
-                                    hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 + hist_CR2->GetBinErrorUp(i)/hist_CR2->GetBinContent(i)));
-                                    hist_ABCDsys_down->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 - hist_CR2->GetBinErrorLow(i)/hist_CR2->GetBinContent(i)));
+                                    double ErrorUp = sqrt(pow(hist_CR2_pred->GetBinErrorUp(i)/hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinErrorUp(i)/hist_CR2_obs->GetBinContent(i),2));
+                                    double ErrorDown = sqrt(pow(hist_CR2_pred->GetBinErrorLow(i)/hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinErrorLow(i)/hist_CR2_obs->GetBinContent(i),2));
+                                    hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 + ErrorUp));
+                                    hist_ABCDsys_down->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 - ErrorDown));
                                 }
                             }
 

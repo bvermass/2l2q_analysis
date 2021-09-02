@@ -176,22 +176,26 @@ void RatioPlot::AddStatVariation(TH1* hist, TString statname)
 
 void RatioPlot::Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TString legendname, TH1F* MC_central)
 {
-    TString histname_CR2 = histname;
-    histname_CR2.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
+    TString histname_CR2_pred = histname;
+    histname_CR2_pred.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
+    TString histname_CR2_obs = histname;
+    histname_CR2_obs.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
+    histname_CR2_obs.ReplaceAll("BtoAwithCD", "quadA");
 
-    TH1F* hist_CR2 = (TH1F*)DataRun2File->Get(histname_CR2);
+    TH1F* hist_CR2_pred = (TH1F*)DataRun2File->Get(histname_CR2_pred);
+    TH1F* hist_CR2_obs = (TH1F*)DataRun2File->Get(histname_CR2_obs);
     std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
-    for(int i = 1; i <= hist_CR2->GetNbinsX(); i++){
-        x_central.push_back((double)hist_CR2->GetXaxis()->GetBinCenter(i));
-        x_low.push_back((double)x_central[i-1] - hist_CR2->GetXaxis()->GetBinLowEdge(i));
-        x_high.push_back((double)hist_CR2->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
+    for(int i = 1; i <= hist_CR2_pred->GetNbinsX(); i++){
+        x_central.push_back((double)hist_CR2_pred->GetXaxis()->GetBinCenter(i));
+        x_low.push_back((double)x_central[i-1] - hist_CR2_pred->GetXaxis()->GetBinLowEdge(i));
+        x_high.push_back((double)hist_CR2_pred->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
         y_central.push_back(1.);
-        if(hist_CR2->GetBinContent(i) == 0 or hist_CR2->GetBinErrorUp(i) == 0){
+        if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
             y_low.push_back(0.);
             y_high.push_back(2.);
         }else{
-            y_low.push_back((double)hist_CR2->GetBinError(i) / hist_CR2->GetBinContent(i));
-            y_high.push_back((double)hist_CR2->GetBinError(i) / hist_CR2->GetBinContent(i));
+            y_low.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
+            y_high.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
         }
     }
 
