@@ -56,10 +56,9 @@ void RatioPlot::SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TStrin
     Central_Ratio->GetYaxis()->SetTitle(yaxistitle);
     Central_Ratio->SetMinimum(0);
     Central_Ratio->SetMaximum(2);
-    if(num->GetXaxis()->IsAlphanumeric()){
-        for(int i = 1; i <= num->GetNbinsX(); i++){
-            Central_Ratio->GetXaxis()->SetBinLabel(i, num->GetXaxis()->GetBinLabel(i));
-        }
+    for(int i = 1; i <= num->GetNbinsX(); i++){
+        Central_Ratio->SetBinError(i, num->GetBinError(i)/den->GetBinContent(i));
+        if(num->GetXaxis()->IsAlphanumeric()) Central_Ratio->GetXaxis()->SetBinLabel(i, num->GetXaxis()->GetBinLabel(i));
     }
 }
 
@@ -200,7 +199,7 @@ void RatioPlot::Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TSt
     }
 
     systunc_graphs.push_back(new TGraphAsymmErrors(x_central.size(), &x_central[0], &y_central[0], &x_low[0], &x_high[0], &y_low[0], &y_high[0]));
-    systunc_graphs.back()->SetName(hist_CR2->GetName() + legendname);
+    systunc_graphs.back()->SetName(hist_CR2_pred->GetName() + legendname);
     systunc_graphs.back()->SetFillColor(colors[systunc_graphs.size()-1]);
     systunc_graphs.back()->SetLineColor(colors[systunc_graphs.size()-1]);
     systunc_graphs.back()->SetMarkerColor(colors[systunc_graphs.size()-1]);
