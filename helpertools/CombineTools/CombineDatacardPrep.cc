@@ -119,7 +119,7 @@ int main(int argc, char * argv[])
             TString histname = sample_hist_ref->GetName();
 
 
-            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA_") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA_") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw") and !histname.Contains("_OS") and !histname.Contains("_SS")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -152,9 +152,22 @@ int main(int argc, char * argv[])
                 std::vector<std::string> systNames;
                 std::vector<std::string> systDist;
 
-                systNames.push_back("ABCDsys");
-                systDist.push_back("shapeN");
-                systUnc.push_back({0,1});
+                if(flavor == "_ee_" or flavor == "_2l_"){
+                    systNames.push_back("ABCDsys"+year+"_e_close");
+                    systDist.push_back("shapeN");
+                    systUnc.push_back({0,1});
+                    systNames.push_back("ABCDsys"+year+"_e_far");
+                    systDist.push_back("shapeN");
+                    systUnc.push_back({0,1});
+                }
+                if(flavor == "_mm_" or flavor == "_2l_"){
+                    systNames.push_back("ABCDsys"+year+"_mu_close");
+                    systDist.push_back("shapeN");
+                    systUnc.push_back({0,1});
+                    systNames.push_back("ABCDsys"+year+"_mu_far");
+                    systDist.push_back("shapeN");
+                    systUnc.push_back({0,1});
+                }
 
                 systNames.push_back("lumi_correlated");
                 systDist.push_back("lnN");
@@ -254,7 +267,9 @@ int main(int argc, char * argv[])
                             //Create ABCDsys histograms based on variation of SR histograms with relative stat unc from CR2 histograms
                             TH1F* hist_ABCDsys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
                             TH1F* hist_ABCDsys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
+                            std::vector<bool> correlation_mask = get_correlation_mask(systNames[i], histname_data, hist_ABCDsys_up->GetNbinsX());
                             for(int i = 1; i <= hist_ABCDsys_up->GetNbinsX(); i++){
+                                if(!correlation_mask[i-1]) continue;
                                 if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
                                     hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*2);
                                     hist_ABCDsys_down->SetBinContent(i, 0.);
@@ -390,6 +405,65 @@ void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_dat
 
     shapeSR_file->Close();
 
+}
+
+std::vector<bool> get_correlation_mask(TString sysname, TString histname, int nbins)
+{
+    if(histname.Contains("_2l_")){//2l needs to split unc between displaced electron and muon final states.
+        if(sysname.Contains("_e")){
+            if(sysname.Contains("close")){
+                if(nbins == 48) return {false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        true, true, false, true, true, false, true, true, false, true, true, false,
+                                        true, true, false, true, true, false, true, true, false, true, true, false};
+
+                if(nbins == 46) return {false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false,
+                                        true, true, false, true, true, false, true, true, false, true, true, false,
+                                        true, true, false, true, true, false, true, true, false, true, true, false};
+            }else if(sysname.Contains("far")){
+                if(nbins == 48) return {false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, true, false, false, true, false, false, true, false, false, true,
+                                        false, false, true, false, false, true, false, false, true, false, false, true};
+
+                if(nbins == 46) return {false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, true, false, false, true, false, false, true, false, false, true,
+                                        false, false, true, false, false, true, false, false, true, false, false, true};
+            }
+        }else if(sysname.Contains("_mu")){
+            if(sysname.Contains("close")){
+                if(nbins == 48) return {true, true, false, true, true, false, true, true, false, true, true, false,
+                                        true, true, false, true, true, false, true, true, false, true, true, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false};
+
+                if(nbins == 46) return {true, true, false, true, true, false, true, true, false, true, false,
+                                        true, true, false, true, true, false, true, true, false, true, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false};
+            }else if(sysname.Contains("far")){
+                if(nbins == 48) return {false, false, true, false, false, true, false, false, true, false, false, true,
+                                        false, false, true, false, false, true, false, false, true, false, false, true,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false};
+
+                if(nbins == 46) return {false, false, true, false, false, true, false, false, true, false, true,
+                                        false, false, true, false, false, true, false, false, true, false, true,
+                                        false, false, false, false, false, false, false, false, false, false, false, false,
+                                        false, false, false, false, false, false, false, false, false, false, false, false};
+            }
+        }
+    }else{//ee and mm cases
+        if(sysname.Contains("close")){
+            if(nbins == 12) return {true, true, false, true, true, false, true, true, false, true, true, false};
+            else if(nbins == 11) return {true, true, false, true, true, false, true, true, false, true, false};
+        }else if(sysname.Contains("far")){
+            if(nbins == 12) return {false, false, true, false, false, true, false, false, true, false, false, true};
+            else if(nbins == 11) return {false, false, true, false, false, true, false, false, true, false, true};
+        }
+    }
 }
 
 void checkfornans(std::vector<std::string>& sigName_sys, std::vector<std::vector<std::string>>& bkgNames_sys, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys)
