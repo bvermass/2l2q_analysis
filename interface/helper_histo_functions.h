@@ -16,6 +16,8 @@
 #include <TString.h>
 #include <TH1.h>
 
+double      ratio_error(double x, double y, double Ex, double Ey);
+double      product_error(double x, double y, double Ex, double Ey);
 bool        equals(double x, double y, double precision = 1e-12);
 std::vector<double> make_logscale(unsigned nbins, double xmin, double xmax);
 TString     make_outputfilename(TString filename, TString base_directory, TString base_filename, int partition, int partitionjobnumber, bool full_analyzer);

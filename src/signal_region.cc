@@ -22,11 +22,17 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
     i_jetl2             = find_jet_closest_to_lepton(i_subleading, JetPt_Version, 0.7); //finds jet within 0.7 of subleading lepton to be used as 'displaced jet'
     //i_gen_leading       = find_gen_lep(i_leading);                //finds closest dR match
     //i_gen_subleading    = find_gen_lep(i_subleading);
-    i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton
-    i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
+    if(isSignal){
+        i_gen_l1            = find_gen_l1();                                                   //finds HNL process l1 gen lepton
+        i_gen_l2            = find_gen_l2();                                                   //finds HNL process l2 gen lepton
+    }else{
+        i_gen_l1            = find_gen_lep(i_leading);
+        i_gen_l2            = find_gen_lep(i_subleading);
+    }
     leadingIsl1         = leptonIsGenLepton(i_leading, i_gen_l1);
     subleadingIsl2      = leptonIsGenLepton(i_subleading, i_gen_l2);
     subleadinghighestptIsl2 = leptonIsGenLepton(i_subleading_highestpt, i_gen_l2);
+    //subleadinghighestptIsl2promptID = leptonIsGenLepton(i_subleading_highestpt_promptID, i_gen_l2);
     HNLadditionaltracks = HNL_additional_reco_tracks();
     i_l1_fromgen        = find_reco_l_fromgen(i_gen_l1);
     i_l2_fromgen        = find_reco_l_fromgen(i_gen_l2);
@@ -218,14 +224,12 @@ void full_analyzer::signal_regions(){
      _Training                  = _l1l2SV &&
                                   i_jetl2 != -1 &&
                                   nTightJet <= 1 &&
-                                  (nTightEle + nTightMu == 1) &&
-                                  (nDisplEle + nDisplMu == 1) &&
                                   dphill > 0.4 &&
                                   mll > 10 &&
                                   IVF_PVSVdist_2D < 50;
                                   //_relIso[i_subleading] < 1.5;//to remove?
 
-     _Training2Jets             = _l1l2SV &&
+     _2Jets                     = _l1l2SV &&
                                   i_jetl2 != -1 &&
                                   nTightJet > 1 &&
                                   (nTightEle + nTightMu == 1) &&
@@ -234,7 +238,36 @@ void full_analyzer::signal_regions(){
                                   mll > 10 &&
                                   IVF_PVSVdist_2D < 50;
 
-     _Training2JetsNoZ          = _l1l2SV &&
+     _2prompt2BJets             = _l1l2SV &&
+                                  _lPt[i_leading] > 30 &&
+                                  i_jetl2 != -1 &&
+                                  get_dR_lepton_jet(i_subleading, i_jetl2) < 0.4 &&
+                                  nTightJet > 1 &&
+                                  IsMediumBJetID(i_jetl2) &&
+                                  ((i_jetl2 != i_leading_jet && IsMediumBJetID(i_leading_jet)) || IsMediumBJetID(i_subleading_jet)) &&
+                                  dphill > 0.4 &&
+                                  mll > 10 &&
+                                  IVF_PVSVdist_2D < 50;
+
+     _2BJets                    = _l1l2SV &&
+                                  _lPt[i_leading] > 30 &&
+                                  i_jetl2 != -1 &&
+                                  get_dR_lepton_jet(i_subleading, i_jetl2) < 0.4 &&
+                                  nTightJet > 1 &&
+                                  IsMediumBJetID(i_jetl2) &&
+                                  ((i_jetl2 != i_leading_jet && IsMediumBJetID(i_leading_jet)) || IsMediumBJetID(i_subleading_jet)) &&
+                                  dphill > 0.4 &&
+                                  mll > 10 &&
+                                  IVF_PVSVdist_2D < 50 &&
+                                  _jetPt[i_jetl2] < 50 && fabs(_dxy[i_subleading]) > 0.05 && _relIso[i_subleading] < 3.5;// Btag CR needs to be more signallike
+                                  (!sr_flavor.Contains("ee") || (mll < 80 || mll > 100));// ee final state needs to have less DY
+
+     _2BJetsExtraCuts           = _2BJets &&
+                                  _lNumberOfValidPixelHits[i_subleading] >= 3 &&
+                                  _3dIPSig[i_subleading] > 35;
+
+
+     _2JetsNoZ                  = _l1l2SV &&
                                   i_jetl2 != -1 &&
                                   nTightJet > 1 &&
                                   (nTightEle + nTightMu == 1) &&
@@ -274,17 +307,23 @@ void full_analyzer::signal_regions(){
 void full_analyzer::additional_signal_regions(){
     for(auto& MassMap : JetTagVal){
         for(auto& V2Map : MassMap.second){
-            double pfncutvalue = 0.9;
-            if(sr_flavor.Contains("mm")){
-                if(MassMap.first == 5) pfncutvalue = 0.996;
-                else pfncutvalue = 0.998;
-            }else if(sr_flavor.Contains("ee")){
-                if(MassMap.first == 5) pfncutvalue = 0.98;
-                else pfncutvalue = 0.97;
-            }
+            //double pfncutvalue = 0.9;
+            //if(sr_flavor.Contains("mm")){
+            //    if(MassMap.first == 5) pfncutvalue = 0.996;
+            //    else pfncutvalue = 0.998;
+            //}else if(sr_flavor.Contains("ee")){
+            //    if(MassMap.first == 5) pfncutvalue = 0.98;
+            //    else pfncutvalue = 0.97;
+            //}
             //std::cout << "flavor, mass, pfncutvalue: " << sr_flavor << " " << MassMap.first << " " << pfncutvalue << std::endl;
             _TrainingHighPFN[MassMap.first][V2Map.first]            = _Training &&
                                                                (V2Map.second > 0.9);
+
+            _2prompt2BJetsHighPFN[MassMap.first][V2Map.first]            = _2prompt2BJets &&
+                                                               (V2Map.second > 0.2);
+
+            _2BJetsHighPFN[MassMap.first][V2Map.first]            = _2BJets &&
+                                                               (V2Map.second > 0.2);
 
             _Full[MassMap.first][V2Map.first]                = _FullNoPFN &&
                                                                (V2Map.second > 0.9);

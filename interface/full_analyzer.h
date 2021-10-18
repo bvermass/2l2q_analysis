@@ -1046,7 +1046,7 @@ public :
    int i_gen_l2;
    bool leadingIsl1;
    bool subleadingIsl2; 
-   bool subleadinghighestptIsl2;
+   bool subleadinghighestptIsl2, subleadinghighestptIsl2promptID;
    int i_l1_fromgen, i_l2_fromgen;
    int HNLadditionaltracks;
 
@@ -1054,6 +1054,7 @@ public :
    int i_leading;
    int i_subleading;
    int i_subleading_highestpt;
+   int i_subleadingprompt;
    TString sr_flavor, sr_charge, sr_lflavor, sr_l2flavor, sr_l1flavor;
    
    // gen indices corresponding to signal region leptons (geometric)
@@ -1070,11 +1071,11 @@ public :
    unsigned i_subleading_track;
 
    // numbers of leptons
-   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl, nLooseBJet, nKshort;
+   int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl, nMediumBJet, nLooseBJet, nKshort;
 
    //Signal region booleans
-   bool _genOverlap, _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _bkgestimator, _Training, _Training2Jets, _Training2JetsNoZ, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
-   std::map<int, std::map<double, bool>> _TrainingHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
+   bool _genOverlap, _trige, _trigmu, _l1, _l1l2, _l1l2SV, _Training_noRelIso, _bkgestimator, _Training, _2Jets, _2BJets, _2BJetsExtraCuts, _2prompt2BJets, _2JetsNoZ, _FullNoPFN, _CR_FullNoPFN_invdphi, _CR_FullNoPFN_invmll, _FullNoPFN_toofar;
+   std::map<int, std::map<double, bool>> _TrainingHighPFN, _2BJetsHighPFN, _2prompt2BJetsHighPFN, _Full, _CR_Full_invdphi, _CR_Full_invmll;
 
    // relevant lepton variables
    double mll, dRll, dphill, dRljet;
@@ -1157,6 +1158,7 @@ public :
    // in src/jetID.cc
     bool     IsTightJetID(const unsigned i, const TString JetPt_Version);
     bool     IsLooseBJetID(const unsigned i);
+    bool     IsMediumBJetID(const unsigned i);
     bool     IsCleanJet(const unsigned i, const std::vector<unsigned>& leptoncollection);
     int      find_leading_jet(const std::vector<unsigned>& jetcollection);
     int      find_subleading_jet(const std::vector<unsigned>& jetcollection, const int index_leading);
@@ -1198,7 +1200,7 @@ public :
     void     fill_IVF_histograms(std::map<TString, TH1*>*, std::map<TString, TH2*>*, TString, double);
     void     fill_leptonreco_eff(std::map<TString, TH1*>* hists);
     void     fill_lepton_eff(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight);
+    void     fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix);
     void     fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
     void     fill_HNLrecotracks_KVF_eff(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
    // void     fill_ID_histos(std::map<TString, TH1*>*, TString);
@@ -1225,7 +1227,7 @@ public :
     void     add_gen_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     add_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_IVF_eff_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
-    void     add_HNLrecotracks_KVF_eff_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     add_HNLrecotracks_KVF_eff_histograms(std::map<TString, TH1*>* hists, TString prefix);
     void     add_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
     void     fill_chargeflip_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double event_weight);
     void     fill_gen_HNLtagger_tree(HNLtagger& hnltagger_gen, int i_jet);
@@ -1234,8 +1236,8 @@ public :
    // in src/PFNTools.cc
     std::map<int, std::map<double, double>> GetJetTagVals(HNLtagger& hnltagger, PFNReader& pfn, int pfn_version);
     std::map<int, std::map<double, double>> GetJetTagVals_LowAndHighMass(HNLtagger& hnltagger, PFNReader& pfn_lowmass, PFNReader& pfn_highmass);
-    void     add_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix);
-    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, TString prefix, double mass, double V2, double event_weight);
+    void     add_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix);
+    void     fill_pfn_histograms(std::map<TString, TH1*>* hists, std::map<TString, TH2*>* hists2D, TString prefix, double mass, double V2, double event_weight);
     void     Combine_PFN_ROC_flavor_states(std::map<TString, TH1*>* hists);
 
     // in src/tree_functions.cc

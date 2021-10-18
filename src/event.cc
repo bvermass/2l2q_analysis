@@ -7,7 +7,7 @@
 void full_analyzer::Set_Objects_And_Relevant_Variables(const TString JetPt_Version)
 {
     //Get muons, electrons and jets that pass ID and cleaning
-    std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID;
+    std::vector<unsigned> promptMuonID, promptElectronID, displacedMuonID, displacedElectronID, looseMuonID, looseElectronID, promptMuonIDnodxynodz, promptElectronIDnodxynodz;
     for(unsigned i = 0; i < _nLight; i++){
         if(IsMediumPromptMuonID(i)) promptMuonID.push_back(i);
         //if(IsPromptMuonID(i))       promptMuonID.push_back(i);
@@ -28,11 +28,15 @@ void full_analyzer::Set_Objects_And_Relevant_Variables(const TString JetPt_Versi
     nDisplEle = displacedElectronID.size();
 
     set_jetPt_JERvariations();
-    std::vector<unsigned> jetID, jetID_uncl;
+    std::vector<unsigned> jetID, jetID_uncl, loosebjetID, mediumbjetID;
     for(unsigned i = 0; i < _nJets; i++){
         if(IsTightJetID(i,JetPt_Version) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID) and IsCleanJet(i, displacedMuonID) and IsCleanJet(i, displacedElectronID)) jetID.push_back(i);
         if(IsTightJetID(i, JetPt_Version)) jetID_uncl.push_back(i);
+        if(IsTightJetID(i, JetPt_Version) and IsLooseBJetID(i) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID)) loosebjetID.push_back(i);
+        if(IsTightJetID(i, JetPt_Version) and IsMediumBJetID(i) and IsCleanJet(i, promptMuonID) and IsCleanJet(i, promptElectronID)) mediumbjetID.push_back(i);
     }
+    nLooseBJet      = loosebjetID.size();
+    nMediumBJet     = mediumbjetID.size();
     nTightJet       = jetID.size();
     nTightJet_uncl  = jetID_uncl.size();
 
@@ -41,6 +45,7 @@ void full_analyzer::Set_Objects_And_Relevant_Variables(const TString JetPt_Versi
     i_subleading = select_subleading_lepton_highestpt(displacedElectronID, displacedMuonID);
     //i_subleading = select_subleading_lepton_withSV(displacedElectronID, displacedMuonID);
     i_subleading_highestpt = select_subleading_lepton_highestpt(displacedElectronID, displacedMuonID);
+    i_subleadingprompt = select_subleading_lepton_highestpt(promptElectronID, promptMuonID);
 
 	i_leading_jet                   = find_leading_jet(jetID);
 	i_subleading_jet	            = find_subleading_jet(jetID, i_leading_jet);

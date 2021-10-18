@@ -24,25 +24,25 @@ double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
 {
     if(flavor == 0){//electron
         if(is2016){
-            if(mass <= 5)   return 0.9;
-            else            return 0.9;
+            if(mass <= 5)   return 0.94;
+            else            return 0.94;
         }else if(is2017){
-            if(mass <= 5)   return 0.9;//0.98 had almost 0 predicted events
-            else            return 0.9;//0.97 had almost 0 predicted events
+            if(mass <= 5)   return 0.94;//0.98 had almost 0 predicted events
+            else            return 0.94;//0.97 had almost 0 predicted events
         }else {
-            if(mass <= 5)   return 0.9;
-            else            return 0.9;
+            if(mass <= 5)   return 0.94;
+            else            return 0.94;
         }
     }else {//muon
         if(is2016){
-            if(mass <= 5)   return 0.96;
-            else            return 0.96;
+            if(mass <= 5)   return 0.975;
+            else            return 0.975;
         }else if(is2017){
-            if(mass <= 5)   return 0.96;
-            else            return 0.96;
+            if(mass <= 5)   return 0.975;
+            else            return 0.975;
         }else {
-            if(mass <= 5)   return 0.96;
-            else            return 0.96;
+            if(mass <= 5)   return 0.975;
+            else            return 0.975;
         }
     }
 }
@@ -712,6 +712,16 @@ void mini_analyzer::set_signal_regions()
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutCR1mlSV_quadD");
             }
         }
+        //// control region 1 Old Tight: mlSV with PFN below LoosePFNcut2 and mlSV upper limit still at 90
+        //if(baseline_cutmlSV and event._JetTagVal[i_MV2] < LoosePFNcut2){
+        //    if(event._SV_l1mass > 50 and event._SV_l1mass < 90){
+        //        if(event._JetTagVal[i_MV2] > 0.7) ABCDtags.push_back(MV2tag + "_cutOldTightCR1mlSV_quadA");
+        //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutOldTightCR1mlSV_quadC");
+        //    }else {
+        //        if(event._JetTagVal[i_MV2] > 0.7) ABCDtags.push_back(MV2tag + "_cutOldTightCR1mlSV_quadB");
+        //        else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutOldTightCR1mlSV_quadD");
+        //    }
+        //}
         // control region 1 Tight: mlSV with PFN below LoosePFNcut2
         if(baseline_cutmlSV and event._JetTagVal[i_MV2] < LoosePFNcut2){
             if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
@@ -856,6 +866,15 @@ void mini_analyzer::set_signal_regions()
                 else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR2mlSV_quadD");
             }
         }
+        if(baseline_cutmlSV_nojetveto){
+            if(event._SV_l1mass > 85 and event._SV_l1mass < 110){
+                if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR2NoJetVetomlSV_quadA");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR2NoJetVetomlSV_quadC");
+            }else if(event._SV_l1mass < 50 or event._SV_l1mass > 110){
+                if(event._JetTagVal[i_MV2] > MediumPFNcut) ABCDtags.push_back(MV2tag + "_cutMediumCR2NoJetVetomlSV_quadB");
+                else if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutMediumCR2NoJetVetomlSV_quadD");
+            }
+        }
         //// control region 3: mlSV with signal region between 10 - 50 Gev
         //if(baseline_cutmlSV){
         //    if(event._SV_l1mass < 50){
@@ -910,6 +929,7 @@ void mini_analyzer::set_signal_regions()
             }
         }
         if(baseline_cutmlSV_CR2Jets){
+            ABCDtags.push_back(MV2tag + "_cutbaselinemlSV_CR2Jets");
             if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
                 if(event._JetTagVal[i_MV2] > 0.2) ABCDtags.push_back(MV2tag + "_cutinsidemlSV_CR2Jets");
             }else{
@@ -995,8 +1015,8 @@ void mini_analyzer::add_histograms()
     for(const TString& lep_region : {"_OS_ee", "_SS_ee", "_OS_mm", "_SS_mm", "_OS_em", "_SS_em", "_OS_me", "_SS_me"}){
         for(const auto& MV2 : MV2tags){
             TString MV2tag = MV2.first;
-            if(!(MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06") or MV2tag.Contains("7e-05"))) continue;
-            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
+            if(!(MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06"))) continue;
+            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV"/*, "_cutOldTightCR1mlSV"*/, "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV", "_cutMediumCR2NoJetVetomlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
                 for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD"/*, "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
                     add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
     //                add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
@@ -1013,8 +1033,8 @@ void mini_analyzer::add_histograms()
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
-            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_standard_histograms(lep_region + MV2tag + cutregion);
                 add_pfn_histograms(lep_region + MV2tag + cutregion);
@@ -1025,8 +1045,8 @@ void mini_analyzer::add_histograms()
     for(const TString& lep_region : {"_mm", "_ee", "_em", "_me", "_2l"}){
         for(const auto& MV2 : MV2tags){
             TString MV2tag = MV2.first;
-            bool TagExtraPlots = MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06") or MV2tag.Contains("7e-05");
-            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV", "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
+            bool TagExtraPlots = MV2tag.Contains("2e-06") or MV2tag.Contains("4e-06");
+            for(const TString& cut2region : {/*"_cutphill", "_cutmll", "_cutphiORmll",*/ "_cutmlSV"/*, "_cutOldTightCR1mlSV"*/, "_cutCR1mlSV", "_cutCR2mlSV"/*, "_cutCR3mlSV", "_cutCR1phill", "_cutCR2phill", "_cutCR3phill", "_cutTightphill", "_cutTightmll", "_cutTightphiORmll"*/, "_cutTightmlSV", "_cutMediummlSV", "_cutTightCR1mlSV", "_cutTightCR2mlSV", "_cutTightCR2NoJetVetomlSV", "_cutTightCR2mlSV_CR2Jets"/*, "_cutTightCR3mlSV", "_cutTightCR2phill", "_cutTightCR3phill"*/, "_cutMediumCR2mlSV", "_cutMediumCR2NoJetVetomlSV"/*, "_cutMediumCR3mlSV"*/, "_cutTightmlSV_CR2Jets", "_cutMediummlSV_CR2Jets"}){
                 for(const TString& quadrant : {"_quadB", "_quadC", "_quadD", "_quadCD", "_quadBD", "_quadBCD",  "_CoverD", "_BoverD"/*, "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
                     add_Shape_SR_histograms(lep_region + MV2tag + cut2region + quadrant);
                     if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cut2region + quadrant);
@@ -1045,8 +1065,8 @@ void mini_analyzer::add_histograms()
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
-            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_Shape_SR_histograms(lep_region + MV2tag + cutregion);
                 if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cutregion);
@@ -1076,7 +1096,7 @@ void mini_analyzer::add_standard_histograms(TString prefix)
     //hists[prefix+"_JetEta"]             = new TH1F(prefix+"_JetEta", ";Jet #eta;Events", 6, -3, 3);
     //hists[prefix+"_JetPhi"]             = new TH1F(prefix+"_JetPhi", ";Jet #phi;Events", 6, -3.14, 3.14);
     //hists[prefix+"_nTightLep"]          = new TH1F(prefix+"_nTightLep", ";N_{Lep};Events", 6, 0, 10);
-    hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 6, 0, 50);
+    //hists[prefix+"_l2_pt"]              = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 6, 0, 50);
     //hists[prefix+"_l2_eta"]             = new TH1F(prefix+"_l2_eta", ";l_{2} #eta;Events", 6, -3, 3);
     //hists[prefix+"_l2_phi"]             = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 6, -3.14, 3.14);
     //hists[prefix+"_l2_dxy"]             = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 6, 0, 0.5);
@@ -1154,11 +1174,11 @@ void mini_analyzer::add_Shape_SR_histograms(TString prefix)
         hists[Shape_SRname]->SetCanExtend(false);
     }
     else if(prefix.Contains("_2l")){
-        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", 46, 0, 46);
         hists["_OS"+prefix+"_Shape_SR"]       = new TH1F("_OS"+prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", 24, 0, 24);
         int nbins = 24;
         if(prefix.Contains("_M-10_")) nbins = 22;
         hists["_SS"+prefix+"_Shape_SR"]       = new TH1F("_SS"+prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", nbins, 0, nbins);
+        hists[prefix+"_Shape_SR"]       = new TH1F(prefix+"_Shape_SR", ";#Delta (PV-SV)_{2D} [cm];Events", nbins+24, 0, nbins+24);
         std::vector<TString> binnames_OS, binnames_SS;
         if(prefix.Contains("_M-5_")){
             binnames_OS = {"0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10", "0-4", "4-10", ">10"};
@@ -1247,7 +1267,7 @@ void mini_analyzer::fill_histograms()
         //TString mv2tag = ABCDtag(0,ABCDtag.Index("_CP"));//gridscan
         unsigned i_JetTagVal = MV2tags[mv2tag];
 
-        if(mv2tag.Contains("2e-06") or mv2tag.Contains("4e-06") or mv2tag.Contains("7e-05")){
+        if(mv2tag.Contains("2e-06") or mv2tag.Contains("4e-06")){
             fill_standard_histograms(sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal]);
             if(ABCDtag.Contains("cutbaselinemlSV") or ABCDtag.Contains("cutinsidemlSV") or ABCDtag.Contains("cutoutsidemlSV")){
                 fill_pfn_histograms(     sr_flavor + ABCDtag, event._weight * event._reweighting_weight[i_JetTagVal], i_JetTagVal);
@@ -1328,7 +1348,7 @@ void mini_analyzer::fill_standard_histograms(TString prefix, double event_weight
     //hists[prefix+"_JetEta"]->Fill(event._JetEta,event_weight);            
     //hists[prefix+"_JetPhi"]->Fill(event._JetPhi,event_weight);
     //hists[prefix+"_nTightLep"]->Fill(event._nTightLep,event_weight);         
-    hists[prefix+"_l2_pt"]->Fill(event._lPt,event_weight);             
+    //hists[prefix+"_l2_pt"]->Fill(event._lPt,event_weight);
     //hists[prefix+"_l2_eta"]->Fill(event._lEta,event_weight);            
     //hists[prefix+"_l2_phi"]->Fill(event._lPhi,event_weight);
     //hists[prefix+"_l2_dxy"]->Fill(event._ldxy,event_weight);

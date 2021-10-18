@@ -202,6 +202,28 @@ PFNReader full_analyzer::get_PFNReader_unparametrized_LowMass(int flavor)
         if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
         else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8_unparametrized_LowMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
     }
+    //if(flavor == 0){//electron
+    //    PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_Run2_unparametrized_LowMass_v9/_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //}else if(flavor == 1){//muon
+    //    PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_Run2_unparametrized_LowMass_v9/_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //}
+    //
+    //PFN without 3dIPSig and l Nr. of PixelHits
+    //
+    //highlevel_shape = 21;
+    //if(flavor == 0){//electron
+    //    if(_is2016){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_2016_unparametrized_LowMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }else if(_is2017 or _is2018){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_1718_unparametrized_LowMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }
+    //}else if(flavor == 1){//muon
+    //    if(_is2016){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_2016_unparametrized_LowMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }else if(_is2017 or _is2018){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_1718_unparametrized_LowMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }
+    //}
 
     PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);
     return pfn;
@@ -220,6 +242,28 @@ PFNReader full_analyzer::get_PFNReader_unparametrized_HighMass(int flavor)
         if(_is2016) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_2016_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
         else if(_is2017 or _is2018) PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v8/PFNmu_201718_v8_unparametrized_HighMass/dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
     }
+    //if(flavor == 0){//electron
+    //    PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_Run2_unparametrized_HighMass_v9/_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //}else if(flavor == 1){//muon
+    //    PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_Run2_unparametrized_HighMass_v9/_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //}
+    //
+    //PFN without 3dIPSig and l Nr. of PixelHits
+    //
+    //highlevel_shape = 21;
+    //if(flavor == 0){//electron
+    //    if(_is2016){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_2016_unparametrized_HighMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }else if(_is2017 or _is2018){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNe_1718_unparametrized_HighMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }
+    //}else if(flavor == 1){//muon
+    //    if(_is2016){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_2016_unparametrized_HighMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }else if(_is2017 or _is2018){
+    //        PFN_filename = "/user/bvermass/public/PFN/JetTagger/PFN_v9/PFNmu_1718_unparametrized_HighMass_v9/_l3dIPSig_lNumberOfPixelHits_dropoutLatent=0p5_dropoutOutput=0p5_hiddenLayersLatent=3_hiddenLayersOutput=3_latentSpace=256_learningRate=1_learningRateDecay=1_nodesLatent=128_nodesOutput=128/jetTagger.h5";
+    //    }
+    //}
 
     PFNReader pfn(PFN_filename, highlevel_shape, pfn_shape);
     return pfn;

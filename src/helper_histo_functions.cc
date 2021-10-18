@@ -6,6 +6,16 @@
 
 //move histo bin naming etc. to here!
 
+double ratio_error(double x, double y, double Ex, double Ey)
+{
+    return x/y*sqrt((Ex/x)*(Ex/x) + (Ey/y)*(Ey/y));
+}
+
+double product_error(double x, double y, double Ex, double Ey)
+{
+    return x*y*sqrt((Ex/x)*(Ex/x) + (Ey/y)*(Ey/y));
+}
+
 bool equals(double x, double y, double precision){
     return (std::fabs(x-y) < precision);
 }
@@ -289,7 +299,7 @@ std::vector<double> get_evaluating_V2s_short(double mass)
 
 std::vector<double> get_evaluating_V2s_minimal()
 {
-    return {1e-4, 7e-5, 2e-6, 9e-7};
+    return {/*1e-4, */7e-5, 2e-6, 9e-7};
 }
 
 double get_favorite_V2(double mass, std::string flavor)

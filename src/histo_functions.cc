@@ -14,7 +14,7 @@ void full_analyzer::add_histograms(std::map<TString, TH1*>* hists, std::map<TStr
     add_jet_histograms(hists, prefix);
     add_gen_histograms(hists, hists2D, prefix);
     //add_KVF_eff_histograms(hists, prefix);
-    add_chargeflip_histograms(hists, hists2D, prefix);
+    //add_chargeflip_histograms(hists, hists2D, prefix);
 }
 
 
@@ -37,6 +37,7 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_nDispleAndmu"]                     = new TH1F(prefix+"_nDispleAndmu", ";;Events", 3, 0, 3);
     (*hists)[prefix+"_nJets_uncl"]                      = new TH1F(prefix+"_nJets_uncl", ";N_{jets(uncl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_nJets_cl"]                        = new TH1F(prefix+"_nJets_cl", ";N_{jets(cl.)};Events", 10, 0, 10);
+    (*hists)[prefix+"_nBJets_cl"]                       = new TH1F(prefix+"_nBJets_cl", ";N_{B-jets(cl.)};Events", 10, 0, 10);
     (*hists)[prefix+"_l1_pt"]                           = new TH1F(prefix+"_l1_pt", ";l_{1} #it{p}_{T} [GeV];Events", 30, 0, 100);
     (*hists)[prefix+"_l2_pt"]                           = new TH1F(prefix+"_l2_pt", ";l_{2} #it{p}_{T} [GeV];Events", 30, 0, 50);
     (*hists)[prefix+"_llptdiff"]                        = new TH1F(prefix+"_llptdiff", ";l_{1} #it{p}_{T} - l_{2} #it{p}_{T} [GeV];Events", 30, -50, 100);
@@ -208,14 +209,26 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     if(_Training){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight*rew_weight);
         fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_Training", ev_weight*rew_weight);
-        fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight*rew_weight);
+        //fill_chargeflip_histograms(hists, hists2D, sr_flavor + "_Training", ev_weight*rew_weight);
         fill_HLT_efficiency(hists, "Afterptcut", _lFlavor[i_leading] == 0, _lFlavor[i_leading] == 1, ev_weight*rew_weight);
     }
-    if(_Training2Jets){
+    if(_2Jets){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_2Jets", ev_weight*rew_weight);
         fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2Jets", ev_weight*rew_weight);
     }
-    if(_Training2JetsNoZ){
+    //if(_2prompt2BJets){
+    //    fill_relevant_histograms(hists, hists2D, sr_flavor + "_2prompt2BJets", ev_weight*rew_weight);
+    //    fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2prompt2BJets", ev_weight*rew_weight);
+    //}
+    if(_2BJetsExtraCuts){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_2BJetsExtraCuts", ev_weight*rew_weight);
+        fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2BJetsExtraCuts", ev_weight*rew_weight);
+    }
+    if(_2BJets){
+        fill_relevant_histograms(hists, hists2D, sr_flavor + "_2BJets", ev_weight*rew_weight);
+        fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2BJets", ev_weight*rew_weight);
+    }
+    if(_2JetsNoZ){
         fill_relevant_histograms(hists, hists2D, sr_flavor + "_2JetsNoZ", ev_weight*rew_weight);
     }
 
@@ -226,13 +239,25 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
     //    fill_relevant_histograms(hists, hists2D, sr_flavor + "_TooFar", ev_weight*rew_weight);
     //}
 
-    for(auto& MassMap : evaluating_V2s){
+    for(auto& MassMap : evaluating_V2s_plots){
         for(auto& V2 : MassMap.second){
             if(_FullNoPFN){
-                fill_pfn_histograms(hists, sr_lflavor + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+                fill_pfn_histograms(hists, hists2D, sr_lflavor + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
             }
-            if(_Training2Jets){
-                fill_pfn_histograms(hists, sr_lflavor + "_2Jets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            if(_2Jets){
+                fill_pfn_histograms(hists, hists2D, sr_lflavor + "_2Jets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            }
+            //if(_2prompt2BJets){
+            //    fill_pfn_histograms(hists, hists2D, sr_flavor + "_2prompt2BJets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            //    fill_pfn_histograms(hists, hists2D, sr_l2flavor + "_2prompt2BJets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            //}
+            if(_2BJetsExtraCuts){
+                fill_pfn_histograms(hists, hists2D, sr_lflavor + "_2BJetsExtraCuts" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+                fill_pfn_histograms(hists, hists2D, sr_flavor + "_2BJetsExtraCuts" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            }
+            if(_2BJets){
+                fill_pfn_histograms(hists, hists2D, sr_lflavor + "_2BJets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+                fill_pfn_histograms(hists, hists2D, sr_flavor + "_2BJets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
             }
         }
     }
@@ -242,12 +267,20 @@ void full_analyzer::fill_histograms(std::map<TString, TH1*>* hists, std::map<TSt
             fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
             fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_TrainingHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
         }
+        if(_2BJetsHighPFN[MassMap.first][7e-5]){
+            fill_relevant_histograms(hists, hists2D, sr_flavor + "_2BJetsHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
+            fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2BJetsHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
+        }
+        //if(_2prompt2BJetsHighPFN[MassMap.first][7e-5]){
+        //    fill_relevant_histograms(hists, hists2D, sr_flavor + "_2prompt2BJetsHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
+        //    fill_relevant_histograms(hists, hists2D, sr_l2flavor + "_2prompt2BJetsHighPFN_M-" + std::to_string(MassMap.first), ev_weight*rew_weight);
+        //}
         for(auto& V2 : MassMap.second){
             if(_FullNoPFN){
                 fill_relevant_histograms(hists, hists2D, sr_flavor + "_SR" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
             }
-            //if(_Training2Jets) fill_pfn_histograms(hists, sr_lflavor + "_2Jets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
-            //if(_Training) fill_pfn_histograms(hists, sr_flavor + "_Training" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            //if(_2Jets) fill_pfn_histograms(hists, hists2D, sr_lflavor + "_2Jets" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
+            //if(_Training) fill_pfn_histograms(hists, hists2D, sr_flavor + "_Training" + MV2name[MassMap.first][V2], MassMap.first, V2, ev_weight*reweighting_weights[V2]);
             //if(_TrainingHighPFN[MassMap.first][V2]) fill_relevant_histograms(hists, hists2D, sr_flavor + "_TrainingHighPFN" + MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
             if(_FullNoPFN and _Full[MassMap.first][V2]){
                 fill_Shape_SR_histograms(hists, MV2name[MassMap.first][V2], ev_weight*reweighting_weights[V2]);
@@ -278,6 +311,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_nDispleAndmu"]->Fill(((nDisplEle > 0)? 1 : 0) + ((nDisplMu > 0)? 1 : 0), event_weight);
     (*hists)[prefix+"_nJets_uncl"]->Fill(nTightJet_uncl, event_weight);
     (*hists)[prefix+"_nJets_cl"]->Fill(nTightJet, event_weight);
+    (*hists)[prefix+"_nBJets_cl"]->Fill(nLooseBJet, event_weight);
 
     (*hists)[prefix+"_l1_pt"]->Fill(_lPt[i_leading], event_weight);
     //std::cout << "l2 pt: " << _lPt[i_subleading] << " weight: " << event_weight << std::endl;
@@ -419,6 +453,15 @@ void full_analyzer::fill_cutflow(std::map<TString, TH1*>* hists, TString prefix,
                                     }
                                 }
                             }
+                            //if(i_jetl2_fromSV != -1){
+                            //    (*hists)[prefix+"_cutflow3"]->Fill(4., event_weight);
+                            //    if(nTightJet <= 1){
+                            //        (*hists)[prefix+"_cutflow3"]->Fill(5., event_weight);
+                            //        if((nTightEle + nTightMu == 1) and (nDisplEle + nDisplMu == 1)){
+                            //            (*hists)[prefix+"_cutflow3"]->Fill(6., event_weight);
+                            //        }
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -599,6 +642,8 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             if(i_gen_l2 != -1){
                 (*hists)[prefix+"_IVF_SVgen-reco"]->Fill(IVF_SVgenreco, event_weight);
                 (*hists)[prefix+"_IVF_SVgen-reco_zoom"]->Fill(IVF_SVgenreco, event_weight);
+                (*hists2D)[prefix+"_IVF_PV-SVdxy_genvsreco"]->Fill(IVF_PVSVdist_2D, gen_PVSVdist_2D, event_weight);
+                (*hists2D)[prefix+"_IVF_PV-SVdxy_genvsreco_zoom"]->Fill(IVF_PVSVdist_2D, gen_PVSVdist_2D, event_weight);
                 (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
                 (*hists2D)[prefix+"_IVF_PV-SVdxyz_genvsreco_zoom"]->Fill(IVF_PVSVdist, gen_PVSVdist, event_weight);
                 (*hists2D)[prefix+"_IVF_ctauHN_genPV-SVdxyz"]->Fill(_ctauHN, gen_PVSVdist, event_weight);
@@ -649,6 +694,11 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
         (*hists)["l2full_Lxyz_eff_den"]->Fill(gen_PVSVdist);
         (*hists)["l2full_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
 
+        (*hists)["l2promptid_pt_eff_den"]->Fill(_gen_lPt[i_gen_l2]);
+        (*hists)["l2promptid_eta_eff_den"]->Fill(_gen_lEta[i_gen_l2]);
+        (*hists)["l2promptid_Lxyz_eff_den"]->Fill(gen_PVSVdist);
+        (*hists)["l2promptid_Lxy_eff_den"]->Fill(gen_PVSVdist_2D);
+
         if(_gen_lPt[i_gen_l2] > 35){
             (*hists)["l2high_l1_pt"]->Fill(_gen_lPt[i_gen_l1]);
             (*hists)["l2high_N_pt"]->Fill(_gen_NPt);
@@ -683,6 +733,12 @@ void full_analyzer::fill_leptonreco_eff(std::map<TString, TH1*>* hists){
                 (*hists)["l2full_Lxyz_eff_num"]->Fill(gen_PVSVdist);
                 (*hists)["l2full_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
             }
+            //if(subleadinghighestptIsl2promptID){
+            //    (*hists)["l2promptid_pt_eff_num"]->Fill(_gen_lPt[i_gen_l2]);
+            //    (*hists)["l2promptid_eta_eff_num"]->Fill(_gen_lEta[i_gen_l2]);
+            //    (*hists)["l2promptid_Lxyz_eff_num"]->Fill(gen_PVSVdist);
+            //    (*hists)["l2promptid_Lxy_eff_num"]->Fill(gen_PVSVdist_2D);
+            //}
         }
     }
 }
@@ -850,7 +906,7 @@ void full_analyzer::fill_IVF_eff(std::map<TString, TH1*>* hists, std::map<TStrin
     } 
 }
 
-void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix, double event_weight){
+void full_analyzer::fill_KVF_eff(std::map<TString, TH1*>* hists, TString prefix){
     if(isData) return;
     if(i_gen_l2 == -1) return;
 
