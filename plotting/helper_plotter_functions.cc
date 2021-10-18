@@ -313,7 +313,11 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_SR"))                fullname += "SR/";
     if(histname.Contains("_2prompt"))           fullname += "2prompt/";
     if(histname.Contains("_2Jets"))             fullname += "2Jets/";
+    if(histname.Contains("_2BJets"))            fullname += "2BJets/";
+    if(histname.Contains("_2BJetsExtraCuts"))   fullname += "2BJetsExtraCuts/";
+    if(histname.Contains("_2prompt2BJets"))     fullname += "2prompt2BJets/";
     if(histname.Contains("_TooFar"))            fullname += "TooFar/";
+    if(histname.Contains("before") or histname.Contains("after") or histname.Contains("_Training")) fullname += "partialcuts/";
 
     //related to ABCD method
     if(histname.Contains("cutphill_"))          fullname += "ABCDwithDeltaPhi/";
@@ -332,6 +336,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
     if(histname.Contains("cutMediummlSV_"))     fullname += "ABCDwithMediummlSV/";
     if(histname.Contains("cutTightCR1mlSV_"))   fullname += "ABCDwithTightCR1mlSV/";
+    if(histname.Contains("cutOldTightCR1mlSV_")) fullname += "ABCDwithOldTightCR1mlSV/";
     if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
     if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
     if(histname.Contains("cutMediumCR2mlSV_"))   fullname += "ABCDwithMediumCR2mlSV/";
@@ -364,7 +369,6 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("quadAwithBtoA_"))     fullname += "quadAwithBtoA/";
     if(histname.Contains("quadCwithDtoC_"))     fullname += "quadCwithDtoC/";
 
-    if(histname.Contains("before") or histname.Contains("after") or histname.Contains("_Training")) fullname += "partialcuts/";
     if(histname.Contains("_M-") and histname.Contains("_V2-")) fullname += (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/";
     if(histname.Contains("KVF_"))              fullname += "KVF/";
     if(histname.Contains("_IVF_"))              fullname += "IVF/";

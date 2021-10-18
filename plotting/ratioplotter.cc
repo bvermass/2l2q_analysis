@@ -173,28 +173,66 @@ void RatioPlot::AddStatVariation(TH1* hist, TString statname)
     systunc_legends.push_back(statname);
 }
 
+void RatioPlot::Add_ABCD_SystVariation(TString histname, TString legendname, TH1F* MC_central)
+{
+
+    std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
+    for(int i = 1; i <= MC_central->GetNbinsX(); i++){
+        x_central.push_back((double)MC_central->GetXaxis()->GetBinCenter(i));
+        x_low.push_back((double)x_central[i-1] - MC_central->GetXaxis()->GetBinLowEdge(i));
+        x_high.push_back((double)MC_central->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
+        y_central.push_back(1.);
+        if(histname.Contains("_SS")){
+            y_low.push_back(0.2);
+            y_high.push_back(0.2);
+        }else if(histname.Contains("_OS") and histname.Contains("_M-10")){
+            y_low.push_back(0.3);
+            y_high.push_back(0.3);
+        }else if(histname.Contains("_OS") and histname.Contains("_M-5")){
+            if(i <= MC_central->GetNbinsX()/2){
+                y_low.push_back(0.2);
+                y_high.push_back(0.2);
+            }else{
+                y_low.push_back(0.3);
+                y_high.push_back(0.3);
+            }
+        }
+    }
+
+    systunc_graphs.push_back(new TGraphAsymmErrors(x_central.size(), &x_central[0], &y_central[0], &x_low[0], &x_high[0], &y_low[0], &y_high[0]));
+    systunc_graphs.back()->SetName(MC_central->GetName() + legendname);
+    systunc_graphs.back()->SetFillColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetLineColor(colors[systunc_graphs.size()-1]);
+    systunc_graphs.back()->SetMarkerColor(colors[systunc_graphs.size()-1]);
+
+    systunc_legends.push_back(legendname);
+}
+
 void RatioPlot::Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TString legendname, TH1F* MC_central)
 {
     TString histname_CR2_pred = histname;
     histname_CR2_pred.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
-    TString histname_CR2_obs = histname;
-    histname_CR2_obs.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
-    histname_CR2_obs.ReplaceAll("BtoAwithCD", "quadA");
+    //TString histname_CR2_obs = histname;
+    //histname_CR2_obs.ReplaceAll("TightmlSV", "TightCR2NoJetVetomlSV");
+    //histname_CR2_obs.ReplaceAll("BtoAwithCD", "quadA");
 
     TH1F* hist_CR2_pred = (TH1F*)DataRun2File->Get(histname_CR2_pred);
-    TH1F* hist_CR2_obs = (TH1F*)DataRun2File->Get(histname_CR2_obs);
+    //TH1F* hist_CR2_obs = (TH1F*)DataRun2File->Get(histname_CR2_obs);
     std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
     for(int i = 1; i <= hist_CR2_pred->GetNbinsX(); i++){
         x_central.push_back((double)hist_CR2_pred->GetXaxis()->GetBinCenter(i));
         x_low.push_back((double)x_central[i-1] - hist_CR2_pred->GetXaxis()->GetBinLowEdge(i));
         x_high.push_back((double)hist_CR2_pred->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
         y_central.push_back(1.);
-        if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
+        //if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
+        if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0){
             y_low.push_back(0.);
             y_high.push_back(2.);
         }else{
-            y_low.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
-            y_high.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
+            y_low.push_back((double)hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i));
+            y_high.push_back((double)hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i));
+            //y_low.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
+            //y_high.push_back((double)sqrt(pow(hist_CR2_pred->GetBinError(i) / hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinError(i) / hist_CR2_obs->GetBinContent(i),2)));
         }
     }
 
@@ -232,6 +270,25 @@ void RatioPlot::draw_systuncs()
     if(systunc_graphs.size() != 0) systunc_legend.Draw("same");
 }
 
+void RatioPlot::draw_ABCD_CRline(TString histname, double xmin, double xmax)
+{
+    TLine line;
+    line.SetLineStyle(2);
+    line.SetLineColor(kRed);
+    line.SetLineWidth(2);
+    if(histname.Contains("_SS")){
+        line.DrawLine(xmin, 0.8, xmax, 0.8);
+        line.DrawLine(xmin, 1.2, xmax, 1.2);
+    }else if(histname.Contains("_OS") and histname.Contains("_M-10")){
+        line.DrawLine(xmin, 0.7, xmax, 0.7);
+        line.DrawLine(xmin, 1.3, xmax, 1.3);
+    }else if(histname.Contains("_OS") and histname.Contains("_M-5")){
+        line.DrawLine(xmin, 0.8, xmax/2, 0.8);
+        line.DrawLine(xmin, 1.2, xmax/2, 1.2);
+        line.DrawLine(xmax/2, 0.7, xmax, 0.7);
+        line.DrawLine(xmax/2, 1.3, xmax, 1.3);
+    }
+}
 
 void RatioPlot::dothething()
 {

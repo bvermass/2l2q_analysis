@@ -172,6 +172,17 @@ bool Skimmer::dileptonSkim(){
         }
     }
 
+    // Use for Kshort study
+    //if(i_leading_lepton == -1 or i_subleading_lepton == -1)   return false;
+    //if(i_lPt[i_leading_lepton] < 25)                    return false;
+    //if(i_lPt[i_subleading_lepton] < 17)                 return false;
+
+    //LorentzVector vec_leading(i_lPt[i_leading_lepton], i_lEta[i_leading_lepton], i_lPhi[i_leading_lepton], i_lE[i_leading_lepton]);
+    //LorentzVector vec_subleading(i_lPt[i_subleading_lepton], i_lEta[i_subleading_lepton], i_lPhi[i_subleading_lepton], i_lE[i_subleading_lepton]);
+    //if(std::abs((vec_leading + vec_subleading).mass() - 91.2) > 20) return false;
+
+    //return true;
+
     return (i_leading_lepton != -1 and i_subleading_lepton != -1);
 }
 
@@ -179,6 +190,8 @@ bool Skimmer::dileptonSkim(){
 bool Skimmer::Check_SkimCondition(TString Condition)
 {
     if(Condition == "2l2qSkim") return ((ElectronTriggerSkim() or MuonTriggerSkim()) and dileptonSkim());
+    if(Condition == "2l2qnoTriggerSkim") return dileptonSkim();
     if(Condition == "Trigger") return singleleptonSkim();
+    if(Condition == "QCDSkim") return true;
     else return true;
 }

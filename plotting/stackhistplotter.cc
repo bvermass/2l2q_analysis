@@ -131,10 +131,13 @@ int main(int argc, char * argv[])
     int counter_begin = floor(1.0 * partitionjobnumber / partition * files_bkg.back()->GetNkeys());
     int counter_end   = floor(1.0 * (partitionjobnumber + 1) / partition * files_bkg.back()->GetNkeys());
 
-    double KshortSF = 1.;
+    double KshortSF = 1., Kshort_2GeVSF = 1.;
     if(withdata){
         if(files_data.front()->Get("_mm_Kshort_V0Mass") and files_bkg.front()->Get("_mm_Kshort_V0Mass")){
             KshortSF = ((TH1F*)files_data.front()->Get("_mm_Kshort_V0Mass"))->Integral() / ((TH1F*)files_bkg.front()->Get("_mm_Kshort_V0Mass"))->Integral();
+        }
+        if(files_data.front()->Get("_mm_Kshort_2GeV_V0Mass") and files_bkg.front()->Get("_mm_Kshort_2GeV_V0Mass")){
+            Kshort_2GeVSF = ((TH1F*)files_data.front()->Get("_mm_Kshort_2GeV_V0Mass"))->Integral() / ((TH1F*)files_bkg.front()->Get("_mm_Kshort_2GeV_V0Mass"))->Integral();
         }
     }
 
@@ -177,7 +180,7 @@ int main(int argc, char * argv[])
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
+                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and histname.Index("2BJets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
 
@@ -196,12 +199,14 @@ int main(int argc, char * argv[])
                 // get background histograms and fill legend
                 THStack* hists_bkg = new THStack("stack_bkg", ";"  + ((withdata)? "" : xaxistitle) + ";" + yaxistitle);
                 for(int i = 0; i < files_bkg.size(); i++){
+                    if(histname.Contains("2BJets") and legends_bkg[i].Contains("QCD")) continue;
                     TH1* hist = (TH1*)files_bkg[i]->Get(histname_bkg);
                     if(hist == 0 or hist->GetMaximum() <= 0) continue;
                     int color;
                     if(legends_bkg[i].Contains("Pred") or histname_bkg.Contains("Kshort")) color = color_Pred;
                     else color = get_color(legends_bkg[i]);
-                    if(histname_bkg.Contains("Kshort") and !histname_bkg.Contains("_mll")) hist->Scale(KshortSF);
+                    if(histname_bkg.Contains("Kshort_2GeV") and !histname_bkg.Contains("_mll")) hist->Scale(Kshort_2GeVSF);
+                    else if(histname_bkg.Contains("Kshort") and !histname_bkg.Contains("_mll")) hist->Scale(KshortSF);
                     hist->SetFillStyle(1001);
                     hist->SetFillColor(color);
                     hist->SetLineColor(color);
@@ -231,7 +236,7 @@ int main(int argc, char * argv[])
                             //hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
                             if(histname.Contains("_cutflow2")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(1)/hist->GetBinContent(1));
-                            else if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
+                            else if(histname.Contains("_afterSV") or histname.Contains("_Training_")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
                             //else hist->Scale(10.);
                             hist->SetMarkerColor(colors_signal[i]);
 
@@ -267,7 +272,7 @@ int main(int argc, char * argv[])
                     ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "Stat. unc.");
                     if(histname.Contains("Shape")) ratioplotter.SetConstantFit();
                     //if(histname.Contains("TightmlSV_quadA_Shape") and !histname.Contains("CR")) ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"_ABCDstat"}, {"Syst. unc."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
-                    if(histname.Contains("TightmlSV_BtoAwithCD_Shape") and !histname.Contains("CR")) ratioplotter.Add_CR2_SystVariation(DataRun2File, histname, "Syst. unc.", (TH1F*)hists_bkg->GetStack()->Last());
+                    if((histname.Contains("TightmlSV_BtoAwithCD_Shape") and !histname.Contains("CR")) or histname.Contains("CR2NoJetVetomlSV_") or histname.Contains("mlSV_CR2Jets_")) ratioplotter.Add_ABCD_SystVariation(histname, "Syst. unc.", (TH1F*)hists_bkg->GetStack()->Last());
                 }
 
                 // get plot specific pathnames
@@ -315,6 +320,7 @@ int main(int argc, char * argv[])
 
                 // Draw ratio data/MC if data is present
                 if(withdata) ratioplotter.dothething();
+                //if(withdata) ratioplotter.draw_ABCD_CRline(histname, data_hist->GetXaxis()->GetXmin(), data_hist->GetXaxis()->GetXmax());
 
                 c->Print(pathname_lin + histname + ".png");
 
@@ -331,7 +337,7 @@ int main(int argc, char * argv[])
                 if(withdata) hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())));
                 else hists_bkg->SetMaximum(20*std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")));
                 if(!withdata) alphanumeric_labels(hists_bkg, histname);
-                if(withdata and std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(40.);
+                if(withdata and std::max(hists_bkg->GetMaximum(), std::max(hists_signal->GetMaximum("nostack"), data_hist->GetMaximum())) > 1000) hists_bkg->SetMinimum(4.);
                 else if(std::max(hists_bkg->GetMaximum(), hists_signal->GetMaximum("nostack")) > 1000) hists_bkg->SetMinimum(40.);
                 else hists_bkg->SetMinimum(4.);
                 if(hists_signal->GetNhists() != 0) hists_signal->Draw("hist nostack same");
@@ -346,6 +352,7 @@ int main(int argc, char * argv[])
 
                 // Draw ratio data/MC if data is present
                 if(withdata) ratioplotter.dothething();
+                //if(withdata) ratioplotter.draw_ABCD_CRline(histname, data_hist->GetXaxis()->GetXmin(), data_hist->GetXaxis()->GetXmax());
 
                 c->Print(pathname_log + histname + ".png");
 

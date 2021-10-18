@@ -41,7 +41,9 @@ class RatioPlot{
         void draw_systuncs();
         void ClearSystUncs();
         void AddStatVariation(TH1* hist, TString statname);
+        void Add_ABCD_SystVariation(TString histname, TString legendname, TH1F* MC_central);
         void Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TString legendname, TH1F* MC_central);
+        void draw_ABCD_CRline(TString histname, double xmax, double xmin);
         void dothething();
     private:
         TPad* Pad;
