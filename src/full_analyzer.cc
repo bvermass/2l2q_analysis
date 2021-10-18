@@ -106,12 +106,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
             }
         }
     }
+ 
+    //Kshort histograms
+    if(isKshortntuple){
+        add_Kshort_histograms(&hists, "_mm_Kshort");
+        add_Kshort_histograms(&hists, "_mm_Kshort_outsideMSV");
+        add_Kshort_histograms(&hists, "_mm_Kshort_2GeV");
+        add_Kshort_histograms(&hists, "_mm_Kshort_2GeV_outsideMSV");
+    }
 
-    ////Kshort histograms
-    //add_Kshort_histograms(&hists, "_mm_Kshort");
-    //add_Kshort_histograms(&hists, "_mm_Kshort_outsideMSV");
-    //add_Kshort_histograms(&hists, "_mm_Kshort_2GeV");
-    //add_Kshort_histograms(&hists, "_mm_Kshort_2GeV_outsideMSV");
+    //Conversin
+    hists["Conversion_count"] = new TH1F("Conversion_count", ";;Count", 1, 0, 1);
 
     //assures statistical errors are dealt with correctly
     for(auto const& it : hists){
@@ -145,8 +150,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     //HNLtagger hnltagger_gen_e(filename, "HNLtagger_gen_electron", partition, partitionjobnumber);
     //HNLtagger hnltagger_gen_mu(filename, "HNLtagger_gen_muon", partition, partitionjobnumber);
 
-    ////Kshort HNLtagger files
-    //HNLtagger hnltagger_Kshort(filename, "HNLtagger_Kshort", partition, partitionjobnumber);
+    //Kshort HNLtagger files
+    HNLtagger hnltagger_Kshort(filename, "HNLtagger_Kshort", partition, partitionjobnumber);
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
     TString bkgestimator_fileoption = "recreate";
@@ -320,7 +325,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
                 }
             }
         }
-        //Kshort_study(&hists, hnltagger_Kshort, pfn_e_LowMass, pfn_e_HighMass, pfn_mu_LowMass, pfn_mu_HighMass, ev_weight);
+        if(isKshortntuple) Kshort_study(&hists, hnltagger_Kshort, pfn_e_LowMass, pfn_e_HighMass, pfn_mu_LowMass, pfn_mu_HighMass, ev_weight);
+        Conversion_study(&hists);
 
         ++loop_counter;
     }
