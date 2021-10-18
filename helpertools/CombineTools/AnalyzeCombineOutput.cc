@@ -1,8 +1,8 @@
 #include "AnalyzeCombineOutput.h"
 
 bool verbose = false;
-bool addExternalLimits = false;
-bool addLegacyLimits = true;
+bool addExternalLimits = true;
+bool addLegacyLimits = false;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
@@ -102,7 +102,7 @@ int main(int argc, char * argv[])
 
     PlotExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "ExclusionLimit_" + specific_dir + ".png", "M_{HNL} [GeV]", "|V|^{2}");
     WriteExclusionLimit(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_" + specific_dir + ".txt");
-    //WriteExclusionLimit_with_Bands(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_Legacy_AN_v5_" + specific_dir + ".txt");
+    //WriteExclusionLimit_with_Bands(lower_exclusion_limits, upper_exclusion_limits, plotbasedir + "Limits_Legacy_AN_v8_" + specific_dir + ".txt");
 }
 #endif
 
@@ -315,18 +315,29 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         }
     }
     if(addLegacyLimits){
-        TString legacy_limit_file = "/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/plots/Limits_Legacy_AN_v5_" + plotfilename(plotfilename.Index("ExclusionLimit_")+15, plotfilename.Index(".png") - plotfilename.Index("ExclusionLimit_")-15) + ".txt";
+        TString legacy_limit_file = "/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/plots/Limits_Legacy_AN_v8_" + plotfilename(plotfilename.Index("ExclusionLimit_")+15, plotfilename.Index(".png") - plotfilename.Index("ExclusionLimit_")-15) + ".txt";
 
         TGraphAsymmErrors* legacy_lower_V2_central = get_legacy_limit(legacy_limit_file, 0.50, true, kBlue, 5, 3);
+        TGraphAsymmErrors* legacy_lower_V2_up_1s = get_legacy_limit(legacy_limit_file, 0.84, true, kBlue, 5, 3);
+        TGraphAsymmErrors* legacy_lower_V2_up_2s = get_legacy_limit(legacy_limit_file, 0.975, true, kBlue, 5, 3);
+        TGraphAsymmErrors* legacy_lower_V2_down_1s = get_legacy_limit(legacy_limit_file, 0.16, true, kBlue, 5, 3);
+        TGraphAsymmErrors* legacy_lower_V2_down_2s = get_legacy_limit(legacy_limit_file, 0.025, true, kBlue, 5, 3);
         TGraphAsymmErrors* legacy_upper_V2_central = get_legacy_limit(legacy_limit_file, 0.50, false, kBlue, 5, 3);
 
         legacy_lower_V2_central->Draw("L same");
+        //legacy_lower_V2_up_1s->Draw("L same");
+        //legacy_lower_V2_up_2s->Draw("L same");
+        //legacy_lower_V2_down_1s->Draw("L same");
+        //legacy_lower_V2_down_2s->Draw("L same");
         legacy_upper_V2_central->Draw("L same");
 
         legend.AddEntry(legacy_lower_V2_central, "Old Limit", "l");
         legend.AddEntry(sr_lower_central_graph, "Expected", "l");
         legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
         legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
+
+        plotfilename.ReplaceAll(".png","_vsLegacy.png");
+        plotfilename.ReplaceAll(".pdf","_vsLegacy.pdf");
     }
 
 

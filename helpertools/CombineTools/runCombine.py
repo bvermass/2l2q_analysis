@@ -21,6 +21,7 @@ def submit_script( script, scriptname ):
 def run_combine_fromOwn_datacards(filesperJob):
     print('running combine with my own datacards')
     datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
+    #datacardDir = '/user/bvermass/sandbox/combinetest/'
     file_counter    = 0
     script_counter  = 0
     for root, dirs, files in os.walk(datacardDir):
@@ -43,7 +44,7 @@ def run_combine_fromOwn_datacards(filesperJob):
     
     
                 script.write('cd {}\n'.format(combine_outputDir))
-                script.write('combine -d {} -S 0 -n {}\n'.format(f_abspath, f.split('.txt')[0]))
+                script.write('combine -d {} -n {}\n'.format(f_abspath, f.split('.txt')[0]))
                 #script.write('mv higgs*'
     
                 file_counter += 1
@@ -82,7 +83,7 @@ def run_combine_fromKirills_datacards(filesperJob):
     
     
                 script.write('cd {}\n'.format(combine_outputDir))
-                script.write('combine -d {} -S 0 -n {}\n'.format(f_abspath, f.split('.txt')[0]))
+                script.write('combine -d {} -n {}\n'.format(f_abspath, f.split('.txt')[0]))
     
                 file_counter += 1
     

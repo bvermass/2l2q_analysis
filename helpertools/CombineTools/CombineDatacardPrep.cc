@@ -1,5 +1,6 @@
 #include "CombineDatacardPrep.h"
 
+double PFN_mu_LowMass_unc = 0.1, PFN_mu_HighMass_unc = 0.1, PFN_e_LowMass_unc = 0.1, PFN_e_HighMass_unc = 0.1;
 
 # ifndef __CINT__
 int main(int argc, char * argv[])
@@ -183,6 +184,9 @@ int main(int argc, char * argv[])
                 systDist.push_back("lnN");
                 systUnc.push_back({1.0386, 0});
 
+                systNames.push_back("PFN_sys");
+                systDist.push_back("shapeN");
+                systUnc.push_back({1,0});
                 systNames.push_back("Trigger_sys");
                 systDist.push_back("shapeN");
                 systUnc.push_back({1,0});
@@ -235,6 +239,25 @@ int main(int argc, char * argv[])
                             hists_signal_sys.push_back((TH1F*)files_signal_JERDown->Get(histname_down));
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                             //set_UpAndDown_correctly(hist_signal, hists_signal_sys[hists_signal_sys.size()-2], hists_signal_sys.back());
+                        }else if(systNames[i].find("PFN") != std::string::npos){
+                            TH1F* hist_PFNsys_up   = (TH1F*)hist_signal->Clone((legends_signal[0] + "_" + systNames[i] + "Up").c_str());
+                            TH1F* hist_PFNsys_down = (TH1F*)hist_signal->Clone((legends_signal[0] + "_" + systNames[i] + "Down").c_str());
+                            for(int i = 1; i <= hist_PFNsys_up->GetNbinsX(); i++){
+                                double PFN_unc = 0;
+                                if(mass_bkg == "_M-5_"){
+                                    if(flavor == "_mm_" or (flavor == "_2l_" and i <= hist_PFNsys_up->GetNbinsX()/2)) PFN_unc = PFN_mu_LowMass_unc;
+                                    else PFN_unc = PFN_e_LowMass_unc;
+                                }else if(mass_bkg = "_M-10_"){
+                                    if(flavor == "_mm_" or (flavor == "_2l_" and i <= hist_PFNsys_up->GetNbinsX()/2)) PFN_unc = PFN_mu_HighMass_unc;
+                                    else PFN_unc = PFN_e_HighMass_unc;
+                                }
+                                hist_PFNsys_up->SetBinContent(i, hist_signal->GetBinContent(i) * (1 + PFN_unc));
+                                hist_PFNsys_down->SetBinContent(i, hist_signal->GetBinContent(i) * (1 - PFN_unc));
+                            }
+                            hists_signal_sys.push_back(hist_PFNsys_up);
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
+                            hists_signal_sys.push_back(hist_PFNsys_down);
+                            histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                         }else{
                             histname_up.ReplaceAll("Shape_SR", systNames[i] + "Up_Shape_SR");
                             histname_down.ReplaceAll("Shape_SR", systNames[i] + "Down_Shape_SR");
@@ -252,33 +275,34 @@ int main(int argc, char * argv[])
                     }
                     if(systUnc[i][1] != 0){//data-driven prediction systs
                         if(systNames[i].find("ABCDsys") != std::string::npos){
-                            TString histname_up_pred = histname_data;
-                            histname_up_pred.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
-                            TString histname_up_obs = histname_up_pred;
-                            histname_up_obs.ReplaceAll("BtoAwithCD", "quadA");
-                            //histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up"); //used to be the method from CR1
-                            //histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");//used to be the method from CR1
+                            //TString histname_up_pred = histname_data;
+                            //histname_up_pred.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
+                            ////histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up"); //used to be the method from CR1
+                            ////histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");//used to be the method from CR1
                             std::cout << "systnames: " << systNames[i] << std::endl;
-                            std::cout << "histname: " << histname_up_pred << std::endl;
 
-                            //Get CR2NojetVeto prediction histograms from full run 2 data files
-                            TH1F* hist_CR2_pred = (TH1F*)files_bkg_ABCDsys->Get(histname_up_pred);
-                            TH1F* hist_CR2_obs = (TH1F*)files_bkg_ABCDsys->Get(histname_up_obs);
+                            ////Get CR2NojetVeto prediction histograms from full run 2 data files
+                            //TH1F* hist_CR2_pred = (TH1F*)files_bkg_ABCDsys->Get(histname_up_pred);
+
                             //Create ABCDsys histograms based on variation of SR histograms with relative stat unc from CR2 histograms
                             TH1F* hist_ABCDsys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
                             TH1F* hist_ABCDsys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
                             std::vector<bool> correlation_mask = get_correlation_mask(systNames[i], histname_data, hist_ABCDsys_up->GetNbinsX());
-                            for(int i = 1; i <= hist_ABCDsys_up->GetNbinsX(); i++){
-                                if(!correlation_mask[i-1]) continue;
-                                if(hist_CR2_pred->GetBinContent(i) == 0 or hist_CR2_pred->GetBinErrorUp(i) == 0 or hist_CR2_obs->GetBinContent(i) == 0 or hist_CR2_obs->GetBinErrorUp(i) == 0){
-                                    hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*2);
-                                    hist_ABCDsys_down->SetBinContent(i, 0.);
-                                }else{
-                                    double ErrorUp = sqrt(pow(hist_CR2_pred->GetBinErrorUp(i)/hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinErrorUp(i)/hist_CR2_obs->GetBinContent(i),2));
-                                    double ErrorDown = sqrt(pow(hist_CR2_pred->GetBinErrorLow(i)/hist_CR2_pred->GetBinContent(i),2) + pow(hist_CR2_obs->GetBinErrorLow(i)/hist_CR2_obs->GetBinContent(i),2));
-                                    hist_ABCDsys_up->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 + ErrorUp));
-                                    hist_ABCDsys_down->SetBinContent(i, hists_bkg[0]->GetBinContent(i)*(1 - ErrorDown));
-                                }
+                            double Error;
+                            for(int i_bin = 1; i_bin <= hist_ABCDsys_up->GetNbinsX(); i_bin++){
+                                if(!correlation_mask[i_bin-1]) continue;
+                                Error = get_ABCD_error(i_bin, histname_data);
+                                hist_ABCDsys_up->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 + Error));
+                                hist_ABCDsys_down->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 - Error));
+                                //if(hist_CR2_pred->GetBinContent(i_bin) == 0 or hist_CR2_pred->GetBinErrorUp(i_bin) == 0){
+                                //    hist_ABCDsys_up->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*2);
+                                //    hist_ABCDsys_down->SetBinContent(i_bin, 0.);
+                                //}else{
+                                //    double ErrorUp = hist_CR2_pred->GetBinErrorUp(i_bin)/hist_CR2_pred->GetBinContent(i_bin);
+                                //    double ErrorDown = hist_CR2_pred->GetBinErrorLow(i_bin)/hist_CR2_pred->GetBinContent(i_bin);
+                                //    hist_ABCDsys_up->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 + ErrorUp));
+                                //    hist_ABCDsys_down->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 - ErrorDown));
+                                //}
                             }
 
                             tmp_bkg_sys.push_back(hist_ABCDsys_up);
@@ -463,6 +487,26 @@ std::vector<bool> get_correlation_mask(TString sysname, TString histname, int nb
             if(nbins == 12) return {false, false, true, false, false, true, false, false, true, false, false, true};
             else if(nbins == 11) return {false, false, true, false, false, true, false, false, true, false, true};
         }
+    }
+}
+
+double get_ABCD_error(int i_bin, TString histname)
+{
+    if(histname.Contains("_2l_")){
+        if(histname.Contains("_M-5_")){
+            if((i_bin > 6 and i_bin <= 12) or (i_bin > 18 and i_bin <= 24) or (i_bin > 30 and i_bin < 36) or (i_bin > 42 and i_bin <= 48)) return 0.2;
+            else if((i_bin <= 6) or (i_bin > 12 and i_bin <= 18)) return 0.2;
+            else return 0.3;
+        }else if(histname.Contains("_M-10_")){
+            if((i_bin > 6 and i_bin <= 11) or (i_bin > 17 and i_bin <= 22) or (i_bin > 28 and i_bin <= 34) or (i_bin > 40 and i_bin <= 46)) return 0.2;
+            else return 0.3;
+        }
+    }else if(histname.Contains("_mm_") or histname.Contains("_ee_")){
+        if(i_bin <= 6) return 0.3;
+        else return 0.2;
+    }else{
+        std::cout << "violation: ABCD error not correctly recognized" << std::endl;
+        return 0.3;//should never happen
     }
 }
 
