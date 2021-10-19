@@ -53,12 +53,15 @@ class Shape_SR_plottext{
         ~Shape_SR_plottext();
         void Draw(TString histname);
         void Draw_OSorSS_2l(TString histname);
-        void Draw_2l(TString mass_category);
+        void Draw_SSHighMass_2l(TString histname);
+        void Draw_2l_LowMass(TString mass_category);
+        void Draw_2l_HighMass(TString mass_category);
         void Draw_ee(TString mass_category);
         void Draw_em(TString mass_category);
         void Draw_me(TString mass_category);
         void Draw_mm(TString mass_category);
         void Draw_lines_and_generaltext(TString mass_category);
+        void Draw_lines_and_generaltext_HighMass();
         void Draw_Shape_alpha_lines_and_generaltext(TString histname, TString mass_category);
     private:
         TString mm, em, ee, me, OS, SS, masslessthan2, massmorethan2, masslessthan6, massmorethan6;
