@@ -244,10 +244,13 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
 
     TGraphAsymmErrors* sr_upper_central_graph = new TGraphAsymmErrors(V2_upper.size(), &V2_upper[0], &sr_upper_central[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0]);
 
-
+    //Close the limit at the high mass end
+    //for central value, just draw a line between last two points
+    std::vector<double> highmassend_xpoints({V2_lower.back(), V2_upper.back()}), highmassend_ypoints({sr_lower_central.back(), sr_upper_central.back()}), hmend_err({0,0});
+    TGraphAsymmErrors* highmassend = new TGraphAsymmErrors(highmassend_xpoints.size(), &highmassend_xpoints[0], &highmassend_ypoints[0], &hmend_err[0], &hmend_err[0], &hmend_err[0], &hmend_err[0]);
 
     sr_lower_2s_graph->Draw("A3");
-    sr_lower_2s_graph->GetXaxis()->SetRangeUser(0,15);
+    sr_lower_2s_graph->GetXaxis()->SetRangeUser(1,15);
     sr_lower_2s_graph->GetYaxis()->SetRangeUser(2e-8, 0.3);
 
     sr_lower_1s_graph->Draw("3 same");
@@ -256,6 +259,8 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_upper_2s_graph->Draw("3 same");
     sr_upper_1s_graph->Draw("3 same");
     sr_upper_central_graph->Draw("L same");
+
+    highmassend->Draw("L same");
 
     CMSandLumi->Draw();
     double ymin = 0.78, xmin = 0.17;
@@ -268,49 +273,50 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     
     //Add external limits from other/older analyses
     if(addExternalLimits){
-        TGraphAsymmErrors* delphi_prompt                    = get_external_limit("delphi_prompt", kBlue, 10, 3);
+        //TGraphAsymmErrors* delphi_prompt                    = get_external_limit("delphi_prompt", kBlue, 10, 3);
         TGraphAsymmErrors* delphi_displaced                 = get_external_limit("delphi_displaced", kBlue+2, 9, 3);
-        TGraphAsymmErrors* atlas_prompt_muon                = get_external_limit("atlas_prompt_muon", kGreen+3, 7, 3);
-        TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
-        TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
-        TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
+        //TGraphAsymmErrors* atlas_prompt_muon                = get_external_limit("atlas_prompt_muon", kGreen+3, 7, 3);
+        //TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
+        //TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
+        //TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
         TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kRed, 4, 3);
         TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kRed, 3, 3);
         TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kRed+2, 10, 3);
         TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kRed+2, 10, 3);
 
         if(plotfilename.Contains("_mm_")){
-            delphi_prompt->Draw("L same");
+            //delphi_prompt->Draw("L same");
             delphi_displaced->Draw("L same");
-            atlas_prompt_muon->Draw("L same");
-            atlas_displaced_muon_LNV->Draw("L same");
-            atlas_displaced_muon_LNC->Draw("L same");
+            //atlas_prompt_muon->Draw("L same");
+            //atlas_displaced_muon_LNV->Draw("L same");
+            //atlas_displaced_muon_LNC->Draw("L same");
             cms_trilepton_prompt_muon->Draw("L same");
             if(isRun2) cms_trilepton_displaced_muon->Draw("L same");
         }else if(plotfilename.Contains("_ee_")){
-            delphi_prompt->Draw("L same");
+            //delphi_prompt->Draw("L same");
             delphi_displaced->Draw("L same");
-            atlas_prompt_electron->Draw("L same");
+            //atlas_prompt_electron->Draw("L same");
             cms_trilepton_prompt_electron->Draw("L same");
             if(isRun2) cms_trilepton_displaced_electron->Draw("L same");
         }
 
-        if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
+        //if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_prompt, "DELPHI prompt", "l");
         legend.AddEntry(sr_lower_central_graph, "Expected", "l");
         if(plotfilename.Contains("_mm_") or plotfilename.Contains("_ee_")) legend.AddEntry(delphi_displaced, "DELPHI displaced", "l");
         legend.AddEntry(sr_lower_1s_graph, "Expected #pm 1#sigma", "f");
-        if(plotfilename.Contains("_mm_"))      legend.AddEntry(atlas_prompt_muon, "ATLAS 3l prompt (2016)", "l");
-        else if(plotfilename.Contains("_ee_")) legend.AddEntry(atlas_prompt_electron, "ATLAS 3l prompt (2016)", "l");
+        //if(plotfilename.Contains("_mm_"))      legend.AddEntry(atlas_prompt_muon, "ATLAS 3l prompt (2016)", "l");
+        //else if(plotfilename.Contains("_ee_")) legend.AddEntry(atlas_prompt_electron, "ATLAS 3l prompt (2016)", "l");
 
-        legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
 
         if(plotfilename.Contains("_mm_")){
-            legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
+            //legend.AddEntry(atlas_displaced_muon_LNV, "ATLAS displaced LNV (2016)", "l");
             legend.AddEntry(cms_trilepton_prompt_muon, "CMS 3l prompt (2016)", "l");
-            legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
+            legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
+            //legend.AddEntry(atlas_displaced_muon_LNC, "ATLAS displaced LNC (2016)", "l");
             if(isRun2) legend.AddEntry(cms_trilepton_displaced_muon, "CMS 3l displaced (Run2)", "l");
         }else if(plotfilename.Contains("_ee_")){
             legend.AddEntry(cms_trilepton_prompt_electron, "CMS 3l prompt (2016)", "l");
+            legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
             if(isRun2) legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
         }
     }
