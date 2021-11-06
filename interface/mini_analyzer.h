@@ -32,7 +32,7 @@
 
 double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_NewPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
-double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_looserPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
 double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017);
@@ -41,7 +41,7 @@ class mini_analyzer {
     public :
         BkgEstimator event;
         TString sr_flavor;
-        bool isData, isSignal;
+        bool isData, isSignal, isBlind;
         std::map<TString, TH1*> hists;
         std::map<TString, TH1*> hists_sys;
         std::map<TString, TH2*> hists2D;

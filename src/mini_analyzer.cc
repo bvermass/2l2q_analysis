@@ -4,7 +4,8 @@
 mini_analyzer::mini_analyzer(TString filename) :
     event(filename),
     isData(filename.Contains("Run201") or filename.Contains("SingleLepton")),
-    isSignal(filename.Contains("HeavyNeutrino_lljj_"))
+    isSignal(filename.Contains("HeavyNeutrino_lljj_")),
+    isBlind(false)
 {
     TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
     event.BkgEstimator_tree->GetEntry(0);
@@ -47,29 +48,74 @@ double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
     }
 }
 
-double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017)
+double get_looserPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017)
 {
-    if(flavor == 0){//electron
+    //special cuts for bins that otherwise have 0 prediction
+    if(isOS){
+        if(is2016){
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 2 and Lxy >= 10)                       return 0.93;//OS me LowMass 2016
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.980;//OS em HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.967;//OS ee HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.913;//OS ee HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass <  6 and Lxy >= 5)                        return 0.962;//OS me HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.932;//OS me HighMass 2016
+            }
+        }else{
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.99;//OS mm LowMass 1718
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 2 and Lxy >= 10)                       return 0.959;//OS me LowMass 1718
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.976;//OS em HighMass 1718
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.9;//OS me HighMass 1718
+            }
+        }
+    }else{
+        if(is2016){
+            if(mass <= 5){
+                //all bins fine
+            }else{
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.97;//SS em HighMass 2016
+                //!!!if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.053;//SS em HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 1 and Lxy < 5)            return 0.97;//SS ee HighMass 2016
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.9;//SS ee HighMass 2016
+                if(l1flavor == 1 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.94;//OS me HighMass 2016
+            }
+        }else{
+            if(mass <= 5){
+                if(l1flavor == 1 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.99;//SS mm LowMass 1718
+                if(l1flavor == 0 and l2flavor == 1 and SVmass <  2 and Lxy <  4)                        return 0.980;//SS me LowMass 1718
+            }else{
+                if(l1flavor == 1 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.98;//SS mm HighMass 1718
+                if(l1flavor == 0 and l2flavor == 1 and SVmass >= 6 and Lxy >= 5)                        return 0.510;//SS me HighMass 1718
+                if(l1flavor == 0 and l2flavor == 0 and SVmass >= 6 and Lxy >= 5)                        return 0.936;//SS me HighMass 1718
+            }
+        }
+    }
+
+    //Normal overall PFN cuts
+    if(l2flavor == 0){//electron
         if(is2016){
             if(mass <= 5)   return 0.96;
             else            return 0.97;
         }else if(is2017){
-            if(mass <= 5)   return 0.95;//0.98 had almost 0 predicted events
-            else            return 0.94;//0.97 had almost 0 predicted events
+            if(mass <= 5)   return 0.95;
+            else            return 0.94;
         }else {
             if(mass <= 5)   return 0.96;
             else            return 0.95;
         }
     }else {//muon
         if(is2016){
-            if(mass <= 5)   return 0.996;
-            else            return 0.996;
-        }else if(is2017){
             if(mass <= 5)   return 0.994;
-            else            return 0.996;
+            else            return 0.994;
+        }else if(is2017){
+            if(mass <= 5)   return 0.992;
+            else            return 0.994;
         }else {
-            if(mass <= 5)   return 0.995;
-            else            return 0.996;
+            if(mass <= 5)   return 0.993;
+            else            return 0.994;
         }
     }
 }
@@ -418,8 +464,8 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
 
 void mini_analyzer::ABCD_ratios()
 {
-    if(!isData) calculate_ratio("_quadA_", "_quadB_", "_AoverB_");
-    if(!isData) calculate_ratio("_quadA_", "_quadC_", "_AoverC_");
+    if(!(isData and isBlind)) calculate_ratio("_quadA_", "_quadB_", "_AoverB_");
+    if(!(isData and isBlind)) calculate_ratio("_quadA_", "_quadC_", "_AoverC_");
     calculate_ratio("_quadC_", "_quadD_", "_CoverD_");
     calculate_ratio("_quadB_", "_quadD_", "_BoverD_");
     calculate_eff();
@@ -628,7 +674,7 @@ void mini_analyzer::set_signal_regions()
         //int i_MV2      = get_PFNevaluation_index(ceil(event._SV_mass), event._lFlavor);
         //double PFNcut  = get_PFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
         double PFNcut  = get_NewPFNcut(event._evaluating_mass[MV2.second], event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
-        double LoosePFNcut = get_LoosePFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
+        double LoosePFNcut = get_looserPFNcut(event._evaluating_mass[MV2.second], event._l1Flavor, event._lFlavor, event._SV_mass, event._SV_PVSVdist_2D, event._l1Charge != event._lCharge, event._is2016, event._is2017);
         double LoosePFNcut2 = get_LoosePFNcut2(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
         double MediumPFNcut  = get_MediumPFNcut(event._evaluating_mass[MV2.second], event._lFlavor, event._is2016, event._is2017);
         // Determine quadrant (in PFN output and dphi)
@@ -918,11 +964,11 @@ void mini_analyzer::set_signal_regions()
 
         //extra noSR plots
         if(baseline_cutmlSV){
-            if(!isData) ABCDtags.push_back(MV2tag + "_cutbaselinemlSV");
+            if(!(isData and isBlind)) ABCDtags.push_back(MV2tag + "_cutbaselinemlSV");
             if(event._JetTagVal[i_MV2] < 0.8) ABCDtags.push_back(MV2tag + "_cutbaselinemlSV_noSR");
 
             if(event._SV_l1mass > 50 and event._SV_l1mass < 85){
-                if(!isData) ABCDtags.push_back(MV2tag + "_cutinsidemlSV");
+                if(!(isData and isBlind)) ABCDtags.push_back(MV2tag + "_cutinsidemlSV");
                 if(event._JetTagVal[i_MV2] < 0.8) ABCDtags.push_back(MV2tag + "_cutinsidemlSV_noSR");
             }else{
                 ABCDtags.push_back(MV2tag + "_cutoutsidemlSV");
@@ -975,7 +1021,7 @@ void mini_analyzer::add_histograms_gridscan()
                     //add_fraction_histograms(lep_region + MV2tag + CPtag + cut2region);
 
                     // only make region A histograms if we're not running over data
-                    if(!isData or cut2region.Contains("CR")){
+                    if(!(isData and isBlind) or cut2region.Contains("CR")){
                         for(const TString & quadrant : {"_quadA"/*, "_quadAB", "_quadAC"*/, "_AoverB", "_AoverC"/*, "_quadABCD"*/}){
                             //add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
                             add_pfn_histograms(lep_region + MV2tag + CPtag + cut2region + quadrant);
@@ -994,7 +1040,7 @@ void mini_analyzer::add_histograms_gridscan()
                     for(const TString& quadrant : {"_quadB", "_quadC", "_quadD"/*, "_quadCD", "_quadBD", "_quadBCD"*/,  "_CoverD"/*, "_BoverD", "_DtoCwithCD"*/, "_BtoAwithCD"/*, "_CtoAwithBD"*/}){
                         add_Shape_SR_histograms(lep_region + MV2tag + CPtag + cut2region + quadrant);
                     }
-                    if(!isData or cut2region.Contains("CR")){
+                    if(!(isData and isBlind) or cut2region.Contains("CR")){
                         for(const TString & quadrant : {"_quadA"/*, "_quadAB", "_quadAC"*/, "_AoverB", "_AoverC"/*, "_quadABCD"*/}){
                             add_Shape_SR_histograms(lep_region + MV2tag + CPtag + cut2region + quadrant);
                         }
@@ -1024,7 +1070,7 @@ void mini_analyzer::add_histograms()
     //            //add_fraction_histograms(lep_region + MV2tag + cut2region);
 
     //            // only make region A histograms if we're not running over data
-                if(!isData or cut2region.Contains("CR")){
+                if(!(isData and isBlind) or cut2region.Contains("CR")){
                     for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_AoverC", "_quadABCD"}){
                         add_standard_histograms(lep_region + MV2tag + cut2region + quadrant);
     //                    add_pfn_histograms(lep_region + MV2tag + cut2region + quadrant);
@@ -1033,7 +1079,7 @@ void mini_analyzer::add_histograms()
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            if(isData and isBlind) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_standard_histograms(lep_region + MV2tag + cutregion);
@@ -1051,21 +1097,21 @@ void mini_analyzer::add_histograms()
                     add_Shape_SR_histograms(lep_region + MV2tag + cut2region + quadrant);
                     if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cut2region + quadrant);
                 }
-                if(!isData or cut2region.Contains("CR")){
+                if(!(isData and isBlind) or cut2region.Contains("CR")){
                     for(const TString & quadrant : {"_quadA", "_quadAB", "_quadAC", "_AoverB", "_AoverC", "_quadABCD"}){
                         add_Shape_SR_histograms(lep_region + MV2tag + cut2region + quadrant);
                         if(TagExtraPlots) add_Shape_SR_extra_histograms(lep_region + MV2tag + cut2region + quadrant);
                     }
                 }
             }
-            if(!isData){
+            if(!(isData and isBlind)){
                 for(const auto& var : variations){
                     add_Shape_SR_histograms(lep_region + MV2tag + "_cutTightmlSV_quadA" + var.first);
                 }
             }
 
             std::vector<TString> cutregions;
-            if(isData) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
+            if(isData and isBlind) cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             else       cutregions = {"_cutbaselinemlSV_noSR", "_cutinsidemlSV_noSR", "_cutoutsidemlSV", "_cutbaselinemlSV", "_cutinsidemlSV", "_cutbaselinemlSV_CR2Jets", "_cutinsidemlSV_CR2Jets", "_cutoutsidemlSV_CR2Jets"};
             for(const TString& cutregion : cutregions){
                 add_Shape_SR_histograms(lep_region + MV2tag + cutregion);
@@ -1261,7 +1307,7 @@ void mini_analyzer::add_Shape_SR_extra_histograms(TString prefix)
 void mini_analyzer::fill_histograms()
 {
     for(const auto& ABCDtag : ABCDtags){
-        if(isData and ABCDtag.Contains("_quadA") and not ABCDtag.Contains("CR")) continue;// don't fill region A histograms for data
+        if((isData and isBlind) and ABCDtag.Contains("_quadA") and not ABCDtag.Contains("CR")) continue;// don't fill region A histograms for data
 
         TString mv2tag = ABCDtag(0,ABCDtag.Index("_cut"));
         //TString mv2tag = ABCDtag(0,ABCDtag.Index("_CP"));//gridscan
@@ -1470,7 +1516,7 @@ void mini_analyzer::fill_Shape_SR_extra_histograms(TString sr_flavor, TString AB
 
 void mini_analyzer::sum_quad_histograms()
 {
-    if(!isData){
+    if(!(isData and isBlind)){
         sum_histograms_based_on_tags("_quadA_", "_quadB_", "_quadAB_");
         sum_histograms_based_on_tags("_quadA_", "_quadC_", "_quadAC_");
     }
@@ -1478,7 +1524,7 @@ void mini_analyzer::sum_quad_histograms()
     sum_histograms_based_on_tags("_quadC_", "_quadD_", "_quadCD_");
     sum_histograms_based_on_tags("_quadB_", "_quadCD_", "_quadBCD_");
 
-    if(!isData) sum_histograms_based_on_tags("_quadAB_", "_quadCD_", "_quadABCD_");
+    if(!(isData and isBlind)) sum_histograms_based_on_tags("_quadAB_", "_quadCD_", "_quadABCD_");
 }
 
 
