@@ -42,6 +42,8 @@ class mini_analyzer {
         BkgEstimator event;
         TString sr_flavor;
         bool isData, isSignal, isBlind;
+        bool storeSRevents;
+        BkgEstimator *SRevents_LowMass, *SRevents_HighMass;
         std::map<TString, TH1*> hists;
         std::map<TString, TH1*> hists_sys;
         std::map<TString, TH2*> hists2D;
@@ -88,6 +90,7 @@ class mini_analyzer {
         void add_Shape_SR_extra_histograms(TString prefix);
 
         void fill_histograms();
+        void fill_SRevents();
         void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);

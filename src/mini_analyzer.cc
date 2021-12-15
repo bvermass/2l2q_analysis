@@ -2,10 +2,11 @@
 #include "../interface/mini_analyzer.h"
 
 mini_analyzer::mini_analyzer(TString filename) :
-    event(filename),
+    event(filename, "read"),
     isData(filename.Contains("Run201") or filename.Contains("SingleLepton")),
     isSignal(filename.Contains("HeavyNeutrino_lljj_")),
-    isBlind(false)
+    isBlind(false),
+    storeSRevents(true)
 {
     TH1::AddDirectory(kFALSE);//https://root.cern.ch/input-and-output
     event.BkgEstimator_tree->GetEntry(0);
@@ -13,6 +14,17 @@ mini_analyzer::mini_analyzer(TString filename) :
     init_CP();
     init_variations();
     add_histograms();
+    if(storeSRevents){
+        TString SRevents_LowMass_filename  = filename;
+        SRevents_LowMass_filename.ReplaceAll("final/full_analyzer", "SRevents_LowMass");
+        gSystem->Exec("mkdir -p " + SRevents_LowMass_filename(0,SRevents_LowMass_filename.Index("BkgEstimator_")));
+        SRevents_LowMass = new BkgEstimator(SRevents_LowMass_filename, "recreate");
+
+        TString SRevents_HighMass_filename = filename;
+        SRevents_HighMass_filename.ReplaceAll("final/full_analyzer", "SRevents_HighMass");
+        gSystem->Exec("mkdir -p " + SRevents_HighMass_filename(0,SRevents_HighMass_filename.Index("BkgEstimator_")));
+        SRevents_HighMass = new BkgEstimator(SRevents_HighMass_filename, "recreate");
+    }
     //add_histograms_gridscan();
     std::cout << "number of histograms: " << hists.size() << std::endl;
     std::cout << "number of MV2tags: " << MV2tags.size() << std::endl;
@@ -372,6 +384,7 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
         set_signal_regions();
         //set_signal_regions_gridscan();
         fill_histograms();
+        fill_SRevents();
 
         if( event._SV_l1mass > 10){
             cnt1++;
@@ -420,7 +433,13 @@ void mini_analyzer::analyze(int max_entries, int partition, int partitionjobnumb
     //    set_correct_sysUp_sysDown(&hists_JEC, {"JEC_", "JER_"});
     //}
 
+    if(storeSRevents){
+        SRevents_LowMass->write_tree();
+        SRevents_HighMass->write_tree();
+    }
+
     TString outputfilename = get_mini_analyzer_outputfilename(event.BkgEstimator_filename);
+    if(max_entries == 10000) outputfilename.ReplaceAll(".root", "_test.root");
     std::cout << "output to: " << outputfilename << std::endl;
     TFile *output = new TFile(outputfilename, "recreate");
     
@@ -1333,6 +1352,22 @@ void mini_analyzer::fill_histograms()
             for(const auto& it : variations){
                 fill_Shape_SR_histograms(sr_flavor, ABCDtag + it.first, it.second);
             }
+        }
+    }
+}
+
+void mini_analyzer::fill_SRevents()
+{
+    for(const auto& ABCDtag : ABCDtags){
+        if((isData and isBlind) and ABCDtag.Contains("_quadA") and not ABCDtag.Contains("CR")) continue;
+
+        if(ABCDtag.Contains("M-5_V2-2e-06_cutTightmlSV_quadA")){
+            SRevents_LowMass->copy_event(&event);
+            SRevents_LowMass->fill_tree();
+        }
+        if(ABCDtag.Contains("M-10_V2-2e-06_cutTightmlSV_quadA")){
+            SRevents_HighMass->copy_event(&event);
+            SRevents_HighMass->fill_tree();
         }
     }
 }

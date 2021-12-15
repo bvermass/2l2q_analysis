@@ -154,12 +154,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     HNLtagger hnltagger_Kshort(filename, "HNLtagger_Kshort", partition, partitionjobnumber);
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
-    TString bkgestimator_fileoption = "recreate";
-    BkgEstimator bkgestimator(filename, "BkgEstimator", partition, partitionjobnumber, bkgestimator_fileoption);
-    BkgEstimator bkgestimator_JECDown(filename, "BkgEstimator_JECDown", partition, partitionjobnumber, bkgestimator_fileoption);
-    BkgEstimator bkgestimator_JECUp(filename, "BkgEstimator_JECUp", partition, partitionjobnumber, bkgestimator_fileoption);
-    BkgEstimator bkgestimator_JERDown(filename, "BkgEstimator_JERDown", partition, partitionjobnumber, bkgestimator_fileoption);
-    BkgEstimator bkgestimator_JERUp(filename, "BkgEstimator_JERUp", partition, partitionjobnumber, bkgestimator_fileoption);
+    TString BkgEstimator_fileoption = "recreate";
+    TString BkgEstimator_filename         = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JECDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECDown", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JECUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECUp", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JERDOwn = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERDown", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JERUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERUp", partition, partitionjobnumber, true);
+    BkgEstimator BkgEstimator(BkgEstimator_filename, BkgEstimator_fileoption);
+    BkgEstimator BkgEstimator_JECDown(BkgEstimator_filename_JECDown, BkgEstimator_fileoption);
+    BkgEstimator BkgEstimator_JECUp(BkgEstimator_filename_JECUp, BkgEstimator_fileoption);
+    BkgEstimator BkgEstimator_JERDown(BkgEstimator_filename_JERDown, BkgEstimator_fileoption);
+    BkgEstimator BkgEstimator_JERUp(BkgEstimator_filename_JERUp, BkgEstimator_fileoption);
 
 
     PFNReader pfn_e_LowMass = get_PFNReader_unparametrized_LowMass(0);

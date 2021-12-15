@@ -45,6 +45,7 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     if(base_filename.Contains("JECUp")) outputfilename += "JECUp/";
     if(base_filename.Contains("JERDown")) outputfilename += "JERDown/";
     if(base_filename.Contains("JERUp")) outputfilename += "JERUp/";
+    if(base_filename.Contains("SRevents")) outputfilename += "SRevents/";
     
     if(partition != 1) {
         TString tmpname = filename(filename.Index("heavyNeutrino") + 14, filename.Index("dilep") - filename.Index("heavyNeutrino") - 15); 

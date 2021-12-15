@@ -16,6 +16,8 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._gen_Nctau    = HNL_param->ctau;
     bkgestimator._JetIsFromHNL = get_JetIsFromHNL(i_jetl2);
     bkgestimator._nTightJet    = nTightJet;
+    bkgestimator._nMediumBJet  = nMediumBJet;
+    bkgestimator._nLooseBJet   = nLooseBJet;
     bkgestimator._JetPt        = _jetPt[i_jetl2];
     bkgestimator._JetEta       = _jetEta[i_jetl2];
     bkgestimator._JetPhi       = _jetPhi[i_jetl2];
@@ -39,6 +41,12 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._l1Pt            = _lPt[i_leading];
     bkgestimator._l1Eta           = _lEta[i_leading];
     bkgestimator._l1Phi           = _lPhi[i_leading];
+    bkgestimator._l1dxy           = _dxy[i_leading];
+    bkgestimator._l1dz            = _dz[i_leading];
+    bkgestimator._l13dIPSig       = _3dIPSig[i_leading];
+    bkgestimator._l1relIso        = _relIso[i_leading];
+    bkgestimator._l1ptRel         = _ptRel[i_leading];
+    bkgestimator._l1ptRatio       = _ptRatio[i_leading];
     bkgestimator._l1Flavor        = _lFlavor[i_leading];
     bkgestimator._l1Charge        = _lCharge[i_leading];
     bkgestimator._l1Provenance           = _lProvenance[i_leading];

@@ -9,94 +9,96 @@ BkgEstimator::BkgEstimator()
 {
 }
 
-BkgEstimator::BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber, TString fileoption)
-{
-    //BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
-    //BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass_PFNv9_3dIPSigPixHits/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
-    BkgEstimator_filename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", type_and_flavor, partition, partitionjobnumber, true);
-    BkgEstimator_file = new TFile(BkgEstimator_filename, fileoption);
-    BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
-    BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
-    BkgEstimator_tree->Branch("_RawWeight",                        &_RawWeight,                        "_RawWeight/D");
-    BkgEstimator_tree->Branch("_l1_IDSF",                          &_l1_IDSF,                          "_l1_IDSF/D");
-    BkgEstimator_tree->Branch("_l1_IDSF_unc_sym",                  &_l1_IDSF_unc_sym,                  "_l1_IDSF_unc_sym/D");
-    BkgEstimator_tree->Branch("_l2_IDSF",                          &_l2_IDSF,                          "_l2_IDSF/D");
-    BkgEstimator_tree->Branch("_l2_IDSF_unc_sym",                  &_l2_IDSF_unc_sym,                  "_l2_IDSF_unc_sym/D");
-    BkgEstimator_tree->Branch("_TrackSF",                          &_TrackSF,                          "_TrackSF/D");
-    BkgEstimator_tree->Branch("_TrackSF_unc_sym",                  &_TrackSF_unc_sym,                  "_TrackSF_unc_sym/D");
-    BkgEstimator_tree->Branch("_l1_ISOSF",                         &_l1_ISOSF,                         "_l1_ISOSF/D");
-    BkgEstimator_tree->Branch("_l1_ISOSF_unc_sym",                 &_l1_ISOSF_unc_sym,                 "_l1_ISOSF_unc_sym/D");
-    BkgEstimator_tree->Branch("_TriggerSF",                        &_TriggerSF,                        "_TriggerSF/D");
-    BkgEstimator_tree->Branch("_TriggerSF_unc_sym",                &_TriggerSF_unc_sym,                "_TriggerSF_unc_sym/D");
-    BkgEstimator_tree->Branch("_PileUpSF",                         &_PileUpSF,                         "_PileUpSF/D");
-    BkgEstimator_tree->Branch("_PileUpSF_unc_up",                  &_PileUpSF_unc_up,                  "_PileUpSF_unc_up/D");
-    BkgEstimator_tree->Branch("_PileUpSF_unc_down",                &_PileUpSF_unc_down,                "_PileUpSF_unc_down/D");
-    BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
-    BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
-    BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
-    BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
-    BkgEstimator_tree->Branch("_gen_NV2",                          &_gen_NV2,                          "_gen_NV2/D");
-    BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
-    BkgEstimator_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
-    BkgEstimator_tree->Branch("_nTightJet",                        &_nTightJet,                        "_nTightJet/i");
-    BkgEstimator_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
-    BkgEstimator_tree->Branch("_JetEta",                           &_JetEta,                           "_JetEta/D");
-    BkgEstimator_tree->Branch("_JetPhi",                           &_JetPhi,                           "_JetPhi/D");
-    BkgEstimator_tree->Branch("_nTightLep",                        &_nTightLep,                        "_nTightLep/i");
-    BkgEstimator_tree->Branch("_lPt",                              &_lPt,                              "_lPt/D");
-    BkgEstimator_tree->Branch("_lEta",                             &_lEta,                             "_lEta/D");
-    BkgEstimator_tree->Branch("_lPhi",                             &_lPhi,                             "_lPhi/D");
-    BkgEstimator_tree->Branch("_ldxy",                             &_ldxy,                             "_ldxy/D");
-    BkgEstimator_tree->Branch("_ldz",                              &_ldz,                              "_ldz/D");
-    BkgEstimator_tree->Branch("_l3dIPSig",                         &_l3dIPSig,                         "_l3dIPSig/D");
-    BkgEstimator_tree->Branch("_lrelIso",                          &_lrelIso,                          "_lrelIso/D");
-    BkgEstimator_tree->Branch("_lptRel",                           &_lptRel,                           "_lptRel/D");
-    BkgEstimator_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
-    BkgEstimator_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
-    BkgEstimator_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
-    BkgEstimator_tree->Branch("_lFlavor",                          &_lFlavor,                          "_lFlavor/i");
-    BkgEstimator_tree->Branch("_lCharge",                          &_lCharge,                          "_lCharge/I");
-    BkgEstimator_tree->Branch("_lProvenance",                      &_lProvenance,                      "_lProvenance/i");
-    BkgEstimator_tree->Branch("_lProvenanceCompressed",            &_lProvenanceCompressed,            "_lProvenanceCompressed/i");
-
-    BkgEstimator_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
-    BkgEstimator_tree->Branch("_l1Eta",                            &_l1Eta,                            "_l1Eta/D");
-    BkgEstimator_tree->Branch("_l1Phi",                            &_l1Phi,                            "_l1Phi/D");
-    BkgEstimator_tree->Branch("_l1Flavor",                         &_l1Flavor,                         "_l1Flavor/i");
-    BkgEstimator_tree->Branch("_l1Charge",                         &_l1Charge,                         "_l1Charge/I");
-    BkgEstimator_tree->Branch("_l1Provenance",                     &_l1Provenance,                     "_l1Provenance/i");
-    BkgEstimator_tree->Branch("_l1ProvenanceCompressed",           &_l1ProvenanceCompressed,           "_l1ProvenanceCompressed/i");
-    BkgEstimator_tree->Branch("_mll",                              &_mll,                              "_mll/D");
-    BkgEstimator_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
-    BkgEstimator_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");
-    BkgEstimator_tree->Branch("_dphill",                           &_dphill,                           "_dphill/D");
-    BkgEstimator_tree->Branch("_dRljet",                           &_dRljet,                           "_dRljet/D");
-
-    BkgEstimator_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
-    BkgEstimator_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");
-    BkgEstimator_tree->Branch("_SV_genreco",                       &_SV_genreco,                       "_SV_genreco/D");
-    BkgEstimator_tree->Branch("_SV_ntracks",                       &_SV_ntracks,                       "_SV_ntracks/i");
-    BkgEstimator_tree->Branch("_SV_mass",                          &_SV_mass,                          "_SV_mass/D");
-    BkgEstimator_tree->Branch("_SV_l1mass",                        &_SV_l1mass,                        "_SV_l1mass/D");
-    BkgEstimator_tree->Branch("_SV_pt",                            &_SV_pt,                            "_SV_pt/D");
-    BkgEstimator_tree->Branch("_SV_eta",                           &_SV_eta,                           "_SV_eta/D");
-    BkgEstimator_tree->Branch("_SV_phi",                           &_SV_phi,                           "_SV_phi/D");
-    BkgEstimator_tree->Branch("_SV_normchi2",                      &_SV_normchi2,                      "_SV_normchi2/D");
-
-    BkgEstimator_tree->Branch("_nMV2",                             &_nMV2,                             "_nMV2/i");
-    BkgEstimator_tree->Branch("_evaluating_mass",                  &_evaluating_mass,                  "_evaluating_mass[_nMV2]/I");
-    BkgEstimator_tree->Branch("_evaluating_V2",                    &_evaluating_V2,                    "_evaluating_V2[_nMV2]/D");
-    BkgEstimator_tree->Branch("_JetTagVal",                        &_JetTagVal,                        "_JetTagVal[_nMV2]/D");
-    BkgEstimator_tree->Branch("_reweighting_weight",               &_reweighting_weight,               "_reweighting_weight[_nMV2]/D");
-}
-
-
-// Constructor where BkgEstimator variables are read from an existing file that was produced USING THIS CLASS.
-BkgEstimator::BkgEstimator(TString filename)
+BkgEstimator::BkgEstimator(TString filename, TString fileoption)
 {
     BkgEstimator_filename = filename;
-    open_file_and_tree(filename);
-    set_branch_adresses();
+    if(fileoption == "read"){//open existing file to read its contents
+        open_file_and_tree(filename);
+        set_branch_adresses();
+    }else {//open new file or recreate file to write events
+        BkgEstimator_file = new TFile(BkgEstimator_filename, fileoption);
+        BkgEstimator_tree = new TTree("BkgEstimator_tree", "Class containing main variables for Background estimation");
+        BkgEstimator_tree->Branch("_weight",                           &_weight,                           "_weight/D");
+        BkgEstimator_tree->Branch("_RawWeight",                        &_RawWeight,                        "_RawWeight/D");
+        BkgEstimator_tree->Branch("_l1_IDSF",                          &_l1_IDSF,                          "_l1_IDSF/D");
+        BkgEstimator_tree->Branch("_l1_IDSF_unc_sym",                  &_l1_IDSF_unc_sym,                  "_l1_IDSF_unc_sym/D");
+        BkgEstimator_tree->Branch("_l2_IDSF",                          &_l2_IDSF,                          "_l2_IDSF/D");
+        BkgEstimator_tree->Branch("_l2_IDSF_unc_sym",                  &_l2_IDSF_unc_sym,                  "_l2_IDSF_unc_sym/D");
+        BkgEstimator_tree->Branch("_TrackSF",                          &_TrackSF,                          "_TrackSF/D");
+        BkgEstimator_tree->Branch("_TrackSF_unc_sym",                  &_TrackSF_unc_sym,                  "_TrackSF_unc_sym/D");
+        BkgEstimator_tree->Branch("_l1_ISOSF",                         &_l1_ISOSF,                         "_l1_ISOSF/D");
+        BkgEstimator_tree->Branch("_l1_ISOSF_unc_sym",                 &_l1_ISOSF_unc_sym,                 "_l1_ISOSF_unc_sym/D");
+        BkgEstimator_tree->Branch("_TriggerSF",                        &_TriggerSF,                        "_TriggerSF/D");
+        BkgEstimator_tree->Branch("_TriggerSF_unc_sym",                &_TriggerSF_unc_sym,                "_TriggerSF_unc_sym/D");
+        BkgEstimator_tree->Branch("_PileUpSF",                         &_PileUpSF,                         "_PileUpSF/D");
+        BkgEstimator_tree->Branch("_PileUpSF_unc_up",                  &_PileUpSF_unc_up,                  "_PileUpSF_unc_up/D");
+        BkgEstimator_tree->Branch("_PileUpSF_unc_down",                &_PileUpSF_unc_down,                "_PileUpSF_unc_down/D");
+        BkgEstimator_tree->Branch("_is2016",                           &_is2016,                           "_is2016/O");
+        BkgEstimator_tree->Branch("_is2017",                           &_is2017,                           "_is2017/O");
+        BkgEstimator_tree->Branch("_is2018",                           &_is2018,                           "_is2018/O");
+        BkgEstimator_tree->Branch("_gen_Nmass",                        &_gen_Nmass,                        "_gen_Nmass/I");
+        BkgEstimator_tree->Branch("_gen_NV2",                          &_gen_NV2,                          "_gen_NV2/D");
+        BkgEstimator_tree->Branch("_gen_Nctau",                        &_gen_Nctau,                        "_gen_Nctau/D");
+        BkgEstimator_tree->Branch("_JetIsFromHNL",                     &_JetIsFromHNL,                     "_JetIsFromHNL/O");
+        BkgEstimator_tree->Branch("_nTightJet",                        &_nTightJet,                        "_nTightJet/i");
+        BkgEstimator_tree->Branch("_nMediumBJet",                        &_nMediumBJet,                        "_nMediumBJet/i");
+        BkgEstimator_tree->Branch("_nLooseBJet",                        &_nLooseBJet,                        "_nLooseBJet/i");
+        BkgEstimator_tree->Branch("_JetPt",                            &_JetPt,                            "_JetPt/D");
+        BkgEstimator_tree->Branch("_JetEta",                           &_JetEta,                           "_JetEta/D");
+        BkgEstimator_tree->Branch("_JetPhi",                           &_JetPhi,                           "_JetPhi/D");
+        BkgEstimator_tree->Branch("_nTightLep",                        &_nTightLep,                        "_nTightLep/i");
+        BkgEstimator_tree->Branch("_lPt",                              &_lPt,                              "_lPt/D");
+        BkgEstimator_tree->Branch("_lEta",                             &_lEta,                             "_lEta/D");
+        BkgEstimator_tree->Branch("_lPhi",                             &_lPhi,                             "_lPhi/D");
+        BkgEstimator_tree->Branch("_ldxy",                             &_ldxy,                             "_ldxy/D");
+        BkgEstimator_tree->Branch("_ldz",                              &_ldz,                              "_ldz/D");
+        BkgEstimator_tree->Branch("_l3dIPSig",                         &_l3dIPSig,                         "_l3dIPSig/D");
+        BkgEstimator_tree->Branch("_lrelIso",                          &_lrelIso,                          "_lrelIso/D");
+        BkgEstimator_tree->Branch("_lptRel",                           &_lptRel,                           "_lptRel/D");
+        BkgEstimator_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
+        BkgEstimator_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
+        BkgEstimator_tree->Branch("_lNumberOfPixelHits",               &_lNumberOfPixelHits,               "_lNumberOfPixelHits/i");
+        BkgEstimator_tree->Branch("_lFlavor",                          &_lFlavor,                          "_lFlavor/i");
+        BkgEstimator_tree->Branch("_lCharge",                          &_lCharge,                          "_lCharge/I");
+        BkgEstimator_tree->Branch("_lProvenance",                      &_lProvenance,                      "_lProvenance/i");
+        BkgEstimator_tree->Branch("_lProvenanceCompressed",            &_lProvenanceCompressed,            "_lProvenanceCompressed/i");
+
+        BkgEstimator_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
+        BkgEstimator_tree->Branch("_l1Eta",                            &_l1Eta,                            "_l1Eta/D");
+        BkgEstimator_tree->Branch("_l1Phi",                            &_l1Phi,                            "_l1Phi/D");
+        BkgEstimator_tree->Branch("_l1dxy",                            &_l1dxy,                            "_l1dxy/D");
+        BkgEstimator_tree->Branch("_l1dz",                             &_l1dz,                             "_l1dz/D");
+        BkgEstimator_tree->Branch("_l13dIPSig",                        &_l13dIPSig,                        "_l13dIPSig/D");
+        BkgEstimator_tree->Branch("_l1relIso",                         &_l1relIso,                         "_l1relIso/D");
+        BkgEstimator_tree->Branch("_l1ptRel",                          &_l1ptRel,                          "_l1ptRel/D");
+        BkgEstimator_tree->Branch("_l1ptRatio",                        &_l1ptRatio,                        "_l1ptRatio/D");
+        BkgEstimator_tree->Branch("_l1Flavor",                         &_l1Flavor,                         "_l1Flavor/i");
+        BkgEstimator_tree->Branch("_l1Charge",                         &_l1Charge,                         "_l1Charge/I");
+        BkgEstimator_tree->Branch("_l1Provenance",                     &_l1Provenance,                     "_l1Provenance/i");
+        BkgEstimator_tree->Branch("_l1ProvenanceCompressed",           &_l1ProvenanceCompressed,           "_l1ProvenanceCompressed/i");
+        BkgEstimator_tree->Branch("_mll",                              &_mll,                              "_mll/D");
+        BkgEstimator_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
+        BkgEstimator_tree->Branch("_dRll",                             &_dRll,                             "_dRll/D");
+        BkgEstimator_tree->Branch("_dphill",                           &_dphill,                           "_dphill/D");
+        BkgEstimator_tree->Branch("_dRljet",                           &_dRljet,                           "_dRljet/D");
+
+        BkgEstimator_tree->Branch("_SV_PVSVdist",                      &_SV_PVSVdist,                      "_SV_PVSVdist/D");
+        BkgEstimator_tree->Branch("_SV_PVSVdist_2D",                   &_SV_PVSVdist_2D,                   "_SV_PVSVdist_2D/D");
+        BkgEstimator_tree->Branch("_SV_genreco",                       &_SV_genreco,                       "_SV_genreco/D");
+        BkgEstimator_tree->Branch("_SV_ntracks",                       &_SV_ntracks,                       "_SV_ntracks/i");
+        BkgEstimator_tree->Branch("_SV_mass",                          &_SV_mass,                          "_SV_mass/D");
+        BkgEstimator_tree->Branch("_SV_l1mass",                        &_SV_l1mass,                        "_SV_l1mass/D");
+        BkgEstimator_tree->Branch("_SV_pt",                            &_SV_pt,                            "_SV_pt/D");
+        BkgEstimator_tree->Branch("_SV_eta",                           &_SV_eta,                           "_SV_eta/D");
+        BkgEstimator_tree->Branch("_SV_phi",                           &_SV_phi,                           "_SV_phi/D");
+        BkgEstimator_tree->Branch("_SV_normchi2",                      &_SV_normchi2,                      "_SV_normchi2/D");
+
+        BkgEstimator_tree->Branch("_nMV2",                             &_nMV2,                             "_nMV2/i");
+        BkgEstimator_tree->Branch("_evaluating_mass",                  &_evaluating_mass,                  "_evaluating_mass[_nMV2]/I");
+        BkgEstimator_tree->Branch("_evaluating_V2",                    &_evaluating_V2,                    "_evaluating_V2[_nMV2]/D");
+        BkgEstimator_tree->Branch("_JetTagVal",                        &_JetTagVal,                        "_JetTagVal[_nMV2]/D");
+        BkgEstimator_tree->Branch("_reweighting_weight",               &_reweighting_weight,               "_reweighting_weight[_nMV2]/D");
+    }
 }
 
 
@@ -132,6 +134,8 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_gen_Nctau", &_gen_Nctau, &b__gen_Nctau);
     BkgEstimator_tree->SetBranchAddress("_JetIsFromHNL", &_JetIsFromHNL, &b__JetIsFromHNL);
     BkgEstimator_tree->SetBranchAddress("_nTightJet", &_nTightJet, &b__nTightJet);
+    BkgEstimator_tree->SetBranchAddress("_nMediumBJet", &_nMediumBJet, &b__nMediumBJet);
+    BkgEstimator_tree->SetBranchAddress("_nLooseBJet", &_nLooseBJet, &b__nLooseBJet);
     BkgEstimator_tree->SetBranchAddress("_JetPt", &_JetPt, &b__JetPt);
     BkgEstimator_tree->SetBranchAddress("_JetEta", &_JetEta, &b__JetEta);
     BkgEstimator_tree->SetBranchAddress("_JetPhi", &_JetPhi, &b__JetPhi);
@@ -155,6 +159,12 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_l1Pt", &_l1Pt, &b__l1Pt);
     BkgEstimator_tree->SetBranchAddress("_l1Eta", &_l1Eta, &b__l1Eta);
     BkgEstimator_tree->SetBranchAddress("_l1Phi", &_l1Phi, &b__l1Phi);
+    BkgEstimator_tree->SetBranchAddress("_l1dxy", &_l1dxy, &b__l1dxy);
+    BkgEstimator_tree->SetBranchAddress("_l1dz", &_l1dz, &b__l1dz);
+    BkgEstimator_tree->SetBranchAddress("_l13dIPSig", &_l13dIPSig, &b__l13dIPSig);
+    BkgEstimator_tree->SetBranchAddress("_l1relIso", &_l1relIso, &b__l1relIso);
+    BkgEstimator_tree->SetBranchAddress("_l1ptRel", &_l1ptRel, &b__l1ptRel);
+    BkgEstimator_tree->SetBranchAddress("_l1ptRatio", &_l1ptRatio, &b__l1ptRatio);
     BkgEstimator_tree->SetBranchAddress("_l1Flavor", &_l1Flavor, &b__l1Flavor);
     BkgEstimator_tree->SetBranchAddress("_l1Charge", &_l1Charge, &b__l1Charge);
     BkgEstimator_tree->SetBranchAddress("_l1Provenance", &_l1Provenance, &b__l1Provenance);
@@ -213,7 +223,7 @@ void BkgEstimator::fill_tree()
 void BkgEstimator::write_tree()
 {
     //BkgEstimator_tree->Print();
-    std::cout << "writing BkgEstimator tree" << std::endl;
+    std::cout << "writing BkgEstimator tree to " << BkgEstimator_filename << std::endl;
     BkgEstimator_file->Write();
     BkgEstimator_file->Close();
 }
@@ -222,4 +232,87 @@ void BkgEstimator::delete_tree()
 {
     BkgEstimator_file->Close();
     gSystem->Exec("rm " + BkgEstimator_filename);
+}
+
+void BkgEstimator::copy_event(BkgEstimator* original)
+{
+    _is2016 = original->_is2016;
+    _is2017 = original->_is2017;
+    _is2018 = original->_is2018;
+    _weight = original->_weight;
+    _RawWeight = original->_RawWeight;
+    _l1_IDSF = original->_l1_IDSF;
+    _l1_IDSF_unc_sym = original->_l1_IDSF_unc_sym;
+    _l2_IDSF = original->_l2_IDSF;
+    _l2_IDSF_unc_sym = original->_l2_IDSF_unc_sym;
+    _TrackSF = original->_TrackSF;
+    _TrackSF_unc_sym = original->_TrackSF_unc_sym;
+    _l1_ISOSF = original->_l1_ISOSF;
+    _l1_ISOSF_unc_sym = original->_l1_ISOSF_unc_sym;
+    _TriggerSF = original->_TriggerSF;
+    _TriggerSF_unc_sym = original->_TriggerSF_unc_sym;
+    _PileUpSF = original->_PileUpSF;
+    _PileUpSF_unc_up = original->_PileUpSF_unc_up;
+    _PileUpSF_unc_down = original->_PileUpSF_unc_down;
+    _gen_Nmass = original->_gen_Nmass;
+    _gen_NV2 = original->_gen_NV2;
+    _gen_Nctau = original->_gen_Nctau;
+    _JetIsFromHNL = original->_JetIsFromHNL;
+    _nTightJet = original->_nTightJet;
+    _nMediumBJet = original->_nMediumBJet;
+    _nLooseBJet = original->_nLooseBJet;
+    _JetPt = original->_JetPt;
+    _JetEta = original->_JetEta;
+    _JetPhi = original->_JetPhi;
+    _nTightLep = original->_nTightLep;
+    _lPt = original->_lPt;
+    _lEta = original->_lEta;
+    _lPhi = original->_lPhi;
+    _ldxy = original->_ldxy;
+    _ldz = original->_ldz;
+    _l3dIPSig = original->_l3dIPSig;
+    _lrelIso = original->_lrelIso;
+    _lptRatio = original->_lptRatio;
+    _lptRel = original->_lptRel;
+    _lNumberOfHits = original->_lNumberOfHits;
+    _lNumberOfPixelHits = original->_lNumberOfPixelHits;
+    _lFlavor = original->_lFlavor;
+    _lCharge = original->_lCharge;
+    _lProvenance = original->_lProvenance;
+    _lProvenanceCompressed = original->_lProvenanceCompressed;
+    _l1Pt = original->_l1Pt;
+    _l1Eta = original->_l1Eta;
+    _l1Phi = original->_l1Phi;
+    _l1dxy = original->_l1dxy;
+    _l1dz = original->_l1dz;
+    _l13dIPSig = original->_l13dIPSig;
+    _l1relIso = original->_l1relIso;
+    _l1ptRatio = original->_l1ptRatio;
+    _l1ptRel = original->_l1ptRel;
+    _l1Flavor = original->_l1Flavor;
+    _l1Charge = original->_l1Charge;
+    _l1Provenance = original->_l1Provenance;
+    _l1ProvenanceCompressed = original->_l1ProvenanceCompressed;
+    _mll = original->_mll;
+    _mlljet = original->_mlljet;
+    _dRll = original->_dRll;
+    _dphill = original->_dphill;
+    _dRljet = original->_dRljet;
+    _SV_PVSVdist = original->_SV_PVSVdist;
+    _SV_PVSVdist_2D = original->_SV_PVSVdist_2D;
+    _SV_genreco = original->_SV_genreco;
+    _SV_ntracks = original->_SV_ntracks;
+    _SV_mass = original->_SV_mass;
+    _SV_l1mass = original->_SV_l1mass;
+    _SV_pt = original->_SV_pt;
+    _SV_eta = original->_SV_eta;
+    _SV_phi = original->_SV_phi;
+    _SV_normchi2 = original->_SV_normchi2;
+    _nMV2 = original->_nMV2;
+    for(unsigned i = 0; i < _nMV2; i++){
+        _evaluating_mass[i] = original->_evaluating_mass[i];
+        _evaluating_V2[i] = original->_evaluating_V2[i];
+        _JetTagVal[i] = original->_JetTagVal[i];
+        _reweighting_weight[i] = original->_reweighting_weight[i];
+    }
 }

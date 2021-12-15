@@ -46,6 +46,8 @@ class BkgEstimator
         double   _gen_Nctau;
         bool     _JetIsFromHNL;
         unsigned _nTightJet;
+        unsigned _nMediumBJet;
+        unsigned _nLooseBJet;
         double   _JetPt;
         double   _JetEta;
         double   _JetPhi;
@@ -69,6 +71,12 @@ class BkgEstimator
         double   _l1Pt;
         double   _l1Eta;
         double   _l1Phi;
+        double   _l1dxy;
+        double   _l1dz;
+        double   _l13dIPSig;
+        double   _l1relIso;
+        double   _l1ptRatio;
+        double   _l1ptRel;
         unsigned _l1Flavor;
         int      _l1Charge;
         unsigned _l1Provenance;
@@ -121,6 +129,8 @@ class BkgEstimator
         TBranch     *b__gen_Nctau;
         TBranch     *b__JetIsFromHNL;
         TBranch     *b__nTightJet;
+        TBranch     *b__nMediumBJet;
+        TBranch     *b__nLooseBJet;
         TBranch     *b__JetPt;
         TBranch     *b__JetEta;
         TBranch     *b__JetPhi;
@@ -144,6 +154,12 @@ class BkgEstimator
         TBranch     *b__l1Pt;
         TBranch     *b__l1Eta;
         TBranch     *b__l1Phi;
+        TBranch     *b__l1dxy;
+        TBranch     *b__l1dz;
+        TBranch     *b__l13dIPSig;
+        TBranch     *b__l1relIso;
+        TBranch     *b__l1ptRatio;
+        TBranch     *b__l1ptRel;
         TBranch     *b__l1Flavor;
         TBranch     *b__l1Charge;
         TBranch     *b__l1Provenance;
@@ -173,14 +189,14 @@ class BkgEstimator
 
         //Functions
         BkgEstimator();//empty constructor
-        BkgEstimator(TString filename, TString type_and_flavor, int partition, int partitionjobnumber, TString fileoption = "recreate");//Constructor meant to create file and write events
-        BkgEstimator(TString filename);//Constructor meant to read existing file and access events
+        BkgEstimator(TString filename, TString fileoption = "recreate");//Constructor meant to create file and write events
         void open_file_and_tree(TString filename);
         void set_branch_adresses();
         void analyze(int max_entries, int partition, int partitionjobnumber);
         void fill_tree();
         void write_tree();
         void delete_tree();
+        void copy_event(BkgEstimator* original);
 
 };
 #endif
