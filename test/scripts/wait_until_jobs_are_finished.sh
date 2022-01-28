@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ $# -eq 1 ] ; then
-    tag="bvermass"
+if [ $# -eq 0 ] ; then
+    tag="bvermass "
 else
     tag=$2
 fi
@@ -12,7 +12,7 @@ nrunning=0
 nwaiting=0
 echo -e "\n"
 while $jobsrunning; do
-    while ! qstat -u bvermass > $qstatoutput; do
+    while ! condor_q -nobatch > $qstatoutput; do
         echo -e "caught qstat error, retrying"
         sleep 2
     done
@@ -20,8 +20,8 @@ while $jobsrunning; do
     nwaiting=0
     while IFS='' read -r line || [[ -n "$line" ]]; do
         if echo "$line" | grep -q "$tag"; then
-            RorQ=$(echo ${line:86:1}) #86 is position of R or Q indicating if job is running
-            if echo "$RorQ" | grep -q "Q"; then
+            RorI=$(echo ${line:53:1}) #86 is position of R or Q indicating if job is running
+            if echo "$RorI" | grep -q "I"; then
                 ((nwaiting+=1))
             else
                 ((nrunning+=1))

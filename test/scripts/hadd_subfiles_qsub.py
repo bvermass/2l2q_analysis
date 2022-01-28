@@ -615,13 +615,17 @@ def merge_similar_samples( base_path ):
 
 #customizable parameters
 tag = 'final'
+#tag = 'Kshort'
 n_hadds = 8
 
 
 base_paths = []
+#base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass_PFNv9run2/Kshort/full_analyzer/')
+#base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass_PFNv9_3dIPSigPixHits/' + tag + '/full_analyzer/')
+#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass_PFNv9run2/HNLtagger_electron/' + tag + '/full_analyzer/')
+#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass_PFNv9run2/HNLtagger_muon/' + tag + '/full_analyzer/')
+
 base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/' + tag + '/full_analyzer/')
-#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_electron/' + tag + '/full_analyzer/')
-#base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/HNLtagger_muon/' + tag + '/full_analyzer/')
 base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/')
 base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECUp/')
 base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECDown/')
