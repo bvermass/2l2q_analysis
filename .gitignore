@@ -18,6 +18,7 @@ execFullAnalyzer
 execPFNEfficiency
 execPFNcutStudy
 execStackPlotter
+execBkgEstimator
 helpertools/getTreeEntries/*.txt
 helpertools/getTreeEntries/execIntegralEff
 test/condor/log

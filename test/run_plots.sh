@@ -16,6 +16,8 @@ else
     choice=$2
 fi
 
+./test/scripts/check_file_info.sh $1
+
 if [[ choice -eq 1 ]]; then
     if g++ -std=c++11 -o $exec_name "plotting/singlehistplotter.cc" "plotting/tdrStyle.cc" "src/helper_histo_functions.cc" "plotting/helper_plotter_functions.cc" "plotting/ratioplotter.cc" `root-config --cflags --glibs`; then
         echo -e "\n///////////////////////////////////////////////"

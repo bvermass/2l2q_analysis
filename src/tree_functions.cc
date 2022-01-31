@@ -8,6 +8,9 @@
 
 void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double event_weight, double total_weight)
 {
+    bkgestimator._runNb        = _runNb;
+    bkgestimator._lumiBlock    = _lumiBlock;
+    bkgestimator._eventNb      = _eventNb;
     bkgestimator._is2016       = _is2016;
     bkgestimator._is2017       = _is2017;
     bkgestimator._is2018       = _is2018;
@@ -37,6 +40,25 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._lCharge               = _lCharge[i_subleading];
     bkgestimator._lProvenance           = _lProvenance[i_subleading];
     bkgestimator._lProvenanceCompressed = _lProvenanceCompressed[i_subleading];
+    bkgestimator._lElectronPassConvVeto = _lElectronPassConvVeto[i_subleading];
+    bkgestimator._lElectronMissingHits = _lElectronMissingHits[i_subleading];
+    bkgestimator._lElectronSuperClusterOverP = _lElectronSuperClusterOverP[i_subleading];
+    bkgestimator._lElectronEcalEnergy = _lElectronEcalEnergy[i_subleading];
+    bkgestimator._lElectronSigmaIetaIeta = _lElectronSigmaIetaIeta[i_subleading];
+    bkgestimator._lElectronDEtaInSeed = _lElectronDEtaInSeed[i_subleading];
+    bkgestimator._lElectronDeltaPhiSuperClusterTrack = _lElectronDeltaPhiSuperClusterTrack[i_subleading];
+    bkgestimator._lElectronDeltaEtaSuperClusterTrack = _lElectronDeltaEtaSuperClusterTrack[i_subleading];
+    bkgestimator._lElectronHOverE = _lElectronHOverE[i_subleading];
+    bkgestimator._lElectronEInvMinusPInv = _lElectronEInvMinusPInv[i_subleading];
+    bkgestimator._lElectronNumberInnerHitsMissing = _lElectronNumberInnerHitsMissing[i_subleading];
+    bkgestimator._lGlobalMuon = _lGlobalMuon[i_subleading];
+    bkgestimator._lTrackerMuon = _lTrackerMuon[i_subleading];
+    bkgestimator._lInnerTrackValidFraction = _lInnerTrackValidFraction[i_subleading];
+    bkgestimator._lGlobalTrackNormalizedChi2 = _lGlobalTrackNormalizedChi2[i_subleading];
+    bkgestimator._lCQChi2Position = _lCQChi2Position[i_subleading];
+    bkgestimator._lCQTrackKink = _lCQTrackKink[i_subleading];
+    bkgestimator._lMuonSegComp = _lMuonSegComp[i_subleading];
+    bkgestimator._lMuonTrackPtErr = _lMuonTrackPtErr[i_subleading];
 
     bkgestimator._l1Pt            = _lPt[i_leading];
     bkgestimator._l1Eta           = _lEta[i_leading];
@@ -51,6 +73,25 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._l1Charge        = _lCharge[i_leading];
     bkgestimator._l1Provenance           = _lProvenance[i_leading];
     bkgestimator._l1ProvenanceCompressed = _lProvenanceCompressed[i_leading];
+    bkgestimator._l1ElectronPassConvVeto = _lElectronPassConvVeto[i_leading];
+    bkgestimator._l1ElectronMissingHits = _lElectronMissingHits[i_leading];
+    bkgestimator._l1ElectronSuperClusterOverP = _lElectronSuperClusterOverP[i_leading];
+    bkgestimator._l1ElectronEcalEnergy = _lElectronEcalEnergy[i_leading];
+    bkgestimator._l1ElectronSigmaIetaIeta = _lElectronSigmaIetaIeta[i_leading];
+    bkgestimator._l1ElectronDEtaInSeed = _lElectronDEtaInSeed[i_leading];
+    bkgestimator._l1ElectronDeltaPhiSuperClusterTrack = _lElectronDeltaPhiSuperClusterTrack[i_leading];
+    bkgestimator._l1ElectronDeltaEtaSuperClusterTrack = _lElectronDeltaEtaSuperClusterTrack[i_leading];
+    bkgestimator._l1ElectronHOverE = _lElectronHOverE[i_leading];
+    bkgestimator._l1ElectronEInvMinusPInv = _lElectronEInvMinusPInv[i_leading];
+    bkgestimator._l1ElectronNumberInnerHitsMissing = _lElectronNumberInnerHitsMissing[i_leading];
+    bkgestimator._l1GlobalMuon = _lGlobalMuon[i_leading];
+    bkgestimator._l1TrackerMuon = _lTrackerMuon[i_leading];
+    bkgestimator._l1InnerTrackValidFraction = _lInnerTrackValidFraction[i_leading];
+    bkgestimator._l1GlobalTrackNormalizedChi2 = _lGlobalTrackNormalizedChi2[i_leading];
+    bkgestimator._l1CQChi2Position = _lCQChi2Position[i_leading];
+    bkgestimator._l1CQTrackKink = _lCQTrackKink[i_leading];
+    bkgestimator._l1MuonSegComp = _lMuonSegComp[i_leading];
+    bkgestimator._l1MuonTrackPtErr = _lMuonTrackPtErr[i_leading];
     bkgestimator._mll             = mll;
     bkgestimator._mlljet          = 0;//maybe add it?
     bkgestimator._dRll            = dRll;
@@ -60,13 +101,20 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._SV_PVSVdist     = IVF_PVSVdist;
     bkgestimator._SV_PVSVdist_2D  = IVF_PVSVdist_2D;
     bkgestimator._SV_genreco      = IVF_SVgenreco;
-    bkgestimator._SV_ntracks      = _IVF_ntracks[i_subleading];
     bkgestimator._SV_normchi2     = fabs(_IVF_chi2[i_subleading]/_IVF_df[i_subleading]);
     bkgestimator._SV_mass         = SVmass;
     bkgestimator._SV_l1mass       = SVl1mass;
     bkgestimator._SV_pt           = SVpt;
     bkgestimator._SV_eta          = SVeta;
     bkgestimator._SV_phi          = SVphi;
+    bkgestimator._SV_ntracks      = _IVF_ntracks[i_subleading];
+    for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
+        bkgestimator._SV_trackpt[i_track] = _IVF_trackpt[i_subleading][i_track];
+        bkgestimator._SV_tracketa[i_track] = _IVF_tracketa[i_subleading][i_track];
+        bkgestimator._SV_trackphi[i_track] = _IVF_trackphi[i_subleading][i_track];
+        bkgestimator._SV_trackE[i_track] = _IVF_trackE[i_subleading][i_track];
+        bkgestimator._SV_trackcharge[i_track] = _IVF_trackcharge[i_subleading][i_track];
+    }
 
     bkgestimator._nMV2            = 0;
     for(auto& MassMap : JetTagVal){

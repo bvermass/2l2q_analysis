@@ -22,7 +22,11 @@ class BkgEstimator
         TString BkgEstimator_filename;
         TFile* BkgEstimator_file;
         TTree* BkgEstimator_tree;
+        TH1D*  hCounter;
 
+        ULong64_t   _runNb;
+        ULong64_t   _lumiBlock;
+        ULong64_t   _eventNb;
         bool     _is2016;
         bool     _is2017;
         bool     _is2018;
@@ -67,6 +71,25 @@ class BkgEstimator
         int      _lCharge;
         unsigned _lProvenance;
         unsigned _lProvenanceCompressed;
+        bool     _lElectronPassConvVeto;
+        unsigned _lElectronMissingHits;
+        double   _lElectronSuperClusterOverP;
+        double   _lElectronEcalEnergy;
+        double   _lElectronSigmaIetaIeta;
+        double   _lElectronDEtaInSeed;
+        double   _lElectronDeltaPhiSuperClusterTrack;
+        double   _lElectronDeltaEtaSuperClusterTrack;
+        double   _lElectronHOverE;
+        double   _lElectronEInvMinusPInv;
+        double   _lElectronNumberInnerHitsMissing;
+        bool     _lGlobalMuon;
+        bool     _lTrackerMuon;
+        double   _lInnerTrackValidFraction;
+        double   _lGlobalTrackNormalizedChi2;
+        double   _lCQChi2Position;
+        double   _lCQTrackKink;
+        double   _lMuonSegComp;
+        double   _lMuonTrackPtErr;
 
         double   _l1Pt;
         double   _l1Eta;
@@ -81,6 +104,25 @@ class BkgEstimator
         int      _l1Charge;
         unsigned _l1Provenance;
         unsigned _l1ProvenanceCompressed;
+        bool     _l1ElectronPassConvVeto;
+        unsigned _l1ElectronMissingHits;
+        double   _l1ElectronSuperClusterOverP;
+        double   _l1ElectronEcalEnergy;
+        double   _l1ElectronSigmaIetaIeta;
+        double   _l1ElectronDEtaInSeed;
+        double   _l1ElectronDeltaPhiSuperClusterTrack;
+        double   _l1ElectronDeltaEtaSuperClusterTrack;
+        double   _l1ElectronHOverE;
+        double   _l1ElectronEInvMinusPInv;
+        double   _l1ElectronNumberInnerHitsMissing;
+        bool     _l1GlobalMuon;
+        bool     _l1TrackerMuon;
+        double   _l1InnerTrackValidFraction;
+        double   _l1GlobalTrackNormalizedChi2;
+        double   _l1CQChi2Position;
+        double   _l1CQTrackKink;
+        double   _l1MuonSegComp;
+        double   _l1MuonTrackPtErr;
         double   _mll;
         double   _mlljet;
         double   _dRll;
@@ -90,13 +132,20 @@ class BkgEstimator
         double   _SV_PVSVdist;
         double   _SV_PVSVdist_2D;
         double   _SV_genreco;
-        unsigned _SV_ntracks;
         double   _SV_mass;
         double   _SV_l1mass;
         double   _SV_pt;
         double   _SV_eta;
         double   _SV_phi;
         double   _SV_normchi2;
+        unsigned _SV_ntracks;
+        static const unsigned _SV_ntracks_max = 10;
+        double   _SV_trackpt[_SV_ntracks_max];
+        double   _SV_tracketa[_SV_ntracks_max];
+        double   _SV_trackphi[_SV_ntracks_max];
+        double   _SV_trackE[_SV_ntracks_max];
+        int      _SV_trackcharge[_SV_ntracks_max];
+
 
         unsigned _nMV2 = 0;
         static const unsigned nMV2_max = 150;
@@ -106,6 +155,9 @@ class BkgEstimator
         double   _reweighting_weight[nMV2_max];
 
         //Branches for reading variables from an existing tree (produced with this class)
+        TBranch     *b__runNb;
+        TBranch     *b__lumiBlock;
+        TBranch     *b__eventNb;
         TBranch     *b__is2016;
         TBranch     *b__is2017;
         TBranch     *b__is2018;
@@ -150,6 +202,25 @@ class BkgEstimator
         TBranch     *b__lCharge;
         TBranch     *b__lProvenance;
         TBranch     *b__lProvenanceCompressed;
+        TBranch     *b__lElectronPassConvVeto;
+        TBranch     *b__lElectronMissingHits;
+        TBranch     *b__lElectronSuperClusterOverP;
+        TBranch     *b__lElectronEcalEnergy;
+        TBranch     *b__lElectronSigmaIetaIeta;
+        TBranch     *b__lElectronDEtaInSeed;
+        TBranch     *b__lElectronDeltaPhiSuperClusterTrack;
+        TBranch     *b__lElectronDeltaEtaSuperClusterTrack;
+        TBranch     *b__lElectronHOverE;
+        TBranch     *b__lElectronEInvMinusPInv;
+        TBranch     *b__lElectronNumberInnerHitsMissing;
+        TBranch     *b__lGlobalMuon;
+        TBranch     *b__lTrackerMuon;
+        TBranch     *b__lInnerTrackValidFraction;
+        TBranch     *b__lGlobalTrackNormalizedChi2;
+        TBranch     *b__lCQChi2Position;
+        TBranch     *b__lCQTrackKink;
+        TBranch     *b__lMuonSegComp;
+        TBranch     *b__lMuonTrackPtErr;
 
         TBranch     *b__l1Pt;
         TBranch     *b__l1Eta;
@@ -164,6 +235,25 @@ class BkgEstimator
         TBranch     *b__l1Charge;
         TBranch     *b__l1Provenance;
         TBranch     *b__l1ProvenanceCompressed;
+        TBranch     *b__l1ElectronPassConvVeto;
+        TBranch     *b__l1ElectronMissingHits;
+        TBranch     *b__l1ElectronSuperClusterOverP;
+        TBranch     *b__l1ElectronEcalEnergy;
+        TBranch     *b__l1ElectronSigmaIetaIeta;
+        TBranch     *b__l1ElectronDEtaInSeed;
+        TBranch     *b__l1ElectronDeltaPhiSuperClusterTrack;
+        TBranch     *b__l1ElectronDeltaEtaSuperClusterTrack;
+        TBranch     *b__l1ElectronHOverE;
+        TBranch     *b__l1ElectronEInvMinusPInv;
+        TBranch     *b__l1ElectronNumberInnerHitsMissing;
+        TBranch     *b__l1GlobalMuon;
+        TBranch     *b__l1TrackerMuon;
+        TBranch     *b__l1InnerTrackValidFraction;
+        TBranch     *b__l1GlobalTrackNormalizedChi2;
+        TBranch     *b__l1CQChi2Position;
+        TBranch     *b__l1CQTrackKink;
+        TBranch     *b__l1MuonSegComp;
+        TBranch     *b__l1MuonTrackPtErr;
         TBranch     *b__mll;
         TBranch     *b__mlljet;
         TBranch     *b__dRll;
@@ -173,13 +263,18 @@ class BkgEstimator
         TBranch     *b__SV_PVSVdist;
         TBranch     *b__SV_PVSVdist_2D;
         TBranch     *b__SV_genreco;
-        TBranch     *b__SV_ntracks;
         TBranch     *b__SV_mass;
         TBranch     *b__SV_l1mass;
         TBranch     *b__SV_pt;
         TBranch     *b__SV_eta;
         TBranch     *b__SV_phi;
         TBranch     *b__SV_normchi2;
+        TBranch     *b__SV_ntracks;
+        TBranch     *b__SV_trackpt;
+        TBranch     *b__SV_tracketa;
+        TBranch     *b__SV_trackphi;
+        TBranch     *b__SV_trackE;
+        TBranch     *b__SV_trackcharge;
 
         TBranch     *b__nMV2;
         TBranch     *b__evaluating_mass;
@@ -189,7 +284,7 @@ class BkgEstimator
 
         //Functions
         BkgEstimator();//empty constructor
-        BkgEstimator(TString filename, TString fileoption = "recreate");//Constructor meant to create file and write events
+        BkgEstimator(TString filename, TString fileoption = "recreate", double hCounterValue = 1.);//Constructor meant to create file and write events or to read an existing file
         void open_file_and_tree(TString filename);
         void set_branch_adresses();
         void analyze(int max_entries, int partition, int partitionjobnumber);
