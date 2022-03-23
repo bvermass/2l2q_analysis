@@ -21,10 +21,15 @@ void full_analyzer::SetSampleTypes(TString filename)
     std::cout << "This is " << (isUL? "UL " : "") << (isData? (isSingleMuon? "Muon Data" : (isSingleElectron? "Electron Data" : (isMET? "MET Data" : "Unid. Data"))) : (isSignal? "MC Signal" : "MC bkg")) << " from " << (_is2017? "2017" : (_is2018? "2018" : "2016")) << (isKshortntuple? " (with Kshort info)" : "") << std::endl;
 }
 
-PUWeightReader* full_analyzer::get_PUWeightReader(TFile* input){
+PUWeightReader* full_analyzer::get_PUWeightReader(std::vector<TFile*> inputs){
     if(!isData){
-        TH1F* nTrueInteractions = (TH1F*) input->Get("blackJackAndHookersGlobal/nTrueInteractions");
-        if(!nTrueInteractions) nTrueInteractions = (TH1F*) input->Get("blackJackAndHookers/nTrueInteractions");
+        TH1F* nTrueInteractions = (TH1F*) inputs[0]->Get("blackJackAndHookersGlobal/nTrueInteractions");
+        if(!nTrueInteractions) nTrueInteractions = (TH1F*) inputs[0]->Get("blackJackAndHookers/nTrueInteractions");
+        for(unsigned i = 1; i < inputs.size(); i++){
+            TH1F* nTrueInteractions_tmp = (TH1F*) inputs[i]->Get("blackJackAndHookersGlobal/nTrueInteractions");
+            if(!nTrueInteractions) nTrueInteractions_tmp = (TH1F*) inputs[i]->Get("blackJackAndHookers/nTrueInteractions");
+            nTrueInteractions->Add(nTrueInteractions_tmp);
+        }
         PUWeightReader* puweightreader = new PUWeightReader(local_dir, _is2017, _is2018, nTrueInteractions);
         return puweightreader;
     }else{
@@ -317,7 +322,7 @@ Long64_t full_analyzer::LoadTree(Long64_t entry)
    return centry;
 }
 
-void full_analyzer::Init(TTree *tree)
+void full_analyzer::Init(TChain *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch

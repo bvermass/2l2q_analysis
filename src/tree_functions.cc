@@ -58,6 +58,8 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._lCQChi2Position = _lCQChi2Position[i_subleading];
     bkgestimator._lCQTrackKink = _lCQTrackKink[i_subleading];
     bkgestimator._lMuonSegComp = _lMuonSegComp[i_subleading];
+    bkgestimator._lMuonTime = _lMuonTime[i_subleading];
+    bkgestimator._lMuonRPCTime = _lMuonRPCTime[i_subleading];
     bkgestimator._lMuonTrackPtErr = _lMuonTrackPtErr[i_subleading];
 
     bkgestimator._l1Pt            = _lPt[i_leading];
@@ -91,6 +93,8 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._l1CQChi2Position = _lCQChi2Position[i_leading];
     bkgestimator._l1CQTrackKink = _lCQTrackKink[i_leading];
     bkgestimator._l1MuonSegComp = _lMuonSegComp[i_leading];
+    bkgestimator._l1MuonTime = _lMuonTime[i_leading];
+    bkgestimator._l1MuonRPCTime = _lMuonRPCTime[i_leading];
     bkgestimator._l1MuonTrackPtErr = _lMuonTrackPtErr[i_leading];
     bkgestimator._mll             = mll;
     bkgestimator._mlljet          = 0;//maybe add it?

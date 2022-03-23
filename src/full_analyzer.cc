@@ -19,10 +19,36 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - start loop over events
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
-    TFile *input = new TFile(filename, "open");
-    TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
-    Init(tree);
-    tree->GetEntry(0);
+
+    std::vector<TString> filenames;
+    filenames.push_back(filename);
+
+    if(filename == "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MiniAOD2016/dilep_final.root"){
+        filenames.push_back("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MiniAOD2016/dilep_final.root");
+    }
+    if(filename == "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MiniAOD2016/dilep_final.root"){
+        filenames.push_back("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MiniAOD2016/dilep_final.root");
+    }
+    if(filename == "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MiniAOD2017/dilep_final.root"){
+        filenames.push_back("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MiniAOD2017/dilep_final.root");
+    }
+    if(filename == "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MiniAOD2018/dilep_final.root"){
+        filenames.push_back("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MiniAOD2018/dilep_final.root");
+    }
+    //if(filename == "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/crab_MiniAOD2017v2-v1_dilepton_MC_2017_v8_missingLumis/210416_111422/0000/dilep_120.root"){
+    //    filenames.push_back("/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/crab_MiniAOD2017v2-v1_dilepton_MC_2017_v8_TT_missingLumis/210425_131940/0000/dilep_23.root");
+    //}
+
+
+    TChain *chain = new TChain("blackJackAndHookers/blackJackAndHookersTree");
+    for(const auto& fn : filenames){
+        chain->Add(fn);
+    }
+
+    //TFile *input = new TFile(filename, "open");
+    //TTree *tree  = (TTree*) input->Get("blackJackAndHookers/blackJackAndHookersTree");
+    Init(chain);
+    chain->GetEntry(0);
 
     extensive_plots = true;
     bool makeJECvariations = true;
@@ -51,10 +77,40 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
     }
 
+    // open the separate files to get summed hCounter histogram and summed nTrueInteractions histogram for PUWeightReader
+    std::vector<double> weight_normalization;
+    std::vector<TFile*> inputs;
+    for(const auto& fn : filenames){
+        inputs.push_back(new TFile(fn, "open"));
+    }
+    double hCounterValue = 0., hCounterInitial = 0.;
+    if(!isData and !(isSignal and HNL_param->merged)){
+        for(unsigned i = 0; i < inputs.size(); i++){
+            TH1F* hCounter = (TH1F*) inputs[i]->Get("blackJackAndHookersGlobal/hCounter");
+            if(!hCounter) hCounter = (TH1F*) inputs[i]->Get("blackJackAndHookers/hCounter");
+            if(filenames.size() > 1) std::cout << "hCounter individual values: " << hCounter->GetBinContent(1) << " ";
+            if(i == 0) hCounterInitial = hCounter->GetBinContent(1);
+            weight_normalization.push_back( hCounterInitial / hCounter->GetBinContent(1) );
+            hCounterValue += hCounterInitial;
+        }
+    }else {
+        hCounterValue = 1.;
+    }
+    //TH1F* hCounter = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
+    //if(!hCounter) hCounter = (TH1F*) input->Get("blackJackAndHookers/hCounter");
+    //if(!isData and !(isSignal and HNL_param->merged)) hCounterValue = hCounter->GetBinContent(1);
+    std::cout << std::endl << "normalization weights: ";
+    for(const auto& w_normi : weight_normalization){
+        std::cout << w_normi << " ";
+    }std::cout << std::endl;
 
-    //TH1F* hweight = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
-    //hweight->Scale(hweight->GetBinContent(1) / (cross_section * 35900)); //this is the inverted weight!!! since hadd needs to be able to sum up the weights!
-    
+    // Load PU weights
+    puweightreader = get_PUWeightReader(inputs);
+
+    for(const auto& input : inputs){
+        input->Close();
+    }
+
 
     //This map contains all 1D histograms
     std::map<TString, TH1*> hists;
@@ -129,9 +185,6 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     }
     std::cout << "Total amount of plots: " << hists.size() << ", 2D: " << hists2D.size() << std::endl;
 
-    // Load PU weights
-    puweightreader = get_PUWeightReader(input);
-   
     // Load Lepton Scale Factors
     lsfreader_e_trig = get_LSFReader("e", "Trigger");
     lsfreader_m_trig = get_LSFReader("mu", "Trigger");
@@ -158,13 +211,13 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     TString BkgEstimator_filename         = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator", partition, partitionjobnumber, true);
     TString BkgEstimator_filename_JECDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECDown", partition, partitionjobnumber, true);
     TString BkgEstimator_filename_JECUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECUp", partition, partitionjobnumber, true);
-    TString BkgEstimator_filename_JERDOwn = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERDown", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JERDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERDown", partition, partitionjobnumber, true);
     TString BkgEstimator_filename_JERUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERUp", partition, partitionjobnumber, true);
-    BkgEstimator BkgEstimator(BkgEstimator_filename, BkgEstimator_fileoption);
-    BkgEstimator BkgEstimator_JECDown(BkgEstimator_filename_JECDown, BkgEstimator_fileoption);
-    BkgEstimator BkgEstimator_JECUp(BkgEstimator_filename_JECUp, BkgEstimator_fileoption);
-    BkgEstimator BkgEstimator_JERDown(BkgEstimator_filename_JERDown, BkgEstimator_fileoption);
-    BkgEstimator BkgEstimator_JERUp(BkgEstimator_filename_JERUp, BkgEstimator_fileoption);
+    BkgEstimator bkgestimator(BkgEstimator_filename, BkgEstimator_fileoption, hCounterValue);
+    BkgEstimator bkgestimator_JECDown(BkgEstimator_filename_JECDown, BkgEstimator_fileoption, hCounterValue);
+    BkgEstimator bkgestimator_JECUp(BkgEstimator_filename_JECUp, BkgEstimator_fileoption, hCounterValue);
+    BkgEstimator bkgestimator_JERDown(BkgEstimator_filename_JERDown, BkgEstimator_fileoption, hCounterValue);
+    BkgEstimator bkgestimator_JERUp(BkgEstimator_filename_JERUp, BkgEstimator_fileoption, hCounterValue);
 
 
     PFNReader pfn_e_LowMass = get_PFNReader_unparametrized_LowMass(0);
@@ -181,16 +234,14 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(_is2018) int_lumi = 59.74;
 
     // Determine range of events to loop over
-    Long64_t nentries = tree->GetEntries();
+    Long64_t nentries = chain->GetEntries();
     //cout << "full_analyzer.cc file: " << filename << endl;
     //cout << "Number of events: " << nentries << endl;
-    TH1F* hCounter = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
-    if(!hCounter) hCounter = (TH1F*) input->Get("blackJackAndHookers/hCounter");
     if(max_entries == -1 || max_entries > nentries) max_entries = nentries;
     double total_weight = 1;
     if(!isData and !(isSignal and HNL_param->merged)){
-        std::cout << "xsec: " << cross_section << " nentries: " << nentries << " max_entries: " << max_entries << " hCounter: " << hCounter->GetBinContent(1) << std::endl;
-        total_weight = (cross_section * int_lumi * 1000. * (double)nentries / (double)max_entries) / hCounter->GetBinContent(1); // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
+        std::cout << "xsec: " << cross_section << " nentries: " << nentries << " max_entries: " << max_entries << " hCounter: " << hCounterValue << std::endl;
+        total_weight = (cross_section * int_lumi * 1000. * (double)nentries / (double)max_entries) / hCounterValue; // int lumi is given in inverse picobarn, because cross_section is given in picobarn, nentries/max_entries corrects for amount of events actually ran (if only a fifth, then each weight * 5)
     }else if(isSignal and HNL_param->merged){
         total_weight = int_lumi * 1000. * (double)nentries / (double)max_entries;
     }
@@ -207,16 +258,17 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     //main loop begins here
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
-	    tree->GetEntry(jentry);
+	    chain->GetEntry(jentry);
         bool printevent = (loop_counter == notice);
 	    if(printevent){
 	        cout << jentry - j_begin << " of " << j_end - j_begin << endl;
+            cout << "file: " << chain->GetTreeNumber() << ", base weight: " << _weight << ", norm. weight: " << weight_normalization[chain->GetTreeNumber()] << endl;
             loop_counter = 0;
 	    }
 
         ////TString JetPt_Version = "_jetPt";
         Set_Objects_And_Relevant_Variables("_jetPt");
-        ev_weight = Get_Event_weight();
+        ev_weight = Get_Event_weight() * weight_normalization[chain->GetTreeNumber()];
         fill_SR_counters_cutflow(SR_counters);
 
         // Skip data events that have the wrong leading lepton flavor, making SingleMuon and SingleElectron datasets fully orthogonal

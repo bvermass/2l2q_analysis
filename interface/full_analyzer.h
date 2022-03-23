@@ -42,7 +42,7 @@ using json = nlohmann::json;
 
 class full_analyzer {
 public :
-   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   TChain         *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
@@ -1091,7 +1091,7 @@ public :
    // functions
    // in src/full_analyzer_constructor.cc
    void      SetSampleTypes(TString filename);
-   PUWeightReader* get_PUWeightReader(TFile* input);
+   PUWeightReader* get_PUWeightReader(std::vector<TFile*> inputs);
    LSFReader* get_LSFReader(TString flavor, TString type_SF);
    LSFReader* get_LSFReader_old(TString flavor, TString type_SF);
    LSFReader* get_LSFReader_displ(TString flavor, TString type_SF);
@@ -1104,7 +1104,7 @@ public :
     ~full_analyzer();
     Int_t    GetEntry(Long64_t entry);
     Long64_t LoadTree(Long64_t entry);
-    void     Init(TTree *tree);
+    void     Init(TChain *tree);
     void     Loop();
     void     Show(Long64_t entry = -1);
 

@@ -89,6 +89,8 @@ class BkgEstimator
         double   _lCQChi2Position;
         double   _lCQTrackKink;
         double   _lMuonSegComp;
+        double   _lMuonTime;
+        double   _lMuonRPCTime;
         double   _lMuonTrackPtErr;
 
         double   _l1Pt;
@@ -122,6 +124,8 @@ class BkgEstimator
         double   _l1CQChi2Position;
         double   _l1CQTrackKink;
         double   _l1MuonSegComp;
+        double   _l1MuonTime;
+        double   _l1MuonRPCTime;
         double   _l1MuonTrackPtErr;
         double   _mll;
         double   _mlljet;
@@ -220,6 +224,8 @@ class BkgEstimator
         TBranch     *b__lCQChi2Position;
         TBranch     *b__lCQTrackKink;
         TBranch     *b__lMuonSegComp;
+        TBranch     *b__lMuonTime;
+        TBranch     *b__lMuonRPCTime;
         TBranch     *b__lMuonTrackPtErr;
 
         TBranch     *b__l1Pt;
@@ -253,6 +259,8 @@ class BkgEstimator
         TBranch     *b__l1CQChi2Position;
         TBranch     *b__l1CQTrackKink;
         TBranch     *b__l1MuonSegComp;
+        TBranch     *b__l1MuonTime;
+        TBranch     *b__l1MuonRPCTime;
         TBranch     *b__l1MuonTrackPtErr;
         TBranch     *b__mll;
         TBranch     *b__mlljet;

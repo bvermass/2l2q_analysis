@@ -85,6 +85,8 @@ BkgEstimator::BkgEstimator(TString filename, TString fileoption, double hCounter
         BkgEstimator_tree->Branch("_lCQChi2Position",                  &_lCQChi2Position,                  "_lCQChi2Position/D");
         BkgEstimator_tree->Branch("_lCQTrackKink",                     &_lCQTrackKink,                     "_lCQTrackKink/D");
         BkgEstimator_tree->Branch("_lMuonSegComp",                     &_lMuonSegComp,                     "_lMuonSegComp/D");
+        BkgEstimator_tree->Branch("_lMuonTime",                        &_lMuonTime,                        "_lMuonTime/D");
+        BkgEstimator_tree->Branch("_lMuonRPCTime",                     &_lMuonRPCTime,                     "_lMuonRPCTime/D");
         BkgEstimator_tree->Branch("_lMuonTrackPtErr",                  &_lMuonTrackPtErr,                  "_lMuonTrackPtErr/D");
 
         BkgEstimator_tree->Branch("_l1Pt",                             &_l1Pt,                             "_l1Pt/D");
@@ -118,6 +120,8 @@ BkgEstimator::BkgEstimator(TString filename, TString fileoption, double hCounter
         BkgEstimator_tree->Branch("_l1CQChi2Position",                 &_l1CQChi2Position,                 "_l1CQChi2Position/D");
         BkgEstimator_tree->Branch("_l1CQTrackKink",                    &_l1CQTrackKink,                    "_l1CQTrackKink/D");
         BkgEstimator_tree->Branch("_l1MuonSegComp",                    &_l1MuonSegComp,                    "_l1MuonSegComp/D");
+        BkgEstimator_tree->Branch("_l1MuonTime",                       &_l1MuonTime,                       "_l1MuonTime/D");
+        BkgEstimator_tree->Branch("_l1MuonRPCTime",                    &_l1MuonRPCTime,                    "_l1MuonRPCTime/D");
         BkgEstimator_tree->Branch("_l1MuonTrackPtErr",                 &_l1MuonTrackPtErr,                 "_l1MuonTrackPtErr/D");
         BkgEstimator_tree->Branch("_mll",                              &_mll,                              "_mll/D");
         BkgEstimator_tree->Branch("_mlljet",                           &_mlljet,                           "_mlljet/D");
@@ -225,6 +229,8 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_lCQChi2Position", &_lCQChi2Position, &b__lCQChi2Position);
     BkgEstimator_tree->SetBranchAddress("_lCQTrackKink", &_lCQTrackKink, &b__lCQTrackKink);
     BkgEstimator_tree->SetBranchAddress("_lMuonSegComp", &_lMuonSegComp, &b__lMuonSegComp);
+    BkgEstimator_tree->SetBranchAddress("_lMuonTime", &_lMuonTime, &b__lMuonTime);
+    BkgEstimator_tree->SetBranchAddress("_lMuonRPCTime", &_lMuonRPCTime, &b__lMuonRPCTime);
     BkgEstimator_tree->SetBranchAddress("_lMuonTrackPtErr", &_lMuonTrackPtErr, &b__lMuonTrackPtErr);
 
     BkgEstimator_tree->SetBranchAddress("_l1Pt", &_l1Pt, &b__l1Pt);
@@ -258,6 +264,8 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_l1CQChi2Position", &_l1CQChi2Position, &b__l1CQChi2Position);
     BkgEstimator_tree->SetBranchAddress("_l1CQTrackKink", &_l1CQTrackKink, &b__l1CQTrackKink);
     BkgEstimator_tree->SetBranchAddress("_l1MuonSegComp", &_l1MuonSegComp, &b__l1MuonSegComp);
+    BkgEstimator_tree->SetBranchAddress("_l1MuonTime", &_l1MuonTime, &b__l1MuonTime);
+    BkgEstimator_tree->SetBranchAddress("_l1MuonRPCTime", &_l1MuonRPCTime, &b__l1MuonRPCTime);
     BkgEstimator_tree->SetBranchAddress("_l1MuonTrackPtErr", &_l1MuonTrackPtErr, &b__l1MuonTrackPtErr);
     BkgEstimator_tree->SetBranchAddress("_mll", &_mll, &b__mll);
     BkgEstimator_tree->SetBranchAddress("_mlljet", &_mlljet, &b__mlljet);
@@ -410,6 +418,8 @@ void BkgEstimator::copy_event(BkgEstimator* original)
     _lCQChi2Position = original->_lCQChi2Position;
     _lCQTrackKink = original->_lCQTrackKink;
     _lMuonSegComp = original->_lMuonSegComp;
+    _lMuonTime = original->_lMuonTime;
+    _lMuonRPCTime = original->_lMuonRPCTime;
     _lMuonTrackPtErr = original->_lMuonTrackPtErr;
 
     _l1Pt = original->_l1Pt;
@@ -443,6 +453,8 @@ void BkgEstimator::copy_event(BkgEstimator* original)
     _l1CQChi2Position = original->_l1CQChi2Position;
     _l1CQTrackKink = original->_l1CQTrackKink;
     _l1MuonSegComp = original->_l1MuonSegComp;
+    _l1MuonTime = original->_l1MuonTime;
+    _l1MuonRPCTime = original->_l1MuonRPCTime;
     _l1MuonTrackPtErr = original->_l1MuonTrackPtErr;
     _mll = original->_mll;
     _mlljet = original->_mlljet;
