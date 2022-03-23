@@ -1,0 +1,10 @@
+executable = $(haddscript)
+should_transfer_files = NO
+log = test/condor/log/Hadd_$(ProcId).log
+output = test/condor/log/Hadd_$(ProcId).out
+error = test/condor/log/Hadd_$(ProcId).err
+request_cpus = 1
+request_disk = 1000
+request_memory = 2000
+
+queue haddscript from test/condor/HaddJobList.txt

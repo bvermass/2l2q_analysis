@@ -638,6 +638,7 @@ base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowA
 
 hadd_counter = 0
 
+os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
 script_counter = 0
 joblist = open('test/condor/HaddJobList.txt', 'w')
 for base_path in base_paths:
@@ -665,7 +666,7 @@ if hadd_counter != 0:
 signal_1718_counter = 0
 signal_161718_counter = 0
 for base_path in base_paths:
-    #signal_1718_counter = add_Signal_1718( base_path, n_hadds, joblist, signal_1718_counter)
+    signal_1718_counter = add_Signal_1718( base_path, n_hadds, joblist, signal_1718_counter)
     signal_161718_counter = add_Signal_161718( base_path, n_hadds, joblist, signal_161718_counter)
     #add_Dirac_cc( base_path, n_hadds)
 

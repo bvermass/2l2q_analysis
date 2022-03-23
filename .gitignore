@@ -25,6 +25,8 @@ test/condor/log
 test/scripts/get_taus.py
 test/condor/FullAnalyzerJobList.txt
 test/condor/MiniAnalyzerJobList.txt
+test/condor/HaddJobList.txt
+test/condor/StackPlotterJobList.txt
 test/sampleLists/plots_test.txt
 test/sampleLists/test.txt
 *.out
