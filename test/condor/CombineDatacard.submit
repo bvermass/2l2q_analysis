@@ -1,0 +1,10 @@
+executable = $(combinedatacardscript)
+should_transfer_files = NO
+log = test/condor/log/CombineDatacard_$(ProcId).log
+output = test/condor/log/CombineDatacard_$(ProcId).out
+error = test/condor/log/CombineDatacard_$(ProcId).err
+request_cpus = 1
+request_disk = 1000
+request_memory = 2000
+
+queue combinedatacardscript from test/condor/CombineDatacardJobList.txt

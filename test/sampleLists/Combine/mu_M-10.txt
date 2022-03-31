@@ -1,8 +1,0 @@
-mu_M-10
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_HeavyNeutrino_lljj_M-10_V-0.000756967634711_mu_massiveAndCKM_LO.root               HNL_M-10_7mm
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_ST.root                                                               Top
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_Diboson.root                                                          Diboson
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_TTJets.root                                                           ttbar
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_DYJets.root                                                           DY
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root               W+Jets
-/user/bvermass/public/2l2q_analysis/histograms/final/full_analyzer/hists_full_analyzer_Background.root                                                                  Obs
