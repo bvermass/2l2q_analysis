@@ -1,15 +1,15 @@
 #!/bin/bash
 make -f makeAnalyzeOutput
 
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_mm__2016_.txt mm_2016
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_ee__2016_.txt ee_2016
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_2l__2016_.txt 2l_2016
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_mm__1718_.txt mm_1718
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_ee__1718_.txt ee_1718
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_2l__1718_.txt 2l_1718
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_mm__run2_.txt mm_run2
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_ee__run2_.txt ee_run2
-./analyzeoutput ~/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/_2l__run2_.txt 2l_run2
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_mm__2016_.txt mm_2016
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_ee__2016_.txt ee_2016
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_2l__2016_.txt 2l_2016
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_mm__1718_.txt mm_1718
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_ee__1718_.txt ee_1718
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_2l__1718_.txt 2l_1718
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_mm__run2_.txt mm_run2
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_ee__run2_.txt ee_run2
+./analyzeoutput ~/public_html/2l2q_analysis/combine_observed/datacards/_2l__run2_.txt 2l_run2
 
 
 

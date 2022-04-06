@@ -1,12 +1,21 @@
 #include "CombineDatacardPrep.h"
 
 double PFN_mu_LowMass_unc = 0.1, PFN_mu_HighMass_unc = 0.1, PFN_e_LowMass_unc = 0.1, PFN_e_HighMass_unc = 0.1;
+double cutoff_low_content = 0.02;
 
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
     setTDRStyle();
     gROOT->ForceStyle();
+
+    TCanvas* c = new TCanvas("c","",700,700);
+    c->cd();
+
+    // Make the pad that will contain the plot
+    TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
+    pad->Draw();
+    pad->cd();
 
     //Requirements for datacard to be made:
     // - Signal Yield > 0.1
@@ -81,18 +90,28 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
-    std::string general_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
-    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
-    std::string quadB_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
-    std::string quadC_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadC_events/", specific_dir + "/");
-    std::string quadD_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadD_events/", specific_dir + "/");
-    std::string sysEffect_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/SysEffects/", specific_dir + "/");
+    std::string general_pathname = (std::string)make_general_pathname("combine_observed/datacards/", specific_dir + "/");
+    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_observed/Shapefiles/", specific_dir + "/");
+    std::string quadB_pathname   = (std::string)make_general_pathname("combine_observed/quadB_events/", specific_dir + "/");
+    std::string quadC_pathname   = (std::string)make_general_pathname("combine_observed/quadC_events/", specific_dir + "/");
+    std::string quadD_pathname   = (std::string)make_general_pathname("combine_observed/quadD_events/", specific_dir + "/");
+    std::string sigcontam_pathname   = (std::string)make_general_pathname("combine_observed/Signal_Contamination/", specific_dir + "/");
+    std::string sysEffect_pathname   = (std::string)make_general_pathname("combine_observed/SysEffects/", specific_dir + "/");
+    std::string scalefactor_pathname = (std::string)make_general_pathname("combine_observed/ScaleFactor/", specific_dir + "/");
+    //std::string general_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
+    //std::string shapeSR_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
+    //std::string quadB_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
+    //std::string quadC_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadC_events/", specific_dir + "/");
+    //std::string quadD_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadD_events/", specific_dir + "/");
+    //std::string sysEffect_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/SysEffects/", specific_dir + "/");
     gSystem->Exec("mkdir -p " + (TString)general_pathname);
     gSystem->Exec("mkdir -p " + (TString)shapeSR_pathname);
     gSystem->Exec("mkdir -p " + (TString)quadB_pathname);
     gSystem->Exec("mkdir -p " + (TString)quadC_pathname);
     gSystem->Exec("mkdir -p " + (TString)quadD_pathname);
+    gSystem->Exec("mkdir -p " + (TString)sigcontam_pathname);
     gSystem->Exec("mkdir -p " + (TString)sysEffect_pathname);
+    gSystem->Exec("mkdir -p " + (TString)scalefactor_pathname);
 
     // get year information for year-dependent systematics
     std::string year;
@@ -126,22 +145,23 @@ int main(int argc, char * argv[])
 
                 // get signal histograms
                 TH1F* hist_signal = (TH1F*) files_signal[0]->Get(histname);
-                double sigYield = hist_signal->Integral();
 
                 // get data histogram
                 TString histname_data = histname;
-                histname_data.ReplaceAll("quadA", "BtoAwithCD");
+                //histname_data.ReplaceAll("quadA", "BtoAwithCD");
                 //histname_data.ReplaceAll(mass_str, mass_bkg);
-                histname_data.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
+                histname_data.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
                 std::cout << "data histname: " << histname_data << std::endl;
                 TH1F* hist_data = (TH1F*) files_data[0]->Get(histname_data);
                 double obsYield = hist_data->Integral();
 
                 // get background histograms
+                TString histname_bkg = histname;
+                histname_bkg.ReplaceAll("quadA", "BtoAwithCD");
                 std::vector<TH1F*> hists_bkg;
                 std::vector<double> bkgYield;
                 for(unsigned i = 0; i < files_bkg.size(); i++){
-                    hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname_data));
+                    hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname_bkg));
                     bkgYield.push_back(hists_bkg[i]->Integral());
                 }
                 //!!!!! temporary fix !!!!! remove !!!!!
@@ -275,23 +295,16 @@ int main(int argc, char * argv[])
                     }
                     if(systUnc[i][1] != 0){//data-driven prediction systs
                         if(systNames[i].find("ABCDsys") != std::string::npos){
-                            //TString histname_up_pred = histname_data;
-                            //histname_up_pred.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
-                            ////histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up"); //used to be the method from CR1
-                            ////histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");//used to be the method from CR1
                             std::cout << "systnames: " << systNames[i] << std::endl;
-
-                            ////Get CR2NojetVeto prediction histograms from full run 2 data files
-                            //TH1F* hist_CR2_pred = (TH1F*)files_bkg_ABCDsys->Get(histname_up_pred);
 
                             //Create ABCDsys histograms based on variation of SR histograms with relative stat unc from CR2 histograms
                             TH1F* hist_ABCDsys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
                             TH1F* hist_ABCDsys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
-                            std::vector<bool> correlation_mask = get_correlation_mask(systNames[i], histname_data, hist_ABCDsys_up->GetNbinsX());
+                            std::vector<bool> correlation_mask = get_correlation_mask(systNames[i], histname_bkg, hist_ABCDsys_up->GetNbinsX());
                             double Error;
                             for(int i_bin = 1; i_bin <= hist_ABCDsys_up->GetNbinsX(); i_bin++){
                                 if(!correlation_mask[i_bin-1]) continue;
-                                Error = get_ABCD_error(i_bin, histname_data);
+                                Error = get_ABCD_error(i_bin, histname_bkg);
                                 hist_ABCDsys_up->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 + Error));
                                 hist_ABCDsys_down->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 - Error));
                                 //if(hist_CR2_pred->GetBinContent(i_bin) == 0 or hist_CR2_pred->GetBinErrorUp(i_bin) == 0){
@@ -316,19 +329,14 @@ int main(int argc, char * argv[])
                 hists_bkg_sys.push_back(tmp_bkg_sys);
                 histnames_bkg_sys.push_back(tmpnames_bkg_sys);
 
-
                 unsigned nSyst = systNames.size();
+
+                //set signal and signal_sys bins with too low content to 0
+                set_low_content_bins_to_zero(hist_signal, hists_signal_sys, cutoff_low_content);
+
 
                 TString outputfilename = histname;
                 outputfilename.ReplaceAll(mass_bkg, mass_str);
-
-                //Shape analysis stuff
-                bool shapeCard = true;
-                std::string shapeFileName = shapeSR_pathname + (std::string)outputfilename + ".root";
-                makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg, hists_signal_sys, hists_bkg_sys, histnames_signal_sys, histnames_bkg_sys);
-                TString sysEffectFilename = sysEffect_pathname + outputfilename + ".png";
-                plotSysEffects(sysEffectFilename, hist_signal, hists_signal_sys, histnames_signal_sys);
-                checkfornans(histnames_signal_sys, histnames_bkg_sys, hists_signal_sys, hists_bkg_sys);
 
 
                 //quadB,C,D yield stuff, for limit setting with gamma pdfs
@@ -341,15 +349,16 @@ int main(int argc, char * argv[])
                 TH1F* hist_signal_quadB = (TH1F*) files_signal[0]->Get(histname_quadB);
                 TH1F* hist_signal_quadC = (TH1F*) files_signal[0]->Get(histname_quadC);
                 TH1F* hist_signal_quadD = (TH1F*) files_signal[0]->Get(histname_quadD);
-                double sigYieldB = hist_signal_quadB->Integral();
-                double sigYieldC = hist_signal_quadC->Integral();
-                double sigYieldD = hist_signal_quadD->Integral();
+                std::vector<TH1F*> hists_vector_filler;
+                set_low_content_bins_to_zero(hist_signal_quadB, hists_vector_filler, cutoff_low_content);
+                set_low_content_bins_to_zero(hist_signal_quadC, hists_vector_filler, cutoff_low_content);
+                set_low_content_bins_to_zero(hist_signal_quadD, hists_vector_filler, cutoff_low_content);
                 TString histname_data_quadB = histname_quadB;
                 TString histname_data_quadC = histname_quadC;
                 TString histname_data_quadD = histname_quadD;
-                histname_data_quadB.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
-                histname_data_quadC.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
-                histname_data_quadD.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-9e-07");
+                histname_data_quadB.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
+                histname_data_quadC.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
+                histname_data_quadD.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
                 TH1F* hist_data_quadB = (TH1F*) files_data[0]->Get(histname_data_quadB);
                 TH1F* hist_data_quadC = (TH1F*) files_data[0]->Get(histname_data_quadC);
                 TH1F* hist_data_quadD = (TH1F*) files_data[0]->Get(histname_data_quadD);
@@ -373,13 +382,45 @@ int main(int argc, char * argv[])
                 std::string quadBFileName = quadB_pathname + (std::string)outputfilename + ".root";
                 std::string quadCFileName = quadC_pathname + (std::string)outputfilename + ".root";
                 std::string quadDFileName = quadD_pathname + (std::string)outputfilename + ".root";
+
+                //scale signal yield to observed yield for quad A histogram, scale B,C,D signal accordingly.
+                //alternative that didn't work too well because of large scaling: scale signal yield to observed yield for the sum of A+B+C+D histograms.
+                //This is done such that combine can handle them. Make sure to scale signal strength from combine afterwards with same scalefactor.
+                //derive scale factor based on 1718 and apply same one to 2016
+                double scalefactor = 1.;
+                if(specific_dir.Contains("1718")) scalefactor = calc_scalefactor(hist_signal, hist_signal_quadB, hist_signal_quadC, hist_signal_quadD, hist_data, hist_data_quadB, hist_data_quadC, hist_data_quadD);
+                else scalefactor = get_1718_scalefactor(scalefactor_pathname + (std::string)outputfilename + ".root");
+                scale_signal_to_observed(scalefactor, hist_signal, hist_signal_quadB, hist_signal_quadC, hist_signal_quadD, hists_signal_sys);
+
+
+                double sigYield = hist_signal->Integral();
+                double sigYieldB = hist_signal_quadB->Integral();
+                double sigYieldC = hist_signal_quadC->Integral();
+                double sigYieldD = hist_signal_quadD->Integral();
+
+
+                //Shape analysis stuff
+                bool shapeCard = true;
+                std::string shapeFileName = shapeSR_pathname + (std::string)outputfilename + ".root";
+                makeShapeSRFile(shapeFileName, hist_signal, hist_data, hists_bkg, legends_signal[0], legends_data[0], legends_bkg, hists_signal_sys, hists_bkg_sys, histnames_signal_sys, histnames_bkg_sys);
+                TString sysEffectFilename = sysEffect_pathname + outputfilename + ".png";
+                plotSysEffects(c, pad, sysEffectFilename, hist_signal, hists_signal_sys, histnames_signal_sys);
+                checkfornans(histnames_signal_sys, histnames_bkg_sys, hists_signal_sys, hists_bkg_sys);
+
+                std::string sigcontamFileName = sigcontam_pathname + (std::string)outputfilename + ".png";
+                plot_signal_contamination(c, pad, sigcontamFileName, hist_signal, hist_signal_quadC);
+
                 makequadFile(quadBFileName, hist_signal_quadB, hist_data_quadB, hists_bkg_quadB, legends_signal[0], legends_data[0], legends_bkg);
                 makequadFile(quadCFileName, hist_signal_quadC, hist_data_quadC, hists_bkg_quadC, legends_signal[0], legends_data[0], legends_bkg);
                 makequadFile(quadDFileName, hist_signal_quadD, hist_data_quadD, hists_bkg_quadD, legends_signal[0], legends_data[0], legends_bkg);
 
+                // file to store scale factor in
+                std::string scalefactorFileName = scalefactor_pathname + (std::string)outputfilename + ".root";
+                makescalefactorFile(scalefactorFileName, scalefactor);
+
                 bool autoMCStats = true;
 
-                if(sigYield > 0.1){
+                if(sigYield > 0.01){
                     //printDataCard(general_pathname + (std::string)outputfilename + ".txt", obsYield, sigYield, legends_signal[0], &bkgYield[0], files_bkg.size(), &legends_bkg[0], systUnc, nSyst, &systNames[0], &systDist[0], shapeCard, shapeFileName, autoMCStats);
                     printABCDDataCard(general_pathname + (std::string)outputfilename + ".txt", obsYield, obsYieldB, obsYieldC, obsYieldD, sigYield, sigYieldB, sigYieldC, sigYieldD, legends_signal[0], &bkgYield[0], &bkgYieldB[0], &bkgYieldC[0], &bkgYieldD[0], files_bkg.size(), &legends_bkg[0], systUnc, nSyst, &systNames[0], &systDist[0], shapeCard, shapeFileName, quadBFileName, quadCFileName, quadDFileName, autoMCStats);
                 }else {
@@ -429,6 +470,16 @@ void makeShapeSRFile(TString shapeSR_filename, TH1F* hist_signal, TH1F* hist_dat
 
     shapeSR_file->Close();
 
+}
+
+void makescalefactorFile(TString filename, double scalefactor)
+{
+    TFile *scalefactor_file = new TFile(filename, "recreate");
+
+    TH1F* scalefactor_hist = new TH1F("scalefactor", ";;Scale Factor", 1, 0, 1);
+    scalefactor_hist->SetBinContent(1, scalefactor);
+    scalefactor_hist->Write();
+    scalefactor_file->Close();
 }
 
 std::vector<bool> get_correlation_mask(TString sysname, TString histname, int nbins)
@@ -530,25 +581,19 @@ void checkfornans(std::vector<std::string>& sigName_sys, std::vector<std::vector
     }
 }
 
-void plotSysEffects(TString plotname, TH1F* hist_signal, std::vector<TH1F*> hist_signal_sys, const std::vector<std::string>& sigName_sys)
+void plotSysEffects(TCanvas* c, TPad* pad, TString plotname, TH1F* hist_signal, std::vector<TH1F*> hist_signal_sys, const std::vector<std::string>& sigName_sys)
 {
     bool is2016 = plotname.Contains("2016");
     bool is2017 = plotname.Contains("2017") or plotname.Contains("1718");
     bool is2018 = plotname.Contains("2018") or plotname.Contains("1718");
     bool isRun2 = plotname.Contains("Run2");
 
-    TCanvas* c = new TCanvas("c","",700,700);
-    c->cd();
-
-    // Make the pad that will contain the plot
-    TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
     pad->Clear();
-    pad->Draw();
     pad->cd();
 
     std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
     std::vector<int> colors;
-    for(int i = 0; i < rgb.size(); i++){
+    for(unsigned i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
 
@@ -787,4 +832,107 @@ void set_UpAndDown_correctly(TH1F* nominal, TH1F* up, TH1F* down)
         down->SetBinContent(i, bc_sysDown_min);
         up->SetBinContent(i, bc_sysUp_max);
     }
+}
+
+void set_low_content_bins_to_zero(TH1F* hist, std::vector<TH1F*>& hists_sys, double cutoff)
+{
+    for(int i = 1; i <= hist->GetNbinsX(); i++){
+        if(hist->GetBinContent(i) < cutoff){
+            hist->SetBinContent(i, 0.);
+            hist->SetBinError(i, 0.);
+            for(const auto& hist_sys : hists_sys){
+                hist_sys->SetBinContent(i, 0.);
+                hist_sys->SetBinError(i, 0.);
+            }
+        }
+    }
+}
+
+void scale_signal_to_observed(double scalefactor, TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, std::vector<TH1F*>& hists_sys)
+{
+    std::cout << "scaling signal with factor " << scalefactor << std::endl;
+    if(hist_quadA->GetMaximum() > 0){//threshold to 0 because we just want to scale all signal points
+        hist_quadA->Scale(scalefactor);
+        hist_quadB->Scale(scalefactor);
+        hist_quadC->Scale(scalefactor);
+        hist_quadD->Scale(scalefactor);
+        for(const auto& hist_sys : hists_sys){
+            hist_sys->Scale(scalefactor);
+        }
+    }
+}
+
+double calc_scalefactor(TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, TH1F* hist_obs_quadA, TH1F* hist_obs_quadB, TH1F* hist_obs_quadC, TH1F* hist_obs_quadD)
+{
+    std::cout << "calculating scalefactor: ";
+    if(hist_quadA->GetMaximum() > 0){//threshold to 0 because we just want to scale all signal points
+        //double scalefactor = (hist_obs_quadA->Integral() + hist_obs_quadB->Integral() + hist_obs_quadC->Integral() + hist_obs_quadD->Integral()) / (hist_quadA->Integral() + hist_quadB->Integral() + hist_quadC->Integral() + hist_quadD->Integral());
+        double scalefactor = hist_obs_quadA->Integral()/hist_quadA->Integral();
+        std::cout << scalefactor << std::endl;
+        return scalefactor;
+    }else {
+        std::cout << "signal empty, so 1" << std::endl;
+        return 1.;
+    }
+}
+
+double get_1718_scalefactor(TString sf_filename)
+{
+    sf_filename.ReplaceAll("2016","1718");
+    std::cout << "getting scalefactor from file " << sf_filename;
+    TFile* sf_file = TFile::Open(sf_filename);
+    TH1F* sf_hist = (TH1F*)sf_file->Get("scalefactor");
+    std::cout << ", sf: " << sf_hist->GetBinContent(1) << std::endl;
+    return sf_hist->GetBinContent(1);
+}
+
+void plot_signal_contamination(TCanvas* c, TPad* pad, TString plotname, TH1F* hist_signal_quadA, TH1F* hist_signal_quadC)
+{
+    bool is2016 = plotname.Contains("2016");
+    bool is2017 = plotname.Contains("2017") or plotname.Contains("1718");
+    bool is2018 = plotname.Contains("2018") or plotname.Contains("1718");
+    bool isRun2 = plotname.Contains("Run2");
+
+    //TCanvas* c = new TCanvas("c","",700,700);
+    //c->cd();
+
+    //// Make the pad that will contain the plot
+    //TPad* pad  = new TPad("pad", "", 0., 0., 1., 1.);
+    //pad->Draw();
+    pad->Clear();
+    pad->cd();
+
+    std::vector<std::vector<int>> rgb = {{46, 114, 204}, {239, 32, 29}, {29, 182, 0}, {86, 14, 118}, {232, 164, 0}, {86, 22, 67}, {247, 135, 100}, {47, 41, 35}};
+    std::vector<int> colors;
+    for(unsigned i = 0; i < rgb.size(); i++){
+        colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
+    }
+
+    TLegend legend = TLegend(0.18, 0.84, 0.95, 0.93);
+    legend.SetNColumns(2);
+    legend.SetFillStyle(0);
+
+    // Get margins and make the CMS and lumi basic latex to print on top of the figure
+    CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
+    Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad);
+
+    std::cout << "plotting signal contamination" << std::endl;
+    THStack* hists = new THStack("stack", "");
+    hist_signal_quadA->SetLineColor(colors[0]);
+    hist_signal_quadA->SetMarkerColor(colors[0]);
+    hist_signal_quadC->SetLineColor(colors[1]);
+    hist_signal_quadC->SetMarkerColor(colors[1]);
+    hists->Add(hist_signal_quadA);
+    hists->Add(hist_signal_quadC);
+    legend.AddEntry(hist_signal_quadA, "Region A", "l");
+    legend.AddEntry(hist_signal_quadC, "Region C", "l");
+
+    hists->Draw("hist E nostack");
+    legend.Draw("same");
+    CMSandLumi->add_flavor(plotname);
+    CMSandLumi->Draw();
+    shapeSR_text->Draw(plotname);
+
+    pad->Modified();
+    c->Print(plotname);
 }

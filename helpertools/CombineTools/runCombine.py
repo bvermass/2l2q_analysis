@@ -18,10 +18,23 @@ def submit_script( script, scriptname ):
         print 'qsub error caught, resubmitting'
         time.sleep(2)
 
+def add_script_to_joblist( joblist, script, scriptname ):
+    print 'submitting {}\n'.format( scriptname )
+    script.close()
+    joblist.write(scriptname + '\n')
+
+def submit_jobs():
+    print 'Submitting full joblist\n'
+    os.system('condor_submit test/condor/Combine.submit')
+
 def run_combine_fromOwn_datacards(filesperJob):
     print('running combine with my own datacards')
-    datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
+    #datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
+    datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/'
     #datacardDir = '/user/bvermass/sandbox/combinetest/'
+
+    joblist = open('test/condor/CombineJobList.txt', 'w')
+
     file_counter    = 0
     script_counter  = 0
     for root, dirs, files in os.walk(datacardDir):
@@ -38,24 +51,29 @@ def run_combine_fromOwn_datacards(filesperJob):
                 if file_counter < 0.1:
                     scriptname = 'combine_{}.sh'.format(script_counter)
                     script = init_script(scriptname)
-                    script.write('cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_8_1_0/src/HiggsAnalysis/CombinedLimit\n')
+                    script.write('cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit\n')
                     script.write('eval `scram runtime -sh`\n')
                     script_counter += 1
     
     
                 script.write('cd {}\n'.format(combine_outputDir))
+                #script.write('combine --rMin 0.00001 --cminPreFit 2 -d {} -n {}\n'.format(f_abspath, f.split('.txt')[0]))
                 script.write('combine -d {} -n {}\n'.format(f_abspath, f.split('.txt')[0]))
                 #script.write('mv higgs*'
     
                 file_counter += 1
     
                 if abs(file_counter - filesperJob) < 0.1:
-                    submit_script(script, scriptname)
+                    add_script_to_joblist(joblist, script, scriptname)
                     file_counter = 0
     
     if file_counter != 0:
-        submit_script(script, scriptname)
+        add_script_to_joblist(joblist, script, scriptname)
         file_counter = 0
+
+    joblist.close()
+    os.system('chmod +x combine_*')
+    submit_jobs()
 
 def run_combine_fromKirills_datacards(filesperJob):
     print('running combine with Kirills datacards')

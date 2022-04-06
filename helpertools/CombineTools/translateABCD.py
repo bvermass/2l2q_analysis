@@ -15,7 +15,7 @@ def main(argv = None):
     usage = "usage: %prog [options]\n Incorporate ABCD method in Combine"
 
     parser = OptionParser(usage)
-    parser.add_option("--input", type=str, default='/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass', help="Input card directory [default: %default]")
+    parser.add_option("--input", type=str, default='/user/bvermass/public_html/2l2q_analysis/combine_observed', help="Input card directory [default: %default]")
     parser.add_option("--output", type=str, default='cards', help="Output card directory [default: %default]")
     parser.add_option("--ncores", type=int, default=4, help="Number of cores for multiprocessing [default: %default]")
     parser.add_option("--fake", action="store_true", help="Produce fake shapes [default: %default]")

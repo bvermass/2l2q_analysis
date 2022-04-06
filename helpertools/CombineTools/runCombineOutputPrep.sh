@@ -1,13 +1,13 @@
 #!/bin/bash
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _2016_ _mm__2016_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _2016_ _ee__2016_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _2l_ _2016_ _2l__2016_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _1718_ _mm__1718_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _1718_ _ee__1718_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _2l_ _1718_ _2l__1718_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _run2_ _mm__run2_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _run2_ _ee__run2_
-python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _2l_ _run2_ _2l__run2_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _mm_ _2016_ _mm__2016_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _ee_ _2016_ _ee__2016_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _2l_ _2016_ _2l__2016_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _mm_ _1718_ _mm__1718_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _ee_ _1718_ _ee__1718_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _2l_ _1718_ _2l__1718_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _mm_ _run2_ _mm__run2_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _ee_ _run2_ _ee__run2_
+python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/ _2l_ _run2_ _2l__run2_
 
 #python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _mm_ _2016_ _mm__2016_
 #python CombineOutputPrep.py /user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/ _ee_ _2016_ _ee__2016_

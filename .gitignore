@@ -27,6 +27,9 @@ test/condor/FullAnalyzerJobList.txt
 test/condor/MiniAnalyzerJobList.txt
 test/condor/HaddJobList.txt
 test/condor/StackPlotterJobList.txt
+test/condor/CombineDatacardJobList.txt
+test/condor/CombineDatacardJobList2016.txt
+test/condor/CombineJobList.txt
 test/sampleLists/plots_test.txt
 test/sampleLists/test.txt
 *.out

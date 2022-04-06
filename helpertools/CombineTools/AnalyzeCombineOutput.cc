@@ -3,6 +3,7 @@
 bool verbose = false;
 bool addExternalLimits = true;
 bool addLegacyLimits = false;
+bool addUpperLimits = false;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
@@ -35,6 +36,7 @@ int main(int argc, char * argv[])
     std::string line;
     std::ifstream txtfile (txtfilename);
     std::vector<CombineOutput*> combine_outputs;
+    std::map<double, std::map<double, double>> scalefactors;//<M, <V2, scalefactor>>
     if(txtfile.is_open()){
         while(std::getline(txtfile, line)){
             std::cout << line << std::endl;
@@ -42,6 +44,7 @@ int main(int argc, char * argv[])
             if(combine_output->combine_tree){
                 combine_outputs.push_back(combine_output);
             }
+            scalefactors[combine_output->M][combine_output->V2] = GetCorrespondingScalefactor((TString)line);
         }
     }
 
@@ -51,7 +54,11 @@ int main(int argc, char * argv[])
     for(unsigned i = 0; i < combine_outputs.size(); i++){
         if(verbose) std::cout << "processing " << combine_outputs[i]->combine_filename << std::endl;
         std::map<float, double> sigstr = combine_outputs[i]->GetSignalStrengths();
-        if(sigstr.size() == 5){
+        if(verbose) std::cout << "M, V2, scale factor: " << combine_outputs[i]->M << " " << combine_outputs[i]->V2 << " " << scalefactors[combine_outputs[i]->M][combine_outputs[i]->V2] << std::endl;
+        for(auto& sr : sigstr){
+            sr.second = sr.second * scalefactors[combine_outputs[i]->M][combine_outputs[i]->V2];
+        }
+        if(sigstr.size() == 6){
             signal_strengths[combine_outputs[i]->M][combine_outputs[i]->V2] = sigstr;
         }
     }
@@ -75,6 +82,8 @@ int main(int argc, char * argv[])
         else if(CheckGoesBelow1(sr_M.second, 0.50)) lower_exclusion_limits[sr_M.first][0.84] = GetLowerExclusionLimit(sr_M.second, 0.50);
         if(CheckGoesBelow1(sr_M.second, 0.975))     lower_exclusion_limits[sr_M.first][0.975] = GetLowerExclusionLimit(sr_M.second, 0.975);
         else if(CheckGoesBelow1(sr_M.second, 0.50)) lower_exclusion_limits[sr_M.first][0.975] = GetLowerExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBelow1(sr_M.second, -1))        lower_exclusion_limits[sr_M.first][-1]    = GetLowerExclusionLimit(sr_M.second, -1);
+        else if(CheckGoesBelow1(sr_M.second, 0.50)) lower_exclusion_limits[sr_M.first][-1]    = GetLowerExclusionLimit(sr_M.second, 0.50);
     }
     std::map<double, std::map<float, double>> upper_exclusion_limits;//<mass, <quantile, V2(where limit is 1, approached from below)>>
     for(auto& sr_M : signal_strengths){
@@ -87,14 +96,16 @@ int main(int argc, char * argv[])
         else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.84] = GetUpperExclusionLimit(sr_M.second, 0.50);
         if(CheckGoesBackAbove1(sr_M.second, 0.975))     upper_exclusion_limits[sr_M.first][0.975] = GetUpperExclusionLimit(sr_M.second, 0.975);
         else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][0.975] = GetUpperExclusionLimit(sr_M.second, 0.50);
+        if(CheckGoesBackAbove1(sr_M.second, -1))        upper_exclusion_limits[sr_M.first][-1]    = GetUpperExclusionLimit(sr_M.second, -1);
+        else if(CheckGoesBackAbove1(sr_M.second, 0.50)) upper_exclusion_limits[sr_M.first][-1]    = GetUpperExclusionLimit(sr_M.second, 0.50);
     }
 
     if(verbose){
-        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975}){
+        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975, -1.}){
             std::cout << "Lower Exclusion Line " << q << ": ";
             PrintExclusionLine(lower_exclusion_limits, q);
         }
-        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975}){
+        for(const double& q : {0.025, 0.16, 0.5, 0.84, 0.975, -1.}){
             std::cout << "Upper Exclusion Line " << q << ": ";
             PrintExclusionLine(upper_exclusion_limits, q);
         }
@@ -193,7 +204,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
 
-    std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central;
+    std::vector<double> V2_lower, V2_lower_err, sr_lower_2s_up, sr_lower_2s_down, sr_lower_1s_up, sr_lower_1s_down, sr_lower_central, sr_lower_observed;
     for(auto& sr_V2 : lower_exclusion_limit){
         if(sr_V2.second[0.50] < 1e-10) continue;
         V2_lower.push_back(sr_V2.first);
@@ -202,10 +213,11 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         sr_lower_2s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.025]);
         sr_lower_1s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.16]);
         sr_lower_central.push_back(sr_V2.second[0.50]);
+        sr_lower_observed.push_back(sr_V2.second[-1]);
         V2_lower_err.push_back(0.);
     }
 
-    std::vector<double> V2_upper, V2_upper_err, sr_upper_2s_up, sr_upper_2s_down, sr_upper_1s_up, sr_upper_1s_down, sr_upper_central;
+    std::vector<double> V2_upper, V2_upper_err, sr_upper_2s_up, sr_upper_2s_down, sr_upper_1s_up, sr_upper_1s_down, sr_upper_central, sr_upper_observed;
     for(auto& sr_V2 : upper_exclusion_limit){
         if(sr_V2.second[0.50] < 1e-10) continue;
         V2_upper.push_back(sr_V2.first);
@@ -214,6 +226,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         sr_upper_2s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.025]);
         sr_upper_1s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.16]);
         sr_upper_central.push_back(sr_V2.second[0.50]);
+        sr_upper_observed.push_back(sr_V2.second[-1]);
         V2_upper_err.push_back(0.);
     }
 
@@ -233,6 +246,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_lower_1s_graph->SetFillStyle(1001);
 
     TGraphAsymmErrors* sr_lower_central_graph = new TGraphAsymmErrors(V2_lower.size(), &V2_lower[0], &sr_lower_central[0], &V2_lower_err[0], &V2_lower_err[0], &V2_lower_err[0], &V2_lower_err[0]);
+    TGraphAsymmErrors* sr_lower_observed_graph = new TGraphAsymmErrors(V2_lower.size(), &V2_lower[0], &sr_lower_observed[0], &V2_lower_err[0], &V2_lower_err[0], &V2_lower_err[0], &V2_lower_err[0]);
 
     TGraphAsymmErrors* sr_upper_2s_graph = new TGraphAsymmErrors(V2_upper.size(), &V2_upper[0], &sr_upper_central[0], &V2_upper_err[0], &V2_upper_err[0], &sr_upper_2s_down[0], &sr_upper_2s_up[0]);
     sr_upper_2s_graph->SetFillColor(kOrange);
@@ -243,6 +257,7 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
     sr_upper_1s_graph->SetFillStyle(1001);
 
     TGraphAsymmErrors* sr_upper_central_graph = new TGraphAsymmErrors(V2_upper.size(), &V2_upper[0], &sr_upper_central[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0]);
+    TGraphAsymmErrors* sr_upper_observed_graph = new TGraphAsymmErrors(V2_upper.size(), &V2_upper[0], &sr_upper_observed[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0], &V2_upper_err[0]);
 
     //Close the limit at the high mass end
     //for central value, just draw a line between last two points
@@ -255,12 +270,22 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
 
     sr_lower_1s_graph->Draw("3 same");
     sr_lower_central_graph->Draw("L same");
+    sr_lower_observed_graph->Draw("L same");
+    sr_lower_observed_graph->SetLineColor(kRed);
+    sr_lower_observed_graph->SetLineWidth(2);
+    sr_lower_central_graph->SetLineWidth(2);
 
-    sr_upper_2s_graph->Draw("3 same");
-    sr_upper_1s_graph->Draw("3 same");
-    sr_upper_central_graph->Draw("L same");
+    if(addUpperLimits){
+        sr_upper_2s_graph->Draw("3 same");
+        sr_upper_1s_graph->Draw("3 same");
+        sr_upper_central_graph->Draw("L same");
+        sr_upper_observed_graph->Draw("L same");
+        sr_upper_observed_graph->SetLineColor(kRed);
+        sr_upper_observed_graph->SetLineWidth(2);
+        sr_upper_central_graph->SetLineWidth(2);
+    }
 
-    highmassend->Draw("L same");
+    //highmassend->Draw("L same");
 
     CMSandLumi->Draw();
     double ymin = 0.78, xmin = 0.17;
@@ -279,10 +304,10 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
         //TGraphAsymmErrors* atlas_prompt_electron            = get_external_limit("atlas_prompt_electron", kGreen+3, 8, 3);
         //TGraphAsymmErrors* atlas_displaced_muon_LNV         = get_external_limit("atlas_displaced_muon_LNV", kCyan+1, 6, 3);
         //TGraphAsymmErrors* atlas_displaced_muon_LNC         = get_external_limit("atlas_displaced_muon_LNC", kCyan+3, 5, 3);
-        TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kRed, 4, 3);
-        TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kRed, 3, 3);
-        TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kRed+2, 10, 3);
-        TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kRed+2, 10, 3);
+        TGraphAsymmErrors* cms_trilepton_prompt_muon        = get_external_limit("cms_trilepton_prompt_muon", kGreen+3, 4, 3);
+        TGraphAsymmErrors* cms_trilepton_prompt_electron    = get_external_limit("cms_trilepton_prompt_electron", kGreen+3, 3, 3);
+        TGraphAsymmErrors* cms_trilepton_displaced_electron = get_external_limit("cms_trilepton_displaced_electron", kCyan+2, 10, 3);
+        TGraphAsymmErrors* cms_trilepton_displaced_muon     = get_external_limit("cms_trilepton_displaced_muon", kCyan+2, 10, 3);
 
         if(plotfilename.Contains("_mm_")){
             //delphi_prompt->Draw("L same");
@@ -319,15 +344,16 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
             legend.AddEntry(sr_lower_2s_graph, "Expected #pm 2#sigma", "f");
             if(isRun2) legend.AddEntry(cms_trilepton_displaced_electron, "CMS 3l displaced (Run2)", "l");
         }
+        legend.AddEntry(sr_lower_observed_graph, "Observed", "l");
     }
     if(addLegacyLimits){
         TString legacy_limit_file = "/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/plots/Limits_Legacy_AN_v8_" + plotfilename(plotfilename.Index("ExclusionLimit_")+15, plotfilename.Index(".png") - plotfilename.Index("ExclusionLimit_")-15) + ".txt";
 
         TGraphAsymmErrors* legacy_lower_V2_central = get_legacy_limit(legacy_limit_file, 0.50, true, kBlue, 5, 3);
-        TGraphAsymmErrors* legacy_lower_V2_up_1s = get_legacy_limit(legacy_limit_file, 0.84, true, kBlue, 5, 3);
-        TGraphAsymmErrors* legacy_lower_V2_up_2s = get_legacy_limit(legacy_limit_file, 0.975, true, kBlue, 5, 3);
-        TGraphAsymmErrors* legacy_lower_V2_down_1s = get_legacy_limit(legacy_limit_file, 0.16, true, kBlue, 5, 3);
-        TGraphAsymmErrors* legacy_lower_V2_down_2s = get_legacy_limit(legacy_limit_file, 0.025, true, kBlue, 5, 3);
+        //TGraphAsymmErrors* legacy_lower_V2_up_1s = get_legacy_limit(legacy_limit_file, 0.84, true, kBlue, 5, 3);
+        //TGraphAsymmErrors* legacy_lower_V2_up_2s = get_legacy_limit(legacy_limit_file, 0.975, true, kBlue, 5, 3);
+        //TGraphAsymmErrors* legacy_lower_V2_down_1s = get_legacy_limit(legacy_limit_file, 0.16, true, kBlue, 5, 3);
+        //TGraphAsymmErrors* legacy_lower_V2_down_2s = get_legacy_limit(legacy_limit_file, 0.025, true, kBlue, 5, 3);
         TGraphAsymmErrors* legacy_upper_V2_central = get_legacy_limit(legacy_limit_file, 0.50, false, kBlue, 5, 3);
 
         legacy_lower_V2_central->Draw("L same");
@@ -415,8 +441,8 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
     sr_lower_2s_graph->SetFillStyle(1001);
     sr_lower_2s_graph->GetXaxis()->SetTitle(Xaxistitle);
     sr_lower_2s_graph->GetYaxis()->SetTitle(Yaxistitle);
-    sr_lower_2s_graph->GetXaxis()->SetMoreLogLabels();
-    sr_lower_2s_graph->GetYaxis()->SetMoreLogLabels();
+    //sr_lower_2s_graph->GetXaxis()->SetMoreLogLabels();
+    //sr_lower_2s_graph->GetYaxis()->SetMoreLogLabels();
 
     TGraphAsymmErrors* sr_lower_1s_graph = new TGraphAsymmErrors(V2_lower.size(), &V2_lower[0], &sr_lower_central[0], &V2_lower_err[0], &V2_lower_err[0], &sr_lower_1s_down[0], &sr_lower_1s_up[0]);
     sr_lower_1s_graph->SetFillColor(kGreen+1);
@@ -483,7 +509,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
 
-    std::vector<double> V2, V2_err, sr_2s_up, sr_2s_down, sr_1s_up, sr_1s_down, sr_central;
+    std::vector<double> V2, V2_err, sr_2s_up, sr_2s_down, sr_1s_up, sr_1s_down, sr_central, sr_observed;
     for(auto& sr_V2 : signal_strengths){
         //if(sr_V2.second[0.50] > 5) continue;
         V2.push_back(sr_V2.first);
@@ -492,6 +518,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
         sr_2s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.025]);
         sr_1s_down.push_back(sr_V2.second[0.50] - sr_V2.second[0.16]);
         sr_central.push_back(sr_V2.second[0.50]);
+        sr_observed.push_back(sr_V2.second[-1]);
         V2_err.push_back(0.);
     }
 
@@ -500,14 +527,15 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     sr_2s_graph->SetFillStyle(1001);
     sr_2s_graph->GetXaxis()->SetTitle(Xaxistitle);
     sr_2s_graph->GetYaxis()->SetTitle(Yaxistitle);
-    sr_2s_graph->GetXaxis()->SetMoreLogLabels();
-    sr_2s_graph->GetYaxis()->SetMoreLogLabels();
+    //sr_2s_graph->GetXaxis()->SetMoreLogLabels();
+    //sr_2s_graph->GetYaxis()->SetMoreLogLabels();
 
     TGraphAsymmErrors* sr_1s_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &sr_1s_down[0], &sr_1s_up[0]);
     sr_1s_graph->SetFillColor(kGreen+1);
     sr_1s_graph->SetFillStyle(1001);
 
     TGraphAsymmErrors* sr_central_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
+    TGraphAsymmErrors* sr_observed_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_observed[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
 
     sr_2s_graph->Draw("A3");
     if(plotfilename.Contains("ExclusionLimit")){
@@ -515,13 +543,32 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
         sr_2s_graph->GetYaxis()->SetRangeUser(2e-8, 1e-1);
     }
     sr_1s_graph->Draw("3 same");
-    sr_central_graph->Draw("L same");
+    sr_central_graph->Draw("L P same");
+    sr_observed_graph->Draw("L P same");
+    sr_observed_graph->SetLineColor(kRed);
+    sr_observed_graph->SetMarkerColor(kRed);
     CMSandLumi->Draw();
+    draw_line_at_1(sr_2s_graph->GetXaxis()->GetXmin(), sr_2s_graph->GetXaxis()->GetXmax());
 
     pad->Modified();
     c->Print(plotfilename);
     delete c;
     return;
+}
+
+double GetCorrespondingScalefactor(TString combine_filename)
+{
+    TString scalefactor_filename = combine_filename;
+    scalefactor_filename.ReplaceAll("datacards", "ScaleFactor");
+    scalefactor_filename.ReplaceAll("higgsCombine", "");
+    scalefactor_filename.ReplaceAll(".AsymptoticLimits.mH120", "");
+    scalefactor_filename.ReplaceAll("_run2_", "_1718_");
+
+    TFile *scalefactor_file = new TFile(scalefactor_filename, "open");
+    TH1F* scalefactor_hist = (TH1F*)scalefactor_file->Get("scalefactor");
+
+    if(!scalefactor_hist) std::cout << "Error: no scale factor hist retrieved from " << scalefactor_filename << std::endl;
+    return scalefactor_hist->GetBinContent(1);
 }
 
 
@@ -543,7 +590,9 @@ std::map<float, double> CombineOutput::GetSignalStrengths()
     std::map<float, double> signal_strengths;
     for(unsigned jentry = 0; jentry < nentries; jentry++){
         combine_tree->GetEntry(jentry);
-        if(quantileExpected > 0) signal_strengths[quantileExpected] = limit;
+        //if(quantileExpected > 0) signal_strengths[quantileExpected] = limit;
+        signal_strengths[quantileExpected] = limit;
+        if(verbose) std::cout << "quantile and limit: " << quantileExpected << " " << limit << std::endl;
     }
     return signal_strengths;
 }

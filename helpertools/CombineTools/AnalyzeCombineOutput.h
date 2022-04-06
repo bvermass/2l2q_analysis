@@ -36,6 +36,7 @@ void PlotExclusionLimit_withPolyLine(std::map<double, std::map<float, double>> l
 void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_strengths, TString specific_dir, TString Xaxistitle, TString Yaxistitle);
 void PrintExclusionLine(std::map<double, std::map<float, double>> exclusion_line, double quantile);
 void PrintAllSignalStrengths(std::map<double, std::map<double, std::map<float, double>>> signal_strengths);
+double GetCorrespondingScalefactor(TString combine_filename);
 void WriteExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
 void WriteExclusionLimit_with_Bands(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString filename);
 
