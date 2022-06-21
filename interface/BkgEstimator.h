@@ -63,6 +63,7 @@ class BkgEstimator
         double   _ldz;
         double   _l3dIPSig;
         double   _lrelIso;
+        double   _lrelIsoDB;
         double   _lptRatio;
         double   _lptRel;
         unsigned _lNumberOfHits;
@@ -100,6 +101,7 @@ class BkgEstimator
         double   _l1dz;
         double   _l13dIPSig;
         double   _l1relIso;
+        double   _l1relIsoDB;
         double   _l1ptRatio;
         double   _l1ptRel;
         unsigned _l1Flavor;
@@ -198,6 +200,7 @@ class BkgEstimator
         TBranch     *b__ldz;
         TBranch     *b__l3dIPSig;
         TBranch     *b__lrelIso;
+        TBranch     *b__lrelIsoDB;
         TBranch     *b__lptRatio;
         TBranch     *b__lptRel;
         TBranch     *b__lNumberOfHits;
@@ -235,6 +238,7 @@ class BkgEstimator
         TBranch     *b__l1dz;
         TBranch     *b__l13dIPSig;
         TBranch     *b__l1relIso;
+        TBranch     *b__l1relIsoDB;
         TBranch     *b__l1ptRatio;
         TBranch     *b__l1ptRel;
         TBranch     *b__l1Flavor;
@@ -295,7 +299,7 @@ class BkgEstimator
         BkgEstimator(TString filename, TString fileoption = "recreate", double hCounterValue = 1.);//Constructor meant to create file and write events or to read an existing file
         void open_file_and_tree(TString filename);
         void set_branch_adresses();
-        void analyze(int max_entries, int partition, int partitionjobnumber);
+        void analyze(std::string outputfilename, int max_entries, int partition, int partitionjobnumber);
         void fill_tree();
         void write_tree();
         void delete_tree();

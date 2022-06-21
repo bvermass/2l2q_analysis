@@ -32,6 +32,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._ldz                   = _dz[i_subleading];
     bkgestimator._l3dIPSig              = _3dIPSig[i_subleading];
     bkgestimator._lrelIso               = _relIso[i_subleading];
+    bkgestimator._lrelIsoDB             = _relIso0p4MuDeltaBeta[i_subleading];
     bkgestimator._lptRel                = _ptRel[i_subleading];
     bkgestimator._lptRatio              = _ptRatio[i_subleading];
     bkgestimator._lNumberOfHits         = _lNumberOfValidTrackerHits[i_subleading];
@@ -69,6 +70,7 @@ void full_analyzer::fill_BkgEstimator_tree(BkgEstimator& bkgestimator, double ev
     bkgestimator._l1dz            = _dz[i_leading];
     bkgestimator._l13dIPSig       = _3dIPSig[i_leading];
     bkgestimator._l1relIso        = _relIso[i_leading];
+    bkgestimator._l1relIsoDB      = _relIso0p4MuDeltaBeta[i_leading];
     bkgestimator._l1ptRel         = _ptRel[i_leading];
     bkgestimator._l1ptRatio       = _ptRatio[i_leading];
     bkgestimator._l1Flavor        = _lFlavor[i_leading];

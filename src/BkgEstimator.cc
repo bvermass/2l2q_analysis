@@ -59,6 +59,7 @@ BkgEstimator::BkgEstimator(TString filename, TString fileoption, double hCounter
         BkgEstimator_tree->Branch("_ldz",                              &_ldz,                              "_ldz/D");
         BkgEstimator_tree->Branch("_l3dIPSig",                         &_l3dIPSig,                         "_l3dIPSig/D");
         BkgEstimator_tree->Branch("_lrelIso",                          &_lrelIso,                          "_lrelIso/D");
+        BkgEstimator_tree->Branch("_lrelIsoDB",                        &_lrelIsoDB,                        "_lrelIsoDB/D");
         BkgEstimator_tree->Branch("_lptRel",                           &_lptRel,                           "_lptRel/D");
         BkgEstimator_tree->Branch("_lptRatio",                         &_lptRatio,                         "_lptRatio/D");
         BkgEstimator_tree->Branch("_lNumberOfHits",                    &_lNumberOfHits,                    "_lNumberOfHits/i");
@@ -96,6 +97,7 @@ BkgEstimator::BkgEstimator(TString filename, TString fileoption, double hCounter
         BkgEstimator_tree->Branch("_l1dz",                             &_l1dz,                             "_l1dz/D");
         BkgEstimator_tree->Branch("_l13dIPSig",                        &_l13dIPSig,                        "_l13dIPSig/D");
         BkgEstimator_tree->Branch("_l1relIso",                         &_l1relIso,                         "_l1relIso/D");
+        BkgEstimator_tree->Branch("_l1relIsoDB",                       &_l1relIsoDB,                       "_l1relIsoDB/D");
         BkgEstimator_tree->Branch("_l1ptRel",                          &_l1ptRel,                          "_l1ptRel/D");
         BkgEstimator_tree->Branch("_l1ptRatio",                        &_l1ptRatio,                        "_l1ptRatio/D");
         BkgEstimator_tree->Branch("_l1Flavor",                         &_l1Flavor,                         "_l1Flavor/i");
@@ -203,6 +205,7 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_ldz", &_ldz, &b__ldz);
     BkgEstimator_tree->SetBranchAddress("_l3dIPSig", &_l3dIPSig, &b__l3dIPSig);
     BkgEstimator_tree->SetBranchAddress("_lrelIso", &_lrelIso, &b__lrelIso);
+    BkgEstimator_tree->SetBranchAddress("_lrelIsoDB", &_lrelIsoDB, &b__lrelIsoDB);
     BkgEstimator_tree->SetBranchAddress("_lptRel", &_lptRel, &b__lptRel);
     BkgEstimator_tree->SetBranchAddress("_lptRatio", &_lptRatio, &b__lptRatio);
     BkgEstimator_tree->SetBranchAddress("_lNumberOfHits", &_lNumberOfHits, &b__lNumberOfHits);
@@ -240,6 +243,7 @@ void BkgEstimator::set_branch_adresses()
     BkgEstimator_tree->SetBranchAddress("_l1dz", &_l1dz, &b__l1dz);
     BkgEstimator_tree->SetBranchAddress("_l13dIPSig", &_l13dIPSig, &b__l13dIPSig);
     BkgEstimator_tree->SetBranchAddress("_l1relIso", &_l1relIso, &b__l1relIso);
+    BkgEstimator_tree->SetBranchAddress("_l1relIsoDB", &_l1relIsoDB, &b__l1relIsoDB);
     BkgEstimator_tree->SetBranchAddress("_l1ptRel", &_l1ptRel, &b__l1ptRel);
     BkgEstimator_tree->SetBranchAddress("_l1ptRatio", &_l1ptRatio, &b__l1ptRatio);
     BkgEstimator_tree->SetBranchAddress("_l1Flavor", &_l1Flavor, &b__l1Flavor);
@@ -296,7 +300,7 @@ void BkgEstimator::set_branch_adresses()
 }
 
 
-void BkgEstimator::analyze(int max_entries, int partition, int partitionjobnumber)
+void BkgEstimator::analyze(std::string outputfilename, int max_entries, int partition, int partitionjobnumber)
 {
     // Determine range of events to loop over
     Long64_t nentries = BkgEstimator_tree->GetEntries();
@@ -306,7 +310,8 @@ void BkgEstimator::analyze(int max_entries, int partition, int partitionjobnumbe
     unsigned notice = ceil(0.01 * (j_end - j_begin) / 20) * 100;
     unsigned loop_counter = 0;
 
-    std::vector<ULong64_t> eventnumber_vec;
+    TH1F* h_reliso = new TH1F("relIso", ";relIso;Events", 30, 0, 3);
+    std::vector<ULong64_t> eventnumber_vec, lumiblock_vec, runnumber_vec;
     //main loop
     for(unsigned jentry = j_begin; jentry < j_end; ++jentry){
 	    BkgEstimator_tree->GetEntry(jentry);
@@ -315,17 +320,29 @@ void BkgEstimator::analyze(int max_entries, int partition, int partitionjobnumbe
             loop_counter = 0;
 	    }
 
-        if(_lFlavor == 1 and _l1Flavor == 1 and _lCharge != _l1Charge and _SV_PVSVdist_2D > 10 and _SV_mass < 2){
+
+        if(_lFlavor == 1 and _l1Flavor == 1 and _lCharge != _l1Charge){// and _SV_PVSVdist_2D > 10 and _SV_mass < 2){
             eventnumber_vec.push_back(_eventNb);
+            lumiblock_vec.push_back(_lumiBlock);
+            runnumber_vec.push_back(_runNb);
+
+            h_reliso->Fill(_l1relIsoDB);
         }
         ++loop_counter;
     }
 
-    std::sort(eventnumber_vec.begin(), eventnumber_vec.end());
-    for(auto nb : eventnumber_vec){
+    //TFile *output = new TFile("reliso_QCD_MuEnriched.root", "recreate");
+    TFile *output = new TFile("reliso_SingleLepton1718.root", "recreate");
+    h_reliso->Write();
+    output->Close();
+
+    //std::sort(eventnumber_vec.begin(), eventnumber_vec.end());
+    for(unsigned i = 0; i < eventnumber_vec.size(); i++){
         std::ostringstream eventnumberstream;
-        eventnumberstream << nb << "\n";
-        filePutContents("EventNumbers_OSmmL10M02.txt", eventnumberstream.str(), true);
+        //eventnumberstream << "Run nr.: " << runnumber_vec[i] << "  lumiblock: " << lumiblock_vec[i] << "  event nr.: " << eventnumber_vec[i] << "\n";
+        eventnumberstream << runnumber_vec[i] << " " << lumiblock_vec[i] << " " << eventnumber_vec[i] << "\n";
+        ////filePutContents("EventNumbers_HNL_M-3_V-0p0031384709653_mu_OSmm_2017.txt", eventnumberstream.str(), true);
+        //filePutContents(outputfilename, eventnumberstream.str(), true);
     }
 }
 
@@ -392,6 +409,7 @@ void BkgEstimator::copy_event(BkgEstimator* original)
     _ldz = original->_ldz;
     _l3dIPSig = original->_l3dIPSig;
     _lrelIso = original->_lrelIso;
+    _lrelIsoDB = original->_lrelIsoDB;
     _lptRatio = original->_lptRatio;
     _lptRel = original->_lptRel;
     _lNumberOfHits = original->_lNumberOfHits;
@@ -429,6 +447,7 @@ void BkgEstimator::copy_event(BkgEstimator* original)
     _l1dz = original->_l1dz;
     _l13dIPSig = original->_l13dIPSig;
     _l1relIso = original->_l1relIso;
+    _l1relIsoDB = original->_l1relIsoDB;
     _l1ptRatio = original->_l1ptRatio;
     _l1ptRel = original->_l1ptRel;
     _l1Flavor = original->_l1Flavor;
