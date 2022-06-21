@@ -59,6 +59,20 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
                     if(deltaR(tmptrack, l2_vec) < mindR){
                         i_subleading_track = i_track;
                         mindR = deltaR(tmptrack, l2_vec);
+                        IVFmatch_dpt     = _IVF_trackpt[i_subleading][i_track] - _lPt[i_subleading];
+                        IVFmatch_deta    = _IVF_tracketa[i_subleading][i_track] - _lEta[i_subleading];
+                        IVFmatch_dphi    = _IVF_trackphi[i_subleading][i_track] - _lPhi[i_subleading];
+                        IVFmatch_dE      = _IVF_trackE[i_subleading][i_track] - _lE[i_subleading];
+                        //IVFmatch_ddxy    = _IVF_trackdxy[i_subleading][i_track] - _dxy[i_subleading];
+                        //IVFmatch_ddz     = _IVF_trackdz[i_subleading][i_track] - _dz[i_subleading];
+                        IVFmatch_dcharge = _IVF_trackcharge[i_subleading][i_track] - _lCharge[i_subleading];
+                        IVFmatch_dR         = mindR;
+
+                        _lIVF_match_extra_dpt     = fabs(_IVF_trackpt[i_subleading][i_track] - _lPt[i_subleading]) < 4;
+                        _lIVF_match_extra_dR      = mindR < 0.02;
+                        _lIVF_match_extra_dcharge = fabs(_IVF_trackcharge[i_subleading][i_track] - _lCharge[i_subleading]) < 0.01;
+                        _lIVF_match_extra_dall    = _lIVF_match_extra_dpt and _lIVF_match_extra_dR and _lIVF_match_extra_dcharge;
+
                     }
                 }
                 for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
@@ -70,6 +84,11 @@ void full_analyzer::set_relevant_lepton_variables(const TString JetPt_Version){
             }
             SVmass          = tracksum.mass();
             SVl1mass        = (tracksum + l1_vec).mass();
+            //std::cout << sr_flavor << " mll1-2: " << mll << " - " << (l1_vec + l2_vec).mass() << std::endl;
+            //std::cout << "l2 pt, track pts: " << _lPt[i_subleading] << "; ";
+            //for(unsigned i_track = 0; i_track < _IVF_ntracks[i_subleading]; i_track++){
+            //    std::cout << " " << _IVF_trackpt[i_subleading][i_track];
+            //}std::cout << std::endl;
             SVmassminl2     = (tracksum - l2_vec).mass();
             SVpt            = tracksum.pt();
             SVeta           = tracksum.eta();

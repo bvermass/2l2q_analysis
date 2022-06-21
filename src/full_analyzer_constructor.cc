@@ -662,6 +662,7 @@ void full_analyzer::Init(TChain *tree)
    fChain->SetBranchAddress("_IVF_trackphi", _IVF_trackphi, &b__IVF_trackphi);
    fChain->SetBranchAddress("_IVF_trackE", _IVF_trackE, &b__IVF_trackE);
    fChain->SetBranchAddress("_IVF_trackcharge", _IVF_trackcharge, &b__IVF_trackcharge);
+   fChain->SetBranchAddress("_IVF_trackdxy", _IVF_trackdxy, &b__IVF_trackdxy);
    fChain->SetBranchAddress("_lIVF_match", _lIVF_match, &b__lIVF_match);
    fChain->SetBranchAddress("_lGlobalMuon", _lGlobalMuon, &b__lGlobalMuon);
    fChain->SetBranchAddress("_lTrackerMuon", _lTrackerMuon, &b__lTrackerMuon);

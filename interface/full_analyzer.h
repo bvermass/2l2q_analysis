@@ -369,6 +369,7 @@ public :
    Double_t        _IVF_trackphi[10][15];
    Double_t        _IVF_trackE[10][15];
    Double_t        _IVF_trackcharge[10][15];
+   Double_t        _IVF_trackdxy[10][15];
    Bool_t          _lIVF_match[10];
    Bool_t          _lGlobalMuon[10];                                                                       //muon speficic variables, also for displaced muon ID
    Bool_t          _lTrackerMuon[10];
@@ -859,6 +860,7 @@ public :
    TBranch        *b__IVF_trackphi;
    TBranch        *b__IVF_trackE;
    TBranch        *b__IVF_trackcharge;
+   TBranch        *b__IVF_trackdxy;
    TBranch        *b__lIVF_match;
    TBranch        *b__lGlobalMuon;                                                                       //muon speficic variables, also for displaced muon ID
    TBranch        *b__lTrackerMuon;
@@ -1069,6 +1071,8 @@ public :
 
    // index of lepton in list of tracks
    unsigned i_subleading_track;
+   double IVFmatch_dpt, IVFmatch_deta, IVFmatch_dphi, IVFmatch_dE, IVFmatch_dcharge, IVFmatch_dR;
+   bool _lIVF_match_extra_dpt, _lIVF_match_extra_dR, _lIVF_match_extra_dcharge, _lIVF_match_extra_dall;
 
    // numbers of leptons
    int nTightEle, nTightMu, nDisplEle, nDisplMu, nTightJet, nTightJet_uncl, nMediumBJet, nLooseBJet, nKshort;

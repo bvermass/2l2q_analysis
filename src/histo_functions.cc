@@ -47,7 +47,8 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_l2_dxy"]                          = new TH1F(prefix+"_l2_dxy", ";l_{2} dxy [cm];Events", 30, 0, 0.5);
     (*hists)[prefix+"_l1_dz"]                           = new TH1F(prefix+"_l1_dz", ";l_{1} dz [cm];Events", 30, 0, 0.05);
     (*hists)[prefix+"_l2_dz"]                           = new TH1F(prefix+"_l2_dz", ";l_{2} dz [cm];Events", 30, 0, 2);
-    (*hists)[prefix+"_l1_reliso"]                       = new TH1F(prefix+"_l1_reliso", ";l_{1} Rel Iso;Events", 30, 0, 0.05);
+    (*hists)[prefix+"_l1_reliso"]                       = new TH1F(prefix+"_l1_reliso", ";l_{1} Rel Iso;Events", 30, 0, 0.5);
+    (*hists)[prefix+"_l1_relisoDB"]                     = new TH1F(prefix+"_l1_relisoDB", ";l_{1} Rel Iso;Events", 30, 0, 0.5);
     (*hists)[prefix+"_l2_reliso"]                       = new TH1F(prefix+"_l2_reliso", ";l_{2} Rel Iso;Events", 30, 0, 3.5);
     (*hists)[prefix+"_l2_reliso_zoom"]                  = new TH1F(prefix+"_l2_reliso_zoom", ";l_{2} Rel Iso;Events", 30, 0, 1.5);
     (*hists)[prefix+"_l1_ptrel"]                        = new TH1F(prefix+"_l1_ptrel", ";l_{1} #it{p}_{T}^{rel} [GeV];Events", 30, 0, 40);
@@ -112,6 +113,13 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
     (*hists)[prefix+"_e2_EE_HOverE"]                    = new TH1F(prefix+"_e2_EE_HOverE", ";e_{2} H/E(Endcap);Events", 30, 0, 0.3);
     (*hists)[prefix+"_e2_EE_EInvMinusPInv"]             = new TH1F(prefix+"_e2_EE_EInvMinusPInv", ";e_{2} 1/E - 1/P(Endcap);Events", 30, 0, 0.25);
 
+    (*hists)[prefix+"_m2_GlobalTrackNormalizedChi2"]    = new TH1F(prefix+"_m2_GlobalTrackNormalizedChi2", ";#mu Track #chi^{2}_{norm.};Events", 30, 0, 5);
+    (*hists)[prefix+"_m2_CQChi2Position"]               = new TH1F(prefix+"_m2_CQChi2Position", ";#mu Track #chi^{2}_{norm.};Events", 30, 0, 20);
+    (*hists)[prefix+"_m2_CQTrackKink"]                  = new TH1F(prefix+"_m2_CQTrackKink", ";#mu Track #chi^{2}_{norm.};Events", 30, 0, 50);
+    (*hists)[prefix+"_m2_MuonSegComp"]                  = new TH1F(prefix+"_m2_MuonSegComp", ";#mu Track #chi^{2}_{norm.};Events", 30, 0, 1);
+    (*hists)[prefix+"_m2_InnerTrackValidFraction"]      = new TH1F(prefix+"_m2_InnerTrackValidFraction", ";#mu Track #chi^{2}_{norm.};Events", 30, 0.4, 1);
+    (*hists)[prefix+"_m2_TrackPtErr"]                   = new TH1F(prefix+"_m2_TrackPtErr", ";#mu Track #chi^{2}_{norm.};Events", 30, 0, 2);
+
     if(extensive_plots){
         (*hists)[prefix+"_l1_phi"]                          = new TH1F(prefix+"_l1_phi", ";l_{1} #phi;Events", 30, -3.14, 3.14);
         (*hists)[prefix+"_l2_phi"]                          = new TH1F(prefix+"_l2_phi", ";l_{2} #phi;Events", 30, -3.14, 3.14);
@@ -161,6 +169,40 @@ void full_analyzer::add_general_histograms(std::map<TString, TH1*>* hists, std::
         (*hists)[prefix+"_IVF_l1_mass"]                     = new TH1F(prefix+"_IVF_l1_mass", ";l_{1} + SV Mass [GeV] (IVF);Events", 40, 0, 150);
         (*hists)[prefix+"_IVF_PV-SVdxy_zoom2"]              = new TH1F(prefix+"_IVF_PV-SVdxy_zoom2", ";#Delta_{xy}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
         (*hists)[prefix+"_IVF_PV-SVdxyz_zoom2"]             = new TH1F(prefix+"_IVF_PV-SVdxyz_zoom2", ";#Delta_{xyz}(PV, SV_{fit}) [cm] (IVF);Events", 20, 0, 2);
+
+        (*hists)[prefix+"_IVF_dpt"]                         = new TH1F(prefix+"_IVF_dpt", ";#it{p}_{T}^{track} - #it{p}_{T}^{l2} [GeV];Events", 50, -5, 5);
+        (*hists)[prefix+"_IVF_dpt2"]                        = new TH1F(prefix+"_IVF_dpt2", ";#it{p}_{T}^{track} - #it{p}_{T}^{l2} [GeV];Events", 50, -15, 15);
+        (*hists)[prefix+"_IVF_deta"]                        = new TH1F(prefix+"_IVF_deta", ";#eta^{track} - #eta^{l2};Events", 50, -0.55, 0.55);
+        (*hists)[prefix+"_IVF_dphi"]                        = new TH1F(prefix+"_IVF_dphi", ";#phi^{track} - #phi^{l2};Events", 50, -0.55, 0.55);
+        (*hists)[prefix+"_IVF_dE"]                          = new TH1F(prefix+"_IVF_dE", ";E^{l2} - E^{track} [GeV];Events", 50, -5, 5);
+        (*hists)[prefix+"_IVF_dcharge"]                     = new TH1F(prefix+"_IVF_dcharge", ";Charge^{track} - Charge^{l2};Events", 5, -2.5, 2.5);
+        (*hists)[prefix+"_IVF_dR"]                          = new TH1F(prefix+"_IVF_dR", ";#Delta R(l2, track);Events", 50, -0.55, 0.55);
+
+        (*hists)[prefix+"_IVF_dpt_eff_den"]                 = new TH1F(prefix+"_IVF_dpt_eff_den", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dR_eff_den"]                  = new TH1F(prefix+"_IVF_dR_eff_den", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dcharge_eff_den"]             = new TH1F(prefix+"_IVF_dcharge_eff_den", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dall_eff_den"]                = new TH1F(prefix+"_IVF_dall_eff_den", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_mll_dpt_eff_den"]             = new TH1F(prefix+"_IVF_mll_dpt_eff_den", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dR_eff_den"]              = new TH1F(prefix+"_IVF_mll_dR_eff_den", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dcharge_eff_den"]         = new TH1F(prefix+"_IVF_mll_dcharge_eff_den", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dall_eff_den"]            = new TH1F(prefix+"_IVF_mll_dall_eff_den", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_l2pt_dpt_eff_den"]            = new TH1F(prefix+"_IVF_l2pt_dpt_eff_den", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dR_eff_den"]             = new TH1F(prefix+"_IVF_l2pt_dR_eff_den", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dcharge_eff_den"]        = new TH1F(prefix+"_IVF_l2pt_dcharge_eff_den", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dall_eff_den"]           = new TH1F(prefix+"_IVF_l2pt_dall_eff_den", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_dpt_eff_num"]                 = new TH1F(prefix+"_IVF_dpt_eff_num", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dR_eff_num"]                  = new TH1F(prefix+"_IVF_dR_eff_num", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dcharge_eff_num"]             = new TH1F(prefix+"_IVF_dcharge_eff_num", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_dall_eff_num"]                = new TH1F(prefix+"_IVF_dall_eff_num", ";;Events", 1, 0, 1);
+        (*hists)[prefix+"_IVF_mll_dpt_eff_num"]             = new TH1F(prefix+"_IVF_mll_dpt_eff_num", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dR_eff_num"]              = new TH1F(prefix+"_IVF_mll_dR_eff_num", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dcharge_eff_num"]         = new TH1F(prefix+"_IVF_mll_dcharge_eff_num", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_mll_dall_eff_num"]            = new TH1F(prefix+"_IVF_mll_dall_eff_num", ";#it{m}_{ll} [GeV];Events", 20, 0, 120);
+        (*hists)[prefix+"_IVF_l2pt_dpt_eff_num"]            = new TH1F(prefix+"_IVF_l2pt_dpt_eff_num", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dR_eff_num"]             = new TH1F(prefix+"_IVF_l2pt_dR_eff_num", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dcharge_eff_num"]        = new TH1F(prefix+"_IVF_l2pt_dcharge_eff_num", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+        (*hists)[prefix+"_IVF_l2pt_dall_eff_num"]           = new TH1F(prefix+"_IVF_l2pt_dall_eff_num", ";#it{p}_{T}^{l2} [GeV];Events", 20, 0, 50);
+
     }
 }
 
@@ -324,6 +366,7 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
     (*hists)[prefix+"_l1_dz"]->Fill(fabs(_dz[i_leading]), event_weight);
     (*hists)[prefix+"_l2_dz"]->Fill(fabs(_dz[i_subleading]), event_weight);
     (*hists)[prefix+"_l1_reliso"]->Fill(_relIso[i_leading], event_weight);
+    (*hists)[prefix+"_l1_relisoDB"]->Fill(_relIso0p4MuDeltaBeta[i_leading], event_weight);
     (*hists)[prefix+"_l2_reliso"]->Fill(_relIso[i_subleading], event_weight);
     (*hists)[prefix+"_l2_reliso_zoom"]->Fill(_relIso[i_subleading], event_weight);
     (*hists)[prefix+"_l1_ptrel"]->Fill(_ptRel[i_leading], event_weight);
@@ -376,6 +419,13 @@ void full_analyzer::fill_general_histograms(std::map<TString, TH1*>* hists, std:
             (*hists)[prefix+"_e2_EE_HOverE"]->Fill(_lElectronHOverE[i_subleading], event_weight);
             (*hists)[prefix+"_e2_EE_EInvMinusPInv"]->Fill(_lElectronEInvMinusPInv[i_subleading], event_weight);
         }
+    }else{
+        (*hists)[prefix+"_m2_GlobalTrackNormalizedChi2"]->Fill(_lGlobalTrackNormalizedChi2[i_subleading], event_weight);
+        (*hists)[prefix+"_m2_CQChi2Position"]->Fill(_lCQChi2Position[i_subleading], event_weight);
+        (*hists)[prefix+"_m2_CQTrackKink"]->Fill(_lCQTrackKink[i_subleading], event_weight);
+        (*hists)[prefix+"_m2_MuonSegComp"]->Fill(_lMuonSegComp[i_subleading], event_weight);
+        (*hists)[prefix+"_m2_InnerTrackValidFraction"]->Fill(_lInnerTrackValidFraction[i_subleading], event_weight);
+        (*hists)[prefix+"_m2_TrackPtErr"]->Fill(_lMuonTrackPtErr[i_subleading], event_weight);
     }
 
 
@@ -633,6 +683,46 @@ void full_analyzer::fill_IVF_histograms(std::map<TString, TH1*>* hists, std::map
             (*hists)[prefix+"_IVF_ptsum"]->Fill(tracksum.Pt(), event_weight);
             (*hists)[prefix+"_IVF_l1_mass"]->Fill((tracksum+l1vector).M(), event_weight);
 
+            (*hists)[prefix+"_IVF_dpt"]->Fill(IVFmatch_dpt, event_weight);
+            (*hists)[prefix+"_IVF_dpt2"]->Fill(IVFmatch_dpt, event_weight);
+            (*hists)[prefix+"_IVF_deta"]->Fill(IVFmatch_deta, event_weight);
+            (*hists)[prefix+"_IVF_dphi"]->Fill(IVFmatch_dphi, event_weight);
+            (*hists)[prefix+"_IVF_dE"]->Fill(IVFmatch_dE, event_weight);
+            (*hists)[prefix+"_IVF_dcharge"]->Fill(IVFmatch_dcharge, event_weight);
+            (*hists)[prefix+"_IVF_dR"]->Fill(IVFmatch_dR, event_weight);
+
+            (*hists)[prefix+"_IVF_dpt_eff_den"]->Fill(0.5, event_weight);
+            (*hists)[prefix+"_IVF_dR_eff_den"]->Fill(0.5, event_weight);
+            (*hists)[prefix+"_IVF_dcharge_eff_den"]->Fill(0.5, event_weight);
+            (*hists)[prefix+"_IVF_dall_eff_den"]->Fill(0.5, event_weight);
+            (*hists)[prefix+"_IVF_mll_dpt_eff_den"]->Fill(mll, event_weight);
+            (*hists)[prefix+"_IVF_mll_dR_eff_den"]->Fill(mll, event_weight);
+            (*hists)[prefix+"_IVF_mll_dcharge_eff_den"]->Fill(mll, event_weight);
+            (*hists)[prefix+"_IVF_mll_dall_eff_den"]->Fill(mll, event_weight);
+            (*hists)[prefix+"_IVF_l2pt_dpt_eff_den"]->Fill(_lPt[i_subleading], event_weight);
+            (*hists)[prefix+"_IVF_l2pt_dR_eff_den"]->Fill(_lPt[i_subleading], event_weight);
+            (*hists)[prefix+"_IVF_l2pt_dcharge_eff_den"]->Fill(_lPt[i_subleading], event_weight);
+            (*hists)[prefix+"_IVF_l2pt_dall_eff_den"]->Fill(_lPt[i_subleading], event_weight);
+            if(_lIVF_match_extra_dpt){
+                (*hists)[prefix+"_IVF_dpt_eff_num"]->Fill(0.5, event_weight);
+                (*hists)[prefix+"_IVF_mll_dpt_eff_num"]->Fill(mll, event_weight);
+                (*hists)[prefix+"_IVF_l2pt_dpt_eff_num"]->Fill(_lPt[i_subleading], event_weight);
+            }
+            if(_lIVF_match_extra_dR){
+                (*hists)[prefix+"_IVF_dR_eff_num"]->Fill(0.5, event_weight);
+                (*hists)[prefix+"_IVF_mll_dR_eff_num"]->Fill(mll, event_weight);
+                (*hists)[prefix+"_IVF_l2pt_dR_eff_num"]->Fill(_lPt[i_subleading], event_weight);
+            }
+            if(_lIVF_match_extra_dcharge){
+                (*hists)[prefix+"_IVF_dcharge_eff_num"]->Fill(0.5, event_weight);
+                (*hists)[prefix+"_IVF_mll_dcharge_eff_num"]->Fill(mll, event_weight);
+                (*hists)[prefix+"_IVF_l2pt_dcharge_eff_num"]->Fill(_lPt[i_subleading], event_weight);
+            }
+            if(_lIVF_match_extra_dall){
+                (*hists)[prefix+"_IVF_dall_eff_num"]->Fill(0.5, event_weight);
+                (*hists)[prefix+"_IVF_mll_dall_eff_num"]->Fill(mll, event_weight);
+                (*hists)[prefix+"_IVF_l2pt_dall_eff_num"]->Fill(_lPt[i_subleading], event_weight);
+            }
         }
         
         if(!isData){
