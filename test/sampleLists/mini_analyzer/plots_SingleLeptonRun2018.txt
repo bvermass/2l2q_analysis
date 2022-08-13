@@ -1,2 +1,2 @@
-mini_data_2018_unparametrized_LowAndHighMass_gridscan 10
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root Data_2018
+mini_data_2018_highlPt_gridscan 10
+/user/bvermass/public/2l2q_analysis/histograms_highlPt/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2018.root Data_2018

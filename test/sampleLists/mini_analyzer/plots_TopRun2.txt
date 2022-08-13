@@ -1,3 +1,0 @@
-mini_Top_Run2_unparametrized_LowAndHighMass 5
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Top_MiniAODRun2.root Top
-/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_Top_MiniAODRun2.root Pred.
