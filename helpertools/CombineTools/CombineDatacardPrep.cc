@@ -1,5 +1,12 @@
 #include "CombineDatacardPrep.h"
 
+bool makeDirac = false;
+bool makeNTight = true;
+bool makeTight = false;
+bool makeMedium = false;
+bool makeLoose = false;
+bool apply_SF = true;
+bool verbose = false;
 double PFN_mu_LowMass_unc = 0.1, PFN_mu_HighMass_unc = 0.1, PFN_e_LowMass_unc = 0.1, PFN_e_HighMass_unc = 0.1;
 double cutoff_low_content = 0.02;
 
@@ -66,8 +73,9 @@ int main(int argc, char * argv[])
             std::cout << "bkg: " << filename << std::endl;
             files_bkg.push_back(TFile::Open(filename));
             TString filename_ABCDsys = filename;
-            filename_ABCDsys.ReplaceAll("Run2016", "Run2");
-            filename_ABCDsys.ReplaceAll("Run1718", "Run2");
+            filename_ABCDsys.ReplaceAll("Run2016", "MiniAODRun2");
+            filename_ABCDsys.ReplaceAll("Run1718", "MiniAODRun2");
+            filename_ABCDsys.ReplaceAll("SingleLepton", "DYJets");
             files_bkg_ABCDsys = TFile::Open(filename_ABCDsys);
         }
         //else if(filename.Index("_Run201") != -1) files_data.push_back(TFile::Open(filename));
@@ -85,19 +93,23 @@ int main(int argc, char * argv[])
     }
 
 
-
+    TString combine_base_dir = "combine_observed_Tight";
+    if(makeMedium) combine_base_dir = "combine_observed_Medium";
+    else if(makeLoose) combine_base_dir = "combine_observed_Loose";
+    else if(makeNTight) combine_base_dir = "combine_observed_NTight";
+    //combine_base_dir = "combine_observed_unparametrized_LowAndHighMass_noDYveto_Tight_Dirac";
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << "specific directory: " << specific_dir << std::endl;
-    std::string general_pathname = (std::string)make_general_pathname("combine_observed/datacards/", specific_dir + "/");
-    std::string shapeSR_pathname = (std::string)make_general_pathname("combine_observed/Shapefiles/", specific_dir + "/");
-    std::string quadB_pathname   = (std::string)make_general_pathname("combine_observed/quadB_events/", specific_dir + "/");
-    std::string quadC_pathname   = (std::string)make_general_pathname("combine_observed/quadC_events/", specific_dir + "/");
-    std::string quadD_pathname   = (std::string)make_general_pathname("combine_observed/quadD_events/", specific_dir + "/");
-    std::string sigcontam_pathname   = (std::string)make_general_pathname("combine_observed/Signal_Contamination/", specific_dir + "/");
-    std::string sysEffect_pathname   = (std::string)make_general_pathname("combine_observed/SysEffects/", specific_dir + "/");
-    std::string scalefactor_pathname = (std::string)make_general_pathname("combine_observed/ScaleFactor/", specific_dir + "/");
+    std::string general_pathname = (std::string)make_general_pathname(combine_base_dir + "/datacards/", specific_dir + "/");
+    std::string shapeSR_pathname = (std::string)make_general_pathname(combine_base_dir + "/Shapefiles/", specific_dir + "/");
+    std::string quadB_pathname   = (std::string)make_general_pathname(combine_base_dir + "/quadB_events/", specific_dir + "/");
+    std::string quadC_pathname   = (std::string)make_general_pathname(combine_base_dir + "/quadC_events/", specific_dir + "/");
+    std::string quadD_pathname   = (std::string)make_general_pathname(combine_base_dir + "/quadD_events/", specific_dir + "/");
+    std::string sigcontam_pathname   = (std::string)make_general_pathname(combine_base_dir + "/Signal_Contamination/", specific_dir + "/");
+    std::string sysEffect_pathname   = (std::string)make_general_pathname(combine_base_dir + "/SysEffects/", specific_dir + "/");
+    std::string scalefactor_pathname = (std::string)make_general_pathname(combine_base_dir + "/ScaleFactor/", specific_dir + "/");
     //std::string general_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/datacards/", specific_dir + "/");
     //std::string shapeSR_pathname = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/Shapefiles/", specific_dir + "/");
     //std::string quadB_pathname   = (std::string)make_general_pathname("combine_unparametrized_LowAndHighMass/quadB_events/", specific_dir + "/");
@@ -127,6 +139,8 @@ int main(int argc, char * argv[])
         mass_bkg = "_M-10_";
     }
 
+    bool Kappa_factor_applied_2l = false, Kappa_factor_applied_mm = false;
+
     TIter next(files_signal[0]->GetListOfKeys());
     TKey* key;
     while((key = (TKey*)next())){
@@ -138,8 +152,13 @@ int main(int argc, char * argv[])
             TH1F* sample_hist_ref = (TH1F*)key->ReadObj();
             TString histname = sample_hist_ref->GetName();
 
+            if(makeLoose  and !histname.Contains("cutmlSV_quadA_")) continue;
+            if(makeMedium and !histname.Contains("cutMediummlSV_quadA_")) continue;
+            if(makeTight  and !histname.Contains("cutTightmlSV_quadA_")) continue;
+            if(makeNTight and !histname.Contains("cutNTightmlSV_quadA_")) continue;
 
-            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA_") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw") and !histname.Contains("_OS") and !histname.Contains("_SS")){
+            //if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and histname.Contains("cutTightmlSV_quadA_") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw") and ((!makeDirac and !histname.Contains("_OS")) or (makeDirac and histname.Contains("_OS"))) and !histname.Contains("_SS")){
+            if(histname.Contains(flavor) and histname.Contains(mass_bkg) and histname.Contains("Shape_SR") and !histname.Contains("ABCDstat") and !histname.Contains("_sys") and !histname.Contains("_unw") and ((!makeDirac and !histname.Contains("_OS")) or (makeDirac and histname.Contains("_OS"))) and !histname.Contains("_SS")){
                 std::cout << std::endl << histname << std::endl;
                 //if(histname.Index("_afterPFN") != -1 and histname.Index("_PV-SVdxy") != -1){
 
@@ -156,12 +175,35 @@ int main(int argc, char * argv[])
                 double obsYield = hist_data->Integral();
 
                 // get background histograms
-                TString histname_bkg = histname;
+                TString histname_bkg = histname_data;
                 histname_bkg.ReplaceAll("quadA", "BtoAwithCD");
                 std::vector<TH1F*> hists_bkg;
                 std::vector<double> bkgYield;
                 for(unsigned i = 0; i < files_bkg.size(); i++){
                     hists_bkg.push_back((TH1F*)files_bkg[i]->Get(histname_bkg));
+
+                    if(apply_SF){
+                        if(verbose){
+                            std::cout << "before: " << std::endl;
+                            for(int i = 1; i < hists_bkg.back()->GetNbinsX(); i++){
+                                std::cout << "bin " << i << ": " << hists_bkg.back()->GetBinContent(i) << std::endl;
+                            }
+                        }
+                        //if(histname_bkg.Contains("_2l_M-5") or histname_bkg.Contains("_mm_M-5")) apply_DY_KappaFactor(hists_bkg.back());
+                        if(histname_bkg.Contains("_2l_M-5") and !Kappa_factor_applied_2l){
+                            apply_DY_KappaFactor(hists_bkg.back());
+                            Kappa_factor_applied_2l = true;
+                        }else if(histname_bkg.Contains("_mm_M-5") and !Kappa_factor_applied_mm){
+                            apply_DY_KappaFactor(hists_bkg.back());
+                            Kappa_factor_applied_mm = true;
+                        }
+                        if(verbose){
+                            std::cout << "after: " << std::endl;
+                            for(int i = 1; i < hists_bkg.back()->GetNbinsX(); i++){
+                                std::cout << "bin " << i << ": " << hists_bkg.back()->GetBinContent(i) << std::endl;
+                            }
+                        }
+                    }
                     bkgYield.push_back(hists_bkg[i]->Integral());
                 }
                 //!!!!! temporary fix !!!!! remove !!!!!
@@ -186,6 +228,12 @@ int main(int argc, char * argv[])
                     systDist.push_back("shapeN");
                     systUnc.push_back({0,1});
                     systNames.push_back("ABCDsys"+year+"_mu_far");
+                    systDist.push_back("shapeN");
+                    systUnc.push_back({0,1});
+                }
+
+                if(apply_SF and (flavor == "_mm_" or flavor == "_2l_")){
+                    systNames.push_back("SF_sys");
                     systDist.push_back("shapeN");
                     systUnc.push_back({0,1});
                 }
@@ -242,19 +290,15 @@ int main(int argc, char * argv[])
                         TString histname_down = histname;
 
                         if(systNames[i].find("JEC") != std::string::npos){
-                            std::cout << "systnames: " << systNames[i] << std::endl;
-                            std::cout << "histname: " << histname_up << std::endl;
                             hists_signal_sys.push_back((TH1F*)files_signal_JECUp->Get(histname_up));
-                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            std::cout << "systnames: " << systNames[i] << ", histname: " << histname_up << ", address: " << hists_signal_sys.back() << std::endl;
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
                             hists_signal_sys.push_back((TH1F*)files_signal_JECDown->Get(histname_down));
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
                             //set_UpAndDown_correctly(hist_signal, hists_signal_sys[hists_signal_sys.size()-2], hists_signal_sys.back());
                         }else if(systNames[i].find("JER") != std::string::npos){
-                            std::cout << "systnames: " << systNames[i] << std::endl;
-                            std::cout << "histname: " << histname_up << std::endl;
                             hists_signal_sys.push_back((TH1F*)files_signal_JERUp->Get(histname_up));
-                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            std::cout << "systnames: " << systNames[i] << ", histname: " << histname_up << ", address: " << hists_signal_sys.back() << std::endl;
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
                             hists_signal_sys.push_back((TH1F*)files_signal_JERDown->Get(histname_down));
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
@@ -275,6 +319,7 @@ int main(int argc, char * argv[])
                                 hist_PFNsys_down->SetBinContent(i, hist_signal->GetBinContent(i) * (1 - PFN_unc));
                             }
                             hists_signal_sys.push_back(hist_PFNsys_up);
+                            std::cout << "systnames: " << systNames[i] << ", histname: " << histname_up << ", address: " << hists_signal_sys.back() << std::endl;
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
                             hists_signal_sys.push_back(hist_PFNsys_down);
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
@@ -284,10 +329,8 @@ int main(int argc, char * argv[])
                             if(systNames[i].find("PileUp") != std::string::npos){
                                 systNames[i].replace(systNames[i].find("PileUp_"), systNames[i].find("sys"), "PileUp_"+year);
                             }
-                            std::cout << "systnames: " << systNames[i] << std::endl;
-                            std::cout << "histname: " << histname_up << std::endl;
                             hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_up));
-                            std::cout << "address: " << hists_signal_sys.back() << std::endl;
+                            std::cout << "systnames: " << systNames[i] << ", histname: " << histname_up << ", address: " << hists_signal_sys.back() << std::endl;
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Up");
                             hists_signal_sys.push_back((TH1F*)files_signal[0]->Get(histname_down));
                             histnames_signal_sys.push_back(legends_signal[0] + "_" + systNames[i] + "Down");
@@ -295,16 +338,19 @@ int main(int argc, char * argv[])
                     }
                     if(systUnc[i][1] != 0){//data-driven prediction systs
                         if(systNames[i].find("ABCDsys") != std::string::npos){
-                            std::cout << "systnames: " << systNames[i] << std::endl;
 
                             //Create ABCDsys histograms based on variation of SR histograms with relative stat unc from CR2 histograms
                             TH1F* hist_ABCDsys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
                             TH1F* hist_ABCDsys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
-                            std::vector<bool> correlation_mask = get_correlation_mask(systNames[i], histname_bkg, hist_ABCDsys_up->GetNbinsX());
+                            std::vector<bool> correlation_mask;
+                            if(makeDirac) correlation_mask = get_correlation_mask_dirac(systNames[i], histname_bkg, hist_ABCDsys_up->GetNbinsX());
+                            else correlation_mask = get_correlation_mask(systNames[i], histname_bkg, hist_ABCDsys_up->GetNbinsX());
+
                             double Error;
                             for(int i_bin = 1; i_bin <= hist_ABCDsys_up->GetNbinsX(); i_bin++){
                                 if(!correlation_mask[i_bin-1]) continue;
                                 Error = get_ABCD_error(i_bin, histname_bkg);
+                                if(makeDirac) Error = get_ABCD_error_dirac();
                                 hist_ABCDsys_up->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 + Error));
                                 hist_ABCDsys_down->SetBinContent(i_bin, hists_bkg[0]->GetBinContent(i_bin)*(1 - Error));
                                 //if(hist_CR2_pred->GetBinContent(i_bin) == 0 or hist_CR2_pred->GetBinErrorUp(i_bin) == 0){
@@ -320,7 +366,32 @@ int main(int argc, char * argv[])
 
                             tmp_bkg_sys.push_back(hist_ABCDsys_up);
                             tmp_bkg_sys.push_back(hist_ABCDsys_down);
-                            std::cout << "address: " << tmp_bkg_sys.back() << std::endl;
+                            std::cout << "systnames: " << systNames[i] << ", address: " << tmp_bkg_sys.back() << std::endl;
+                            tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Up");
+                            tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Down");
+                        //}else{
+                            //TString histname_up_pred = histname_data;
+                            //histname_up_pred.ReplaceAll("cutTightmlSV", "cutTightCR2NoJetVetomlSV");
+                            //histname_up.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Up"); //used to be the method from CR1
+                            ////histname_down.ReplaceAll("Shape_SR", "Shape_SR_" + systNames[i] + "Down");//used to be the method from CR1
+
+                            ////Get CR2NojetVeto prediction histograms from full run 2 data files
+                            //TH1F* hist_CR2_pred = (TH1F*)files_bkg_ABCDsys->Get(histname_up_pred);
+                        }
+                        if(systNames[i].find("SF_sys") != std::string::npos){
+
+                            TH1F* hist_SF_sys_up   = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Up").c_str());
+                            TH1F* hist_SF_sys_down = (TH1F*)hists_bkg[0]->Clone((legends_bkg[0] + "_" + systNames[i] + "Down").c_str());
+
+                            std::vector<double> SF_unc = get_DY_KappaFactor_unc(histname_bkg);
+
+                            for(int i = 0; i < SF_unc.size(); i++){
+                                hist_SF_sys_up->SetBinContent(i+1, hists_bkg[0]->GetBinContent(i+1)*(1+SF_unc[i]));
+                                hist_SF_sys_down->SetBinContent(i+1, hists_bkg[0]->GetBinContent(i+1)*(1-SF_unc[i]));
+                            }
+                            tmp_bkg_sys.push_back(hist_SF_sys_up);
+                            tmp_bkg_sys.push_back(hist_SF_sys_down);
+                            std::cout << "systnames: " << systNames[i] << ", address: " << tmp_bkg_sys.back() << std::endl;
                             tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Up");
                             tmpnames_bkg_sys.push_back(legends_bkg[0] + "_" + systNames[i] + "Down");
                         }
@@ -356,9 +427,9 @@ int main(int argc, char * argv[])
                 TString histname_data_quadB = histname_quadB;
                 TString histname_data_quadC = histname_quadC;
                 TString histname_data_quadD = histname_quadD;
-                histname_data_quadB.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
-                histname_data_quadC.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
-                histname_data_quadD.ReplaceAll((TString)histname_data(histname_data.Index("_V2-"), histname_data.Index("_cut") - histname_data.Index("_V2-")), "_V2-2e-06");
+                histname_data_quadB.ReplaceAll((TString)histname(histname.Index("_V2-"), histname.Index("_cut") - histname.Index("_V2-")), "_V2-2e-06");
+                histname_data_quadC.ReplaceAll((TString)histname(histname.Index("_V2-"), histname.Index("_cut") - histname.Index("_V2-")), "_V2-2e-06");
+                histname_data_quadD.ReplaceAll((TString)histname(histname.Index("_V2-"), histname.Index("_cut") - histname.Index("_V2-")), "_V2-2e-06");
                 TH1F* hist_data_quadB = (TH1F*) files_data[0]->Get(histname_data_quadB);
                 TH1F* hist_data_quadC = (TH1F*) files_data[0]->Get(histname_data_quadC);
                 TH1F* hist_data_quadD = (TH1F*) files_data[0]->Get(histname_data_quadD);
@@ -541,6 +612,44 @@ std::vector<bool> get_correlation_mask(TString sysname, TString histname, int nb
     }
 }
 
+std::vector<bool> get_correlation_mask_dirac(TString sysname, TString histname, int nbins)
+{
+    if(histname.Contains("_2l_")){//2l needs to split unc between displaced electron and muon final states.
+        if(sysname.Contains("_e")){
+            if(sysname.Contains("close")){
+                return {false, false, false, false, false, false,
+                        false, false, false, false, false, false,
+                        true, true, false, true, true, false,
+                        true, true, false, true, true, false};
+            }else if(sysname.Contains("far")){
+                return {false, false, false, false, false, false,
+                        false, false, false, false, false, false,
+                        false, false, true, false, false, true,
+                        false, false, true, false, false, true};
+
+            }
+        }else if(sysname.Contains("_mu")){
+            if(sysname.Contains("close")){
+                return {true, true, false, true, true, false,
+                        true, true, false, true, true, false,
+                        false, false, false, false, false, false,
+                        false, false, false, false, false, false};
+            }else if(sysname.Contains("far")){
+                return {false, false, true, false, false, true,
+                        false, false, true, false, false, true,
+                        false, false, false, false, false, false,
+                        false, false, false, false, false, false};
+            }
+        }
+    }else{//ee and mm cases
+        if(sysname.Contains("close")){
+            return {true, true, false, true, true, false};
+        }else if(sysname.Contains("far")){
+            return {false, false, true, false, false, true};
+        }
+    }
+}
+
 double get_ABCD_error(int i_bin, TString histname)
 {
     if(histname.Contains("_2l_")){
@@ -559,6 +668,11 @@ double get_ABCD_error(int i_bin, TString histname)
         std::cout << "violation: ABCD error not correctly recognized" << std::endl;
         return 0.3;//should never happen
     }
+}
+
+double get_ABCD_error_dirac()
+{
+    return 0.3;
 }
 
 void checkfornans(std::vector<std::string>& sigName_sys, std::vector<std::vector<std::string>>& bkgNames_sys, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys)

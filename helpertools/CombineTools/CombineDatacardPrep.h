@@ -34,7 +34,9 @@ void printDataCard(const std::string& cardName, const double obsYield, const dou
 void printABCDDataCard(const std::string& cardName, const double obsYieldA, const double obsYieldB, const double obsYieldC, const double obsYieldD, const double sigYieldA, const double sigYieldB, const double sigYieldC, const double sigYieldD, const std::string& sigName, const double* bkgYieldA, const double* bkgYieldB, const double* bkgYieldC, const double* bkgYieldD, const unsigned nBkg, const std::string* bkgNames, const std::vector<std::vector<double> >& systUnc, const unsigned nSyst, const std::string* systNames, const std::string* systDist, const bool shapeCard, const std::string& shapeFileNameA, const std::string& shapeFileNameB, const std::string& shapeFileNameC, const std::string& shapeFileNameD, const bool autoMCStats );
 
 std::vector<bool> get_correlation_mask(TString sysname, TString histname, int nbins);
+std::vector<bool> get_correlation_mask_dirac(TString sysname, TString histname, int nbins);
 double get_ABCD_error(int i_bin, TString histname);
+double get_ABCD_error_dirac();
 void set_UpAndDown_correctly(TH1F* nominal, TH1F* up, TH1F* down);
 void plotSysEffects(TCanvas* c, TPad* pad, TString shapeSR_filename, TH1F* hist_signal, std::vector<TH1F*> hist_signal_sys, const std::vector<std::string>& sigName_sys);
 void checkfornans(std::vector<std::string>& sigName_sys, std::vector<std::vector<std::string>>& bkgNames_sys, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys);
