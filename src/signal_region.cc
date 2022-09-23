@@ -226,6 +226,7 @@ void full_analyzer::signal_regions(){
 
      _l1l2                      = _l1 &&
                                   i_subleading != -1 &&
+                                  _lPt[i_subleading] > 7 &&
                                   ((_lFlavor[i_subleading] == 0 and _lPt[i_subleading] + 5 < _lPt[i_leading]) || (_lFlavor[i_subleading] == 1 and _lPt[i_subleading] < _lPt[i_leading]));
                                   //fabs(_dxy[i_subleading]) > 0.02;
 
@@ -369,7 +370,7 @@ bool full_analyzer::leadptcut(int i_lep){
     double ptcutval;
     if(_lFlavor[i_lep]      == 0 and _is2016) ptcutval = 30; //electron
     else if(_lFlavor[i_lep] == 0) ptcutval = 34;
-    else if(_lFlavor[i_lep] == 1) ptcutval = 28; //muon
+    else if(_lFlavor[i_lep] == 1) ptcutval = 30; //muon
     
     if(_lPt[i_lep] >= ptcutval) return true;
     else return false;

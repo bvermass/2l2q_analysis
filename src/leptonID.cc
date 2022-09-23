@@ -14,6 +14,8 @@ bool full_analyzer::IsPromptMuonID(const unsigned i)
     if(fabs(_dxy[i]) > 0.01)                       return false;
     if(fabs(_dz[i]) > 0.1)                         return false;
     if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
+    //if(_relIso0p4MuDeltaBeta[i] < 0.1)             return false;
+    //if(_relIso0p4MuDeltaBeta[i] >= 0.5)             return false;
     if(!_lPOGTight[i])                              return false;
 
     return true;
@@ -27,6 +29,8 @@ bool full_analyzer::IsMediumPromptMuonID(const unsigned i)
     if(fabs(_dxy[i]) >= 0.01)                       return false;
     if(fabs(_dz[i]) >= 0.1)                         return false;
     if(_relIso0p4MuDeltaBeta[i] >= 0.1)             return false;
+    //if(_relIso0p4MuDeltaBeta[i] < 0.1)             return false;
+    //if(_relIso0p4MuDeltaBeta[i] >= 0.5)             return false;
     if(!_lPOGMedium[i])                             return false;
 
     return true;
@@ -40,6 +44,8 @@ bool full_analyzer::IsPromptElectronID(const unsigned i)
     if(fabs(_dxy[i]) >= 0.02)                       return false;
     if(fabs(_dz[i]) >= 0.04)                        return false;
     if(_relIso[i] >= 0.1)                           return false;
+    //if(_relIso[i] < 0.1)                           return false;
+    //if(_relIso[i] >= 0.5)                           return false;
     if(!_lPOGTight[i])                              return false;
 
     return true;
@@ -53,6 +59,8 @@ bool full_analyzer::IsMvaPromptElectronID(const unsigned i)
     if(fabs(_dxy[i]) >= 0.02)                       return false;
     if(fabs(_dz[i]) >= 0.04)                        return false;
     if(_relIso[i] >= 0.1)                           return false;
+    //if(_relIso[i] < 0.1)                           return false;
+    //if(_relIso[i] >= 0.5)                           return false;
     //if(!_lPOGTight[i])                              return false;
     if(!passMvaFall17NoIso_WP90(i))                 return false;
 

@@ -66,12 +66,16 @@ TString make_outputfilename(TString filename, TString base_directory, TString ba
     return outputfilename;
 }
 
-TString get_mini_analyzer_outputfilename(TString input)
+TString get_mini_analyzer_outputfilename(TString input, bool dogridscan)
 {
     TString outputfilename = input;
     outputfilename.ReplaceAll("trees", "histograms");
     outputfilename.ReplaceAll("BkgEstimator/final/full_analyzer/", "mini_analyzer/");
     outputfilename.ReplaceAll("BkgEstimator_", "hists_mini_analyzer_");
+    if(dogridscan) outputfilename.ReplaceAll("highlPt","highlPt_gridscan");
+    //outputfilename.ReplaceAll("unparametrized_LowAndHighMass","unparametrized_LowAndHighMass_noDYveto");
+    //outputfilename.ReplaceAll("highlPt","highlPt_noDYveto");
+    //outputfilename.ReplaceAll("unparametrized_LowAndHighMass","unparametrized_LowAndHighMass_PFN0p6");
     gSystem->Exec("mkdir -p " + outputfilename(0,outputfilename.Index("hists_mini_analyzer")));
     return outputfilename;
 }
@@ -187,9 +191,9 @@ double get_signedLog(double var)
     return (var >= 0)? log(var + 1) : - log(fabs(var - 1));
 }
 
-double get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct)
+double get_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct, bool MajToDirac)
 {
-    return get_xsec_reweighting_weight(V2_old, V2_new)*get_ctprofile_reweighting_weight(V2_old, V2_new, ctau_old, ct);
+    return get_xsec_reweighting_weight(V2_old, V2_new)*get_ctprofile_reweighting_weight(V2_old, V2_new, ctau_old, ct, MajToDirac);
 }
 
 double get_xsec_reweighting_weight(double V2_old, double V2_new)
@@ -197,9 +201,9 @@ double get_xsec_reweighting_weight(double V2_old, double V2_new)
     return V2_new/V2_old;
 }
 
-double get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct)
+double get_ctprofile_reweighting_weight(double V2_old, double V2_new, double ctau_old, double ct, bool MajToDirac)
 {
-    double ctau_new = ctau_old * V2_old / V2_new;
+    double ctau_new = ctau_old * V2_old / V2_new * (MajToDirac? 2 : 1);
     return (ctau_old/ctau_new)*exp((1./ctau_old - 1./ctau_new)*ct);
 }
 

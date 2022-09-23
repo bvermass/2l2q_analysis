@@ -20,6 +20,10 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 
+    bool makeMajToDirac = true;
+    TString tree_identifier = "_highlPt";
+    if(makeMajToDirac) tree_identifier += "_Dirac";
+
     std::vector<TString> filenames;
     filenames.push_back(filename);
 
@@ -60,7 +64,7 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
     if(isSignal){
         filePutContents("/user/bvermass/public/2l2q_analysis/log/MV2_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->V2) + "\n", true);
         filePutContents("/user/bvermass/public/2l2q_analysis/log/Mctau_points_" + (std::string)HNL_param->flavor + "_" + (_is2017? "2017" : (_is2018? "2018" : "2016")) + ".txt", (std::string)get_MV2name(HNL_param->mass, HNL_param->ctau) + "\n", true);
-        cross_section = HNL_param->cross_section;
+        if(HNL_param->merged) cross_section = HNL_param->cross_section;
     }
 
     // Determine V2s and ctaus on which jettagger needs to be evaluated (1 mass for signal, all masses for background or data)
@@ -95,6 +99,9 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         }
     }else {
         hCounterValue = 1.;
+        for(unsigned i = 0; i < inputs.size(); i++){
+            weight_normalization.push_back(1.);
+        }
     }
     //TH1F* hCounter = (TH1F*) input->Get("blackJackAndHookersGlobal/hCounter");
     //if(!hCounter) hCounter = (TH1F*) input->Get("blackJackAndHookers/hCounter");
@@ -208,11 +215,11 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     // Fill a small tree with only relevant variables that might be useful for background estimation. Fill it when it passes an inclusive selection that encompasses both signal region and orthogonal regions from where to predict the background
     TString BkgEstimator_fileoption = "recreate";
-    TString BkgEstimator_filename         = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator", partition, partitionjobnumber, true);
-    TString BkgEstimator_filename_JECDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECDown", partition, partitionjobnumber, true);
-    TString BkgEstimator_filename_JECUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JECUp", partition, partitionjobnumber, true);
-    TString BkgEstimator_filename_JERDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERDown", partition, partitionjobnumber, true);
-    TString BkgEstimator_filename_JERUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/", "BkgEstimator_JERUp", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename         = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees"+tree_identifier+"/BkgEstimator/", "BkgEstimator", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JECDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees"+tree_identifier+"/BkgEstimator/", "BkgEstimator_JECDown", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JECUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees"+tree_identifier+"/BkgEstimator/", "BkgEstimator_JECUp", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JERDown = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees"+tree_identifier+"/BkgEstimator/", "BkgEstimator_JERDown", partition, partitionjobnumber, true);
+    TString BkgEstimator_filename_JERUp   = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/trees"+tree_identifier+"/BkgEstimator/", "BkgEstimator_JERUp", partition, partitionjobnumber, true);
     BkgEstimator bkgestimator(BkgEstimator_filename, BkgEstimator_fileoption, hCounterValue);
     BkgEstimator bkgestimator_JECDown(BkgEstimator_filename_JECDown, BkgEstimator_fileoption, hCounterValue);
     BkgEstimator bkgestimator_JECUp(BkgEstimator_filename_JECUp, BkgEstimator_fileoption, hCounterValue);
@@ -278,8 +285,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
         for(auto& MassMap : evaluating_V2s){
             for(double V2 : MassMap.second){
                 if(isSignal){
-                    if(HNL_param->merged) reweighting_weights[V2] = HNL_param->get_reweighting_weight_merged(V2, _ctauHN);
-                    else reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN);
+                    if(HNL_param->merged) reweighting_weights[V2] = HNL_param->get_reweighting_weight_merged(V2, _ctauHN, makeMajToDirac);
+                    else reweighting_weights[V2] = get_reweighting_weight(HNL_param->V2, V2, HNL_param->ctau, _ctauHN, makeMajToDirac);
                 }else {
                     reweighting_weights[V2] = 1.;
                 }
@@ -428,7 +435,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 
     if(makeHistograms){
         //TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass_PFNv9_3dIPSigPixHits/", "hists_full_analyzer", partition, partitionjobnumber, true);
-        TString outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/", "hists_full_analyzer", partition, partitionjobnumber, true);
+        TString outputfilename;
+        outputfilename = make_outputfilename(filename, "/user/bvermass/public/2l2q_analysis/histograms" + tree_identifier + "/", "hists_full_analyzer", partition, partitionjobnumber, true);
         cout << "output to: " << outputfilename << endl;
         TFile *output = new TFile(outputfilename, "recreate");
 

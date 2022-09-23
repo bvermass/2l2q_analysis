@@ -36,7 +36,7 @@ class HNL_parameters
         //Functions
         HNL_parameters(TString parameters_filename, TString HNL_sample_filename);//Constructor meant to read existing file and access events
         void Set_Merging_parameters();
-        double get_reweighting_weight_merged(double V2_new, double ct);
+        double get_reweighting_weight_merged(double V2_new, double ct, bool MajToDirac = false);
         bool merged = false;
 };
 #endif

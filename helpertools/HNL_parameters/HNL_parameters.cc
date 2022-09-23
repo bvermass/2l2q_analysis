@@ -128,11 +128,11 @@ void HNL_parameters::Set_Merging_parameters()
     }
 }
 
-double HNL_parameters::get_reweighting_weight_merged(double V2_new, double ct)
+double HNL_parameters::get_reweighting_weight_merged(double V2_new, double ct, bool MajToDirac)
 {
     //for all initial samples we need: Ntot_i, ctau_i, V2_i, xsec_i
     if(ctau_vec.size() < 1) std::cout << "vectors are empty!" << std::endl;
-    double ctau_new = ctau_vec[0] * V2_vec[0] / V2_new;
+    double ctau_new = ctau_vec[0] * V2_vec[0] / V2_new * (MajToDirac? 2. : 1.);
     double xsec_new = xsec_vec[0] * V2_new / V2_vec[0];
     double exp_sum = 0.;
     for(unsigned i = 0; i < Ntot_vec.size(); i++){
