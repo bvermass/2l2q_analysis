@@ -1,0 +1,4 @@
+QCD_comparison_2018 5
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_QCD_EMEnriched_MiniAOD2018.root                                                  QCDxEMEnriched
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_QCD_MuEnriched_MiniAOD2018.root                                                  QCDxMuEnriched
+/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/final/full_analyzer/hists_full_analyzer_QCD_bcToE_MiniAOD2018.root                                                       QCDxbcToE
