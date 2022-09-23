@@ -3,7 +3,7 @@
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
-    bool normalize_to_unity = true;
+    bool normalize_to_unity = false;
     // set general plot style
     setTDRStyle();
     auto style = gROOT->GetStyle("tdrStyle");
@@ -58,7 +58,7 @@ int main(int argc, char * argv[])
 
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
-    TString general_pathname = make_general_pathname("plots/multihists/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots_new/multihists/", specific_dir + "/");
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -104,6 +104,7 @@ int main(int argc, char * argv[])
                 TString histname   = sample_hist_ref->GetName();
 
                 if(histname.Index("_Bool_") != -1) continue; // don't plot the Bool histograms
+                if(histname.Contains("_sys")) continue;
                 if(sample_hist_ref->GetMaximum() == 0) continue;
                 if(!check_identifiers(histname, identifiers)) continue;
                 std::cout << histname << std::endl;
@@ -124,14 +125,14 @@ int main(int argc, char * argv[])
                                 histname_to_use.ReplaceAll("_Training_", "_TrainingHighPFN_M-10_");
                                 plotname_addition = "_vsHighMassPFN";
                             }
-                        }else if(histname.Contains("cutoutsidemlSV_CR2Jets") and legends[i].Contains("mlSV = [50,85]")){
-                            histname_to_use.ReplaceAll("cutoutsidemlSV_CR2Jets", "cutinsidemlSV_CR2Jets");
+                        }else if(histname.Contains("cutoutsidemlSV") and legends[i].Contains("mlSV = [50,85]")){
+                            histname_to_use.ReplaceAll("cutoutsidemlSV", "cutinsidemlSV");
                             plotname_addition = "_VSinside";
                         }
                         TH1* hist = (TH1*)files[i]->Get(histname_to_use);
                         if(hist and hist->GetMaximum() > 0){
                             hists->Add(hist);
-                            if(legends[i].Contains("Pred")){
+                            if(legends[i].Contains("Pred") or legends[i].Contains("Data")){
                                 hist->SetMarkerColor(kBlack);
                                 hist->SetLineColor(kBlack);
                             }else{
@@ -301,6 +302,94 @@ int main(int argc, char * argv[])
                     c->Print(pathname_log + plotname + ".png");
 
                     delete hists_AoverC;
+                }
+                
+                //figures of C_sig / C_bkg that determine the sensitivity of region C signal 
+                if(isData and histname.Contains("_quadC_")){
+                    pad->Clear();
+                    pad->SetLogy(0);
+                    legend.Clear();
+
+                    //TMultiGraph* multigraph = new TMultiGraph();
+                    THStack* multigraph = new THStack("CsigOverCbkg", (TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";C_{sig}/C_{bkg}");
+                    //multigraph->SetTitle((TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";C_{sig}/C_{bkg}");
+                    for(int i = 0; i < files.size(); i++){
+                        if(i == i_Data) continue;
+                        if(files[i]->GetListOfKeys()->Contains(histname)){
+                            //TGraphAsymmErrors* graph = new TGraphAsymmErrors((TH1F*) files[i]->Get(histname), (TH1F*) files[i_Data]->Get(histname));
+                            TH1F* graph = (TH1F*) files[i]->Get(histname);
+                            TH1F* graphden = (TH1F*) files[i_Data]->Get(histname);
+                            graph->Divide(graphden);
+                            multigraph->Add(graph);
+                            graph->SetMarkerColor(colors[i]);
+                            graph->SetLineColor(colors[i]);
+
+                            TString legend_tmp = legends[i];
+                            legend_tmp.ReplaceAll("z",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                            legend_tmp.ReplaceAll("-03", "^{-3}");
+                            legend_tmp.ReplaceAll("-04", "^{-4}");
+                            legend_tmp.ReplaceAll("-05", "^{-5}");
+                            legend_tmp.ReplaceAll("-06", "^{-6}");
+                            legend_tmp.ReplaceAll("-07", "^{-7}");
+                            legend.AddEntry(graph, legend_tmp, "pl");
+                        }
+                    }
+                    multigraph->Draw("hist E nostack");
+                    multigraph->SetMinimum(1e-4);
+                    pad->SetLogy(1);
+                    multigraph->SetMaximum(10*multigraph->GetMaximum("nostack"));
+
+                    legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
+                    CMSandLumi->Draw();
+
+                    pad->Modified();
+                    c->Print(pathname_log + histname.ReplaceAll("quadC","CsigOverCbkg") + ".png");
+                }
+
+                if(histname.Contains("_quadA_")){
+                    pad->Clear();
+                    pad->SetLogy(0);
+                    legend.Clear();
+
+                    TString histname_BtoAwithCD = histname;
+                    histname_BtoAwithCD.ReplaceAll("_quadA_", "_BtoAwithCD_");
+
+                    THStack* stack = new THStack("ADoverBC", (TString)";" + sample_hist_ref->GetXaxis()->GetTitle() + ";A*D/B*C");
+                    for(int i = 0; i < files.size(); i++){
+                        if(files[i]->GetListOfKeys()->Contains(histname)){
+                            TH1F* h_quadA = (TH1F*)files[i]->Get(histname);
+                            TH1F* h_BtoAwithCD = (TH1F*)files[i]->Get(histname_BtoAwithCD);
+
+                            h_quadA->Divide(h_BtoAwithCD);
+                            stack->Add(h_quadA);
+                            h_quadA->SetMarkerColor(colors[i]);
+                            h_quadA->SetLineColor(colors[i]);
+                            
+                            TString legend_tmp = legends[i];
+                            legend_tmp.ReplaceAll("z",histname(histname.Index("V2-")+3, histname.Index("_cut") - histname.Index("V2-") - 3));
+                            legend_tmp.ReplaceAll("-03", "^{-3}");
+                            legend_tmp.ReplaceAll("-04", "^{-4}");
+                            legend_tmp.ReplaceAll("-05", "^{-5}");
+                            legend_tmp.ReplaceAll("-06", "^{-6}");
+                            legend_tmp.ReplaceAll("-07", "^{-7}");
+                            legend.AddEntry(h_quadA, legend_tmp, "pl");
+                        }
+                    }
+
+                    stack->Draw("E nostack");
+                    stack->SetMinimum(0.);
+                    stack->SetMaximum(std::min(6., 1.25*stack->GetMaximum("nostack")));
+
+                    draw_line_at_1(stack->GetXaxis()->GetXmin(), stack->GetXaxis()->GetXmax());
+
+                    legend.Draw("same");
+                    CMSandLumi->add_flavor(histname);
+                    CMSandLumi->Draw();
+                    if(histname.Contains("Shape_SR")) shapeSR_text->Draw(histname);
+
+                    pad->Modified();
+                    c->Print(pathname_lin + histname.ReplaceAll("_quadA_", "_ADoverBC_") + ".png");
                 }
             }
             if(cl.find("TH2") != std::string::npos){

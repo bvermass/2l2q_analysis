@@ -35,6 +35,7 @@ class RatioPlot{
         void SetLogx(int xlog);
         void SetBinNames(std::vector<TString> BinNames);
         void SetCentralRatio(TH1F* num, TH1F* den, TString xaxistitle, TString yaxistitle);
+        void SetCentralRatio(TGraphAsymmErrors* num, TH1F* den, TString xaxistitle, TString yaxistitle);
         void SetConstantFit();
         std::vector<double> GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central);
         void SetSystUncs_up_and_down(TString histname, std::vector<TFile*> files_bkg, std::vector<TString> systunc_names, std::vector<TString> legends, TH1F* MC_central);
@@ -42,9 +43,12 @@ class RatioPlot{
         void ClearSystUncs();
         void AddStatVariation(TH1* hist, TString statname);
         void Add_ABCD_SystVariation(TString histname, TString legendname, TH1F* MC_central);
+        void Add_DYSF_SystVariation(TString histname, TString legendname, TH1F* MC_central);
         void Add_CR2_SystVariation(TFile* DataRun2File, TString histname, TString legendname, TH1F* MC_central);
+        void Add_Full_Error(TH1F* h);
         void draw_ABCD_CRline(TString histname, double xmax, double xmin);
         void dothething();
+        void Write_Central_Ratio(const std::string& name);
     private:
         TPad* Pad;
         TH1F* Central_Ratio;

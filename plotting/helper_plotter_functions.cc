@@ -96,7 +96,7 @@ void Shape_SR_plottext::Draw(TString histname)
     TString mass_category = "low";
     if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_") or histname.Contains("_M-15_")) mass_category = "high";
     if(histname.Contains("Shape_SR")){
-        if(histname.Contains("_OS_2l") or histname.Contains("_SS_2l") and not histname.Contains("_M-10_")) Draw_OSorSS_2l(histname);
+        if(histname.Contains("_OS_2l") or (histname.Contains("_SS_2l") and not histname.Contains("_M-10_"))) Draw_OSorSS_2l(histname);
         else if(histname.Contains("_SS_2l") and histname.Contains("_M-10_")) Draw_SSHighMass_2l(histname);
         else if(histname.Contains("_2l") and histname.Contains("_M-10_")) Draw_2l_LowMass(mass_category);
         else if(histname.Contains("_2l") and histname.Contains("_M-5_")) Draw_2l_HighMass(mass_category);
@@ -105,7 +105,8 @@ void Shape_SR_plottext::Draw(TString histname)
         if(histname.Contains("_me")) Draw_me(mass_category);
         if(histname.Contains("_mm")) Draw_mm(mass_category);
     }else if(histname.Contains("Shape_alpha")){
-        Draw_Shape_alpha_lines_and_generaltext(histname, mass_category);
+        if(histname.Contains("_2l")) Draw_OSorSS_2l(histname);
+        else Draw_Shape_alpha_lines_and_generaltext(histname, mass_category);
     }
 }
 
@@ -385,8 +386,8 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("_OS_"))               fullname += "OS/";
     else if(histname.Contains("_SS_"))          fullname += "SS/";
     if(histname.Contains("_Bool_"))             fullname += "Bool/";
-    if(histname.Contains("_CR"))                fullname += "CR/";
-    if(histname.Contains("_SR"))                fullname += "SR/";
+    //if(histname.Contains("_CR"))                fullname += "CR/";
+    //if(histname.Contains("_SR"))                fullname += "SR/";
     if(histname.Contains("_2prompt"))           fullname += "2prompt/";
     if(histname.Contains("_2Jets"))             fullname += "2Jets/";
     if(histname.Contains("_2BJets"))            fullname += "2BJets/";
@@ -410,15 +411,26 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("cutTightmll_"))       fullname += "ABCDwithTightmll/";
     if(histname.Contains("cutTightphiORmll_"))  fullname += "ABCDwithTightDeltaPhiORmll/";
     if(histname.Contains("cutTightmlSV_"))      fullname += "ABCDwithTightmlSV/";
+    if(histname.Contains("cutVTightmlSV_"))     fullname += "ABCDwithVTightmlSV/";
     if(histname.Contains("cutMediummlSV_"))     fullname += "ABCDwithMediummlSV/";
+    if(histname.Contains("cutVLoosemlSV_"))     fullname += "ABCDwithVLoosemlSV/";
+    if(histname.Contains("cutVVLoosemlSV_"))     fullname += "ABCDwithVVLoosemlSV/";
+    if(histname.Contains("cutHighbmlSV_"))      fullname += "ABCDwithHighbmlSV/";
+    if(histname.Contains("cutTightHighbmlSV_")) fullname += "ABCDwithTightHighbmlSV/";
+    if(histname.Contains("cutMediumHighbmlSV_"))fullname += "ABCDwithMediumHighbmlSV/";
     if(histname.Contains("cutTightCR1mlSV_"))   fullname += "ABCDwithTightCR1mlSV/";
     if(histname.Contains("cutOldTightCR1mlSV_")) fullname += "ABCDwithOldTightCR1mlSV/";
     if(histname.Contains("cutTightCR2mlSV_"))   fullname += "ABCDwithTightCR2mlSV/";
     if(histname.Contains("cutTightCR3mlSV_"))   fullname += "ABCDwithTightCR3mlSV/";
     if(histname.Contains("cutMediumCR2mlSV_"))   fullname += "ABCDwithMediumCR2mlSV/";
+    if(histname.Contains("cutVLooseCR2mlSV_"))   fullname += "ABCDwithVLooseCR2mlSV/";
+    if(histname.Contains("cutVVLooseCR2mlSV_"))   fullname += "ABCDwithVVLooseCR2mlSV/";
     if(histname.Contains("cutMediumCR3mlSV_"))   fullname += "ABCDwithMediumCR3mlSV/";
     if(histname.Contains("cutTightCR2phill_"))  fullname += "ABCDwithTightCR2phill/";
     if(histname.Contains("cutTightCR3phill_"))  fullname += "ABCDwithTightCR3phill/";
+    if(histname.Contains("cutCR2NoJetVetomlSV_")) fullname += "ABCDwithCR2NoJetVetomlSV/";
+    if(histname.Contains("cutTightCR2NoJetVetomlSV_")) fullname += "ABCDwithTightCR2NoJetVetomlSV/";
+    if(histname.Contains("cutMediumCR2NoJetVetomlSV_")) fullname += "ABCDwithMediumCR2NoJetVetomlSV/";
     if(histname.Contains("cutAll_"))            fullname += "ABCDwithAllmethods/";
     if(histname.Contains("cutTightAll_"))       fullname += "ABCDwithAllTightmethods/";
     if(histname.Contains("quadA_"))             fullname += "quadA/";
@@ -444,6 +456,7 @@ TString make_plotspecific_pathname(const TString& histname, const TString& pathn
     if(histname.Contains("CtoAwithBD_"))        fullname += "CtoAwithBD/";
     if(histname.Contains("quadAwithBtoA_"))     fullname += "quadAwithBtoA/";
     if(histname.Contains("quadCwithDtoC_"))     fullname += "quadCwithDtoC/";
+    if(histname.Contains("CsigOverCbkg_"))      fullname += "CsigOverCbkg/";
 
     if(histname.Contains("_M-") and histname.Contains("_V2-")) fullname += (TString)histname(histname.Index("_M-") + 1, histname.Index("e-0") - histname.Index("_M-") + 3) + "/";
     if(histname.Contains("KVF_"))              fullname += "KVF/";
@@ -544,6 +557,78 @@ TH1F get_histoRatio(TH1F* data, TH1F* MC, TString xaxistitle)
     histo_ratio.SetMaximum(2);
 
     return histo_ratio;
+}
+
+TString get_DY_KappaFactor_filename(TString histname)
+{
+    if(histname.Contains("cutMedium"))          return "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/data/KappaFactor/_OS_2l_M-5_V2-2e-06_cutMediummlSV_quadA_Shape_SR.txt";
+    else if(histname.Contains("cutVLoose"))     return "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/data/KappaFactor/_mm_M-5_V2-2e-06_cutVLoosemlSV_quadA_Shape_SR.txt";
+    else if(histname.Contains("cutVVLoose"))    return "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/data/KappaFactor/_mm_M-5_V2-2e-06_cutVVLoosemlSV_quadA_Shape_SR.txt";
+    else                                        return "/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/data/KappaFactor/_mm_M-5_V2-2e-06_cutmlSV_quadA_Shape_SR.txt";
+}
+
+std::vector<double> get_DY_KappaFactor_unc(TString histname)
+{
+    TString kappa_filename = get_DY_KappaFactor_filename(histname);
+    std::ifstream kappa_file(kappa_filename);
+    std::vector<double> kappa, kappa_unc, DY_fraction;
+
+    if(kappa_file.is_open()){
+        std::string line;
+
+        while(std::getline(kappa_file, line)){
+            std::istringstream iss(line);
+            std::string bin_number_str, kappa_str, kappa_unc_str, DY_fraction_str;
+            iss >> bin_number_str >> kappa_str >> kappa_unc_str >> DY_fraction_str;
+
+            //std::cout << "bin number: " << bin_number_str << " kappa_str: " << kappa_str << " kappa_unc_str: " << kappa_unc_str << std::endl;
+
+            kappa.push_back(std::stod(kappa_str));
+            kappa_unc.push_back(std::stod(kappa_unc_str));
+            DY_fraction.push_back(std::stod(DY_fraction_str));
+        }
+
+        //std::cout << "kappa 4 and unc: " << kappa[4] << " " << kappa_unc[4] << std::endl;
+    }else{
+        std::cout << "Error: kappa Factor file " << kappa_filename << " is not correctly open" << std::endl;
+    }
+
+    return kappa_unc;
+}
+
+void apply_DY_KappaFactor(TH1* h)
+{
+    TString kappa_filename = get_DY_KappaFactor_filename(h->GetName());
+    std::ifstream kappa_file(kappa_filename);
+    std::vector<double> kappa, kappa_unc, DY_fraction;
+
+    if(kappa_file.is_open()){
+        std::string line;
+
+        while(std::getline(kappa_file, line)){
+            std::istringstream iss(line);
+            std::string bin_number_str, kappa_str, kappa_unc_str, DY_fraction_str;
+            iss >> bin_number_str >> kappa_str >> kappa_unc_str >> DY_fraction_str;
+
+            std::cout << "bin number: " << bin_number_str << " kappa_str: " << kappa_str << " kappa_unc_str: " << kappa_unc_str << " DY_fraction_str: " << DY_fraction_str << std::endl;
+
+            kappa.push_back(std::stod(kappa_str));
+            kappa_unc.push_back(std::stod(kappa_unc_str));
+            DY_fraction.push_back(std::stod(DY_fraction_str));
+        }
+
+        //std::cout << "kappa 4 and unc: " << kappa[4] << " " << kappa_unc[4] << std::endl;
+    }else{
+        std::cout << "Error: kappa Factor file " << kappa_filename << " is not correctly open" << std::endl;
+        return;
+    }
+
+    for(int i = 1; i <= 6; i++){
+        double kappa_scaled = 1 - ((1 - kappa[i-1]) * DY_fraction[i-1]);
+        std::cout << "bin nr., kappa, kappa_scaled: " << i << " " << kappa[i-1] << " " << kappa_scaled << std::endl;
+        //h->SetBinError(i, h->GetBinContent(i)*sqrt(h->GetBinError(i)*h->GetBinError(i)/(h->GetBinContent(i)*h->GetBinContent(i)) + kappa_unc[i-1]*kappa_unc[i-1]));
+        h->SetBinContent(i, h->GetBinContent(i) * kappa_scaled);
+    }
 }
 
 

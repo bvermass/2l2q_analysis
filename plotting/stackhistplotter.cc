@@ -5,6 +5,10 @@ int main(int argc, char * argv[])
 {
     bool sum_em_me = false;
     bool wideplots = false;
+    bool apply_DY_K = true;
+    bool scalesignal = false;
+    bool addABorCD = false;
+    bool calculate_DY_fraction = false;
 
     // set general plot style
     setTDRStyle(wideplots);
@@ -84,7 +88,7 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
-    TString general_pathname = make_general_pathname("plots/stacks/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots_new/stacks/", specific_dir + "/");
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -141,7 +145,7 @@ int main(int argc, char * argv[])
         }
     }
 
-    TFile* DataRun2File = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2.root");
+    TFile* DataRun2File = TFile::Open("/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass_noDYveto/mini_analyzer/hists_mini_analyzer_SingleLepton_Run2.root");
 
     TList *keylist;
     if(withdata) keylist = files_data.front()->GetListOfKeys();
@@ -167,6 +171,7 @@ int main(int argc, char * argv[])
                 
                 if(histname.Index("_sys") != -1 or histname.Index("_ABCDstat") != -1 or histname.Index("_Bool_") != -1 or histname.Index("_fromZ_") != -1) continue; // don't plot the Bool histograms
                 if(sample_hist_ref->GetMaximum() == 0 and withdata) continue; // bkg histogram is empty and there is no data file to plot
+                if(!wideplots and histname.Contains("Shape_") and histname.Contains("2l")) continue; //don't plot the Shape SR plots if wide option is turned off
                 if(!check_identifiers(histname, identifiers)) continue;
                 std::cout << histname << std::endl;
 
@@ -180,10 +185,15 @@ int main(int argc, char * argv[])
                     //    histname_BtoA.ReplaceAll("_AoverC_", "_BoverD_");
                     //}
                     data_hist = (TH1F*) files_data[0]->Get(histname_BtoA);
-                    if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and histname.Index("2BJets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
+                    //if(!is_mini_analyzer and histname.Index("_CR") == -1 and histname.Index("_Training_") == -1 and histname.Index("_2prompt") == -1 and histname.Index("_afterSV") == -1 and histname.Index("_2Jets") == -1 and histname.Index("2BJets") == -1 and !histname.Contains("l2Sel") and !histname.Contains("cutflow2") and !histname.Contains("Kshort")) continue; // Only print Control region plots for data or Training region with high background
                     //if(histname.Contains("JetTagVal") or histname.Contains("PFN_ROC")) continue;
                     if(data_hist == 0 or data_hist->GetMaximum() == 0) continue; // data histogram is empty
 
+                    if(addABorCD){
+                        TString histname_BtoA_quadB = histname_BtoA;
+                        histname_BtoA_quadB.ReplaceAll("quadA_", "quadB_").ReplaceAll("quadC_","quadD_");
+                        data_hist->Add((TH1F*)files_data[0]->Get(histname_BtoA_quadB));
+                    }
                     //add em and me final states together if wanted (use flag)
                     if(sum_em_me and histname_BtoA.Contains("_em_")){
                         TString histname_me = histname_BtoA; histname_me.ReplaceAll("_em_", "_me_");
@@ -194,14 +204,22 @@ int main(int argc, char * argv[])
                 }
                 
                 TString histname_bkg = histname;
-                histname_bkg.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                if(legends_bkg[0].Contains("Pred")) histname_bkg.ReplaceAll("_quadA_", "_BtoAwithCD_");
+                //else if(legends_bkg[0].Contains("Pred")) histname_bkg.ReplaceAll("_quadA_", "_quadB_");
                 histname_bkg.ReplaceAll("_noSR", "");
                 // get background histograms and fill legend
                 THStack* hists_bkg = new THStack("stack_bkg", ";"  + ((withdata)? "" : xaxistitle) + ";" + yaxistitle);
                 for(int i = 0; i < files_bkg.size(); i++){
                     if(histname.Contains("2BJets") and legends_bkg[i].Contains("QCD")) continue;
+                    std::cout << "bkgname for histo: " << histname_bkg << std::endl;
                     TH1* hist = (TH1*)files_bkg[i]->Get(histname_bkg);
                     if(hist == 0 or hist->GetMaximum() <= 0) continue;
+                    if(apply_DY_K and (histname_bkg.Contains("_2l_M-5") or histname_bkg.Contains("_mm_M-5"))) apply_DY_KappaFactor(hist);
+                    if(addABorCD){
+                        TString histname_bkg_quadB = histname_bkg;
+                        histname_bkg_quadB.ReplaceAll("quadA_", "quadB_").ReplaceAll("quadC_","quadD_");
+                        hist->Add((TH1F*)files_data[0]->Get(histname_bkg_quadB));
+                    }
                     int color;
                     if(legends_bkg[i].Contains("Pred") or histname_bkg.Contains("Kshort")) color = color_Pred;
                     else color = get_color(legends_bkg[i]);
@@ -217,10 +235,40 @@ int main(int argc, char * argv[])
                         hist->Add((TH1F*)files_bkg[i]->Get(histname_me));
                     }
 
+                    //if(legends_bkg[0].Contains("Pred")){
+                    //    TString histname_quadC = histname_bkg;
+                    //    TString histname_quadD = histname_bkg;
+                    //    histname_quadC.ReplaceAll("_quadB_", "_quadC_");
+                    //    histname_quadD.ReplaceAll("_quadB_", "_quadD_");
+                    //    TH1* hist_quadC = (TH1*)files_bkg[i]->Get(histname_quadC);
+                    //    TH1* hist_quadD = (TH1*)files_bkg[i]->Get(histname_quadD);
+
+                    //    double ratio = hist_quadC->Integral() / hist_quadD->Integral();
+                    //    std::cout << "C, D and ratio: " << hist_quadC->Integral() << " " << hist_quadD->Integral() << " " << ratio << std::endl;
+                    //    hist->Scale(ratio);
+                    //}
+
                     hists_bkg->Add(hist);
                     legend.AddEntry(hist, legends_bkg[i], "f");
                 }
                 if(hists_bkg->GetMaximum() <= 0) continue;
+
+                //determine percentage that DY is from total. get DY from its file (all bkg: Diboson, Top, Vg, DY, WJets)
+                if(calculate_DY_fraction){
+                    for(unsigned i_DY = 0; i_DY < files_bkg.size(); i_DY++){
+                        if(legends_bkg[i_DY].Contains("DY")){
+                            TH1F* DY_hist = (TH1F*) files_bkg[i_DY]->Get(histname_bkg);
+
+                            for(int i_bin = 1; i_bin < 7; i_bin++){
+                                std::cout << "bin " << i_bin << ": " << DY_hist->GetBinContent(i_bin) << " of " << ((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(i_bin) << std::endl;
+                            }
+                            for(int i_bin = 1; i_bin < 7; i_bin++){
+                                std::cout << DY_hist->GetBinContent(i_bin)/((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(i_bin) << std::endl;
+                            }
+                        }
+                    }
+                }
+
                 
                 // get signal histograms and fill legend
                 TString histname_signal = histname;
@@ -236,8 +284,8 @@ int main(int argc, char * argv[])
                             //hist->SetLineStyle(linestyle_signal[i]);
                             hist->SetLineWidth(3);
                             if(histname.Contains("_cutflow2")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->GetBinContent(1)/hist->GetBinContent(1));
-                            else if(histname.Contains("_afterSV") or histname.Contains("_Training_")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
-                            //else hist->Scale(10.);
+                            else if(histname.Contains("_afterSV") or histname.Contains("_Training")) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
+                            else if(scalesignal) hist->Scale(((TH1F*)hists_bkg->GetStack()->Last())->Integral()/hist->Integral());
                             hist->SetMarkerColor(colors_signal[i]);
 
                             // get signal histograms and fill legend
@@ -272,8 +320,19 @@ int main(int argc, char * argv[])
                     ratioplotter.AddStatVariation((TH1F*)hists_bkg->GetStack()->Last(), "Stat. unc.");
                     if(histname.Contains("Shape")) ratioplotter.SetConstantFit();
                     //if(histname.Contains("TightmlSV_quadA_Shape") and !histname.Contains("CR")) ratioplotter.SetSystUncs_up_and_down(histname, files_bkg, {"_ABCDstat"}, {"Syst. unc."}, (TH1F*)hists_bkg->GetStack()->Last());//example from MET Resolution study
-                    if((histname.Contains("TightmlSV_BtoAwithCD_Shape") and !histname.Contains("CR")) or histname.Contains("CR2NoJetVetomlSV_") or histname.Contains("mlSV_CR2Jets_")) ratioplotter.Add_ABCD_SystVariation(histname, "Syst. unc.", (TH1F*)hists_bkg->GetStack()->Last());
+                    //if((histname.Contains("TightmlSV_BtoAwithCD_Shape") and !histname.Contains("CR")) or histname.Contains("CR2NoJetVetomlSV_") or histname.Contains("mlSV_CR2Jets_")) ratioplotter.Add_ABCD_SystVariation(histname, "Syst. unc.", (TH1F*)hists_bkg->GetStack()->Last());
+                    if(histname.Contains("mlSV_quadA_Shape") or histname.Contains("CR2NoJetVetomlSV_") or histname.Contains("mlSV_CR2Jets_")){
+                        ratioplotter.Add_ABCD_SystVariation(histname, "ABCD unc.", (TH1F*)hists_bkg->GetStack()->Last());
+                        if(apply_DY_K and (histname.Contains("_2l_M-5") or histname.Contains("_mm_M-5"))) ratioplotter.Add_DYSF_SystVariation(histname, "SF unc.", (TH1F*)hists_bkg->GetStack()->Last());
+                    }
+
+                    //if(histname.Contains("cutmlSV_quadA_Shape") or histname.Contains("VLoosemlSV_quadA_Shape")) ratioplotter.Write_Central_Ratio((std::string)histname + ".txt");
+
+                    // Add syst unc to bkg histo error bar
+                    ratioplotter.Add_Full_Error(bkgForError);
                 }
+
+
 
                 // get plot specific pathnames
                 TString pathname_lin    = make_plotspecific_pathname(histname, general_pathname, "lin/");
@@ -321,6 +380,8 @@ int main(int argc, char * argv[])
                 // Draw ratio data/MC if data is present
                 if(withdata) ratioplotter.dothething();
                 //if(withdata) ratioplotter.draw_ABCD_CRline(histname, data_hist->GetXaxis()->GetXmin(), data_hist->GetXaxis()->GetXmax());
+
+                if(addABorCD) histname.ReplaceAll("quadA_", "quadAB_").ReplaceAll("quadC_", "quadCD_");
 
                 c->Print(pathname_lin + histname + ".png");
 

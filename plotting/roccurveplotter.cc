@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
     // Name of directory where plots will end up
     TString specific_dir = (TString)argv[1];
     std::cout << specific_dir << std::endl;
-    TString general_pathname = make_general_pathname("plots/roccurves/", specific_dir + "/");
+    TString general_pathname = make_general_pathname("plots_new/roccurves/", specific_dir + "/");
     //gSystem->Exec("rm " + general_pathname + "Signal_Bkg_Yields.txt");
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags

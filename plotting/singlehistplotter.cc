@@ -39,9 +39,10 @@ int main(int argc, char * argv[])
     TColor::InvertPalette();
 
     // Name of directory where plots will end up
-    TString general_pathname = make_general_pathname("plots/singlehists/", subdirectory_name + "/");
+    TString general_pathname = make_general_pathname("plots_new/singlehists/", subdirectory_name + "/");
     std::string corfilename = (std::string)(general_pathname + "correlations.txt");
     gSystem->Exec("rm -f " + (TString)corfilename);
+    std::cout << "correlations file: " << corfilename << std::endl;
 
     // Read identifiers from plotting/identifiers.txt and only make plots matching these tags
     std::vector<std::vector<TString>> identifiers = get_identifiers("plotting/identifiers.txt", ",");
@@ -62,20 +63,27 @@ int main(int argc, char * argv[])
 
     TLegend legend = get_legend(0.2, 0.88, 0.95, 0.93, 4);
 
+    float leftmargin  = pad->GetLeftMargin();
+    float topmargin   = pad->GetTopMargin();
+    float rightmargin = pad->GetRightMargin();
+
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
     Shape_SR_plottext* shapeSR_text = new Shape_SR_plottext(pad);
+
+    TLatex corlatex = get_latex(0.8*topmargin, 11, 42);
 
     int partitionjobnumber = std::atoi(argv[2]);
     int partition = std::atoi(argv[3]);
     int counter = 0;
     int counter_begin = floor(1.0 * partitionjobnumber / partition * sample_file->GetNkeys());
     int counter_end   = floor(1.0 * (partitionjobnumber + 1) / partition * sample_file->GetNkeys());
-    
+
     TIter next(sample_file->GetListOfKeys());
     TKey* key;
     while(key = (TKey*)next()){
         if(counter >= counter_begin and counter <= counter_end){
+            //std::cout << ".";
             std::string cl(key->GetClassName());
 
             // -- TH1 --
@@ -83,6 +91,7 @@ int main(int argc, char * argv[])
                 TH1F*   sample_hist = (TH1F*)key->ReadObj();
                 TString histname   = sample_hist->GetName();
 
+                //std::cout << "check hist: " << histname << std::endl;
                 if(!check_identifiers(histname, identifiers) or sample_hist->GetMaximum() == 0){
                     delete sample_hist;
                     continue;
@@ -122,7 +131,7 @@ int main(int argc, char * argv[])
 
                 pad->Clear();
                 pad->SetLogy(0);
-    
+
                 sample_hist->SetMarkerColor(colors[0]);
                 sample_hist->SetLineColor(colors[0]);
                 sample_hist->Draw("E0 P");
@@ -184,7 +193,7 @@ int main(int argc, char * argv[])
                 TH2F *sample_hist = (TH2F*)key->ReadObj();
                 TString histname = sample_hist->GetName();
 
-                if(!check_identifiers(histname, identifiers) or sample_hist->GetMaximum() == 0){
+                if(!check_identifiers(histname, identifiers)){// or sample_hist->GetMaximum() == 0){
                     delete sample_hist;
                     continue;
                 }
@@ -226,17 +235,19 @@ int main(int argc, char * argv[])
                 CMSandLumi->add_flavor(histname);
                 CMSandLumi->Draw();
 
+                if(is_mini_analyzer and (histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs"))){
+                    double cor = sample_hist->GetCorrelationFactor();
+                    std::ostringstream corstream;
+                    corstream << std::setprecision(3) << 100.*cor;
+                    std::string corstring = (std::string)histname + " correlation factor:" + corstream.str() + "\n";
+                    filePutContents(corfilename, corstring, true);
+                    corlatex.DrawLatex(leftmargin + 0.03*(1 - leftmargin - rightmargin), 0.6*topmargin, "correlation: " + (TString)corstream.str() + "%");
+                }
+
                 pad->Modified();
                 c->Print(pathname_lin + histname + ".png");
                 c->Print(pathname_lin + histname + ".pdf");
 
-                if(is_mini_analyzer and (histname.Contains("_PFNvs") or histname.Contains("_mllvs") or histname.Contains("_dphillvs"))){
-                    double cor = sample_hist->GetCorrelationFactor();
-                    std::ostringstream corstream;
-                    corstream << cor;
-                    std::string corstring = (std::string)histname + " correlation factor:" + corstream.str();
-                    filePutContents(corfilename, corstring, true);
-                }
                 delete sample_hist;
             }
         }
