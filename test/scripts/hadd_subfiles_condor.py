@@ -99,7 +99,6 @@ def add_Signal_1718( path, n_hadds, joblist, script_counter):
 
 def add_Signal_161718( path, n_hadds, joblist, script_counter):
     hadd_counter = 0
-    script_counter = 0
     for filename in os.listdir(path):
         if 'HeavyNeutrino_lljj' in filename and 'MiniAOD2016' in filename:
             filename = os.path.join(path, filename)
@@ -629,16 +628,16 @@ base_paths = []
 #base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass_PFNv9run2/HNLtagger_electron/' + tag + '/full_analyzer/')
 #base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass_PFNv9run2/HNLtagger_muon/' + tag + '/full_analyzer/')
 
-base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_unparametrized_LowAndHighMass/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECUp/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JECDown/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JERUp/')
-base_paths.append('/user/bvermass/public/2l2q_analysis/trees_unparametrized_LowAndHighMass/BkgEstimator/' + tag + '/full_analyzer/JERDown/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/histograms_highlPt/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_highlPt/BkgEstimator/' + tag + '/full_analyzer/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_highlPt/BkgEstimator/' + tag + '/full_analyzer/JECUp/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_highlPt/BkgEstimator/' + tag + '/full_analyzer/JECDown/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_highlPt/BkgEstimator/' + tag + '/full_analyzer/JERUp/')
+base_paths.append('/user/bvermass/public/2l2q_analysis/trees_highlPt/BkgEstimator/' + tag + '/full_analyzer/JERDown/')
 
 hadd_counter = 0
 
-os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
+#os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
 script_counter = 0
 joblist = open('test/condor/HaddJobList.txt', 'w')
 for base_path in base_paths:
@@ -674,7 +673,6 @@ joblist.close()
 os.system('chmod +x haddscript_*')
 submit_jobs()
 os.system( './test/scripts/wait_until_jobs_are_finished.sh' )
-
 
 for base_path in base_paths:
     if merge_similar_samples(base_path):

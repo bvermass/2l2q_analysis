@@ -28,6 +28,8 @@ else:
     #if startpoint = 2, make run2 datacards (This assumes 1718 and 2016 datacards have been made already)
 
 sampleListdirectory = 'test/sampleLists/Combine/'
+#majordirac = "dirac"
+majordirac = "majorana"
 
 if startpoint == 0:
     joblist = open('test/condor/CombineDatacardJobList.txt', 'w')
@@ -35,7 +37,7 @@ if startpoint == 0:
     
     job_counter = 0
     for sampleList in os.listdir(sampleListdirectory):
-        if not '1718' in sampleList:
+        if not '1718' in sampleList or not majordirac in sampleList:
             continue
         
         inputconditions  = [line.strip() for line in open(sampleListdirectory+sampleList)]
@@ -73,7 +75,7 @@ if startpoint == 1 or startpoint == 0:
     submitfilename = 'test/condor/CombineDatacard2016.submit'
     job_counter = 0
     for sampleList in os.listdir(sampleListdirectory):
-        if not '2016' in sampleList:
+        if not '2016' in sampleList or not majordirac in sampleList:
             continue
         
         inputconditions  = [line.strip() for line in open(sampleListdirectory+sampleList)]
@@ -106,7 +108,8 @@ if startpoint == 1 or startpoint == 0:
     
     os.system('./test/scripts/wait_until_jobs_are_finished.sh')
 
-os.system('./helpertools/CombineTools/init_merge_datacards_for_run2.sh')
+#for startpoint 2: make only run2 datacards
+os.system('./helpertools/CombineTools/run_merge_datacards_for_run2.sh')
 
 #cleanup
 os.system('rm combinedatacardscript_*.sh')

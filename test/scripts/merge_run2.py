@@ -10,7 +10,7 @@ if len(sys.argv) != 2:
 basedir = os.path.abspath(sys.argv[1])
 print basedir
 for f_2016 in glob.glob(basedir + '/*'):
-    if '2016' in f_2016:# and 'lljj' in f_2016:
+    if '2016' in f_2016 and 'lljj' in f_2016:
         #f_2017 = f_2016.replace('MiniAOD2016', 'MiniAOD2017').replace('Run2016','Run2017') 
         #f_2018 = f_2016.replace('MiniAOD2016', 'MiniAOD2018').replace('Run2016','Run2018')
         f_1718 = f_2016.replace('MiniAOD2016', 'MiniAOD1718').replace('Run2016','Run1718')
@@ -21,3 +21,7 @@ for f_2016 in glob.glob(basedir + '/*'):
         #    os.system('hadd -f {} {} {} {}'.format(f_run2, f_2016, f_2017, f_2018))
         if os.path.isfile(f_1718):
             os.system('hadd -f {} {} {}'.format(f_run2, f_2016, f_1718))
+    #if 'lljj' in f_2016 and 'MiniAODRun2' in f_2016:
+    #    print f_2016
+    #    f_new = f_2016.replace('MiniAODRun2', 'MiniAODRun2_SeparatePrediction')
+    #    #os.system('mv {} {}'.format(f_2016, f_new))

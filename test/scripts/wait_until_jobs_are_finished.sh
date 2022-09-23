@@ -2,7 +2,7 @@
 if [ $# -eq 0 ] ; then
     tag="bvermass "
 else
-    tag=$2
+    tag=$1
 fi
 
 qstatoutput="qstatoutput.txt"
