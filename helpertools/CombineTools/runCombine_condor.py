@@ -16,21 +16,27 @@ def add_script_to_joblist( script, scriptname, joblist ):
     joblist.write('{}\n'.format(scriptname))
 
 
-if len(sys.argv) != 2:
-    print 'command should be: python runCombine.py [filesperJob]'
+if not (len(sys.argv) == 2 or len(sys.argv) == 3):
+    print 'command should be: python runCombine.py [filesperJob] [diracormaj]'
     sys.exit()
 
-datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/'
+datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed_NTight/datacards/'
 filesperJob = int(sys.argv[1])
+if len(sys.argv) == 3:
+    diracormaj = sys.argv[2]
+else:
+    diracormaj = 'majorana'
+
+
 file_counter    = 0
 script_counter  = 0
 
-joblist = open('condorJobList.txt', 'w')
+joblist = open('test/condor/CombineJobList.txt', 'w')
 
 for root, dirs, files in os.walk(datacardDir):
     for f in files:
-        if '_M-' in f and '_V2-' in f and '.txt' in f:
-            f_abspath = os.path.abspath(os.path.join(root, f))
+        f_abspath = os.path.abspath(os.path.join(root, f))
+        if '_M-' in f and '_V2-' in f and '.txt' in f and diracormaj in f_abspath:
             print f_abspath
 
             combine_outputDir = root
@@ -47,18 +53,19 @@ for root, dirs, files in os.walk(datacardDir):
 
 
             script.write('cd {}\n'.format(combine_outputDir))
-            script.write('combine -d {} -S 0 -n {}\n'.format(f_abspath, f.split('.txt')[0]))
+            script.write('combine -d {} -n {}\n'.format(f_abspath, f.split('.txt')[0]))
             #script.write('mv higgs*'
 
             file_counter += 1
 
             if abs(file_counter - filesperJob) < 0.1:
-                submit_script(script, scriptname, joblist)
+                add_script_to_joblist(script, scriptname, joblist)
                 file_counter = 0
 
 if file_counter != 0:
-    submit_script(script, scriptname, joblist)
+    add_script_to_joblist(script, scriptname, joblist)
     file_counter = 0
 
 joblist.close()
-os.system('condor_submit condor.submit')
+os.system('chmod +x combine_*')
+os.system('condor_submit test/condor/Combine.submit')

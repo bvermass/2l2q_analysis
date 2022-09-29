@@ -1,6 +1,6 @@
 import os,sys
 
-datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/'
+datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed_NTight/datacards/'
 print('merging datacards in {}'.format(datacardDir))
 
 for root, dirs, files in os.walk(datacardDir):

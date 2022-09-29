@@ -76,6 +76,8 @@ std::vector<std::vector<double>> get_limitpoints(TString identifier)
     if(identifier == "cms_trilepton_prompt_electron")    return get_cms_trilepton_prompt_electron();
     if(identifier == "cms_trilepton_displaced_muon")     return get_cms_trilepton_displaced_muon();
     if(identifier == "cms_trilepton_displaced_electron") return get_cms_trilepton_displaced_electron();
+    if(identifier == "comb3l") return get_comb3l_signalstrengths();
+    if(identifier == "comb2l") return get_comb2l_signalstrengths();
     return {{1,1}};
 }
 
@@ -327,5 +329,26 @@ std::vector<std::vector<double>> get_cms_trilepton_displaced_muon()//these are p
         { 6.0, 0.00276272906922 },
         { 5.0, 0.00824528001249 },
         { 4.0, 0.029941605404 }
+    };
+}
+
+std::vector<std::vector<double>> get_comb3l_signalstrengths()
+{
+    return {
+        { 1e-7, 3.29727 },
+        { 5e-7, 0.684432 },
+        { 2e-6, 0.269564 },
+        { 8e-6, 0.287201 },
+        { 1e-5, 0.350194 }
+    };
+}
+std::vector<std::vector<double>> get_comb2l_signalstrengths()
+{
+    return {
+        { 1e-7, 3.55878},
+        { 5e-7, 0.81144 },
+        { 2e-6, 0.416408 },
+        { 8e-6, 0.705059 },
+        { 1e-5, 0.847681 }
     };
 }

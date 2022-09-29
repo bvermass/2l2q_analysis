@@ -27,7 +27,7 @@ def submit_jobs():
     print 'Submitting full joblist\n'
     os.system('condor_submit test/condor/Combine.submit')
 
-def run_combine_fromOwn_datacards(filesperJob):
+def run_combine_fromOwn_datacards(filesperJob, diracormaj):
     print('running combine with my own datacards')
     #datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_unparametrized_LowAndHighMass/datacards/'
     datacardDir = '/user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/'
@@ -39,12 +39,12 @@ def run_combine_fromOwn_datacards(filesperJob):
     script_counter  = 0
     for root, dirs, files in os.walk(datacardDir):
         for f in files:
-            if '_M-' in f and '_V2-' in f and '.txt' in f:
-                f_abspath = os.path.abspath(os.path.join(root, f))
+            f_abspath = os.path.abspath(os.path.join(root, f))
+            if '_M-' in f and '_V2-' in f and '.txt' in f and diracormaj in f_abspath:
                 print f_abspath
     
                 combine_outputDir = root
-                combine_outputDir.replace('datacards', 'combine_output')
+                #combine_outputDir = combine_outputDir.replace('datacards', 'combine_output')
                 os.system('mkdir -p {}'.format(combine_outputDir))
                 
     
@@ -114,15 +114,19 @@ def run_combine_fromKirills_datacards(filesperJob):
         file_counter = 0
 
 
-if len(sys.argv) != 3:
-    print 'command should be: python runCombine.py [filesperJob] [runOwnOrKirill]'
+if not (len(sys.argv) == 3 or len(sys.argv) == 4):
+    print 'command should be: python runCombine.py [filesperJob] [runOwnOrKirill] [diracormaj]'
     sys.exit()
 
 filesperJob = int(sys.argv[1])
 runOwnOrKirill = int(sys.argv[2])
+if len(sys.arg) == 4:
+    diracormaj = sys.argv[3]
+else:
+    diracormaj = 'majorana'
 
 if runOwnOrKirill == 0:
-    run_combine_fromOwn_datacards(filesperJob)
+    run_combine_fromOwn_datacards(filesperJob, diracormaj)
 elif runOwnOrKirill == 1:
     run_combine_fromKirills_datacards(filesperJob)
 

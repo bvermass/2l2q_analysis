@@ -4,6 +4,7 @@ bool verbose = false;
 bool addExternalLimits = true;
 bool addLegacyLimits = false;
 bool addUpperLimits = false;
+bool drawExclusionPoints = true;
 # ifndef __CINT__
 int main(int argc, char * argv[])
 {
@@ -176,8 +177,8 @@ double GetLowerExclusionLimit(std::map<double, std::map<float, double>> signal_s
             y1 = sr_V2.second[quantile];
         }
     }
-
-    return (x2 - x1 + y2*x1 - y1*x2) / (y2 - y1);//linear interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1)
+    //return (x2 - x1 + y2*x1 - y1*x2) / (y2 - y1);//linear interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1)
+    return exp(log(x1) + log(1./y1) * log(x1/x2) / log(y1/y2));//logarithmic interpolation between (x1,y1) and (x2,y2) and returning x3 for point (x3,1) (signal strength equal to 1), necessary for straight line on double logarithmic plot
 }
 
 void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusion_limit, std::map<double, std::map<float, double>> upper_exclusion_limit, TString plotfilename, TString Xaxistitle, TString Yaxistitle)
@@ -537,6 +538,24 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     TGraphAsymmErrors* sr_central_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
     TGraphAsymmErrors* sr_observed_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_observed[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
 
+    //draw lower exclusion limit points, the points where signal strength crosses 1
+    if(drawExclusionPoints){
+        std::vector<double> exclusionLimitPoints;
+        if(CheckGoesBelow1(signal_strengths, 0.025))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.025));
+        if(CheckGoesBelow1(signal_strengths, 0.16))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.16));
+        if(CheckGoesBelow1(signal_strengths, 0.50))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.50));
+        if(CheckGoesBelow1(signal_strengths, 0.84))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.84));
+        if(CheckGoesBelow1(signal_strengths, 0.975))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.975));
+        if(CheckGoesBelow1(signal_strengths, -1))       exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, -1));
+        sort(exclusionLimitPoints.begin(), exclusionLimitPoints.end());
+        double ones[6] = {1., 1., 1., 1., 1., 1.};
+        TPolyMarker* exclusionLimitPoints_graph = new TPolyMarker(exclusionLimitPoints.size(), &exclusionLimitPoints[0], ones);
+        exclusionLimitPoints_graph->SetMarkerColor(kBlue);
+        for(const auto& v2 : exclusionLimitPoints){
+            std::cout << "v2 point: " << v2 << std::endl;
+        }
+    }
+
     sr_2s_graph->Draw("A3");
     if(plotfilename.Contains("ExclusionLimit")){
         sr_2s_graph->GetXaxis()->SetRangeUser(0,15);
@@ -545,6 +564,7 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     sr_1s_graph->Draw("3 same");
     sr_central_graph->Draw("L P same");
     sr_observed_graph->Draw("L P same");
+    if(drawExclusionPoints) exclusionLimitPoints_graph->Draw("P same");
     sr_observed_graph->SetLineColor(kRed);
     sr_observed_graph->SetMarkerColor(kRed);
     CMSandLumi->Draw();
@@ -558,25 +578,36 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
 
 double GetCorrespondingScalefactor(TString combine_filename)
 {
-    TString scalefactor_filename = combine_filename;
-    scalefactor_filename.ReplaceAll("datacards", "ScaleFactor");
-    scalefactor_filename.ReplaceAll("higgsCombine", "");
-    scalefactor_filename.ReplaceAll(".AsymptoticLimits.mH120", "");
-    scalefactor_filename.ReplaceAll("_run2_", "_1718_");
+    if(combine_filename.Contains("scaled")){//Get scalefactor from the filename itself
+        return ((TString)combine_filename(combine_filename.Index("scaled") + 6, combine_filename.Index("_asymptotic") - combine_filename.Index("scaled") - 6)).Atof();
 
-    TFile *scalefactor_file = new TFile(scalefactor_filename, "open");
-    TH1F* scalefactor_hist = (TH1F*)scalefactor_file->Get("scalefactor");
+    }else{//get scalefactor from scalefactor file
+        TString scalefactor_filename = combine_filename;
+        scalefactor_filename.ReplaceAll("datacards", "ScaleFactor");
+        scalefactor_filename.ReplaceAll("higgsCombine", "");
+        scalefactor_filename.ReplaceAll(".AsymptoticLimits.mH120", "");
+        scalefactor_filename.ReplaceAll("_run2_", "_1718_");
 
-    if(!scalefactor_hist) std::cout << "Error: no scale factor hist retrieved from " << scalefactor_filename << std::endl;
-    return scalefactor_hist->GetBinContent(1);
+        TFile *scalefactor_file = new TFile(scalefactor_filename, "open");
+        TH1F* scalefactor_hist = (TH1F*)scalefactor_file->Get("scalefactor");
+
+        if(!scalefactor_hist) std::cout << "Error: no scale factor hist retrieved from " << scalefactor_filename << std::endl;
+        return scalefactor_hist->GetBinContent(1);
+    }
 }
 
 
 CombineOutput::CombineOutput(TString filename)
 {
     combine_filename = filename;
-    M  = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V2-") - filename.Index("_M-") -3)).Atof();
-    V2 = ((TString)filename(filename.Index("_V2-") + 4, filename.Index("_cut") - filename.Index("_V2-") - 4)).Atof();
+    if(filename.Contains("_V2-")){
+        M  = ((TString)filename(filename.Index("_M-") + 3, filename.Index("_V2-") - filename.Index("_M-") -3)).Atof();
+        V2 = ((TString)filename(filename.Index("_V2-") + 4, filename.Index("_cut") - filename.Index("_V2-") - 4)).Atof();
+    }else if(filename.Contains("_V-")){
+        M  = ((TString)filename(filename.Index("M-") + 2, filename.Index("_V-") - filename.Index("M-") -2)).Atof();
+        double V = ((TString)filename(filename.Index("_V-") + 3, filename.Index("_mu") - filename.Index("_V-") - 3)).Atof();
+        V2 = V*V;
+    }
     combine_file = new TFile(filename, "open");
     combine_tree = (TTree*) combine_file->Get("limit");
     Init(combine_tree);

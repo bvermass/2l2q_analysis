@@ -97,6 +97,7 @@ int main(int argc, char * argv[])
     if(makeMedium) combine_base_dir = "combine_observed_Medium";
     else if(makeLoose) combine_base_dir = "combine_observed_Loose";
     else if(makeNTight) combine_base_dir = "combine_observed_NTight";
+
     //combine_base_dir = "combine_observed_unparametrized_LowAndHighMass_noDYveto_Tight_Dirac";
 
     // Name of directory where plots will end up
@@ -143,6 +144,7 @@ int main(int argc, char * argv[])
 
     TIter next(files_signal[0]->GetListOfKeys());
     TKey* key;
+    std::cout << "Begin loop" << std::endl;
     while((key = (TKey*)next())){
 
         TClass *cl = gROOT->GetClass(key->GetClassName());

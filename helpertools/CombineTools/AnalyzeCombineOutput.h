@@ -12,6 +12,7 @@
 #include <TH1.h>
 #include <TGraphAsymmErrors.h>
 #include <TPolyLine.h>
+#include <TPolyMarker.h>
 
 #include <iostream>
 #include <fstream>
@@ -85,5 +86,8 @@ std::vector<std::vector<double>> get_cms_trilepton_prompt_muon();
 std::vector<std::vector<double>> get_cms_trilepton_prompt_electron();
 std::vector<std::vector<double>> get_cms_trilepton_displaced_muon();
 std::vector<std::vector<double>> get_cms_trilepton_displaced_electron();
+std::vector<std::vector<double>> get_comb3l_signalstrengths();
+std::vector<std::vector<double>> get_comb2l_signalstrengths();
+
 
 #endif
