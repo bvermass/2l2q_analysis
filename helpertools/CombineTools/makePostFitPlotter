@@ -1,0 +1,12 @@
+CC=g++ -Wall -Wno-reorder -Wextra
+CFLAGS= -Wl,--no-as-needed
+LDFLAGS=`root-config --glibs --cflags`
+SOURCES=PostFitPlotter.cc ../../plotting/ratioplotter.cc ../../plotting/tdrStyle.cc ../../plotting/helper_plotter_functions.cc ../../src/helper_histo_functions.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE=postfitplotter
+
+all: 
+	$(CC) $(CFLAGS) $(SOURCES) $(LDFLAGS) -o $(EXECUTABLE)
+	
+clean:
+	rm -rf *o $(EXECUTABLE)
