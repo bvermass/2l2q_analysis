@@ -3,8 +3,9 @@ LocalJob*
 helpertools/Skimmer/test
 helpertools/Skimmer/finished_samples.txt
 helpertools/Skimmer/hadded_samples.txt
-helpertools/Skimmer/script_*
+helpertools/Skimmer/condorJobList.txt
 helpertools/Skimmer/using_submit_skim_and_hadd_for_data.sh
+helpertools/Skimmer/log/
 helpertools/CombineTools/test
 helpertools/CombineTools/postfitplotter
 helpertools/HNL_parameters/test

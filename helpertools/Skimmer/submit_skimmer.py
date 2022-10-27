@@ -17,6 +17,11 @@ def submit_script( script, scriptname ):
         print 'qsub error caught, resubmitting'
         time.sleep(2)
 
+def add_script_to_joblist( script, scriptname, condorjoblist ):
+    print 'adding {}'.format( scriptname )
+    condorjoblist.write( '{}\n'.format(scriptname) )
+    script.close()
+    os.system('chmod +x {}'.format(scriptname))
 
 def merge_skimmed_files( input_crab_paths ):
     if os.system('hadd -f ~/public/heavyNeutrino/dilep_skim.root ~/public/heavyNeutrino/skim/*.root') == 0:
@@ -31,9 +36,11 @@ def merge_skimmed_files( input_crab_paths ):
 
 def copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths ):
     if os.path.exists('{}{}.root'.format(output_path, dilep_tag)):
-        os.system('gfal-copy -p -f -t 5000 srm://maite.iihe.ac.be:8443{}{}.root srm://maite.iihe.ac.be:8443{}{}_old.root'.format(output_path, dilep_tag, output_path, dilep_tag))
+        #os.system('gfal-copy -p -f -t 5000 srm://maite.iihe.ac.be:8443{}{}.root srm://maite.iihe.ac.be:8443{}{}_old.root'.format(output_path, dilep_tag, output_path, dilep_tag))
+        os.system('cp -f {}{}.root {}{}_old.root'.format(output_path, dilep_tag, output_path, dilep_tag))
 
-    if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}{}.root'.format(output_path, dilep_tag)) == 0:
+    #if os.system('gfal-copy -p -f -t 5000 file:///user/bvermass/public/heavyNeutrino/dilep_skim.root srm://maite.iihe.ac.be:8443{}{}.root'.format(output_path, dilep_tag)) == 0:
+    if os.system('cp -f /user/bvermass/public/heavyNeutrino/dilep_skim.root {}{}.root'.format(output_path, dilep_tag)) == 0:
         print 'successfully copied dilep_skim to pnfs to {}{}.root'.format(output_path, dilep_tag)
         os.system('rm ~/public/heavyNeutrino/dilep_skim.root')
         for input_crab_path in input_crab_paths:
@@ -94,6 +101,9 @@ os.system('make -f makeSkimmer')
 print 'cleaned finished_samples.txt?'
 os.system('touch finished_samples.txt')
 os.system('touch hadded_samples.txt')
+os.system('rm condorJobList.txt')
+os.system('touch condorJobList.txt')
+condorJobList = open('condorJobList.txt', 'w')
 
 output_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
 input_base_path = "/pnfs/iihe/cms/store/user/bvermass/heavyNeutrino/"
@@ -129,7 +139,7 @@ for sampledir in os.listdir(input_base_path):
                 for f in files:
                     if '.root' in f:
                         if hadd_counter == 0:
-                            scriptname = 'script_{}.sh'.format( script_counter )
+                            scriptname = 'Skimmerscript_{}.sh'.format( script_counter )
                             print 'making next {}'.format( scriptname )
                             script = init_script( scriptname )
                             script_counter += 1
@@ -137,16 +147,21 @@ for sampledir in os.listdir(input_base_path):
                         script.write('./test {} /user/bvermass/public/heavyNeutrino/skim/{}\n'.format(os.path.abspath(os.path.join(root, f)), f.split('.')[0] + '_' + str(i) + '.root'))
                         hadd_counter += 1
                         if hadd_counter == n_hadds:
-                            submit_script( script, scriptname )
+                            #submit_script( script, scriptname )
+                            add_script_to_joblist( script, scriptname, condorJobList )
                             hadd_counter = 0
 
 
         #send last job to the cluster if it wasn't filled up to n_hadds
         if hadd_counter != 0:
-            submit_script( script, scriptname )
+            #submit_script( script, scriptname )
+            add_script_to_joblist( script, scriptname, condorJobList )
             hadd_counter = 0
 
-        os.system( './../../test/scripts/wait_until_jobs_are_finished.sh' )
+        condorJobList.close()
+        os.system( 'condor_submit condor_Skimmer.submit' )
+        os.system( './../../test/scripts/wait_until_jobs_are_finished.sh Skimmerscript' )
+        os.system( 'rm Skimmerscript_*' )
         merge_skimmed_files( input_crab_paths )
         copy_dilepskim_to_pnfs( output_path, dilep_tag, input_crab_paths )
 
