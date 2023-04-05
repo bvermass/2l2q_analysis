@@ -3,7 +3,7 @@ cd /storage_mnt/storage/user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14
 #cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_8_1_0/src/HiggsAnalysis/CombinedLimit
 cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit
 eval `scram runtime -sh`
-cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-3_e_1718_majorana
+#cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-3_e_1718_majorana
 
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-3_e_1718_majorana/_ee_M-3_V2-1e-04_cutTightmlSV_quadA_Shape_SR.txt -n _ee_M-3_V2-1e-04_cutTightmlSV_quadA_Shape_SR
 #combine -M MultiDimFit -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-3_e_1718_majorana/_ee_M-3_V2-1e-04_cutTightmlSV_quadA_Shape_SR.txt -n _ee_M-3_V2-1e-04_cutTightmlSV_quadA_Shape_SR
@@ -33,13 +33,19 @@ cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-3_e_171
 #combine --cminPreFit 2 -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-8_mu_1718_majorana/_mm_M-8_V2-9e-05_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-8_V2-9e-05_cutTightmlSV_quadA_Shape_SR
 #combine --rMin 0.001 --cminPreFit 2 -v 3 -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-8_mu_1718_majorana/_mm_M-8_V2-7e-05_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-8_V2-7e-05_cutTightmlSV_quadA_Shape_SR
 
-cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana
+#cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-1e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-1e-04_cutTightmlSV_quadA_Shape_SR
-combine -v 3 -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-3e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-3e-04_cutTightmlSV_quadA_Shape_SR
+#combine -v 3 -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-3e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-3e-04_cutTightmlSV_quadA_Shape_SR
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-5e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-5e-04_cutTightmlSV_quadA_Shape_SR
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-7e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-7e-04_cutTightmlSV_quadA_Shape_SR
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-9e-04_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-9e-04_cutTightmlSV_quadA_Shape_SR
 #combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-5_mu_1718_majorana/_mm_M-5_V2-1e-03_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-1e-03_cutTightmlSV_quadA_Shape_SR
 
-
+#cd /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-8_e_1718_dirac
+#combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed/datacards/M-8_e_1718_dirac/_OS_ee_M-8_V2-1e-04_cutTightmlSV_quadA_Shape_SR.txt -n _OS_ee_M-8_V2-1e-04_cutTightmlSV_quadA_Shape_SR
+#combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed_Tight/datacards/M-12_mu_run2_dirac/_OS_mm_M-12_V2-3e-07_cutTightmlSV_quadA_Shape_SR.txt -n _OS_mm_M-12_V2-3e-07_cutTightmlSV_quadA_Shape_SR
 cd /user/bvermass/heavyNeutrino/Dileptonprompt/CMSSW_10_2_14/src/2l2q_analysis/helpertools/CombineTools
+combine -d /user/bvermass/public_html/2l2q_analysis/combine_observed_Tight/datacards/M-5_mu_run2_majorana/_mm_M-5_V2-6e-06_cutTightmlSV_quadA_Shape_SR.txt -n _mm_M-5_V2-6e-06_cutTightmlSV_quadA_Shape_SR
+
+combine -M FitDiagnostics /user/bvermass/public_html/2l2q_analysis/combine_observed_Tight/datacards/M-5_mu_run2_majorana/_mm_M-5_V2-6e-06_cutTightmlSV_quadA_Shape_SR.txt
+

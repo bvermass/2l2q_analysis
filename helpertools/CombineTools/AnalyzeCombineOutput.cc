@@ -262,8 +262,8 @@ void PlotExclusionLimit(std::map<double, std::map<float, double>> lower_exclusio
 
     //Close the limit at the high mass end
     //for central value, just draw a line between last two points
-    std::vector<double> highmassend_xpoints({V2_lower.back(), V2_upper.back()}), highmassend_ypoints({sr_lower_central.back(), sr_upper_central.back()}), hmend_err({0,0});
-    TGraphAsymmErrors* highmassend = new TGraphAsymmErrors(highmassend_xpoints.size(), &highmassend_xpoints[0], &highmassend_ypoints[0], &hmend_err[0], &hmend_err[0], &hmend_err[0], &hmend_err[0]);
+    //std::vector<double> highmassend_xpoints({V2_lower.back(), V2_upper.back()}), highmassend_ypoints({sr_lower_central.back(), sr_upper_central.back()}), hmend_err({0,0});
+    //TGraphAsymmErrors* highmassend = new TGraphAsymmErrors(highmassend_xpoints.size(), &highmassend_xpoints[0], &highmassend_ypoints[0], &hmend_err[0], &hmend_err[0], &hmend_err[0], &hmend_err[0]);
 
     sr_lower_2s_graph->Draw("A3");
     sr_lower_2s_graph->GetXaxis()->SetRangeUser(1,15);
@@ -538,19 +538,32 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     TGraphAsymmErrors* sr_central_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_central[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
     TGraphAsymmErrors* sr_observed_graph = new TGraphAsymmErrors(V2.size(), &V2[0], &sr_observed[0], &V2_err[0], &V2_err[0], &V2_err[0], &V2_err[0]);
 
+    //TGraphAsymmErrors* comb2l = get_external_limit("comb2l", kGreen+3, 5, 3);
+    //TGraphAsymmErrors* comb3l = get_external_limit("comb3l", kBlue+2, 2, 3);
+    //
+    //double ymin = 0.75, xmin = 0.57;
+    //TLegend legend(xmin, ymin, 0.93, 0.93);
+    //legend.SetTextSize(0.025);
+    //legend.SetFillStyle(0);
+    //legend.SetHeader("M_{HNL}=14GeV", "C");
+    //legend.AddEntry(comb2l, "HNL#rightarrow 2l2q", "l");
+    //legend.AddEntry(comb3l, "HNL#rightarrow 3l#nu", "l");
+    //legend.AddEntry(sr_central_graph, "Exp. (Combination)", "l");
+    //legend.AddEntry(sr_observed_graph, "Obs. (Combination)", "l");
+
     //draw lower exclusion limit points, the points where signal strength crosses 1
+    std::vector<double> exclusionLimitPoints;
+    if(CheckGoesBelow1(signal_strengths, 0.025))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.025));
+    if(CheckGoesBelow1(signal_strengths, 0.16))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.16));
+    if(CheckGoesBelow1(signal_strengths, 0.50))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.50));
+    if(CheckGoesBelow1(signal_strengths, 0.84))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.84));
+    if(CheckGoesBelow1(signal_strengths, 0.975))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.975));
+    if(CheckGoesBelow1(signal_strengths, -1))       exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, -1));
+    sort(exclusionLimitPoints.begin(), exclusionLimitPoints.end());
+    double ones[6] = {1., 1., 1., 1., 1., 1.};
+    TPolyMarker* exclusionLimitPoints_graph = new TPolyMarker(exclusionLimitPoints.size(), &exclusionLimitPoints[0], ones);
+    exclusionLimitPoints_graph->SetMarkerColor(kBlue);
     if(drawExclusionPoints){
-        std::vector<double> exclusionLimitPoints;
-        if(CheckGoesBelow1(signal_strengths, 0.025))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.025));
-        if(CheckGoesBelow1(signal_strengths, 0.16))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.16));
-        if(CheckGoesBelow1(signal_strengths, 0.50))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.50));
-        if(CheckGoesBelow1(signal_strengths, 0.84))     exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.84));
-        if(CheckGoesBelow1(signal_strengths, 0.975))    exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, 0.975));
-        if(CheckGoesBelow1(signal_strengths, -1))       exclusionLimitPoints.push_back(GetLowerExclusionLimit(signal_strengths, -1));
-        sort(exclusionLimitPoints.begin(), exclusionLimitPoints.end());
-        double ones[6] = {1., 1., 1., 1., 1., 1.};
-        TPolyMarker* exclusionLimitPoints_graph = new TPolyMarker(exclusionLimitPoints.size(), &exclusionLimitPoints[0], ones);
-        exclusionLimitPoints_graph->SetMarkerColor(kBlue);
         for(const auto& v2 : exclusionLimitPoints){
             std::cout << "v2 point: " << v2 << std::endl;
         }
@@ -569,6 +582,13 @@ void PlotSignalStrengths(std::map<double, std::map<float, double>> signal_streng
     sr_observed_graph->SetMarkerColor(kRed);
     CMSandLumi->Draw();
     draw_line_at_1(sr_2s_graph->GetXaxis()->GetXmin(), sr_2s_graph->GetXaxis()->GetXmax());
+
+
+    //comb2l->Draw("L same");
+    //comb3l->Draw("L same");
+
+    //legend.Draw("same");
+
 
     pad->Modified();
     c->Print(plotfilename);

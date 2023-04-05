@@ -462,6 +462,7 @@ int main(int argc, char * argv[])
                 //derive scale factor based on 1718 and apply same one to 2016
                 double scalefactor = 1.;
                 if(specific_dir.Contains("1718")) scalefactor = calc_scalefactor(hist_signal, hist_signal_quadB, hist_signal_quadC, hist_signal_quadD, hist_data, hist_data_quadB, hist_data_quadC, hist_data_quadD);
+                //if(specific_dir.Contains("1718")) scalefactor = get_trilepton_scalefactor(hist_signal, hist_signal_quadB, hist_signal_quadC, hist_signal_quadD, hist_data, hist_data_quadB, hist_data_quadC, hist_data_quadD);//only temporary implementation to TEST combination with trilepton! IMPROVE TO WORK EVERYWHERE
                 else scalefactor = get_1718_scalefactor(scalefactor_pathname + (std::string)outputfilename + ".root");
                 scale_signal_to_observed(scalefactor, hist_signal, hist_signal_quadB, hist_signal_quadC, hist_signal_quadD, hists_signal_sys);
 
@@ -716,6 +717,7 @@ void plotSysEffects(TCanvas* c, TPad* pad, TString plotname, TH1F* hist_signal, 
     TLegend legend = TLegend(0.18, 0.84, 0.95, 0.93);
     legend.SetNColumns(2);
     legend.SetFillStyle(0);
+    legend.SetTextSize(0.02);
 
     // Get margins and make the CMS and lumi basic latex to print on top of the figure
     CMSandLuminosity* CMSandLumi = new CMSandLuminosity(pad, is2016, is2017, is2018, isRun2);
@@ -725,7 +727,7 @@ void plotSysEffects(TCanvas* c, TPad* pad, TString plotname, TH1F* hist_signal, 
     TMultiGraph* hists = new TMultiGraph();
     int icount = 0;
     for(unsigned i = 0; i < hist_signal_sys.size(); i++){
-        if(sigName_sys[i].find("JEC") == std::string::npos and sigName_sys[i].find("JER") == std::string::npos) continue;
+        //if(sigName_sys[i].find("JEC") == std::string::npos and sigName_sys[i].find("JER") == std::string::npos) continue;
         //if(sigName_sys[i].find("Trigger") == std::string::npos) continue;
         TH1F* hist_rel = (TH1F*)hist_signal->Clone((TString)sigName_sys[i]);
         TH1F* hist_rel_sys = (TH1F*)hist_signal_sys[i]->Clone((TString)sigName_sys[i] + "sys");
@@ -976,6 +978,22 @@ void scale_signal_to_observed(double scalefactor, TH1F* hist_quadA, TH1F* hist_q
             hist_sys->Scale(scalefactor);
         }
     }
+}
+
+double get_trilepton_scalefactor(TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, TH1F* hist_obs_quadA, TH1F* hist_obs_quadB, TH1F* hist_obs_quadC, TH1F* hist_obs_quadD)
+{
+    //This is a proof of concept where I got the scalefactors that Kirill used for a specific mass point for the trilepton samples.
+    //For the combination of dilepton and trilepton datacards, they need to use the same scale factors.
+    //TString hname = hist_quadA->GetName();
+    //TString coupling = hname(hname.Index("_V2-")+4, hname.Index("_cut") - hname.Index("_V2-")-4);
+    //std::cout << "hname and coupling: " << hname << " " << coupling << std::endl;
+    //if(hname.Contains("M-10") and coupling == "1e-05") return 0.3847628644;
+    //if(hname.Contains("M-10") and coupling == "8e-06") return 0.3155510758;
+    //if(hname.Contains("M-10") and coupling == "2e-06") return 0.2685151574;
+    //if(hname.Contains("M-10") and coupling == "5e-07") return 0.6021123477;
+    //if(hname.Contains("M-10") and coupling == "1e-07") return 2.910691657;
+
+    return calc_scalefactor(hist_quadA, hist_quadB, hist_quadC, hist_quadD, hist_obs_quadA, hist_obs_quadB, hist_obs_quadC, hist_obs_quadD);
 }
 
 double calc_scalefactor(TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, TH1F* hist_obs_quadA, TH1F* hist_obs_quadB, TH1F* hist_obs_quadC, TH1F* hist_obs_quadD)

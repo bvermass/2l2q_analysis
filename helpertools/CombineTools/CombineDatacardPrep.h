@@ -42,6 +42,7 @@ void plotSysEffects(TCanvas* c, TPad* pad, TString shapeSR_filename, TH1F* hist_
 void checkfornans(std::vector<std::string>& sigName_sys, std::vector<std::vector<std::string>>& bkgNames_sys, std::vector<TH1F*> hist_signal_sys, std::vector<std::vector<TH1F*>> hists_bkg_sys);
 void set_low_content_bins_to_zero(TH1F* hist, std::vector<TH1F*>& hists_sys, double cutoff);
 void scale_signal_to_observed(double scalefactor, TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, std::vector<TH1F*>& hists_sys);
+double get_trilepton_scalefactor(TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, TH1F* hist_obs_quadA, TH1F* hist_obs_quadB, TH1F* hist_obs_quadC, TH1F* hist_obs_quadD);
 double calc_scalefactor(TH1F* hist_quadA, TH1F* hist_quadB, TH1F* hist_quadC, TH1F* hist_quadD, TH1F* hist_obs_quadA, TH1F* hist_obs_quadB, TH1F* hist_obs_quadC, TH1F* hist_obs_quadD);
 double get_1718_scalefactor(TString sf_filename);
 void plot_signal_contamination(TCanvas* c, TPad* pad, TString plotname, TH1F* hist_signal_quadA, TH1F* hist_signal_quadC);
