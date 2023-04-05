@@ -20,8 +20,8 @@ void full_analyzer::run_over_file(TString filename, double cross_section, int ma
 //     - construct booleans for object selection? should be done at ntuplizer level, but all used variables should be included too
 //     - functions for every signal region event selection
 
-    bool makeMajToDirac = true;
-    TString tree_identifier = "_highlPt";
+    bool makeMajToDirac = true; // set true if you want to set event weights so that majorana HNL samples can be interpreted as if they were dirac HNL samples. will add '_Dirac' to filename.
+    TString tree_identifier = "_highlPt"; // set this identifier however you like. I use it as identifier name when making small changes to compare to.
     if(makeMajToDirac) tree_identifier += "_Dirac";
 
     std::vector<TString> filenames;

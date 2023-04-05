@@ -83,7 +83,7 @@ std::vector<TString> mini_analyzer::set_signal_regions_JEC(BkgEstimator& eventJE
     for(auto const& MV2 : MV2tags){
         TString MV2tag = MV2.first;
         int i_MV2      = get_PFNevaluation_index(eventJEC._evaluating_mass[MV2.second], eventJEC._lFlavor);
-        double PFNcut  = get_NewPFNcut(eventJEC._evaluating_mass[MV2.second], eventJEC._l1Flavor, eventJEC._lFlavor, eventJEC._SV_mass, eventJEC._SV_PVSVdist_2D, eventJEC._l1Charge != eventJEC._lCharge, eventJEC._is2016, eventJEC._is2017);
+        double PFNcut  = get_NTightPFNcut(eventJEC._evaluating_mass[MV2.second], eventJEC._l1Flavor, eventJEC._lFlavor, eventJEC._l1Charge, eventJEC._lCharge, eventJEC._SV_mass, eventJEC._SV_PVSVdist_2D, eventJEC._l1Charge != eventJEC._lCharge, eventJEC._is2016, eventJEC._is2017);
 
         if(baseline_cutmlSV_JEC){
             if(eventJEC._SV_l1mass > 50 and eventJEC._SV_l1mass < 85){

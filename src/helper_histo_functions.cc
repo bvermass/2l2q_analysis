@@ -274,7 +274,7 @@ double get_truncated_ctau(bool is2016, double mass, double ctau_true)
 
 std::vector<double> get_evaluating_V2s_all()
 {
-    return {6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3, 3e-3, 5e-3, 7e-3, 9e-3, 1e-2, 3e-2, 5e-2, 7e-2, 9e-2};
+    return {6e-8, 8e-8, 1e-7, 3e-7, 5e-7, 7e-7, 9e-7, 2e-6, 3e-6, 4e-6, 6e-6, 8e-6, 1e-5, 3e-5, 5e-5, 7e-5, 9e-5, 1e-4, 3e-4, 5e-4, 7e-4, 9e-4, 1e-3, 3e-3, 5e-3, 7e-3, 9e-3, 1e-2, 3e-2, 5e-2, 7e-2, 9e-2};
 }
 
 

@@ -31,18 +31,22 @@
 #include "../helpertools/LorentzVector/LorentzVector.h"
 
 double get_PFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-double get_NewPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
-double get_looserPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
-double get_MediumPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_TightPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
+double get_NTightPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, int l1charge, int l2charge, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
+double get_MediumPFNcut(int mass, unsigned l1flavor, unsigned l2flavor, double SVmass, double Lxy, bool isOS, bool is2016, bool is2017);
+double get_looserPFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 double get_LoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
-double get_LoosePFNcut2(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_VLoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
+double get_VVLoosePFNcut(int mass, unsigned flavor, bool is2016, bool is2017);
 
 class mini_analyzer {
     public :
         BkgEstimator event;
         TString sr_flavor;
+        TString LowMassBin, HighMassBin;
         bool isData, isSignal, isBlind;
         bool storeSRevents;
+        bool allCouplings;
         BkgEstimator *SRevents_LowMass, *SRevents_HighMass;
         std::map<TString, TH1*> hists;
         std::map<TString, TH1*> hists_sys;
@@ -85,6 +89,7 @@ class mini_analyzer {
         void add_histograms_gridscan();
         void add_fraction_histograms(TString prefix);
         void add_standard_histograms(TString prefix);
+        void add_extra_histograms(TString prefix);
         void add_pfn_histograms(TString prefix);
         void add_Shape_SR_histograms(TString prefix);
         void add_Shape_SR_extra_histograms(TString prefix);
@@ -93,6 +98,7 @@ class mini_analyzer {
         void fill_SRevents();
         void fill_fraction_histograms(TString prefix, double event_weight);
         void fill_standard_histograms(TString prefix, double event_weight);
+        void fill_extra_histograms(TString prefix, double event_weight);
         void fill_pfn_histograms(TString prefix, double event_weight, unsigned i);
         void fill_Shape_SR_histograms(TString sr_flavor, TString ABCDtag, double event_weight);
         void fill_Shape_SR_extra_histograms(TString sr_flavor, TString ABCDtag, double event_weight, unsigned i);
