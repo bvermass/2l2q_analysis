@@ -1,0 +1,5 @@
+/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/dirac_comb3l_Run2/higgsCombineM-14.0_V-0.0007078135_mu_Dirac_muo_scaled0.6021123477_asymptotic.AsymptoticLimits.mH120.root
+/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/dirac_comb3l_Run2/higgsCombineM-14.0_V-0.0031622777_mu_Dirac_muo_scaled0.3847628644_asymptotic.AsymptoticLimits.mH120.root
+/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/dirac_comb3l_Run2/higgsCombineM-14.0_V-0.0003162278_mu_Dirac_muo_scaled2.910691657_asymptotic.AsymptoticLimits.mH120.root
+/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/dirac_comb3l_Run2/higgsCombineM-14.0_V-0.0014142136_mu_Dirac_muo_scaled0.2685151574_asymptotic.AsymptoticLimits.mH120.root
+/user/kskovpen/analysis/HNL/CMSSW_10_2_13/src/Limits/limit/dirac_comb3l_Run2/higgsCombineM-14.0_V-0.0028178006_mu_Dirac_muo_scaled0.3155510758_asymptotic.AsymptoticLimits.mH120.root
