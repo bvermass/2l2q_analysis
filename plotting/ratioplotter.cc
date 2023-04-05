@@ -22,7 +22,7 @@ RatioPlot::RatioPlot(TPad* pad, bool widepl):
     Central_Ratio->SetMaximum(2);
     
     std::vector<std::vector<int>> rgb = {{63,136,197}, {68,187,164}, {186,16,25}};
-    for(int i = 0; i < rgb.size(); i++){
+    for(unsigned i = 0; i < rgb.size(); i++){
         colors.push_back(TColor::GetColor(rgb[i][0], rgb[i][1], rgb[i][2]));
     }
 
@@ -41,7 +41,7 @@ void RatioPlot::SetLogx(int xlog)
 void RatioPlot::SetBinNames(std::vector<TString> BinNames)
 {
     Central_Ratio->SetLabelSize(0.14);
-    for(int i = 0; i < BinNames.size(); ++i){
+    for(unsigned i = 0; i < BinNames.size(); ++i){
         Central_Ratio->GetXaxis()->SetBinLabel(i+1, BinNames[i]);
     }
 }
@@ -93,7 +93,7 @@ void RatioPlot::SetConstantFit()
 std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector<TFile*> files_bkg, TH1F* MC_central)
 {
     THStack* MC_varied = new THStack("MC_varied", ";;Events");
-    for(int i = 0; i < files_bkg.size(); i++){
+    for(unsigned i = 0; i < files_bkg.size(); i++){
         TH1F* varied_hist = (TH1F*) files_bkg[i]->Get(variation_name);
         if(varied_hist){
             MC_varied->Add(varied_hist);
@@ -121,7 +121,7 @@ std::vector<double> RatioPlot::GetVariations(TString variation_name, std::vector
 
 void RatioPlot::SetSystUncs_up_and_down(TString histname, std::vector<TFile*> files_bkg, std::vector<TString> systunc_names, std::vector<TString> legends, TH1F* MC_central)
 {
-    for(int i_syst = 0; i_syst < systunc_names.size(); i_syst++){
+    for(unsigned i_syst = 0; i_syst < systunc_names.size(); i_syst++){
         TString systunc_name_down = histname + systunc_names[i_syst] + "Down";
         TString systunc_name_up   = histname + systunc_names[i_syst] + "Up";
 
@@ -205,10 +205,10 @@ void RatioPlot::Add_ABCD_SystVariation(TString histname, TString legendname, TH1
         if(histname.Contains("_SS")){
             y_low.push_back(0.2);
             y_high.push_back(0.2);
-        }else if(histname.Contains("_OS") and histname.Contains("_M-10")){
+        }else if(histname.Contains("_OS") and get_mass_category(histname) == "high"){
             y_low.push_back(0.3);
             y_high.push_back(0.3);
-        }else if(histname.Contains("_OS") and histname.Contains("_M-5")){
+        }else if(histname.Contains("_OS") and get_mass_category(histname) == "low"){
             if(i <= MC_central->GetNbinsX()/2){
                 y_low.push_back(0.2);
                 y_high.push_back(0.2);
@@ -216,10 +216,10 @@ void RatioPlot::Add_ABCD_SystVariation(TString histname, TString legendname, TH1
                 y_low.push_back(0.3);
                 y_high.push_back(0.3);
             }
-        }else if(histname.Contains("_mm") and histname.Contains("_M-10")){
+        }else if(histname.Contains("_mm") and get_mass_category(histname) == "high"){
             y_low.push_back(0.3);
             y_high.push_back(0.3);
-        }else if(histname.Contains("_mm") and histname.Contains("_M-5")){
+        }else if(histname.Contains("_mm") and get_mass_category(histname) == "low"){
             y_low.push_back(0.2);
             y_high.push_back(0.2);
         }
@@ -264,7 +264,7 @@ void RatioPlot::Add_DYSF_SystVariation(TString histname, TString legendname, TH1
 
 
     std::vector<double> x_central, x_low, x_high, y_central, y_low, y_high;
-    for(int i = 1; i <= MC_central->GetNbinsX(); i++){
+    for(unsigned i = 1; i <= MC_central->GetNbinsX(); i++){
         x_central.push_back((double)MC_central->GetXaxis()->GetBinCenter(i));
         x_low.push_back((double)x_central[i-1] - MC_central->GetXaxis()->GetBinLowEdge(i));
         x_high.push_back((double)MC_central->GetXaxis()->GetBinUpEdge(i) - x_central[i-1]);
@@ -356,12 +356,12 @@ void RatioPlot::Add_Full_Error(TH1F* h)
 {
     for(int bin = 1; bin < h->GetNbinsX(); bin++){
         double fullerrorl = 0, fullerrorh = 0;
-        for(int i = 0; i < systunc_graphs.size(); i++){
+        for(unsigned i = 0; i < systunc_graphs.size(); i++){
             fullerrorl = sqrt(fullerrorl*fullerrorl + systunc_graphs[i]->GetErrorYlow(bin)*systunc_graphs[i]->GetErrorYlow(bin));
             fullerrorh = sqrt(fullerrorh*fullerrorh + systunc_graphs[i]->GetErrorYhigh(bin)*systunc_graphs[i]->GetErrorYhigh(bin));
         }
-        std::cout << "old and new error: " << bin << ": " << h->GetBinError(bin) << " " << 0.5 * (fullerrorl + fullerrorh) * h->GetBinContent(bin) << std::endl;
-        std::cout << "from errl, errh, bincontent: " << fullerrorl << " " << fullerrorh << " " << h->GetBinContent(bin) << std::endl;
+        //std::cout << "old and new error: " << bin << ": " << h->GetBinError(bin) << " " << 0.5 * (fullerrorl + fullerrorh) * h->GetBinContent(bin) << std::endl;
+        //std::cout << "from errl, errh, bincontent: " << fullerrorl << " " << fullerrorh << " " << h->GetBinContent(bin) << std::endl;
         h->SetBinError(bin, 0.5 * (fullerrorl + fullerrorh) * h->GetBinContent(bin));//TH1F doesnt have asymmetric error options
     }
 }

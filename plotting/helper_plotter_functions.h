@@ -54,12 +54,13 @@ class Shape_SR_plottext{
         void Draw(TString histname);
         void Draw_OSorSS_2l(TString histname);
         void Draw_SSHighMass_2l(TString histname);
-        void Draw_2l_LowMass(TString mass_category);
-        void Draw_2l_HighMass(TString mass_category);
+        void Draw_2l_LowMass();
+        void Draw_2l_HighMass();
         void Draw_ee(TString mass_category);
         void Draw_em(TString mass_category);
         void Draw_me(TString mass_category);
         void Draw_mm(TString mass_category);
+        void Draw_OS_lines_and_generaltext(TString mass_category);
         void Draw_lines_and_generaltext(TString mass_category);
         void Draw_lines_and_generaltext_HighMass();
         void Draw_Shape_alpha_lines_and_generaltext(TString histname, TString mass_category);
@@ -76,6 +77,7 @@ bool        check_identifiers(TString histname, std::vector<std::vector<TString>
 TString     make_general_pathname(const TString& plottype, TString specific_dir);
 TString     make_plotspecific_pathname(const TString& histname, const TString& pathname, const TString& linorlog);
 TString     get_lflavor(const TString& histname);
+TString     get_mass_category(const TString& histname);
 TLegend     get_legend(double xmin, double ymin, double xmax, double ymax, int Ncolumns);
 TString     adjust_legend(TString legend);
 TLatex      get_latex(double textsize, int textalign, int textfont);

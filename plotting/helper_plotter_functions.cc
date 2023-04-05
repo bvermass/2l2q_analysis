@@ -12,7 +12,7 @@ CMSandLuminosity::CMSandLuminosity(TPad* pad, bool is2016, bool is2017, bool is2
     , drawflavor( false )
 {
     if(!is2016 and !is2017 and !is2018 and !isRun2){
-        std::cout << "not clear which year to use for lumi info" << std::endl;
+        std::cout << "not clear which year to use for lumi info: 16-" << is2016 << " 17-" << is2017 << " 18-" << is2018 << " Run2-" << isRun2 << std::endl;
         lumitext = "(13 TeV)";
     }
     if(is2016 and is2017 and !is2018 and !isRun2) lumitext = "77.8 fb^{-1} (13 TeV)";
@@ -96,14 +96,15 @@ void Shape_SR_plottext::Draw(TString histname)
     TString mass_category = "low";
     if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_") or histname.Contains("_M-15_")) mass_category = "high";
     if(histname.Contains("Shape_SR")){
-        if(histname.Contains("_OS_2l") or (histname.Contains("_SS_2l") and not histname.Contains("_M-10_"))) Draw_OSorSS_2l(histname);
-        else if(histname.Contains("_SS_2l") and histname.Contains("_M-10_")) Draw_SSHighMass_2l(histname);
-        else if(histname.Contains("_2l") and histname.Contains("_M-10_")) Draw_2l_LowMass(mass_category);
-        else if(histname.Contains("_2l") and histname.Contains("_M-5_")) Draw_2l_HighMass(mass_category);
-        if(histname.Contains("_ee")) Draw_ee(mass_category);
-        if(histname.Contains("_em")) Draw_em(mass_category);
-        if(histname.Contains("_me")) Draw_me(mass_category);
-        if(histname.Contains("_mm")) Draw_mm(mass_category);
+        if(histname.Contains("_OS_2l") or (histname.Contains("_SS_2l") and mass_category != "high")) Draw_OSorSS_2l(histname);
+        else if(histname.Contains("_SS_2l") and mass_category == "high") Draw_SSHighMass_2l(histname);
+        else if(histname.Contains("_2l") and mass_category == "high") Draw_2l_LowMass();
+        else if(histname.Contains("_2l") and mass_category == "low") Draw_2l_HighMass();
+        else if(histname.Contains("_OS_")) Draw_OS_lines_and_generaltext(mass_category);
+        else if(histname.Contains("_ee")) Draw_ee(mass_category);
+        else if(histname.Contains("_em")) Draw_em(mass_category);
+        else if(histname.Contains("_me")) Draw_me(mass_category);
+        else if(histname.Contains("_mm")) Draw_mm(mass_category);
     }else if(histname.Contains("Shape_alpha")){
         if(histname.Contains("_2l")) Draw_OSorSS_2l(histname);
         else Draw_Shape_alpha_lines_and_generaltext(histname, mass_category);
@@ -177,7 +178,7 @@ void Shape_SR_plottext::Draw_SSHighMass_2l(TString histname)
     }
 }
 
-void Shape_SR_plottext::Draw_2l_LowMass(TString mass_category)
+void Shape_SR_plottext::Draw_2l_LowMass()
 {
     latex.DrawLatex(0.125*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
     latex.DrawLatex(0.375*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, em);
@@ -205,7 +206,7 @@ void Shape_SR_plottext::Draw_2l_LowMass(TString mass_category)
 }
 
 
-void Shape_SR_plottext::Draw_2l_HighMass(TString mass_category)
+void Shape_SR_plottext::Draw_2l_HighMass()
 {
     double nt = 46.;
     latex.DrawLatex(6./nt*(1 - leftmargin - rightmargin) + leftmargin, 1-3.5*topmargin, mm);
@@ -257,6 +258,21 @@ void Shape_SR_plottext::Draw_mm(TString mass_category)
     //latex.DrawLatex(0.5*(1 - leftmargin - rightmargin) + leftmargin, 1-0.8*topmargin, mm);
     if(mass_category == "low") Draw_lines_and_generaltext(mass_category);
     if(mass_category == "high") Draw_lines_and_generaltext_HighMass();
+}
+
+void Shape_SR_plottext::Draw_OS_lines_and_generaltext(TString mass_category)
+{
+    double nt = 6;
+    dashedLine.DrawLineNDC(3./nt*(1 - leftmargin - rightmargin) + leftmargin, bottommargin, 3./nt*(1 - leftmargin - rightmargin) + leftmargin, 1 - 3.8*topmargin);
+
+    if(mass_category == "low"){
+        latex.DrawLatex(1.5/nt*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan2);
+        latex.DrawLatex(4.5/nt*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan2);
+    }
+    if(mass_category == "high"){
+        latex.DrawLatex(1.5/nt*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, masslessthan6);
+        latex.DrawLatex(4.5/nt*(1 - leftmargin - rightmargin) + leftmargin, 1-4.2*topmargin, massmorethan6);
+    }
 }
 
 void Shape_SR_plottext::Draw_lines_and_generaltext_HighMass()
@@ -488,6 +504,15 @@ TString get_lflavor(const TString& histname){
     else if(histname.Index("_l2e_") != -1) return "l2e/";
     else if(histname.Index("_l2m_") != -1) return "l2m/";
     else return "";
+}
+
+TString get_mass_category(const TString& histname){
+    if(histname.Contains("_M-1_") or histname.Contains("_M-2_") or histname.Contains("_M-3_") or histname.Contains("_M-4_") or histname.Contains("_M-5_")) return "low";
+    if(histname.Contains("_M-6_") or histname.Contains("_M-8_") or histname.Contains("_M-10_") or histname.Contains("_M-12_") or histname.Contains("_M-14_") or histname.Contains("_M-15_") or histname.Contains("_M-15.5_") or histname.Contains("_M-16.0_") or histname.Contains("_M-16.5_") or histname.Contains("_M-17.0_") or histname.Contains("_M-17.5_") or histname.Contains("_M-18.0_") or histname.Contains("_M-18.5_") or histname.Contains("_M-19.0_") or histname.Contains("_M-19.5_") or histname.Contains("_M-20.0_") or histname.Contains("_M-20.5_") or histname.Contains("_M-21_") or histname.Contains("_M-21.5_") or histname.Contains("_M-22_")) return "high";
+    else{
+        std::cout << "error in get_mass_category in plotting/helper_plotter_functions.cc" << std::endl;
+        return "low";
+    }
 }
 
 

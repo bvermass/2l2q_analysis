@@ -4,7 +4,7 @@
 int main(int argc, char * argv[])
 {
     bool sum_em_me = false;
-    bool wideplots = false;
+    bool wideplots = true;
     bool apply_DY_K = true;
     bool scalesignal = false;
     bool addABorCD = false;
