@@ -9,9 +9,8 @@ if [[ option -eq 1 || option -eq 0 ]]; then
     ./test/scripts/wait_until_jobs_are_finished.sh
     python test/scripts/hadd_subfiles_condor.py
 
-    #python test/scripts/hadd_subfiles.py
+    # make plots
     #./quickscript.sh
-    ./test/scripts/wait_until_jobs_are_finished.sh
 fi
 if [[ option -eq 2 || option -eq 0 ]]; then
     make -f test/make_mini_analyzer
@@ -20,12 +19,11 @@ if [[ option -eq 2 || option -eq 0 ]]; then
     python test/submit_mini_analyzer_condor.py test/sampleLists/mini_analyzer/HNL_JECJER.txt 4
     ./test/scripts/wait_until_jobs_are_finished.sh
 
-    #cd helpertools/HistogramMerger/
-    ##python submit_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
-    #python run_HistogramMerger.py ../../test/sampleLists/RewVal/mini_analyzer/
-    #cd ../../
+    # make plots
     #./test/scripts/wait_until_jobs_are_finished.sh
     #./quickminiscript.sh
-    #./test/scripts/run_full_combine_workflow.sh
+
+    # make limits
+    ./test/scripts/run_full_combine_workflow.sh
     ./test/scripts/wait_until_jobs_are_finished.sh
 fi

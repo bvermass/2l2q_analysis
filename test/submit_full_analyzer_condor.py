@@ -16,6 +16,7 @@ inputconditions  = [inputcondition.split() for inputcondition in inputconditions
 
 joblist = open('test/condor/FullAnalyzerJobList.txt', 'w')
 for inputcondition in inputconditions:
+    print(inputcondition)
     inputfilename = inputcondition[0]
     cross_section = inputcondition[1]
     max_entries   = inputcondition[2]
